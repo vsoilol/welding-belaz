@@ -7,10 +7,14 @@ namespace Belaz.WeldingApp.IdentityApi.Data.DataAccess
 {
     public class IdentityDbContext : DbContext
     {
-
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options) : base(options)
         {
+            Database.EnsureCreated();
         }
+
+        public DbSet<UserData> Users { get; set; }
+
+        public DbSet<RoleData> Roles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

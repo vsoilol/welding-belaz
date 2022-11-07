@@ -1,12 +1,13 @@
 using Belaz.WeldingApp.IdentityApi.WebApi.Managers.Models;
+using Belaz.WeldingApp.IdentityApi.WebApi.Presenters.Models;
 
 namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers.Interfaces
 {
     public interface IAuthManager
     {
-        Task<LoginResponse> Register(RegisterModel registerData);
+        Task<AuthenticationResult> Register(RegisterModel registerData);
 
-        Task<LoginResponse> Login(LoginModel login);
+        Task<AuthenticationResult> Login(LoginModel login);
 
         Task<bool> Logout();
     }

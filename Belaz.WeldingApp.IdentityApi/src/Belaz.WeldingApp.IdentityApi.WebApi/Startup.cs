@@ -36,8 +36,10 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi
 
             services.AddScoped<IRepository<UserData>, UserRepository>();
             services.AddScoped<IRepository<RoleData>, RoleRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserPresenter, UserPresenter>();
             services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<ITokenManager, TokenManager>();
             services.AddScoped<IAuthPresenter, AuthPresenter>();
             services.AddScoped<IAuthManager, AuthManager>();
 

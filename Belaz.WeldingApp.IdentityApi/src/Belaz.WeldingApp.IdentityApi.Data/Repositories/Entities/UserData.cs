@@ -1,6 +1,6 @@
-namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers.Models
+﻿namespace Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities
 {
-    public class RegisterModel
+    public class UserData : Entity
     {
         public string FirstName { get; set; }
 
@@ -12,8 +12,8 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers.Models
 
         public string Email { get; set; }
 
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
 
-        public string Role { get; set; }
+        public List<RoleData> Roles { get; set; }
     }
 }

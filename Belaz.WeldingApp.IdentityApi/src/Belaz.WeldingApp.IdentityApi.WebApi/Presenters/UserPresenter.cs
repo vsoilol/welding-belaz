@@ -1,4 +1,5 @@
 using AutoMapper;
+using Belaz.WeldingApp.IdentityApi.WebApi.Exceptions;
 using Belaz.WeldingApp.IdentityApi.WebApi.Managers.Interfaces;
 using Belaz.WeldingApp.IdentityApi.WebApi.Managers.Models;
 using Belaz.WeldingApp.IdentityApi.WebApi.Presenters.Interfaces;
@@ -40,8 +41,6 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Presenters
 
         public async Task<UserContract> AddAsync(UserContract user)
         {
-            var newUser = _mapper.Map<User>(user);
-
             var registerModel = new RegisterModel
             {
                 FirstName = user.FirstName,
@@ -52,11 +51,16 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Presenters
                 Role = user.Role
             };
 
-            var loginResponse = await _authManager.Register(registerModel);
+            var authResult = await _authManager.Register(registerModel);
 
-            var ceratedUser = await _userManager.AsQueryable().FirstOrDefaultAsync(x => x.UserName == user.Email);
+            if (!authResult.Success)
+            {
+                throw new RegisterFailedException(registerModel.UserName);
+            }
 
-            var userContract = _mapper.Map<UserContract>(ceratedUser);
+            var createdUser = await _userManager.AsQueryable().FirstOrDefaultAsync(x => x.UserName == user.Email);
+
+            var userContract = _mapper.Map<UserContract>(createdUser);
 
             return userContract;
         }

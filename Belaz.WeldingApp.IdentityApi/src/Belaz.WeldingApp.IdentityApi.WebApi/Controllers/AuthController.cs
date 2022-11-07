@@ -20,29 +20,49 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
         [AllowAnonymous, HttpPost("register")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserContract>> Register([FromBody] RegisterModelContract registerContract)
+        public async Task<IActionResult> Register([FromBody] RegisterModelContract registerContract)
         {
-            registerContract = GetUserContract();
+            var authResponse = await _authPresenter.Register(registerContract);
 
-            var response = await _authPresenter.Register(registerContract);
+            if (!authResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse { Errors = authResponse.Errors, });
+            }
 
-            return Ok(response);
+            var authSuccess = new AuthSuccessResponse
+            {
+                Token = authResponse.Token,
+                UserId = authResponse.UserId,
+                ExpirationDate = authResponse.ExpirationDate
+            };
+            return Ok(authSuccess);
         }
 
         [AllowAnonymous, HttpPost("login")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<LoginResponseContract>> Login([FromBody] LoginModelContract loginContract)
+        public async Task<IActionResult> Login([FromBody] LoginModelContract loginContract)
         {
             if (string.IsNullOrWhiteSpace(loginContract.Password) || string.IsNullOrWhiteSpace(loginContract.UserName))
             {
                 return BadRequest("Wrong credentials!");
             }
 
-            var response = await _authPresenter.Login(loginContract);
+            var authResponse = await _authPresenter.Login(loginContract);
 
-            return Ok(response);
+            if (!authResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse { Errors = authResponse.Errors, });
+            }
+
+            var authSuccess = new AuthSuccessResponse
+            {
+                Token = authResponse.Token,
+                UserId = authResponse.UserId,
+                ExpirationDate = authResponse.ExpirationDate
+            };
+            return Ok(authSuccess);
         }
 
         [Authorize]
@@ -52,21 +72,6 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
             var response = await _authPresenter.Logout();
 
             return Ok(response);
-        }
-
-        private RegisterModelContract GetUserContract()
-        {
-            return new RegisterModelContract
-            {
-                FirstName = "admin",
-                LastName = "admin",
-                MiddleName = "admin",
-                Email = "admin",
-                UserName = "admin",
-                Role = "Master",
-                Password = "admin",
-                ConfirmPassword = "admin"
-            };
         }
     }
 }

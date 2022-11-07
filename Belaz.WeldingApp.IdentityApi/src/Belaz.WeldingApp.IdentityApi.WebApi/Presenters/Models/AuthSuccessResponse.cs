@@ -1,6 +1,6 @@
-namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers.Models
+﻿namespace Belaz.WeldingApp.IdentityApi.WebApi.Presenters.Models
 {
-    public class LoginResponse
+    public class AuthSuccessResponse
     {
         public string Token { get; set; }
 

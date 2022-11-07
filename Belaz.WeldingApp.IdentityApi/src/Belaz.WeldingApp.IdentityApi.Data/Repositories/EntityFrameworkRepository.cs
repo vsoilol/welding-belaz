@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
 {
     public abstract class EntityFrameworkRepository<T> : IRepository<T>
-    where T : Entity
+        where T : Entity
     {
         private readonly DbSet<T> _entities;
 
@@ -43,11 +43,9 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
             return await _entities.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public virtual async Task<bool> AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
-            await _entities.AddAsync(entity);
-
-            return true;
+            return (await _entities.AddAsync(entity)).Entity;
         }
 
         public virtual bool Update(T entity)

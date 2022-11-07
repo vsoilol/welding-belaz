@@ -23,9 +23,5 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Presenters.Models
 
         [Required]
         public string Role { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
     }
 }

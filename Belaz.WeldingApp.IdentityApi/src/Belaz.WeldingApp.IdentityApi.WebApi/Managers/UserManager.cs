@@ -13,11 +13,13 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers
     {
         private readonly IRepository<UserData> _userRepository;
         private readonly IMapper _mapper;
+        private readonly IRoleRepository _roleRepository;
 
-        public UserManager(IRepository<UserData> userRepository, IMapper mapper)
+        public UserManager(IRepository<UserData> userRepository, IMapper mapper, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _roleRepository = roleRepository;
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -47,9 +49,20 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers
             return userQuery;
         }
 
-        public Task<User> AddAsync(User user)
+        public async Task<User> AddAsync(User user)
         {
-            throw new NotImplementedException("");
+            if ((await _userRepository.GetByFilterAsync(x => x.UserName == user.UserName)).FirstOrDefault() is not null)
+            {
+                throw new UserExistsException(user.UserName);
+            }
+
+            var userData = _mapper.Map<UserData>(user);
+
+            userData.PasswordHash = user.PasswordHash;
+            userData.Roles =
+                await _roleRepository.GetAllRolesByNames(user.Roles.Select(_ => _.Name.ToLower()).ToList());
+
+            return _mapper.Map<User>(await _userRepository.AddAsync(userData));
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -61,7 +74,6 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers
             return isDeleted;
         }
 
-
         public async Task<User> UpdateAsync(int id, User user)
         {
             var userData = await _userRepository.GetByIdAsync(id);
@@ -71,7 +83,6 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers
                 throw new UserNotFoundException(id.ToString());
             }
 
-            userData.UpdatedAt = DateTime.UtcNow;
             userData.FirstName = user.FirstName;
             userData.LastName = user.LastName;
             userData.MiddleName = user.MiddleName;
