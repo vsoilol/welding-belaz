@@ -14,7 +14,7 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces
 
         bool Update(T entity);
 
-        Task<bool> AddAsync(T entity);
+        Task<T> AddAsync(T entity);
 
         Task<bool> DeleteByIdAsync(int id);
 

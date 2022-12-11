@@ -1,41 +1,51 @@
+using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
+using Belaz.WeldingApp.IdentityApi.WebApi.Helpers;
 using Serilog;
 
 namespace Belaz.WeldingApp.IdentityApi.WebApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
 
-            //var host = CreateHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
 
-            try
-            {
-                //await MigrationHelper.EnsureDatabasesMigrated(host.Services);
+            await CreateDbIfNotExists(host);
 
-                //using (var scope = host.Services.CreateScope())
-                //{
-                //    var services = scope.ServiceProvider;
-                //    await services.GetService<InitialData>().InitializeAsync();
-                //}
+            await host.RunAsync();
+        }
 
-                CreateHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
+        private static async Task CreateDbIfNotExists(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
             {
-                Log.Fatal(ex, "Application start-up failed");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    var userRepository = services.GetRequiredService<IRepository<UserData>>();
+                    var roleRepository = services.GetRequiredService<IRepository<RoleData>>();
+                    await DataSeed.SeedSampleDataAsync(roleRepository, userRepository);
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex, "Application start-up failed");
+                }
+                finally
+                {
+                    await Log.CloseAndFlushAsync();
+                }
             }
         }
 
-        private static bool IsDevelopment => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        private static bool IsDevelopment =>
+            Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
         public static string HostPort => IsDevelopment ? "" : Environment.GetEnvironmentVariable("PORT");
 

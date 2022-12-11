@@ -17,26 +17,22 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Presenters
             _mapper = mapper;
         }
 
-        public async Task<LoginResponseContract> Login(LoginModelContract loginContract)
+        public async Task<AuthenticationResult> Login(LoginModelContract loginContract)
         {
             var login = _mapper.Map<LoginModel>(loginContract);
 
             var response = await _authManager.Login(login);
 
-            var responseContract = _mapper.Map<LoginResponseContract>(response);
-
-            return responseContract;
+            return response;
         }
 
-        public async Task<LoginResponseContract> Register(RegisterModelContract registerContract)
+        public async Task<AuthenticationResult> Register(RegisterModelContract registerContract)
         {
             var register = _mapper.Map<RegisterModel>(registerContract);
 
             var response = await _authManager.Register(register);
 
-            var responseContract = _mapper.Map<LoginResponseContract>(response);
-
-            return responseContract;
+            return response;
         }
 
         public async Task<bool> Logout()

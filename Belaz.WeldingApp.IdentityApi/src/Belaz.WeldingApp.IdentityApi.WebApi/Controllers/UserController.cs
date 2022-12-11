@@ -1,5 +1,8 @@
+using Belaz.WeldingApp.IdentityApi.WebApi.Attributes;
+using Belaz.WeldingApp.IdentityApi.WebApi.Constants;
 using Belaz.WeldingApp.IdentityApi.WebApi.Presenters.Interfaces;
 using Belaz.WeldingApp.IdentityApi.WebApi.Presenters.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +10,7 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
         private readonly IUserPresenter _userPresenter;
@@ -16,7 +20,8 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
             _userPresenter = userPresenter;
         }
 
-        [Authorize, HttpGet]
+        [HttpGet]
+        [AuthorizeRoles(Role.Admin, Role.Master)]
         [ProducesResponseType(typeof(IEnumerable<UserContract>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
@@ -25,7 +30,8 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
             return Ok(users);
         }
 
-        [Authorize, HttpGet("userId")]
+        [HttpGet("userId")]
+        [AuthorizeRoles(Role.Admin, Role.Master)]
         [ProducesResponseType(typeof(UserContract), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get(int userId)
         {
@@ -34,7 +40,8 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
             return Ok(user);
         }
 
-        [Authorize, HttpPost]
+        [HttpPost]
+        [AuthorizeRoles(Role.Admin)]
         [ProducesResponseType(typeof(UserContract), StatusCodes.Status201Created)]
         public async Task<IActionResult> Add([FromBody] UserContract userContract)
         {
@@ -43,7 +50,8 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
             return CreatedAtAction(nameof(Get), new { id = createdUserContract.Id }, createdUserContract);
         }
 
-        [Authorize, HttpPut("userId")]
+        [HttpPut("userId")]
+        [AuthorizeRoles(Role.Admin)]
         [ProducesResponseType(typeof(UserContract), StatusCodes.Status200OK)]
         public async Task<IActionResult> Update(int userId, [FromBody] UserContract userContract)
         {
@@ -53,7 +61,8 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Controllers
         }
 
 
-        [Authorize, HttpDelete("userId")]
+        [HttpDelete("userId")]
+        [AuthorizeRoles(Role.Admin)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int userId)

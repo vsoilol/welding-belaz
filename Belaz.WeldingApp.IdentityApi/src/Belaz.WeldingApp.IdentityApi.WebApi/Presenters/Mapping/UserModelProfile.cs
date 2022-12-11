@@ -10,11 +10,12 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Presenters.Mapping
         public UserModelProfile()
         {
             CreateMap<UserContract, User>()
-                .ForMember(x => x.UserRoles, opt => opt.Ignore())
-                .ForMember(x=>x.PasswordHash, opt => opt.Ignore())
-                .ForMember(x => x.PasswordSalt, opt => opt.Ignore());
+                .ForMember(x => x.Roles, opt => opt.Ignore())
+                .ForMember(x => x.PasswordHash, opt => opt.Ignore());
             CreateMap<User, UserContract>()
-                .ForMember(x => x.Role, opt => opt.MapFrom(x => x.UserRoles.First().Role.Name));
+                .ForMember(x => x.Role,
+                    opt =>
+                        opt.MapFrom(x => x.Roles.First().Name));
 
             CreateMap<User, UserData>();
             CreateMap<UserData, User>();

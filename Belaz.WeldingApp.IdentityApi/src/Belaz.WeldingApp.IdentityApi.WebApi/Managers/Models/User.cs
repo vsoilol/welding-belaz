@@ -16,14 +16,8 @@ namespace Belaz.WeldingApp.IdentityApi.WebApi.Managers.Models
 
         public string UserName { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public string PasswordHash { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
-
-        public byte[] PasswordHash { get; set; }
-
-        public byte[] PasswordSalt { get; set; }
-
-        public List<UserRoleData> UserRoles { get; set; }
+        public List<RoleData> Roles { get; set; }
     }
 }

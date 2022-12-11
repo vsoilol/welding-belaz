@@ -8,7 +8,8 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
 {
     public class UserRepository : EntityFrameworkRepository<UserData>
     {
-        public UserRepository(IdentityDbContext context, ILogger<EntityFrameworkRepository<UserData>> logger) : base(context, logger)
+        public UserRepository(IdentityDbContext context, ILogger<EntityFrameworkRepository<UserData>> logger) : base(
+            context, logger)
         {
         }
 
@@ -16,14 +17,13 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
 
         public override IQueryable<UserData> AsQueryable()
         {
-            return Context.Users.AsQueryable().Include(x => x.UserRoles).ThenInclude(x => x.Role);
+            return Context.Users.AsQueryable().Include(x => x.Roles);
         }
 
         public override async Task<IEnumerable<UserData>> GetAllAsync()
         {
             return await Context.Users
-                .Include(x => x.UserRoles)
-                    .ThenInclude(x => x.Role)
+                .Include(x => x.Roles)
                 .ToListAsync();
         }
 
@@ -31,8 +31,7 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
         {
             return await Context.Users
                 .Where(filter)
-                .Include(x => x.UserRoles)
-                    .ThenInclude(x => x.Role)
+                .Include(x => x.Roles)
                 .ToListAsync();
         }
 
@@ -40,8 +39,7 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
         {
             return await Context.Users
                 .Where(x => x.Id == id)
-                .Include(x => x.UserRoles)
-                    .ThenInclude(x => x.Role)
+                .Include(x => x.Roles)
                 .FirstOrDefaultAsync();
         }
     }
