@@ -5,12 +5,12 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belaz.WeldingApp.IntegrationApi", "Belaz.WeldingApp.IntegrationApi\Belaz.WeldingApp.IntegrationApi.csproj", "{99DBB68B-AF3F-438D-B76A-759FE13010CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belaz.WeldingApp.IntegrationApi.Tests", "..\..\Belaz.WeldingApp.FileApi\src\Belaz.WeldingApp.FileApi.Tests\Belaz.WeldingApp.IntegrationApi.Tests.csproj", "{B37FA07C-B4D6-4751-BCA0-77FC4495D98E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{57B4B25C-82D7-48BD-A412-E9A255F22EF0}"
 	ProjectSection(SolutionItems) = preProject
-		Dockerfile = Dockerfile
+		..\Dockerfile = ..\Dockerfile
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.IntegrationApi.Tests", "Belaz.WeldingApp.IntegrationApi.Tests\Belaz.WeldingApp.IntegrationApi.Tests.csproj", "{CE20F040-BEAF-45C4-97BA-B5A90BB1DAA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,10 @@ Global
 		{99DBB68B-AF3F-438D-B76A-759FE13010CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99DBB68B-AF3F-438D-B76A-759FE13010CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99DBB68B-AF3F-438D-B76A-759FE13010CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B37FA07C-B4D6-4751-BCA0-77FC4495D98E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B37FA07C-B4D6-4751-BCA0-77FC4495D98E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B37FA07C-B4D6-4751-BCA0-77FC4495D98E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B37FA07C-B4D6-4751-BCA0-77FC4495D98E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE20F040-BEAF-45C4-97BA-B5A90BB1DAA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE20F040-BEAF-45C4-97BA-B5A90BB1DAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE20F040-BEAF-45C4-97BA-B5A90BB1DAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE20F040-BEAF-45C4-97BA-B5A90BB1DAA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
