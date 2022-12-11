@@ -36,3 +36,26 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
     ports:
       - "5003:80"
+        
+  postgresql_database:
+    container_name: postgresql_database
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: welding-belaz
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./DockerData/databasedata:/var/lib/postgresql/data/
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    volumes:
+      - ./DockerData/pdadmin_data:/var/lib/pgadmin
