@@ -7,9 +7,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Belaz.WeldingApp.FileApi/Belaz.WeldingApp.FileApi.csproj", "src/Belaz.WeldingApp.FileApi/"]
-RUN dotnet restore "src/Belaz.WeldingApp.FileApi/Belaz.WeldingApp.FileApi.csproj"
-COPY ./src .
+COPY ["Belaz.WeldingApp.FileApi/Belaz.WeldingApp.FileApi.csproj", "Belaz.WeldingApp.FileApi/"]
+RUN dotnet restore "Belaz.WeldingApp.FileApi/Belaz.WeldingApp.FileApi.csproj"
+COPY . .
 WORKDIR "/src/Belaz.WeldingApp.FileApi"
 RUN dotnet build "Belaz.WeldingApp.FileApi.csproj" -c Release -o /app/build
 

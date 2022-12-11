@@ -5,11 +5,10 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{8ADE1734-B58F-4A4C-A9BE-2F759B6720AF}"
 	ProjectSection(SolutionItems) = preProject
-		..\.dockerignore = ..\.dockerignore
 		..\.editorconfig = ..\.editorconfig
 		..\.gitignore = ..\.gitignore
-		..\Dockerfile = ..\Dockerfile
 		..\README.md = ..\README.md
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belaz.WeldingApp.IdentityApi.Data", "Belaz.WeldingApp.IdentityApi.Data\Belaz.WeldingApp.IdentityApi.Data.csproj", "{4FF82205-A7B7-40C2-A8DD-81C7A68E2C2E}"
