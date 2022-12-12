@@ -1,19 +1,6 @@
 using System.Text;
 using Belaz.WeldingApp.IntegrationApi.Common;
 using Belaz.WeldingApp.IntegrationApi.Config;
-using Belaz.WeldingApp.IntegrationApi.DelegatingHandlers;
-using Belaz.WeldingApp.IntegrationApi.IntegrationApi;
-using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Implementations;
-using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Interfaces;
-using Belaz.WeldingApp.IntegrationApi.Managers;
-using Belaz.WeldingApp.IntegrationApi.Managers.Implementations;
-using Belaz.WeldingApp.IntegrationApi.Managers.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.Extensions.Http;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 
 namespace Belaz.WeldingApp.IntegrationApi
 {
@@ -42,7 +29,6 @@ namespace Belaz.WeldingApp.IntegrationApi
 
             services.SetupSwagger();
             services.RegisterIntegrationApis(Configuration);
-            services.AddScoped<IUserManager, UserManager>();
 
             services.AddEndpointsApiExplorer();
 
