@@ -1,4 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
 {

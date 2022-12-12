@@ -1,11 +1,16 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WeldingApp.Common.Attributes;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [Route("api/welders")]
 [ApiController]
+
 public class WelderController : ControllerBase
 {
     private readonly IWelderManager _welderManager;

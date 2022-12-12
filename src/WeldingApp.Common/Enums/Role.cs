@@ -1,4 +1,4 @@
-﻿namespace Belaz.WeldingApp.IdentityApi.Constants
+﻿namespace WeldingApp.Common.Enums
 {
     [Flags]
     public enum Role

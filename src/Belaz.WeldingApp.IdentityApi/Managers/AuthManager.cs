@@ -10,8 +10,6 @@ using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Managers.Models;
 using Belaz.WeldingApp.IdentityApi.Options;
 using Belaz.WeldingApp.IdentityApi.Presenters.Models;
-using Belaz.WeldingApp.IdentityApi.Constants;
-using Belaz.WeldingApp.IdentityApi.Exceptions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

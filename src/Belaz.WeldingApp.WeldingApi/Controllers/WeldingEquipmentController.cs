@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;

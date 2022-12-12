@@ -1,10 +1,11 @@
 using Belaz.WeldingApp.IdentityApi.Attributes;
-using Belaz.WeldingApp.IdentityApi.Constants;
 using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Presenters.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WeldingApp.Common.Attributes;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.IdentityApi.Controllers
 {

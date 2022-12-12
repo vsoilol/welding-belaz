@@ -1,12 +1,17 @@
 using Belaz.WeldingApp.IntegrationApi.Contracts.Requests.User;
 using Belaz.WeldingApp.IntegrationApi.Contracts.Responses.Identity;
 using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WeldingApp.Common.Attributes;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.IntegrationApi.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
         private readonly IUserIntegrationApi _userIntegrationApi;
@@ -17,6 +22,7 @@ namespace Belaz.WeldingApp.IntegrationApi.Controllers
         }
 
         [HttpGet]
+        [AuthorizeRoles(Role.Admin, Role.Master)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<IdentityUserDto>>> Get()
         {
@@ -25,6 +31,7 @@ namespace Belaz.WeldingApp.IntegrationApi.Controllers
         }
 
         [HttpGet("{userId}")]
+        [AuthorizeRoles(Role.Admin, Role.Master)]
         public async Task<ActionResult<IdentityUserDto>> Get([FromRoute] Guid userId)
         {
             var user = await _userIntegrationApi.GetByIdAsync(userId);
@@ -32,6 +39,7 @@ namespace Belaz.WeldingApp.IntegrationApi.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRoles(Role.Admin)]
         public async Task<ActionResult<IdentityUserDto>> Add([FromBody] CreateUserRequest request)
         {
             var createdUserContract = await _userIntegrationApi.AddAsync(request);
@@ -39,6 +47,7 @@ namespace Belaz.WeldingApp.IntegrationApi.Controllers
         }
 
         [HttpPut("{userId}")]
+        [AuthorizeRoles(Role.Admin)]
         public async Task<ActionResult<IdentityUserDto>> Update([FromRoute] Guid userId,
             [FromBody] CreateUserRequest userContract)
         {
@@ -48,6 +57,7 @@ namespace Belaz.WeldingApp.IntegrationApi.Controllers
 
 
         [HttpDelete("{userId}")]
+        [AuthorizeRoles(Role.Admin)]
         public async Task<ActionResult<Guid>> Delete([FromRoute] Guid userId)
         {
             var deletedUserId = await _userIntegrationApi.DeleteAsync(userId);

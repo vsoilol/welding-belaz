@@ -1,4 +1,4 @@
-﻿namespace Belaz.WeldingApp.IntegrationApi.Contracts.Enums
+﻿namespace WeldingApp.Common.Enums
 {
     public enum Condition
     {

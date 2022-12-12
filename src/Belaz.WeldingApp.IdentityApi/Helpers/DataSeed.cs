@@ -1,7 +1,7 @@
-﻿using Belaz.WeldingApp.IdentityApi.Constants;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+﻿using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Extensions;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.IdentityApi.Helpers
 {

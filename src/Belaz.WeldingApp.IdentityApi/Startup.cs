@@ -85,7 +85,6 @@ namespace Belaz.WeldingApp.IdentityApi
                 {
                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 }));
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

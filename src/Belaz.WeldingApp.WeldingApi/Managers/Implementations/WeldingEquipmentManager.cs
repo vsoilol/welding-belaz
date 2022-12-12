@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations;
 

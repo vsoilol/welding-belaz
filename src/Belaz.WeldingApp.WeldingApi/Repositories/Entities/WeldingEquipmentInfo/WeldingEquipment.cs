@@ -4,6 +4,7 @@ using System.Globalization;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
+using WeldingApp.Common.Enums;
 using Calendar = Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo.Calendar;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
