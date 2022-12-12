@@ -1,5 +1,5 @@
 using System.Net;
-using Belaz.WeldingApp.IntegrationApi.Presenters.Models;
+using Belaz.WeldingApp.IntegrationApi.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -30,6 +30,11 @@ namespace Belaz.WeldingApp.IntegrationApi.Middlewares
             {
                 await _next(httpContext);
             }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                await HandleExceptionAsync(httpContext, ServerErrorMessage, ex.StatusCode);
+            }
             catch (ArgumentException ex)
             {
                 _logger.LogError(ex, ex.Message);
@@ -42,11 +47,11 @@ namespace Belaz.WeldingApp.IntegrationApi.Middlewares
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, string errorMessage, HttpStatusCode statusCode)
+        private async Task HandleExceptionAsync(HttpContext context, string errorMessage, HttpStatusCode? statusCode)
         {
             context.Response.Clear();
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)statusCode;
+            context.Response.StatusCode = (int)(statusCode ?? HttpStatusCode.InternalServerError);
 
             var exceptionContract = new ExceptionContract()
             {

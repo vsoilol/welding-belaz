@@ -1,9 +1,9 @@
-using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Models;
+using Belaz.WeldingApp.IntegrationApi.Contracts.Responses.Identity;
 
 namespace Belaz.WeldingApp.IntegrationApi.Managers.Interfaces
 {
     public interface IUserManager
     {
-        Task<IReadOnlyCollection<UserData>> GetUsers();
+        Task<IReadOnlyCollection<IdentityUserDto>> GetUsers();
     }
 }

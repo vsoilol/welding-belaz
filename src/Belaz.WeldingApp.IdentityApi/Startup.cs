@@ -76,7 +76,7 @@ namespace Belaz.WeldingApp.IdentityApi
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
                             .GetBytes(Configuration.GetSection("Auth:Secret").Value)),
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
                     };
                 });
 

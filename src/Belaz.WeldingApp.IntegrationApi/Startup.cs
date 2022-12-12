@@ -1,13 +1,16 @@
 using System.Text;
 using Belaz.WeldingApp.IntegrationApi.Common;
+using Belaz.WeldingApp.IntegrationApi.Config;
+using Belaz.WeldingApp.IntegrationApi.DelegatingHandlers;
 using Belaz.WeldingApp.IntegrationApi.IntegrationApi;
+using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Implementations;
 using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Interfaces;
 using Belaz.WeldingApp.IntegrationApi.Managers;
+using Belaz.WeldingApp.IntegrationApi.Managers.Implementations;
 using Belaz.WeldingApp.IntegrationApi.Managers.Interfaces;
-using Belaz.WeldingApp.IntegrationApi.Presenters;
-using Belaz.WeldingApp.IntegrationApi.Presenters.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -37,39 +40,13 @@ namespace Belaz.WeldingApp.IntegrationApi
 
             services.AddHealthChecks();
 
-            services.AddHttpClient<IUserIntergrationApi, UserIntergrationApi>(
-                c => c.BaseAddress = new Uri(Configuration["Api:UserApiBaseUrl"]));
-
+            services.SetupSwagger();
+            services.RegisterIntegrationApis(Configuration);
             services.AddScoped<IUserManager, UserManager>();
-            services.AddScoped<IUserPresenter, UserPresenter>();
 
             services.AddEndpointsApiExplorer();
 
-            services.AddSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-
-                options.OperationFilter<SecurityRequirementsOperationFilter>();
-            });
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                            .GetBytes(Configuration.GetSection("Auth:Secret").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+            services.SetupJwtTokens(Configuration);
 
             services.AddCors(options => options.AddPolicy(name: "NgOrigins",
                 policy =>
@@ -81,11 +58,8 @@ namespace Belaz.WeldingApp.IntegrationApi
         {
             app.UseMiddleware<Middlewares.ExceptionHandlerMiddleware>();
 
-            if (env.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseCors("NgOrigins");
             app.UseHttpsRedirection();

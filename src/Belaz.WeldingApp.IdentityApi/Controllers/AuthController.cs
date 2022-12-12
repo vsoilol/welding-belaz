@@ -67,11 +67,11 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers
 
         [Authorize]
         [HttpPost("logout")]
-        public async Task<ActionResult<UserContract>> Logout()
+        public async Task<ActionResult<bool>> Logout()
         {
             var response = await _authPresenter.Logout();
 
-            return Ok(response);
+            return response;
         }
     }
 }

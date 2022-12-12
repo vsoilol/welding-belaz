@@ -1,4 +1,5 @@
-using Belaz.WeldingApp.IntegrationApi.Presenters.Interfaces;
+using Belaz.WeldingApp.IntegrationApi.Managers.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,24 +9,23 @@ namespace Belaz.WeldingApp.IntegrationApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserPresenter _userPresenter;
+        private readonly IUserManager _userManager;
 
-        public UserController(IUserPresenter userPresenter)
+
+        public UserController(IUserManager userManager)
         {
-            _userPresenter = userPresenter;
+            _userManager = userManager;
         }
 
-
-        [Authorize(Roles = "Admin"), HttpGet()]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get()
         {
-            var users = await _userPresenter.GetUsers();
-
+            var users = await _userManager.GetUsers();
             return Ok(users);
         }
 
-        [Authorize(Roles = "Master"), HttpGet("userId")]
+        [HttpGet("userId")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get(int userId)
         {
