@@ -1,5 +1,5 @@
-using Belaz.WeldingApp.WeldingApi.Repositories.Models;
 using System.Linq.Expressions;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
 {
@@ -9,6 +9,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
         bool Add(T entity);
 
         IQueryable<T> AsQueryable();
+
+        IQueryable<T> AsQueryableByFilter(Expression<Func<T, bool>> filter);
 
         void Attach(T entity);
 

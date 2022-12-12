@@ -9,19 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Contracts\Requests" />
     <Folder Include="Controllers\" />
     <Folder Include="Managers\Interfaces\" />
-    <Folder Include="Managers\Mapping\" />
-    <Folder Include="Managers\Models\" />
-    <Folder Include="Presenters\Models\" />
-    <Folder Include="Presenters\Mapping\" />
-    <Folder Include="Presenters\Interfaces\" />
   </ItemGroup>
 
 </Project>

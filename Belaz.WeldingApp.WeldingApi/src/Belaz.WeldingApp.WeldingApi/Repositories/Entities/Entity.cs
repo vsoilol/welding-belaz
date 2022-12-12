@@ -1,7 +1,12 @@
-namespace Belaz.WeldingApp.WeldingApi.Repositories.Models
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities
 {
     public class Entity
     {
-        public virtual int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid Id { get; set; }
     }
 }

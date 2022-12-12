@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities;
 using Belaz.WeldingApp.WeldingApi.Repositories.Interfaces;
-using Belaz.WeldingApp.WeldingApi.Repositories.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories
@@ -8,76 +8,81 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories
     public abstract class EntityFrameworkRepository<T> : IRepository<T>
         where T : Entity
     {
-        private readonly DbSet<T> _entities;
-
         private readonly ILogger<EntityFrameworkRepository<T>> _logger;
 
-        protected EntityFrameworkRepository(DbContext context, ILogger<EntityFrameworkRepository<T>> logger)
+        protected EntityFrameworkRepository(ApplicationContext context, ILogger<EntityFrameworkRepository<T>> logger)
         {
             Context = context;
-            _entities = context.Set<T>();
+            Entities = context.Set<T>();
             _logger = logger;
         }
 
-        protected DbContext Context { get; }
+        protected ApplicationContext Context { get; }
+
+        protected readonly DbSet<T> Entities;
 
         public virtual IQueryable<T> AsQueryable()
         {
-            return _entities.AsQueryable();
+            return Entities.AsQueryable();
         }
 
         public virtual IEnumerable<T> GetAll()
         {
-            return _entities.AsEnumerable();
+            return Entities.AsEnumerable();
         }
 
         public IEnumerable<T> GetByFilter(Expression<Func<T, bool>> filter)
         {
-            return _entities.Where(filter).AsEnumerable();
+            return Entities.Where(filter).AsEnumerable();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _entities.ToListAsync();
+            return await Entities.ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>> filter)
         {
-            return await _entities.Where(filter).ToListAsync();
+            return await Entities.Where(filter).ToListAsync();
+        }
+
+        public IQueryable<T> AsQueryableByFilter(Expression<Func<T, bool>> filter)
+        {
+            return Entities.Where(filter);
         }
 
         public virtual T GetById(int id)
         {
-            return _entities.Find(id);
+            return Entities.Find(id);
         }
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
-            return await _entities.FindAsync(id);
+            return await Entities.FindAsync(id);
         }
 
         public virtual bool Add(T entity)
         {
-            _entities.Add(entity);
+            Entities.Add(entity);
             return true;
         }
 
         public virtual bool Update(T entity)
         {
-            _entities.Update(entity);
+            Entities.Update(entity);
             return true;
         }
 
         public virtual async Task<bool> DeleteByFilterAsync(Expression<Func<T, bool>> filter)
         {
             var toDetele = await GetByFilterAsync(filter);
-            _entities.RemoveRange(toDetele);
+            Entities.RemoveRange(toDetele);
             return true;
         }
 
         public virtual void Attach(T entity)
         {
-            _entities.Attach(entity);
+            Entities.Attach(entity);
         }
 
         public virtual bool Save()
