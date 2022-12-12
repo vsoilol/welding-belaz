@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.IntegrationApi.DelegatingHandlers;
+﻿using Belaz.WeldingApp.IntegrationApi.Common;
+using Belaz.WeldingApp.IntegrationApi.DelegatingHandlers;
 using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Implementations;
 using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Interfaces;
 using Microsoft.Extensions.Http;
@@ -7,7 +8,7 @@ namespace Belaz.WeldingApp.IntegrationApi.Config;
 
 public static class RegisterIntegrationApiConfig
 {
-    public static void RegisterIntegrationApis(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterIntegrationApis(this IServiceCollection services, IConfiguration configuration, ApiOptions apiUrls)
     {
         services.AddTransient<JwtHeaderHandler>();
 
@@ -20,9 +21,15 @@ public static class RegisterIntegrationApiConfig
         });
 
         services.AddHttpClient<IUserIntegrationApi, UserIntegrationApi>(
-            c => c.BaseAddress = new Uri(configuration["Api:UserApiBaseUrl"]));
+            c => c.BaseAddress = new Uri(apiUrls.UserApiBaseUrl));
 
         services.AddHttpClient<IAuthIntegrationApi, AuthIntegrationApi>(
-            c => c.BaseAddress = new Uri(configuration["Api:UserApiBaseUrl"]));
+            c => c.BaseAddress = new Uri(apiUrls.UserApiBaseUrl));
+
+        services.AddHttpClient<IWelderIntegrationApi, WelderIntegrationApi>(
+            c => c.BaseAddress = new Uri(apiUrls.WeldingApiBaseUrl));
+
+        services.AddHttpClient<IWeldingEquipmentIntegrationApi, WeldingEquipmentIntegrationApi>(
+            c => c.BaseAddress = new Uri(apiUrls.WeldingApiBaseUrl));
     }
 }

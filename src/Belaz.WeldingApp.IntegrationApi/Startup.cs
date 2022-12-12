@@ -28,7 +28,10 @@ namespace Belaz.WeldingApp.IntegrationApi
             services.AddHealthChecks();
 
             services.SetupSwagger();
-            services.RegisterIntegrationApis(Configuration);
+
+            var apiUrls = new ApiOptions();
+            Configuration.Bind("Api", apiUrls);
+            services.RegisterIntegrationApis(Configuration, apiUrls);
 
             services.AddEndpointsApiExplorer();
 
