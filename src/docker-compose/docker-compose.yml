@@ -1,0 +1,73 @@
+version: '3.4'
+
+services:      
+  postgresql_database:
+    container_name: postgresql_database
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminadmin
+      POSTGRES_DB: welding-belaz
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker-storage/databasedata:/var/lib/postgresql/data/
+    
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    volumes:
+      - ./docker-storage/pdadmin_data:/var/lib/pgadmin
+
+  welding-api:
+    image: welding-app/welding-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+    ports:
+      - "5010:80"
+    depends_on:
+      - postgresql_database
+        
+  identity-api:
+    image: welding-app/identity-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+    ports:
+      - "5011:80"
+    depends_on:
+      - postgresql_database
+    
+  file-api:
+    image: welding-app/file-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+    ports:
+      - "5012:80"
+    depends_on:
+      - postgresql_database
+        
+  integration-api:
+    image: welding-app/integration-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.IntegrationApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+    ports:
+      - "5013:80"
+    depends_on:
+      - postgresql_database
