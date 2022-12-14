@@ -22,7 +22,6 @@
     <Folder Include="Contracts\Requests" />
     <Folder Include="Controllers\" />
     <Folder Include="Managers\Interfaces\" />
-    <Folder Include="Repositories\Entities\Enums" />
   </ItemGroup>
 
   <ItemGroup>

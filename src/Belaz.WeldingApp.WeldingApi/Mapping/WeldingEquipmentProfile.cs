@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Extensions;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 using WeldingApp.Common.Enums;
 

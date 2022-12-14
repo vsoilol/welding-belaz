@@ -29,35 +29,32 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.IdentityUser
         [Required]
         [MaxLength(300)]
         public string PasswordHash { get; set; }
-
-        [Required]
+        
         [MaxLength(100)]
-        public string Position { get; set; }
+        public string? Position { get; set; }
 
         /// <summary>
-        /// Табельный номер
+        /// Табельный номер 
         /// </summary>
-        [Required]
         [MaxLength(100)]
-        public string ServiceNumber { get; set; }
-
+        public string? ServiceNumber { get; set; }
+        
         /// <summary>
-        /// Срок действия удостоверения
+        /// Срок действия удостоверения 
         /// </summary>
-        [Required]
-        public DateTime CertificateValidityPeriod { get; set; }
+        public DateTime? CertificateValidityPeriod { get; set; }
 
         /// <summary>
         /// RFID-метка
         /// </summary>
-        [Required]
         [MaxLength(100)]
-        public string RfidTag { get; set; }
-
-        [Required]
-        public Guid ProductionAreaId { get; set; }
-
+        public string? RfidTag { get; set; }
+        
+        public Guid? ProductionAreaId { get; set; }
+        
         [ForeignKey(nameof(ProductionAreaId))]
-        public ProductionArea ProductionArea { get; set; }
+        public ProductionArea? ProductionArea { get; set; }
+        
+        public List<UserRole> UserRoles { get; set; }
     }
 }

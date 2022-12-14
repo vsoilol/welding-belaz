@@ -17,13 +17,13 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
 
         [Required]
         public TimeSpan ShiftEnd { get; set; }
-
+        
         [Required]
         public Guid DayId { get; set; }
-
+        
         [ForeignKey(nameof(DayId))]
         public Day Day { get; set; }
-
+        
         public List<WeldingEquipmentWorkingShift> WeldingEquipmentWorkingShifts { get; set; }
     }
 }

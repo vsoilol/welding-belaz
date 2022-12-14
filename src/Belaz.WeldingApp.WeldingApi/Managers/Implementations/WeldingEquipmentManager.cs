@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;

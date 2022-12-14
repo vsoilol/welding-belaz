@@ -12,10 +12,10 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
         public int Number { get; set; }
 
         public List<Workplace> Workplaces { get; set; }
-
+        
         [Required]
         public Guid ProductionAreaId { get; set; }
-
+        
         [ForeignKey(nameof(ProductionAreaId))]
         public ProductionArea ProductionArea { get; set; }
     }

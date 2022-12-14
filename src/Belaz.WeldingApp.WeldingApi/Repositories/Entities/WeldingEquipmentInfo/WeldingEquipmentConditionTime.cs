@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
@@ -13,7 +12,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// Причина простоя
         /// </summary>
         public string? DowntimeReason { get; set; }
-
+        
         /// <summary>
         /// Время изменения состояния
         /// </summary>
@@ -22,9 +21,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// <summary>
         /// Сколько оборудование находиться в данном состоянии в минутах
         /// </summary>
-        [Required]
+        [Required] 
         public int Time { get; set; } = 0;
-
+        
         public WeldingEquipmentWorkingShift? WeldingEquipmentWorkingShift { get; set; }
     }
 }

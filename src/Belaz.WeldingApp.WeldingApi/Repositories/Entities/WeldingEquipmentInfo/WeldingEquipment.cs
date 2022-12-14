@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Enums;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 using WeldingApp.Common.Enums;
-using Calendar = Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo.Calendar;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
 {
@@ -91,13 +89,13 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// </summary>
         [Required]
         public double IdleVoltage { get; set; }
-
+        
         /// <summary>
         /// Сварочный ток min
         /// </summary>
         [Required]
         public double WeldingCurrentMin { get; set; }
-
+        
         /// <summary>
         /// Сварочный ток max
         /// </summary>
@@ -109,25 +107,30 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// </summary>
         [Required]
         public double ArcVoltageMin { get; set; }
-
+        
         /// <summary>
         /// Напряжения на дуге max
         /// </summary>
         [Required]
         public double ArcVoltageMax { get; set; }
-
+        
         public Guid? PostId { get; set; }
-
+        
         [ForeignKey(nameof(PostId))]
         public Post? Post { get; set; }
-
+        
         public Guid? CalendarId { get; set; }
-
+        
         [ForeignKey(nameof(CalendarId))]
         public Calendar? Calendar { get; set; }
-
+        
+        public Guid? MasterId { get; set; }
+        
+        [ForeignKey(nameof(MasterId))]
+        public Master? Master { get; set; }
+        
         public Guid? WelderId { get; set; }
-
+        
         [ForeignKey(nameof(WelderId))]
         public Welder? Welder { get; set; }
 

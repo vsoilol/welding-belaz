@@ -15,10 +15,10 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
         /// Перерыв между сменами в минутах
         /// </summary>
         public int? BreakBetweenShifts { get; set; }
-
+        
         [Required]
         public Guid CalendarId { get; set; }
-
+        
         [ForeignKey(nameof(CalendarId))]
         public Calendar Calendar { get; set; }
 
