@@ -1,4 +1,4 @@
-﻿namespace Belaz.WeldingApp.Models.Entities.Enums
+﻿namespace WeldingApp.Common.Enums
 {
     public enum Status
     {

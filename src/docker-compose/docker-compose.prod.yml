@@ -1,0 +1,42 @@
+﻿version: '3.4'
+
+services:
+  welding-api:
+    image: welding-app/welding-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+    ports:
+      - "5010:80"
+  
+  identity-api:
+    image: welding-app/identity-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+    ports:
+      - "5011:80"
+  
+  file-api:
+    image: welding-app/file-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+    ports:
+      - "5012:80"
+  
+  integration-api:
+    image: welding-app/integration-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.IntegrationApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+    ports:
+      - "5013:80"
