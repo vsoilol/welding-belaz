@@ -11,7 +11,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users
     /// </summary>
     public class Master : Entity
     {
-        [Required]
         public Guid UserId { get; set; }
         
         [ForeignKey(nameof(UserId))]

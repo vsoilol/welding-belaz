@@ -8,11 +8,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
     /// </summary>
     public class ProductionArea : Entity
     {
-        [Required]
-        [MaxLength(100)]
         public string Name { get; set; }
-
-        [Required]
+        
         public Guid WorkshopId { get; set; }
         
         [ForeignKey(nameof(WorkshopId))]

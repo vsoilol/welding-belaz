@@ -10,19 +10,16 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
     {
         public int Number { get; set; }
         
-        [Required]
         public Guid WelderId { get; set; }
         
         [ForeignKey(nameof(WelderId))]
         public Welder Welder { get; set; }
         
-        [Required]
         public Guid MasterId { get; set; }
         
         [ForeignKey(nameof(MasterId))]
         public Master Master { get; set; }
         
-        [Required]
         public Guid InspectorId { get; set; }
         
         [ForeignKey(nameof(InspectorId))]
@@ -31,7 +28,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// <summary>
         /// Дата выполнения сварки
         /// </summary>
-        [Required]
         public DateTime WeldingDate { get; set; }
 
         /// <summary>
@@ -47,34 +43,28 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// <summary>
         /// Температура окружающей среды
         /// </summary>
-        [Required]
         public int AmbientTemperature { get; set; }
 
         /// <summary>
         /// Влажность воздуха
         /// </summary>
-        [Required]
         public int AirHumidity { get; set; }
         
         /// <summary>
         /// Межслойная температура
         /// </summary>
-        [Required]
         public int InterlayerTemperature { get; set; }
 
         /// <summary>
         /// Номер текущего слоя
         /// </summary>
-        [Required]
         public int CurrentLayerNumber { get; set; }
 
         /// <summary>
         /// Температура предварительного нагрева
         /// </summary>
-        [Required]
         public int PreheatingTemperature { get; set; }
-
-        [Required] 
+        
         public Status Status { get; set; } = Status.NotStarted;
 
         /// <summary>
@@ -110,44 +100,33 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// <summary>
         /// Основной материал
         /// </summary>
-        [Required]
-        [MaxLength(50)]
         public string BasicMaterial { get; set; }
 
         /// <summary>
         /// № сертификата (партии) основного материала
         /// </summary>
-        [Required]
-        [MaxLength(50)]
         public string MainMaterialBatchNumber  { get; set; }
 
         /// <summary>
         /// Сварочные материалы
         /// </summary>
-        [Required]
-        [MaxLength(50)]
         public string WeldingMaterial { get; set; }
         
         /// <summary>
         /// № сертификата (партии) св. материала
         /// </summary>
-        [Required]
-        [MaxLength(50)]
         public string WeldingMaterialBatchNumber { get; set; }
 
         /// <summary>
         /// Защитный газ 
         /// </summary>
-        [MaxLength(50)]
         public string? ProtectiveGas { get; set; }
         
         /// <summary>
         /// № сертификата (партии) на защитный газ 
         /// </summary>
-        [MaxLength(50)]
         public string? ProtectiveGasBatchNumber { get; set; }
-        
-        [Required]
+
         public Guid SeamId { get; set; }
         
         [ForeignKey(nameof(SeamId))]

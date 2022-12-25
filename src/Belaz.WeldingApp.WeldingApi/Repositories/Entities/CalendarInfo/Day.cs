@@ -5,10 +5,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
 {
     public class Day : Entity
     {
-        [Required]
         public int MonthNumber { get; set; }
-
-        [Required]
+        
         public int Number { get; set; }
 
         /// <summary>
@@ -16,7 +14,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
         /// </summary>
         public int? BreakBetweenShifts { get; set; }
         
-        [Required]
         public Guid CalendarId { get; set; }
         
         [ForeignKey(nameof(CalendarId))]

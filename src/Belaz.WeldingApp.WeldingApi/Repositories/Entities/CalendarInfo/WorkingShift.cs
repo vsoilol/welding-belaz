@@ -9,16 +9,12 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
     /// </summary>
     public class WorkingShift : Entity
     {
-        [Required]
         public int Number { get; set; }
-
-        [Required]
+        
         public TimeSpan ShiftStart { get; set; }
-
-        [Required]
+        
         public TimeSpan ShiftEnd { get; set; }
         
-        [Required]
         public Guid DayId { get; set; }
         
         [ForeignKey(nameof(DayId))]

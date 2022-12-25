@@ -5,7 +5,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
 {
     public class WeldingEquipmentConditionTime : Entity
     {
-        [Required]
         public Condition Condition { get; set; }
 
         /// <summary>
@@ -21,7 +20,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// <summary>
         /// Сколько оборудование находиться в данном состоянии в минутах
         /// </summary>
-        [Required] 
         public int Time { get; set; } = 0;
         
         public WeldingEquipmentWorkingShift? WeldingEquipmentWorkingShift { get; set; }

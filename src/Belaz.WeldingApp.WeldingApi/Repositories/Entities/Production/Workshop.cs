@@ -7,8 +7,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
     /// </summary>
     public class Workshop : Entity
     {
-        [Required]
-        [MaxLength(100)]
         public string Name { get; set; }
         
         public List<ProductionArea> ProductionAreas { get; set; }

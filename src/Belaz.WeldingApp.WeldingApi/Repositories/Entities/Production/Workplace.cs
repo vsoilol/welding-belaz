@@ -8,7 +8,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
     /// </summary>
     public class Workplace : Entity
     {
-        [Required]
         public int Number { get; set; }
         
         public Guid? PostId { get; set; }

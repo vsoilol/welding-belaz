@@ -9,11 +9,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
     /// </summary>
     public class Knot : Entity
     {
-        [Required]
-        [MaxLength(100)]
         public string Name { get; set; }
-
-        [Required]
+        
         public int Number { get; set; }
         
         public Guid? WeldingTaskId { get; set; }

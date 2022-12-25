@@ -9,7 +9,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
     /// </summary>
     public class Seam : Entity
     {
-        [Required]
         public int Number { get; set; }
         
         public Guid? WeldingTaskId { get; set; }
