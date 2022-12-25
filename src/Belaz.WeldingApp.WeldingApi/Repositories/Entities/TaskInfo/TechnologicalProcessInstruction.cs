@@ -9,7 +9,7 @@
         /// <summary>
         /// Ссылка на PDF-файл в PDM-системе
         /// </summary>
-        public string Link { get; set; }
+        public string PdmSystemFileLink { get; set; }
 
         public List<Layer> Layers { get; set; }
 
