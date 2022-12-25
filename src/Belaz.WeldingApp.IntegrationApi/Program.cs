@@ -29,7 +29,7 @@ namespace Belaz.WeldingApp.IntegrationApi
 
                 CreateHostBuilder(args).Build().Run();
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Log.Fatal(ex, "Application start-up failed");
             }

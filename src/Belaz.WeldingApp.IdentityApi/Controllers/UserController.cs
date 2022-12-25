@@ -1,4 +1,3 @@
-using Belaz.WeldingApp.IdentityApi.Attributes;
 using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Presenters.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

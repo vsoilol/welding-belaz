@@ -1,14 +1,20 @@
+using System.Reflection;
 using System.Text;
 using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
+using Belaz.WeldingApp.IdentityApi.Extensions;
+using Belaz.WeldingApp.IdentityApi.Filters;
 using Belaz.WeldingApp.IdentityApi.Managers;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
 using Belaz.WeldingApp.IdentityApi.Options;
 using Belaz.WeldingApp.IdentityApi.Presenters;
 using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
+using Belaz.WeldingApp.IdentityApi.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -35,6 +41,18 @@ namespace Belaz.WeldingApp.IdentityApi
             services.AddDbContext<IdentityDbContext>(
                 options => options.UseNpgsql(DatabaseConnectionString));
 
+            /*
+            services.AddFluentValidation(conf =>
+            {
+                conf.RegisterValidatorsFromAssembly(typeof(Startup).Assembly);
+                conf.AutomaticValidationEnabled = false;
+            });
+            */
+
+            //services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+
             services.AddScoped<IRepository<UserData>, UserRepository>();
             services.AddScoped<IRepository<RoleData>, RoleRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
@@ -48,21 +66,28 @@ namespace Belaz.WeldingApp.IdentityApi
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
-            services.AddControllers()
-                    .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddControllers(
+                    options =>
+                    {
+                        options.Filters.Add<ApiValidationFilter>();
+                    })
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .RegisterValidatorsInAssembly(typeof(Startup).Assembly);
 
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
+                options.AddSecurityDefinition("oauth2",
+                    new OpenApiSecurityScheme
+                    {
+                        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+                        In = ParameterLocation.Header,
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey
+                    });
 
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
@@ -81,10 +106,7 @@ namespace Belaz.WeldingApp.IdentityApi
                 });
 
             services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-                policy =>
-                {
-                    policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                }));
+                policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -102,10 +124,7 @@ namespace Belaz.WeldingApp.IdentityApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         //private readonly IWebHostEnvironment _webHostEnvironment;

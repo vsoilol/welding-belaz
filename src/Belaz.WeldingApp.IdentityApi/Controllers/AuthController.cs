@@ -1,3 +1,4 @@
+using Belaz.WeldingApp.IdentityApi.Filters;
 using Belaz.WeldingApp.IdentityApi.Managers.Models;
 using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Presenters.Models;
@@ -53,7 +54,7 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers
 
             if (!authResponse.Success)
             {
-                return BadRequest(new AuthFailedResponse { Errors = authResponse.Errors, });
+                return BadRequest();
             }
 
             var authSuccess = new AuthSuccessResponse

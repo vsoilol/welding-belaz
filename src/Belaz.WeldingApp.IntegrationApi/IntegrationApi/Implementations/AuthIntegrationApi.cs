@@ -1,5 +1,6 @@
 ﻿using Belaz.WeldingApp.IntegrationApi.Contracts.Requests.Identity;
 using Belaz.WeldingApp.IntegrationApi.Contracts.Responses.Identity;
+using Belaz.WeldingApp.IntegrationApi.Extensions;
 using Belaz.WeldingApp.IntegrationApi.IntegrationApi.Interfaces;
 using Newtonsoft.Json;
 
@@ -46,7 +47,7 @@ public class AuthIntegrationApi : IAuthIntegrationApi
 
         var response = await _httpClient.PostAsync(requestUri, content);
 
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeAsync();
 
         var responseString = await response.Content.ReadAsStringAsync();
 
