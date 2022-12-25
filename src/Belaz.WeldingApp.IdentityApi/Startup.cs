@@ -66,7 +66,6 @@ namespace Belaz.WeldingApp.IdentityApi
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
-
             services.AddControllers(
                     options =>
                     {

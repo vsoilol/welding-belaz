@@ -10,7 +10,7 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [Route("api/welders")]
 [ApiController]
-
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class WelderController : ControllerBase
 {
     private readonly IWelderManager _welderManager;
@@ -21,6 +21,7 @@ public class WelderController : ControllerBase
     }
 
     [HttpGet]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WelderDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WelderDto>>> GetAllWeldersAsync()
     {

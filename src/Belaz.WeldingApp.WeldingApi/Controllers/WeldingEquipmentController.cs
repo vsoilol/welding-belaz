@@ -4,11 +4,14 @@ using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WeldingApp.Common.Attributes;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [Route("api/weldingEquipment")]
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class WeldingEquipmentController : ControllerBase
 {
     private readonly IWeldingEquipmentManager _weldingEquipmentManager;
@@ -19,6 +22,7 @@ public class WeldingEquipmentController : ControllerBase
     }
 
     [HttpGet]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WeldingEquipmentDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingEquipmentDto>>> GetAllWeldingEquipmentsAsync()
     {
@@ -26,6 +30,7 @@ public class WeldingEquipmentController : ControllerBase
     }
 
     [HttpGet("downtime")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WeldingEquipmentDowntimeDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingEquipmentDowntimeDto>>> GetAllWeldingEquipmentDowntimesAsync()
     {
