@@ -1,5 +1,7 @@
 using System.Net;
 using System.Text.Json;
+using Belaz.WeldingApp.IdentityApi.Exceptions;
+using WeldingApp.Common.Models;
 
 namespace Belaz.WeldingApp.IdentityApi.Middlewares
 {
@@ -22,10 +24,19 @@ namespace Belaz.WeldingApp.IdentityApi.Middlewares
             {
                 await _next(httpContext);
             }
+            catch (LoginFailedException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
+            }
+            catch (RegisterFailedException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                //to-do need to add catches for each unique exceptions.
                 await HandleExceptionAsync(httpContext, ServerErrorMessage, HttpStatusCode.InternalServerError);
             }
         }
@@ -36,7 +47,12 @@ namespace Belaz.WeldingApp.IdentityApi.Middlewares
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            var serializedResponseMessage = JsonSerializer.Serialize(errorMessage);
+            var badRequestResult = new BadRequestResult
+            {
+                Errors = errorMessage, StatusCode = context.Response.StatusCode, Title = "Internal Server Error"
+            };
+
+            var serializedResponseMessage = JsonSerializer.Serialize(badRequestResult);
 
             await context.Response.WriteAsync(serializedResponseMessage);
         }

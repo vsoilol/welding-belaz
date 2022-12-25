@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using WeldingApp.Common.Models;
 
 namespace Belaz.WeldingApp.IntegrationApi.Exception;
 
@@ -6,8 +7,10 @@ public class SimpleHttpResponseException : System.Exception
 {
     public HttpStatusCode StatusCode { get; private set; }
 
-    public SimpleHttpResponseException(HttpStatusCode statusCode, string content) : base(content)
+    public BadRequestResult ProblemDetails { get; }
+
+    public SimpleHttpResponseException(BadRequestResult problemDetails, string content) : base(content)
     {
-        StatusCode = statusCode;
+        ProblemDetails = problemDetails;
     }
 }

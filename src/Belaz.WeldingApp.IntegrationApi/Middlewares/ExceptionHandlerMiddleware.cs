@@ -4,6 +4,7 @@ using Belaz.WeldingApp.IntegrationApi.Exception;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.IntegrationApi.Middlewares
 {
@@ -34,12 +35,7 @@ namespace Belaz.WeldingApp.IntegrationApi.Middlewares
             catch (SimpleHttpResponseException ex)
             {
                 _logger.LogError(ex, ex.Message);
-                await HandleExceptionAsync(httpContext, ex.Message, ex.StatusCode);
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                await HandleExceptionAsync(httpContext, ServerErrorMessage, ex.StatusCode);
+                await HandleExceptionAsync(httpContext, ex.ProblemDetails);
             }
             catch (ArgumentException ex)
             {
@@ -53,19 +49,31 @@ namespace Belaz.WeldingApp.IntegrationApi.Middlewares
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, string errorMessage, HttpStatusCode? statusCode)
+        private async Task HandleExceptionAsync(HttpContext context, BadRequestResult badRequestResult)
         {
             context.Response.Clear();
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)(statusCode ?? HttpStatusCode.InternalServerError);
+            context.Response.StatusCode = badRequestResult.StatusCode;
 
-            var exceptionContract = new ExceptionContract()
+            var serializedResponseMessage = JsonConvert.SerializeObject(badRequestResult, _options.Value.SerializerSettings);
+
+            await context.Response.WriteAsync(serializedResponseMessage);
+        }
+
+        private async Task HandleExceptionAsync(HttpContext context, string errorMessage, HttpStatusCode statusCode)
+        {
+            context.Response.Clear();
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)statusCode;
+
+            var badRequestResult = new BadRequestResult
             {
-                Code = context.Response.StatusCode.ToString(),
-                Message = errorMessage,
+                Errors = errorMessage,
+                StatusCode = context.Response.StatusCode,
+                Title = "Internal Server Error"
             };
 
-            var serializedResponseMessage = JsonConvert.SerializeObject(exceptionContract, _options.Value.SerializerSettings);
+            var serializedResponseMessage = JsonConvert.SerializeObject(badRequestResult, _options.Value.SerializerSettings);
 
             await context.Response.WriteAsync(serializedResponseMessage);
         }

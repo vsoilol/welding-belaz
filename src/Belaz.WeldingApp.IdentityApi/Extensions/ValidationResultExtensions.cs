@@ -1,24 +1,22 @@
 ﻿using System.Net;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Mvc;
+using WeldingApp.Common.Models;
 
 namespace Belaz.WeldingApp.IdentityApi.Extensions
 {
     public static class ValidationResultExtensions
     {
-        public static ProblemDetails ToProblemDetails(this IEnumerable<ValidationFailure> validationFailures)
+        public static BadRequestResult ToProblemDetails(this IEnumerable<ValidationFailure> validationFailures)
         {
             var errors = validationFailures.ToDictionary(x => x.PropertyName, x => x.ErrorMessage);
 
-            var problemDetails = new ProblemDetails
+            var problemDetails = new BadRequestResult
             {
-                Type = "ValidationError",
-                Detail = "invalid request, please check the error list for more details",
-                Status = (int) (HttpStatusCode.BadRequest),
-                Title = "invalid request"
+                Title = "validation error, please check the error list for more details",
+                StatusCode = (int) (HttpStatusCode.BadRequest),
+                Errors = errors,
             };
 
-            problemDetails.Extensions.Add("errors", errors);
             return problemDetails;
         }
     }

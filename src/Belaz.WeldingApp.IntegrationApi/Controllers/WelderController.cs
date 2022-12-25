@@ -21,7 +21,7 @@ public class WelderController : ControllerBase
     }
 
     [HttpGet]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     public async Task<ActionResult<IEnumerable<WelderDto>>> GetAllWeldersAsync()
     {
         return await _welderIntegrationApi.GetAllWeldersAsync();

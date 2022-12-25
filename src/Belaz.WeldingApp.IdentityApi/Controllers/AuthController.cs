@@ -4,6 +4,7 @@ using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Presenters.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.IdentityApi.Controllers
 {
@@ -25,11 +26,6 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers
         {
             var authResponse = await _authPresenter.Register(registerContract);
 
-            if (!authResponse.Success)
-            {
-                return BadRequest(new AuthFailedResponse { Errors = authResponse.Errors, });
-            }
-
             var authSuccess = new AuthSuccessResponse
             {
                 Token = authResponse.Token,
@@ -45,17 +41,7 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginModelContract loginContract)
         {
-            if (string.IsNullOrWhiteSpace(loginContract.Password) || string.IsNullOrWhiteSpace(loginContract.UserName))
-            {
-                return BadRequest("Wrong credentials!");
-            }
-
             var authResponse = await _authPresenter.Login(loginContract);
-
-            if (!authResponse.Success)
-            {
-                return BadRequest();
-            }
 
             var authSuccess = new AuthSuccessResponse
             {

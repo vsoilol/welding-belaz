@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
+using Belaz.WeldingApp.IdentityApi.Exceptions;
 using Belaz.WeldingApp.IdentityApi.Extensions;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Managers.Models;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Serilog.Debugging;
 
 namespace Belaz.WeldingApp.IdentityApi.Managers
 {
@@ -42,14 +44,14 @@ namespace Belaz.WeldingApp.IdentityApi.Managers
 
             if (userData is null)
             {
-                return new AuthenticationResult { Errors = new[] { "User does not exist" }, };
+                throw new LoginFailedException("User does not exist");
             }
 
             var userHasValidPassword = SecurePasswordHasher.Verify(login.Password, userData.PasswordHash);
 
             if (!userHasValidPassword)
             {
-                return new AuthenticationResult { Errors = new[] { "User/password combination is wrong" }, };
+                throw new LoginFailedException("User/password combination is wrong");
             }
 
             return _tokenManager.GenerateAuthenticationResultForUser(userData);
@@ -71,10 +73,7 @@ namespace Belaz.WeldingApp.IdentityApi.Managers
 
             if (userContains)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { $"User with email: {registerContract.Email} already exist!" },
-                };
+                throw new RegisterFailedException($"User with email: {registerContract.Email} already exist!");
             }
 
             if (string.IsNullOrWhiteSpace(registerContract.Password))
@@ -86,10 +85,7 @@ namespace Belaz.WeldingApp.IdentityApi.Managers
 
             if (userRole is null)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[] { $"Cannot find {registerContract.Role} role!" },
-                };
+                throw new RegisterFailedException($"Cannot find {registerContract.Role} role!");
             }
 
             var newUser = new UserData
