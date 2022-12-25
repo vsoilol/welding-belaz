@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
 {
-    public class Layer : Entity
+    public class LayerInstruction : Entity
     {
         /// <summary>
         /// Сварочный ток min

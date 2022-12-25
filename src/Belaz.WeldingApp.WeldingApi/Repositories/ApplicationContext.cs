@@ -43,7 +43,7 @@ public class ApplicationContext : DbContext
         
     public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; }
         
-    public DbSet<Layer> Layers { get; set; }
+    public DbSet<LayerInstruction> Layers { get; set; }
         
     public DbSet<TechnologicalProcessInstruction> TechnologicalProcessInstructions { get; set; }
         

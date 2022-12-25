@@ -11,7 +11,7 @@
         /// </summary>
         public string PdmSystemFileLink { get; set; }
 
-        public List<Layer> Layers { get; set; }
+        public List<LayerInstruction> Layers { get; set; }
 
         public List<WeldingTask> WeldingTasks { get; set; }
     }
