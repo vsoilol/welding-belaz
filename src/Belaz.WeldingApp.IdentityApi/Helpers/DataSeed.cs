@@ -23,8 +23,8 @@ namespace Belaz.WeldingApp.IdentityApi.Helpers
                 FirstName = "Admin",
                 MiddleName = "Admin",
                 LastName = "Adminovich",
-                UserName = "admin",
-                PasswordHash = SecurePasswordHasher.Hash("admin"),
+                UserName = "admin1@admin.com",
+                PasswordHash = SecurePasswordHasher.Hash("_admin123A"),
             };
 
             var adminRole = await roleRepository.GetByFilterAsync(_ => _.Name == nameof(Role.Admin));

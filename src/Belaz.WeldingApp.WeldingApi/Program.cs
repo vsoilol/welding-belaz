@@ -1,4 +1,5 @@
 using System.Text;
+using Belaz.WeldingApp.WeldingApi.Helpers;
 using Belaz.WeldingApp.WeldingApi.Managers.Implementations;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -15,7 +16,7 @@ namespace Belaz.WeldingApp.WeldingApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -66,8 +67,17 @@ namespace Belaz.WeldingApp.WeldingApi
                         ValidateAudience = false,
                     };
                 });
+            
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
             var app = builder.Build();
+            
+            using (var scope = app.Services.CreateScope()) {
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<ApplicationContext>();
+                await DataSeed.SeedSampleDataAsync(context);
+            }
             
             app.UseSwagger();
             app.UseSwaggerUI();
