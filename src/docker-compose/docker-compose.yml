@@ -73,3 +73,10 @@ services:
       - postgresql_database
     volumes:
       - ./docker-storage/logs:/app/logs
+        
+  proxy:
+    image: nginx:mainline
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "4001:80"
