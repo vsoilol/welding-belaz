@@ -9,6 +9,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
     public class ProductionArea : Entity
     {
         public string Name { get; set; }
+
+        public int Number { get; set; }
         
         public Guid WorkshopId { get; set; }
         

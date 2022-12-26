@@ -1,8 +1,12 @@
 using System.Text;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Post;
 using Belaz.WeldingApp.WeldingApi.Helpers;
 using Belaz.WeldingApp.WeldingApi.Managers.Implementations;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Implementations;
@@ -32,9 +36,29 @@ namespace Belaz.WeldingApp.WeldingApi
             builder.Services
                 .AddScoped<EntityFrameworkRepository<WeldingEquipmentConditionTime>,
                     WeldingEquipmentConditionTimeRepository>();
-
+            builder.Services.AddScoped<EntityFrameworkRepository<Workshop>, WorkshopRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<Workplace>, WorkplaceRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<ProductionArea>, ProductionAreaRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<Post>, PostRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<Detail>, DetailRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<Knot>, KnotRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<Product>, ProductRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<Seam>, SeamRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<TechnologicalProcess>, TechnologicalProcessRepository>();
+            builder.Services.AddScoped<EntityFrameworkRepository<WeldingTask>, WeldingTaskRepository>();
+            
             builder.Services.AddScoped<IWelderManager, WelderManager>();
             builder.Services.AddScoped<IWeldingEquipmentManager, WeldingEquipmentManager>();
+            builder.Services.AddScoped<IWorkshopManager, WorkshopManager>();
+            builder.Services.AddScoped<IWorkplaceManager, WorkplaceManager>();
+            builder.Services.AddScoped<IProductionAreaManager, ProductionAreaManager>();
+            builder.Services.AddScoped<IPostManager, PostManager>();
+            builder.Services.AddScoped<IKnotManager, KnotManager>();
+            builder.Services.AddScoped<IDetailManager, DetailManager>();
+            builder.Services.AddScoped<IProductManager, ProductManager>();
+            builder.Services.AddScoped<ISeamManager, SeamManager>();
+            builder.Services.AddScoped<ITechnologicalProcessManager, TechnologicalProcessManager>();
+            builder.Services.AddScoped<IWeldingTaskManager, WeldingTaskManager>();
 
             builder.Services.AddControllers();
 
@@ -79,8 +103,15 @@ namespace Belaz.WeldingApp.WeldingApi
                 await DataSeed.SeedSampleDataAsync(context);
             }
             
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz");
+                c.RoutePrefix = "api/swagger";
+            });
 
             app.UseHttpsRedirection();
 

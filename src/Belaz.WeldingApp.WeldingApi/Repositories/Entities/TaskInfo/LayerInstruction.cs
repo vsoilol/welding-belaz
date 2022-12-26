@@ -35,9 +35,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// </summary>
         public double PreheatingTemperatureMax { get; set; }
         
-        public Guid TechnologicalProcessInstructionId { get; set; }
+        public Guid? TechnologicalProcessId { get; set; }
         
-        [ForeignKey(nameof(TechnologicalProcessInstructionId))]
-        public TechnologicalProcessInstruction TechnologicalProcessInstruction { get; set; }
+        [ForeignKey(nameof(TechnologicalProcessId))]
+        public TechnologicalProcess? TechnologicalProcess { get; set; }
     }
 }

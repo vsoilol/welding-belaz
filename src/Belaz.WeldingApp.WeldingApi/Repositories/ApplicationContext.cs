@@ -1,6 +1,7 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Repositories.Entities;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.IdentityUser;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
@@ -43,13 +44,23 @@ public class ApplicationContext : DbContext
         
     public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; }
         
-    public DbSet<LayerInstruction> Layers { get; set; }
+    public DbSet<LayerInstruction> LayerInstructions { get; set; }
         
-    public DbSet<TechnologicalProcessInstruction> TechnologicalProcessInstructions { get; set; }
+    public DbSet<TechnologicalProcess> TechnologicalProcesses { get; set; }
         
     public DbSet<WeldingTask> WeldingTasks { get; set; }
         
     public DbSet<EventLog> EventLogs { get; set; }
+    
+    public DbSet<Seam> Seams { get; set; }
+    
+    public DbSet<Knot> Knots { get; set; }
+    
+    public DbSet<Detail> Details { get; set; }
+    
+    public DbSet<Product> Products { get; set; }
+    
+    public DbSet<ProductBridge> ProductBridges { get; set; }
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
@@ -62,5 +73,7 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<WeldingEquipmentWorkingShift>().HasKey(t =>
             new { t.WeldingEquipmentId, t.WorkingShiftId, t.WeldingEquipmentConditionTimeId });
         modelBuilder.Entity<UserRole>().HasKey(t => new { t.RoleId, t.UserId });
+        modelBuilder.Entity<ProductBridge>().HasKey(t =>
+            new { t.DetailId, t.KnotId, t.ProductId, t.SeamId });
     }
 }

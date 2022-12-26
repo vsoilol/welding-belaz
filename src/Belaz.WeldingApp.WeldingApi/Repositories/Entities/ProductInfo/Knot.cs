@@ -13,9 +13,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
         
         public int Number { get; set; }
         
-        public Guid? WeldingTaskId { get; set; }
-        
-        [ForeignKey(nameof(WeldingTaskId))]
         public WeldingTask? WeldingTask { get; set; }
+        
+        public List<ProductBridge> ProductBridges { get; set; }
     }
 }

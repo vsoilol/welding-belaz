@@ -41,15 +41,6 @@ namespace Belaz.WeldingApp.IdentityApi
             services.AddDbContext<IdentityDbContext>(
                 options => options.UseNpgsql(DatabaseConnectionString));
 
-            /*
-            services.AddFluentValidation(conf =>
-            {
-                conf.RegisterValidatorsFromAssembly(typeof(Startup).Assembly);
-                conf.AutomaticValidationEnabled = false;
-            });
-            */
-
-            //services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
 
@@ -112,8 +103,21 @@ namespace Belaz.WeldingApp.IdentityApi
         {
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            /*app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = "api/swagger";
+            });*/
+
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz Identity");
+                c.RoutePrefix = "api/swagger";
+            });
 
             app.UseCors("NgOrigins");
             app.UseHttpsRedirection();

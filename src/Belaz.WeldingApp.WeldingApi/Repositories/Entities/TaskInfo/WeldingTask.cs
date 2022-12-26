@@ -127,10 +127,10 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// </summary>
         public string? ProtectiveGasBatchNumber { get; set; }
 
-        public Guid SeamId { get; set; }
+        public Guid? SeamId { get; set; }
         
         [ForeignKey(nameof(SeamId))]
-        public Seam Seam { get; set; }
+        public Seam? Seam { get; set; }
         
         public Guid? ProductId { get; set; }
         
@@ -147,9 +147,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         [ForeignKey(nameof(DetailId))]
         public Detail? Detail { get; set; }
         
-        public Guid TechnologicalProcessInstructionId { get; set; }
+        public Guid? TechnologicalInstructionId { get; set; }
         
-        [ForeignKey(nameof(TechnologicalProcessInstructionId))]
-        public TechnologicalProcessInstruction TechnologicalProcessInstruction { get; set; }
+        [ForeignKey(nameof(TechnologicalInstructionId))]
+        public TechnologicalInstruction? TechnologicalInstruction { get; set; }
     }
 }

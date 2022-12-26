@@ -1,7 +1,9 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.IdentityUser;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +35,16 @@ public class DataSeed
         if (!context.WeldingEquipments.Any())
         {
             await AddSeveralWeldingEquipment(context);
+        }
+
+        if (!context.ProductBridges.Any())
+        {
+            await AddProducts(context);
+        }
+
+        if (!context.WeldingTasks.Any())
+        {
+            await AddWeldingTasks(context);
         }
     }
 
@@ -95,6 +107,7 @@ public class DataSeed
         var workShop = new Workshop
         {
             Name = "Цех",
+            Number = 1,
             ProductionAreas = new List<ProductionArea>
             {
                 new ProductionArea
@@ -414,6 +427,353 @@ public class DataSeed
         welders[2].WeldingEquipmentId = weldingEquipments[2].Id;
 
         context.Welders.UpdateRange(welders);
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task AddProducts(ApplicationContext context)
+    {
+        var productBridges = new List<ProductBridge>
+        {
+            new ProductBridge
+            {
+                Detail = new Detail
+                {
+                    Name = "Деталь 1",
+                    Number = 1,
+                },
+                Knot = new Knot
+                {
+                    Name = "Узел 1",
+                    Number = 1,
+                },
+                Product = new Product
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Изделие 1",
+                    Number = 1,
+                },
+                Seam = new Seam
+                {
+                    Number = 1,
+                }
+            },
+            new ProductBridge
+            {
+                Detail = new Detail
+                {
+                    Name = "Деталь 2",
+                    Number = 2,
+                },
+                Knot = new Knot
+                {
+                    Name = "Узел 2",
+                    Number = 2,
+                },
+                Product = new Product
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Изделие 2",
+                    Number = 2,
+                },
+                Seam = new Seam
+                {
+                    Number = 2,
+                }
+            }
+        };
+
+        await context.ProductBridges.AddRangeAsync(productBridges);
+        await context.SaveChangesAsync();
+
+        var technologicalProcess = new List<TechnologicalProcess>
+        {
+            new TechnologicalProcess
+            {
+                Id = Guid.NewGuid(),
+                ProductId = productBridges[0].ProductId,
+                Name = "Технологический процесс 1",
+                Number = 1,
+                PdmSystemFileLink = "Ссылка",
+            },
+            new TechnologicalProcess
+            {
+                Id = Guid.NewGuid(),
+                ProductId = productBridges[1].ProductId,
+                Name = "Технологический процесс 2",
+                Number = 2,
+                PdmSystemFileLink = "Ссылка",
+            }
+        };
+
+        await context.TechnologicalProcesses.AddRangeAsync(technologicalProcess);
+        await context.SaveChangesAsync();
+
+        productBridges[0].Product.TechnologicalProcessInstructionId = technologicalProcess[0].Id;
+        productBridges[1].Product.TechnologicalProcessInstructionId = technologicalProcess[1].Id;
+
+        context.UpdateRange(productBridges);
+        await context.SaveChangesAsync();
+
+        var layerInstructions = new List<LayerInstruction>
+        {
+            new LayerInstruction
+            {
+                Id = Guid.NewGuid(),
+                TechnologicalProcessId = technologicalProcess[0].Id,
+                WeldingCurrentMin = 1,
+                WeldingCurrentMax = 100,
+                ArcVoltageMin = 5,
+                ArcVoltageMax = 50,
+                PreheatingTemperatureMin = 10,
+                PreheatingTemperatureMax = 60,
+            },
+            new LayerInstruction
+            {
+                Id = Guid.NewGuid(),
+                TechnologicalProcessId = technologicalProcess[1].Id,
+                WeldingCurrentMin = 1,
+                WeldingCurrentMax = 100,
+                ArcVoltageMin = 5,
+                ArcVoltageMax = 50,
+                PreheatingTemperatureMin = 10,
+                PreheatingTemperatureMax = 60,
+            }
+        };
+
+        await context.LayerInstructions.AddRangeAsync(layerInstructions);
+        await context.SaveChangesAsync();
+
+        technologicalProcess[0].LayerInstructionId = layerInstructions[0].Id;
+        technologicalProcess[1].LayerInstructionId = layerInstructions[1].Id;
+
+        context.UpdateRange(technologicalProcess);
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task AddWeldingTasks(ApplicationContext context)
+    {
+        var seam = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
+        var knot = await context.Knots.FirstOrDefaultAsync(_ => _.Number == 1);
+        var detail = await context.Details.FirstOrDefaultAsync(_ => _.Number == 1);
+        var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1);
+        var welder = await context.Welders.FirstOrDefaultAsync(_ => _.Workplace != null);
+
+        var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
+        var knot2 = await context.Knots.FirstOrDefaultAsync(_ => _.Number == 2);
+
+        var inspector = new Inspector
+        {
+            UserInfo = new UserData
+            {
+                CertificateValidityPeriod = new DateTime(2025, 2, 2),
+                FirstName = "Имя Контролера",
+                LastName = "Имя Контролера",
+                MiddleName = "Имя Контролера",
+                UserName = "UserName",
+                Email = "Email",
+                PasswordHash = "PasswordHash",
+                Position = "Должность 1",
+                ServiceNumber = "Табельный номер  1",
+                RfidTag = "RFID метка проверяющего 1",
+            },
+        };
+
+        await context.Inspectors.AddAsync(inspector);
+        await context.SaveChangesAsync();
+
+        var master = new Master
+        {
+            UserInfo = new UserData
+            {
+                CertificateValidityPeriod = new DateTime(2025, 2, 2),
+                FirstName = "Имя мастера",
+                LastName = "Отчество мастера",
+                MiddleName = "Фамилия мастера",
+                UserName = "UserName",
+                Email = "Email",
+                PasswordHash = "PasswordHash",
+                Position = "Должность 1",
+                ServiceNumber = "Табельный номер  1",
+                RfidTag = "RFID метка проверяющего 1",
+            },
+        };
+
+        await context.Masters.AddAsync(master);
+        await context.SaveChangesAsync();
+
+        var tasks = new List<WeldingTask>
+        {
+            new WeldingTask
+            {
+                Number = 1,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 300,
+                AirHumidity = 01,
+                InterlayerTemperature = 200,
+                CurrentLayerNumber = 81,
+                PreheatingTemperature = 150,
+                Status = Status.Manufactured,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Seam = seam2,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                TechnologicalInstruction = new TechnologicalInstruction
+                {
+                    Name = "Инструкция",
+                    Number = 1,
+                },
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            },
+            new WeldingTask
+            {
+                Number = 2,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 3067,
+                AirHumidity = 41,
+                InterlayerTemperature = 203,
+                CurrentLayerNumber = 31,
+                PreheatingTemperature = 110,
+                Status = Status.Defective,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Knot = knot2,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                TechnologicalInstruction = new TechnologicalInstruction
+                {
+                    Name = "Инструкция",
+                    Number = 1,
+                },
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            },
+            new WeldingTask
+            {
+                Number = 3,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 390,
+                AirHumidity = 81,
+                InterlayerTemperature = 820,
+                CurrentLayerNumber = 81,
+                PreheatingTemperature = 170,
+                Status = Status.VerificationSubject,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Detail = detail,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                TechnologicalInstruction = new TechnologicalInstruction
+                {
+                    Name = "Инструкция",
+                    Number = 1,
+                },
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            },
+            new WeldingTask
+            {
+                Number = 4,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 320,
+                AirHumidity = 1,
+                InterlayerTemperature = 220,
+                CurrentLayerNumber = 12,
+                PreheatingTemperature = 2,
+                Status = Status.VerificationSubject,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Seam = seam,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                TechnologicalInstruction = new TechnologicalInstruction
+                {
+                    Name = "Инструкция",
+                    Number = 1,
+                },
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            },
+            new WeldingTask
+            {
+                Number = 5,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 130,
+                AirHumidity = 21,
+                InterlayerTemperature = 23,
+                CurrentLayerNumber = 13,
+                PreheatingTemperature = 10,
+                Status = Status.VerificationSubject,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Product = product,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                TechnologicalInstruction = new TechnologicalInstruction
+                {
+                    Name = "Инструкция",
+                    Number = 1,
+                },
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            },
+            new WeldingTask
+            {
+                Number = 6,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 31,
+                AirHumidity = 2,
+                InterlayerTemperature = 22,
+                CurrentLayerNumber = 2,
+                PreheatingTemperature = 11,
+                Status = Status.VerificationSubject,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Knot = knot,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                TechnologicalInstruction = new TechnologicalInstruction
+                {
+                    Name = "Инструкция",
+                    Number = 1,
+                },
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            }
+        };
+
+        await context.WeldingTasks.AddRangeAsync(tasks);
         await context.SaveChangesAsync();
     }
 }
