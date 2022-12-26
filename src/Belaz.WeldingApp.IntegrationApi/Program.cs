@@ -1,4 +1,5 @@
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Belaz.WeldingApp.IntegrationApi
 {
@@ -12,21 +13,23 @@ namespace Belaz.WeldingApp.IntegrationApi
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
+                .WriteTo.File(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\welding-belaz.txt"),
+                    outputTemplate:
+                    "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                    rollingInterval: RollingInterval.Day,
+                    fileSizeLimitBytes: 1_000_000,
+                    rollOnFileSizeLimit: true,
+                    shared: true,
+                    flushToDiskInterval: TimeSpan.FromSeconds(1))
+                .WriteTo.Console(
+                    outputTemplate:
+                    "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                    theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
-
-            //var host = CreateHostBuilder(args).Build();
 
             try
             {
-                //await MigrationHelper.EnsureDatabasesMigrated(host.Services);
-
-                //using (var scope = host.Services.CreateScope())
-                //{
-                //    var services = scope.ServiceProvider;
-                //    await services.GetService<InitialData>().InitializeAsync();
-                //}
-
                 CreateHostBuilder(args).Build().Run();
             }
             catch (System.Exception ex)
@@ -43,6 +46,7 @@ namespace Belaz.WeldingApp.IntegrationApi
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     if (HostPort != "")

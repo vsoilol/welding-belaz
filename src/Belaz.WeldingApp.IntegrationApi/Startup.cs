@@ -47,8 +47,15 @@ namespace Belaz.WeldingApp.IntegrationApi
         {
             app.UseMiddleware<Middlewares.ExceptionHandlerMiddleware>();
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz Integration");
+                c.RoutePrefix = "api/swagger";
+            });
 
             app.UseCors("NgOrigins");
             app.UseHttpsRedirection();
