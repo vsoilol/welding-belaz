@@ -71,3 +71,5 @@ services:
       - "5013:80"
     depends_on:
       - postgresql_database
+    volumes:
+      - ./docker-storage/logs:/app/logs

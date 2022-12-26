@@ -14,7 +14,7 @@ namespace Belaz.WeldingApp.IntegrationApi
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.File(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\welding-belaz.txt"),
+                    @"logs/welding-belaz.txt",
                     outputTemplate:
                     "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                     rollingInterval: RollingInterval.Day,
