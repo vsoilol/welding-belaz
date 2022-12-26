@@ -25,7 +25,7 @@ services:
     ports:
       - "5010:80"
     depends_on:
-      - postgresql_database
+      - belaz-postgres
 
   identity-api:
     image: welding-app/identity-api
@@ -37,7 +37,7 @@ services:
     ports:
       - "5011:80"
     depends_on:
-      - postgresql_database
+      - belaz-postgres
 
   file-api:
     image: welding-app/file-api
@@ -49,7 +49,7 @@ services:
     ports:
       - "5012:80"
     depends_on:
-      - postgresql_database
+      - belaz-postgres
 
   integration-api:
     image: welding-app/integration-api
@@ -63,7 +63,7 @@ services:
     volumes:
       - ./docker-storage/logs:/app/logs
     depends_on:
-      - postgresql_database
+      - belaz-postgres
 
   proxy:
     image: nginx:mainline
@@ -72,4 +72,4 @@ services:
     ports:
       - "4001:80"
     depends_on:
-      - postgresql_database
+      - belaz-postgres
