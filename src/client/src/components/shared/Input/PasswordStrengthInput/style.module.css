@@ -1,0 +1,41 @@
+.wrapper {
+  box-sizing: border-box;
+  margin: 10px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 18px;
+  padding: 0 20px;
+}
+
+.blocksWrapper {
+  display: flex;
+}
+
+.block {
+  width: 20px;
+  height: 8px;
+  background-color: #949494;
+  margin: 0 1px;
+  transition: background-color 0.25s cubic-bezier(0, 0, 1, 1);
+}
+
+.right {
+  border-radius: 0 8px 8px 0;
+}
+
+.left {
+  border-radius: 8px 0 0 8px;
+}
+
+.green {
+  background-color: #7fbe41;
+}
+
+.greenText {
+  color: #7fbe41;
+}
+
+.yellowText {
+  color: #a89700;
+}

@@ -1,0 +1,35 @@
+import { connect } from "react-redux";
+import { TasksPage } from "pages/Tasks";
+import Actions from "store/tasks/actions";
+import ExecutorsActions from "store/executors/actions";
+import InstructionsActions from "store/instructions/actions";
+import EquipmentActions from "store/equipment/actions";
+
+const mapStateToProps = (state) => {
+  return {
+    tasks: state.tasks.tasks,
+    masters: state.executors.masters,
+    executors: state.executors.executors,
+    techs: state.executors.techs,
+    instructions: state.instructions.instructions,
+    equipment: state.equipment.equipment,
+    isRequesting:
+      state?.tasks?.isRequesting ||
+      state?.instructions?.isRequesting ||
+      state?.techs?.isRequesting,
+    userRole: state.auth.user.role,
+  };
+};
+const mapDispatchToProps = {
+  loadTasks: Actions.Creators.loadTasksRequest,
+  addTask: Actions.Creators.addTaskRequest,
+  deleteTask: Actions.Creators.deleteTaskRequest,
+  editTask: Actions.Creators.editTaskRequest,
+  loadExecutors: ExecutorsActions.Creators.loadExecutorsRequest,
+  loadMasters: ExecutorsActions.Creators.loadMastersRequest,
+  loadTechs: ExecutorsActions.Creators.loadTechsRequest,
+  loadInstructions: InstructionsActions.Creators.loadInstructionsRequest,
+  loadEquipment: EquipmentActions.Creators.loadEquipmentRequest,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);

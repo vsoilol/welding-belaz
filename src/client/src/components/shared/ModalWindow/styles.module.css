@@ -1,0 +1,106 @@
+.modalContainer {
+  max-height: calc(100% - 60px);
+  margin-top: 40px;
+  position: fixed;
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  -ms-overflow-style: none;
+}
+
+.header {
+  display: flex;
+  height: 60px;
+  padding: 0 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerText {
+  font-family: "Muller Narrow Light";
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.44px;
+  line-height: 23px;
+}
+
+.wrapper {
+  overflow: auto;
+}
+
+.modalContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.bottomControls {
+  padding-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  width: 100%;
+}
+
+.closeIcon {
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  z-index: 2;
+}
+
+.shadow {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 997;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 992px) {
+  .modalContainer {
+    top: 150%;
+    left: 50%;
+    border-radius: 8px;
+    padding-bottom: 16px;
+    transform: translate(-50%, -50%);
+    transition: top 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .header {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .openedModalContainer {
+    top: 50%;
+  }
+}
+
+@media (max-width: 991px) {
+  .modalContainer {
+    z-index: 1000;
+    bottom: -100%;
+    border-radius: 8px 8px 0 0;
+    padding-bottom: 60px;
+    overflow-y: scroll;
+    left: 0;
+    width: 100% !important;
+    transition: bottom 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  .openedModalContainer {
+    bottom: 0;
+    width: 100%;
+  }
+
+  .shadow {
+    z-index: 997;
+  }
+}
+
+@media print {
+  .modalContainer {
+    display: none;
+  }
+}

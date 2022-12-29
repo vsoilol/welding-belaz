@@ -1,0 +1,15 @@
+.profileIcon {
+  height: 16px;
+  width: 16px;
+  padding: 30px 7px 13px 7px;
+  filter: invert(98%) sepia(0%) saturate(2734%) hue-rotate(185deg)
+    brightness(17%) contrast(100%);
+}
+
+.profileIconWrapper {
+  margin-left: 5px;
+}
+
+.profileIconActive {
+  filter: none;
+}

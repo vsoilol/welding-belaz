@@ -1,0 +1,40 @@
+.tableWrapper { 
+  margin-top: 80px; 
+}
+
+.innerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px;
+}
+
+.row:first-child {
+  margin-top: 30px;
+}
+
+.row:last-child {
+  margin-bottom: 30px;
+}
+.tableWrapper { 
+  max-width: 1400px;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+@media (max-width: 1440px) {
+  .tableWrapper {
+    margin-top: 40px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .tableWrapper {
+    margin-top: 0;
+  }
+}
