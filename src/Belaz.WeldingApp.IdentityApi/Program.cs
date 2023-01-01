@@ -1,12 +1,9 @@
 using System.Text;
 using Belaz.WeldingApp.IdentityApi;
 using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Helpers;
-using Belaz.WeldingApp.IdentityApi.Managers.Implementations;
-using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
 using Belaz.WeldingApp.IdentityApi.Options;
 using FluentValidation;
@@ -118,10 +115,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-app.UseSwagger(c =>
-{
-    c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
-});
+app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentname}/swagger.json"; });
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz Identity");
