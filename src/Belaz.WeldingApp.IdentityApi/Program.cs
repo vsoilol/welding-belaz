@@ -20,12 +20,9 @@ using Swashbuckle.AspNetCore.Filters;
 using WeldingApp.Common.Extensions;
 using WeldingApp.Common.Filters;
 
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(ProjectLoggerConfiguration.GetLoggerConfiguration("identity-api"));
 
 builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
 {
@@ -94,7 +91,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 

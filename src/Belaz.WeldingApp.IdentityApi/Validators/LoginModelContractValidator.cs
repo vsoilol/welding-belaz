@@ -1,22 +1,21 @@
 ﻿using Belaz.WeldingApp.IdentityApi.Contracts.Requests.Identity;
 using FluentValidation;
 
-namespace Belaz.WeldingApp.IdentityApi.Validators
+namespace Belaz.WeldingApp.IdentityApi.Validators;
+
+public class LoginModelContractValidator : AbstractValidator<LoginModelContract>
 {
-    public class LoginModelContractValidator : AbstractValidator<LoginModelContract>
+    public LoginModelContractValidator()
     {
-        public LoginModelContractValidator()
-        {
-            When(_ => _.UserName != "admin",
-                () =>
-                {
-                    RuleFor(model => model.UserName)
-                        .Cascade(CascadeMode.Stop)
-                        .NotEmpty()
-                        .Matches("^\\S+@\\S+\\.\\S+$")
-                        .WithMessage("The UserName field is not a valid e-mail address.");
-                });
-            RuleFor(model => model.Password).Cascade(CascadeMode.Stop).NotEmpty();
-        }
+        When(_ => _.UserName != "admin",
+            () =>
+            {
+                RuleFor(model => model.UserName)
+                    .Cascade(CascadeMode.Stop)
+                    .NotEmpty()
+                    .Matches("^\\S+@\\S+\\.\\S+$")
+                    .WithMessage("The UserName field is not a valid e-mail address.");
+            });
+        RuleFor(model => model.Password).Cascade(CascadeMode.Stop).NotEmpty();
     }
 }

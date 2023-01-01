@@ -1,10 +1,9 @@
-﻿namespace Belaz.WeldingApp.IdentityApi.Exceptions
+﻿namespace Belaz.WeldingApp.IdentityApi.Exceptions;
+
+[Serializable]
+public class UserExistsException : Exception
 {
-    [Serializable]
-    public class UserExistsException : Exception
+    public UserExistsException(string userName) : base($"User with username: {userName} already exists")
     {
-        public UserExistsException(string userName) : base($"User with username: {userName} already exists")
-        {
-        }
     }
 }
