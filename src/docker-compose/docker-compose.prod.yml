@@ -6,8 +6,9 @@ services:
     container_name: belaz-postgres
     restart: always
     volumes:
-      - /home/bru/data/postgresql-db:/var/lib/postgresql/data
+      - /home/bru/docker-data/welding-belaz/postgresql-db:/var/lib/postgresql/data
       - ../../database/init-script.sql:/docker-entrypoint-initdb.d/init.sql
+    user: "1001:1001"
     environment:
       POSTGRES_PASSWORD: Hynatg32_R
       POSTGRES_USER: bru
@@ -57,12 +58,13 @@ services:
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IntegrationApi/Dockerfile
+    user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
     ports:
       - "5013:80"
     volumes:
-      - ./docker-storage/logs:/app/logs
+      - /home/bru/docker-data/welding-belaz/logs:/app/logs
     depends_on:
       - belaz-postgres
 
