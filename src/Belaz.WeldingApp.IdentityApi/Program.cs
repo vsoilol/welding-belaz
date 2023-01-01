@@ -51,14 +51,9 @@ builder.Services.AddDbContext<IdentityDbContext>(
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-builder.Services.AddScoped<IRepository<UserData>, UserRepository>();
-builder.Services.AddScoped<IRepository<RoleData>, RoleRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IUserManager, UserManager>();
-builder.Services.AddScoped<ITokenManager, TokenManager>();
-builder.Services.AddScoped<IAuthManager, AuthManager>();
-
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.RegisterDependency();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
