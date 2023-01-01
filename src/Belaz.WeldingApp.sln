@@ -32,6 +32,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonProjects", "CommonPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeldingApp.Common", "WeldingApp.Common\WeldingApp.Common.csproj", "{9CEDAC05-E82A-4F43-B9DB-D4804CF935F6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{9AF7C979-063E-4D41-B6C5-A384284C41A9}"
+	ProjectSection(SolutionItems) = preProject
+		sharedsettings.json = sharedsettings.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

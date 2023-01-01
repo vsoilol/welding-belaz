@@ -26,7 +26,7 @@ builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
     var env = builderContext.HostingEnvironment;
 
     // find the shared folder in the parent folder
-    var sharedFolder = Path.Combine(env.ContentRootPath, "..", "WeldingApp.Common");
+    var sharedFolder = env.EnvironmentName.Contains("Docker") ? "" : Path.Combine(env.ContentRootPath, "..");
 
     //load the SharedSettings first, so that appsettings.json overrwrites it
     config

@@ -45,6 +45,8 @@ services:
       ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
       - "5011:80"
+    volumes:
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
     
