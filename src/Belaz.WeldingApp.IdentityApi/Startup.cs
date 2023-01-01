@@ -5,7 +5,6 @@ using Belaz.WeldingApp.IdentityApi.Data.Repositories;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Extensions;
-using Belaz.WeldingApp.IdentityApi.Filters;
 using Belaz.WeldingApp.IdentityApi.Managers;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
@@ -20,6 +19,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using WeldingApp.Common.Extensions;
+using WeldingApp.Common.Filters;
 
 namespace Belaz.WeldingApp.IdentityApi
 {
@@ -102,12 +103,6 @@ namespace Belaz.WeldingApp.IdentityApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-            /*app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.RoutePrefix = "api/swagger";
-            });*/
 
             app.UseSwagger(c =>
             {

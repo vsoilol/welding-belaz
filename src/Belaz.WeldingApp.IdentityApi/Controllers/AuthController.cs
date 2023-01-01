@@ -1,4 +1,3 @@
-using Belaz.WeldingApp.IdentityApi.Filters;
 using Belaz.WeldingApp.IdentityApi.Managers.Models;
 using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Presenters.Models;
