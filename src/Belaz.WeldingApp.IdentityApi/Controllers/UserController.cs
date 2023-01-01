@@ -1,5 +1,6 @@
-using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
-using Belaz.WeldingApp.IdentityApi.Presenters.Models;
+using Belaz.WeldingApp.IdentityApi.Contracts.Requests.User;
+using Belaz.WeldingApp.IdentityApi.Contracts.Responses.User;
+using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,49 +14,49 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
-        private readonly IUserPresenter _userPresenter;
+        private readonly IUserManager _userManager;
 
-        public UserController(IUserPresenter userPresenter)
+        public UserController(IUserManager userManager)
         {
-            _userPresenter = userPresenter;
+            _userManager = userManager;
         }
 
         [HttpGet]
         [AuthorizeRoles(Role.Admin, Role.Master)]
-        [ProducesResponseType(typeof(IEnumerable<UserContract>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userPresenter.GetAllAsync();
+            var users = await _userManager.GetAllAsync();
 
             return Ok(users);
         }
 
         [HttpGet("{userId}")]
         [AuthorizeRoles(Role.Admin, Role.Master)]
-        [ProducesResponseType(typeof(UserContract), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get([FromRoute] Guid userId)
         {
-            var user = await _userPresenter.GetByIdAsync(userId);
+            var user = await _userManager.GetByIdAsync(userId);
 
             return Ok(user);
         }
 
         [HttpPost]
         [AuthorizeRoles(Role.Admin)]
-        [ProducesResponseType(typeof(UserContract), StatusCodes.Status201Created)]
-        public async Task<IActionResult> Add([FromBody] UserContract userContract)
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
+        public async Task<IActionResult> Add([FromBody] CreateUserRequest userContract)
         {
-            var createdUserContract = await _userPresenter.AddAsync(userContract);
+            var createdUserContract = await _userManager.AddAsync(userContract);
 
             return CreatedAtAction(nameof(Get),  new {userId = createdUserContract.Id}, createdUserContract);
         }
 
         [HttpPut("{userId}")]
         [AuthorizeRoles(Role.Admin)]
-        [ProducesResponseType(typeof(UserContract), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Update([FromRoute] Guid userId, [FromBody] UserContract userContract)
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Update([FromRoute] Guid userId, [FromBody] CreateUserRequest userContract)
         {
-            var updatedUser = await _userPresenter.UpdateAsync(userId, userContract);
+            var updatedUser = await _userManager.UpdateAsync(userId, userContract);
 
             return Ok(updatedUser);
         }
@@ -67,7 +68,7 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete([FromRoute] Guid userId)
         {
-            var isDeleted = await _userPresenter.DeleteAsync(userId);
+            var isDeleted = await _userManager.DeleteAsync(userId);
 
             if (isDeleted)
             {

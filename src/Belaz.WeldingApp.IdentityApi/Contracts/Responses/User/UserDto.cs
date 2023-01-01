@@ -1,7 +1,9 @@
-namespace Belaz.WeldingApp.IdentityApi.Presenters.Models
+﻿namespace Belaz.WeldingApp.IdentityApi.Contracts.Responses.User
 {
-    public class RegisterModelContract
+    public class UserDto
     {
+        public Guid? Id { get; set; }
+
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }
@@ -12,10 +14,6 @@ namespace Belaz.WeldingApp.IdentityApi.Presenters.Models
 
         public string UserName { get; set; }
 
-        public string Role { get; set; }
-
-        public string Password { get; set; }
-
-        public string ConfirmPassword { get; set; }
+        public string? Role { get; set; }
     }
 }

@@ -6,12 +6,10 @@ using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Extensions;
 using Belaz.WeldingApp.IdentityApi.Managers;
+using Belaz.WeldingApp.IdentityApi.Managers.Implementations;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
 using Belaz.WeldingApp.IdentityApi.Options;
-using Belaz.WeldingApp.IdentityApi.Presenters;
-using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
-using Belaz.WeldingApp.IdentityApi.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,10 +46,8 @@ namespace Belaz.WeldingApp.IdentityApi
             services.AddScoped<IRepository<UserData>, UserRepository>();
             services.AddScoped<IRepository<RoleData>, RoleRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
-            services.AddScoped<IUserPresenter, UserPresenter>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ITokenManager, TokenManager>();
-            services.AddScoped<IAuthPresenter, AuthPresenter>();
             services.AddScoped<IAuthManager, AuthManager>();
 
             services.AddHttpContextAccessor();

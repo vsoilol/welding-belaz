@@ -1,10 +1,10 @@
-﻿using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
-using Belaz.WeldingApp.IdentityApi.Presenters.Models;
+﻿using Belaz.WeldingApp.IdentityApi.Contracts.Responses.Identity;
+using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 
 namespace Belaz.WeldingApp.IdentityApi.Managers.Interfaces
 {
     public interface ITokenManager
     {
-        AuthenticationResult GenerateAuthenticationResultForUser(UserData user);
+        AuthSuccessResponse GenerateAuthenticationResultForUser(UserData user);
     }
 }

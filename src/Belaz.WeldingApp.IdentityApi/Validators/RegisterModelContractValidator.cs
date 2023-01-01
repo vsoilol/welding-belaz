@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.IdentityApi.Presenters.Models;
+﻿using Belaz.WeldingApp.IdentityApi.Contracts.Requests.Identity;
 using FluentValidation;
 
 namespace Belaz.WeldingApp.IdentityApi.Validators

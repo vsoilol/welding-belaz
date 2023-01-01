@@ -1,0 +1,12 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "Auth": {
+    "Secret": "kasdljal32d13j1dh3",
+    "TokenLifetime": "03:00:00"
+  }
+}

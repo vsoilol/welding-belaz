@@ -60,6 +60,21 @@ namespace Belaz.WeldingApp.IdentityApi
                     }
 
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+
+                    // find the shared folder in the parent folder
+                    var sharedFolder = Path.Combine(env.ContentRootPath, "..", "WeldingApp.Common");
+
+                    //load the SharedSettings first, so that appsettings.json overrwrites it
+                    config
+                        .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
+                        .AddJsonFile("appsettings.json", optional: true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+                    config.AddEnvironmentVariables();
                 });
         }
     }
