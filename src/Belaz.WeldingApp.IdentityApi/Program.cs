@@ -1,81 +1,150 @@
+using System.Text;
+using Belaz.WeldingApp.IdentityApi;
+using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
+using Belaz.WeldingApp.IdentityApi.Data.Repositories;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Helpers;
+using Belaz.WeldingApp.IdentityApi.Managers.Implementations;
+using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
+using Belaz.WeldingApp.IdentityApi.Middlewares;
+using Belaz.WeldingApp.IdentityApi.Options;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
+using WeldingApp.Common.Extensions;
+using WeldingApp.Common.Filters;
 
-namespace Belaz.WeldingApp.IdentityApi
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
 {
-    public class Program
+    var env = builderContext.HostingEnvironment;
+
+    // find the shared folder in the parent folder
+    var sharedFolder = Path.Combine(env.ContentRootPath, "..", "WeldingApp.Common");
+
+    //load the SharedSettings first, so that appsettings.json overrwrites it
+    config
+        .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
+        .AddJsonFile("appsettings.json", optional: true)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+    config.AddEnvironmentVariables();
+});
+
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
+
+builder.Services.AddDbContext<IdentityDbContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityDb")));
+
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+builder.Services.AddScoped<IRepository<UserData>, UserRepository>();
+builder.Services.AddScoped<IRepository<RoleData>, RoleRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IUserManager, UserManager>();
+builder.Services.AddScoped<ITokenManager, TokenManager>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddControllers(
+        options => { options.Filters.Add<ApiValidationFilter>(); })
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+    .RegisterValidatorsInAssembly(typeof(Program).Assembly);
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2",
+        new OpenApiSecurityScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        public static async Task Main(string[] args)
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .CreateLogger();
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("Auth:Secret").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
-            var host = CreateHostBuilder(args).Build();
+builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+    policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
 
-            await CreateDbIfNotExists(host);
 
-            await host.RunAsync();
-        }
+///////////////////////////////////////////////////////////////////////////////////////////
 
-        private static async Task CreateDbIfNotExists(IHost host)
-        {
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
+var app = builder.Build();
 
-                try
-                {
-                    var userRepository = services.GetRequiredService<IRepository<UserData>>();
-                    var roleRepository = services.GetRequiredService<IRepository<RoleData>>();
-                    await DataSeed.SeedSampleDataAsync(roleRepository, userRepository);
-                }
-                catch (Exception ex)
-                {
-                    Log.Fatal(ex, "Application start-up failed");
-                }
-                finally
-                {
-                    await Log.CloseAndFlushAsync();
-                }
-            }
-        }
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
 
-        private static bool IsDevelopment =>
-            Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-
-        public static string HostPort => IsDevelopment ? "" : Environment.GetEnvironmentVariable("PORT");
-
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    if (HostPort != "")
-                    {
-                        webBuilder.UseUrls($"http://+:{HostPort}");
-                    }
-
-                    webBuilder.UseStartup<Startup>();
-                })
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var env = hostingContext.HostingEnvironment;
-
-                    // find the shared folder in the parent folder
-                    var sharedFolder = Path.Combine(env.ContentRootPath, "..", "WeldingApp.Common");
-
-                    //load the SharedSettings first, so that appsettings.json overrwrites it
-                    config
-                        .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
-                        .AddJsonFile("appsettings.json", optional: true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-                    config.AddEnvironmentVariables();
-                });
-        }
+    try
+    {
+        var userRepository = services.GetRequiredService<IRepository<UserData>>();
+        var roleRepository = services.GetRequiredService<IRepository<RoleData>>();
+        await DataSeed.SeedSampleDataAsync(roleRepository, userRepository);
+    }
+    catch (Exception ex)
+    {
+        Log.Fatal(ex, "Application start-up failed");
+    }
+    finally
+    {
+        await Log.CloseAndFlushAsync();
     }
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+app.UseSwagger(c =>
+{
+    c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
+});
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz Identity");
+    c.RoutePrefix = "api/swagger";
+});
+
+app.UseCors("NgOrigins");
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+app.Run();
