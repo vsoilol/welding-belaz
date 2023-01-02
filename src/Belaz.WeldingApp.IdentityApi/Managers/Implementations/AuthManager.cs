@@ -5,10 +5,10 @@ using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Exceptions;
 using Belaz.WeldingApp.IdentityApi.Extensions;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
-using Belaz.WeldingApp.IdentityApi.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WeldingApp.Common.Options;
 
 namespace Belaz.WeldingApp.IdentityApi.Managers.Implementations;
 

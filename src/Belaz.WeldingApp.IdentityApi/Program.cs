@@ -5,7 +5,6 @@ using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Helpers;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
-using Belaz.WeldingApp.IdentityApi.Options;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,6 +15,7 @@ using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using WeldingApp.Common.Extensions;
 using WeldingApp.Common.Filters;
+using WeldingApp.Common.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
