@@ -1,10 +1,9 @@
-namespace Belaz.WeldingApp.IdentityApi.Exceptions
+namespace Belaz.WeldingApp.IdentityApi.Exceptions;
+
+[Serializable]
+internal class LoginFailedException : Exception
 {
-    [Serializable]
-    internal class LoginFailedException : Exception
+    public LoginFailedException(string message) : base(message)
     {
-        public LoginFailedException(string message) : base(message)
-        {
-        }
     }
 }

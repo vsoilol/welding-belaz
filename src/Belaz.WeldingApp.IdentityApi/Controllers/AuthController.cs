@@ -1,64 +1,47 @@
-using Belaz.WeldingApp.IdentityApi.Filters;
-using Belaz.WeldingApp.IdentityApi.Managers.Models;
-using Belaz.WeldingApp.IdentityApi.Presenters.Interfaces;
-using Belaz.WeldingApp.IdentityApi.Presenters.Models;
+using Belaz.WeldingApp.IdentityApi.Contracts.Requests.Identity;
+using Belaz.WeldingApp.IdentityApi.Contracts.Responses.Identity;
+using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
-namespace Belaz.WeldingApp.IdentityApi.Controllers
+namespace Belaz.WeldingApp.IdentityApi.Controllers;
+
+[Route("api/auth")]
+[ApiController]
+public class AuthController : ControllerBase
 {
-    [Route("api/auth")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly IAuthManager _authManager;
+
+    public AuthController(IAuthManager authManager)
     {
-        private readonly IAuthPresenter _authPresenter;
+        _authManager = authManager;
+    }
 
-        public AuthController(IAuthPresenter authPresenter)
-        {
-            _authPresenter = authPresenter;
-        }
+    [AllowAnonymous, HttpPost("register")]
+    [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Register([FromBody] RegisterModelContract registerContract)
+    {
+        var authResponse = await _authManager.Register(registerContract);
+        return Ok(authResponse);
+    }
 
-        [AllowAnonymous, HttpPost("register")]
-        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] RegisterModelContract registerContract)
-        {
-            var authResponse = await _authPresenter.Register(registerContract);
+    [AllowAnonymous, HttpPost("login")]
+    [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Login([FromBody] LoginModelContract loginContract)
+    {
+        var authResponse = await _authManager.Login(loginContract);
+        return Ok(authResponse);
+    }
 
-            var authSuccess = new AuthSuccessResponse
-            {
-                Token = authResponse.Token,
-                UserId = authResponse.UserId,
-                ExpirationDate = authResponse.ExpirationDate
-            };
-            return Ok(authSuccess);
-        }
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<ActionResult<bool>> Logout()
+    {
+        var response = await _authManager.Logout();
 
-        [AllowAnonymous, HttpPost("login")]
-        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Login([FromBody] LoginModelContract loginContract)
-        {
-            var authResponse = await _authPresenter.Login(loginContract);
-
-            var authSuccess = new AuthSuccessResponse
-            {
-                Token = authResponse.Token,
-                UserId = authResponse.UserId,
-                ExpirationDate = authResponse.ExpirationDate
-            };
-            return Ok(authSuccess);
-        }
-
-        [Authorize]
-        [HttpPost("logout")]
-        public async Task<ActionResult<bool>> Logout()
-        {
-            var response = await _authPresenter.Logout();
-
-            return response;
-        }
+        return response;
     }
 }
