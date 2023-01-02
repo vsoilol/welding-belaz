@@ -87,7 +87,7 @@ services:
       context: ..
       dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
       - "5100:80"
     depends_on:
