@@ -79,7 +79,7 @@ services:
       - /home/bru/docker-data/welding-belaz/logs/gateway-api-logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
-      - postgresql_database
+      - belaz-postgres
 
   proxy:
     image: nginx:mainline
