@@ -12,6 +12,19 @@
           }
         }
       ]
+    },
+    {
+      "Key": "welding",
+      "Config": [
+        {
+          "Name": "Welding API",
+          "Version": "v1",
+          "Service": {
+            "Name": "welding",
+            "Path": "/api/swagger/v1/swagger.json"
+          }
+        }
+      ]
     }
   ]
 }

@@ -7,13 +7,17 @@ using MMLib.Ocelot.Provider.AppConfiguration;
 using MMLib.SwaggerForOcelot.DependencyInjection;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using WeldingApp.Common.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var sharedFolder = builder.Environment.EnvironmentName.Contains("Docker")
     ? ""
     : Path.Combine(builder.Environment.ContentRootPath, "..");
+
+builder.Host.UseSerilog(ProjectLoggerConfiguration.GetLoggerConfiguration("gateway-api"));
 
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)

@@ -17,6 +17,7 @@ services:
   
   welding-api:
     image: welding-app/welding-api
+    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
@@ -25,13 +26,13 @@ services:
     ports:
       - "5010:80"
     volumes:
-      - ./docker-storage/logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
 
   identity-api:
     image: welding-app/identity-api
+    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
@@ -40,43 +41,28 @@ services:
     ports:
       - "5011:80"
     volumes:
-      - ./docker-storage/logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
 
   file-api:
     image: welding-app/file-api
+    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
     volumes:
-      - ./docker-storage/logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     ports:
       - "5012:80"
     depends_on:
       - belaz-postgres
-
-  integration-api:
-    image: welding-app/integration-api
-    build:
-      context: ..
-      dockerfile: ./Belaz.WeldingApp.IntegrationApi/Dockerfile
-    environment:
-      ASPNETCORE_ENVIRONMENT: "Docker.Production"
-    ports:
-      - "5013:80"
-    volumes:
-      - ./docker-storage/logs:/app/logs
-      - ../sharedsettings.json:/app/sharedsettings.json
-    depends_on:
-      - belaz-postgres
         
   gateway-api:
     image: welding-app/gateway-api
+    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
@@ -85,6 +71,7 @@ services:
     ports:
       - "5100:80"
     volumes:
+      - ./docker-storage/logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
