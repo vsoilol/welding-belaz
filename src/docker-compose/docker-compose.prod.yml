@@ -5,8 +5,10 @@ services:
     image: postgres:15
     container_name: belaz-postgres
     restart: always
+    user: "1001:1001"
     volumes:
-      - /home/bru/data/postgresql-db:/var/lib/postgresql/data
+      - /home/bru/docker-data/welding-belaz/postgresql-db:/var/lib/postgresql/data
+      - ../../database/init-script.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_PASSWORD: Hynatg32_R
       POSTGRES_USER: bru
@@ -17,43 +19,46 @@ services:
   
   welding-api:
     image: welding-app/welding-api
-    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
+    user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
     ports:
       - "5010:80"
     volumes:
+      - /home/bru/docker-data/welding-belaz/logs/welding-api-logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
 
   identity-api:
     image: welding-app/identity-api
-    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
+    user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
     ports:
       - "5011:80"
     volumes:
+      - /home/bru/docker-data/welding-belaz/logs/identity-api-logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
 
   file-api:
     image: welding-app/file-api
-    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
+    user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
     volumes:
+      - /home/bru/docker-data/welding-belaz/logs/file-api-logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     ports:
       - "5012:80"
@@ -62,16 +67,16 @@ services:
         
   gateway-api:
     image: welding-app/gateway-api
-    restart: always
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
+    user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
       - "5100:80"
     volumes:
-      - ./docker-storage/logs:/app/logs
+      - /home/bru/docker-data/welding-belaz/logs/gateway-api-logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database

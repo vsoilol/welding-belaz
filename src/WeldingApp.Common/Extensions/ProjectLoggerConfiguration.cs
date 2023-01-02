@@ -18,7 +18,7 @@ public static class ProjectLoggerConfiguration
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.File(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"logs\{logFileName}.txt"),
+                @$"logs/{logFileName}.txt",
                 outputTemplate:
                 "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                 rollingInterval: RollingInterval.Day,
