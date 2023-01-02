@@ -80,6 +80,18 @@ services:
     volumes:
       - ./docker-storage/logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
+      
+  gateway-api:
+    image: welding-app/gateway-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "5100:80"
+    depends_on:
+      - postgresql_database
         
   proxy:
     image: nginx:mainline
