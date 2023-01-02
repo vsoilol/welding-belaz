@@ -1,44 +1,60 @@
+using System.Text;
 using Belaz.WeldingApp.ApiGateway.Config;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MMLib.Ocelot.Provider.AppConfiguration;
 using MMLib.SwaggerForOcelot.DependencyInjection;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
-{
-    config
-        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json",
-            optional: true, reloadOnChange: true)
-        .AddOcelotWithSwaggerSupport((o) =>
-        {
-            o.Folder = "Configuration";
-        })
-        .AddEnvironmentVariables();
-});*/
+var sharedFolder = builder.Environment.EnvironmentName.Contains("Docker")
+    ? ""
+    : Path.Combine(builder.Environment.ContentRootPath, "..");
 
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json",
         optional: true, reloadOnChange: true)
     .AddOcelotWithSwaggerSupport((o) => { o.Folder = "Configuration"; })
     .AddEnvironmentVariables();
 
-builder.Services.AddOcelot().AddAppConfiguration();;
+builder.Services.AddOcelot().AddAppConfiguration();
+;
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Welding API Gateway", Version = "v1" });
+    options.AddSecurityDefinition("oauth2",
+        new OpenApiSecurityScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("ApiGatewayKey", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("Auth:Secret").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
 var app = builder.Build();
 

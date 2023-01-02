@@ -24,6 +24,9 @@ services:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
     ports:
       - "5010:80"
+    volumes:
+      - ./docker-storage/logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
 
@@ -36,6 +39,9 @@ services:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
     ports:
       - "5011:80"
+    volumes:
+      - ./docker-storage/logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
 
@@ -46,6 +52,9 @@ services:
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
+    volumes:
+      - ./docker-storage/logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     ports:
       - "5012:80"
     depends_on:
@@ -62,8 +71,23 @@ services:
       - "5013:80"
     volumes:
       - ./docker-storage/logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
+        
+  gateway-api:
+    image: welding-app/gateway-api
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+    ports:
+      - "5100:80"
+    volumes:
+      - ../sharedsettings.json:/app/sharedsettings.json
+    depends_on:
+      - postgresql_database
 
   proxy:
     image: nginx:mainline
