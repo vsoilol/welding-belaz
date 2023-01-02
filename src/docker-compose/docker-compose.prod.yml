@@ -70,7 +70,6 @@ services:
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
-    user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
