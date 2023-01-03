@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.TechnologicalInstruction;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 
@@ -17,5 +18,14 @@ public class TechnologicalInstructionProfile : Profile
                     .MapFrom(x => x.WeldPassages));
         
         CreateMap<TechnologicalInstruction, TechnologicalInstructionBriefDto>();
+        
+        CreateMap<CreateInstructionRequest, TechnologicalInstruction>()
+            .ForMember(dto => dto.WeldPassages,
+                opt => opt
+                    .MapFrom(x => x.WeldPassages))
+            .AfterMap((src, dest) => { 
+                foreach(var i in dest.WeldPassages) 
+                    i.SeamId = src.SeamId;
+            });
     }
 }
