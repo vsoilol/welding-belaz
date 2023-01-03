@@ -20,67 +20,30 @@ public class ProductManager : IProductManager
         _productRepository = productRepository;
     }
 
-    public Task<List<ProductDto>> GetAllProductsByWeldingTaskStatus(Status status)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<ProductDto>> GetAllDetailsByWeldingTaskStatus(Status status)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<ProductDto>> GetAllKnotsByWeldingTaskStatus(Status status)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<List<ProductDto>> GetAllProductsByControlSubject(bool isControlSubject)
+    public async Task<List<ProductDto>> GetAllByWeldingTaskStatus(Status status, ProductType productType)
     {
         return await _productRepository
             .AsQueryable()
-            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Product)
+            .Where(_ => _.WeldingTask.Status == status && _.ProductType == productType)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
-    public async Task<List<ProductDto>> GetAllDetailsByControlSubject(bool isControlSubject)
+    public async Task<List<ProductDto>> GetAllByControlSubject(bool isControlSubject, ProductType productType)
     {
         return await _productRepository
             .AsQueryable()
-            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Detail)
+            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == productType)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
-    public async Task<List<ProductDto>> GetAllKnotsByControlSubject(bool isControlSubject)
+    public async Task<ProductDto?> GetByIdAsync(Guid id)
     {
-        var data = await _productRepository
-            .AsQueryable()
-            .Include(_ => _.ProductInsides)
-            .Include(_ => _.ProductMains)
-            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Knot)
-            .ToListAsync();
-        
         return await _productRepository
             .AsQueryable()
-            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Knot)
+            .Where(_ => _.Id == id)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
-    public Task<ProductDto?> GetProductByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ProductDto?> GetDetailByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ProductDto?> GetKnotByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
+            .FirstOrDefaultAsync();
     }
 }
