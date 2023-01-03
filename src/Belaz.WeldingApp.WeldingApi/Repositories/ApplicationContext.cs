@@ -75,7 +75,7 @@ public class ApplicationContext : DbContext
 
         modelBuilder.Entity<ProductInside>()
             .HasOne(e => e.InsideProduct)
-            .WithMany()
+            .WithMany(e => e.ProductMains)
             .OnDelete(DeleteBehavior.Restrict);
         
         

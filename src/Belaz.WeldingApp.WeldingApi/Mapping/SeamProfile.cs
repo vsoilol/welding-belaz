@@ -12,27 +12,15 @@ public class SeamProfile : Profile
             .ForMember(dto => dto.Product,
             opt => opt
                 .MapFrom(x => x.Product))
-            .ForMember(dto => dto.TechnologicalInstructionName,
+            .ForMember(dto => dto.TechnologicalInstruction,
                 opt => opt
-                    .MapFrom(x => x.TechnologicalInstruction.Name))
-            .ForMember(dto => dto.TechnologicalInstructionNumber,
+                    .MapFrom(x => x.TechnologicalInstruction))
+            .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
-                    .MapFrom(x => x.TechnologicalInstruction.Number))
-            .ForMember(dto => dto.TechnologicalProcessName,
+                    .MapFrom(x => x.TechnologicalInstruction.TechnologicalProcess))
+            .ForMember(dto => dto.ProductionInfo,
                 opt => opt
-                    .MapFrom(x => x.TechnologicalInstruction.TechnologicalProcess.Name))
-            .ForMember(dto => dto.TechnologicalProcessNumber,
-                opt => opt
-                    .MapFrom(x => x.TechnologicalInstruction.TechnologicalProcess.Number))
-            .ForMember(dto => dto.WorkplaceNumber,
-                opt => opt
-                    .MapFrom(x => x.WeldingTask.Welder.Workplace.Number))
-            .ForMember(dto => dto.WorkshopNumber,
-                opt => opt
-                    .MapFrom(x => x.WeldingTask.Welder.Workplace.ProductionArea.Workshop.Number))
-            .ForMember(dto => dto.ProductionAreaNumber,
-                opt => opt
-                    .MapFrom(x => x.WeldingTask.Welder.Workplace.ProductionArea.Number));
+                    .MapFrom(x => x.WeldingTask.Welder.Workplace));
 
         CreateMap<Seam, SeamBriefDto>();
     }

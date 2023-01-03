@@ -121,6 +121,7 @@ public class DataSeed
                 new ProductionArea
                 {
                     Name = "Производственный участок 1",
+                    Number = 1,
                     Posts = new List<Post>
                     {
                         new Post
@@ -139,6 +140,7 @@ public class DataSeed
                 new ProductionArea
                 {
                     Name = "Производственный участок 2",
+                    Number = 2,
                     Posts = new List<Post>
                     {
                         new Post
@@ -157,6 +159,7 @@ public class DataSeed
                 new ProductionArea
                 {
                     Name = "Производственный участок 3",
+                    Number = 3,
                     Posts = new List<Post>
                     {
                         new Post

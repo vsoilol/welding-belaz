@@ -28,5 +28,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
         public List<Seam> Seams { get; set; } = null!;
 
         public List<ProductInside> ProductInsides { get; set; } = null!;
+
+        public List<ProductInside> ProductMains { get; set; } = null!;
     }
 }

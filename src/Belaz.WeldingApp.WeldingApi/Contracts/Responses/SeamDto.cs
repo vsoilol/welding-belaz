@@ -3,22 +3,14 @@
 public class SeamDto
 {
     public Guid Id { get; set; }
-    
+
     public int Number { get; set; }
 
     public ProductBriefDto Product { get; set; } = null!;
-    
-    public int? WorkplaceNumber { get; set; }
-    
-    public int ProductionAreaNumber { get; set; }
-    
-    public int WorkshopNumber { get; set; }
 
-    public string TechnologicalProcessName { get; set; } = null!;
-    
-    public int TechnologicalProcessNumber { get; set; }
-    
-    public string TechnologicalInstructionName { get; set; } = null!;
-    
-    public int TechnologicalInstructionNumber { get; set; }
+    public ProductionBriefDto ProductionInfo { get; set; } = null!;
+
+    public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
+
+    public TechnologicalInstructionBriefDto TechnologicalInstruction { get; set; } = null!;
 }

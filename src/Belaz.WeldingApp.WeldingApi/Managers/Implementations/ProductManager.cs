@@ -37,14 +37,6 @@ public class ProductManager : IProductManager
 
     public async Task<List<ProductDto>> GetAllProductsByControlSubject(bool isControlSubject)
     {
-        var data = _productRepository
-            .AsQueryable()
-            .Include(_ => _.ProductInsides)
-            .ThenInclude(_ => _.InsideProduct)
-            .Include(_ => _.TechnologicalProcess)
-            .Include(_ => _.WeldingTask)
-            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Product);
-
         return await _productRepository
             .AsQueryable()
             .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Product)
@@ -52,14 +44,29 @@ public class ProductManager : IProductManager
             .ToListAsync();
     }
 
-    public Task<List<ProductDto>> GetAllDetailsByControlSubject(bool isControlSubject)
+    public async Task<List<ProductDto>> GetAllDetailsByControlSubject(bool isControlSubject)
     {
-        throw new NotImplementedException();
+        return await _productRepository
+            .AsQueryable()
+            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Detail)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
-    public Task<List<ProductDto>> GetAllKnotsByControlSubject(bool isControlSubject)
+    public async Task<List<ProductDto>> GetAllKnotsByControlSubject(bool isControlSubject)
     {
-        throw new NotImplementedException();
+        var data = await _productRepository
+            .AsQueryable()
+            .Include(_ => _.ProductInsides)
+            .Include(_ => _.ProductMains)
+            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Knot)
+            .ToListAsync();
+        
+        return await _productRepository
+            .AsQueryable()
+            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == ProductType.Knot)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public Task<ProductDto?> GetProductByIdAsync(Guid id)

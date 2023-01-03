@@ -15,5 +15,7 @@ public class TechnologicalInstructionProfile : Profile
             .ForMember(dto => dto.WeldPassages,
                 opt => opt
                     .MapFrom(x => x.WeldPassages));
+        
+        CreateMap<TechnologicalInstruction, TechnologicalInstructionBriefDto>();
     }
 }

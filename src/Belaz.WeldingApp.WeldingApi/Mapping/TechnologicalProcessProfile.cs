@@ -12,5 +12,7 @@ public class TechnologicalProcessProfile : Profile
             .ForMember(dto => dto.TechnologicalInstructions,
                 opt => opt
                     .MapFrom(x => x.TechnologicalInstructions));
+        
+        CreateMap<TechnologicalProcess, TechnologicalProcessBriefDto>();
     }
 }

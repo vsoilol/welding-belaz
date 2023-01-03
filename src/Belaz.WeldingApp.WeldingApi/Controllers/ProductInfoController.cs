@@ -43,4 +43,20 @@ public class ProductInfoController : ControllerBase
     {
         return await _productManager.GetAllProductsByControlSubject(idControlSubject);
     }
+    
+    [HttpGet("knot/byControlSubject/{idControlSubject}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllKnotsByControlSubject([FromRoute] bool idControlSubject)
+    {
+        return await _productManager.GetAllKnotsByControlSubject(idControlSubject);
+    }
+    
+    [HttpGet("detail/byControlSubject/{idControlSubject}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllDetailsByControlSubject([FromRoute] bool idControlSubject)
+    {
+        return await _productManager.GetAllDetailsByControlSubject(idControlSubject);
+    }
 }
