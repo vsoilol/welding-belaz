@@ -15,7 +15,7 @@ public class DataSeed
 {
     public static async Task SeedSampleDataAsync(ApplicationContext context)
     {
-        await AddExecutorRole(context);
+        await CreateRolesAsync(context);
 
         if (!context.Calendars.Any())
         {
@@ -37,9 +37,14 @@ public class DataSeed
             await AddSeveralWeldingEquipment(context);
         }
 
-        if (!context.ProductBridges.Any())
+        if (!context.Products.Any())
         {
             await AddProducts(context);
+        }
+
+        if (!context.TechnologicalProcesses.Any())
+        {
+            await AddTechnologicalProcesses(context);
         }
 
         if (!context.WeldingTasks.Any())
@@ -48,15 +53,18 @@ public class DataSeed
         }
     }
 
-    private static async Task AddExecutorRole(ApplicationContext context)
+    private static async Task CreateRolesAsync(ApplicationContext context)
     {
-        var roleName = "Executor";
+        var enumValues = Enum.GetNames(typeof(Role));
 
-        if (!context.Roles.Any(_ => _.Name == roleName))
+        foreach (var role in enumValues)
         {
-            var creationRole = new RoleData { Name = roleName };
-            await context.Roles.AddAsync(creationRole);
-            await context.SaveChangesAsync();
+            if (!context.Roles.Any(_ => _.Name == role))
+            {
+                var creationRole = new RoleData { Name = role };
+                await context.Roles.AddAsync(creationRole);
+                await context.SaveChangesAsync();
+            }
         }
     }
 
@@ -422,144 +430,187 @@ public class DataSeed
         await context.WeldingEquipments.AddRangeAsync(weldingEquipments);
         await context.SaveChangesAsync();
 
-        welders[0].WeldingEquipmentId = weldingEquipments[0].Id;
-        welders[1].WeldingEquipmentId = weldingEquipments[1].Id;
-        welders[2].WeldingEquipmentId = weldingEquipments[2].Id;
-
         context.Welders.UpdateRange(welders);
         await context.SaveChangesAsync();
     }
 
     private static async Task AddProducts(ApplicationContext context)
     {
-        var productBridges = new List<ProductBridge>
+        var products = new List<Product>
         {
-            new ProductBridge
+            new Product
             {
-                Detail = new Detail
+                Name = "Изделие 1",
+                Number = 1,
+                ProductType = ProductType.Product,
+                Seams = new List<Seam>
                 {
-                    Name = "Деталь 1",
-                    Number = 1,
+                    new Seam
+                    {
+                        Number = 1,
+                    }
                 },
-                Knot = new Knot
+                ProductInsides = new List<ProductInside>
                 {
-                    Name = "Узел 1",
-                    Number = 1,
+                    new ProductInside
+                    {
+                        InsideProduct = new Product
+                        {
+                            Name = "Деталь 1",
+                            Number = 1,
+                            ProductType = ProductType.Detail
+                        },
+                    },
+                    new ProductInside
+                    {
+                        InsideProduct = new Product
+                        {
+                            Name = "Узел 1",
+                            Number = 1,
+                            ProductType = ProductType.Knot
+                        }
+                    }
                 },
-                Product = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Изделие 1",
-                    Number = 1,
-                },
-                Seam = new Seam
-                {
-                    Number = 1,
-                }
             },
-            new ProductBridge
+            new Product
             {
-                Detail = new Detail
+                Name = "Изделие 2",
+                Number = 2,
+                ProductType = ProductType.Product,
+                Seams = new List<Seam>
                 {
-                    Name = "Деталь 2",
-                    Number = 2,
+                    new Seam
+                    {
+                        Number = 2,
+                    }
                 },
-                Knot = new Knot
+                ProductInsides = new List<ProductInside>
                 {
-                    Name = "Узел 2",
-                    Number = 2,
+                    new ProductInside
+                    {
+                        InsideProduct = new Product
+                        {
+                            Name = "Деталь 2",
+                            Number = 2,
+                            ProductType = ProductType.Detail
+                        },
+                    },
+                    new ProductInside
+                    {
+                        InsideProduct = new Product
+                        {
+                            Name = "Узел 2",
+                            Number = 2,
+                            ProductType = ProductType.Knot
+                        }
+                    }
                 },
-                Product = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Изделие 2",
-                    Number = 2,
-                },
-                Seam = new Seam
-                {
-                    Number = 2,
-                }
-            }
+            },
         };
 
-        await context.ProductBridges.AddRangeAsync(productBridges);
+        await context.Products.AddRangeAsync(products);
         await context.SaveChangesAsync();
+    }
 
-        var technologicalProcess = new List<TechnologicalProcess>
+    private static async Task AddTechnologicalProcesses(ApplicationContext context)
+    {
+        var seam = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
+        var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
+        
+        var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
+                                                                      && _.ProductType == ProductType.Product);
+        var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
+                                                                      && _.ProductType == ProductType.Product);
+
+        var technologicalProcesses = new List<TechnologicalProcess>
         {
             new TechnologicalProcess
             {
-                Id = Guid.NewGuid(),
-                ProductId = productBridges[0].ProductId,
                 Name = "Технологический процесс 1",
+                Product = product,
                 Number = 1,
                 PdmSystemFileLink = "Ссылка",
+                TechnologicalInstructions = new List<TechnologicalInstruction>
+                {
+                    new TechnologicalInstruction
+                    {
+                        Name = "Инструкция 1",
+                        Number = 1,
+                        Seam = seam,
+                        WeldPassages = new List<WeldPassage>
+                        {
+                            new WeldPassage
+                            {
+                                Seam = seam,
+                                Name = "Название прохода 1",
+                                LayerInstruction = new LayerInstruction
+                                {
+                                    WeldingCurrentMin = 1,
+                                    WeldingCurrentMax = 100,
+                                    ArcVoltageMin = 5,
+                                    ArcVoltageMax = 50,
+                                    PreheatingTemperatureMin = 10,
+                                    PreheatingTemperatureMax = 60,
+                                }
+                            }
+                        }
+                    }
+                }
             },
             new TechnologicalProcess
             {
-                Id = Guid.NewGuid(),
-                ProductId = productBridges[1].ProductId,
                 Name = "Технологический процесс 2",
                 Number = 2,
                 PdmSystemFileLink = "Ссылка",
+                Product = product2,
+                TechnologicalInstructions = new List<TechnologicalInstruction>
+                {
+                    new TechnologicalInstruction
+                    {
+                        Name = "Инструкция 2",
+                        Number = 2,
+                        Seam = seam2,
+                        WeldPassages = new List<WeldPassage>
+                        {
+                            new WeldPassage
+                            {
+                                Seam = seam2,
+                                Name = "Название прохода 1",
+                                LayerInstruction = new LayerInstruction
+                                {
+                                    WeldingCurrentMin = 1,
+                                    WeldingCurrentMax = 100,
+                                    ArcVoltageMin = 5,
+                                    ArcVoltageMax = 50,
+                                    PreheatingTemperatureMin = 10,
+                                    PreheatingTemperatureMax = 60,
+                                }
+                            }
+                        }
+                    }
+                }
             }
         };
 
-        await context.TechnologicalProcesses.AddRangeAsync(technologicalProcess);
-        await context.SaveChangesAsync();
-
-        productBridges[0].Product.TechnologicalProcessInstructionId = technologicalProcess[0].Id;
-        productBridges[1].Product.TechnologicalProcessInstructionId = technologicalProcess[1].Id;
-
-        context.UpdateRange(productBridges);
-        await context.SaveChangesAsync();
-
-        var layerInstructions = new List<LayerInstruction>
-        {
-            new LayerInstruction
-            {
-                Id = Guid.NewGuid(),
-                TechnologicalProcessId = technologicalProcess[0].Id,
-                WeldingCurrentMin = 1,
-                WeldingCurrentMax = 100,
-                ArcVoltageMin = 5,
-                ArcVoltageMax = 50,
-                PreheatingTemperatureMin = 10,
-                PreheatingTemperatureMax = 60,
-            },
-            new LayerInstruction
-            {
-                Id = Guid.NewGuid(),
-                TechnologicalProcessId = technologicalProcess[1].Id,
-                WeldingCurrentMin = 1,
-                WeldingCurrentMax = 100,
-                ArcVoltageMin = 5,
-                ArcVoltageMax = 50,
-                PreheatingTemperatureMin = 10,
-                PreheatingTemperatureMax = 60,
-            }
-        };
-
-        await context.LayerInstructions.AddRangeAsync(layerInstructions);
-        await context.SaveChangesAsync();
-
-        technologicalProcess[0].LayerInstructionId = layerInstructions[0].Id;
-        technologicalProcess[1].LayerInstructionId = layerInstructions[1].Id;
-
-        context.UpdateRange(technologicalProcess);
+        await context.TechnologicalProcesses.AddRangeAsync(technologicalProcesses);
         await context.SaveChangesAsync();
     }
 
     private static async Task AddWeldingTasks(ApplicationContext context)
     {
         var seam = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
-        var knot = await context.Knots.FirstOrDefaultAsync(_ => _.Number == 1);
-        var detail = await context.Details.FirstOrDefaultAsync(_ => _.Number == 1);
-        var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1);
+        var knot = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1 && _.ProductType == ProductType.Knot);
+        var detail =
+            await context.Products.FirstOrDefaultAsync(_ => _.Number == 1 && _.ProductType == ProductType.Detail);
+        var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
+                                                                      && _.ProductType == ProductType.Product);
         var welder = await context.Welders.FirstOrDefaultAsync(_ => _.Workplace != null);
 
         var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
-        var knot2 = await context.Knots.FirstOrDefaultAsync(_ => _.Number == 2);
+        var knot2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Knot);
+
+        var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
+        var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
 
         var inspector = new Inspector
         {
@@ -575,6 +626,13 @@ public class DataSeed
                 Position = "Должность 1",
                 ServiceNumber = "Табельный номер  1",
                 RfidTag = "RFID метка проверяющего 1",
+                UserRoles = new List<UserRole>
+                {
+                    new UserRole
+                    {
+                        Role = techUserRole
+                    }
+                }
             },
         };
 
@@ -595,6 +653,13 @@ public class DataSeed
                 Position = "Должность 1",
                 ServiceNumber = "Табельный номер  1",
                 RfidTag = "RFID метка проверяющего 1",
+                UserRoles = new List<UserRole>
+                {
+                    new UserRole
+                    {
+                        Role = masterRole
+                    }
+                }
             },
         };
 
@@ -623,11 +688,6 @@ public class DataSeed
                 Seam = seam2,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                TechnologicalInstruction = new TechnologicalInstruction
-                {
-                    Name = "Инструкция",
-                    Number = 1,
-                },
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
                 ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
             },
@@ -648,14 +708,9 @@ public class DataSeed
                 Status = Status.Defective,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
-                Knot = knot2,
+                Product = knot2,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                TechnologicalInstruction = new TechnologicalInstruction
-                {
-                    Name = "Инструкция",
-                    Number = 1,
-                },
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
                 ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
             },
@@ -676,14 +731,9 @@ public class DataSeed
                 Status = Status.VerificationSubject,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
-                Detail = detail,
+                Product = detail,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                TechnologicalInstruction = new TechnologicalInstruction
-                {
-                    Name = "Инструкция",
-                    Number = 1,
-                },
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
                 ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
             },
@@ -707,11 +757,6 @@ public class DataSeed
                 Seam = seam,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                TechnologicalInstruction = new TechnologicalInstruction
-                {
-                    Name = "Инструкция",
-                    Number = 1,
-                },
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
                 ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
             },
@@ -735,11 +780,6 @@ public class DataSeed
                 Product = product,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                TechnologicalInstruction = new TechnologicalInstruction
-                {
-                    Name = "Инструкция",
-                    Number = 1,
-                },
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
                 ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
             },
@@ -760,14 +800,9 @@ public class DataSeed
                 Status = Status.VerificationSubject,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
-                Knot = knot,
+                Product = knot,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                TechnologicalInstruction = new TechnologicalInstruction
-                {
-                    Name = "Инструкция",
-                    Number = 1,
-                },
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
                 ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
             }

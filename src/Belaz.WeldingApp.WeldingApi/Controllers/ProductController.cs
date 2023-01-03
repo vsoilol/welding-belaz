@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Product;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +25,7 @@ public class ProductController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByTaskStatusAsync([FromRoute] Status status)
     {
-        return await _productManager.GetAllByWeldingTaskStatus(status);
+        throw new Exception();
     }
     
     [HttpGet("{id}")]
@@ -33,6 +33,6 @@ public class ProductController : ControllerBase
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<ProductDto?>> GetByIdAsync([FromRoute] Guid id)
     {
-        return await _productManager.GetByIdAsync(id);
+        throw new Exception();
     }
 }

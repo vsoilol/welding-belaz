@@ -1,4 +1,4 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.Product;
+﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 
 public class ProductDto
 {
@@ -11,7 +11,6 @@ public class ProductDto
     public int ProductionAreaNumber { get; set; }
     
     public int WorkshopNumber { get; set; }
-    
     
     public string TechnologicalProcessName { get; set; }
     

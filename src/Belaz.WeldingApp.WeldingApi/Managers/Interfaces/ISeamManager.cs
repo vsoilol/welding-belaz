@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Seam;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces;

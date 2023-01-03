@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
 {
@@ -34,10 +35,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// Температура предварительного нагрева max
         /// </summary>
         public double PreheatingTemperatureMax { get; set; }
-        
-        public Guid? TechnologicalProcessId { get; set; }
-        
-        [ForeignKey(nameof(TechnologicalProcessId))]
-        public TechnologicalProcess? TechnologicalProcess { get; set; }
+
+        public WeldPassage? WeldPassage { get; set; }
     }
 }

@@ -1,15 +1,8 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.TechnologicalProcess;
+﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 
-public class TechnologicalProcessDto
+public class WeldPassageDto
 {
-    public int Number { get; set; }
-
-    public string Name { get; set; }
-
-    /// <summary>
-    /// Ссылка на PDF-файл в PDM-системе
-    /// </summary>
-    public string PdmSystemFileLink { get; set; }
+    public string Name { get; set; } = null!;
     
     /// <summary>
     /// Сварочный ток min

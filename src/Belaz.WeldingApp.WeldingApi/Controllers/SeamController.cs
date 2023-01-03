@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Seam;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

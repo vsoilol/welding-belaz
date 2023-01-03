@@ -1,11 +1,19 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Product;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 
 public interface IProductManager
 {
-    Task<List<ProductDto>> GetAllByWeldingTaskStatus(Status status);
+    Task<List<ProductDto>> GetAllProductsByWeldingTaskStatus(Status status);
     
-    Task<ProductDto?> GetByIdAsync(Guid id);
+    Task<List<ProductDto>> GetAllDetailsByWeldingTaskStatus(Status status);
+    
+    Task<List<ProductDto>> GetAllKnotsByWeldingTaskStatus(Status status);
+    
+    Task<ProductDto?> GetProductByIdAsync(Guid id);
+    
+    Task<ProductDto?> GetDetailByIdAsync(Guid id);
+    
+    Task<ProductDto?> GetKnotByIdAsync(Guid id);
 }
