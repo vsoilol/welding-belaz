@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.TechnologicalProcess;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
@@ -27,5 +27,13 @@ public class TechnologicalProcessManager : ITechnologicalProcessManager
             .Where(_ => _.Id == id)
             .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<List<TechnologicalProcessDto>> GetAllAsync()
+    {
+        return await _technologicalProcessRepository
+            .AsQueryable()
+            .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Detail;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,28 +11,36 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class DetailController : ControllerBase
+public class DetailController
 {
-    private readonly IDetailManager _detailManager;
+    private readonly IProductManager _productManager;
 
-    public DetailController(IDetailManager detailManager)
+    public DetailController(IProductManager productManager)
     {
-        _detailManager = detailManager;
+        _productManager = productManager;
     }
     
-    [HttpGet("byStatus/{status}")]
+    [HttpGet("byControlSubject/{isControlSubject}")]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    [ProducesResponseType(typeof(IEnumerable<DetailDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DetailDto>>> GetAllByTaskStatusAsync([FromRoute] Status status)
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByControlSubject([FromRoute] bool isControlSubject)
     {
-        return await _detailManager.GetAllByWeldingTaskStatus(status);
+        return await _productManager.GetAllByControlSubject(isControlSubject, ProductType.Detail);
     }
     
     [HttpGet("{id}")]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    [ProducesResponseType(typeof(DetailDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<DetailDto?>> GetByIdAsync([FromRoute] Guid id)
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductDto?>> GetAllByControlSubject([FromRoute] Guid id)
     {
-        return await _detailManager.GetByIdAsync(id);
+        return await _productManager.GetByIdAsync(id);
+    }
+    
+    [HttpGet("byStatus/{status}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByTaskStatusAsync([FromRoute] Status status)
+    {
+        return await _productManager.GetAllByWeldingTaskStatus(status, ProductType.Detail);
     }
 }

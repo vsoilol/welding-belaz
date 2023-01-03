@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Product;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
@@ -19,16 +19,25 @@ public class ProductManager : IProductManager
         _mapper = mapper;
         _productRepository = productRepository;
     }
-    
-    public async Task<List<ProductDto>> GetAllByWeldingTaskStatus(Status status)
+
+    public async Task<List<ProductDto>> GetAllByWeldingTaskStatus(Status status, ProductType productType)
     {
         return await _productRepository
             .AsQueryable()
-            .Where(_ => _.WeldingTask.Status == status)
+            .Where(_ => _.WeldingTask.Status == status && _.ProductType == productType)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
-    
+
+    public async Task<List<ProductDto>> GetAllByControlSubject(bool isControlSubject, ProductType productType)
+    {
+        return await _productRepository
+            .AsQueryable()
+            .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public async Task<ProductDto?> GetByIdAsync(Guid id)
     {
         return await _productRepository

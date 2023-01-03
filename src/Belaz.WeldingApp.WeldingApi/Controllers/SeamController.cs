@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Seam;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,5 +34,13 @@ public class SeamController : ControllerBase
     public async Task<ActionResult<SeamDto?>> GetByIdAsync([FromRoute] Guid id)
     {
         return await _seamManager.GetByIdAsync(id);
+    }
+    
+    [HttpGet("byControlSubject/{isControlSubject}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByControlSubjectAsync([FromRoute] bool isControlSubject)
+    {
+        return await _seamManager.GetAllByControlSubject(isControlSubject);
     }
 }

@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Contracts\Requests" />
+    <Folder Include="Contracts\Responses\Product" />
     <Folder Include="Controllers\" />
     <Folder Include="Managers\Interfaces\" />
   </ItemGroup>
