@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class KnotController
+public class KnotController : ControllerBase
 {
     private readonly IProductManager _productManager;
 
@@ -42,5 +43,13 @@ public class KnotController
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByTaskStatusAsync([FromRoute] Status status)
     {
         return await _productManager.GetAllByWeldingTaskStatus(status, ProductType.Knot);
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateProductRequest request)
+    {
+        await _productManager.CreateAsync(request);
+        return Ok();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -45,5 +46,13 @@ public class ProductManager : IProductManager
             .Where(_ => _.Id == id)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task CreateAsync(CreateProductRequest request)
+    {
+        var product = _mapper.Map<Product>(request);
+
+        _productRepository.Add(product);
+        await _productRepository.SaveAsync();
     }
 }
