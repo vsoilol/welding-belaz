@@ -29,6 +29,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/detail",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST", "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/detail",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/detail/byControlSubject/{isControlSubject}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -85,6 +99,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/knot",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST", "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/knot",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/product/byStatus/{status}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -119,6 +147,20 @@
         "GET"
       ],
       "DownstreamPathTemplate": "/api/product/{id}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/product",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST", "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/product",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
@@ -371,6 +413,20 @@
         "GET"
       ],
       "DownstreamPathTemplate": "/api/WeldingTask/registrarInfo",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/TechnologicalInstruction",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET", "POST", "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/seam",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
