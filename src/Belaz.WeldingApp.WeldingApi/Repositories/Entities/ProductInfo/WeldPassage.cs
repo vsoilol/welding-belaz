@@ -6,7 +6,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 /// <summary>
 /// Проход для сварного шва
 /// </summary>
-public class WeldPassage
+public class WeldPassage : Entity
 {
     public string Name { get; set; } = null!;
     

@@ -83,6 +83,5 @@ public class ApplicationContext : DbContext
             new { t.WeldingEquipmentId, t.WorkingShiftId, t.WeldingEquipmentConditionTimeId });
         modelBuilder.Entity<UserRole>().HasKey(t => new { t.RoleId, t.UserId });
         modelBuilder.Entity<ProductInside>().HasKey(t => new { t.InsideProductId, t.MainProductId });
-        modelBuilder.Entity<WeldPassage>().HasKey(t => new { t.SeamId, t.TechnologicalInstructionId });
     }
 }

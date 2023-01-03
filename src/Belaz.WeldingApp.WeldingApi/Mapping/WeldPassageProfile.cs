@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.WeldPassage;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Mapping;
 
@@ -27,5 +29,19 @@ public class WeldPassageProfile : Profile
             .ForMember(dto => dto.PreheatingTemperatureMax,
                 opt => opt
                     .MapFrom(x => x.LayerInstruction.PreheatingTemperatureMax));
+
+        CreateMap<CreateWeldPassageRequest, LayerInstruction>();
+        
+        CreateMap<CreateWeldPassageRequest, WeldPassage>()
+            .ForMember(dto => dto.LayerInstruction,
+                opt => opt
+                    .MapFrom(x => x));
+        
+        CreateMap<UpdateWeldPassageRequest, LayerInstruction>();
+        
+        CreateMap<UpdateWeldPassageRequest, WeldPassage>()
+            .ForMember(dto => dto.LayerInstruction,
+                opt => opt
+                    .MapFrom(x => x));
     }
 }
