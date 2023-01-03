@@ -33,5 +33,7 @@ public class SeamProfile : Profile
             .ForMember(dto => dto.ProductionAreaNumber,
                 opt => opt
                     .MapFrom(x => x.WeldingTask.Welder.Workplace.ProductionArea.Number));
+
+        CreateMap<Seam, SeamBriefDto>();
     }
 }

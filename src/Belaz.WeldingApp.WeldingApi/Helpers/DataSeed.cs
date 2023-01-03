@@ -607,11 +607,15 @@ public class DataSeed
             await context.Products.FirstOrDefaultAsync(_ => _.Number == 1 && _.ProductType == ProductType.Detail);
         var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
                                                                       && _.ProductType == ProductType.Product);
+        var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
+                                                                      && _.ProductType == ProductType.Product);
         var welder = await context.Welders.FirstOrDefaultAsync(_ => _.Workplace != null);
 
         var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
         var knot2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Knot);
-
+        var detail2 =
+            await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Detail);
+        
         var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
         var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
 
@@ -711,7 +715,7 @@ public class DataSeed
                 Status = Status.Defective,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
-                Product = knot2,
+                Product = product,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
@@ -780,7 +784,7 @@ public class DataSeed
                 Status = Status.NotStarted,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
-                Product = product,
+                Product = product2,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
@@ -804,6 +808,52 @@ public class DataSeed
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = knot,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            },
+            new WeldingTask
+            {
+                Number = 6,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 31,
+                AirHumidity = 2,
+                InterlayerTemperature = 22,
+                CurrentLayerNumber = 2,
+                PreheatingTemperature = 11,
+                Status = Status.Manufactured,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Product = knot2,
+                WeldingMaterial = "варочные материалы",
+                WeldingMaterialBatchNumber = "№ сертификата",
+                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+            },
+            new WeldingTask
+            {
+                Number = 6,
+                Welder = welder,
+                Master = master,
+                Inspector = inspector,
+                WeldingDate = new DateTime(2022, 01, 01),
+                WeldingStartTime = new DateTime(2022, 01, 03),
+                WeldingEndTime = null,
+                AmbientTemperature = 31,
+                AirHumidity = 2,
+                InterlayerTemperature = 22,
+                CurrentLayerNumber = 2,
+                PreheatingTemperature = 11,
+                Status = Status.Manufactured,
+                BasicMaterial = "Основной материал",
+                MainMaterialBatchNumber = "№ сертификата",
+                Product = detail2,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },

@@ -11,6 +11,12 @@ public interface IProductManager
     
     Task<List<ProductDto>> GetAllKnotsByWeldingTaskStatus(Status status);
     
+    Task<List<ProductDto>> GetAllProductsByControlSubject(bool isControlSubject);
+    
+    Task<List<ProductDto>> GetAllDetailsByControlSubject(bool isControlSubject);
+    
+    Task<List<ProductDto>> GetAllKnotsByControlSubject(bool isControlSubject);
+    
     Task<ProductDto?> GetProductByIdAsync(Guid id);
     
     Task<ProductDto?> GetDetailByIdAsync(Guid id);

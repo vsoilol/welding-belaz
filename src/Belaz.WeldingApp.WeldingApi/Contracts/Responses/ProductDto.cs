@@ -1,4 +1,6 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+﻿using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
+
+namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 
 public class ProductDto
 {
@@ -15,12 +17,10 @@ public class ProductDto
     public string TechnologicalProcessName { get; set; } = null!;
     
     public int TechnologicalProcessNumber { get; set; }
-    
-    public string TechnologicalInstructionName { get; set; } = null!;
-    
-    public int TechnologicalInstructionNumber { get; set; }
-    
+
     public Guid TechnologicalProcessId { get; set; }
 
     public List<ProductBriefDto> InsideProducts { get; set; } = null!;
+    
+    public List<SeamBriefDto> Seams { get; set; } = null!;
 }

@@ -15,8 +15,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         public string PdmSystemFileLink { get; set; }
 
         public Guid? ProductId { get; set; }
-        
-        [ForeignKey(nameof(ProductId))]
+
+        [ForeignKey(nameof(ProductId))] 
         public Product? Product { get; set; }
 
         public List<TechnologicalInstruction> TechnologicalInstructions { get; set; } = null!;

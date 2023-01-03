@@ -39,5 +39,6 @@ public static class IoC
         services.AddScoped<ITechnologicalProcessManager, TechnologicalProcessManager>();
         services.AddScoped<IWeldingTaskManager, WeldingTaskManager>();
         services.AddScoped<ISeamManager, SeamManager>();
+        services.AddScoped<IProductManager, ProductManager>();
     }
 }

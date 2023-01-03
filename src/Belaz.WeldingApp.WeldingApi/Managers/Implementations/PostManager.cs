@@ -12,19 +12,15 @@ public class PostManager : IPostManager
 {
     private readonly IMapper _mapper;
     private readonly EntityFrameworkRepository<Post> _postRepository;
-    private readonly ApplicationContext _applicationContext;
 
-    public PostManager(IMapper mapper, EntityFrameworkRepository<Post> postRepository, ApplicationContext applicationContext)
+    public PostManager(IMapper mapper, EntityFrameworkRepository<Post> postRepository)
     {
         _mapper = mapper;
         _postRepository = postRepository;
-        _applicationContext = applicationContext;
     }
 
     public async Task<List<PostDto>> GetAllAsync()
     {
-        var data = _applicationContext.Seams.Include(_ => _.Product);
-        
         return await _postRepository
             .AsQueryable()
             .ProjectTo<PostDto>(_mapper.ConfigurationProvider)
