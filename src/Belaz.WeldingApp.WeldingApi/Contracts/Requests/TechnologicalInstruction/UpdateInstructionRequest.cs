@@ -2,15 +2,13 @@
 
 namespace Belaz.WeldingApp.WeldingApi.Contracts.Requests.TechnologicalInstruction;
 
-public class CreateInstructionRequest
+public class UpdateInstructionRequest
 {
+    public Guid Id { get; set; }
+    
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;
-    
-    public Guid SeamId { get; set; }
-    
-    public Guid TechnologicalProcessId { get; set; }
 
-    public List<CreateWeldPassageRequest> WeldPassages { get; set; } = null!;
+    public List<UpdateWeldPassageRequest> WeldPassages { get; set; } = null!;
 }

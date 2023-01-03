@@ -36,4 +36,12 @@ public class TechnologicalInstructionController : ControllerBase
         await _technologicalInstructionManager.CreateAsync(request);
         return Ok();
     }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateInstructionRequest request)
+    {
+        await _technologicalInstructionManager.UpdateAsync(request);
+        return Ok();
+    }
 }

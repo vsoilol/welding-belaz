@@ -27,5 +27,10 @@ public class TechnologicalInstructionProfile : Profile
                 foreach(var i in dest.WeldPassages) 
                     i.SeamId = src.SeamId;
             });
+        
+        CreateMap<UpdateInstructionRequest, TechnologicalInstruction>()
+            .ForMember(dto => dto.WeldPassages,
+                opt => opt
+                    .MapFrom(x => x.WeldPassages));
     }
 }

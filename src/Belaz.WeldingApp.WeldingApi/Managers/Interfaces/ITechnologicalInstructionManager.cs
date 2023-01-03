@@ -8,4 +8,6 @@ public interface ITechnologicalInstructionManager
     Task<List<TechnologicalInstructionDto>> GetAllAsync();
     
     Task CreateAsync(CreateInstructionRequest request);
+    
+    Task UpdateAsync(UpdateInstructionRequest request);
 }

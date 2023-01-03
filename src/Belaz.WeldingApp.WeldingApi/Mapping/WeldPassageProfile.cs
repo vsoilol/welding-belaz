@@ -36,5 +36,12 @@ public class WeldPassageProfile : Profile
             .ForMember(dto => dto.LayerInstruction,
                 opt => opt
                     .MapFrom(x => x));
+        
+        CreateMap<UpdateWeldPassageRequest, LayerInstruction>();
+        
+        CreateMap<UpdateWeldPassageRequest, WeldPassage>()
+            .ForMember(dto => dto.LayerInstruction,
+                opt => opt
+                    .MapFrom(x => x));
     }
 }
