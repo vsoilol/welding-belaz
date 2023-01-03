@@ -51,12 +51,12 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories
             return Entities.Where(filter);
         }
 
-        public virtual T GetById(int id)
+        public virtual T GetById(Guid id)
         {
             return Entities.Find(id);
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T> GetByIdAsync(Guid id)
         {
             return await Entities.FindAsync(id);
         }

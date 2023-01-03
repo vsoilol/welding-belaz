@@ -55,4 +55,12 @@ public class ProductManager : IProductManager
         _productRepository.Add(product);
         await _productRepository.SaveAsync();
     }
+
+    public async Task UpdateAsync(UpdateProductRequest request)
+    {
+        var product = _mapper.Map<Product>(request);
+        
+        _productRepository.Update(product);
+        await _productRepository.SaveAsync();
+    }
 }

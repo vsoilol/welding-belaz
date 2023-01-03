@@ -53,4 +53,13 @@ public class ProductController : ControllerBase
         await _productManager.CreateAsync(request);
         return Ok();
     }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductRequest request)
+    {
+        await _productManager.UpdateAsync(request);
+        return Ok();
+    }
 }
