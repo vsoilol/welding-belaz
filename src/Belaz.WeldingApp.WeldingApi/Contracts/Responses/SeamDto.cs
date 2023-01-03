@@ -2,6 +2,8 @@
 
 public class SeamDto
 {
+    public Guid Id { get; set; }
+    
     public int Number { get; set; }
 
     public ProductBriefDto Product { get; set; } = null!;

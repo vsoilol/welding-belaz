@@ -8,4 +8,6 @@ public interface ISeamManager
     Task<List<SeamDto>> GetAllByWeldingTaskStatus(Status status);
     
     Task<SeamDto?> GetByIdAsync(Guid id);
+    
+    Task<List<SeamDto>> GetAllByControlSubject(bool isControlSubject);
 }

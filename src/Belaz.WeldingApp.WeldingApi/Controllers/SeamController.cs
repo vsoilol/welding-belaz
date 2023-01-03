@@ -35,4 +35,12 @@ public class SeamController : ControllerBase
     {
         return await _seamManager.GetByIdAsync(id);
     }
+    
+    [HttpGet("byControlSubject/{idControlSubject}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByControlSubjectAsync([FromRoute] bool idControlSubject)
+    {
+        return await _seamManager.GetAllByControlSubject(idControlSubject);
+    }
 }

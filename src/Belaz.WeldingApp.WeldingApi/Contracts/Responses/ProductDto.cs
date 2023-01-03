@@ -2,7 +2,7 @@
 
 public class ProductDto
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
         
     public int Number { get; set; }
     
@@ -12,13 +12,15 @@ public class ProductDto
     
     public int WorkshopNumber { get; set; }
     
-    public string TechnologicalProcessName { get; set; }
+    public string TechnologicalProcessName { get; set; } = null!;
     
     public int TechnologicalProcessNumber { get; set; }
     
-    public string TechnologicalInstructionName { get; set; }
+    public string TechnologicalInstructionName { get; set; } = null!;
     
     public int TechnologicalInstructionNumber { get; set; }
     
     public Guid TechnologicalProcessId { get; set; }
+
+    public List<ProductBriefDto> InsideProducts { get; set; } = null!;
 }

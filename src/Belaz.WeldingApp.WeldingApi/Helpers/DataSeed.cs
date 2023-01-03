@@ -442,6 +442,7 @@ public class DataSeed
             {
                 Name = "Изделие 1",
                 Number = 1,
+                IsControlSubject = true,
                 ProductType = ProductType.Product,
                 Seams = new List<Seam>
                 {
@@ -467,7 +468,7 @@ public class DataSeed
                         {
                             Name = "Узел 1",
                             Number = 1,
-                            ProductType = ProductType.Knot
+                            ProductType = ProductType.Knot,
                         }
                     }
                 },
@@ -482,6 +483,7 @@ public class DataSeed
                     new Seam
                     {
                         Number = 2,
+                        IsControlSubject = true,
                     }
                 },
                 ProductInsides = new List<ProductInside>
@@ -492,7 +494,8 @@ public class DataSeed
                         {
                             Name = "Деталь 2",
                             Number = 2,
-                            ProductType = ProductType.Detail
+                            ProductType = ProductType.Detail,
+                            IsControlSubject = true,
                         },
                     },
                     new ProductInside
@@ -728,7 +731,7 @@ public class DataSeed
                 InterlayerTemperature = 820,
                 CurrentLayerNumber = 81,
                 PreheatingTemperature = 170,
-                Status = Status.VerificationSubject,
+                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = detail,
@@ -751,7 +754,7 @@ public class DataSeed
                 InterlayerTemperature = 220,
                 CurrentLayerNumber = 12,
                 PreheatingTemperature = 2,
-                Status = Status.VerificationSubject,
+                Status = Status.InProgress,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Seam = seam,
@@ -774,7 +777,7 @@ public class DataSeed
                 InterlayerTemperature = 23,
                 CurrentLayerNumber = 13,
                 PreheatingTemperature = 10,
-                Status = Status.VerificationSubject,
+                Status = Status.NotStarted,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = product,
@@ -797,7 +800,7 @@ public class DataSeed
                 InterlayerTemperature = 22,
                 CurrentLayerNumber = 2,
                 PreheatingTemperature = 11,
-                Status = Status.VerificationSubject,
+                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = knot,

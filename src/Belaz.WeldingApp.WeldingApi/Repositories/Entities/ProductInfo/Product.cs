@@ -13,6 +13,11 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
         public string? Name { get; set; }
         
         public int Number { get; set; }
+        
+        /// <summary>
+        /// Подлежит ли контролю
+        /// </summary>
+        public bool IsControlSubject { get; set; }
 
         public ProductType ProductType { get; set; }
 

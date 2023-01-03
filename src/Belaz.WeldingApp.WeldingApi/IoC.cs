@@ -24,6 +24,7 @@ public static class IoC
         services.AddScoped<EntityFrameworkRepository<Workplace>, WorkplaceRepository>();
         services.AddScoped<EntityFrameworkRepository<ProductionArea>, ProductionAreaRepository>();
         services.AddScoped<EntityFrameworkRepository<Post>, PostRepository>();
+        services.AddScoped<EntityFrameworkRepository<Seam>, SeamRepository>();
         services.AddScoped<EntityFrameworkRepository<Product>, ProductRepository>();
         services.AddScoped<EntityFrameworkRepository<TechnologicalProcess>, TechnologicalProcessRepository>();
         services.AddScoped<EntityFrameworkRepository<WeldingTask>, WeldingTaskRepository>();
@@ -37,5 +38,6 @@ public static class IoC
         services.AddScoped<IPostManager, PostManager>();
         services.AddScoped<ITechnologicalProcessManager, TechnologicalProcessManager>();
         services.AddScoped<IWeldingTaskManager, WeldingTaskManager>();
+        services.AddScoped<ISeamManager, SeamManager>();
     }
 }
