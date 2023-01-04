@@ -426,7 +426,7 @@
       "UpstreamHttpMethod": [
         "GET", "POST", "PUT"
       ],
-      "DownstreamPathTemplate": "/api/seam",
+      "DownstreamPathTemplate": "/api/TechnologicalInstruction",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
