@@ -60,7 +60,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+    policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
+
 var app = builder.Build();
+
+app.UseCors("NgOrigins");
 
 app.UseSwagger();
 
