@@ -61,7 +61,15 @@ public class ProductManager : IProductManager
     {
         var product = _mapper.Map<Product>(request);
         product.ProductType = productType;
-        
+
+        var deleteInsidesProducts = _productRepository
+            .AsQueryable()
+            .Include(_ => _.ProductInsides)
+            .ThenInclude(_ => _.InsideProduct)
+            .Where(_ => _.ProductInsides.Any(productInside => productInside.MainProductId == product.Id))
+            .SelectMany(_ => _.ProductInsides)
+            .Select(_ => _.InsideProduct);
+
         _productRepository.Update(product);
         await _productRepository.SaveAsync();
     }
