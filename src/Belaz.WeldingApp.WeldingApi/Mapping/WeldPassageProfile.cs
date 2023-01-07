@@ -10,38 +10,14 @@ public class WeldPassageProfile : Profile
 {
     public WeldPassageProfile()
     {
-        CreateMap<WeldPassage, WeldPassageDto>()
-            .ForMember(dto => dto.WeldingCurrentMin,
-                opt => opt
-                    .MapFrom(x => x.LayerInstruction.WeldingCurrentMin))
-            .ForMember(dto => dto.WeldingCurrentMax,
-                opt => opt
-                    .MapFrom(x => x.LayerInstruction.WeldingCurrentMax))
-            .ForMember(dto => dto.ArcVoltageMin,
-                opt => opt
-                    .MapFrom(x => x.LayerInstruction.ArcVoltageMin))
-            .ForMember(dto => dto.ArcVoltageMax,
-                opt => opt
-                    .MapFrom(x => x.LayerInstruction.ArcVoltageMax))
-            .ForMember(dto => dto.PreheatingTemperatureMin,
-                opt => opt
-                    .MapFrom(x => x.LayerInstruction.PreheatingTemperatureMin))
-            .ForMember(dto => dto.PreheatingTemperatureMax,
-                opt => opt
-                    .MapFrom(x => x.LayerInstruction.PreheatingTemperatureMax));
+        CreateMap<WeldPassage, WeldPassageDto>();
 
         CreateMap<CreateWeldPassageRequest, LayerInstruction>();
         
-        CreateMap<CreateWeldPassageRequest, WeldPassage>()
-            .ForMember(dto => dto.LayerInstruction,
-                opt => opt
-                    .MapFrom(x => x));
+        CreateMap<CreateWeldPassageRequest, WeldPassage>();
         
         CreateMap<UpdateWeldPassageRequest, LayerInstruction>();
         
-        CreateMap<UpdateWeldPassageRequest, WeldPassage>()
-            .ForMember(dto => dto.LayerInstruction,
-                opt => opt
-                    .MapFrom(x => x));
+        CreateMap<UpdateWeldPassageRequest, WeldPassage>();
     }
 }

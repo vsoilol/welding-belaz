@@ -47,16 +47,16 @@ public class DetailController : ControllerBase
     
     [HttpPost]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateProductRequest request)
+    public async Task<IActionResult> CreateAsync([FromBody] CreateProductWithoutTypeRequest request)
     {
-        await _productManager.CreateAsync(request);
+        await _productManager.CreateAsync(request, ProductType.Detail);
         return Ok();
     }
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductRequest request)
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductWithoutTypeRequest request)
     {
         await _productManager.UpdateAsync(request);
         return Ok();

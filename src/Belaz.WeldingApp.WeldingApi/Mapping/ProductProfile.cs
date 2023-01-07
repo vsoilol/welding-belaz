@@ -45,6 +45,14 @@ public class ProductProfile : Profile
                 opt => opt
                     .MapFrom(x => x.InsideProducts));
         
+        CreateMap<CreateProductWithoutTypeRequest, Product>()
+            .ForMember(dto => dto.Seams,
+                opt => opt
+                    .MapFrom(x => x.Seams))
+            .ForMember(dto => dto.ProductInsides,
+                opt => opt
+                    .MapFrom(x => x.InsideProducts));
+        
         CreateMap<UpdateProductRequest, ProductInside>()
             .ForMember(dto => dto.InsideProduct,
                 opt => opt
@@ -54,6 +62,18 @@ public class ProductProfile : Profile
                     .MapFrom(x => x.Id));   
 
         CreateMap<UpdateProductRequest, Product>()
+            .ForMember(dto => dto.Seams,
+                opt => opt
+                    .MapFrom(x => x.Seams))
+            .ForMember(dto => dto.ProductInsides,
+                opt => opt
+                    .MapFrom(x => x.InsideProducts))
+            .AfterMap((src, dest) => { 
+                foreach(var i in dest.ProductInsides) 
+                    i.MainProductId = src.Id;
+            });
+        
+        CreateMap<UpdateProductWithoutTypeRequest, Product>()
             .ForMember(dto => dto.Seams,
                 opt => opt
                     .MapFrom(x => x.Seams))

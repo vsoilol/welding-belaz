@@ -522,11 +522,11 @@ public class DataSeed
     {
         var seam = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
         var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
-        
+
         var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
                                                                       && _.ProductType == ProductType.Product);
         var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
-                                                                      && _.ProductType == ProductType.Product);
+                                                                       && _.ProductType == ProductType.Product);
 
         var technologicalProcesses = new List<TechnologicalProcess>
         {
@@ -549,15 +549,12 @@ public class DataSeed
                             {
                                 Seam = seam,
                                 Name = "Название прохода 1",
-                                LayerInstruction = new LayerInstruction
-                                {
-                                    WeldingCurrentMin = 1,
-                                    WeldingCurrentMax = 100,
-                                    ArcVoltageMin = 5,
-                                    ArcVoltageMax = 50,
-                                    PreheatingTemperatureMin = 10,
-                                    PreheatingTemperatureMax = 60,
-                                }
+                                WeldingCurrentMin = 1,
+                                WeldingCurrentMax = 100,
+                                ArcVoltageMin = 5,
+                                ArcVoltageMax = 50,
+                                PreheatingTemperatureMin = 10,
+                                PreheatingTemperatureMax = 60,
                             }
                         }
                     }
@@ -582,15 +579,12 @@ public class DataSeed
                             {
                                 Seam = seam2,
                                 Name = "Название прохода 1",
-                                LayerInstruction = new LayerInstruction
-                                {
-                                    WeldingCurrentMin = 1,
-                                    WeldingCurrentMax = 100,
-                                    ArcVoltageMin = 5,
-                                    ArcVoltageMax = 50,
-                                    PreheatingTemperatureMin = 10,
-                                    PreheatingTemperatureMax = 60,
-                                }
+                                WeldingCurrentMin = 1,
+                                WeldingCurrentMax = 100,
+                                ArcVoltageMin = 5,
+                                ArcVoltageMax = 50,
+                                PreheatingTemperatureMin = 10,
+                                PreheatingTemperatureMax = 60,
                             }
                         }
                     }
@@ -611,14 +605,14 @@ public class DataSeed
         var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
                                                                       && _.ProductType == ProductType.Product);
         var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
-                                                                      && _.ProductType == ProductType.Product);
+                                                                       && _.ProductType == ProductType.Product);
         var welder = await context.Welders.FirstOrDefaultAsync(_ => _.Workplace != null);
 
         var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
         var knot2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Knot);
         var detail2 =
             await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Detail);
-        
+
         var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
         var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
 

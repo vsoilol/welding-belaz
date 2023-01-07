@@ -46,7 +46,6 @@ public class TechnologicalInstructionManager : ITechnologicalInstructionManager
         var technologicalInstruction = await _technologicalInstructionRepository
             .AsQueryableByFilter(_ => _.Id == request.Id)
             .Include(_ => _.WeldPassages)
-            .ThenInclude(_ => _.LayerInstruction)
             .FirstOrDefaultAsync();
 
         technologicalInstruction.Name = updatedTechnologicalInstruction.Name;
@@ -59,12 +58,12 @@ public class TechnologicalInstructionManager : ITechnologicalInstructionManager
 
             weldPassage.Name = newWelderPassage.Name;
 
-            weldPassage.LayerInstruction.ArcVoltageMax = newWelderPassage.LayerInstruction.ArcVoltageMax;
-            weldPassage.LayerInstruction.ArcVoltageMin = newWelderPassage.LayerInstruction.ArcVoltageMin;
-            weldPassage.LayerInstruction.PreheatingTemperatureMax = newWelderPassage.LayerInstruction.PreheatingTemperatureMax;
-            weldPassage.LayerInstruction.PreheatingTemperatureMin = newWelderPassage.LayerInstruction.PreheatingTemperatureMin;
-            weldPassage.LayerInstruction.WeldingCurrentMax = newWelderPassage.LayerInstruction.WeldingCurrentMax;
-            weldPassage.LayerInstruction.WeldingCurrentMin = newWelderPassage.LayerInstruction.WeldingCurrentMin;
+            weldPassage.ArcVoltageMax = newWelderPassage.ArcVoltageMax;
+            weldPassage.ArcVoltageMin = newWelderPassage.ArcVoltageMin;
+            weldPassage.PreheatingTemperatureMax = newWelderPassage.PreheatingTemperatureMax;
+            weldPassage.PreheatingTemperatureMin = newWelderPassage.PreheatingTemperatureMin;
+            weldPassage.WeldingCurrentMax = newWelderPassage.WeldingCurrentMax;
+            weldPassage.WeldingCurrentMin = newWelderPassage.WeldingCurrentMin;
         }
 
         var newWelderPassages = updatedTechnologicalInstruction.WeldPassages

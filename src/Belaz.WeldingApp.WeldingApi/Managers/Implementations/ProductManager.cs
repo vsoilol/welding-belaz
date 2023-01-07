@@ -48,15 +48,16 @@ public class ProductManager : IProductManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task CreateAsync(CreateProductRequest request)
+    public async Task CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType)
     {
         var product = _mapper.Map<Product>(request);
+        product.ProductType = productType;
 
         _productRepository.Add(product);
         await _productRepository.SaveAsync();
     }
 
-    public async Task UpdateAsync(UpdateProductRequest request)
+    public async Task UpdateAsync(UpdateProductWithoutTypeRequest request)
     {
         var product = _mapper.Map<Product>(request);
         
