@@ -15,6 +15,10 @@ public class CreateProductRequest
     /// Подлежит ли контролю
     /// </summary>
     public bool IsControlSubject { get; set; }
+    
+    public Guid ProductionAreaId { get; set; }
+
+    public Guid? WorkplaceId { get; set; }
 
     public List<CreateSeamRequest> Seams { get; set; } = null!;
     

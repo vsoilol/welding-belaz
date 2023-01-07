@@ -57,9 +57,10 @@ public class ProductManager : IProductManager
         await _productRepository.SaveAsync();
     }
 
-    public async Task UpdateAsync(UpdateProductWithoutTypeRequest request)
+    public async Task UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType)
     {
         var product = _mapper.Map<Product>(request);
+        product.ProductType = productType;
         
         _productRepository.Update(product);
         await _productRepository.SaveAsync();

@@ -8,15 +8,8 @@ public class ProductionProfile : Profile
 {
     public ProductionProfile()
     {
-        CreateMap<Workplace, ProductionBriefDto>()
-            .ForMember(dto => dto.WorkplaceNumber,
-                opt => opt
-                    .MapFrom(x => x.Number))
-            .ForMember(dto => dto.WorkshopNumber,
-                opt => opt
-                    .MapFrom(x => x.ProductionArea.Workshop.Number))
-            .ForMember(dto => dto.ProductionAreaNumber,
-                opt => opt
-                    .MapFrom(x => x.ProductionArea.Number));
+        CreateMap<Workplace, ProductionBriefDto>();
+        CreateMap<Workshop, ProductionBriefDto>();
+        CreateMap<ProductionArea, ProductionBriefDto>();
     }
 }

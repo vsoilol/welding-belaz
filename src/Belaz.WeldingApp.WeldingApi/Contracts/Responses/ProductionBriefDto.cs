@@ -2,10 +2,7 @@
 
 public class ProductionBriefDto
 {
-    public int? WorkplaceNumber { get; set; }
-    
-    public int ProductionAreaNumber { get; set; }
-    
-    public int WorkshopNumber { get; set; }
+    public Guid Id { get; set; }
 
+    public int Number { get; set; }
 }

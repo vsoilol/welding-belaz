@@ -14,6 +14,10 @@ public class UpdateProductWithoutTypeRequest
     /// Подлежит ли контролю
     /// </summary>
     public bool IsControlSubject { get; set; }
+    
+    public Guid ProductionAreaId { get; set; }
+
+    public Guid? WorkplaceId { get; set; }
 
     public List<UpdateSeamRequest> Seams { get; set; } = null!;
     

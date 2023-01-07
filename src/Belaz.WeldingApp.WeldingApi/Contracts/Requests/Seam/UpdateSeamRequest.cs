@@ -10,4 +10,8 @@ public class UpdateSeamRequest
     /// Подлежит ли контролю
     /// </summary>
     public bool IsControlSubject { get; set; }
+    
+    public Guid ProductionAreaId { get; set; }
+
+    public Guid? WorkplaceId { get; set; }
 }

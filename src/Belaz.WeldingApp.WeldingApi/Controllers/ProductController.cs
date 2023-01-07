@@ -59,7 +59,7 @@ public class ProductController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductWithoutTypeRequest request)
     {
-        await _productManager.UpdateAsync(request);
+        await _productManager.UpdateAsync(request, ProductType.Product);
         return Ok();
     }
 }
