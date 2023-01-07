@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 using WeldingApp.Common.Enums;
 
@@ -30,5 +31,15 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
         public List<ProductInside> ProductInsides { get; set; } = null!;
 
         public List<ProductInside> ProductMains { get; set; } = null!;
+        
+        public Guid? ProductionAreaId { get; set; }
+    
+        [ForeignKey(nameof(ProductionAreaId))]
+        public ProductionArea? ProductionArea { get; set; }
+        
+        public Guid? WorkplaceId { get; set; }
+    
+        [ForeignKey(nameof(WorkplaceId))]
+        public Workplace? Workplace { get; set; }
     }
 }

@@ -8,7 +8,11 @@ public class ProductDto
         
     public int Number { get; set; }
 
-    public ProductionBriefDto ProductionInfo { get; set; } = null!;
+    public int? WorkplaceNumber { get; set; }
+    
+    public int ProductionAreaNumber { get; set; }
+    
+    public int WorkshopNumber { get; set; }
     
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
 

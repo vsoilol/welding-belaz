@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
 {
@@ -19,5 +20,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
         
         [ForeignKey(nameof(ProductionAreaId))]
         public ProductionArea? ProductionArea { get; set; }
+        
+        public List<Product> Products { get; set; } = null!;
+        
+        public List<Seam> Seams { get; set; } = null!;
     }
 }

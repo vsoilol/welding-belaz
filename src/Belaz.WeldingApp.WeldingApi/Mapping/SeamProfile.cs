@@ -11,17 +11,23 @@ public class SeamProfile : Profile
     {
         CreateMap<Seam, SeamDto>()
             .ForMember(dto => dto.Product,
-            opt => opt
-                .MapFrom(x => x.Product))
+                opt => opt
+                    .MapFrom(x => x.Product))
             .ForMember(dto => dto.TechnologicalInstruction,
                 opt => opt
                     .MapFrom(x => x.TechnologicalInstruction))
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x => x.TechnologicalInstruction.TechnologicalProcess))
-            .ForMember(dto => dto.ProductionInfo,
+            .ForMember(dto => dto.ProductionAreaNumber,
                 opt => opt
-                    .MapFrom(x => x.WeldingTask.Welder.Workplace));
+                    .MapFrom(x => x.ProductionArea.Number))
+            .ForMember(dto => dto.WorkshopNumber,
+                opt => opt
+                    .MapFrom(x => x.ProductionArea.Workshop.Number))
+            .ForMember(dto => dto.WorkplaceNumber,
+                opt => opt
+                    .MapFrom(x => x.Workplace.Number));
 
         CreateMap<Seam, SeamBriefDto>();
         

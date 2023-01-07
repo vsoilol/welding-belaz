@@ -439,6 +439,9 @@ public class DataSeed
 
     private static async Task AddProducts(ApplicationContext context)
     {
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
+        var workplace = await context.Workplaces.FirstOrDefaultAsync();
+        
         var products = new List<Product>
         {
             new Product
@@ -447,11 +450,15 @@ public class DataSeed
                 Number = 1,
                 IsControlSubject = true,
                 ProductType = ProductType.Product,
+                ProductionArea = productionArea,
+                Workplace = workplace,
                 Seams = new List<Seam>
                 {
                     new Seam
                     {
                         Number = 1,
+                        ProductionArea = productionArea,
+                        Workplace = workplace,
                     }
                 },
                 ProductInsides = new List<ProductInside>
@@ -462,7 +469,9 @@ public class DataSeed
                         {
                             Name = "Деталь 1",
                             Number = 1,
-                            ProductType = ProductType.Detail
+                            ProductType = ProductType.Detail,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         },
                     },
                     new ProductInside
@@ -472,6 +481,8 @@ public class DataSeed
                             Name = "Узел 1",
                             Number = 1,
                             ProductType = ProductType.Knot,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         }
                     }
                 },
@@ -481,12 +492,16 @@ public class DataSeed
                 Name = "Изделие 2",
                 Number = 2,
                 ProductType = ProductType.Product,
+                ProductionArea = productionArea,
+                Workplace = workplace,
                 Seams = new List<Seam>
                 {
                     new Seam
                     {
                         Number = 2,
                         IsControlSubject = true,
+                        ProductionArea = productionArea,
+                        Workplace = workplace,
                     }
                 },
                 ProductInsides = new List<ProductInside>
@@ -499,6 +514,8 @@ public class DataSeed
                             Number = 2,
                             ProductType = ProductType.Detail,
                             IsControlSubject = true,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         },
                     },
                     new ProductInside
@@ -507,7 +524,9 @@ public class DataSeed
                         {
                             Name = "Узел 2",
                             Number = 2,
-                            ProductType = ProductType.Knot
+                            ProductType = ProductType.Knot,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         }
                     }
                 },
