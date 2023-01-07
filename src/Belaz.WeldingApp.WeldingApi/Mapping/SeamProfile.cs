@@ -19,15 +19,15 @@ public class SeamProfile : Profile
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x => x.TechnologicalInstruction.TechnologicalProcess))
-            .ForMember(dto => dto.ProductionAreaNumber,
+            .ForMember(dto => dto.ProductionArea,
                 opt => opt
-                    .MapFrom(x => x.ProductionArea.Number))
-            .ForMember(dto => dto.WorkshopNumber,
+                    .MapFrom(x => x.ProductionArea))
+            .ForMember(dto => dto.Workshop,
                 opt => opt
-                    .MapFrom(x => x.ProductionArea.Workshop.Number))
-            .ForMember(dto => dto.WorkplaceNumber,
+                    .MapFrom(x => x.ProductionArea.Workshop))
+            .ForMember(dto => dto.Workplace,
                 opt => opt
-                    .MapFrom(x => x.Workplace.Number));
+                    .MapFrom(x => x.Workplace));
 
         CreateMap<Seam, SeamBriefDto>();
         
