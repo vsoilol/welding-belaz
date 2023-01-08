@@ -48,18 +48,28 @@ public class ProductManager : IProductManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task CreateAsync(CreateProductRequest request)
+    public async Task CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType)
     {
         var product = _mapper.Map<Product>(request);
+        product.ProductType = productType;
 
         _productRepository.Add(product);
         await _productRepository.SaveAsync();
     }
 
-    public async Task UpdateAsync(UpdateProductRequest request)
+    public async Task UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType)
     {
         var product = _mapper.Map<Product>(request);
-        
+        product.ProductType = productType;
+
+        var deleteInsidesProducts = _productRepository
+            .AsQueryable()
+            .Include(_ => _.ProductInsides)
+            .ThenInclude(_ => _.InsideProduct)
+            .Where(_ => _.ProductInsides.Any(productInside => productInside.MainProductId == product.Id))
+            .SelectMany(_ => _.ProductInsides)
+            .Select(_ => _.InsideProduct);
+
         _productRepository.Update(product);
         await _productRepository.SaveAsync();
     }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
@@ -25,4 +26,14 @@ public class Seam : Entity
     public List<WeldPassage> WeldPassages { get; set; } = null!;
     
     public TechnologicalInstruction? TechnologicalInstruction { get; set; }
+    
+    public Guid? ProductionAreaId { get; set; }
+    
+    [ForeignKey(nameof(ProductionAreaId))]
+    public ProductionArea? ProductionArea { get; set; }
+        
+    public Guid? WorkplaceId { get; set; }
+    
+    [ForeignKey(nameof(WorkplaceId))]
+    public Workplace? Workplace { get; set; }
 }

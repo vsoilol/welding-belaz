@@ -1,16 +1,13 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Seam;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Contracts.Requests.ProductInfo;
 
-public class CreateProductRequest
+public class CreateProductWithoutTypeRequest
 {
     public string? Name { get; set; }
         
     public int Number { get; set; }
-    
-    public ProductType ProductType { get; set; }
-    
+
     /// <summary>
     /// Подлежит ли контролю
     /// </summary>

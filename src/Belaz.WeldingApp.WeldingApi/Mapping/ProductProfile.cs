@@ -20,9 +20,15 @@ public class ProductProfile : Profile
             .ForMember(dto => dto.Seams,
                 opt => opt
                     .MapFrom(x => x.Seams))
-            .ForMember(dto => dto.ProductionInfo,
+            .ForMember(dto => dto.ProductionArea,
                 opt => opt
-                    .MapFrom(x => x.WeldingTask.Welder.Workplace))
+                    .MapFrom(x => x.ProductionArea))
+            .ForMember(dto => dto.Workshop,
+                opt => opt
+                    .MapFrom(x => x.ProductionArea.Workshop))
+            .ForMember(dto => dto.Workplace,
+                opt => opt
+                    .MapFrom(x => x.Workplace))
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x =>
@@ -45,6 +51,14 @@ public class ProductProfile : Profile
                 opt => opt
                     .MapFrom(x => x.InsideProducts));
         
+        CreateMap<CreateProductWithoutTypeRequest, Product>()
+            .ForMember(dto => dto.Seams,
+                opt => opt
+                    .MapFrom(x => x.Seams))
+            .ForMember(dto => dto.ProductInsides,
+                opt => opt
+                    .MapFrom(x => x.InsideProducts));
+        
         CreateMap<UpdateProductRequest, ProductInside>()
             .ForMember(dto => dto.InsideProduct,
                 opt => opt
@@ -54,6 +68,18 @@ public class ProductProfile : Profile
                     .MapFrom(x => x.Id));   
 
         CreateMap<UpdateProductRequest, Product>()
+            .ForMember(dto => dto.Seams,
+                opt => opt
+                    .MapFrom(x => x.Seams))
+            .ForMember(dto => dto.ProductInsides,
+                opt => opt
+                    .MapFrom(x => x.InsideProducts))
+            .AfterMap((src, dest) => { 
+                foreach(var i in dest.ProductInsides) 
+                    i.MainProductId = src.Id;
+            });
+        
+        CreateMap<UpdateProductWithoutTypeRequest, Product>()
             .ForMember(dto => dto.Seams,
                 opt => opt
                     .MapFrom(x => x.Seams))

@@ -439,6 +439,9 @@ public class DataSeed
 
     private static async Task AddProducts(ApplicationContext context)
     {
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
+        var workplace = await context.Workplaces.FirstOrDefaultAsync();
+        
         var products = new List<Product>
         {
             new Product
@@ -447,11 +450,15 @@ public class DataSeed
                 Number = 1,
                 IsControlSubject = true,
                 ProductType = ProductType.Product,
+                ProductionArea = productionArea,
+                Workplace = workplace,
                 Seams = new List<Seam>
                 {
                     new Seam
                     {
                         Number = 1,
+                        ProductionArea = productionArea,
+                        Workplace = workplace,
                     }
                 },
                 ProductInsides = new List<ProductInside>
@@ -462,7 +469,9 @@ public class DataSeed
                         {
                             Name = "Деталь 1",
                             Number = 1,
-                            ProductType = ProductType.Detail
+                            ProductType = ProductType.Detail,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         },
                     },
                     new ProductInside
@@ -472,6 +481,8 @@ public class DataSeed
                             Name = "Узел 1",
                             Number = 1,
                             ProductType = ProductType.Knot,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         }
                     }
                 },
@@ -481,12 +492,16 @@ public class DataSeed
                 Name = "Изделие 2",
                 Number = 2,
                 ProductType = ProductType.Product,
+                ProductionArea = productionArea,
+                Workplace = workplace,
                 Seams = new List<Seam>
                 {
                     new Seam
                     {
                         Number = 2,
                         IsControlSubject = true,
+                        ProductionArea = productionArea,
+                        Workplace = workplace,
                     }
                 },
                 ProductInsides = new List<ProductInside>
@@ -499,6 +514,8 @@ public class DataSeed
                             Number = 2,
                             ProductType = ProductType.Detail,
                             IsControlSubject = true,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         },
                     },
                     new ProductInside
@@ -507,7 +524,9 @@ public class DataSeed
                         {
                             Name = "Узел 2",
                             Number = 2,
-                            ProductType = ProductType.Knot
+                            ProductType = ProductType.Knot,
+                            ProductionArea = productionArea,
+                            Workplace = workplace,
                         }
                     }
                 },
@@ -522,11 +541,11 @@ public class DataSeed
     {
         var seam = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
         var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
-        
+
         var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
                                                                       && _.ProductType == ProductType.Product);
         var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
-                                                                      && _.ProductType == ProductType.Product);
+                                                                       && _.ProductType == ProductType.Product);
 
         var technologicalProcesses = new List<TechnologicalProcess>
         {
@@ -549,15 +568,12 @@ public class DataSeed
                             {
                                 Seam = seam,
                                 Name = "Название прохода 1",
-                                LayerInstruction = new LayerInstruction
-                                {
-                                    WeldingCurrentMin = 1,
-                                    WeldingCurrentMax = 100,
-                                    ArcVoltageMin = 5,
-                                    ArcVoltageMax = 50,
-                                    PreheatingTemperatureMin = 10,
-                                    PreheatingTemperatureMax = 60,
-                                }
+                                WeldingCurrentMin = 1,
+                                WeldingCurrentMax = 100,
+                                ArcVoltageMin = 5,
+                                ArcVoltageMax = 50,
+                                PreheatingTemperatureMin = 10,
+                                PreheatingTemperatureMax = 60,
                             }
                         }
                     }
@@ -582,15 +598,12 @@ public class DataSeed
                             {
                                 Seam = seam2,
                                 Name = "Название прохода 1",
-                                LayerInstruction = new LayerInstruction
-                                {
-                                    WeldingCurrentMin = 1,
-                                    WeldingCurrentMax = 100,
-                                    ArcVoltageMin = 5,
-                                    ArcVoltageMax = 50,
-                                    PreheatingTemperatureMin = 10,
-                                    PreheatingTemperatureMax = 60,
-                                }
+                                WeldingCurrentMin = 1,
+                                WeldingCurrentMax = 100,
+                                ArcVoltageMin = 5,
+                                ArcVoltageMax = 50,
+                                PreheatingTemperatureMin = 10,
+                                PreheatingTemperatureMax = 60,
                             }
                         }
                     }
@@ -611,14 +624,14 @@ public class DataSeed
         var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
                                                                       && _.ProductType == ProductType.Product);
         var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
-                                                                      && _.ProductType == ProductType.Product);
+                                                                       && _.ProductType == ProductType.Product);
         var welder = await context.Welders.FirstOrDefaultAsync(_ => _.Workplace != null);
 
         var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
         var knot2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Knot);
         var detail2 =
             await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Detail);
-        
+
         var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
         var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
 

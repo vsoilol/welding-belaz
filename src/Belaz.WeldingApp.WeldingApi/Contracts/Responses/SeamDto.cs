@@ -8,7 +8,11 @@ public class SeamDto
 
     public ProductBriefDto Product { get; set; } = null!;
 
-    public ProductionBriefDto ProductionInfo { get; set; } = null!;
+    public ProductionBriefDto? Workplace { get; set; }
+
+    public ProductionBriefDto ProductionArea { get; set; } = null!;
+
+    public ProductionBriefDto Workshop { get; set; } = null!;
 
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
 

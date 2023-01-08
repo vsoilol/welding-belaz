@@ -2,6 +2,8 @@
 
 public class WorkplaceDto
 {
+    public Guid Id { get; set; }
+    
     public int Number { get; set; }
         
     public Guid? PostId { get; set; }
