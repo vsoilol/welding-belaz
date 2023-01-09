@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.TechnologicalProcess;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
 
@@ -14,5 +15,7 @@ public class TechnologicalProcessProfile : Profile
                     .MapFrom(x => x.TechnologicalInstructions));
         
         CreateMap<TechnologicalProcess, TechnologicalProcessBriefDto>();
+        
+        CreateMap<CreateTechnologicalProcessRequest, TechnologicalProcess>();
     }
 }

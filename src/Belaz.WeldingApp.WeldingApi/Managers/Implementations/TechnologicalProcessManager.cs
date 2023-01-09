@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.TechnologicalProcess;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -35,5 +36,24 @@ public class TechnologicalProcessManager : ITechnologicalProcessManager
             .AsQueryable()
             .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+    }
+
+    public async Task CreateAsync(CreateTechnologicalProcessRequest request)
+    {
+        var technologicalProcess = _mapper.Map<TechnologicalProcess>(request);
+        
+        _technologicalProcessRepository.Add(technologicalProcess);
+        await _technologicalProcessRepository.SaveAsync();
+    }
+
+    public async Task UpdateAsync(UpdateTechnologicalProcessRequest request)
+    {
+        var updatedTechnologicalProcess = await _technologicalProcessRepository.GetByIdAsync(request.Id);
+        
+        updatedTechnologicalProcess.Number = request.Number;
+        updatedTechnologicalProcess.Name = request.Name;
+        updatedTechnologicalProcess.PdmSystemFileLink = request.PdmSystemFileLink;
+
+        await _technologicalProcessRepository.SaveAsync();
     }
 }

@@ -354,7 +354,7 @@
       "UpstreamPathTemplate": "/api/TechnologicalProcess",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/TechnologicalProcess",
       "ServiceName": "welding",
