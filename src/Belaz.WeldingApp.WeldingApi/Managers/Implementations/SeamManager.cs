@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Seam;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -45,5 +46,25 @@ public class SeamManager : ISeamManager
             .Where(_ => _.IsControlSubject == isControlSubject)
             .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+    }
+
+    public async Task CreateAsync(CreateSeamRequest request)
+    {
+        var seam = _mapper.Map<Seam>(request);
+
+        _seamRepository.Add(seam);
+        await _seamRepository.SaveAsync();
+    }
+
+    public async Task UpdateAsync(UpdateSeamRequest request)
+    {
+        var updatedSeam = await _seamRepository.GetByIdAsync(request.Id);
+        
+        updatedSeam.Number = request.Number ?? updatedSeam.Number;
+        updatedSeam.IsControlSubject = request.IsControlSubject ?? updatedSeam.IsControlSubject;
+        updatedSeam.ProductionAreaId = request.ProductionAreaId ?? updatedSeam.ProductionAreaId;
+        updatedSeam.WorkplaceId = request.WorkplaceId ?? updatedSeam.WorkplaceId;
+        
+        await _seamRepository.SaveAsync();
     }
 }
