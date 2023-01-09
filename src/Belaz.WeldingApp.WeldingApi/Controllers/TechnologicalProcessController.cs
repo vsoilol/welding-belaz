@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.TechnologicalProcess;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,5 +35,21 @@ public class TechnologicalProcessController : ControllerBase
     public async Task<ActionResult<IEnumerable<TechnologicalProcessDto>>> GetAllAsync()
     {
         return await _technologicalProcessManager.GetAllAsync();
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateTechnologicalProcessRequest request)
+    {
+        await _technologicalProcessManager.CreateAsync(request);
+        return Ok();
+    }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateTechnologicalProcessRequest request)
+    {
+        await _technologicalProcessManager.UpdateAsync(request);
+        return Ok();
     }
 }

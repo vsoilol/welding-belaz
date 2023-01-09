@@ -32,7 +32,5 @@ public class SeamProfile : Profile
         CreateMap<Seam, SeamBriefDto>();
         
         CreateMap<CreateSeamRequest, Seam>();
-        
-        CreateMap<UpdateSeamRequest, Seam>();
     }
 }

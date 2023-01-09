@@ -17,7 +17,9 @@ public class CreateProductWithoutTypeRequest
 
     public Guid? WorkplaceId { get; set; }
 
-    public List<CreateSeamRequest> Seams { get; set; } = null!;
+    public Guid TechnologicalProcessId { get; set; }
+
+    public IReadOnlyList<Guid>? Seams { get; set; }
     
-    public List<CreateProductRequest>? InsideProducts { get; set; }
+    public IReadOnlyList<Guid>? InsideProducts { get; set; }
 }

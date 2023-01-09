@@ -183,6 +183,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/seam",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST", "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/seam",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/seam/byControlSubject/{isControlSubject}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -340,7 +354,7 @@
       "UpstreamPathTemplate": "/api/TechnologicalProcess",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/TechnologicalProcess",
       "ServiceName": "welding",
