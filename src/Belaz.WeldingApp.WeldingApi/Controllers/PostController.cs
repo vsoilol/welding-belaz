@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Post;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Post;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

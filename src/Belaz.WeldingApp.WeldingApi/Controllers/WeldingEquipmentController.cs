@@ -9,7 +9,7 @@ using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
-[Route("api/weldingEquipment")]
+[Route("api/[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class WeldingEquipmentController : ControllerBase

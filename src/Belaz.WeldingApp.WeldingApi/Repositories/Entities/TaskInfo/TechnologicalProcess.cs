@@ -14,14 +14,11 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// </summary>
         public string PdmSystemFileLink { get; set; }
 
-        public Guid? LayerInstructionId { get; set; }
-        
-        [ForeignKey(nameof(LayerInstructionId))]
-        public LayerInstruction? LayerInstruction { get; set; }
-
         public Guid? ProductId { get; set; }
-        
-        [ForeignKey(nameof(ProductId))]
-        public Product? Detail { get; set; }
+
+        [ForeignKey(nameof(ProductId))] 
+        public Product? Product { get; set; }
+
+        public List<TechnologicalInstruction> TechnologicalInstructions { get; set; } = null!;
     }
 }

@@ -12,6 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - ./docker-storage/databasedata:/var/lib/postgresql/data/
+      - ../../database/init-script.sql:/docker-entrypoint-initdb.d/init.sql
     
   pgadmin:
     container_name: pgadmin
@@ -33,6 +34,9 @@ services:
       ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
       - "5010:80"
+    volumes:
+      - ./docker-storage/welding-api-logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
         
@@ -45,6 +49,9 @@ services:
       ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
       - "5011:80"
+    volumes:
+      - ./docker-storage/identity-api-logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
     
@@ -57,22 +64,26 @@ services:
       ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
       - "5012:80"
+    volumes:
+      - ./docker-storage/file-api-logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
-        
-  integration-api:
-    image: welding-app/integration-api
+      
+  gateway-api:
+    image: welding-app/gateway-api
     build:
       context: ..
-      dockerfile: ./Belaz.WeldingApp.IntegrationApi/Dockerfile
+      dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
     ports:
-      - "5013:80"
+      - "5100:80"
+    volumes:
+      - ./docker-storage/gateway-api-logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
-    volumes:
-      - ./docker-storage/logs:/app/logs
         
   proxy:
     image: nginx:mainline

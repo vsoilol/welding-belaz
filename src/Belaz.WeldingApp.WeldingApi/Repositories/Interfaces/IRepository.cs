@@ -26,9 +26,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
 
         Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>> filter);
 
-        T GetById(int id);
+        T GetById(Guid id);
 
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(Guid id);
 
         bool Save();
 

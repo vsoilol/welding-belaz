@@ -53,16 +53,14 @@ public class ApplicationContext : DbContext
     public DbSet<WeldingTask> WeldingTasks { get; set; }
         
     public DbSet<EventLog> EventLogs { get; set; }
-    
-    public DbSet<Seam> Seams { get; set; }
-    
-    public DbSet<Knot> Knots { get; set; }
-    
-    public DbSet<Detail> Details { get; set; }
-    
+
     public DbSet<Product> Products { get; set; }
     
-    public DbSet<ProductBridge> ProductBridges { get; set; }
+    public DbSet<ProductInside> ProductInsides { get; set; }
+    
+    public DbSet<WeldPassage> WeldPassages { get; set; }
+    
+    public DbSet<Seam> Seams { get; set; }
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
@@ -72,10 +70,20 @@ public class ApplicationContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Entity<ProductInside>()
+            .HasOne(e => e.MainProduct)
+            .WithMany(e => e.ProductInsides);
+
+        modelBuilder.Entity<ProductInside>()
+            .HasOne(e => e.InsideProduct)
+            .WithMany(e => e.ProductMains)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        
         modelBuilder.Entity<WeldingEquipmentWorkingShift>().HasKey(t =>
             new { t.WeldingEquipmentId, t.WorkingShiftId, t.WeldingEquipmentConditionTimeId });
         modelBuilder.Entity<UserRole>().HasKey(t => new { t.RoleId, t.UserId });
-        modelBuilder.Entity<ProductBridge>().HasKey(t =>
-            new { t.DetailId, t.KnotId, t.ProductId, t.SeamId });
+        modelBuilder.Entity<ProductInside>().HasKey(t => new { t.InsideProductId, t.MainProductId });
     }
 }

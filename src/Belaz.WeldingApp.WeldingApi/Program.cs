@@ -1,126 +1,104 @@
 using System.Text;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Post;
+using Belaz.WeldingApp.WeldingApi;
 using Belaz.WeldingApp.WeldingApi.Helpers;
-using Belaz.WeldingApp.WeldingApi.Managers.Implementations;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
-using Belaz.WeldingApp.WeldingApi.Repositories.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using WeldingApp.Common.Extensions;
+using WeldingApp.Common.Filters;
 
-namespace Belaz.WeldingApp.WeldingApi
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(ProjectLoggerConfiguration.GetLoggerConfiguration("welding-api"));
+
+builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
 {
-    public class Program
-    {
-        public static async Task Main(string[] args)
+    var env = builderContext.HostingEnvironment;
+
+    // find the shared folder in the parent folder
+    var sharedFolder = env.EnvironmentName.Contains("Docker") ? "" : Path.Combine(env.ContentRootPath, "..");
+
+    //load the SharedSettings first, so that appsettings.json overrwrites it
+    config
+        .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
+        .AddJsonFile("appsettings.json", optional: true)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+    config.AddEnvironmentVariables();
+});
+
+var connectionString = builder.Configuration.GetConnectionString("WeldingDatabase");
+
+builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseNpgsql(connectionString));
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.RegisterDependency();
+
+builder.Services.AddControllers(
+        options => { options.Filters.Add<ApiValidationFilter>(); })
+    .RegisterValidatorsInAssembly(typeof(Program).Assembly);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2",
+        new OpenApiSecurityScheme
         {
-            var builder = WebApplication.CreateBuilder(args);
+            Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
 
-            var connectionString = builder.Configuration.GetConnectionString("WeldingDatabase");
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
-            builder.Services.AddDbContext<ApplicationContext>(options =>
-                options.UseNpgsql(connectionString));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("Auth:Secret").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
-            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-            builder.Services.AddScoped<EntityFrameworkRepository<Welder>, WelderRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<WeldingEquipment>, WeldingEquipmentRepository>();
-            builder.Services
-                .AddScoped<EntityFrameworkRepository<WeldingEquipmentConditionTime>,
-                    WeldingEquipmentConditionTimeRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<Workshop>, WorkshopRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<Workplace>, WorkplaceRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<ProductionArea>, ProductionAreaRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<Post>, PostRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<Detail>, DetailRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<Knot>, KnotRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<Product>, ProductRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<Seam>, SeamRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<TechnologicalProcess>, TechnologicalProcessRepository>();
-            builder.Services.AddScoped<EntityFrameworkRepository<WeldingTask>, WeldingTaskRepository>();
-            
-            builder.Services.AddScoped<IWelderManager, WelderManager>();
-            builder.Services.AddScoped<IWeldingEquipmentManager, WeldingEquipmentManager>();
-            builder.Services.AddScoped<IWorkshopManager, WorkshopManager>();
-            builder.Services.AddScoped<IWorkplaceManager, WorkplaceManager>();
-            builder.Services.AddScoped<IProductionAreaManager, ProductionAreaManager>();
-            builder.Services.AddScoped<IPostManager, PostManager>();
-            builder.Services.AddScoped<IKnotManager, KnotManager>();
-            builder.Services.AddScoped<IDetailManager, DetailManager>();
-            builder.Services.AddScoped<IProductManager, ProductManager>();
-            builder.Services.AddScoped<ISeamManager, SeamManager>();
-            builder.Services.AddScoped<ITechnologicalProcessManager, TechnologicalProcessManager>();
-            builder.Services.AddScoped<IWeldingTaskManager, WeldingTaskManager>();
+var app = builder.Build();
 
-            builder.Services.AddControllers();
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
 
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            
-            builder.Services.AddSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("oauth2",
-                    new OpenApiSecurityScheme
-                    {
-                        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-                        In = ParameterLocation.Header,
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.ApiKey
-                    });
-
-                options.OperationFilter<SecurityRequirementsOperationFilter>();
-            });
-
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                            .GetBytes(builder.Configuration.GetSection("Auth:Secret").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                    };
-                });
-            
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-            var app = builder.Build();
-            
-            using (var scope = app.Services.CreateScope()) {
-                var services = scope.ServiceProvider;
-
-                var context = services.GetRequiredService<ApplicationContext>();
-                await DataSeed.SeedSampleDataAsync(context);
-            }
-            
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
-            });
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz");
-                c.RoutePrefix = "api/swagger";
-            });
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
-        }
-    }
+    var context = services.GetRequiredService<ApplicationContext>();
+    await DataSeed.SeedSampleDataAsync(context);
 }
+
+app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentname}/swagger.json"; });
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz");
+    c.RoutePrefix = "api/swagger";
+});
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

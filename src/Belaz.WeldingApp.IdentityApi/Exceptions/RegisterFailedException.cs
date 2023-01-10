@@ -1,10 +1,9 @@
-﻿namespace Belaz.WeldingApp.IdentityApi.Exceptions
+﻿namespace Belaz.WeldingApp.IdentityApi.Exceptions;
+
+[Serializable]
+public class RegisterFailedException : Exception
 {
-    [Serializable]
-    public class RegisterFailedException : Exception
+    public RegisterFailedException(string message) : base(message)
     {
-        public RegisterFailedException(string message) : base(message)
-        {
-        }
     }
 }
