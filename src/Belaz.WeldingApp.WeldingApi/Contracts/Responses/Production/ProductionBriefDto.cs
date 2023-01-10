@@ -1,4 +1,4 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
 
 public class ProductionBriefDto
 {

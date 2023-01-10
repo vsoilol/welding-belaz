@@ -1,10 +1,13 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.ProductionArea;
+﻿using System.Net;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.ProductionArea;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeldingApp.Common.Attributes;
 using WeldingApp.Common.Enums;
+using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -34,5 +37,34 @@ public class ProductionAreaController : ControllerBase
     public async Task<ActionResult<ProductionAreaDto?>> GetByIdAsync([FromRoute] Guid id)
     {
         return await _productionAreaManager.GetByIdAsync(id);
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(ProductionAreaDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductionAreaDto?>> CreateAsync([FromBody] CreateProductionAreaRequest request)
+    {
+        return await _productionAreaManager.CreateAsync(request);
+    }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductionAreaRequest request)
+    {
+        var result = await _productionAreaManager.UpdateAsync(request);
+
+        if (!result)
+        {
+            var problemDetails = new BadRequestResult
+            {
+                Title = "Update Error",
+                StatusCode = (int) (HttpStatusCode.BadRequest),
+                Errors = $"Error when update Workshop with id {request.Id}",
+            };
+
+            return BadRequest(problemDetails);
+        }
+        
+        return Ok();
     }
 }

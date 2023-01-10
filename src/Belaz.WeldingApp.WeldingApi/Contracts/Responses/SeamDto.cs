@@ -1,4 +1,6 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
+
+namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 
 public class SeamDto
 {
@@ -10,9 +12,9 @@ public class SeamDto
 
     public ProductionBriefDto? Workplace { get; set; }
 
-    public ProductionBriefDto ProductionArea { get; set; } = null!;
+    public ProductionWithNameDto ProductionArea { get; set; } = null!;
 
-    public ProductionBriefDto Workshop { get; set; } = null!;
+    public ProductionWithNameDto Workshop { get; set; } = null!;
 
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
 

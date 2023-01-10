@@ -1,4 +1,6 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.ProductionArea;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
+
+namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.ProductionArea;
 
 public class ProductionAreaDto
 {
@@ -7,6 +9,6 @@ public class ProductionAreaDto
     public string Name { get; set; }
 
     public int Number { get; set; }
-        
-    public Guid WorkshopId { get; set; }
+    
+    public ProductionWithNameDto Workshop { get; set; } = null!;
 }

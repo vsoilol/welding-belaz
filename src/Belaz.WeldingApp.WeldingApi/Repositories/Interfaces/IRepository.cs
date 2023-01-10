@@ -6,7 +6,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
     public interface IRepository<T>
          where T : Entity
     {
-        bool Add(T entity);
+        T Add(T entity);
 
         IQueryable<T> AsQueryable();
 
@@ -27,6 +27,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
         Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>> filter);
 
         T GetById(Guid id);
+        
+        IQueryable<T> GetByIdAsQueryable(Guid id);
 
         Task<T> GetByIdAsync(Guid id);
 
@@ -35,5 +37,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
         Task<bool> SaveAsync();
 
         bool Update(T entity);
+
+        Task<bool> UpdateAsync(T entity);
     }
 }

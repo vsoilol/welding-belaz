@@ -242,7 +242,7 @@
       "UpstreamPathTemplate": "/api/post",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/post",
       "ServiceName": "welding",
@@ -270,7 +270,7 @@
       "UpstreamPathTemplate": "/api/ProductionArea",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/ProductionArea",
       "ServiceName": "welding",
@@ -298,7 +298,7 @@
       "UpstreamPathTemplate": "/api/Workplace",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Workplace",
       "ServiceName": "welding",
@@ -326,7 +326,7 @@
       "UpstreamPathTemplate": "/api/Workshop",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Workshop",
       "ServiceName": "welding",

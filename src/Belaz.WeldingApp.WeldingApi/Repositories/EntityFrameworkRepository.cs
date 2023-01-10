@@ -56,21 +56,31 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories
             return Entities.Find(id);
         }
 
+        public IQueryable<T> GetByIdAsQueryable(Guid id)
+        {
+            return Entities.Where(_ => _.Id == id).AsQueryable();
+        }
+
         public virtual async Task<T> GetByIdAsync(Guid id)
         {
             return await Entities.FindAsync(id);
         }
 
-        public virtual bool Add(T entity)
+        public virtual T Add(T entity)
         {
-            Entities.Add(entity);
-            return true;
+            return Entities.Add(entity).Entity;
         }
 
         public virtual bool Update(T entity)
         {
             Entities.Update(entity);
             return true;
+        }
+        
+        public virtual Task<bool> UpdateAsync(T entity)
+        {
+            Entities.Update(entity);
+            return Task.FromResult(true);
         }
 
         public virtual async Task<bool> DeleteByFilterAsync(Expression<Func<T, bool>> filter)

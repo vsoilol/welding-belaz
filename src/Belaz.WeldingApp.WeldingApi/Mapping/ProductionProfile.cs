@@ -11,7 +11,9 @@ public class ProductionProfile : Profile
     {
         CreateMap<Workplace, ProductionBriefDto>();
         CreateMap<Workshop, ProductionBriefDto>();
+        CreateMap<Post, ProductionBriefDto>();
         CreateMap<ProductionArea, ProductionBriefDto>();
         CreateMap<ProductionArea, ProductionWithNameDto>();
+        CreateMap<Workshop, ProductionWithNameDto>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Workshop;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workshop;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -34,5 +35,25 @@ public class WorkshopManager : IWorkshopManager
             .Where(_ => _.Id == id)
             .ProjectTo<WorkshopDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<WorkshopDto?> CreateAsync(CreateWorkshopRequest request)
+    {
+        var workshop = _mapper.Map<Workshop>(request);
+        
+        var createdWorkshop = _workshopRepository.Add(workshop);
+        await _workshopRepository.SaveAsync();
+
+        return await _workshopRepository
+            .AsQueryable()
+            .Where(_ => _.Id == createdWorkshop.Id)
+            .ProjectTo<WorkshopDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
+    public Task<bool> UpdateAsync(UpdateWorkshopRequest request)
+    {
+        var workshop = _mapper.Map<Workshop>(request);
+        return _workshopRepository.UpdateAsync(workshop);
     }
 }
