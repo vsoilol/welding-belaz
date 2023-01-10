@@ -35,5 +35,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
         Task<bool> SaveAsync();
 
         bool Update(T entity);
+
+        Task<bool> UpdateAsync(T entity);
     }
 }

@@ -326,7 +326,7 @@
       "UpstreamPathTemplate": "/api/Workshop",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Workshop",
       "ServiceName": "welding",

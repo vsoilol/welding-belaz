@@ -51,8 +51,9 @@ public class WorkshopManager : IWorkshopManager
             .FirstOrDefaultAsync();
     }
 
-    public Task UpdateAsync(CreateWorkshopRequest request)
+    public Task<bool> UpdateAsync(UpdateWorkshopRequest request)
     {
-        throw new NotImplementedException();
+        var workshop = _mapper.Map<Workshop>(request);
+        return _workshopRepository.UpdateAsync(workshop);
     }
 }

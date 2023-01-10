@@ -71,6 +71,12 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories
             Entities.Update(entity);
             return true;
         }
+        
+        public virtual Task<bool> UpdateAsync(T entity)
+        {
+            Entities.Update(entity);
+            return Task.FromResult(true);
+        }
 
         public virtual async Task<bool> DeleteByFilterAsync(Expression<Func<T, bool>> filter)
         {
