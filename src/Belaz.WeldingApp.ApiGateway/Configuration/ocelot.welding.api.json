@@ -382,7 +382,7 @@
       "UpstreamPathTemplate": "/api/WeldingEquipment",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/WeldingEquipment",
       "ServiceName": "welding",
