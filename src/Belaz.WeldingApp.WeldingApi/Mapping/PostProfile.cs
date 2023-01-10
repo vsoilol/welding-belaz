@@ -8,6 +8,9 @@ public class PostProfile : Profile
 {
     public PostProfile()
     {
-        CreateMap<Post, PostDto>();
+        CreateMap<Post, PostDto>()
+            .ForMember(dto => dto.ProductionArea,
+            opt => opt
+                .MapFrom(x => x.ProductionArea));
     }
 }
