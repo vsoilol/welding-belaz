@@ -270,7 +270,7 @@
       "UpstreamPathTemplate": "/api/ProductionArea",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/ProductionArea",
       "ServiceName": "welding",

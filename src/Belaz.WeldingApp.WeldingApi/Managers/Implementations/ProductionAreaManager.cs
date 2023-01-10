@@ -50,8 +50,9 @@ public class ProductionAreaManager : IProductionAreaManager
             .FirstOrDefaultAsync();
     }
 
-    public Task<ProductionAreaDto?> UpdateAsync(UpdateProductionAreaRequest request)
+    public Task<bool> UpdateAsync(UpdateProductionAreaRequest request)
     {
-        throw new NotImplementedException();
+        var productionArea = _mapper.Map<ProductionArea>(request);
+        return _productionAreaRepository.UpdateAsync(productionArea);
     }
 }

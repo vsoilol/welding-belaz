@@ -12,5 +12,5 @@ public interface IProductionAreaManager
     
     Task<ProductionAreaDto?> CreateAsync(CreateProductionAreaRequest request);
     
-    Task<ProductionAreaDto?> UpdateAsync(UpdateProductionAreaRequest request);
+    Task<bool> UpdateAsync(UpdateProductionAreaRequest request);
 }

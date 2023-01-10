@@ -49,7 +49,6 @@ public class WorkshopController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateWorkshopRequest request)
     {
         var result = await _workshopManager.UpdateAsync(request);
