@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Workplace;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workplace;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -34,5 +35,25 @@ public class WorkplaceManager : IWorkplaceManager
             .Where(_ => _.Id == id)
             .ProjectTo<WorkplaceDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<WorkplaceDto?> CreateAsync(CreateWorkplaceRequest request)
+    {
+        var workplace = _mapper.Map<Workplace>(request);
+        
+        var createdWorkplace = _workplaceRepository.Add(workplace);
+        await _workplaceRepository.SaveAsync();
+
+        return await _workplaceRepository
+            .AsQueryable()
+            .Where(_ => _.Id == createdWorkplace.Id)
+            .ProjectTo<WorkplaceDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
+    public Task<bool> UpdateAsync(UpdateWorkplaceRequest request)
+    {
+        var workplace = _mapper.Map<Workplace>(request);
+        return _workplaceRepository.UpdateAsync(workplace);
     }
 }

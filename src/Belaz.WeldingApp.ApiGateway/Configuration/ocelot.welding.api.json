@@ -298,7 +298,7 @@
       "UpstreamPathTemplate": "/api/Workplace",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Workplace",
       "ServiceName": "welding",
