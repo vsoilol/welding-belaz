@@ -61,6 +61,7 @@ public class WeldingEquipmentManager : IWeldingEquipmentManager
 
     public Task<bool> UpdateAsync(UpdateEquipmentRequest request)
     {
-        throw new NotImplementedException();
+        var workplace = _mapper.Map<WeldingEquipment>(request);
+        return _weldingEquipmentRepository.UpdateAsync(workplace);
     }
 }
