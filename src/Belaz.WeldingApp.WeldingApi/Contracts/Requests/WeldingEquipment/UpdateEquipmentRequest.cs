@@ -1,33 +1,31 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.UserData;
+﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Requests.WeldingEquipment;
 
-namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
-
-public class WeldingEquipmentDto
+public class UpdateEquipmentRequest
 {
     public Guid Id { get; set; }
 
     /// <summary>
     /// RFID-метка
     /// </summary>
-    public string RfidTag { get; set; }
+    public string RfidTag { get; set; } = null!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// Маркировка
     /// </summary>
-    public string Marking { get; set; }
+    public string Marking { get; set; } = null!;
 
     /// <summary>
     /// Заводской (инвентарный) номер
     /// </summary>
-    public string FactoryNumber { get; set; }
+    public string FactoryNumber { get; set; } = null!;
 
     /// <summary>
     /// Дата ввода в эксплуатацию
+    /// Формат dd/mm/yyyy
     /// </summary>
-    public string CommissioningDate { get; set; }
+    public string CommissioningDate { get; set; } = null!;
 
     public int Height { get; set; }
 
@@ -43,22 +41,18 @@ public class WeldingEquipmentDto
     /// <summary>
     /// Наименование изготовителя
     /// </summary>
-    public string ManufacturerName { get; set; }
+    public string ManufacturerName { get; set; } = null!;
 
     /// <summary>
     /// Дата очередной аттестации
+    /// Формат dd/mm/yyyy
     /// </summary>
-    public string NextAttestationDate { get; set; }
-
-    /// <summary>
-    /// Ответственный за сварочное оборудование
-    /// </summary>
-    public UserFullName ResponsiblePerson { get; set; }
+    public string NextAttestationDate { get; set; } = null!;
 
     /// <summary>
     /// Процесс (способ) сварки
     /// </summary>
-    public string WeldingProcess { get; set; }
+    public string WeldingProcess { get; set; } = null!;
 
     /// <summary>
     /// Напряжение холостого хода
@@ -85,10 +79,5 @@ public class WeldingEquipmentDto
     /// </summary>
     public double ArcVoltageMax { get; set; }
 
-    public ProductionBriefDto? Post { get; set; }
-
-    /// <summary>
-    /// Продолжительность включения (нагрузки), в минутах
-    /// </summary>
-    public int ActivationDuration { get; set; }
+    public Guid? PostId { get; set; }
 }
