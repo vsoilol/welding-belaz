@@ -8,7 +8,7 @@ namespace Belaz.WeldingApp.WeldingApi.Mapping
     {
         public MasterProfile()
         {
-            CreateMap<Welder, MasterDto>()
+            CreateMap<Master, MasterDto>()
             .ForMember(dto => dto.RfidTag,
                 opt => opt
                     .MapFrom(x => x.UserInfo.RfidTag))
@@ -20,7 +20,13 @@ namespace Belaz.WeldingApp.WeldingApi.Mapping
                     .MapFrom(x => x.UserInfo.MiddleName))
             .ForMember(dto => dto.LastName,
                 opt => opt
-                    .MapFrom(x => x.UserInfo.LastName));
+                    .MapFrom(x => x.UserInfo.LastName))
+            .ForMember(dto => dto.ProductionArea,
+                opt => opt
+                    .MapFrom(x => x.UserInfo.ProductionArea))
+            .ForMember(dto => dto.WeldingEquipment,
+                opt => opt
+                    .MapFrom(x => x.WeldingEquipment));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users
     {
         public Guid UserId { get; set; }
 
-        [ForeignKey(nameof(UserId))]
-        public UserData UserInfo { get; set; }
+        [ForeignKey(nameof(UserId))] 
+        public UserData UserInfo { get; set; } = null!;
     }
 }

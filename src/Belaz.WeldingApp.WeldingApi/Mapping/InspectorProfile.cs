@@ -8,7 +8,7 @@ namespace Belaz.WeldingApp.WeldingApi.Mapping
     {
         public InspectorProfile()
         {
-            CreateMap<Welder, InspectorDto>()
+            CreateMap<Inspector, InspectorDto>()
             .ForMember(dto => dto.RfidTag,
                 opt => opt
                     .MapFrom(x => x.UserInfo.RfidTag))
@@ -20,7 +20,10 @@ namespace Belaz.WeldingApp.WeldingApi.Mapping
                     .MapFrom(x => x.UserInfo.MiddleName))
             .ForMember(dto => dto.LastName,
                 opt => opt
-                    .MapFrom(x => x.UserInfo.LastName));
+                    .MapFrom(x => x.UserInfo.LastName))
+            .ForMember(dto => dto.ProductionArea,
+                opt => opt
+                    .MapFrom(x => x.UserInfo.ProductionArea));
         }
     }
 }

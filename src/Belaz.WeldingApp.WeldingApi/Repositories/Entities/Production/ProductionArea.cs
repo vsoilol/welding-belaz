@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
@@ -25,5 +26,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
         public List<Product> Products { get; set; } = null!;
         
         public List<Seam> Seams { get; set; } = null!;
+        
+        public List<UserData> Users { get; set; } = null!;
     }
 }

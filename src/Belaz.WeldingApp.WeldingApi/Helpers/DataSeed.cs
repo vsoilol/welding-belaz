@@ -26,6 +26,11 @@ public class DataSeed
         {
             await AddProduction(context);
         }
+        
+        if (!context.Chiefs.Any())
+        {
+            await AddChief(context);
+        }
 
         if (!context.Welders.Any())
         {
@@ -67,7 +72,7 @@ public class DataSeed
             }
         }
     }
-
+    
     private static async Task AddCalendar(ApplicationContext context)
     {
         var calendar = new Calendar
@@ -107,78 +112,6 @@ public class DataSeed
         };
 
         await context.Calendars.AddAsync(calendar);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddProduction(ApplicationContext context)
-    {
-        var workShop = new Workshop
-        {
-            Name = "Цех",
-            Number = 1,
-            ProductionAreas = new List<ProductionArea>
-            {
-                new ProductionArea
-                {
-                    Name = "Производственный участок 1",
-                    Number = 1,
-                    Posts = new List<Post>
-                    {
-                        new Post
-                        {
-                            Number = 1
-                        }
-                    },
-                    Workplaces = new List<Workplace>
-                    {
-                        new Workplace
-                        {
-                            Number = 1
-                        }
-                    }
-                },
-                new ProductionArea
-                {
-                    Name = "Производственный участок 2",
-                    Number = 2,
-                    Posts = new List<Post>
-                    {
-                        new Post
-                        {
-                            Number = 2
-                        }
-                    },
-                    Workplaces = new List<Workplace>
-                    {
-                        new Workplace
-                        {
-                            Number = 2
-                        }
-                    }
-                },
-                new ProductionArea
-                {
-                    Name = "Производственный участок 3",
-                    Number = 3,
-                    Posts = new List<Post>
-                    {
-                        new Post
-                        {
-                            Number = 3
-                        }
-                    },
-                    Workplaces = new List<Workplace>
-                    {
-                        new Workplace
-                        {
-                            Number = 3
-                        }
-                    }
-                }
-            }
-        };
-
-        await context.Workshops.AddAsync(workShop);
         await context.SaveChangesAsync();
     }
 
@@ -437,11 +370,117 @@ public class DataSeed
         await context.SaveChangesAsync();
     }
 
+    private static async Task AddProduction(ApplicationContext context)
+    {
+        var workShop = new Workshop
+        {
+            Name = "Цех",
+            Number = 1,
+            ProductionAreas = new List<ProductionArea>
+            {
+                new ProductionArea
+                {
+                    Name = "Производственный участок 1",
+                    Number = 1,
+                    Posts = new List<Post>
+                    {
+                        new Post
+                        {
+                            Number = 1
+                        }
+                    },
+                    Workplaces = new List<Workplace>
+                    {
+                        new Workplace
+                        {
+                            Number = 1
+                        }
+                    }
+                },
+                new ProductionArea
+                {
+                    Name = "Производственный участок 2",
+                    Number = 2,
+                    Posts = new List<Post>
+                    {
+                        new Post
+                        {
+                            Number = 2
+                        }
+                    },
+                    Workplaces = new List<Workplace>
+                    {
+                        new Workplace
+                        {
+                            Number = 2
+                        }
+                    }
+                },
+                new ProductionArea
+                {
+                    Name = "Производственный участок 3",
+                    Number = 3,
+                    Posts = new List<Post>
+                    {
+                        new Post
+                        {
+                            Number = 3
+                        }
+                    },
+                    Workplaces = new List<Workplace>
+                    {
+                        new Workplace
+                        {
+                            Number = 3
+                        }
+                    }
+                }
+            }
+        };
+
+        await context.Workshops.AddAsync(workShop);
+        await context.SaveChangesAsync();
+    }
+    
+    private static async Task AddChief(ApplicationContext context)
+    {
+        var chiefRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Chief));
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
+
+        var chief = new Chief
+        {
+            UserInfo = new UserData
+            {
+                CertificateValidityPeriod = new DateTime(2025, 2, 2),
+                FirstName = "Имя начальника цеха",
+                LastName = "Отчество начальника цеха",
+                MiddleName = "Фамилия начальника цеха",
+                UserName = "UserName",
+                Email = "Email",
+                PasswordHash = "PasswordHash",
+                Position = "Должность 1",
+                ServiceNumber = "Табельный номер  1",
+                RfidTag = "RFID метка начальника цеха 1",
+                ProductionArea = productionArea,
+                UserRoles = new List<UserRole>
+                {
+                    new UserRole
+                    {
+                        Role = chiefRole
+                    }
+                }
+            },
+        };
+
+        await context.Chiefs.AddAsync(chief);
+        await context.SaveChangesAsync();
+    }
+
     private static async Task AddProducts(ApplicationContext context)
     {
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
         var workplace = await context.Workplaces.FirstOrDefaultAsync();
-        
+
         var products = new List<Product>
         {
             new Product
@@ -634,6 +673,9 @@ public class DataSeed
 
         var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
         var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
+        
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
+        var weldingEquipment = await context.WeldingEquipments.FirstOrDefaultAsync();
 
         var inspector = new Inspector
         {
@@ -649,6 +691,7 @@ public class DataSeed
                 Position = "Должность 1",
                 ServiceNumber = "Табельный номер  1",
                 RfidTag = "RFID метка проверяющего 1",
+                ProductionArea = productionArea,
                 UserRoles = new List<UserRole>
                 {
                     new UserRole
@@ -664,6 +707,7 @@ public class DataSeed
 
         var master = new Master
         {
+            WeldingEquipment = weldingEquipment,
             UserInfo = new UserData
             {
                 CertificateValidityPeriod = new DateTime(2025, 2, 2),
@@ -676,6 +720,7 @@ public class DataSeed
                 Position = "Должность 1",
                 ServiceNumber = "Табельный номер  1",
                 RfidTag = "RFID метка проверяющего 1",
+                ProductionArea = productionArea,
                 UserRoles = new List<UserRole>
                 {
                     new UserRole

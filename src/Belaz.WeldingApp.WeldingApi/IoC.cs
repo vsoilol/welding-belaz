@@ -28,6 +28,9 @@ public static class IoC
         services.AddScoped<EntityFrameworkRepository<Product>, ProductRepository>();
         services.AddScoped<EntityFrameworkRepository<TechnologicalProcess>, TechnologicalProcessRepository>();
         services.AddScoped<EntityFrameworkRepository<WeldingTask>, WeldingTaskRepository>();
+        services.AddScoped<EntityFrameworkRepository<Chief>, ChiefRepository>();
+        services.AddScoped<EntityFrameworkRepository<Inspector>, InspectorRepository>();
+        services.AddScoped<EntityFrameworkRepository<Master>, MasterRepository>();
         services.AddScoped<EntityFrameworkRepository<TechnologicalInstruction>, TechnologicalInstructionRepository>();
 
         // Managers
@@ -41,6 +44,9 @@ public static class IoC
         services.AddScoped<IWeldingTaskManager, WeldingTaskManager>();
         services.AddScoped<ISeamManager, SeamManager>();
         services.AddScoped<IProductManager, ProductManager>();
+        services.AddScoped<IChiefManager, ChiefManager>();
+        services.AddScoped<IInspectorManager, InspectorManager>();
+        services.AddScoped<IMasterManager, MasterManager>();
         services.AddScoped<ITechnologicalInstructionManager, TechnologicalInstructionManager>();
     }
 }
