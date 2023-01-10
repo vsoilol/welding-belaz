@@ -1,4 +1,6 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workplace;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
+
+namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workplace;
 
 public class WorkplaceDto
 {
@@ -6,7 +8,7 @@ public class WorkplaceDto
     
     public int Number { get; set; }
         
-    public Guid? PostId { get; set; }
+    public ProductionBriefDto? Post { get; set; }
 
-    public Guid? ProductionAreaId { get; set; }
+    public ProductionWithNameDto? ProductionArea { get; set; }
 }
