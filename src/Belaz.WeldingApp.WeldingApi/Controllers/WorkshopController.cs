@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workshop;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Workshop;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workshop;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,5 +35,13 @@ public class WorkshopController : ControllerBase
     public async Task<ActionResult<WorkshopDto?>> GetByIdAsync([FromRoute] Guid id)
     {
         return await _workshopManager.GetByIdAsync(id);
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WorkshopDto?>> CreateAsync([FromBody] CreateWorkshopRequest request)
+    {
+        return await _workshopManager.CreateAsync(request);
     }
 }

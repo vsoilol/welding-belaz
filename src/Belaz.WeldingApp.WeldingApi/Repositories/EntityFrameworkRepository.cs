@@ -61,10 +61,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories
             return await Entities.FindAsync(id);
         }
 
-        public virtual bool Add(T entity)
+        public virtual T Add(T entity)
         {
-            Entities.Add(entity);
-            return true;
+            return Entities.Add(entity).Entity;
         }
 
         public virtual bool Update(T entity)

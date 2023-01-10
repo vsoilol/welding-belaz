@@ -6,7 +6,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
     public interface IRepository<T>
          where T : Entity
     {
-        bool Add(T entity);
+        T Add(T entity);
 
         IQueryable<T> AsQueryable();
 
