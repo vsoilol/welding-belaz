@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.UserData;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.UserData;
 
 namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 
@@ -84,7 +85,7 @@ public class WeldingEquipmentDto
     /// </summary>
     public double ArcVoltageMax { get; set; }
 
-    public int? PostNumber { get; set; }
+    public ProductionBriefDto? Post { get; set; }
 
     /// <summary>
     /// Продолжительность включения (нагрузки), в минутах

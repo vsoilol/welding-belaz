@@ -47,6 +47,9 @@ public class WeldingEquipmentProfile : Profile
             .ForMember(dto => dto.CommissioningDate,
                 opt => opt
                     .MapFrom(x => x.CommissioningDate.ToDayInfoString()))
+            .ForMember(dto => dto.Post,
+                opt => opt
+                    .MapFrom(x => x.Post))
             .ForMember(dto => dto.NextAttestationDate,
                 opt => opt
                     .MapFrom(x => x.NextAttestationDate.ToDayInfoString()))
