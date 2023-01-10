@@ -32,6 +32,8 @@ public class ApplicationContext : DbContext
         
     public DbSet<WorkingShift> WorkingShifts { get; set; }
         
+    public DbSet<Chief> Chiefs { get; set; }
+
     public DbSet<Inspector> Inspectors { get; set; }
         
     public DbSet<Master> Masters { get; set; }
