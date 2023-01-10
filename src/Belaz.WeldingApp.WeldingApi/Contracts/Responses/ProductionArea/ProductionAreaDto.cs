@@ -7,6 +7,6 @@ public class ProductionAreaDto
     public string Name { get; set; }
 
     public int Number { get; set; }
-        
-    public Guid WorkshopId { get; set; }
+    
+    public ProductionBriefDto Workshop { get; set; } = null!;
 }

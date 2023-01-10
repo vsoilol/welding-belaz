@@ -56,6 +56,11 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories
             return Entities.Find(id);
         }
 
+        public IQueryable<T> GetByIdAsQueryable(Guid id)
+        {
+            return Entities.Where(_ => _.Id == id).AsQueryable();
+        }
+
         public virtual async Task<T> GetByIdAsync(Guid id)
         {
             return await Entities.FindAsync(id);
