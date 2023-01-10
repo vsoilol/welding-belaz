@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Post;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Post;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -34,5 +35,24 @@ public class PostManager : IPostManager
             .Where(_ => _.Id == id)
             .ProjectTo<PostDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<PostDto?> CreateAsync(CreatePostRequest request)
+    {
+        var post = _mapper.Map<Post>(request);
+        
+        var createdPost = _postRepository.Add(post);
+        await _postRepository.SaveAsync();
+
+        return await _postRepository
+            .GetByIdAsQueryable(createdPost.Id)
+            .ProjectTo<PostDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
+    public Task<bool> UpdateAsync(UpdatePostRequest request)
+    {
+        var productionArea = _mapper.Map<Post>(request);
+        return _postRepository.UpdateAsync(productionArea);
     }
 }
