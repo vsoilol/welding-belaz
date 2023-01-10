@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Globalization;
+using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
@@ -13,6 +15,22 @@ public class WeldingEquipmentProfile : Profile
         WeldingEquipmentToWeldingEquipmentBriefDto();
         WeldingEquipmentToWeldingEquipmentDto();
         WeldingEquipmentConditionTimeToWeldingEquipmentDowntimeDto();
+
+        CreateMap<CreateEquipmentRequest, WeldingEquipment>()
+            .ForMember(dto => dto.NextAttestationDate,
+                opt => opt
+                    .MapFrom(x => DateTime.ParseExact(x.NextAttestationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
+            .ForMember(dto => dto.CommissioningDate,
+                opt => opt
+                    .MapFrom(x => DateTime.ParseExact(x.CommissioningDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+        
+        CreateMap<UpdateEquipmentRequest, WeldingEquipment>()
+            .ForMember(dto => dto.NextAttestationDate,
+                opt => opt
+                    .MapFrom(x => DateTime.ParseExact(x.NextAttestationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
+            .ForMember(dto => dto.CommissioningDate,
+                opt => opt
+                    .MapFrom(x => DateTime.ParseExact(x.CommissioningDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
     }
 
     private void WeldingEquipmentToWeldingEquipmentBriefDto()

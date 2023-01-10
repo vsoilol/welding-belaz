@@ -60,7 +60,7 @@ public class PostController : ControllerBase
             {
                 Title = "Update Error",
                 StatusCode = (int) (HttpStatusCode.BadRequest),
-                Errors = $"Error when update Workshop with id {request.Id}",
+                Errors = $"Error when update Post with id {request.Id}",
             };
 
             return BadRequest(problemDetails);

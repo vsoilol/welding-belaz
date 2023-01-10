@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
@@ -42,5 +43,24 @@ public class WeldingEquipmentManager : IWeldingEquipmentManager
             .ToListAsync();
 
         return weldingEquipmentDowntimes;
+    }
+
+    public async Task<WeldingEquipmentDto?> CreateAsync(CreateEquipmentRequest request)
+    {
+        var weldingEquipment = _mapper.Map<WeldingEquipment>(request);
+        
+        var createdWeldingEquipment = _weldingEquipmentRepository.Add(weldingEquipment);
+        await _weldingEquipmentRepository.SaveAsync();
+
+        return await _weldingEquipmentRepository
+            .AsQueryable()
+            .Where(_ => _.Id == createdWeldingEquipment.Id)
+            .ProjectTo<WeldingEquipmentDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
+    public Task<bool> UpdateAsync(UpdateEquipmentRequest request)
+    {
+        throw new NotImplementedException();
     }
 }
