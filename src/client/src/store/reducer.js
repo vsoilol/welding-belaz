@@ -9,6 +9,11 @@ import records from "store/records/reducers";
 import instructions from "store/instructions/reducers";
 import history from "./history";
 
+///Производство 
+import workplace from "./workplace/reducers";
+///Технологические процессы
+import texprocwelding from "./texprocwelding/reducers";
+
 const reducers = {
   router: connectRouter(history),
   equipment,
@@ -18,6 +23,11 @@ const reducers = {
   error,
   auth,
   records,
+
+  ///Производство 
+  workplace,
+  ///Технологические процессы
+  texprocwelding
 };
 
 export default combineReducers(reducers);

@@ -5,6 +5,11 @@ const { Types, Creators } = createActions({
   loadTasksSuccess: ["tasks"],
   loadTasksFailure: ["error"],
 
+
+  loadInfoRequest: ["payload"],
+  loadInfoSuccess: ["info"],
+  loadInfoFailure: ["error"],
+
   editTaskRequest: ["payload"],
   editTaskSuccess: ["task"],
   editTaskFailure: ["error"],
@@ -16,6 +21,12 @@ const { Types, Creators } = createActions({
   deleteTaskRequest: ["payload"],
   deleteTaskSuccess: ["id"],
   deleteTaskFailure: ["error"],
+
+
+  ///Сварные швы
+  loadSeamRequest: ["payload"],
+  loadSeamSuccess: ["seam"],
+  loadSeamFailure: ["error"],
 });
 
 const tasksActions = {

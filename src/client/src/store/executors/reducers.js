@@ -23,7 +23,7 @@ const loadExecutorsSuccess = (state = INITIAL_STATE, { executors }) => {
     ...state,
     isRequesting: false,
     executors: executors?.map((executor) => {
-      return { ...executor.userData, executorId: executor.executorId };
+      return { ...executor };
     }),
   };
 };
@@ -33,7 +33,9 @@ const editExecutorSuccess = (state = INITIAL_STATE, { executor, userId }) => {
     ...state,
     isRequesting: false,
     executors: state.executors?.map((item) => {
-      return item.executorId === userId ? { ...item, ...flattenObject(executor) } : item;
+      return item.executorId === userId
+        ? { ...item, ...flattenObject(executor) }
+        : item;
     }),
   };
 };
@@ -55,10 +57,11 @@ const addExecutorSuccess = (state = INITIAL_STATE, { executor }) => {
 };
 
 const loadMastersSuccess = (state = INITIAL_STATE, { masters }) => {
+
   return {
     ...state,
     isRequesting: false,
-    masters: masters?.map((master) => {
+    masters: masters?.map((master) => { 
       return flattenObject(master);
     }),
   };
@@ -133,6 +136,9 @@ const failure = (state = INITIAL_STATE, { error }) => {
     error,
   };
 };
+
+
+
 
 export const HANDLERS = {
   [Types.LOAD_EXECUTORS_REQUEST]: request,

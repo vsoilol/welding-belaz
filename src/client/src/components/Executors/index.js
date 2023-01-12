@@ -74,10 +74,11 @@ export const Executors = ({
         textColor="primary"
         variant="fullWidth"
         aria-label="full width tabs example"
+        className={styles.Tabs}
       >
         <Tab label="Руководители сварочных работ (мастера)" {...a11yProps(0)} />
         <Tab label="Сварщики" {...a11yProps(1)} />
-        <Tab label="Технический надзор" {...a11yProps(2)} /> 
+        <Tab label="Контролеры УКК" {...a11yProps(2)} />
       </Tabs>
       <TabPanel
         value={value}

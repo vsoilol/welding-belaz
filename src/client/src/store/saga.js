@@ -6,6 +6,13 @@ import { recordsSaga } from "store/records/sagas";
 import { authSaga } from "store/auth/sagas";
 import { instructionsSaga } from "store/instructions/sagas";
 
+///Производство 
+import { workplaceSaga } from "store/workplace/sagas";
+///Технологические 
+import { texprocweldingSaga } from "store/texprocwelding/sagas";
+
+
+
 export default function* () {
   yield spawn(equipmentSaga);
   yield spawn(executorsSaga);
@@ -13,4 +20,10 @@ export default function* () {
   yield spawn(instructionsSaga);
   yield spawn(authSaga);
   yield spawn(recordsSaga);
+  ///Производство 
+  yield spawn(workplaceSaga);
+  ///Технологические 
+  yield spawn(texprocweldingSaga);
+
+
 }

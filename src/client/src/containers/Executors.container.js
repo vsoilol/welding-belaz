@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
     isRequesting: state.executors.isRequesting,
     userRole: state.auth.user.role,
   };
-};
+}; 
 const mapDispatchToProps = {
   loadExecutors: Actions.Creators.loadExecutorsRequest,
   addExecutor: Actions.Creators.addExecutorRequest,

@@ -52,7 +52,7 @@ const {
 
 function* loadExecutors() {
   try {
-    const { data } = yield call(api.get, `/users/executors`);
+    const { data } = yield call(api.get, `/welder`); 
     yield put(loadExecutorsSuccess(data));
   } catch (error) {
     yield put(loadExecutorsFailure(error));
@@ -72,11 +72,7 @@ function* addExecutor({ payload }) {
 
 function* editExecutor({ payload, userId }) {
   try {
-    const { data } = yield call(
-      api.put,
-      `/users/executors/${userId}`,
-      payload
-    );
+    const { data } = yield call(api.put, `/users/executors/${userId}`, payload);
     yield put(editExecutorSuccess(data, userId));
   } catch (error) {
     yield put(editExecutorFailure(error));
@@ -99,7 +95,7 @@ function* deleteExecutor({ payload }) {
 
 function* loadMasters() {
   try {
-    const { data } = yield call(api.get, `/users/masters`);
+    const { data } = yield call(api.get, `/Master`);
     yield put(loadMastersSuccess(data));
   } catch (error) {
     yield put(loadMastersFailure(error));
@@ -119,11 +115,7 @@ function* addMaster({ payload }) {
 
 function* editMaster({ payload, userId }) {
   try {
-    const { data } = yield call(
-      api.put,
-      `/users/masters/${userId}`,
-      payload
-    );
+    const { data } = yield call(api.put, `/users/masters/${userId}`, payload);
     yield put(editMasterSuccess(data, userId));
   } catch (error) {
     yield put(editMasterFailure(error));
@@ -146,7 +138,7 @@ function* deleteMaster({ payload }) {
 
 function* loadTechs() {
   try {
-    const { data } = yield call(api.get, `/users/technicals`);
+    const { data } = yield call(api.get, `/Inspector`);
     yield put(loadTechsSuccess(data));
   } catch (error) {
     yield put(loadTechsFailure(error));
@@ -190,7 +182,7 @@ function* deleteTech({ payload }) {
     yield put(setError(error.message));
   }
 }
- 
+
 export function* executorsSaga() {
   yield takeLatest(LOAD_EXECUTORS_REQUEST, loadExecutors);
   yield takeLatest(ADD_EXECUTOR_REQUEST, addExecutor);
@@ -203,5 +195,5 @@ export function* executorsSaga() {
   yield takeLatest(LOAD_TECHS_REQUEST, loadTechs);
   yield takeLatest(ADD_TECH_REQUEST, addTech);
   yield takeLatest(DELETE_TECH_REQUEST, deleteTech);
-  yield takeLatest(EDIT_TECH_REQUEST, editTech); 
+  yield takeLatest(EDIT_TECH_REQUEST, editTech);
 }

@@ -28,7 +28,9 @@ const dateOptions = {
 };
 
 export const Tasks = ({
-  loadTasks,
+  loadTasks, 
+  loadInfo,
+  info,
   tasks,
   addTask,
   deleteTask,
@@ -41,6 +43,11 @@ export const Tasks = ({
   loadMasters,
   masters,
   userRole,
+
+
+  loadSeam,
+  seam
+  
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -82,7 +89,9 @@ export const Tasks = ({
     loadTechs();
     loadMasters();
     loadInstructions();
-  }, [loadInstructions, loadMasters, loadTasks, loadTechs]);
+    loadInfo();
+    loadSeam();
+  }, [loadInstructions, loadMasters, loadTasks, loadTechs,loadInfo,loadSeam]);
 
   const formattedTechs = techs?.map((item) => {
     return {
@@ -117,70 +126,50 @@ export const Tasks = ({
 
   const columns = [
     {
-      title: "№ задания»",
-      field: "id",
-    },
-    {
-      title: "Наименование (маркировка сварного соединения)",
-      field: "weldingConnectionName",
-    },
-    { title: "Объект", field: "object" },
-
-    { title: "Участок/цех", field: "sector" },
-    {
-      title: "Дата выполнения",
-      field: "finishedAt",
-      render: (rowData) => (
-        <span>
-          {rowData?.finishedAt ? new Date(rowData?.finishedAt).toLocaleDateString(
-            "ru-RU",
-            dateOptions
-          ) : "Не завершено"}
-        </span>
-      ),
-    },
-    {
-      title: "Руководитель сварочных работ",
-      field: "masterId",
-      render: (rowData) => {
-        const master = masters.find(
-          (mater) => mater.masterId === rowData?.master?.masterId
-        );
-        return (
-          <p>
-            {master?.surname} {master?.name} {master?.patronymic}
-          </p>
-        );
-      },
+      title: "№ задания»", field: "number",
     },
     {
       title: "Исполнитель",
       field: "masterId",
       render: (rowData) => {
-        const master = masters.find(
-          (mater) => mater.masterId === rowData?.master?.masterId
-        );
         return (
-          <p>
-            Иванов Алексей Валентинович
+          <p>{`
+            ${rowData.welder.middleName} 
+            ${rowData.welder.firstName} 
+            ${rowData.welder.lastName}
+            `} 
           </p>
         );
       },
     },
     {
-      title: "Контролера",
+      title: "Руководитель сварочных работ",
       field: "masterId",
       render: (rowData) => {
-        const master = masters.find(
-          (mater) => mater.masterId === rowData?.master?.masterId
-        );
         return (
-          <p>
-            Дубровский Александр Алексеевич
+          <p>{`
+            ${rowData.master.middleName} 
+            ${rowData.master.firstName} 
+            ${rowData.master.lastName}
+            `} 
           </p>
         );
       },
     },
+    {
+      title: "Контролер",
+      field: "masterId",
+      render: (rowData) => {
+        return (
+          <p>{`
+            ${rowData.inspector.middleName} 
+            ${rowData.inspector.firstName} 
+            ${rowData.inspector.lastName}
+            `} 
+          </p>
+        );
+      },
+    }, 
     {
       field: "url",
       title: "Скачать паспорт",
@@ -242,182 +231,98 @@ export const Tasks = ({
 
     seam: [
       {
-        title: "Номер шва",
-        render: (rowData) => (
-          <span>{rowData.numb_seam}</span>
-        ),
+        title: "Номер шва", 
+        field:"number"
       },
       {
-        title: "Номер детали",
-        render: (rowData) => (
-          <span>{rowData.numb_detals}</span>
-        ),
+        title: "Номер детали", 
+        field:"product.number"
       },
       {
-        title: "Номер узла",
-        render: (rowData) => (
-          <span>{rowData.numb_node}</span>
-        ),
+        title: "Номер узла", 
+        field:"product.productType"
       },
       {
-        title: "Номер изделие",
-        render: (rowData) => (
-          <span>{rowData.numb_goods}</span>
-        ),
+        title: "Номер изделие", 
+        field:"product.number"
       },
       {
-        title: "Наименование   технологического процесса  ",
-        render: (rowData) => (
-          <span>{rowData.name_technological_process}</span>
-        ),
+        title: "Наименование   технологического процесса  ", 
+        field:"technologicalProcess.name"
       },
       {
-        title: "Номер  технологического процесса  ",
-        render: (rowData) => (
-          <span>{rowData.numb_technological_process}</span>
-        ),
+        title: "Номер  технологического процесса  ", 
+        field:"technologicalProcess.number"
       },
     ],
 
     detals: [
       {
-        title: "Наименование",
-        render: (rowData) => (
-          <span>{rowData.numb_seam}</span>
-        ),
+        title: "Наименование", 
+        field:"product.name"
       },
       {
-        title: "Номер шва",
-        render: (rowData) => (
-          <span>{rowData.numb_seam}</span>
-        ),
+        title: "Номер шва", 
+        field:"number"
       },
       {
-        title: "Номер детали",
-        render: (rowData) => (
-          <span>{rowData.numb_detals}</span>
-        ),
+        title: "Номер детали", 
+        field:"product.number"
       },
       {
-        title: "Номер узла",
-        render: (rowData) => (
-          <span>{rowData.numb_node}</span>
-        ),
+        title: "Номер узла", 
+        field:"product.productType"
       },
       {
-        title: "Номер изделие",
-        render: (rowData) => (
-          <span>{rowData.numb_goods}</span>
-        ),
+        title: "Номер изделие", 
+        field:"product.number"
       },
       {
-        title: "Наименование   технологического процесса  ",
-        render: (rowData) => (
-          <span>{rowData.name_technological_process}</span>
-        ),
+        title: "Наименование   технологического процесса  ", 
+        field:"technologicalProcess.name"
       },
       {
-        title: "Номер  технологического процесса  ",
-        render: (rowData) => (
-          <span>{rowData.numb_technological_process}</span>
-        ),
+        title: "Номер  технологического процесса  ", 
+        field:"technologicalProcess.number"
       },
     ],
 
     temperatura: [
       {
-        title: "Температура окружающей среды",
-        render: (rowData) => (
-          <span>{rowData.param1}</span>
-        ),
+        title: "Температура окружающей среды (°C)",
+        render: (rowData) => {
+          return (
+            <p>
+              {`${rowData.ambientTemperature}`}
+            </p>
+          );
+        }, 
       },
       {
-        title: "Влажность воздуха",
-        render: (rowData) => (
-          <span>{rowData.param2}</span>
-        ),
+        title: "Влажность воздуха (%)",
+        field: "airHumidity",
       },
       {
-        title: "Межслойная температура",
-        render: (rowData) => (
-          <span>{rowData.param3}</span>
-        ),
+        title: "Межслойная температура (°C)",
+        field: "interlayerTemperature",
       },
       {
         title: "Номер текущего слоя",
-        render: (rowData) => (
-          <span>{rowData.param4}</span>
-        ),
+        field: "currentLayerNumber",
       },
       {
-        title: "Температура предварительного нагрева",
-        render: (rowData) => (
-          <span>{rowData.param5}</span>
-        ),
+        title: "Температура предварительного нагрева (°C)",
+        field: "preheatingTemperature",
       },
       {
         title: "Усредненные значения сварочного тока и напряжения на дуге",
-        render: (rowData) => (
-          <span>{rowData.param6}</span>
-        ),
+        field: "arcVoltageValues[0]",
       },
     ]
 
-  }
-
-  const columns_dataDetals = {
-
-    seam: [
-      // {
-      //   name_node:"",
-      //   numb_node:"",
-      //   numb_workshops:"",
-      //   numb_production_sites:"",
-      //   numb_jobs_place:"",
-      //   name_technological_process:"",
-      //   numb_technological_process:""
-      // },
-
-    ],
-    detals: [
-
-    ],
-
-    temperatura: [  ]
-
-  }
-
-
-  for (let index = 0; index < 17; index++) {
-    columns_dataDetals.seam.push({
-      numb_detals: `Деталь ${index + 1}`,
-      numb_seam: `Шов ${index + 1}`,
-      numb_node: `Узел ${index + 1}`,
-      numb_goods: `Изделие ${index + 1}`,
-      name_technological_process: `Технологический процесс  ${index + 1} `,
-      numb_technological_process: `3886:${index}`
-    }
-    )
-    columns_dataDetals.detals.push({
-      numb_detals: `Деталь ${index + 1}`,
-      numb_seam: `Шов ${index + 1}`,
-      numb_node: `Узел ${index + 1}`,
-      numb_goods: `Изделие ${index + 1}`,
-      name_technological_process: `Технологический процесс  ${index + 1} `,
-      numb_technological_process: `3886:${index}`
-    }
-    )
-    columns_dataDetals.temperatura.push({
-       param1:`3${index + 1} °C`,
-       param2:`3${index + 1}—6${index + 1} %`,
-       param3:`5${index + 1} °C`,
-       param4:`${index + 10}`,
-       param5:`4${index + 1} °C`,
-       param6:`1${index + 1} - 3${index + 1}`,
-    }
-    )
-  }
-
+  } 
+ 
+ 
 
 
   const [value_panel, setValue] = useState(0);
@@ -464,14 +369,13 @@ export const Tasks = ({
         <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{ minWidth: "800px", }}
+          style={{ minWidth: "800px",}} 
         >
           <Table
             title="Сменные задания на сварку"
             columns={columns}
-            data={tasks}
-            isLoading={isRequesting}
-            renderRowChildren={renderRowChildren}
+            data={tasks} 
+            isLoading={isRequesting} 
             deleteAction={
               userRole === "admin" || userRole === "master" ? deleteTask : null
             }
@@ -506,7 +410,7 @@ export const Tasks = ({
           <Table
             title="Сварные швы деталей, узлов и изделий"
             columns={columns_data.seam}
-            data={columns_dataDetals.seam}
+            data={seam}
             isLoading={isRequesting}
             deleteAction={
               userRole === "admin" || userRole === "master" ? deleteTask : null
@@ -542,8 +446,8 @@ export const Tasks = ({
         >
           <Table
             title="Данные об изготовленных изделиях"
-            columns={columns_data.detals}
-            data={columns_dataDetals.seam}
+            columns={columns_data.detals} 
+            data={seam}
             isLoading={isRequesting}
             deleteAction={
               userRole === "admin" || userRole === "master" ? deleteTask : null
@@ -581,7 +485,7 @@ export const Tasks = ({
           <Table
             title="Температура окружающей среды"
             columns={columns_data.temperatura}
-            data={columns_dataDetals.temperatura}
+            data={info}
             isLoading={isRequesting}
             deleteAction={
               userRole === "admin" || userRole === "master" ? deleteTask : null

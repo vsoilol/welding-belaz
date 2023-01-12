@@ -19,13 +19,15 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
- 
 
-  
 
+
+import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import api from "services/api";
+
+
 
 
 const dateOptions = {
@@ -35,38 +37,88 @@ const dateOptions = {
 };
 
 export const WorkPlace = ({
-  loadEquipment,
-  loadMasters,
-  equipment,
-  addEquipment,
+  ///Workshop
+  loadWorkshop,
+  addWorkshop,
+  editWorkshop,
+  ///Area 
+  loadArea,
+  addArea,
+  editArea,
+  ///Posts 
+  loadPosts,
+  addPosts,
+  editPosts,
+  ///Workplace 
+  loadWorkplace,
+  addWorkplace,
+  editWorkplace,
+  ///Product
+  loadProduct,
+  addProduct,
+  editProduct,
+  //Knot
+  loadKnot,
+  addKnot,
+  editKnot,
+  ///Detail
+  loadDetail,
+  addDetail,
+  editDetail,
+  ///Seam
+  loadSeam,
+  addSeam,
+  editSeam,
+  loadTexprocwelding,
+
+
+
   deleteEquipment,
-  editEquipment,
   isRequesting,
   masters,
   userRole,
+
+
+  workshop,
+  area,
+  posts,
+  workplace,
+  product,
+  knot,
+  detail,
+  seam,
+  texprocwelding
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalNumb, setIsModalNumb] = useState(0);
+
   const [modalData, setModalData] = useState(null);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
   const [activeEquipment, setActiveEquipment] = useState("");
   const [open, setOpen] = useState(false);
 
+  const [valueProdArea, setValueProdArea] = useState();
+
+  const [valuetPosts, setValuetPosts] = useState();
+  const [valuetWorkPlace, setValuetWorkPlace] = useState();
+  const [valuetTechProc, setValuetTechProc] = useState();
+  const [valuetSeam, setValuetSeam] = useState();
+
   const initialValues = {
-    machineId: modalData?.machineId ?? "",
     name: modalData?.name ?? "",
-    serialNum: modalData?.serialNum ?? "",
-    photoName: modalData?.photoName ?? "",
-    nextInspectionDate: modalData?.nextInspectionDate ?? "",
-    weldingProcess: modalData?.weldingProcess ?? "",
-    weldingMethod: modalData?.weldingMethod ?? "",
-    noLoadVoltage: modalData?.noLoadVoltage ?? "",
-    minCurrentValue: modalData?.minCurrentValue ?? "",
-    maxCurrentValue: modalData?.maxCurrentValue ?? "",
-    minVoltageValue: modalData?.minVoltageValue ?? "",
-    maxVoltageValue: modalData?.maxVoltageValue ?? "",
-    loadPercentage: modalData?.loadPercentage ?? "",
-    masterId: modalData?.master?.masterId ?? "",
+    number: modalData?.number ?? "",
+    id: modalData?.id ?? "",
+
+    workshopNumber: modalData?.workshop?.number ?? "",
+    productionAreaNumber: modalData?.productionInfo?.productionAreaNumber ?? "",
+    workplaceNumber: modalData?.productionInfo?.workplaceNumber ?? "",
+    technologicalProcessname: modalData?.technologicalProcess?.name ?? "",
+    technologicalProcessnumber: modalData?.technologicalProcess?.number ?? "",
+
+
+
   };
+
 
   const formattedMasters = masters?.map((item) => {
     return {
@@ -76,775 +128,901 @@ export const WorkPlace = ({
   });
 
   useEffect(() => {
-    loadEquipment();
-    loadMasters();
-  }, [loadEquipment, loadMasters]);
+    loadWorkshop();
+    loadArea();
+    loadPosts();
+    loadWorkplace();
+    loadProduct();
+    loadKnot();
+    loadDetail();
+    loadSeam();
+    loadTexprocwelding();
+  }, [
+    loadWorkshop,
+    loadArea,
+    loadPosts,
+    loadWorkplace,
+    loadProduct,
+    loadKnot,
+    loadDetail,
+    loadTexprocwelding
+  ]);
 
- 
+  //////////////////////////////////////////////////////////////////// 
+  const columns = {
+    workshops: [
+      {
+        title: "Наименование цеха",
+        field: "name",
+      },
+      {
+        title: "Номер  цеха",
+        field: "number",
+      },
+    ],
+    production_sites: [
+      {
+        title: "Наименование производственного участка ",
+        field: "name",
+      },
+      {
+        title: "Номер  производственного участка ",
+        field: "number",
+      },
+    ],
+    posts: [
+      {
+        title: "Наименование поста ",
+        render: (rowData) => {
+          return <p>Пост {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  поста ",
+        field: "number",
+      },
+    ],
+    jobs_place: [
+      {
+        title: "Наименование рабочего места ",
+        render: (rowData) => {
+          return <p>Рабочее место {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  рабочего места ",
+        field: "number",
+      },
+    ],
 
+    goods: [
+      {
+        title: "Наименование изделия ", field: "name"
+      },
+      {
+        title: "Номер  изделия ", field: "number"
+      },
 
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+    ],
+    node: [
+      {
+        title: "Наименование узла ", field: "name"
+      },
+      {
+        title: "Номер  узла ", field: "number"
+      },
 
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+    ],
+    details: [
+      {
+        title: "Наименование детали ", field: "name"
+      },
+      {
+        title: "Номер  детали ", field: "number"
+      },
 
-   ////////////////////////////////////////////////////////////////////
-    const columns = {
-        workshops:[
-          {
-            title: "Наименование цеха",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.name_workshops}</span>
-            ),
-          },
-          {
-            title: "Номер  цеха",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.numb_workshops}</span>
-            ),
-          },
-        ],
-        production_sites:[
-          {
-            title: "Наименование производственного участка ",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.name_production_sites}</span>
-            ),
-          },
-          {
-            title: "Номер  производственного участка ",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.numb_production_sites}</span>
-            ),
-          },
-        ],
-        posts:[
-          {
-            title: "Наименование поста ",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.name_posts}</span>
-            ),
-          },
-          {
-            title: "Номер  поста ",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.numb_posts}</span>
-            ),
-          },
-        ],
-        jobs_place:[
-          {
-            title: "Наименование рабочего места ",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.name_jobs_place}</span>
-            ),
-          },
-          {
-            title: "Номер  рабочего места ",
-            field: "id",
-            render: (rowData) => (
-              <span>{rowData.numb_jobs_place}</span>
-            ),
-          },
-        ],
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+    ],
+    welding_seam: [
+      {
+        title: "Наименование сварного шва ",
+        render: (rowData) => {
+          return <p>Cварочный шов {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  сварного шва ", field: "number"
+      },
 
-        goods:[
-          {
-            title: "Наименование изделия ", 
-            render: (rowData) => (
-              <span>{rowData.name_goods}</span>
-            ),
-          },
-          {
-            title: "Номер  изделия ", 
-            render: (rowData) => (
-              <span>{rowData.numb_goods}</span>
-            ),
-          },
-
-
-
-          {
-            title: "Номер  цеха ", 
-            render: (rowData) => (
-              <span>{rowData.numb_workshops}</span>
-            ),
-          },
-          {
-            title: "Номер  производственного участка ", 
-            render: (rowData) => (
-              <span>{rowData.numb_production_sites}</span>
-            ),
-          },
-          {
-            title: "Номер  рабочего места  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_jobs_place}</span>
-            ),
-          },
-          {
-            title: "Наименование   технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.name_technological_process}</span>
-            ),
-          },
-          {
-            title: "Номер  технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_technological_process}</span>
-            ),
-          },
-        ],
-        node:[
-          {
-            title: "Наименование узла ", 
-            render: (rowData) => (
-              <span>{rowData.name_node}</span>
-            ),
-          },
-          {
-            title: "Номер  узла ", 
-            render: (rowData) => (
-              <span>{rowData.numb_node}</span>
-            ),
-          },
-
-          {
-            title: "Номер  цеха ",  
-            render: (rowData) => (
-              <span>{rowData.numb_workshops}</span>
-            ),
-          },
-          {
-            title: "Номер  производственного участка ", 
-            render: (rowData) => (
-              <span>{rowData.numb_production_sites}</span>
-            ),
-          },
-          {
-            title: "Номер  рабочего места  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_jobs_place}</span>
-            ),
-          },
-          {
-            title: "Наименование   технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.name_technological_process}</span>
-            ),
-          },
-          {
-            title: "Номер  технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_technological_process}</span>
-            ),
-          },
-        ],
-        details:[
-          {
-            title: "Наименование детали ", 
-            render: (rowData) => (
-              <span>{rowData.name_details}</span>
-            ),
-          },
-          {
-            title: "Номер  детали ", 
-            render: (rowData) => (
-              <span>{rowData.numb_details}</span>
-            ),
-          },
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+    ],
+  };
 
 
-          {
-            title: "Номер  цеха ", 
-            render: (rowData) => (
-              <span>{rowData.numb_workshops}</span>
-            ),
-          },
-          {
-            title: "Номер  производственного участка ", 
-            render: (rowData) => (
-              <span>{rowData.numb_production_sites}</span>
-            ),
-          },
-          {
-            title: "Номер  рабочего места  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_jobs_place}</span>
-            ),
-          },
-          {
-            title: "Наименование   технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.name_technological_process}</span>
-            ),
-          },
-          {
-            title: "Номер  технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_technological_process}</span>
-            ),
-          },
-        ],
-        welding_seam:[
-          {
-            title: "Наименование сварного шва ", 
-            render: (rowData) => (
-              <span>{rowData.name_welding_seam}</span>
-            ),
-          },
-          {
-            title: "Номер  сварного шва ", 
-            render: (rowData) => (
-              <span>{rowData.numb_welding_seam}</span>
-            ),
-          },
+  const requiredKeys = ["name", "nextInspectionDate"];
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
+  const [value_panel, setValue] = useState(0);
 
-          {
-            title: "Номер  цеха ", 
-            render: (rowData) => (
-              <span>{rowData.numb_workshops}</span>
-            ),
-          },
-          {
-            title: "Номер  производственного участка ", 
-            render: (rowData) => (
-              <span>{rowData.numb_production_sites}</span>
-            ),
-          },
-          {
-            title: "Номер  рабочего места  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_jobs_place}</span>
-            ),
-          },
-          {
-            title: "Наименование   технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.name_technological_process}</span>
-            ),
-          },
-          {
-            title: "Номер  технологического процесса  ", 
-            render: (rowData) => (
-              <span>{rowData.numb_technological_process}</span>
-            ),
-          },
-        ]
-    } 
-
-    const columns_data={
-      workshops:[
-        // { 
-        //   name_workshops:"Наименование цеха",
-        //   numb_workshops:"Номер цеха", 
-        // }
-      ],
-      production_sites:[
-        // { 
-        //   name_production_sites:"Наименование производственного участка",
-        //   numb_production_sites:"Номер производственного участка", 
-        // },  
-      ],
-      posts:[ 
-        // { 
-        //   name_posts:"Наименование поста",
-        //   numb_posts:"Номер поста", 
-        // }, 
-      ],
-      jobs_place:[
-        // { 
-        //   name_jobs_place:"Наименование рабочего места",
-        //   numb_jobs_place:"Номер рабочего места", 
-        // }, 
-        
-      ],
-
-      goods:[
-        // { 
-        //   name_goods:"",
-        //   numb_goods:"",
-        //   numb_workshops:"",
-        //   numb_production_sites:"",
-        //   numb_jobs_place:"",
-        //   name_technological_process:"",
-        //   numb_technological_process:""
-        // },
-        
-      ],
-      node:[
-        // {
-        //   name_node:"",
-        //   numb_node:"",
-        //   numb_workshops:"",
-        //   numb_production_sites:"",
-        //   numb_jobs_place:"",
-        //   name_technological_process:"",
-        //   numb_technological_process:""
-        // },
-        
-      ],
-      details:[
-        // {
-        //   name_details:"",
-        //   numb_details:"",
-        //   numb_workshops:"",
-        //   numb_production_sites:"",
-        //   numb_jobs_place:"",
-        //   name_technological_process:"",
-        //   numb_technological_process:""
-        // }, 
-      ],
-      welding_seam:[
-        // {
-        //   name_welding_seam:"",
-        //   numb_welding_seam:"",
-        //   numb_workshops:"",
-        //   numb_production_sites:"",
-        //   numb_jobs_place:"",
-        //   name_technological_process:"",
-        //   numb_technological_process:""
-        // },
-        
-      ],
-    }
-
-
-    for (let index = 0; index < 17; index++) {
-        
-        columns_data.workshops.push( 
-          { 
-          name_workshops:`Цех ${index+1}`,
-          numb_workshops:` 34${index}-38-01${index}-86`, 
-        }
-        ) 
-        columns_data.production_sites.push(
-          { 
-            name_production_sites:`Производственного участка ${index+1}`,
-            numb_production_sites:`${index+1}3:F${index+1}:AA:${index+1}8`, 
-          },  
-        ) 
-        columns_data.posts.push(
-          { 
-            name_posts:`Пост ${index+1}`,
-            numb_posts:`34${index}-38-01${index}-86`, 
-          },  
-        ) 
-        columns_data.jobs_place.push(
-          { 
-            name_jobs_place:`Рабочее место ${index+1}`,
-            numb_jobs_place:`${index+1}3:F${index+1}:AA:${index+1}8`, 
-          },  
-        )
-
-
-        columns_data.goods.push( { 
-            name_goods:`Изделие${index+1}`,
-            numb_goods:`${index+1}`,
-            numb_workshops:`34${index}-38-01${index}-86`,
-            numb_production_sites: `${index+1}3:F${index+1}:AA:${index+1}8`,
-            numb_jobs_place:`7${index}7-38-01${index}-86`,
-            name_technological_process:`Технологический процесс  ${index} `,
-            numb_technological_process:`${index}-3886`
-          }
-        ) 
-        columns_data.node.push( { 
-          name_node:`Узел ${index+1}`,
-          numb_node:`${index+1}`,
-          numb_workshops:`38:${index}45:01${index}-76`,
-          numb_production_sites:`7${index}7-38-01${index}-86` ,
-          numb_jobs_place:`${index+1}3:F${index+1}:AA:${index+1}8`,
-          name_technological_process:`Технологический процесс  ${index+1} `,
-          numb_technological_process:`3886:${index}`
-        }
-         )
-        columns_data.details.push( { 
-          name_details:`Деталь ${index+1}`,
-          numb_details:`${index+1}`,
-          numb_workshops:`34${index}-38-01${index}-86`,
-          numb_production_sites: `${index+1}3:F${index+1}:AA:${index+1}8`,
-          numb_jobs_place:`7${index}7-38-01${index}-86`,
-          name_technological_process:`Технологический процесс  ${index} `,
-          numb_technological_process:`${index}-3886`
-        }
-        )
-        columns_data.welding_seam.push( { 
-          name_welding_seam:`Шов ${index+1}`,
-          numb_welding_seam:`${index+1}`,
-          numb_workshops:`38:${index}45:01${index}-76`,
-          numb_production_sites:`7${index}7-38-01${index}-86` ,
-          numb_jobs_place:`${index+1}3:F${index+1}:AA:${index+1}8`,
-          name_technological_process:`Технологический процесс  ${index+1} `,
-          numb_technological_process:`3886:${index}`
-        }
-        )
-    }
-   
-
-    const requiredKeys = ["name", "nextInspectionDate"];
-
-    const handleOpen = () => {
-      setOpen(true);
-    };
- 
-     
+  let valuePanels  = Number(localStorage.getItem("value_panel"))
   
-    const [value_panel, setValue] = useState(0);
-    const ChangePanels = (event, newValue) => { 
-      setValue(newValue); 
-    }; 
-    const TabPanel = (props_panel) => { 
-      const { children, value, indPanel} = props_panel; 
-      return (
-        <div  hidden={value !== indPanel}  >
-          {children}
-        </div>
-      );
-    };
+ 
 
+  const ChangePanels = (event, newValue) => {
+    localStorage.setItem("value_panel",newValue)
+    setValue(newValue);
+  };
+
+
+  
+
+  const TabPanel = (props_panel) => {
+    const { children, value, indPanel } = props_panel;
+    return <div hidden={value !== indPanel}>{children}</div>;
+  };
+
+  function SetValue(valueId, index) {
+    ///workshop
+    if (index === 0) {
+      for (let index = 0; index < workshop.length; index++) {
+        if (workshop[index].id === valueId) {
+          return workshop[index].number
+        }
+      }
+    }
+    ///area
+    if (index === 1) {
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].id === valueId) {
+          return area[index].number
+        }
+      }
+    }
+     ///post
+     if (index === 2) {
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].id === valueId) {
+          return posts[index].number
+        }
+      }
+    }
+     ///texprocwelding
+     if (index === 3) {
+      for (let index = 0; index < texprocwelding.length; index++) {
+        if (texprocwelding[index].id === valueId) {
+          return texprocwelding[index].number
+        }
+      }
+    } 
+    ///texprocwelding
+    if (index === 4) {
+      for (let index = 0; index < texprocwelding.length; index++) {
+        if (texprocwelding[index].id === valueId) {
+          return texprocwelding[index].name
+        }
+      }
+    }  
+  } 
+
+  //Запрос на редактирование или добавление
+  function SendData(variables) {
+    variables["workshopId"] = valueProdArea
+    variables["workshopNumber"] = SetValue(valueProdArea, 0)
+
+    variables["productionAreaId"] = valuetPosts
+    variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
+
+    variables["postId"] = valuetWorkPlace 
+    variables["postNumber"] = SetValue(valuetWorkPlace, 2)
+
+    variables["technologicalProcessId"] = valuetTechProc
+    variables["technologicalProcessNumber"] = SetValue(valuetTechProc, 3)
+    variables["technologicalProcessName"] = SetValue(valuetTechProc, 4)
+    
+    variables["workplaceId"] = null  
+ 
+    //Добавить Цех 
+    if (isModalNumb == 8) {
+      addWorkshop(variables)
+    }
+    //Редактировать Цех
+    if (isModalNumb == 0) {
+      editWorkshop(variables)
+    }
+
+    //Добавить Производственные участки
+    if (isModalNumb == 9) {
+
+      addArea(variables)
+    }
+    //Редактировать Производственные участки
+    if (isModalNumb == 1) {
+      editArea(variables)
+    }
+
+    //Добавить Посты
+    if (isModalNumb == 10) {
+
+      addPosts(variables)
+    }
+    //Редактировать Посты
+    if (isModalNumb == 2) {
+      editPosts(variables)
+    }
+
+    //Добавить Рабочие места
+    if (isModalNumb == 11) {
+      addWorkplace(variables)
+    }
+    //Редактировать Рабочие места
+    if (isModalNumb == 3) {
+      editWorkplace(variables)
+    }
+
+    //Добавить Изделие
+    if (isModalNumb == 12) {
+      addProduct(variables)
+    }
+    //Редактировать Изделие
+    if (isModalNumb == 4) {
+      editProduct(variables)
+    }
+
+    //Добавить Узел
+    if (isModalNumb == 13) {
+      addKnot(variables)
+    }
+    //Редактировать Узел
+    if (isModalNumb == 5) {
+      editKnot(variables)
+    }
+    //Добавить Деталь
+    if (isModalNumb == 14) {
+      addDetail(variables)
+    }
+    //Редактировать Деталь
+    if (isModalNumb == 6) {
+      editDetail(variables)
+    }
+    //Добавить Сварочный шов
+    if (isModalNumb == 15) {
+      addSeam(variables)
+    }
+    //Редактировать Сварочный шов
+    if (isModalNumb == 7) {
+      editSeam(variables)
+    }
+  }
+
+  ///Изменение заголовка модалки
+  function TitleTextModal(params) {
+    if (params === 0) {
+      return "Редактировать Цех"
+    }
+    if (params === 1) {
+      return "Редактировать Производственный участок"
+    }
+    if (params === 2) {
+      return "Редактировать Пост"
+    }
+    if (params === 3) {
+      return "Редактировать Рабочее место"
+    }
+    if (params === 4) {
+      return "Редактировать Изделие"
+    }
+    if (params === 5) {
+      return "Редактировать Узел"
+    }
+    if (params === 6) {
+      return "Редактировать Деталь"
+    }
+    if (params === 7) {
+      return "Редактировать Сварочный шов"
+    }
+
+    if (params === 8) {
+      return "Добавить Цех"
+    }
+    if (params === 9) {
+      return "Добавить Производственный участок"
+    }
+    if (params === 10) {
+      return "Добавить Пост"
+    }
+    if (params === 11) {
+      return "Добавить Рабочее место"
+    }
+    if (params === 12) {
+      return "Добавить Изделие"
+    }
+    if (params === 13) {
+      return "Добавить Узел"
+    }
+    if (params === 14) {
+      return "Добавить Деталь"
+    }
+    if (params === 15) {
+      return "Добавить Сварочный шов"
+    }
+  }
+
+
+  //select Производственные участки  
+
+  const optProdArea = workshop?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  //select Посты   
+  const optPosts = area?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  //select Рабочие места 
+  const WorkPlaceOpt = posts?.map((item) => {
+    return {
+      value: item.id,
+      label: "Пост " + item.number,
+    };
+  });
+  //select технологического процесса   
+  const TechProc = texprocwelding?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+
+  //select Сварочный шов  
+  const SeamOptions = seam?.map((item) => {
+    return {
+      value: item.id,
+      label: `Cварочный шов ${item.number}`,
+    };
+  });
+
+  ///Отображение Selects
+  function DisplaySelects(select) {
+    if (select.select === 0 || select.select === 8) {
+      return (
+        <div  ></div>
+      )
+    }
+    //select Производственные участки  
+    if (select.select === 9 || select.select === 1) {
+      return (
+        <div className={styles.row}>
+          <Select
+            name="valueProdArea"
+            value={valueProdArea}
+            width="380px"
+            placeholder="Цех"
+            onChange={(event) => {
+              setValueProdArea(event.value)
+            }}
+            options={optProdArea}
+          />
+        </div>
+      )
+    }
+    //select Посты
+    if (select.select === 10 || select.select === 2) {
+      return (
+        <div className={styles.row}>
+          <Select
+            name="valuetPosts"
+            width="380px"
+            value={valuetPosts}
+            placeholder="Производственные участки"
+            onChange={(event) => setValuetPosts(event.value)}
+            options={optPosts}
+          />
+        </div>
+      )
+    }
+    //select Рабочие места
+    if (select.select === 11 || select.select === 3) {
+      return (
+        <div>
+
+          <div className={styles.row}>
+            <Select
+              name="valuetWorkPlace"
+              width="380px"
+              value={valuetWorkPlace}
+              placeholder="Пост"
+              onChange={(event) => setValuetWorkPlace(event.value)}
+              options={WorkPlaceOpt}
+            />
+          </div>
+
+          <div className={styles.row}>
+            <Select
+              name="valueProdArea"
+              value={valueProdArea}
+              width="380px"
+              placeholder="Цех"
+              onChange={(event) => {
+                setValueProdArea(event.value);
+              }}
+              options={optProdArea}
+            />
+          </div>
+        </div>
+
+
+      )
+    }
+
+    ///Изделия / Узлы / Детали / Сварные швы
+    if (select.select === 20) {
+      return (
+        <div>
+          <div className={styles.row}>
+            <Select
+              name="valuetWorkPlace"
+              width="380px"
+              value={valuetWorkPlace}
+              placeholder="Пост"
+              onChange={(event) => setValuetWorkPlace(event.value)}
+              options={WorkPlaceOpt}
+            />
+          </div>
+          <div className={styles.row}>
+            <Select
+              name="valueProdArea"
+              value={valueProdArea}
+              width="380px"
+              placeholder="Цех"
+              onChange={(event) => {
+                setValueProdArea(event.value);
+              }}
+              options={optProdArea}
+            />
+          </div>
+
+          <div className={styles.row}>
+            <Select
+              name="valuetPosts"
+              width="380px"
+              value={valuetPosts}
+              placeholder="Производственные участки"
+              onChange={(event) => setValuetPosts(event.value)}
+              options={optPosts}
+            />
+          </div>
+
+
+          <div className={styles.row}>
+            <Select
+              name="valuetTechProc"
+              width="380px"
+              value={valuetTechProc}
+              placeholder="Технологический процесс"
+              onChange={(event) => setValuetTechProc(event.value)}
+              options={TechProc}
+            />
+          </div>
+
+
+          <div className={styles.row}>
+            <Select
+              name="valuetTechProc"
+              width="380px"
+              value={valuetSeam}
+              placeholder="Сварочный шов"
+              onChange={(event) => setValuetSeam(event.value)}
+              options={SeamOptions}
+            />
+          </div>
+
+
+        </div>
+
+
+      )
+    }
+  }
+  
   ////////////////////////////////////////////////////////////////////
   return (
-
     <div className={styles.innerWrapper}>
-
-
-
       <ToolTip
         title="Производство"
         toolTipText="Здесь Вы можете просмотреть цеха, производственные участки, посты, рабочие места,изделия, узлы, детали, сварные швы, подлежащие проверке УКК"
-        src={workPlaceImage} 
+        src={workPlaceImage}
       />
       {open ? (
         <Modal
           open={open}
           setOpen={setOpen}
-          children={<EquipmentMap equipment={equipment} />}
         />
-      ) : null} 
- 
-      <Tabs   
+      ) : null}
+
+      <Tabs
         value={value_panel}
         onChange={ChangePanels}
         indicatorColor="primary"
-        textColor="primary" 
+        textColor="primary"
         aria-label="full width tabs example"
-         > 
-          <Tab   label="Цеха"  />
-          <Tab   label="Производственные участки"  />
-          <Tab   label="Посты"  />
-          <Tab   label="Рабочие места"  />
+      >
+        <Tab label="Цеха" />
+        <Tab label="Производственные участки" />
+        <Tab label="Посты" />
+        <Tab label="Рабочие места" />
 
-          <Tab   label="Изделия"  />
-          <Tab   label="Узлы"  />
-          <Tab   label="Детали"  />
-          <Tab   label="Сварные швы"  /> 
-        </Tabs>
-
+        <Tab label="Изделия" />
+        <Tab label="Узлы" />
+        <Tab label="Детали" />
+        <Tab label="Сварные швы" />
+      </Tabs>
 
       <div className={styles.tableWrapper}>
-        
         {/*Цеха*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Цеха"
-                columns={columns.workshops}
-                value={0}
-                data={columns_data.workshops}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить цех",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать цех",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-              deleteAction={userRole === "admin" ? deleteEquipment : null}
-            /> 
-        </TabPanel> 
+          <Table
+            title="Цеха"
+            columns={columns.workshops}
+            value={0}
+            data={workshop}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить цех",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(8) },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать цех",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      ; setIsModalNumb(0)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
         {/*Производственные участки*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={1}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Производственные участки"
-                columns={columns.production_sites}
-                value={1} 
-                className="workshops"
-                data={columns_data.production_sites}
-                isLoading={isRequesting}  
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить производственный участок",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать производственный участок",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-                deleteAction={userRole === "admin" ? deleteEquipment : null}
-                
-            /> 
+          <Table
+            title="Производственные участки"
+            columns={columns.production_sites}
+            value={1}
+            className="workshops"
+            data={area}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить производственный участок",
+                    isFreeAction: true,
+                    onClick: () => {
+                      setIsModalOpen(true);
+                      setIsModalNumb(9)
+                    },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать производственный участок",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(1)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
         </TabPanel>
         {/*Посты*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={2}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Посты"
-                columns={columns.posts}
-                value={2} 
-                className="workshops"
-                data={columns_data.posts}
-                isLoading={isRequesting}  
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить пост",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать пост",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-                deleteAction={userRole === "admin" ? deleteEquipment : null}
-                
-            /> 
+          <Table
+            title="Посты"
+            columns={columns.posts}
+            value={2}
+            className="workshops"
+            data={posts}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить пост",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(10) },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать пост",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(2)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
         </TabPanel>
         {/*Рабочие места */}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={3}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Рабочие места"
-                columns={columns.jobs_place}
-                value={3} 
-                className="workshops"
-                data={columns_data.jobs_place}
-                isLoading={isRequesting}  
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить рабочее место",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать рабочее место",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-                deleteAction={userRole === "admin" ? deleteEquipment : null}
-                
-            /> 
+          <Table
+            title="Рабочие места"
+            columns={columns.jobs_place}
+            value={3}
+            className="workshops"
+            data={workplace}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить рабочее место",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(11) },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать рабочее место",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(3)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
         </TabPanel>
 
         {/*Изделия*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={4}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Изделия"
-                columns={columns.goods}
-                value={4}
-                data={columns_data.goods}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить изделие",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать изделие",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-              deleteAction={userRole === "admin" ? deleteEquipment : null}
-            /> 
-        </TabPanel> 
+          <Table
+            title="Изделия"
+            columns={columns.goods}
+            value={4}
+            data={product}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить изделие",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(12) },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать изделие",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(4)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
         {/*Узлы*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={5}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Узлы"
-                columns={columns.node}
-                value={5}
-                data={columns_data.node}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить узел",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать узел",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-              deleteAction={userRole === "admin" ? deleteEquipment : null}
-            /> 
-        </TabPanel> 
+          <Table
+            title="Узлы"
+            columns={columns.node}
+            value={5}
+            data={knot}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить узел",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(13) },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать узел",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(5)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
         {/*Детали*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={6}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Детали"
-                columns={columns.details}
-                value={6}
-                data={columns_data.details}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить деталь",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать деталь",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-              deleteAction={userRole === "admin" ? deleteEquipment : null}
-            /> 
-        </TabPanel> 
+          <Table
+            title="Детали"
+            columns={columns.details}
+            value={6}
+            data={detail}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить деталь",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(14) },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать деталь",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(6)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
         {/*Сварные швы*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={7}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
         >
-            <Table 
-                title="Сварные швы"
-                columns={columns.welding_seam}
-                value={7}
-                data={columns_data.welding_seam}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить шов",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать шва",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-              deleteAction={userRole === "admin" ? deleteEquipment : null}
-            /> 
-        </TabPanel> 
+          <Table
+            title="Сварные швы"
+            columns={columns.welding_seam}
+            value={7}
+            data={seam}
+            isLoading={isRequesting}
+            actions={
+              userRole === "admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить шов",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(15) },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать шва",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(7)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
       </div>
-      
 
 
 
-
-
-
-      
 
       <ResultsModal
         type={"EQUIPMENT"}
@@ -852,16 +1030,178 @@ export const WorkPlace = ({
         isOpen={isResultsModalOpen}
         setIsOpen={setIsResultsModalOpen}
       />
+
       <ModalWindow
         isOpen={isModalOpen}
-        headerText={
-          modalData ? "Редактировать " : "Добавить "
-        }
+        headerText={TitleTextModal(isModalNumb)}
         setIsOpen={(state) => {
           setIsModalOpen(state);
           setModalData(null);
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
 
+        {isModalNumb < 4 || isModalNumb > 7 && isModalNumb < 12
+          ? (
+            <Formik
+              initialValues={initialValues}
+              enableReinitialize
+              onSubmit={(variables) => {
+                const { id, ...dataToSend } = variables;
+                setIsModalOpen(false);
+                SendData(variables)
+              }}
+            >
+              {({
+                handleSubmit,
+                handleChange,
+                values,
+                setFieldValue,
+                handleBlur,
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                      value={values.name}
+                      name="name"
+                      placeholder="Наименовние"
+                      onBlur={handleBlur}
+                    />
+                  </div>
 
+                  <DisplaySelects select={isModalNumb} />
+
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                      value={values.number}
+                      name="number"
+                      placeholder="Номер   "
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      {modalData ? "Сохранить" : "Создать"}
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </Formik>
+          )
+          : (
+            <Formik
+              initialValues={initialValues}
+              enableReinitialize
+              onSubmit={(variables) => {
+                const { id, ...dataToSend } = variables;
+                setIsModalOpen(false);
+                SendData(variables)
+              }}
+            >
+              {({
+                handleSubmit,
+                handleChange,
+                values,
+                setFieldValue,
+                handleBlur,
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                      value={values.name}
+                      name="name"
+                      placeholder="Наименовние"
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                      value={values.number}
+                      name="number"
+                      placeholder="Номер"
+                      onBlur={handleBlur}
+                    />
+                  </div>
+
+                  <DisplaySelects select={20} />
+
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      {modalData ? "Сохранить" : "Создать"}
+                    </Button>
+                  </div>
+                </form>
+
+              )}
+            </Formik>
+          )
+        }
+
+      </ModalWindow>
+
+      {/* <div className={styles.row}>
+        <Input
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+          value={values.workshopNumber}
+          name="workshopNumber"
+          placeholder="Номер  цеха "
+          onBlur={handleBlur}
+        />
+      </div>
+      <div className={styles.row}>
+        <Input
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+          value={values.productionAreaNumber}
+          name="productionAreaNumber"
+          placeholder="Номер  производственного участка "
+          onBlur={handleBlur}
+        />
+      </div>
+      <div className={styles.row}>
+        <Input
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+          value={values.workplaceNumber}
+          name="workplaceNumber"
+          placeholder="Номер  рабочего места  "
+          onBlur={handleBlur}
+        />
+      </div> */}
+
+      {/* <ModalWindow
+        isOpen={isModalOpen}
+        headerText={modalData ? "Редактировать " : "Добавить "}
+        setIsOpen={(state) => {
+          setIsModalOpen(state);
+          setModalData(null);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -889,57 +1229,28 @@ export const WorkPlace = ({
                 <Input
                   onChange={(e) => {
                     handleChange(e);
-                  }} 
-                  style={{width:380, height: 40, padding: "0 20px 0 30px" }}
+                  }}
+                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                   value={values.name}
                   name="name"
                   placeholder="Наименовние"
                   onBlur={handleBlur}
-                /> 
-              </div> 
+                />
+              </div>
               <div className={styles.row}> 
                 <Input
                   onChange={(e) => {
                     handleChange(e);
-                  }} 
-                  style={{ width:380, height: 40, padding: "0 20px 0 30px" }}
-                  value={values.serialNum}
-                  name="serialNum"
-                  placeholder="Номер ( цеха, участка, поста, рабочего места) "
+                  }}
+                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                  value={values.number}
+                  name="number"
+                  placeholder="Номер   "
                   onBlur={handleBlur}
                 />
-              </div> 
+              </div>  
               <div className={styles.row}>
-                <Select
-                  name="masterId"
-                  value={values.masterId}
-                  width="380px"
-                  placeholder="Мастер"
-                  onChange={(e) => {
-                    setFieldValue("masterId", e.value);
-                  }}
-                  options={formattedMasters}
-                />
-              </div> 
-              {!modalData && (
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{
-                      width: 380,
-                      height: 40,
-                    }}
-                    value={values.machineId}
-                    name={`machineId`}
-                    placeholder="RFID метка"
-                  />
-                </div>
-              )}
-              <div className={styles.row}>
-                <Button
-                  disabled={requiredKeys.some((key) => !values[key])}
+                <Button 
                   type="submit"
                 >
                   {modalData ? "Сохранить" : "Создать"}
@@ -948,8 +1259,7 @@ export const WorkPlace = ({
             </form>
           )}
         </Formik>
-      </ModalWindow>
-
+      </ModalWindow> */}
     </div>
   );
 };

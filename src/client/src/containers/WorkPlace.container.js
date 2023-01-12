@@ -1,23 +1,70 @@
 import { connect } from "react-redux";
 import { WorkPlacePage } from "pages/WorkPlace";
-import Actions from "store/equipment/actions";
-import MasterActions from "store/executors/actions";
+import Actions from "store/workplace/actions";
+import MasterActions from "store/workplace/actions";
 
 const mapStateToProps = (state) => {
   return {
-    equipment: state.equipment.equipment,
     masters: state.executors.masters,
     isRequesting:
       state?.equipment?.isRequesting || state?.masters?.isRequesting,
     userRole: state.auth.user.role,
+
+    ///Цеха 
+    workshop: state.workplace.workshop,
+    ///Производственные участки 
+    area: state.workplace.productionArea,
+    ///Посты
+    posts: state.workplace.posts,
+    ///Рабочие места
+    workplace: state.workplace.workplace,
+    ///Изделия
+    product: state.workplace.product,
+    ///Узлы
+    knot: state.workplace.knot,
+    ///Детали
+    detail: state.workplace.detail,
+    ///Сварные швы
+    seam: state.workplace.seam,
+    
+    texprocwelding:state.texprocwelding.texprocwelding,
   };
 };
 const mapDispatchToProps = {
-  loadEquipment: Actions.Creators.loadEquipmentRequest,
-  addEquipment: Actions.Creators.addEquipmentRequest,
-  deleteEquipment: Actions.Creators.deleteEquipmentRequest,
-  editEquipment: Actions.Creators.editEquipmentRequest,
-  loadMasters: MasterActions.Creators.loadMastersRequest,
+  ///Цеха 
+  loadWorkshop: Actions.Creators.loadWorkshopRequest,
+  addWorkshop: Actions.Creators.addWorkshopRequest,
+  editWorkshop: Actions.Creators.editWorkshopRequest,
+  ///Производственные участки 
+  loadArea: Actions.Creators.loadAreaRequest,
+  addArea: Actions.Creators.addAreaRequest,
+  editArea: Actions.Creators.editAreaRequest,
+  ///Посты
+  loadPosts: Actions.Creators.loadPostsRequest,
+  addPosts: Actions.Creators.addPostsRequest,
+  editPosts: Actions.Creators.editPostsRequest,
+  ///Рабочие места
+  loadWorkplace: Actions.Creators.loadWorkplaceRequest,
+  addWorkplace: Actions.Creators.addWorkplaceRequest,
+  editWorkplace: Actions.Creators.editWorkplaceRequest,
+  ///Изделия
+  loadProduct: Actions.Creators.loadProductRequest,
+  addProduct:Actions.Creators.addProductRequest,
+  editProduct:Actions.Creators.editProductRequest,
+  ///Узлы
+  loadKnot: Actions.Creators.loadKnotRequest,
+  addKnot:Actions.Creators.addKnotRequest,
+  editKnot:Actions.Creators.editKnotRequest,
+  ///Детали
+  loadDetail: Actions.Creators.loadDetailRequest,
+  addDetail:Actions.Creators.addDetailRequest,
+  editDetail:Actions.Creators.editDetailRequest,
+  ///Сварные швы
+  loadSeam: Actions.Creators.loadSeamRequest,
+  addSeam:Actions.Creators.addSeamRequest,
+  editSeam:Actions.Creators.editSeamRequest,
+  ///Технологические процессы 
+  loadTexprocwelding: Actions.Creators.loadTexprocweldingRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkPlacePage);

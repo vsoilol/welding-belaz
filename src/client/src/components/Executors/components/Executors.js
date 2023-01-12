@@ -8,11 +8,15 @@ import Select from "components/shared/Select";
 import { Table } from "components/shared/Table";
 import { Formik } from "formik";
 import React, { useState } from "react";
+import TableCell from "@material-ui/core/TableCell";
 import styles from "../styles.module.css";
-
-import Calendars from "./Calendar"
-
-
+import TableRow from "@material-ui/core/TableRow";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import Paper from "@material-ui/core/Paper";
+import MaterialTable from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import Calendars from "./Calendar";
 
 const useStyles = makeStyles(() => ({
   rowStyle: {
@@ -52,307 +56,204 @@ export const ExecutorsTable = ({
   });
 
   const initialValues = {
-    refId:
-      type === "executor"
-        ? modalData?.executorId
-        : type === "master"
-        ? modalData?.masterId
-        : modalData?.techUserId ?? "",
-    name: modalData?.name ?? "",
-    surname: modalData?.surname ?? "",
-    patronymic: modalData?.patronymic ?? "",
-    photoName: modalData?.photoName ?? "",
-    email: modalData?.email ?? "",
-    position: modalData?.position ?? "",
-    stamp: modalData?.stamp ?? "",
-    badgeNumber: modalData?.badgeNumber ?? "",
-    badgeExpirationDate: modalData?.badgeExpirationDate ?? "",
+    rfidTag: modalData?.rfidTag ?? "",
+    firstName: modalData?.firstName ?? "",
+    lastName: modalData?.lastName ?? "",
+    middleName: modalData?.middleName ?? "",
+    workshopName: modalData?.workshopName ?? "",
+    productionAreaName: modalData?.productionAreaName ?? "",
+    workplaceNumber: modalData?.workplaceNumber ?? "",
+    weldingEquipment: modalData?.weldingEquipment ?? [
+      {
+        rfidTag: "",
+        name: "",
+        marking: "",
+        factoryNumber: "",
+        commissioningDate: "",
+        currentCondition: "",
+      },
+    ],
   };
 
   const requiredKeys = [
-    "refId",
-    "name",
-    "badgeNumber",
-    "badgeExpirationDate",
-    "surname",
-    "position",
-    "email",
-    "patronymic",
+    "rfidTag",
+    "firstName",
+    "lastName",
+    "middleName",
+    "workshopName",
+    "productionAreaName",
+    "workplaceNumber",
   ];
 
-
-  const mastersName = (rowData)=>{  
-    for (let index = 0; index < masters.length; index++) { 
-      for (let index2 = 0; index2 < masters[index].executors.length; index2++) {
-          let nameExecutors = masters[index].executors[index2].userData.surname; 
-          if(rowData==nameExecutors){
-            return masters[index].surname 
-          } 
-      }
-    }
-  }
+  const controllerColumns = [
+    {
+      title: "RFID-метка",
+      field: "rfidTag",
+    },
+    {
+      title: "Имя",
+      field: "firstName",
+    },
+    {
+      title: "Фамилия",
+      field: "middleName",
+    },
+    {
+      title: "Отчество",
+      field: "lastName",
+    },
+    {
+      title: "Цех",
+      field: "workshopName",
+    },
+    {
+      title: "Производственный участок",
+      field: "name",
+    },
+  ];
  
 
-  const executorColumns = [
-    {
-      title: "Фото",
-      field: "photoName",
-      render: (rowData) => (
-        <img
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-          }}
-          src={
-            `${process.env.REACT_APP_API_URI}/images/${rowData.photo}` ??
-            "https://www.pngfind.com/pngs/b/110-1102775_download-empty-profile-hd-png-download.png"
-          }
-          alt=""
-        />
-      ),
-    },
-    {
-      title: "ФИО",
-      field: "name",
-      render: (rowData) => (
-        <span>{`${rowData.surname} ${rowData.name} ${rowData.patronymic}`}</span>
-      ),
-    },
-    {
-      title: "Должность",
-      field: "position",
-    },
-    {
-      title: "№ Удостоверения",
-      field: "badgeNumber",
-    },
-    {
-      title: "RFID метка",
-      field: "id",
-    },
-    {
-      title: "Срок действия удостоверения",
-      field: "badgeExpirationDate",
-      render: (rowData) => (
-        <span>
-          {new Date(rowData?.badgeExpirationDate).toLocaleDateString(
-            "ru-RU",
-            dateOptions
-          )}
-        </span>
-      ),
-    },
-    {
-      title: "Область распространения квалификации",
-      field: "qualificationArea",
-      width: 400,
-    },
-    {
-      title: "Цех",
-      field: "id",
-      render: (rowData) => (
-        <span>Цех</span>
-      ),
-    },
-    {
-      title: "Производственный участок",
-      field: "id",
-      render: (rowData) => (
-        <span>Производственный участок</span>
-      ),
-    },  
-    {
-      title: "Закрепленное сварочное оборудование",
-      field: "id",
-      render: (rowData) => (
-        <span>Закрепленное сварочное оборудование</span>
-      ),
-    },
-    {
-      title: "Mастер", 
-      render: (rowData) => { 
-        return <p>{mastersName(rowData.surname)}</p>;
-      },
-    },
-    { title: "Клеймо", field: "stamp" }, 
-    {
-      field: "link",
-      title: "Отчет",
-      render: (rowData) => (
-        <div
-          onClick={() => {
-            setIsResultsModalOpen(true);
-            setActiveExecutor(rowData?.executorId);
-          }}
-        >
-          <SaveIcon />
-        </div>
-      ),
-      width: 54,
-    },
-  ];
+  const renderValue = (value) => {
+    if (value === 0 || value === "0" || value === null) {
+      return "-";
+    }
+    return value ?? "-";
+  };
 
-  const executorConrolerColumns = [
-    {
-      title: "Фото",
-      field: "photoName",
-      render: (rowData) => (
-        <img
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-          }}
-          src={
-            `${process.env.REACT_APP_API_URI}/images/${rowData.photo}` ??
-            "https://www.pngfind.com/pngs/b/110-1102775_download-empty-profile-hd-png-download.png"
-          }
-          alt=""
-        />
-      ),
-    },
-    {
-      title: "ФИО",
-      field: "name",
-      render: (rowData) => (
-        <span>{`${rowData.surname} ${rowData.name} ${rowData.patronymic}`}</span>
-      ),
-    },
-    {
-      title: "Должность",
-      field: "position",
-    },
-    {
-      title: "№ Удостоверения",
-      field: "badgeNumber",
-    },
-    {
-      title: "RFID метка",
-      field: "id",
-    },
-    {
-      title: "Срок действия удостоверения",
-      field: "badgeExpirationDate",
-      render: (rowData) => (
-        <span>
-          {new Date(rowData?.badgeExpirationDate).toLocaleDateString(
-            "ru-RU",
-            dateOptions
-          )}
-        </span>
-      ),
-    },
-    {
-      title: "Область распространения квалификации",
-      field: "qualificationArea",
-      width: 400,
-    },
-    {
-      title: "Цех",
-      field: "id",
-      render: (rowData) => (
-        <span>Цех</span>
-      ),
-    },
-    {
-      title: "Производственный участок",
-      field: "id",
-      render: (rowData) => (
-        <span>Производственный участок</span>
-      ),
-    },   
-    { title: "Клеймо", field: "stamp" }, 
-    {
-      field: "link",
-      title: "Отчет",
-      render: (rowData) => (
-        <div
-          onClick={() => {
-            setIsResultsModalOpen(true);
-            setActiveExecutor(rowData?.executorId);
-          }}
-        >
-          <SaveIcon />
-        </div>
-      ),
-      width: 54,
-    },
-  ];
-
+  const renderConditionValue = (value) => {
+    switch (value) {
+      case 1:
+        return "Выключено";
+      case 2:
+        return "Включено";
+      case 3:
+        return "В работе";
+      default:
+        return "Вынужденный простой";
+    }
+  };
 
   const extraUserColumns = [
     {
-      title: "Фото",
-      field: "photoName",
-      render: (rowData) => (
-        <img
-          style={{ width: 40, height: 40, borderRadius: "50%" }}
-          src={
-            `${process.env.REACT_APP_API_URI}/images/${rowData.photo}` ??
-            "https://www.pngfind.com/pngs/b/110-1102775_download-empty-profile-hd-png-download.png"
-          }
-          alt=""
-        />
-      ),
+      title: "RFID-метка",
+      field: "rfidTag",
     },
     {
-      title: "ФИО",
-      field: "name",
-      render: (rowData) => (
-        <span>{`${rowData.surname} ${rowData.name} ${rowData.patronymic}`}</span>
-      ),
+      title: "Имя",
+      field: "firstName",
     },
     {
-      title: "Должность",
-      field: "position",
+      title: "Фамилия",
+      field: "middleName",
     },
     {
-      title: "№ Удостоверения",
-      field: "badgeNumber",
+      title: "Отчество",
+      field: "lastName",
     },
-    {
-      title: "RFID метка",
-      field: "id",
-    },
-
-    /////Новые поля
     {
       title: "Цех",
-      field: "id",
-      render: (rowData) => (
-        <span>Цех</span>
-      ),
+      field: "workshopName",
     },
     {
       title: "Производственный участок",
-      field: "id",
-      render: (rowData) => (
-        <span>Производственный участок</span>
-      ),
-    },  
-    {
-      title: "Закрепленное сварочное оборудование",
-      field: "id",
-      render: (rowData) => (
-        <span>Закрепленное сварочное оборудование</span>
-      ),
+      field: "productionAreaName",
     },
-    /////!Новые поля
     {
-      title: "Срок действия удостоверения",
-      field: "badgeExpirationDate",
-      render: (rowData) => (
-        <span>
-          {new Date(rowData?.badgeExpirationDate).toLocaleDateString(
-            "ru-RU",
-            dateOptions
-          )}
-        </span>
-      ),
+      title: "Номер рабочего места",
+      field: "workplaceNumber",
+      render: (rowData) => {
+        return <p>{renderValue(rowData.workplaceNumber)}</p>;
+      },
     },
   ];
 
+  const renderRowChildren = (rowData) => { 
+    return (
+      rowData?.weldingEquipment && (
+        <TableContainer component={Paper}>
+          <MaterialTable aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  RFID-метка
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Наименование
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Маркировка
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Заводской номер
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Дата ввода в эксплуатацию
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Текущие состояние
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow key={rowData?.weldingEquipment?.id}>
+                <TableCell align="center">
+                  {rowData.weldingEquipment.rfidTag}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData.weldingEquipment.name}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData.weldingEquipment.marking}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData.weldingEquipment.factoryNumber}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData.weldingEquipment.commissioningDate}
+                </TableCell>
+                <TableCell align="center">
+                  {renderConditionValue(
+                    rowData.weldingEquipment.currentCondition
+                  )}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </MaterialTable>
+        </TableContainer>
+      )
+    );
+  };
+ 
   return (
     <>
       <div className={styles.tableWrapper}>
@@ -380,12 +281,13 @@ export const ExecutorsTable = ({
               : []
           }
           deleteAction={userRole === "admin" ? deleteExecutor : null}
+          renderRowChildren={renderRowChildren}
           rowStyle={classes.rowStyle}
-          columns={type === "executor" ? executorColumns : extraUserColumns}
+          columns={type === "executor" ? extraUserColumns : controllerColumns}
           data={executors}
         />
       </div>
-      <Calendars></Calendars>
+      {/* <Calendars></Calendars> */}
       <ResultsModal
         type={"EXECUTOR"}
         activeId={activeExecutor}
@@ -592,10 +494,6 @@ export const ExecutorsTable = ({
           )}
         </Formik>
       </ModalWindow>
-
-
-      
-
     </>
   );
 };

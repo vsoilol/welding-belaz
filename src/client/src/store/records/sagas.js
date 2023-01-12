@@ -19,7 +19,7 @@ const {
 
 function* loadRecords() {
   try {
-    const { data } = yield call(api.get, `/records`);
+    const { data } = yield call(api.get, `/records`); 
     yield put(loadRecordsSuccess(data));
   } catch (error) {
     yield put(loadRecordsFailure(error));

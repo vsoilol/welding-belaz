@@ -23,6 +23,16 @@ const loadTasksSuccess = (state = INITIAL_STATE, { tasks }) => {
   };
 };
 
+
+const loadInfoSuccess = (state = INITIAL_STATE, { info }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    info,
+  };
+};
+
+
 const editTaskSuccess = (state = INITIAL_STATE, { task }) => {
   return {
     ...state,
@@ -55,10 +65,21 @@ const failure = (state = INITIAL_STATE, { error }) => {
   };
 };
 
+///Сварные швы
+const loadSeamSuccess = (state = INITIAL_STATE, { seam }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    seam,
+  };
+};
+
 export const HANDLERS = {
   [Types.LOAD_TASKS_REQUEST]: request,
   [Types.LOAD_TASKS_SUCCESS]: loadTasksSuccess,
   [Types.LOAD_TASKS_FAILURE]: failure,
+
+
 
   [Types.EDIT_TASK_REQUEST]: request,
   [Types.EDIT_TASK_SUCCESS]: editTaskSuccess,
@@ -71,6 +92,17 @@ export const HANDLERS = {
   [Types.ADD_TASK_REQUEST]: request,
   [Types.ADD_TASK_SUCCESS]: addTaskSuccess,
   [Types.ADD_TASK_FAILURE]: failure,
+
+  
+  [Types.LOAD_INFO_REQUEST]: request,
+  [Types.LOAD_INFO_SUCCESS]: loadInfoSuccess,
+  [Types.LOAD_INFO_FAILURE]: failure,
+
+
+  ///Сварные швы
+  [Types.LOAD_SEAM_REQUEST]: request,
+  [Types.LOAD_SEAM_SUCCESS]: loadSeamSuccess,
+  [Types.LOAD_SEAM_FAILURE]: failure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

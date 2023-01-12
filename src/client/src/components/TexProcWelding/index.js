@@ -19,9 +19,9 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
- 
 
-  
+
+
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -34,38 +34,53 @@ const dateOptions = {
 };
 
 export const TexProcWelding = ({
-  loadEquipment,
   loadMasters,
-  equipment,
-  addEquipment,
-  deleteEquipment,
-  editEquipment,
+  loadTexprocwelding,
+  loadInstructions,
+  loadSeam,
+  addInst,
+  editInst,
+
+
+  equipment, 
+  deleteEquipment, 
   isRequesting,
   masters,
   userRole,
+
+
+  texprocwelding,
+  instructions,
+
+  seam,
+
+
+
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenNumb, setIsModalOpenNumb] = useState(0);
+
   const [modalData, setModalData] = useState(null);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
   const [activeEquipment, setActiveEquipment] = useState("");
   const [open, setOpen] = useState(false);
 
+  const [valuetSeam, setValuetSeam] = useState(0); 
+
   const initialValues = {
-    machineId: modalData?.machineId ?? "",
+
+    id:modalData?.weldPassages.id??"",
     name: modalData?.name ?? "",
-    serialNum: modalData?.serialNum ?? "",
-    photoName: modalData?.photoName ?? "",
-    nextInspectionDate: modalData?.nextInspectionDate ?? "",
-    weldingProcess: modalData?.weldingProcess ?? "",
-    weldingMethod: modalData?.weldingMethod ?? "",
-    noLoadVoltage: modalData?.noLoadVoltage ?? "",
-    minCurrentValue: modalData?.minCurrentValue ?? "",
-    maxCurrentValue: modalData?.maxCurrentValue ?? "",
-    minVoltageValue: modalData?.minVoltageValue ?? "",
-    maxVoltageValue: modalData?.maxVoltageValue ?? "",
-    loadPercentage: modalData?.loadPercentage ?? "",
-    masterId: modalData?.master?.masterId ?? "",
-  };
+    number: modalData?.number ?? "",
+    weldPassagesName: modalData?.weldPassages[0].name ?? "",
+    weldingCurrentMin:modalData?.weldPassages[0].weldingCurrentMin ?? "",
+    weldingCurrentMax:modalData?.weldPassages[0].weldingCurrentMax ?? "",
+    arcVoltageMin:modalData?.weldPassages[0].arcVoltageMin ?? "",
+    arcVoltageMax:modalData?.weldPassages[0].arcVoltageMax ?? "",
+    preheatingTemperatureMin:modalData?.weldPassages[0].preheatingTemperatureMin ?? "",
+    preheatingTemperatureMax:modalData?.weldPassages[0].preheatingTemperatureMax ?? "",
+    weldPassagesId:modalData?.weldPassages[0].id ?? "",
+  }; 
 
   const formattedMasters = masters?.map((item) => {
     return {
@@ -75,125 +90,155 @@ export const TexProcWelding = ({
   });
 
   useEffect(() => {
-    loadEquipment();
-    loadMasters();
-  }, [loadEquipment, loadMasters]);
+    loadTexprocwelding();
+    loadInstructions();
+    loadSeam();
+  }, [
+    loadMasters,
+    loadTexprocwelding,
+    loadInstructions,
+    loadSeam
+  ]);
 
+
+
+
+  ////////////////////////////////////////////////////////////////////
+  const columns = [
+    {
+      title: "Наименование", field: "name",
+    },
+    {
+      title: "Номер технологического процесса", field: "number",
+    },
+    {
+      title: "Ссылка на PDF-файл ", field: "pdmSystemFileLink",
+    },
+    {
+      title: "Изделие", field: "technologicalInstructions[0].seam.product.name",
+    },
+    {
+      title: "Сборочные узлы",
+      render: (rowData) => (
+        <span>Сборочный узел {rowData.technologicalInstructions[0].seam.product.number}</span>
+      ),
+    },
+    {
+      title: "Детали", field: "technologicalInstructions[0].seam.product.name",
+    },
+    {
+      title: "Швы", field: "technologicalInstructions[0].seam.product.productType",
+    },
+    {
+      title: "Диапазоны допустимых значений контролируемых параметров (сварочный ток, напряжение на дуге)",
+      render: (rowData) => (
+        <span>{rowData.technologicalInstructions[0].weldPassages[0].arcVoltageMin} - {rowData.technologicalInstructions[0].weldPassages[0].arcVoltageMax}</span>
+      ),
+    },
+    {
+      title: "Размеры шва", field: "technologicalInstructions[0].seam.product.productType",
+    },
+    {
+      title: "Количество проходов", field: "technologicalInstructions[0].seam.product.productType",
+    },
+  ]
+  const colinstructions = [
+    {
+      title: "Наименование", field: "name",
+    },
+    {
+      title: "Номер технологического процесса", field: "number",
+    },
+    {
+      title: "Шов",
+      render: (rowData) => {
+        return (
+          <p>
+            Cварочный шов {rowData.seam.number}
+          </p>
+        );
+      }
+    },
+    {
+      title: "Наименование прохода", 
+      field: "weldPassages[0].name",   
+    },
+    {
+      title: "Время сварки ",
+      render: (rowData) => {
+        return (
+          <p>
+            {`${rowData.weldPassages[0].weldingCurrentMin} - ${rowData.weldPassages[0].weldingCurrentMax}`}
+          </p>
+        );
+      },
+    },
+    {
+      title: "Напряжение дуги  ",
+      render: (rowData) => {
+        return (
+          <p>
+            {`${rowData.weldPassages[0].arcVoltageMin} - ${rowData.weldPassages[0].arcVoltageMax}`}
+          </p>
+        );
+      },
+    },
+    {
+      title: "Температура предварительного нагрева ",
+      render: (rowData) => {
+        return (
+          <p>
+            {`${rowData.weldPassages[0].preheatingTemperatureMin} - ${rowData.weldPassages[0].preheatingTemperatureMax}`}
+          </p>
+        );
+      },
+    }
+  ]
  
+  //select Сварочный шов  
+  const SeamOptions = seam?.map((item) => {
+    return {
+      value: item.id,
+      label: `Cварочный шов ${item.number}`,
+    };
+  });
+
+
+  const requiredKeys = ["name", "nextInspectionDate"];
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
 
 
-
-   ////////////////////////////////////////////////////////////////////
-    const columns = [
-      {
-        title: "Наименование", 
-        render: (rowData) => (
-          <span>{rowData.name}</span>
-        ),
-      },
-      {
-        title: "Номер технологического процесса", 
-        render: (rowData) => (
-          <span>{rowData.numb}</span>
-        ),
-      },
-      {
-        title: "Ссылка на PDF-файл ", 
-        render: (rowData) => (
-          <span>{rowData.ref}</span>
-        ),
-      },
-      {
-        title: "Изделие", 
-        render: (rowData) => (
-          <span>{rowData.goods}</span>
-        ),
-      },
-      {
-        title: "Сборочные узлы", 
-        render: (rowData) => (
-          <span>{rowData.node}</span>
-        ),
-      },
-      {
-        title: "Детали", 
-        render: (rowData) => (
-          <span>{rowData.details}</span>
-        ),
-      },
-      {
-        title: "Швы", 
-        render: (rowData) => (
-          <span>{rowData.seam}</span>
-        ),
-      },
-      {
-        title: "Диапазоны допустимых значений контролируемых параметров (сварочный ток, напряжение на дуге)", 
-        render: (rowData) => (
-          <span>{rowData.diapazone}</span>
-        ),
-      },
-      {
-        title: "Размеры шва", 
-        render: (rowData) => (
-          <span>{rowData.size}</span>
-        ),
-      },
-      {
-        title: "Количество проходов", 
-        render: (rowData) => (
-          <span>{rowData.count}</span>
-        ),
-      },
-    ]
-  
-
-    const columns_data= [
-       
-    ]
-
-    for (let index = 0; index < 17; index++) {
-        
-      columns_data.push(
-        {
-          name:`Процесс сборки ${index+1}`,
-          numb:` 34${index}-38-01${index}-86`,
-          ref:`http://localhost:3000/tex-proc-welding/34${index}-38-01${index}-86`,
-          goods:`Изделие${index+1}`,
-          node:`Узел ${index+1}`,
-          details:`Деталь ${index+1}`,
-          seam:`Шов ${index+1}`,
-          diapazone:`7${index+1} - 8${index+2}`,
-          size:`12${index+3}`,
-          count:`${index+2}`
-        }
-      )
+  const [value_panel, setValue] = useState(0);
+  const ChangePanels = (event, newValue) => {
+    setValue(newValue);
+  };
+  const TabPanel = (props_panel) => {
+    const { children, value, indPanel } = props_panel;
+    return (
+      <div hidden={value !== indPanel}  >
+        {children}
+      </div>
+    );
+  };  
+ 
+    //Запрос на редактирование или добавление
+    function SendData(variables) { 
+      variables["seamId"] = valuetSeam;
+      variables["technologicalProcessId"] = texprocwelding[0].id;
       
-  }
-  
-
-    const requiredKeys = ["name", "nextInspectionDate"];
-
-    const handleOpen = () => {
-      setOpen(true);
-    };
- 
-  
-  
-    const [value_panel, setValue] = useState(0);
-    const ChangePanels = (event, newValue) => { 
-      setValue(newValue); 
-    }; 
-    const TabPanel = (props_panel) => { 
-      const { children, value, indPanel} = props_panel; 
-      return (
-        <div  hidden={value !== indPanel}  >
-          {children}
-        </div>
-      );
-    };
-
+      if (isModalOpenNumb===0) {  
+         addInst(variables)  
+      }
+      if (isModalOpenNumb===1) {  
+         variables["id"] = modalData.id;
+         variables["weldPassagesId"]=modalData?.weldPassages[0].id
+         editInst(variables) 
+      }   
+    }
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -204,7 +249,7 @@ export const TexProcWelding = ({
       <ToolTip
         title="Технологические процессы сборки и сварки"
         toolTipText="Здесь Вы можете просмотреть технологические процессы сборки и сварки"
-        src={TechProcWeldImage} 
+        src={TechProcWeldImage}
       />
       {open ? (
         <Modal
@@ -212,57 +257,109 @@ export const TexProcWelding = ({
           setOpen={setOpen}
           children={<EquipmentMap equipment={equipment} />}
         />
-      ) : null} 
-  
+      ) : null}
 
+      <Tabs
+        value={value_panel}
+        onChange={ChangePanels}
+        indicatorColor="primary"
+        textColor="primary"
+      >
+        <Tab label="Технологические процессы" />
+        <Tab label="Технологические инструкции" />
+      </Tabs>
 
       <div className={styles.tableWrapper}>
-        
+
+
+
+
         {/*Технологические процессы сборки и сварки */}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px", }}
           className="TableTech"
         >
-            <Table 
-                title="Технологические процессы сборки и сварки"
-                columns={columns}
-                value={0}
-                data={columns_data}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить ",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать ",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-              deleteAction={userRole === "admin" ? deleteEquipment : null}
-            /> 
-        </TabPanel>  
+          <Table
+            title="Технологические процессы сборки и сварки"
+            columns={columns}
+            value={0}
+            data={texprocwelding} 
+            isLoading={isRequesting}
+            actions={
+              userRole === "admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить ",
+                    isFreeAction: true,
+                    onClick: () => {
+                      setIsModalOpen(true);
+                      
+                    },
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать ",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true); 
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
+
+        {/*Технологические инструкции*/}
+        <TabPanel
+          value={value_panel}
+          indPanel={1}
+          style={{ minWidth: "800px", }}
+          className="TableTech"
+        >
+          <Table
+            title="Технологические инструкции"
+            columns={colinstructions}
+            value={0}
+            data={instructions} 
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить ",
+                    isFreeAction: true,
+                    onClick: () => {setIsModalOpen(true);setIsModalOpenNumb(0)},
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать ",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalOpenNumb(1)
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
       </div>
-      
 
 
 
 
 
 
-      
+
+
 
       <ResultsModal
         type={"EQUIPMENT"}
@@ -287,10 +384,8 @@ export const TexProcWelding = ({
           initialValues={initialValues}
           enableReinitialize
           onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            modalData
-              ? editEquipment({ ...variables })
-              : addEquipment({ ...dataToSend });
+            const { id, ...dataToSend } = variables;  
+            SendData(variables,id) 
             setIsModalOpen(false);
             setModalData(null);
           }}
@@ -307,57 +402,130 @@ export const TexProcWelding = ({
                 <Input
                   onChange={(e) => {
                     handleChange(e);
-                  }} 
-                  style={{width:380, height: 40, padding: "0 20px 0 30px" }}
+                  }}
+                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                   value={values.name}
                   name="name"
                   placeholder="Наименовние"
                   onBlur={handleBlur}
-                /> 
-              </div> 
-              <div className={styles.row}> 
+                />
+              </div>
+              <div className={styles.row}>
                 <Input
                   onChange={(e) => {
                     handleChange(e);
-                  }} 
-                  style={{ width:380, height: 40, padding: "0 20px 0 30px" }}
-                  value={values.serialNum}
-                  name="serialNum"
-                  placeholder="Номер ( цеха, участка, поста, рабочего места) "
+                  }}
+                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                  value={values.number}
+                  name="number"
+                  placeholder="Номер технологического процесса"
                   onBlur={handleBlur}
                 />
-              </div> 
+              </div>
               <div className={styles.row}>
                 <Select
-                  name="masterId"
-                  value={values.masterId}
+                  name="valuetTechProc"
                   width="380px"
-                  placeholder="Мастер"
-                  onChange={(e) => {
-                    setFieldValue("masterId", e.value);
-                  }}
-                  options={formattedMasters}
+                  value={valuetSeam}
+                  placeholder="Сварочный шов"
+                  onChange={(event) => setValuetSeam(event.value)}
+                  options={SeamOptions}
                 />
-              </div> 
+              </div>
+              <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                  value={values.weldPassagesName}
+                  name="weldPassagesName"
+                  placeholder="Наименование прохода"
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px" }}
+                  value={values.weldingCurrentMin}
+                  name="weldingCurrentMin"
+                  placeholder="Время сварки min"
+                  onBlur={handleBlur}
+                />
+
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px" }}
+                  value={values.weldingCurrentMax}
+                  name="weldingCurrentMax"
+                  placeholder="Время сварки max"
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px" }}
+                  value={values.arcVoltageMin}
+                  name="arcVoltageMin"
+                  placeholder="Напряжение дуги min"
+                  onBlur={handleBlur}
+                />
+
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px" }}
+                  value={values.arcVoltageMax}
+                  name="arcVoltageMax"
+                  placeholder="Напряжение дуги max"
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px" }}
+                  value={values.preheatingTemperatureMin}
+                  name="preheatingTemperatureMin"
+                  placeholder="Температура предварительного нагрева min"
+                  onBlur={handleBlur}
+                />
+
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px" }}
+                  value={values.preheatingTemperatureMax}
+                  name="preheatingTemperatureMax"
+                  placeholder="Температура предварительного нагрева max"
+                  onBlur={handleBlur}
+                />
+              </div>
               {!modalData && (
                 <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{
-                      width: 380,
-                      height: 40,
-                    }}
-                    value={values.machineId}
-                    name={`machineId`}
-                    placeholder="RFID метка"
-                  />
+
                 </div>
               )}
               <div className={styles.row}>
                 <Button
-                  disabled={requiredKeys.some((key) => !values[key])}
                   type="submit"
                 >
                   {modalData ? "Сохранить" : "Создать"}

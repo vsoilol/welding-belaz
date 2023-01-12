@@ -18,10 +18,14 @@ const mapStateToProps = (state) => {
       state?.instructions?.isRequesting ||
       state?.techs?.isRequesting,
     userRole: state.auth.user.role,
+    info:state.tasks.info, 
+    ///Сварные швы
+    seam: state.workplace.seam,
   };
 };
 const mapDispatchToProps = {
   loadTasks: Actions.Creators.loadTasksRequest,
+  loadInfo: Actions.Creators.loadInfoRequest,
   addTask: Actions.Creators.addTaskRequest,
   deleteTask: Actions.Creators.deleteTaskRequest,
   editTask: Actions.Creators.editTaskRequest,
@@ -30,6 +34,8 @@ const mapDispatchToProps = {
   loadTechs: ExecutorsActions.Creators.loadTechsRequest,
   loadInstructions: InstructionsActions.Creators.loadInstructionsRequest,
   loadEquipment: EquipmentActions.Creators.loadEquipmentRequest,
+  ///Сварные швы
+  loadSeam: Actions.Creators.loadSeamRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);

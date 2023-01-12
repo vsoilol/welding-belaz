@@ -23,14 +23,19 @@ const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
   };
 };
 
+
 const editEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
+  console.log(equipment)
+  console.log(state.equipment[0])
+
+  window.location.reload()
   return {
     ...state,
     isRequesting: false,
     equipment: state.equipment?.map((item) =>
       item.machineId === equipment.machineId ? equipment : item
-    ),
-  };
+    )
+  } 
 };
 
 const deleteEquipmentSuccess = (state = INITIAL_STATE, { machineId }) => {
@@ -42,6 +47,7 @@ const deleteEquipmentSuccess = (state = INITIAL_STATE, { machineId }) => {
 };
 
 const addEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
+  window.location.reload()
   return {
     ...state,
     isRequesting: false,
@@ -56,6 +62,16 @@ const failure = (state = INITIAL_STATE, { error }) => {
     error,
   };
 };
+
+///Посты
+const loadPostsSuccess = (state = INITIAL_STATE, { posts }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    posts,
+  };
+};
+
 
 export const HANDLERS = {
   [Types.LOAD_EQUIPMENT_REQUEST]: request,
@@ -73,6 +89,14 @@ export const HANDLERS = {
   [Types.ADD_EQUIPMENT_REQUEST]: request,
   [Types.ADD_EQUIPMENT_SUCCESS]: addEquipmentSuccess,
   [Types.ADD_EQUIPMENT_FAILURE]: failure,
+
+
+  ///Посты
+  [Types.LOAD_POSTS_REQUEST]: request,
+  [Types.LOAD_POSTS_SUCCESS]: loadPostsSuccess,
+  [Types.LOAD_POSTS_FAILURE]: failure,
+
+
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

@@ -35,7 +35,9 @@ const dateOptions = {
 
 export const Equipment = ({
   loadEquipment,
-  loadMasters,
+  loadMasters, 
+  loadPosts,
+
   equipment,
   addEquipment,
   deleteEquipment,
@@ -43,28 +45,41 @@ export const Equipment = ({
   isRequesting,
   masters,
   userRole,
+
+  posts
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
   const [activeEquipment, setActiveEquipment] = useState("");
   const [open, setOpen] = useState(false);
+  const [valuetPosts, setValuetPosts] = useState("id"); 
+  const [isModalNumb, setIsModalNumb] = useState(0);
+
+  const [isEquipmentNumb, setEquipmentNumb] = useState(0);
+
 
   const initialValues = {
-    machineId: modalData?.machineId ?? "",
-    name: modalData?.name ?? "",
-    serialNum: modalData?.serialNum ?? "",
-    photoName: modalData?.photoName ?? "",
-    nextInspectionDate: modalData?.nextInspectionDate ?? "",
-    weldingProcess: modalData?.weldingProcess ?? "",
-    weldingMethod: modalData?.weldingMethod ?? "",
-    noLoadVoltage: modalData?.noLoadVoltage ?? "",
-    minCurrentValue: modalData?.minCurrentValue ?? "",
-    maxCurrentValue: modalData?.maxCurrentValue ?? "",
-    minVoltageValue: modalData?.minVoltageValue ?? "",
-    maxVoltageValue: modalData?.maxVoltageValue ?? "",
-    loadPercentage: modalData?.loadPercentage ?? "",
-    masterId: modalData?.master?.masterId ?? "",
+     rfidTag: modalData?.rfidTag?? "", 
+     name: modalData?.name?? "", 
+     marking:  modalData?.marking?? "", 
+     factoryNumber: modalData?.factoryNumber?? "", 
+     commissioningDate:  modalData?.commissioningDate?? "", 
+     height:  modalData?.height?? "", 
+     width:  modalData?.width?? "", 
+     lenght:  modalData?.lenght?? "", 
+     groupNumber:  modalData?.groupNumber?? "", 
+     manufacturerName:  modalData?.manufacturerName?? "", 
+     nextAttestationDate:  modalData?.nextAttestationDate?? "", 
+     weldingProcess:  modalData?.weldingProcess?? "", 
+     idleVoltage: modalData?.idleVoltage?? "", 
+     weldingCurrentMin:  modalData?.weldingCurrentMin?? "", 
+     weldingCurrentMax:  modalData?.weldingCurrentMax?? "", 
+     arcVoltageMin:  modalData?.arcVoltageMin?? "", 
+     arcVoltageMax:  modalData?.arcVoltageMax?? "", 
+     postId:  valuetPosts?? "", 
+ 
+
   };
 
   const formattedMasters = masters?.map((item) => {
@@ -77,190 +92,49 @@ export const Equipment = ({
   useEffect(() => {
     loadEquipment();
     loadMasters();
-  }, [loadEquipment, loadMasters]);
+    loadPosts();
+  }, [loadEquipment, loadMasters,loadPosts]);
 
+  // {
+  //   title: "Ф.И.О ответственного",
+  //   render: (rowData) => {
+  //     return (
+  //       <p>{`
+  //       ${rowData.responsiblePerson.middleName} 
+  //       ${rowData.responsiblePerson.firstName} 
+  //       ${rowData.responsiblePerson.lastName}
+  //         `}
+  //       </p>
+  //     );
+  //   },
 
+  // },
 
   const columns = [
     { title: "Наименование", field: "name" },
-    {
-      title: "Фото",
-      field: "photoName",
-      render: (rowData) => (
-        <img
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-          }}
-          src={
-            `${process.env.REACT_APP_API_URI}/images/${rowData.photo}` ??
-            "https://semantic-ui.com/images/wireframe/white-image.png"
-          }
-          alt=""
-        />
-      ),
-    },
-    { title: "Маркировка", field: "serialNum" },
-    { title: "RFID метка", field: "machineId" },
-    {
-      title: "Процесс сварки",
-      field: "weldingProcess",
-      render: (rowData) => <p>{rowData.weldingProcess}</p>,
-    },
-    {
-      title: "Способ сварки",
-      field: "weldingMethod",
-      render: (rowData) => <p>{rowData.weldingMethod}</p>,
-    },
-    {
-      title: "Дата очередной аттестации (ППР)",
-      field: "nextInspectionDate",
-      type: "date",
-      render: (rowData) => (
-        <span>
-          {new Date(rowData?.nextInspectionDate).toLocaleDateString(
-            "ru-RU",
-            dateOptions
-          )}
-        </span>
-      ),
-    },
-    {
-      title: "Закреплено",
-      field: "masterId",
-      render: (rowData) => {
-        const master = masters.find(
-          (item) => item.masterId === rowData?.master?.masterId
-        );
-        return (
-          <p>
-            {master?.surname} {master?.name} {master?.patronymic}
-          </p>
-        );
-      },
-    },
-    {
-      title: "Серийный (инвентарный) номер",
-      field: "serialNum",
-      render: (rowData) => {
-        return (
-          <p>{rowData.serialNum}</p>
-        );
-      },
-
-    },
-
-    /////Новые поля
-    {
-      title: "Заводской (инвентарный) номер",
-      render: (rowData) => {
-        return (
-          <p>"заводской (инвентарный) номер"</p>
-        );
-      },
-
-    },
-    {
-      title: "Дата ввода в эксплуатацию",
-      render: (rowData) => {
-        return (
-          <p>"дата ввода в эксплуатацию"</p>
-        );
-      },
-
-    },
-    {
-      title: "Габариты",
-      render: (rowData) => {
-        return (
-          <p>"габариты"</p>
-        );
-      },
-
-    },
-    {
-      title: "Номер группы оборудования",
-      render: (rowData) => {
-        return (
-          <p>"номер группы оборудования"</p>
-        );
-      },
-    },
-    {
-      title: "Наименование изготовителя",
-      render: (rowData) => {
-        return (
-          <p>"наименование изготовителя"</p>
-        );
-      },
-    },
-    {
-      title: "Дата очередной аттестации",
-      render: (rowData) => {
-        return (
-          <p>"дата очередной аттестации"</p>
-        );
-      },
-
-    },
-    {
-      title: "Ф.И.О ответственного",
-      render: (rowData) => {
-        return (
-          <p>"Ф.И.О ответственного"</p>
-        );
-      },
-
-    },
-    {
-      title: "Процесс (способ) сварки",
-      render: (rowData) => {
-        return (
-          <p>"процесс (способ) сварки"</p>
-        );
-      },
-    },
-    {
-      title: "Напряжение холостого хода",
-      render: (rowData) => {
-        return (
-          <p>"напряжение холостого хода"</p>
-        );
-      },
-    },
+    { title: "Маркировка", field: "marking" },
+    { title: "RFID метка", field: "rfidTag" },
+    { title: "Заводской  (инвентарный) номер", field: "factoryNumber" },
+    { title: "Дата ввода в эксплуатацию", field: "commissioningDate" },
+    { title: "Габариты", field: "width" },
+    { title: "Номер группы оборудования", field: "groupNumber" },
+    { title: "Наименование изготовителя", field: "manufacturerName" },
+    { title: "Дата очередной аттестации", field: "nextAttestationDate" },
+    
+    { title: "Процесс (способ) сварки", field: "weldingProcess" },
+    { title: "Напряжение холостого хода", field: "idleVoltage" },
     {
       title: "Допустимые диапазоны сварочного тока и напряжения на дуге (min и max)",
       render: (rowData) => {
         return (
-          <p>" (min и max)"</p>
+          <p>
+            {`${rowData.arcVoltageMin} -  ${rowData.arcVoltageMax}`}
+          </p>
         );
       },
     },
-    {
-      title: "Продолжительность включения (нагрузки)",
-      render: (rowData) => {
-        return (
-          <p>" продолжительность включения (нагрузки)"</p>
-        );
-      },
-    },
-    {
-      title: "Номер поста",
-      render: (rowData) => {
-        return (
-          <p>"номер поста"</p>
-        );
-      },
-    },
-    {
-      title: "На котором находится оборудование (при наличии))",
-      render: (rowData) => {
-        return (
-          <p>"на котором находится оборудование (при наличии))"</p>
-        );
-      },
-    }, 
+    { title: "Продолжительность включения (нагрузки)", field: "activationDuration" },
+    { title: "Номер поста", field: "post.number" },
     {
       field: "link",
       title: "Отчет",
@@ -281,27 +155,15 @@ export const Equipment = ({
   const columns2 = [
     {
       title: "Время изменения состояния",
-      render: (rowData) => {
-        return (
-          <p>"время изменения состояния"</p>
-        );
-      },
+      field: "changeConditionTime"
     },
     {
       title: "Текущее состояние",
-      render: (rowData) => {
-        return (
-          <p>"текущее состояние"</p>
-        );
-      },
+      field: "weldingEquipment.currentCondition"
     },
     {
       title: "Причина простоя",
-      render: (rowData) => {
-        return (
-          <p>" причину простоя"</p>
-        );
-      },
+      field: "downtimeReason"
     },
   ]
 
@@ -417,7 +279,7 @@ export const Equipment = ({
   };
 
 
-  
+
 
   const [value_panel, setValue] = useState(0);
   const ChangePanels = (event, newValue) => {
@@ -431,7 +293,26 @@ export const Equipment = ({
       </div>
     );
   };
-
+  //select Посты   
+  const optPosts = posts?.map((item) => { 
+    return {
+      value: item.id,
+      label: `Пост ${item.number}`,
+    };
+  });
+  function SendData(variables) {  
+    variables["id"]=isEquipmentNumb 
+    variables["postId"]=valuetPosts 
+    //Добавить Оборудование 
+    if (isModalNumb == 0) {
+      addEquipment(variables)
+    }
+    //Редактировать Оборудование
+    if (isModalNumb == 1) {
+      editEquipment(variables)
+    }
+ 
+  }
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -440,11 +321,6 @@ export const Equipment = ({
         title="Оборудование"
         toolTipText="Здесь Вы можете просмотреть оборудование, его технические характеристики, отчет о работе"
         src={equipmentImage}
-        button={
-          <button type="button" className={styles.button} onClick={handleOpen}>
-            Оборудование на карте
-          </button>
-        }
       />
       {open ? (
         <Modal
@@ -468,75 +344,78 @@ export const Equipment = ({
 
       <div className={styles.tableWrapper}>
         {/*Сварочное оборудование*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px", }}
         >
-             <Table
-                title="Сварочное оборудование "
-                columns={columns}
-                data={equipment}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить оборудование",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать оборудование",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                }
-                renderRowChildren={renderRowChildren}
-                deleteAction={userRole === "admin" ? deleteEquipment : null}
-              />
-        </TabPanel> 
+          <Table
+            title="Сварочное оборудование "
+            columns={columns}
+            data={equipment[0]}
+            isLoading={isRequesting}
+            actions={
+              userRole === "Admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить оборудование",
+                    isFreeAction: true,
+                    onClick: () => { setIsModalNumb(0);setIsModalOpen(true)},
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать оборудование",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setIsModalNumb(1);
+                      setEquipmentNumb(rowData.id)
+
+                    },
+                  },
+                ]
+                : []
+            }
+            renderRowChildren={renderRowChildren}
+            deleteAction={userRole === "admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
         {/*Простои оборудования*/}
-        <TabPanel 
+        <TabPanel
           value={value_panel}
           indPanel={1}
-          style={{  minWidth: "800px", }}
+          style={{ minWidth: "800px", }}
         >
-             <Table
-                title="Простои оборудования "
-                columns={columns2}
-                data={equipment}
-                isLoading={isRequesting}
-                actions={
-                  userRole === "admin"
-                    ? [
-                      {
-                        icon: "add",
-                        tooltip: "Добавить оборудование",
-                        isFreeAction: true,
-                        onClick: () => setIsModalOpen(true),
-                      },
-                      {
-                        icon: "edit",
-                        tooltip: "Редактировать оборудование",
-                        onClick: (event, rowData) => {
-                          setModalData(rowData);
-                          setIsModalOpen(true);
-                        },
-                      },
-                    ]
-                    : []
-                } 
-                deleteAction={userRole === "admin" ? deleteEquipment : null}
-              />
-        </TabPanel> 
-        
+          <Table
+            title="Простои оборудования "
+            columns={columns2}
+            data={equipment[1]}
+            isLoading={isRequesting}
+            actions={
+              userRole === "admin"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Добавить оборудование",
+                    isFreeAction: true,
+                    onClick: () => setIsModalOpen(true),
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать оборудование",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                    },
+                  },
+                ]
+                : []
+            }
+            deleteAction={userRole === "admin" ? deleteEquipment : null}
+          />
+        </TabPanel>
+
       </div>
       <ResultsModal
         type={"EQUIPMENT"}
@@ -559,10 +438,8 @@ export const Equipment = ({
           initialValues={initialValues}
           enableReinitialize
           onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            modalData
-              ? editEquipment({ ...variables })
-              : addEquipment({ ...dataToSend });
+            const { id, ...dataToSend } = variables; 
+            SendData(variables)
             setIsModalOpen(false);
             setModalData(null);
           }}
@@ -576,6 +453,18 @@ export const Equipment = ({
           }) => (
             <form onSubmit={handleSubmit}>
               <div className={styles.row}>
+                <Select
+                  name="postId"
+                  value={valuetPosts}
+                  width="380px"
+                  placeholder="Номер поста"
+                  onChange={(event) => setValuetPosts(event.value)}
+                  options={optPosts}
+                />
+                
+                
+              </div>
+              <div className={styles.row}>
                 <Input
                   onChange={(e) => {
                     handleChange(e);
@@ -587,89 +476,20 @@ export const Equipment = ({
                   placeholder="Наименовние"
                   onBlur={handleBlur}
                 />
+                 
                 <Input
                   onChange={(e) => {
                     handleChange(e);
                   }}
                   width="200"
                   style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.serialNum}
-                  name="serialNum"
+                  value={values.marking}
+                  name="marking"
                   placeholder="Маркировка"
                   onBlur={handleBlur}
                 />
               </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                  value={values.photoName}
-                  name="photoName"
-                  placeholder="Фото"
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                  value={values.nextInspectionDate}
-                  name="nextInspectionDate"
-                  placeholder="Дата очередной аттестации (ППР)»"
-                  type="text"
-                  onFocus={(e) => {
-                    e.currentTarget.type = "date";
-                  }}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div className={styles.row}>
-                <Select
-                  name="masterId"
-                  value={values.masterId}
-                  width="380px"
-                  placeholder="Мастер"
-                  onChange={(e) => {
-                    setFieldValue("masterId", e.value);
-                  }}
-                  options={formattedMasters}
-                />
-              </div>
-              <p className={styles.text}>Режим работы</p>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{
-                    width: 180,
-                    height: 40,
-                    paddingLeft: 20,
-                  }}
-                  value={values.weldingProcess}
-                  name={`weldingProcess`}
-                  placeholder="Процесс сварки"
-                />
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{
-                    width: 180,
-                    height: 40,
-                    paddingLeft: 20,
-                  }}
-                  value={values.weldingMethod}
-                  name={`weldingMethod`}
-                  placeholder="Способ сварки"
-                />
-              </div>
-              <div className={styles.row}>
+              <div className={styles.row}>                   
                 <Input
                   onChange={(e) => {
                     handleChange(e);
@@ -677,14 +497,96 @@ export const Equipment = ({
                   style={{
                     width: 380,
                     height: 40,
+                  }}
+                  value={values.rfidTag}
+                  name={`rfidTag`}
+                  placeholder="RFID метка"
+                />
+              </div>
+
+              <div className={styles.row}>
+              
+                  
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 380,
+                    height: 40,
+                    padding: "0px 0px 0px 20px"
+                  }}
+                  value={values.factoryNumber}
+                  name={`factoryNumber`}
+                  placeholder="Заводской  (инвентарный) номер"
+                />
+              </div>
+
+              <div className={styles.row}>
+              
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                  value={values.nextAttestationDate}
+                  name="nextAttestationDate"
+                  placeholder="Дата очередной аттестации (ППР)»"
+                  type="text"
+                  onFocus={(e) => {
+                    e.currentTarget.type = "date";
+                  }}
+                  onBlur={handleBlur}
+                />
+                
+                
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  width="200"
+                  style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                  value={values.commissioningDate}
+                  name="commissioningDate"
+                  placeholder="Дата ввода в эксплуатацию"
+                  type="text"
+                  onFocus={(e) => {
+                    e.currentTarget.type = "date";
+                  }}
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className={styles.row}> 
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 280,
+                    height: 40,
                     paddingLeft: 20,
                   }}
-                  value={values.noLoadVoltage}
-                  name={`noLoadVoltage`}
+                  value={values.weldingProcess}
+                  name={`weldingProcess`}
+                  placeholder="Процесс сварки"
+                /> 
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 280,
+                    height: 40,
+                    paddingLeft: 20,
+                  }}
+                  value={values.idleVoltage}
+                  name={`idleVoltage`}
                   placeholder="Напряжение холостого хода"
                 />
               </div>
               <div className={styles.row}>
+                 
                 <Input
                   onChange={(e) => {
                     handleChange(e);
@@ -698,7 +600,82 @@ export const Equipment = ({
                   name={`loadPercentage`}
                   placeholder="Продолжительность нагрузки, %"
                 />
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 380,
+                    height: 40,
+                    paddingLeft: 20,
+                  }}
+                  value={values.manufacturerName}
+                  name={`manufacturerName`}
+                  placeholder="Наименование изготовителя"
+                />
               </div>
+              <p className={styles.text} >Габариты</p>
+              <div className={styles.row}> 
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 280,
+                    height: 40,
+                    paddingLeft: 20,
+                  }}
+                  value={values.height}
+                  name={`height`}
+                  placeholder="Высота"
+                />
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 280,
+                    height: 40,
+                    paddingLeft: 20,
+                  }}
+                  value={values.width}
+                  name={`width`}
+                  placeholder="Ширина"
+                />
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 280,
+                    height: 40,
+                    paddingLeft: 20,
+                  }}
+                  value={values.lenght}
+                  name={`lenght`}
+                  placeholder="Длина"
+                />
+
+              </div>
+              <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{
+                    width: 280,
+                    height: 40,
+                    paddingLeft: 20,
+                  }}
+                  value={values.groupNumber}
+                  name={`groupNumber`}
+                  placeholder="Номер группы оборудования"
+                />    
+                
+
+              </div>
+              
+
               <p className={styles.text}>Диапазон сварочного тока:</p>
               <div className={styles.row}>
                 <Input
@@ -710,8 +687,8 @@ export const Equipment = ({
                     height: 40,
                     paddingLeft: 20,
                   }}
-                  value={values.minCurrentValue}
-                  name={`minCurrentValue`}
+                  value={values.weldingCurrentMin}
+                  name={`weldingCurrentMin`}
                   placeholder="min"
                   onBlur={handleBlur}
                 />
@@ -724,9 +701,10 @@ export const Equipment = ({
                     height: 40,
                     paddingLeft: 20,
                   }}
-                  value={values.maxCurrentValue}
-                  name={`maxCurrentValue`}
-                  placeholder="max"
+                  value={values.weldingCurrentMax}
+                  name={`weldingCurrentMax`}
+                  placeholder="max" 
+                
                 />
               </div>
               <p className={styles.text}>Диапазон напряжения на дуге:</p>
@@ -740,10 +718,10 @@ export const Equipment = ({
                     height: 40,
                     paddingLeft: 20,
                   }}
-                  value={values.minVoltageValue}
-                  name={`minVoltageValue`}
+                  value={values.arcVoltageMin}
+                  name={`arcVoltageMin`}
                   placeholder="min"
-                />
+                /> 
                 <Input
                   onChange={(e) => {
                     handleChange(e);
@@ -753,30 +731,16 @@ export const Equipment = ({
                     height: 40,
                     paddingLeft: 20,
                   }}
-                  value={values.maxVoltageValue}
-                  name={`maxVoltageValue`}
+                  value={values.arcVoltageMax}
+                  name={`arcVoltageMax`}
                   placeholder="max"
                 />
               </div>
-              {!modalData && (
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{
-                      width: 380,
-                      height: 40,
-                    }}
-                    value={values.machineId}
-                    name={`machineId`}
-                    placeholder="RFID метка"
-                  />
-                </div>
-              )}
+             
+
+
               <div className={styles.row}>
-                <Button
-                  disabled={requiredKeys.some((key) => !values[key])}
+                <Button 
                   type="submit"
                 >
                   {modalData ? "Сохранить" : "Создать"}

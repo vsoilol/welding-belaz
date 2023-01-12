@@ -5,6 +5,12 @@ const { Types, Creators } = createActions({
   loadEquipmentSuccess: ["equipment"],
   loadEquipmentFailure: ["error"],
 
+  ///Посты
+  loadPostsRequest: ["payload"],
+  loadPostsSuccess: ["posts"],
+  loadPostsFailure: ["error"],
+ 
+
   editEquipmentRequest: ["payload"],
   editEquipmentSuccess: ["equipment"],
   editEquipmentFailure: ["error"],
@@ -16,6 +22,7 @@ const { Types, Creators } = createActions({
   deleteEquipmentRequest: ["payload"],
   deleteEquipmentSuccess: ["id"],
   deleteEquipmentFailure: ["error"],
+
 });
 
 const equipmentActions = {

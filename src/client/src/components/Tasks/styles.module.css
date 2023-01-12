@@ -4,7 +4,7 @@
 }
 
 p {
-  text-align: center;
+  text-align: left;
 }
 
 .bold {
@@ -45,8 +45,7 @@ p {
 .form {
   display: flex;
   flex-direction: column;
-}
-
+}  
 .button {
   cursor: pointer;
   display: block;

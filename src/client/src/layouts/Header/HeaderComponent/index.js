@@ -23,10 +23,8 @@ export const Header = () => {
 
     { name: "Производство", route: "/production" },  
     { name: "Технологические процессы сборки и сварки", route: "/tex-proc-welding" },  
-    
-    { name: "Тех. Инструкции", route: "/instructions" },
-    { name: "Задания", route: "/tasks" },
-    { name: "Записи", route: "/records" }, 
+     
+    { name: "Задания", route: "/tasks" }, 
   ];
 
   const renderHeaderButtons = () => {
