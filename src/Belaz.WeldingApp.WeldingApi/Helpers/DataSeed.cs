@@ -591,7 +591,7 @@ public class DataSeed
             new TechnologicalProcess
             {
                 Name = "Технологический процесс 1",
-                Product = product,
+                Products = new List<Product>{product},
                 Number = 1,
                 PdmSystemFileLink = "Ссылка",
                 TechnologicalInstructions = new List<TechnologicalInstruction>
@@ -623,7 +623,7 @@ public class DataSeed
                 Name = "Технологический процесс 2",
                 Number = 2,
                 PdmSystemFileLink = "Ссылка",
-                Product = product2,
+                Products = new List<Product>{product2},
                 TechnologicalInstructions = new List<TechnologicalInstruction>
                 {
                     new TechnologicalInstruction

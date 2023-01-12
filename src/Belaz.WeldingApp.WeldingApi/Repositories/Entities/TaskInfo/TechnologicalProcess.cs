@@ -12,12 +12,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// <summary>
         /// Ссылка на PDF-файл в PDM-системе
         /// </summary>
-        public string PdmSystemFileLink { get; set; }
+        public string PdmSystemFileLink { get; set; } = null!;
 
-        public Guid? ProductId { get; set; }
-
-        [ForeignKey(nameof(ProductId))] 
-        public Product? Product { get; set; }
+        public List<Product> Products { get; set; } = null!;
 
         public List<TechnologicalInstruction> TechnologicalInstructions { get; set; } = null!;
     }
