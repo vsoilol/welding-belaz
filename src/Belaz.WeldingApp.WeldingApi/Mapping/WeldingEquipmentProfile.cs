@@ -19,18 +19,18 @@ public class WeldingEquipmentProfile : Profile
         CreateMap<CreateEquipmentRequest, WeldingEquipment>()
             .ForMember(dto => dto.NextAttestationDate,
                 opt => opt
-                    .MapFrom(x => DateTime.ParseExact(x.NextAttestationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                    .MapFrom(x => DateTime.ParseExact(x.NextAttestationDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)))
             .ForMember(dto => dto.CommissioningDate,
                 opt => opt
-                    .MapFrom(x => DateTime.ParseExact(x.CommissioningDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                    .MapFrom(x => DateTime.ParseExact(x.CommissioningDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)));
         
         CreateMap<UpdateEquipmentRequest, WeldingEquipment>()
             .ForMember(dto => dto.NextAttestationDate,
                 opt => opt
-                    .MapFrom(x => DateTime.ParseExact(x.NextAttestationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                    .MapFrom(x => DateTime.ParseExact(x.NextAttestationDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)))
             .ForMember(dto => dto.CommissioningDate,
                 opt => opt
-                    .MapFrom(x => DateTime.ParseExact(x.CommissioningDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+                    .MapFrom(x => DateTime.ParseExact(x.CommissioningDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)));
     }
 
     private void WeldingEquipmentToWeldingEquipmentBriefDto()
