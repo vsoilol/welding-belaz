@@ -12,8 +12,6 @@ public class UpdateWelderRequest
 
     public string MiddleName { get; set; } = null!;
 
-    public string WorkshopName { get; set; } = null!;
-
     public Guid ProductionAreaId { get; set; }
     
     public Guid? WorkplaceId { get; set; }

@@ -11,16 +11,16 @@ public class UserDataProfile : Profile
     {
         CreateMap<UserData, UserFullName>();
         CreateMapCreateWelderRequestToUserData();
+        CreateMapUpdateWelderRequestToUserData();
     }
 
     private void CreateMapCreateWelderRequestToUserData()
     {
-        CreateMap<CreateWelderRequest, UserData>()
-            .ForMember(dto => dto.UserName,
-                opt => opt
-                    .MapFrom(x => $"{x.FirstName}_{x.MiddleName}_{x.LastName}"))
-            .ForMember(dto => dto.Email,
-                opt => opt
-                    .MapFrom(x => $"{x.FirstName}_{x.MiddleName}_{x.LastName}@email.com"));
+        CreateMap<CreateWelderRequest, UserData>();
+    }
+    
+    private void CreateMapUpdateWelderRequestToUserData()
+    {
+        CreateMap<UpdateWelderRequest, UserData>();
     }
 }

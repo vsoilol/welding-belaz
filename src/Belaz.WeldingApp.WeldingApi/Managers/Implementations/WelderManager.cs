@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Welder;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
@@ -44,20 +45,14 @@ public class WelderManager : IWelderManager
             .FirstOrDefaultAsync();
     }
 
-    public Task UpdateAsync(UpdateWelderRequest request)
+    public async Task UpdateAsync(UpdateWelderRequest request)
     {
-        /*if (!result)
-        {
-            var problemDetails = new BadRequestResult
-            {
-                Title = "Update Error",
-                StatusCode = (int) (HttpStatusCode.BadRequest),
-                Errors = $"Error when update Welding Equipment with id {request.Id}",
-            };
+        var welder = _mapper.Map<Welder>(request);
+        var isUpdate = await _welderRepository.UpdateAsync(welder);
 
-            return BadRequest(problemDetails);
-        }*/
-        
-        throw new NotImplementedException();
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(Welder), request.Id);
+        }
     }
 }

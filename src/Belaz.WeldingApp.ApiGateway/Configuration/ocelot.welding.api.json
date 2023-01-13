@@ -368,7 +368,7 @@
       "UpstreamPathTemplate": "/api/Welder",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Welder",
       "ServiceName": "welding",

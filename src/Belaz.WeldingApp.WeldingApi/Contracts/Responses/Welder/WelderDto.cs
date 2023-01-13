@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 
 namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
 
@@ -6,19 +7,19 @@ public class WelderDto
 {
     public Guid Id { get; set; }
 
-    public string RfidTag { get; set; }
+    public string RfidTag { get; set; } = null!;
 
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
-    public string MiddleName { get; set; }
+    public string MiddleName { get; set; } = null!;
 
-    public string WorkshopName { get; set; }
+    public ProductionWithNameDto Workshop { get; set; } = null!;
 
-    public string ProductionAreaName { get; set; }
+    public ProductionWithNameDto ProductionArea { get; set; } = null!;
 
-    public WeldingEquipmentBriefDto WeldingEquipment { get; set; }
+    public WeldingEquipmentBriefDto? WeldingEquipment { get; set; }
 
-    public int? WorkplaceNumber { get; set; }
+    public ProductionBriefDto? Workplace { get; set; }
 }
