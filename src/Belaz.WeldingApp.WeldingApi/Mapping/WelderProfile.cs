@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Welder;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 
@@ -30,5 +31,15 @@ public class WelderProfile : Profile
             .ForMember(dto => dto.WorkplaceNumber,
                 opt => opt
                     .MapFrom(x => x.Workplace != null ? x.Workplace!.Number : (int?)null));
+
+        CreateMapForCreateWelderRequestToWelder();
+    }
+
+    private void CreateMapForCreateWelderRequestToWelder()
+    {
+        CreateMap<CreateWelderRequest, Welder>()
+            .ForMember(dto => dto.UserInfo,
+                opt => opt
+                    .MapFrom(x => x));
     }
 }
