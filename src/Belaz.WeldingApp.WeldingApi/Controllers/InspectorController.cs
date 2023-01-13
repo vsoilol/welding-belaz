@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Inspector;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Inspector;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -26,5 +27,21 @@ public class InspectorController : ControllerBase
     public async Task<ActionResult<IEnumerable<InspectorDto>>> GetAllWeldersAsync()
     {
         return await _inspectorManager.GetAllAsync();
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(InspectorDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<InspectorDto?>> CreateAsync([FromBody] CreateUserRequest request)
+    {
+        return await _inspectorManager.CreateAsync(request);
+    }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserRequest request)
+    {
+        await _inspectorManager.UpdateAsync(request);
+        return Ok();
     }
 }

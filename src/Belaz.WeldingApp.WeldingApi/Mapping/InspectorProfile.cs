@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Inspector;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 
@@ -24,6 +25,24 @@ namespace Belaz.WeldingApp.WeldingApi.Mapping
             .ForMember(dto => dto.ProductionArea,
                 opt => opt
                     .MapFrom(x => x.UserInfo.ProductionArea));
+            CreateMapCreateUserRequestToInspector();
+            CreateMapUpdateUserRequestToInspector();
+        }
+
+        private void CreateMapCreateUserRequestToInspector()
+        {
+            CreateMap<CreateUserRequest, Inspector>()
+                .ForMember(dto => dto.UserInfo,
+                    opt => opt
+                        .MapFrom(x => x));
+        }
+        
+        private void CreateMapUpdateUserRequestToInspector()
+        {
+            CreateMap<UpdateUserRequest, Inspector>()
+                .ForMember(dto => dto.UserInfo,
+                    opt => opt
+                        .MapFrom(x => x));
         }
     }
 }

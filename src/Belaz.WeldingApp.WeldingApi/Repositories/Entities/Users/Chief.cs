@@ -1,5 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Repositories.Entities.IdentityUser;
 using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users
 {
@@ -12,5 +13,10 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users
 
         [ForeignKey(nameof(UserId))] 
         public UserData UserInfo { get; set; } = null!;
+        
+        public Guid? WeldingEquipmentId { get; set; }
+        
+        [ForeignKey(nameof(WeldingEquipmentId))]
+        public WeldingEquipment? WeldingEquipment { get; set; }
     }
 }

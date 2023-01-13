@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Welder;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.UserData;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.IdentityUser;
@@ -12,6 +13,10 @@ public class UserDataProfile : Profile
         CreateMap<UserData, UserFullName>();
         CreateMapCreateWelderRequestToUserData();
         CreateMapUpdateWelderRequestToUserData();
+        CreateMapCreateUserRequestToUserData();
+        CreateMapUpdateUserRequestToUserData();
+        CreateMapCreateUserWithEquipmentRequestToUserData();
+        CreateMapUpdateUserWithEquipmentRequestToUserData();
     }
 
     private void CreateMapCreateWelderRequestToUserData()
@@ -22,5 +27,25 @@ public class UserDataProfile : Profile
     private void CreateMapUpdateWelderRequestToUserData()
     {
         CreateMap<UpdateWelderRequest, UserData>();
+    }
+
+    private void CreateMapCreateUserRequestToUserData()
+    {
+        CreateMap<CreateUserRequest, UserData>();
+    }
+    
+    private void CreateMapUpdateUserRequestToUserData()
+    {
+        CreateMap<UpdateUserRequest, UserData>();
+    }
+    
+    private void CreateMapCreateUserWithEquipmentRequestToUserData()
+    {
+        CreateMap<CreateUserWithEquipmentRequest, UserData>();
+    }
+    
+    private void CreateMapUpdateUserWithEquipmentRequestToUserData()
+    {
+        CreateMap<UpdateUserWithEquipmentRequest, UserData>();
     }
 }
