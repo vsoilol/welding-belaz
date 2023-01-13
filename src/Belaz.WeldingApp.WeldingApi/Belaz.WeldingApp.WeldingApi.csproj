@@ -21,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Contracts\Requests\Chief" />
+    <Folder Include="Contracts\Requests\Master" />
     <Folder Include="Controllers\" />
     <Folder Include="Managers\Interfaces\" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Welder;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -26,5 +27,21 @@ public class WelderController : ControllerBase
     public async Task<ActionResult<IEnumerable<WelderDto>>> GetAllWeldersAsync()
     {
         return await _welderManager.GetAllAsync();
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(WelderDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WelderDto?>> CreateAsync([FromBody] CreateWelderRequest request)
+    {
+        return await _welderManager.CreateAsync(request);
+    }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateWelderRequest request)
+    {
+        await _welderManager.UpdateAsync(request);
+        return Ok();
     }
 }

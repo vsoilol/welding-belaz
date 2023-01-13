@@ -104,10 +104,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         
         [ForeignKey(nameof(MasterId))]
         public Master? Master { get; set; }
-        
-        public Guid? WelderId { get; set; }
-        
-        [ForeignKey(nameof(WelderId))]
+
         public Welder? Welder { get; set; }
 
         public List<WeldingEquipmentWorkingShift> WeldingEquipmentWorkingShifts { get; set; }

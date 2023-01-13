@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Welder;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 
@@ -21,14 +22,33 @@ public class WelderProfile : Profile
             .ForMember(dto => dto.LastName,
                 opt => opt
                     .MapFrom(x => x.UserInfo.LastName))
-            .ForMember(dto => dto.WorkshopName,
+            .ForMember(dto => dto.Workshop,
                 opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea.Workshop.Name))
-            .ForMember(dto => dto.ProductionAreaName,
+                    .MapFrom(x => x.UserInfo.ProductionArea.Workshop))
+            .ForMember(dto => dto.ProductionArea,
                 opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea.Name))
-            .ForMember(dto => dto.WorkplaceNumber,
+                    .MapFrom(x => x.UserInfo.ProductionArea))
+            .ForMember(dto => dto.Workplace,
                 opt => opt
-                    .MapFrom(x => x.Workplace != null ? x.Workplace!.Number : (int?)null));
+                    .MapFrom(x => x.Workplace));
+
+        CreateMapForCreateWelderRequestToWelder();
+        CreateMapForUpdateWelderRequestToWelder();
+    }
+
+    private void CreateMapForCreateWelderRequestToWelder()
+    {
+        CreateMap<CreateWelderRequest, Welder>()
+            .ForMember(dto => dto.UserInfo,
+                opt => opt
+                    .MapFrom(x => x));
+    }
+    
+    private void CreateMapForUpdateWelderRequestToWelder()
+    {
+        CreateMap<UpdateWelderRequest, Welder>()
+            .ForMember(dto => dto.UserInfo,
+                opt => opt
+                    .MapFrom(x => x));
     }
 }
