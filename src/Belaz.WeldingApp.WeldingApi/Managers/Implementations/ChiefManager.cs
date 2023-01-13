@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Chief;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Master;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
@@ -27,6 +30,31 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations
                 .ToListAsync();
 
             return chiefs;
+        }
+
+        public async Task<ChiefDto?> CreateAsync(CreateUserWithEquipmentRequest request)
+        {
+            var chief = _mapper.Map<Chief>(request);
+        
+            var createdChief = _chiefRepository.Add(chief);
+            await _chiefRepository.SaveAsync();
+
+            return await _chiefRepository
+                .AsQueryable()
+                .Where(_ => _.Id == createdChief.Id)
+                .ProjectTo<ChiefDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateAsync(UpdateUserWithEquipmentRequest request)
+        {
+            var chief = _mapper.Map<Chief>(request);
+            var isUpdate = await _chiefRepository.UpdateAsync(chief);
+
+            if (!isUpdate)
+            {
+                throw new UpdateFailedException(typeof(Inspector), request.Id);
+            }
         }
     }
 }

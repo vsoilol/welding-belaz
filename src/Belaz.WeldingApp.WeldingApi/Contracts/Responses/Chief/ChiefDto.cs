@@ -1,4 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Production;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
 
 namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.Chief
 {
@@ -15,5 +16,7 @@ namespace Belaz.WeldingApp.WeldingApi.Contracts.Responses.Chief
         public string MiddleName { get; set; } = null!;
 
         public ProductionWithNameDto ProductionArea { get; set; } = null!;
+        
+        public WeldingEquipmentBriefDto? WeldingEquipment { get; set; }
     }
 }

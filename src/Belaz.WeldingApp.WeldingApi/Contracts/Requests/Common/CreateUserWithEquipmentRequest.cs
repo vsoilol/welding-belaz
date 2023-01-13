@@ -2,5 +2,5 @@
 
 public class CreateUserWithEquipmentRequest : CreateUserRequest
 {
-    public Guid WeldingEquipmentId { get; set; }
+    public Guid? WeldingEquipmentId { get; set; }
 }

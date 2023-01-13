@@ -1,6 +1,6 @@
 ﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
 
-public class UpdateUserWithEquipmentRequest : UpdateUserRequest
+public class UpdateUserWithEquipmentRequest : CreateUserWithEquipmentRequest
 {
-    public Guid WeldingEquipmentId { get; set; }
+    public Guid Id { get; set; }
 }

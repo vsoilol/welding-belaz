@@ -452,7 +452,7 @@
       "UpstreamPathTemplate": "/api/Chief",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Chief",
       "ServiceName": "welding",
@@ -466,7 +466,7 @@
       "UpstreamPathTemplate": "/api/Inspector",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Inspector",
       "ServiceName": "welding",
@@ -480,7 +480,7 @@
       "UpstreamPathTemplate": "/api/Master",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/Master",
       "ServiceName": "welding",

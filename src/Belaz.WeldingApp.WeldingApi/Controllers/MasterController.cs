@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Master;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Master;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -26,5 +27,21 @@ public class MasterController : ControllerBase
     public async Task<ActionResult<IEnumerable<MasterDto>>> GetAllWeldersAsync()
     {
         return await _masterManager.GetAllAsync();
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(MasterDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<MasterDto?>> CreateAsync([FromBody] CreateUserWithEquipmentRequest request)
+    {
+        return await _masterManager.CreateAsync(request);
+    }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
+    {
+        await _masterManager.UpdateAsync(request);
+        return Ok();
     }
 }

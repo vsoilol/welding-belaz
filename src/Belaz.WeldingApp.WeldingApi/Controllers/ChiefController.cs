@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Chief;
+﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Chief;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -26,5 +27,21 @@ public class ChiefController : ControllerBase
     public async Task<ActionResult<IEnumerable<ChiefDto>>> GetAllWeldersAsync()
     {
         return await _chiefManager.GetAllAsync();
+    }
+    
+    [HttpPost]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(ChiefDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ChiefDto?>> CreateAsync([FromBody] CreateUserWithEquipmentRequest request)
+    {
+        return await _chiefManager.CreateAsync(request);
+    }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
+    {
+        await _chiefManager.UpdateAsync(request);
+        return Ok();
     }
 }
