@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Chief;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 
@@ -23,7 +24,29 @@ namespace Belaz.WeldingApp.WeldingApi.Mapping
                     .MapFrom(x => x.UserInfo.LastName))
             .ForMember(dto => dto.ProductionArea,
                 opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea));
+                    .MapFrom(x => x.UserInfo.ProductionArea))
+            .ForMember(dto => dto.WeldingEquipment,
+                opt => opt
+                    .MapFrom(x => x.WeldingEquipment));
+
+            CreateMapCreateUserWithEquipmentRequestToChief();
+            CreateMapUpdateUserWithEquipmentRequestToChief();
+        }
+        
+        private void CreateMapCreateUserWithEquipmentRequestToChief()
+        {
+            CreateMap<CreateUserWithEquipmentRequest, Chief>()
+                .ForMember(dto => dto.UserInfo,
+                    opt => opt
+                        .MapFrom(x => x));
+        }
+
+        private void CreateMapUpdateUserWithEquipmentRequestToChief()
+        {
+            CreateMap<UpdateUserWithEquipmentRequest, Chief>()
+                .ForMember(dto => dto.UserInfo,
+                    opt => opt
+                        .MapFrom(x => x));
         }
     }
 }
