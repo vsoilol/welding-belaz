@@ -11,10 +11,10 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users
     public class Inspector : Entity
     {
         public Guid UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))] 
+        public UserData UserInfo { get; set; } = null!;
         
-        [ForeignKey(nameof(UserId))]
-        public UserData UserInfo { get; set; }
-        
-        public List<WeldingTask> WeldingTasks { get; set; }
+        public List<WeldingTask> WeldingTasks { get; set; } = null!;
     }
 }
