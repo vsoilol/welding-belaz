@@ -46,14 +46,16 @@ export const Equipment = ({
   masters,
   userRole,
 
-  posts
+  posts,
+  value
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
   const [activeEquipment, setActiveEquipment] = useState("");
   const [open, setOpen] = useState(false);
-  const [valuetPosts, setValuetPosts] = useState("id"); 
+  const [valuetPosts, setValuetPosts] = useState(); 
+  const [valuetPostsNumber, setValuetPostsNumber] = useState(""); 
   const [isModalNumb, setIsModalNumb] = useState(0);
 
   const [isEquipmentNumb, setEquipmentNumb] = useState(0);
@@ -70,14 +72,17 @@ export const Equipment = ({
      lenght:  modalData?.lenght?? "", 
      groupNumber:  modalData?.groupNumber?? "", 
      manufacturerName:  modalData?.manufacturerName?? "", 
-     nextAttestationDate:  modalData?.nextAttestationDate?? "", 
+
+     nextAttestationDate:  modalData?.nextAttestationDate?? "",
+     commissioningDate:  modalData?.commissioningDate?? "", 
+
+
      weldingProcess:  modalData?.weldingProcess?? "", 
      idleVoltage: modalData?.idleVoltage?? "", 
      weldingCurrentMin:  modalData?.weldingCurrentMin?? "", 
      weldingCurrentMax:  modalData?.weldingCurrentMax?? "", 
      arcVoltageMin:  modalData?.arcVoltageMin?? "", 
-     arcVoltageMax:  modalData?.arcVoltageMax?? "", 
-     postId:  valuetPosts?? "", 
+     arcVoltageMax:  modalData?.arcVoltageMax?? "",  
  
 
   };
@@ -115,41 +120,14 @@ export const Equipment = ({
     { title: "Маркировка", field: "marking" },
     { title: "RFID метка", field: "rfidTag" },
     { title: "Заводской  (инвентарный) номер", field: "factoryNumber" },
-    { title: "Дата ввода в эксплуатацию", field: "commissioningDate" },
-    { title: "Габариты", field: "width" },
+    { title: "Дата ввода в эксплуатацию", field: "commissioningDate" }, 
     { title: "Номер группы оборудования", field: "groupNumber" },
     { title: "Наименование изготовителя", field: "manufacturerName" },
     { title: "Дата очередной аттестации", field: "nextAttestationDate" },
     
     { title: "Процесс (способ) сварки", field: "weldingProcess" },
-    { title: "Напряжение холостого хода", field: "idleVoltage" },
-    {
-      title: "Допустимые диапазоны сварочного тока и напряжения на дуге (min и max)",
-      render: (rowData) => {
-        return (
-          <p>
-            {`${rowData.arcVoltageMin} -  ${rowData.arcVoltageMax}`}
-          </p>
-        );
-      },
-    },
-    { title: "Продолжительность включения (нагрузки)", field: "activationDuration" },
-    { title: "Номер поста", field: "post.number" },
-    {
-      field: "link",
-      title: "Отчет",
-      render: (rowData) => (
-        <div
-          onClick={() => {
-            setIsResultsModalOpen(true);
-            setActiveEquipment(rowData?.machineId);
-          }}
-        >
-          <SaveIcon />
-        </div>
-      ),
-      width: 54,
-    },
+    { title: "Напряжение холостого хода", field: "idleVoltage" }, 
+    { title: "Номер поста", field: "post.number" }, 
   ];
 
   const columns2 = [
@@ -189,15 +167,7 @@ export const Equipment = ({
                   align="center"
                 >
                   Процесс сварки
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Способ сварки
-                </TableCell>
+                </TableCell> 
                 <TableCell
                   style={{
                     borderBottom: 0,
@@ -232,43 +202,60 @@ export const Equipment = ({
                 >
                   Продолжительность включения/нагрузки, %
                 </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                  colSpan={3}
+                >
+                  Габариты
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell />
-                <TableCell />
-                <TableCell />
+                <TableCell /> 
                 <TableCell align="center">min</TableCell>
                 <TableCell align="center">max</TableCell>
                 <TableCell align="center">min</TableCell>
                 <TableCell align="center">max</TableCell>
                 <TableCell />
+                <TableCell align="center">Длина</TableCell>
+                <TableCell align="center">Высота</TableCell>
+                <TableCell align="center">Ширина</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               <TableRow>
                 <TableCell align="center" component="th" scope="row">
                   {rowData?.weldingProcess ?? "-"}
+                </TableCell> 
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.idleVoltage ?? "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData?.weldingCurrentMin ?? "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData?.weldingCurrentMax ?? "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData?.arcVoltageMin ?? "-"}
+                </TableCell>
+                <TableCell align="center">
+                  {rowData?.arcVoltageMax ?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldingMethod ?? "-"}
+                  {rowData?.activationDuration ?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.noLoadVoltage ?? "-"}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData?.minCurrentValue ?? "-"}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData?.maxCurrentValue ?? "-"}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData?.minVoltageValue ?? "-"}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData?.maxVoltageValue ?? "-"}
+                  {rowData?.lenght ?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.loadPercentage ?? "-"}
+                  {rowData?.height ?? "-"}
+                </TableCell>
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.width ?? "-"}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -282,11 +269,11 @@ export const Equipment = ({
 
 
   const [value_panel, setValue] = useState(0);
-  const ChangePanels = (event, newValue) => {
+  const ChangePanels = (event, newValue) => { 
     setValue(newValue);
   };
   const TabPanel = (props_panel) => {
-    const { children, value, indPanel } = props_panel;
+    const { children, value, indPanel } = props_panel; 
     return (
       <div hidden={value !== indPanel}  >
         {children}
@@ -300,18 +287,20 @@ export const Equipment = ({
       label: `Пост ${item.number}`,
     };
   });
-  function SendData(variables) {  
+  function SendData(variables,type) {  
     variables["id"]=isEquipmentNumb 
     variables["postId"]=valuetPosts 
+    variables["postNumber"]=valuetPostsNumber  
+    variables["commissioningDate"]=variables.commissioningDate
+    variables["nextAttestationDate"]=variables.nextAttestationDate 
     //Добавить Оборудование 
     if (isModalNumb == 0) {
       addEquipment(variables)
     }
     //Редактировать Оборудование
-    if (isModalNumb == 1) {
+    if (isModalNumb == 1) { 
       editEquipment(variables)
-    }
- 
+    } 
   }
   ////////////////////////////////////////////////////////////////////
   return (
@@ -370,8 +359,8 @@ export const Equipment = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(1);
-                      setEquipmentNumb(rowData.id)
-
+                      setEquipmentNumb(rowData.id)  
+                      setValuetPosts(rowData.post?.id)  
                     },
                   },
                 ]
@@ -458,7 +447,8 @@ export const Equipment = ({
                   value={valuetPosts}
                   width="380px"
                   placeholder="Номер поста"
-                  onChange={(event) => setValuetPosts(event.value)}
+                  onChange={(event) => {setValuetPosts(event.value);setValuetPostsNumber(event.label)  
+                    }}
                   options={optPosts}
                 />
                 
@@ -741,6 +731,12 @@ export const Equipment = ({
 
               <div className={styles.row}>
                 <Button 
+                  disabled={
+                    values.name==""||valuetPosts==undefined||values.marking==""||values.rfidTag==""||values.factoryNumber==""||
+                    values.nextAttestationDate==""||values.commissioningDate==""||values.weldingProcess==""||values.idleVoltage==""||
+                    values.loadPercentage==""||values.manufacturerName==""||values.height==""||values.width==""||values.lenght==""||
+                    values.weldingCurrentMin==""||values.weldingCurrentMax==""||values.arcVoltageMin==""||values.arcVoltageMax==""
+                  }
                   type="submit"
                 >
                   {modalData ? "Сохранить" : "Создать"}

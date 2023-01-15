@@ -65,27 +65,7 @@ function* loadPosts() {
 
 function* addEquipment({ payload }) {
   try {
-    console.log({ 
-      "postId": payload.postId,
-      "rfidTag": payload.rfidTag,
-      "name": payload.name,
-      "marking": payload.marking,
-      "factoryNumber": payload.factoryNumber,
-      "commissioningDate": new Date(payload.commissioningDate).toLocaleDateString(),
-      "height": Number(payload.height),
-      "width": Number(payload.width),
-      "lenght": Number(payload.lenght),
-      "groupNumber": Number(payload.groupNumber),
-      "manufacturerName": payload.manufacturerName,
-      "nextAttestationDate": new Date(payload.nextAttestationDate).toLocaleDateString(),
-      "weldingProcess": payload.weldingProcess,
-      "idleVoltage": Number(payload.idleVoltage),
-      "weldingCurrentMin": Number(payload.weldingCurrentMin),
-      "weldingCurrentMax": Number(payload.weldingCurrentMax),
-      "arcVoltageMin": Number(payload.arcVoltageMin),
-      "arcVoltageMax": Number(payload.arcVoltageMax),
-      "postId": payload.postId
-    })
+    
     const { data } = yield call(api.post, `/WeldingEquipment`, {
       "postId": payload.postId,
       "rfidTag": payload.rfidTag,
@@ -107,7 +87,8 @@ function* addEquipment({ payload }) {
       "arcVoltageMax": Number(payload.arcVoltageMax),
       "postId": payload.postId
     });
-    yield put(addEquipmentSuccess(payload));
+    window.location.reload()
+    // yield put(addEquipmentSuccess(data));
   } catch (error) {
     yield put(addEquipmentFailure(error));
     yield put(setError(error.message));
@@ -116,40 +97,20 @@ function* addEquipment({ payload }) {
 
 function* editEquipment({ payload }) {
   try {
-    console.log({
-      "id": payload.id, 
-      "rfidTag": payload.rfidTag,
-      "name": payload.name,
-      "marking": payload.marking,
-      "factoryNumber": payload.factoryNumber,
-      "commissioningDate": new Date(payload.commissioningDate).toLocaleDateString(),
-      "height": Number(payload.height),
-      "width": Number(payload.width),
-      "lenght": Number(payload.lenght),
-      "groupNumber": Number(payload.groupNumber),
-      "manufacturerName": payload.manufacturerName,
-      "nextAttestationDate": new Date(payload.nextAttestationDate).toLocaleDateString(),
-      "weldingProcess": payload.weldingProcess,
-      "idleVoltage": Number(payload.idleVoltage),
-      "weldingCurrentMin": Number(payload.weldingCurrentMin),
-      "weldingCurrentMax": Number(payload.weldingCurrentMax),
-      "arcVoltageMin": Number(payload.arcVoltageMin),
-      "arcVoltageMax": Number(payload.arcVoltageMax),
-      "postId": payload.postId,
-    })
+  
     const { data } = yield call(api.put, `/WeldingEquipment`, {
       "id": payload.id, 
       "rfidTag": payload.rfidTag,
       "name": payload.name,
       "marking": payload.marking,
       "factoryNumber": payload.factoryNumber,
-      "commissioningDate": new Date(payload.commissioningDate).toLocaleDateString(),
+      "commissioningDate": payload.commissioningDate,
       "height": Number(payload.height),
       "width": Number(payload.width),
       "lenght": Number(payload.lenght),
       "groupNumber": Number(payload.groupNumber),
       "manufacturerName": payload.manufacturerName,
-      "nextAttestationDate": new Date(payload.nextAttestationDate).toLocaleDateString(),
+      "nextAttestationDate": payload.nextAttestationDate,
       "weldingProcess": payload.weldingProcess,
       "idleVoltage": Number(payload.idleVoltage),
       "weldingCurrentMin": Number(payload.weldingCurrentMin),
@@ -158,7 +119,8 @@ function* editEquipment({ payload }) {
       "arcVoltageMax": Number(payload.arcVoltageMax),
       "postId": payload.postId,
     });
-    yield put(editEquipmentSuccess(data));
+    window.location.reload()
+    // yield put(editEquipmentSuccess(payload));
   } catch (error) {
     yield put(editEquipmentFailure(error));
     yield put(setError(error.message));

@@ -61,24 +61,7 @@ function* loadInstructions() {
 }
 
 function* addInst(variables) {
-  try { 
-    console.log({
-      "number": Number(variables.payload.number),
-      "name": variables.payload.name,
-      "seamId": "4140c6a7-2ecd-4baf-a33f-2cbed1c1f933",
-      "technologicalProcessId": variables.payload.technologicalProcessId,
-      "weldPassages": [
-        {
-          "name": variables.payload.weldPassagesName,
-          "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
-          "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
-          "arcVoltageMin": Number(variables.payload.arcVoltageMin),
-          "arcVoltageMax": Number(variables.payload.arcVoltageMax),
-          "preheatingTemperatureMin": Number(variables.payload.preheatingTemperatureMin),
-          "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
-        }
-      ]
-    })
+  try {  
     const { data } = yield call(api.post, `/TechnologicalInstruction`, {
       "number": Number(variables.payload.number),
       "name": variables.payload.name,
@@ -121,7 +104,8 @@ function* editInst(variables) {
         }
       ]
     });
-    yield put(editInstSuccess(variables.payload));
+    window.location.reload();
+    // yield put(editInstSuccess(variables.payload));
   } catch (error) {
     yield put(editInstFailure(error));
     yield put(setError(error.message));

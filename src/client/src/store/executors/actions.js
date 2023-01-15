@@ -48,6 +48,20 @@ const { Types, Creators } = createActions({
   deleteTechRequest: ["payload"],
   deleteTechSuccess: ["id"],
   deleteTechFailure: ["error"],
+
+
+  ///Оборудование
+  loadEquipmentRequest: ["payload"],
+  loadEquipmentSuccess: ["equipment"],
+  loadEquipmentFailure: ["error"],
+   ///Производственные участки 
+   loadAreaRequest: ["payload"],
+   loadAreaSuccess: ["productionArea"],
+   loadAreaFailure: ["error"],
+  ///Цеха 
+  loadWorkshopRequest: ["payload"],
+  loadWorkshopSuccess: ["workshop"],
+  loadWorkshopFailure: ["error"],
 });
 
 const executorsActions = {

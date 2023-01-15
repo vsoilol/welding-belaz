@@ -135,6 +135,11 @@ const editWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
     }),
   };
 };
+
+
+
+
+
 ///Изделия
 const loadProductSuccess = (state = INITIAL_STATE, { product }) => { 
   return {
@@ -145,27 +150,26 @@ const loadProductSuccess = (state = INITIAL_STATE, { product }) => {
 };
 const addProductSuccess = (state = INITIAL_STATE, { product }) => {  
   console.log(product)
-  console.log(state.product)
-  window.location.reload()
-  return {
-    ...state,
-    isRequesting: false,
-    product: state.product?.map((Product) => {   
-      if (Product.id===product.id) {
-        Product.name=product.name
-        Product.id=product.id
-        Product.number=product.number   
-        Product.workshop.number=product.workshopNumber   
-        Product.productionArea.number=product.productionAreaNumber   
-        Product.technologicalProcess={
-          id:product.technologicalProcessId,
-          name:product.technologicalProcessName,
-          number:product.technologicalProcessNumber
-        }
-      }
-      return  Product;
-    }),
-  };
+  console.log(state.product) 
+  // return {
+  //   ...state,
+  //   isRequesting: false,
+  //   product: state.product?.map((Product) => {   
+  //     if (Product.id===product.id) {
+  //       Product.name=product.name
+  //       Product.id=product.id
+  //       Product.number=product.number   
+  //       Product.workshop.number=product.workshopNumber   
+  //       Product.productionArea.number=product.productionAreaNumber   
+  //       Product.technologicalProcess={
+  //         id:product.technologicalProcessId,
+  //         name:product.technologicalProcessName,
+  //         number:product.technologicalProcessNumber
+  //       }
+  //     }
+  //     return  Product;
+  //   }),
+  // };
 };
 const editProductSuccess = (state = INITIAL_STATE, { product }) => {  
   console.log(product)
@@ -261,8 +265,7 @@ const loadDetailSuccess = (state = INITIAL_STATE, { detail }) => {
 };
 const addDetailSuccess = (state = INITIAL_STATE, { detail }) => { 
   console.log(detail)
-  console.log(state.detail)
-  window.location.reload()
+  console.log(state.detail) 
   return {
     ...state,
     isRequesting: false,

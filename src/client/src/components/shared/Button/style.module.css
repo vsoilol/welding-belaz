@@ -90,7 +90,8 @@
   margin: 3px;
   border: 3px solid #ffb999;
   border-radius: 50%;
-  animation: ldsRing 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation: ldsRing 0s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  /* animation: ldsRing 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; */
   border-color: #ffb999 transparent transparent transparent;
 }
 

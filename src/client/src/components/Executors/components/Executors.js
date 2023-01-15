@@ -24,47 +24,44 @@ const useStyles = makeStyles(() => ({
     border: "1px solid red",
   },
 }));
-
-const dateOptions = {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-};
+ 
 
 export const ExecutorsTable = ({
-  addExecutor,
+  addExecutor, 
   deleteExecutor,
   editExecutor,
-  executors,
-  masters,
+  editMaster,
+  editTech,
+  executors, 
   isRequesting,
   type,
   userRole,
+
+  equipment,
+  workshop,
+  area,   
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
   const [activeExecutor, setActiveExecutor] = useState("");
 
-  const classes = useStyles();
+  const [valueWorkshopa, setValueWorkshop] = useState();
+  const [valuetArea, setValuetArea] = useState();
+  const [valuetEquipment, setValuetEquipment] = useState();
+  const [valuetOpenModal, setValuetOpenModal] = useState();
+  const [valuetOpenVkladka, setValuetOpenVkladka] = useState(0);
 
-  const formattedMasters = masters?.map((item) => {
-    return {
-      value: item.masterId,
-      label: `${item.surname} ${item.name}`,
-    };
-  });
-
-  const initialValues = {
+  const classes = useStyles(); 
+  const initialValues = { 
+    id: modalData?.id ?? "",
     rfidTag: modalData?.rfidTag ?? "",
     firstName: modalData?.firstName ?? "",
     lastName: modalData?.lastName ?? "",
-    middleName: modalData?.middleName ?? "",
-    workshopName: modalData?.workshopName ?? "",
-    productionAreaName: modalData?.productionAreaName ?? "",
-    workplaceNumber: modalData?.workplaceNumber ?? "",
+    middleName: modalData?.middleName ?? "", 
     weldingEquipment: modalData?.weldingEquipment ?? [
       {
+        id: modalData?.weldingEquipment?.id ?? null,
         rfidTag: "",
         name: "",
         marking: "",
@@ -73,7 +70,8 @@ export const ExecutorsTable = ({
         currentCondition: "",
       },
     ],
-  };
+  }; 
+ 
 
   const requiredKeys = [
     "rfidTag",
@@ -104,14 +102,27 @@ export const ExecutorsTable = ({
     },
     {
       title: "Цех",
-      field: "workshopName",
+      render: (rowData) => {
+        return (ReturnWorkshop(rowData.productionArea.id));
+      },
     },
     {
       title: "Производственный участок",
-      field: "name",
+      field: "productionArea.name",
     },
-  ];
- 
+  ]; 
+
+
+  function ReturnWorkshop(Area){  
+    if (area!=undefined) {
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].id===Area) {
+          return area[index].workshop.name
+        }
+      } 
+    } 
+    
+  }
 
   const renderValue = (value) => {
     if (value === 0 || value === "0" || value === null) {
@@ -152,11 +163,13 @@ export const ExecutorsTable = ({
     },
     {
       title: "Цех",
-      field: "workshopName",
+      render: (rowData) => {
+        return (ReturnWorkshop(rowData.productionArea.id));
+      },
     },
     {
       title: "Производственный участок",
-      field: "productionAreaName",
+      field: "productionArea.name",
     },
     {
       title: "Номер рабочего места",
@@ -253,7 +266,141 @@ export const ExecutorsTable = ({
       )
     );
   };
+
+
+  const optworkshop = workshop?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  const optArea = area?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  const optequipment = equipment?.map((item) => { 
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  //Запрос на редактирование или добавление
+  function SendData(variables) {  
  
+    variables["productionAreaId"]=valuetArea 
+    variables["weldingEquipmentId"]=valuetEquipment 
+    variables["workshopId"]=valueWorkshopa 
+    if (type==="master") {
+      localStorage.setItem("VkladkaExecutors",0)
+    }
+    if (type==="executor") {
+      localStorage.setItem("VkladkaExecutors",1)
+    }
+    if (type==="controller") {
+      localStorage.setItem("VkladkaExecutors",2)
+    } 
+    //Добавить  
+    if (valuetOpenModal === 0) {
+      console.log(valuetEquipment)
+      addExecutor(variables)
+    } 
+    // //Редактировать 
+    if (valuetOpenModal === 1 && type==="master") {  
+      editMaster(variables)
+    }   
+    if (valuetOpenModal === 1 && type==="executor") {  
+      editExecutor(variables)
+    }   
+    if (valuetOpenModal === 1 && type==="controller") {  
+      editTech(variables)
+    }   
+  }
+  function DisplaySelects(params) {
+
+    if (params.select === "master") {
+      return (
+        <div>
+
+          <div className={styles.row}>
+            <Select
+              name="valuetArea"
+              width="380px"
+              value={valuetArea}
+              placeholder="Производственные участки"
+              onChange={(event) => setValuetArea(event.value)}
+              options={optArea}
+            />
+          </div>
+          <div className={styles.row}>
+            <Select
+              name="valuetEquipment"
+              width="380px"
+              value={valuetEquipment}
+              placeholder="Оборудование"
+              onChange={(event) => setValuetEquipment(event.value)}
+              options={optequipment}
+            />
+          </div>
+        </div>
+      )
+    }
+    if (params.select === "executor") {
+      return (
+        <div>
+          <div className={styles.row}>
+            <Select
+              name="valuetArea"
+              width="380px"
+              value={valuetArea}
+              placeholder="Производственные участки"
+              onChange={(event) => setValuetArea(event.value)}
+              options={optArea}
+            />
+          </div>
+          <div className={styles.row}>
+            <Select
+              name="valuetEquipment"
+              width="380px"
+              value={valuetEquipment}
+              placeholder="Оборудование"
+              onChange={(event) => setValuetEquipment(event.value)}
+              options={optequipment}
+            />
+          </div>
+          <div className={styles.row}>
+            <Select
+              name="valueWorkshopa"
+              value={valueWorkshopa}
+              width="380px"
+              placeholder="Цех"
+              onChange={(event) => {
+                setValueWorkshop(event.value)
+              }}
+              options={optworkshop}
+            />
+          </div>
+        </div>
+      )
+    }
+    if (params.select === "controller") {
+      return (
+        <div>
+          <div className={styles.row}>
+            <Select
+              name="valuetArea"
+              width="380px"
+              value={valuetArea}
+              placeholder="Производственные участки"
+              onChange={(event) => setValuetArea(event.value)}
+              options={optArea}
+            />
+          </div>
+        </div>
+      )
+    }
+  } 
   return (
     <>
       <div className={styles.tableWrapper}>
@@ -261,30 +408,36 @@ export const ExecutorsTable = ({
           title="Сотрудники"
           isLoading={isRequesting}
           actions={
-            userRole === "admin"
+            userRole === "Admin"
               ? [
-                  {
-                    icon: "add",
-                    tooltip: "Добавить пользователя",
-                    isFreeAction: true,
-                    onClick: () => setIsModalOpen(true),
+                {
+                  icon: "add",
+                  tooltip: "Добавить пользователя",
+                  isFreeAction: true,
+                  onClick: () => { setIsModalOpen(true); setValuetOpenModal(0) },
+                },
+                {
+                  icon: "edit",
+                  tooltip: "Редактировать пользователя",
+                  onClick: (event, rowData) => {  
+                    setModalData(rowData);
+                    setIsModalOpen(true);
+                    setValuetOpenModal(1);    
+
+                    setValueWorkshop(rowData.workshop?.id)
+                    setValuetArea(rowData.productionArea.id)
+                    setValuetEquipment(rowData.weldingEquipment?.id)
                   },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать пользователя",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                    },
-                  },
-                ]
+                },
+              ]
               : []
           }
           deleteAction={userRole === "admin" ? deleteExecutor : null}
           renderRowChildren={renderRowChildren}
           rowStyle={classes.rowStyle}
           columns={type === "executor" ? extraUserColumns : controllerColumns}
-          data={executors}
+          data={executors} 
+
         />
       </div>
       {/* <Calendars></Calendars> */}
@@ -307,21 +460,12 @@ export const ExecutorsTable = ({
       >
         <Formik
           initialValues={initialValues}
-          enableReinitialize
+          enableReinitialize 
           onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            modalData
-              ? editExecutor(
-                  { ...variables },
-                  type === "executor"
-                    ? modalData.executorId
-                    : type === "master"
-                    ? modalData.masterId
-                    : modalData.techUserId
-                )
-              : addExecutor({ ...dataToSend });
+            const { id, ...dataToSend } = variables; 
+            SendData(variables,type)
             setIsModalOpen(false);
-            setModalData(null);
+            setModalData(null); 
           }}
         >
           {({
@@ -330,8 +474,9 @@ export const ExecutorsTable = ({
             values,
             setFieldValue,
             handleBlur,
-          }) => (
+          }) => ( 
             <form className={styles.form} onSubmit={handleSubmit}>
+
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
@@ -339,19 +484,21 @@ export const ExecutorsTable = ({
                   }}
                   width="200"
                   style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.surname}
-                  name="surname"
+                  value={values.middleName}
+                  name="middleName"
                   placeholder="Фамилия"
                   onBlur={handleBlur}
                 />
+
+
                 <Input
                   onChange={(e) => {
                     handleChange(e);
                   }}
                   width="200"
                   style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.name}
-                  name="name"
+                  value={values.firstName}
+                  name="firstName"
                   placeholder="Имя"
                   onBlur={handleBlur}
                 />
@@ -360,8 +507,8 @@ export const ExecutorsTable = ({
                     handleChange(e);
                   }}
                   style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.patronymic}
-                  name="patronymic"
+                  value={values.lastName}
+                  name="lastName"
                   placeholder="Отчество"
                   onBlur={handleBlur}
                 />
@@ -371,120 +518,21 @@ export const ExecutorsTable = ({
                   onChange={(e) => {
                     handleChange(e);
                   }}
-                  width="186px"
-                  style={{ height: 40, width: 186 }}
-                  value={values.email}
-                  name="email"
-                  placeholder="email"
-                  onBlur={handleBlur}
-                  type="user"
-                  autoComplete="email"
-                />
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{ height: 40, width: 186, padding: "0 20px 0 30px" }}
-                  value={values.photoName}
-                  name="photoName"
-                  placeholder="Ссылка на фото"
+                  style={{ height: 40, width: 562 }}
+                  value={values.rfidTag}
+                  name="rfidTag"
+                  placeholder="RFID метка "
                   onBlur={handleBlur}
                 />
               </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.position}
-                  name="position"
-                  placeholder="Должность"
-                  onBlur={handleBlur}
-                />
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.badgeNumber}
-                  name="badgeNumber"
-                  placeholder="Номер удостоверения"
-                  onBlur={handleBlur}
-                />
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.badgeExpirationDate}
-                  name="badgeExpirationDate"
-                  type="text"
-                  onFocus={(e) => {
-                    e.currentTarget.type = "date";
-                  }}
-                  placeholder="Срок действия"
-                  onBlur={handleBlur}
-                />
-              </div>
+              <DisplaySelects select={type} />
+
 
               <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{ width: 260, height: 40, padding: "0 20px 0 30px" }}
-                  value={values.stamp}
-                  name="stamp"
-                  placeholder="Клеймо"
-                  onBlur={handleBlur}
-                />
-              </div>
-              {type === "executor" && (
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{
-                      width: 260,
-                      height: 40,
-                      padding: "0 20px 0 30px",
-                    }}
-                    value={values.qualificationArea}
-                    name="qualificationArea"
-                    placeholder="Область распростр. квалификации"
-                    onBlur={handleBlur}
-                  />
-                  <Select
-                    name="masterId"
-                    value={values.masterId}
-                    width="186px"
-                    placeholder="Мастер"
-                    onChange={(e) => {
-                      setFieldValue("masterId", e.value);
-                    }}
-                    options={formattedMasters}
-                  />
-                </div>
-              )}
-              {!modalData && (
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.refId}
-                    name="refId"
-                    placeholder="RFID метка"
-                    onBlur={handleBlur}
-                  />
-                </div>
-              )}
-              <div className={styles.row}>
                 <Button
-                  disabled={requiredKeys.some((key) => !values[key])}
+                  disabled={
+                    values.middleName==""||values.firstName==""||values.lastName==""||values.rfidTag==""
+                  }
                   type="submit"
                 >
                   {modalData ? "Сохранить" : "Создать"}

@@ -103,6 +103,10 @@ export const WorkPlace = ({
   const [valuetWorkPlace, setValuetWorkPlace] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
   const [valuetSeam, setValuetSeam] = useState();
+  const [valueWorkplace, setValueWorkplace] = useState();
+
+  
+
 
   const initialValues = {
     name: modalData?.name ?? "",
@@ -311,6 +315,8 @@ export const WorkPlace = ({
 
   const ChangePanels = (event, newValue) => {
     localStorage.setItem("value_panel",newValue)
+
+    localStorage.removeItem("VkladkaWorkPlace")
     setValue(newValue);
   };
 
@@ -319,6 +325,9 @@ export const WorkPlace = ({
 
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
+    if (localStorage.getItem("VkladkaWorkPlace")!=null) {  
+      setValue(Number(localStorage.getItem("VkladkaWorkPlace"))) 
+    } 
     return <div hidden={value !== indPanel}>{children}</div>;
   };
 
@@ -380,7 +389,7 @@ export const WorkPlace = ({
     variables["technologicalProcessNumber"] = SetValue(valuetTechProc, 3)
     variables["technologicalProcessName"] = SetValue(valuetTechProc, 4)
     
-    variables["workplaceId"] = null  
+    variables["workplaceId"] = valueWorkplace  
  
     //Добавить Цех 
     if (isModalNumb == 8) {
@@ -453,6 +462,8 @@ export const WorkPlace = ({
     if (isModalNumb == 7) {
       editSeam(variables)
     }
+
+    localStorage.setItem("VkladkaWorkPlace",value_panel)
   }
 
   ///Изменение заголовка модалки
@@ -547,6 +558,14 @@ export const WorkPlace = ({
     };
   });
 
+
+  //select рабочие места
+  const workplaceIdOptions = workplace?.map((item) => {
+    return {
+      value: item.id,
+      label: `Рабочие место ${item.number}`,
+    };
+  });
   ///Отображение Selects
   function DisplaySelects(select) {
     if (select.select === 0 || select.select === 8) {
@@ -604,14 +623,12 @@ export const WorkPlace = ({
 
           <div className={styles.row}>
             <Select
-              name="valueProdArea"
-              value={valueProdArea}
+              name="valuetPosts"
               width="380px"
-              placeholder="Цех"
-              onChange={(event) => {
-                setValueProdArea(event.value);
-              }}
-              options={optProdArea}
+              value={valuetPosts}
+              placeholder="Производственные участки"
+              onChange={(event) => setValuetPosts(event.value)}
+              options={optPosts}
             />
           </div>
         </div>
@@ -625,27 +642,17 @@ export const WorkPlace = ({
       return (
         <div>
           <div className={styles.row}>
-            <Select
-              name="valuetWorkPlace"
-              width="380px"
-              value={valuetWorkPlace}
-              placeholder="Пост"
-              onChange={(event) => setValuetWorkPlace(event.value)}
-              options={WorkPlaceOpt}
-            />
-          </div>
-          <div className={styles.row}>
-            <Select
-              name="valueProdArea"
-              value={valueProdArea}
-              width="380px"
-              placeholder="Цех"
-              onChange={(event) => {
-                setValueProdArea(event.value);
-              }}
-              options={optProdArea}
-            />
-          </div>
+              <Select
+                name="valueWorkplace"
+                value={valueWorkplace}
+                width="380px"
+                placeholder="Рабочее место"
+                onChange={(event) => {
+                  setValueWorkplace(event.value)
+                }}
+                options={workplaceIdOptions}
+              />
+          </div> 
 
           <div className={styles.row}>
             <Select
@@ -750,8 +757,9 @@ export const WorkPlace = ({
                     tooltip: "Редактировать цех",
                     onClick: (event, rowData) => {
                       setModalData(rowData);
-                      setIsModalOpen(true);
-                      ; setIsModalNumb(0)
+                      setIsModalOpen(true); 
+                      setIsModalNumb(0);
+                      
                     },
                   },
                 ]
@@ -783,6 +791,10 @@ export const WorkPlace = ({
                     onClick: () => {
                       setIsModalOpen(true);
                       setIsModalNumb(9)
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("") 
                     },
                   },
                   {
@@ -792,6 +804,7 @@ export const WorkPlace = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(1)
+                      setValueProdArea(rowData.workshop.id) 
                     },
                   },
                 ]
@@ -820,7 +833,10 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить пост",
                     isFreeAction: true,
-                    onClick: () => { setIsModalOpen(true); setIsModalNumb(10) },
+                    onClick: () => { setIsModalOpen(true); setIsModalNumb(10) ; setValueProdArea("")
+                    setValuetTechProc("")
+                    setValuetPosts("")
+                    setValuetWorkPlace("") },
                   },
                   {
                     icon: "edit",
@@ -828,7 +844,8 @@ export const WorkPlace = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(2)
+                      setIsModalNumb(2) 
+                      setValuetPosts(rowData.productionArea.id) 
                     },
                   },
                 ]
@@ -857,7 +874,15 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить рабочее место",
                     isFreeAction: true,
-                    onClick: () => { setIsModalOpen(true); setIsModalNumb(11) },
+                    onClick: () => { 
+                      setIsModalOpen(true); 
+                      setIsModalNumb(11) 
+
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("") 
+                    },
                   },
                   {
                     icon: "edit",
@@ -865,7 +890,13 @@ export const WorkPlace = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(3)
+                      setIsModalNumb(3) 
+
+                      console.log(rowData)
+                      setValueProdArea(rowData.workshop?.id)
+                      setValuetTechProc(rowData.technologicalProcess?.id)
+                      setValuetPosts(rowData.productionArea?.id)
+                      setValuetWorkPlace(rowData.workplace?.id) 
                     },
                   },
                 ]
@@ -894,7 +925,16 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить изделие",
                     isFreeAction: true,
-                    onClick: () => { setIsModalOpen(true); setIsModalNumb(12) },
+                    onClick: () => { 
+                      setIsModalOpen(true); 
+                      setIsModalNumb(12) 
+
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("") 
+                      setValueWorkplace("")  
+
+                    },
                   },
                   {
                     icon: "edit",
@@ -902,7 +942,14 @@ export const WorkPlace = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(4)
+                      setIsModalNumb(4) 
+
+                      console.log(rowData)
+
+                      setValueProdArea(rowData.workshop?.id)
+                      setValuetTechProc(rowData.technologicalProcess?.id)
+                      setValuetPosts(rowData.productionArea?.id)
+                      setValueWorkplace(rowData.workplace?.id)  
                     },
                   },
                 ]
@@ -930,7 +977,14 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить узел",
                     isFreeAction: true,
-                    onClick: () => { setIsModalOpen(true); setIsModalNumb(13) },
+                    onClick: () => { 
+                      setIsModalOpen(true); 
+                      setIsModalNumb(13);
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("") 
+                    },
                   },
                   {
                     icon: "edit",
@@ -939,6 +993,10 @@ export const WorkPlace = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(5)
+                      setValueProdArea(rowData.workshop?.id)
+                      setValuetTechProc(rowData.technologicalProcess?.id)
+                      setValuetPosts(rowData.productionArea?.id)
+                      setValuetWorkPlace(rowData.workplace?.id) 
                     },
                   },
                 ]
@@ -966,7 +1024,14 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить деталь",
                     isFreeAction: true,
-                    onClick: () => { setIsModalOpen(true); setIsModalNumb(14) },
+                    onClick: () => { 
+                      setIsModalOpen(true); 
+                      setIsModalNumb(14);
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("") 
+                    },
                   },
                   {
                     icon: "edit",
@@ -975,6 +1040,10 @@ export const WorkPlace = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(6)
+                      setValueProdArea(rowData.workshop?.id)
+                      setValuetTechProc(rowData.technologicalProcess?.id)
+                      setValuetPosts(rowData.productionArea?.id)
+                      setValuetWorkPlace(rowData.workplace?.id) 
                     },
                   },
                 ]
@@ -1089,7 +1158,10 @@ export const WorkPlace = ({
                   </div>
                   <div className={styles.row}>
                     <Button
-                      type="submit"
+                      disabled={
+                        values.number==""||values.name=="" 
+                      }
+                        type="submit"
                     >
                       {modalData ? "Сохранить" : "Создать"}
                     </Button>
@@ -1146,6 +1218,10 @@ export const WorkPlace = ({
                   <div className={styles.row}>
                     <Button
                       type="submit"
+                      disabled={
+                        values.number==""||values.name==""||valueWorkplace==""||
+                        valuetTechProc==""||valuetPosts==""
+                      }
                     >
                       {modalData ? "Сохранить" : "Создать"}
                     </Button>

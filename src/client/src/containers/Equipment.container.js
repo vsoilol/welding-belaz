@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
     isRequesting:
       state?.equipment?.isRequesting || state?.masters?.isRequesting,
     userRole: state.auth.user.role,
-    posts:state.workplace.posts
+    posts:state.workplace.posts, 
+    
   };
 };
 const mapDispatchToProps = {

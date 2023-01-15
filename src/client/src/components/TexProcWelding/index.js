@@ -66,6 +66,7 @@ export const TexProcWelding = ({
   const [open, setOpen] = useState(false);
 
   const [valuetSeam, setValuetSeam] = useState(0); 
+  const [valuetVkladka, setValuetVkladka] = useState(0); 
 
   const initialValues = {
 
@@ -210,14 +211,20 @@ export const TexProcWelding = ({
     setOpen(true);
   };
 
+   
 
 
-  const [value_panel, setValue] = useState(0);
+  const [value_panel, setValue] = useState(0); 
   const ChangePanels = (event, newValue) => {
+    localStorage.removeItem("Vkladka")
     setValue(newValue);
   };
   const TabPanel = (props_panel) => {
-    const { children, value, indPanel } = props_panel;
+    const { children, value, indPanel } = props_panel; 
+    if (localStorage.getItem("Vkladka")!=null) {  
+      setValue(Number(localStorage.getItem("Vkladka"))) 
+    } 
+
     return (
       <div hidden={value !== indPanel}  >
         {children}
@@ -238,6 +245,7 @@ export const TexProcWelding = ({
          variables["weldPassagesId"]=modalData?.weldPassages[0].id
          editInst(variables) 
       }   
+      localStorage.setItem("Vkladka",1)
     }
   ////////////////////////////////////////////////////////////////////
   return (
@@ -334,7 +342,11 @@ export const TexProcWelding = ({
                     icon: "add",
                     tooltip: "Добавить ",
                     isFreeAction: true,
-                    onClick: () => {setIsModalOpen(true);setIsModalOpenNumb(0)},
+                    onClick: () => {
+                      setIsModalOpen(true);
+                      setIsModalOpenNumb(0);
+                      setValuetVkladka(1)
+                    },
                   },
                   {
                     icon: "edit",
@@ -342,7 +354,9 @@ export const TexProcWelding = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalOpenNumb(1)
+                      setIsModalOpenNumb(1) 
+                      setValuetSeam(rowData.seam.id)
+                      setValuetVkladka(1)
                     },
                   },
                 ]

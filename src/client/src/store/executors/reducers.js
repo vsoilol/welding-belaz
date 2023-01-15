@@ -57,12 +57,12 @@ const addExecutorSuccess = (state = INITIAL_STATE, { executor }) => {
 };
 
 const loadMastersSuccess = (state = INITIAL_STATE, { masters }) => {
-
+  
   return {
     ...state,
     isRequesting: false,
-    masters: masters?.map((master) => { 
-      return flattenObject(master);
+    masters: masters?.map((masters) => {
+      return { ...masters };
     }),
   };
 };
@@ -93,12 +93,12 @@ const addMasterSuccess = (state = INITIAL_STATE, { master }) => {
   };
 };
 
-const loadTechsSuccess = (state = INITIAL_STATE, { techs }) => {
+const loadTechsSuccess = (state = INITIAL_STATE, { techs }) => { 
   return {
     ...state,
     isRequesting: false,
-    techs: techs?.map((tech) => {
-      return flattenObject(tech);
+    techs: techs?.map((techs) => {
+      return { ...techs };
     }),
   };
 };
@@ -129,6 +129,31 @@ const addTechSuccess = (state = INITIAL_STATE, { tech }) => {
   };
 };
 
+  ///Оборудование
+const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    equipment,
+  };
+};
+///Цеха 
+const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    workshop,
+  };
+};
+///Производственные участки 
+const loadAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    productionArea,
+  };
+};
+
 const failure = (state = INITIAL_STATE, { error }) => {
   return {
     ...state,
@@ -144,6 +169,10 @@ export const HANDLERS = {
   [Types.LOAD_EXECUTORS_REQUEST]: request,
   [Types.LOAD_EXECUTORS_SUCCESS]: loadExecutorsSuccess,
   [Types.LOAD_EXECUTORS_FAILURE]: failure,
+
+  [Types.LOAD_EQUIPMENT_REQUEST]: request,
+  [Types.LOAD_EQUIPMENT_SUCCESS]: loadEquipmentSuccess,
+  [Types.LOAD_EQUIPMENT_FAILURE]: failure,
 
   [Types.EDIT_EXECUTOR_REQUEST]: request,
   [Types.EDIT_EXECUTOR_SUCCESS]: editExecutorSuccess,
@@ -188,6 +217,16 @@ export const HANDLERS = {
   [Types.ADD_TECH_REQUEST]: request,
   [Types.ADD_TECH_SUCCESS]: addTechSuccess,
   [Types.ADD_TECH_FAILURE]: failure,
+
+  ///Цеха 
+  [Types.LOAD_WORKSHOP_REQUEST]: request,
+  [Types.LOAD_WORKSHOP_SUCCESS]: loadWorkshopSuccess,
+  [Types.LOAD_WORKSHOP_FAILURE]: failure,
+
+ ///Производственные участки 
+ [Types.LOAD_AREA_REQUEST]: request,
+ [Types.LOAD_AREA_SUCCESS]: loadAreaSuccess,
+ [Types.LOAD_AREA_FAILURE]: failure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

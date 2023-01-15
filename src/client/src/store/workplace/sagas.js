@@ -125,7 +125,7 @@ const {
 ///Цеха 
 function* loadWorkshop() {
   try {
-    const { data } = yield call(api.get, `/Workshop`);
+    const { data } = yield call(api.get, `/Workshop`); 
     yield put(loadWorkshopSuccess(data));
   } catch (error) {
     yield put(loadWorkshopFailure(error));
@@ -138,7 +138,8 @@ function* addWorkshop(variables) {
       "name": variables.payload.name,
       "number": variables.payload.number
     });
-    yield put(addWorkshopSuccess(data));
+    window.location.reload() 
+    // yield put(addWorkshopSuccess(data));
   } catch (error) {
     yield put(addWorkshopFailure(error));
     yield put(setError(error.message));
@@ -150,8 +151,9 @@ function* editWorkshop(variables) {
       "id":variables.payload.id,
       "name": variables.payload.name,
       "number": variables.payload.number
-    }); 
-    yield put(editWorkshopSuccess(variables.payload));
+    });
+    window.location.reload() 
+    // yield put(editWorkshopSuccess(variables.payload));
   } catch (error) {
     yield put(editWorkshopFailure(error));
     yield put(setError(error.message));
@@ -174,7 +176,8 @@ function* addArea(variables) {
       "number": variables.payload.number,
       "workshopId": variables.payload.workshopId
     });
-     yield put(addAreaSuccess(data));
+    window.location.reload()
+    //  yield put(addAreaSuccess(data));
   } catch (error) {
     yield put(addAreaFailure(error));
     yield put(setError(error.message));
@@ -188,7 +191,8 @@ function* editArea(variables) {
       "number": variables.payload.number,
       "workshopId": variables.payload.workshopId
     });
-    yield put(editAreaSuccess(variables.payload));
+    window.location.reload()
+    // yield put(editAreaSuccess(variables.payload));
   } catch (error) {
     yield put(editAreaFailure(error));
     yield put(setError(error.message));
@@ -212,7 +216,8 @@ function* addPosts(variables) {
       "productionAreaId": variables.payload.productionAreaId
     }
     );
-    yield put(addPostsSuccess(data));
+    window.location.reload()
+    // yield put(addPostsSuccess(data));
   } catch (error) {
     yield put(addPostsFailure(error));
     yield put(setError(error.message));
@@ -225,7 +230,8 @@ function* editPosts(variables) {
       "number": variables.payload.number,
       "productionAreaId": variables.payload.productionAreaId
     });
-    yield put(editPostsSuccess(variables.payload));
+    window.location.reload()
+    // yield put(editPostsSuccess(variables.payload));
   } catch (error) {
     yield put(editPostsFailure(error));
     yield put(setError(error.message));
@@ -250,7 +256,8 @@ function* addWorkplace(variables) {
       "productionAreaId": variables.payload.productionAreaId
     }
     );
-    yield put(addWorkplaceSuccess(data));
+    window.location.reload()
+    // yield put(addWorkplaceSuccess(data));
   } catch (error) {
     yield put(addWorkplaceFailure(error));
     yield put(setError(error.message));
@@ -264,7 +271,8 @@ function* editWorkplace(variables) {
       "postId": variables.payload.postId,
       "productionAreaId": variables.payload.productionAreaId
     });
-    yield put(editWorkplaceSuccess(variables.payload));
+    window.location.reload()
+    // yield put(editWorkplaceSuccess(variables.payload));
   } catch (error) {
     yield put(editWorkplaceFailure(error));
     yield put(setError(error.message));
@@ -288,39 +296,24 @@ function* loadProduct() {
 }
 function* addProduct(variables) {
   try {
-    console.log( {
-      "id": variables.payload.id,
+   
+    const { data } = yield call(api.post, `/product`, {
       "name": variables.payload.name,
       "number": variables.payload.number,
       "isControlSubject": true,
       "productionAreaId": variables.payload.productionAreaId,
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId, 
-    })
-    const { data } = yield call(api.post, `/product`, {
-      "name": variables.payload.name,
-      "number": variables.payload.number,
-      "isControlSubject": true,
-      "productionAreaId": variables.payload.productionAreaId,
-      "technologicalProcessId": variables.payload.technologicalProcessId,
     });
-    yield put(addProductSuccess(variables.payload));
+    window.location.reload() 
+    // yield put(addProductSuccess(variables));
   } catch (error) {
     yield put(addProductFailure(error));
     yield put(setError(error.message));
   }
 }
 function* editProduct(variables) {
-  try {
-    console.log( {
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number": variables.payload.number,
-      "isControlSubject": true,
-      "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId, 
-    })
+  try { 
     const { data } = yield call(api.put, `/product`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
@@ -330,7 +323,8 @@ function* editProduct(variables) {
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId, 
     });
-    yield put(editProductSuccess(variables.payload));
+    window.location.reload()
+    // yield put(editProductSuccess(variables.payload));
   } catch (error) {
     yield put(editProductFailure(error));
     yield put(setError(error.message));
@@ -347,15 +341,8 @@ function* loadKnot() {
   }
 }
 function* addKnot(variables) {
+  
   try { 
-    console.log({
-      "name":variables.payload.name,
-      "number":Number( variables.payload.number),
-      "isControlSubject": false,
-      "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId":  variables.payload.technologicalProcessId,
-    })
     const { data } = yield call(api.post, `/knot`, {
       "name":variables.payload.name,
       "number":Number( variables.payload.number),
@@ -364,23 +351,15 @@ function* addKnot(variables) {
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId":  variables.payload.technologicalProcessId,
     });
-    yield put(addKnotSuccess(variables.payload));
+    window.location.reload()
+    // yield put(addKnotSuccess(variables.payload));
   } catch (error) {
     yield put(addKnotFailure(error));
     yield put(setError(error.message));
   }
 }
 function* editKnot(variables) {
-  try { 
-    console.log({
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number":Number( variables.payload.number),
-      "isControlSubject": false,
-      "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId,
-    })
+  try {  
     const { data } = yield call(api.put, `/knot`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
@@ -390,7 +369,8 @@ function* editKnot(variables) {
       "technologicalProcessId": variables.payload.technologicalProcessId,
       "workplaceId": variables.payload.workplaceId,
     });
-    yield put(editKnotSuccess(variables.payload));
+    window.location.reload()
+    // yield put(editKnotSuccess(variables.payload));
   } catch (error) {
     yield put(editKnotFailure(error));
     yield put(setError(error.message));
@@ -407,15 +387,7 @@ function* loadDetail() {
   }
 }
 function* addDetail(variables) {
-  try { 
-    console.log({
-      "name": variables.payload.name,
-      "number":variables.payload.number,
-      "isControlSubject": true,
-      "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId":variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId,
-    })
+  try {  
     const { data } = yield call(api.post, `/detail`, {
       "name": variables.payload.name,
       "number": variables.payload.number,
@@ -423,24 +395,16 @@ function* addDetail(variables) {
       "productionAreaId": variables.payload.productionAreaId,
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId, 
-    });
-    yield put(addDetailSuccess(variables.payload));
+    }); 
+    window.location.reload()
+    // yield put(addDetailSuccess(variables.payload));
   } catch (error) {
     yield put(addDetailFailure(error));
     yield put(setError(error.message));
   }
 }
 function* editDetail(variables) {
-  try { 
-    console.log({
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number": variables.payload.number,
-      "isControlSubject": true,
-      "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId, 
-    })
+  try {  
     const { data } = yield call(api.put, `/detail`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
@@ -450,7 +414,8 @@ function* editDetail(variables) {
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId, 
     });
-    yield put(editDetailSuccess(variables.payload));
+    window.location.reload()
+    // yield put(editDetailSuccess(variables.payload));
   } catch (error) {
     yield put(editDetailFailure(error));
     yield put(setError(error.message));

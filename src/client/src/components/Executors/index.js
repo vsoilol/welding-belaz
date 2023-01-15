@@ -24,6 +24,13 @@ export const Executors = ({
   techs,
   userRole,
   isRequesting,
+
+  loadEquipment,
+  loadWorkshop,
+  loadArea,
+  equipment,
+  workshop,
+  area, 
 }) => {
   const [value, setValue] = useState(0);
 
@@ -31,12 +38,19 @@ export const Executors = ({
     loadExecutors();
     loadMasters();
     loadTechs();
-  }, [loadExecutors, loadTechs, loadMasters]);
+    loadEquipment();
+    loadWorkshop();
+    loadArea();
+  }, [loadExecutors, loadTechs, loadMasters,loadEquipment,loadWorkshop,loadArea]);
 
   const handleChange = (event, newValue) => {
+    localStorage.removeItem("VkladkaExecutors")
     setValue(newValue);
   };
 
+
+
+ 
   const a11yProps = (index) => {
     return {
       id: `full-width-tab-${index}`,
@@ -46,7 +60,9 @@ export const Executors = ({
 
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
-
+    if (localStorage.getItem("VkladkaExecutors")!=null) {  
+      setValue(Number(localStorage.getItem("VkladkaExecutors"))) 
+    } 
     return (
       <div
         role="tabpanel"
@@ -93,8 +109,12 @@ export const Executors = ({
           userRole={userRole}
           addExecutor={addMaster}
           deleteExecutor={deleteMaster}
-          editExecutor={editMaster}
-          executors={masters}
+          editMaster={editMaster}
+          executors={masters} 
+
+          equipment={equipment}
+          workshop={workshop}
+          area={area}
         />
       </TabPanel>
       <TabPanel
@@ -111,8 +131,11 @@ export const Executors = ({
           addExecutor={addExecutor}
           deleteExecutor={deleteExecutor}
           editExecutor={editExecutor}
-          executors={executors}
-          masters={masters}
+          executors={executors} 
+
+          equipment={equipment}
+          workshop={workshop}
+          area={area}
         />
       </TabPanel>
       <TabPanel
@@ -128,8 +151,12 @@ export const Executors = ({
           userRole={userRole}
           addExecutor={addTech}
           deleteExecutor={deleteTech}
-          editExecutor={editTech}
+          editTech={editTech}
           executors={techs}
+
+          equipment={equipment}
+          workshop={workshop}
+          area={area}
         />
       </TabPanel>
     </div>
