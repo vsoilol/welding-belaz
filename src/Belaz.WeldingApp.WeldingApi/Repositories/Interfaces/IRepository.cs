@@ -7,6 +7,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
          where T : Entity
     {
         T Add(T entity);
+        
+        Task AddRangeAsync(IEnumerable<T> entities);
 
         IQueryable<T> AsQueryable();
 
@@ -37,6 +39,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Interfaces
         Task<bool> SaveAsync();
 
         bool Update(T entity);
+        
+        Task<bool> UpdateRangeAsync(IEnumerable<T> entities);
 
         Task<bool> UpdateAsync(T entity);
     }

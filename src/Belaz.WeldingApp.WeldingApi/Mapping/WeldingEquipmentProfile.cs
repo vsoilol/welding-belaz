@@ -58,9 +58,9 @@ public class WeldingEquipmentProfile : Profile
                     .MapFrom(x => x.Welder.UserInfo))
             .ForMember(dto => dto.ActivationDuration,
                 opt => opt
-                    .MapFrom(x => x.WeldingEquipmentWorkingShifts
-                        .Where(_ => _.WeldingEquipmentConditionTime.Condition == Condition.AtWork)
-                        .Sum(_ => _.WeldingEquipmentConditionTime.Time)));
+                    .MapFrom(x => x.WeldingEquipmentConditionTime
+                        .Where(_ => _.Condition == Condition.AtWork)
+                        .Sum(_ => _.Time)));
     }
 
     private void WeldingEquipmentConditionTimeToWeldingEquipmentDowntimeDto()
@@ -71,6 +71,6 @@ public class WeldingEquipmentProfile : Profile
                     .MapFrom(x => x.ChangeConditionTime.ToHoursMinutesSecondsString()))
             .ForMember(dto => dto.WeldingEquipment,
                 opt => opt
-                    .MapFrom(x => x.WeldingEquipmentWorkingShift.WeldingEquipment));
+                    .MapFrom(x => x.WeldingEquipment));
     }
 }

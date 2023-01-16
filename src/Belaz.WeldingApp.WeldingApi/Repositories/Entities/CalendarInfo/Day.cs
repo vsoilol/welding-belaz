@@ -9,16 +9,13 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
         
         public int Number { get; set; }
 
-        /// <summary>
-        /// Перерыв между сменами в минутах
-        /// </summary>
-        public int? BreakBetweenShifts { get; set; }
-        
-        public Guid CalendarId { get; set; }
-        
-        [ForeignKey(nameof(CalendarId))]
-        public Calendar Calendar { get; set; }
+        public bool IsWorkingDay { get; set; }
 
-        public List<WorkingShift> Shifts { get; set; }
+        public Guid CalendarId { get; set; }
+
+        [ForeignKey(nameof(CalendarId))] 
+        public Calendar Calendar { get; set; } = null!;
+
+        public List<WorkingShift>? WorkingShifts { get; set; }
     }
 }

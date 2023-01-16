@@ -15,19 +15,19 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// <summary>
         /// RFID-метка
         /// </summary>
-        public string RfidTag { get; set; }
+        public string RfidTag { get; set; } = null!;
         
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary>
         /// Маркировка
         /// </summary>
-        public string Marking { get; set; }
+        public string Marking { get; set; } = null!;
 
         /// <summary>
         /// Заводской (инвентарный) номер
         /// </summary>
-        public string FactoryNumber { get; set; }
+        public string FactoryNumber { get; set; } = null!;
 
         /// <summary>
         /// Дата ввода в эксплуатацию
@@ -53,7 +53,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// <summary>
         /// Наименование изготовителя
         /// </summary>
-        public string ManufacturerName { get; set; }
+        public string ManufacturerName { get; set; } = null!;
 
         /// <summary>
         /// Дата очередной аттестации
@@ -63,7 +63,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         /// <summary>
         /// Процесс (способ) сварки
         /// </summary>
-        public string WeldingProcess { get; set; }
+        public string WeldingProcess { get; set; } = null!;
 
         /// <summary>
         /// Напряжение холостого хода
@@ -95,10 +95,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         [ForeignKey(nameof(PostId))]
         public Post? Post { get; set; }
         
-        public Guid? CalendarId { get; set; }
-        
-        [ForeignKey(nameof(CalendarId))]
-        public Calendar? Calendar { get; set; }
+        public List<Calendar>? Calendars { get; set; }
         
         public Master? Master { get; set; }
 
@@ -106,6 +103,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         
         public Chief? Chief { get; set; }
 
-        public List<WeldingEquipmentWorkingShift> WeldingEquipmentWorkingShifts { get; set; } = null!;
+        public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTime { get; set; } = null!;
     }
 }

@@ -41,9 +41,7 @@ public class ApplicationContext : DbContext
     public DbSet<Welder> Welders { get; set; }
         
     public DbSet<WeldingEquipment> WeldingEquipments { get; set; }
-        
-    public DbSet<WeldingEquipmentWorkingShift> WeldingEquipmentWorkingShifts { get; set; }
-        
+
     public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; }
         
     public DbSet<LayerInstruction> LayerInstructions { get; set; }
@@ -80,9 +78,6 @@ public class ApplicationContext : DbContext
             .WithMany(e => e.ProductMains)
             .OnDelete(DeleteBehavior.Restrict);
         
-        
-        modelBuilder.Entity<WeldingEquipmentWorkingShift>().HasKey(t =>
-            new { t.WeldingEquipmentId, t.WorkingShiftId, t.WeldingEquipmentConditionTimeId });
         modelBuilder.Entity<UserRole>().HasKey(t => new { t.RoleId, t.UserId });
         modelBuilder.Entity<ProductInside>().HasKey(t => new { t.InsideProductId, t.MainProductId });
     }

@@ -27,7 +27,9 @@ SET default_table_access_method = heap;
 CREATE TABLE public."Calendars" (
     "Id" uuid NOT NULL,
     "Year" integer NOT NULL,
-    "IsMain" boolean NOT NULL
+    "IsMain" boolean NOT NULL,
+    "WelderId" uuid,
+    "WeldingEquipmentId" uuid
 );
 
 
@@ -50,7 +52,7 @@ CREATE TABLE public."Days" (
     "Id" uuid NOT NULL,
     "MonthNumber" integer NOT NULL,
     "Number" integer NOT NULL,
-    "BreakBetweenShifts" integer,
+    "IsWorkingDay" boolean NOT NULL,
     "CalendarId" uuid NOT NULL
 );
 
@@ -258,7 +260,6 @@ CREATE TABLE public."Welders" (
     "Id" uuid NOT NULL,
     "UserId" uuid NOT NULL,
     "WorkplaceId" uuid,
-    "CalendarId" uuid,
     "WeldingEquipmentId" uuid
 );
 
@@ -271,19 +272,10 @@ CREATE TABLE public."WeldingEquipmentConditionTimes" (
     "Id" uuid NOT NULL,
     "Condition" integer NOT NULL,
     "DowntimeReason" text,
+    "Date" timestamp without time zone NOT NULL,
     "ChangeConditionTime" interval,
-    "Time" integer NOT NULL
-);
-
-
---
--- Name: WeldingEquipmentWorkingShifts; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public."WeldingEquipmentWorkingShifts" (
-    "WeldingEquipmentId" uuid NOT NULL,
-    "WorkingShiftId" uuid NOT NULL,
-    "WeldingEquipmentConditionTimeId" uuid NOT NULL
+    "Time" integer NOT NULL,
+    "WeldingEquipmentId" uuid NOT NULL
 );
 
 
@@ -311,8 +303,7 @@ CREATE TABLE public."WeldingEquipments" (
     "WeldingCurrentMax" double precision NOT NULL,
     "ArcVoltageMin" double precision NOT NULL,
     "ArcVoltageMax" double precision NOT NULL,
-    "PostId" uuid,
-    "CalendarId" uuid
+    "PostId" uuid
 );
 
 
@@ -361,7 +352,10 @@ CREATE TABLE public."WorkingShifts" (
     "Number" integer NOT NULL,
     "ShiftStart" interval NOT NULL,
     "ShiftEnd" interval NOT NULL,
-    "DayId" uuid NOT NULL
+    "BreakStart" interval,
+    "BreakEnd" interval,
+    "DayId" uuid,
+    "CalendarId" uuid
 );
 
 
@@ -392,8 +386,7 @@ CREATE TABLE public."Workshops" (
 -- Data for Name: Calendars; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."Calendars" ("Id", "Year", "IsMain") FROM stdin;
-27f8d01a-b8e0-4035-8322-12dc56654c14	2022	t
+COPY public."Calendars" ("Id", "Year", "IsMain", "WelderId", "WeldingEquipmentId") FROM stdin;
 \.
 
 
@@ -402,7 +395,7 @@ COPY public."Calendars" ("Id", "Year", "IsMain") FROM stdin;
 --
 
 COPY public."Chiefs" ("Id", "UserId", "WeldingEquipmentId") FROM stdin;
-24da51d3-0ac9-45ce-b3a9-611a22aa0ea6	54f73f47-60e1-4e6b-afc7-972873236dc5	\N
+7ee9f4da-6d0e-48ff-b03c-5746e8f87d1c	da4f258e-76e3-4024-8485-cff8b9042505	\N
 \.
 
 
@@ -410,8 +403,7 @@ COPY public."Chiefs" ("Id", "UserId", "WeldingEquipmentId") FROM stdin;
 -- Data for Name: Days; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."Days" ("Id", "MonthNumber", "Number", "BreakBetweenShifts", "CalendarId") FROM stdin;
-66edee4e-2b80-445b-b16b-ad6b0a964a0a	1	1	30	27f8d01a-b8e0-4035-8322-12dc56654c14
+COPY public."Days" ("Id", "MonthNumber", "Number", "IsWorkingDay", "CalendarId") FROM stdin;
 \.
 
 
@@ -428,7 +420,7 @@ COPY public."EventLogs" ("Id", "Information", "DateTime", "UserId") FROM stdin;
 --
 
 COPY public."Inspectors" ("Id", "UserId") FROM stdin;
-26358587-e108-4173-a9ac-06d65b257bd1	7be51056-22de-41c6-9dae-076ac668ea5f
+05862b4d-30cc-4e8a-96a2-6a97aed40000	007d788a-4fdd-4510-a086-dc42994f02e2
 \.
 
 
@@ -445,7 +437,7 @@ COPY public."LayerInstructions" ("Id", "WeldingCurrentMin", "WeldingCurrentMax",
 --
 
 COPY public."Masters" ("Id", "UserId", "WeldingEquipmentId") FROM stdin;
-6f08d4df-b70f-4df7-98ee-31746d9d47e6	60e2795d-781d-4868-a2fa-0be9ea4dea99	977d922f-e3c3-4b5b-8609-4de466650aad
+79369079-fb96-4ccb-a665-cfb755885e63	eda2538e-3752-418d-98ba-06f2fba1278e	01cb5d04-a1af-4a58-b1ba-157efedb64c0
 \.
 
 
@@ -454,9 +446,9 @@ COPY public."Masters" ("Id", "UserId", "WeldingEquipmentId") FROM stdin;
 --
 
 COPY public."Posts" ("Id", "Number", "ProductionAreaId") FROM stdin;
-25eb9ecd-d82c-4dee-8a1f-1fde6be8da77	2	8e19bdc2-0fc2-4beb-843f-d28090087010
-77868873-6789-453d-a154-6cad3ac3264b	1	7324bf38-98ce-4b95-849f-3ebdbc59aa64
-f35b3841-40d6-413d-9cfb-170c1b94c6b2	3	dadbf6ba-7b25-4f4f-aa80-6e7a566baac4
+4f3b4a96-7a8c-4359-b050-ee141a183bc9	2	0c293814-fda2-4870-a5c8-8bd46dd33a98
+7159cfa1-fd16-4f4b-a7d8-6dd4587676fe	3	bc8b8a84-5ee1-4afa-a71f-ffb452211179
+7f7bec39-9822-4179-855f-24a12a055a5d	1	8786400c-9873-4f88-a720-4fdf9efb382a
 \.
 
 
@@ -465,10 +457,10 @@ f35b3841-40d6-413d-9cfb-170c1b94c6b2	3	dadbf6ba-7b25-4f4f-aa80-6e7a566baac4
 --
 
 COPY public."ProductInsides" ("MainProductId", "InsideProductId") FROM stdin;
-cfd71f62-cd3d-4556-ab51-f1726b0414ef	2d23825c-7889-443d-bf30-1f441b3cc67f
-27e18cb3-f652-4862-ac41-1b5b77a84bef	33f9bb20-c489-4d21-b6d8-cc207179530f
-27e18cb3-f652-4862-ac41-1b5b77a84bef	5b26c2b0-7adb-4641-83cb-3a2ba6faec0f
-cfd71f62-cd3d-4556-ab51-f1726b0414ef	7ac42d90-80d0-428b-bb7c-35bac9e8cff0
+2fef3be5-7b03-4e56-a09e-6c6ee58ded0f	2b12f5de-39e9-4697-9f2f-6cb6115bac1b
+2c165f01-f057-4589-8ec0-96ec8e50b01e	7941cb92-df27-42ab-bfe3-1ab0afebeabd
+2c165f01-f057-4589-8ec0-96ec8e50b01e	80586316-698a-4cbf-aae9-badb7dc46e69
+2fef3be5-7b03-4e56-a09e-6c6ee58ded0f	fb18bed3-5778-4c72-8138-ff29dd758830
 \.
 
 
@@ -477,9 +469,9 @@ cfd71f62-cd3d-4556-ab51-f1726b0414ef	7ac42d90-80d0-428b-bb7c-35bac9e8cff0
 --
 
 COPY public."ProductionAreas" ("Id", "Name", "Number", "WorkshopId") FROM stdin;
-7324bf38-98ce-4b95-849f-3ebdbc59aa64	Производственный участок 1	1	dd961c80-0d8d-421f-b52b-8da75116da47
-8e19bdc2-0fc2-4beb-843f-d28090087010	Производственный участок 2	2	dd961c80-0d8d-421f-b52b-8da75116da47
-dadbf6ba-7b25-4f4f-aa80-6e7a566baac4	Производственный участок 3	3	dd961c80-0d8d-421f-b52b-8da75116da47
+0c293814-fda2-4870-a5c8-8bd46dd33a98	Производственный участок 2	2	45615e12-2b26-4246-80c6-6b6dda24d68b
+8786400c-9873-4f88-a720-4fdf9efb382a	Производственный участок 1	1	45615e12-2b26-4246-80c6-6b6dda24d68b
+bc8b8a84-5ee1-4afa-a71f-ffb452211179	Производственный участок 3	3	45615e12-2b26-4246-80c6-6b6dda24d68b
 \.
 
 
@@ -488,12 +480,12 @@ dadbf6ba-7b25-4f4f-aa80-6e7a566baac4	Производственный участ
 --
 
 COPY public."Products" ("Id", "Name", "Number", "IsControlSubject", "ProductType", "TechnologicalProcessId", "ProductionAreaId", "WorkplaceId") FROM stdin;
-2d23825c-7889-443d-bf30-1f441b3cc67f	Деталь 1	1	f	3	\N	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
-33f9bb20-c489-4d21-b6d8-cc207179530f	Деталь 2	2	t	3	\N	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
-5b26c2b0-7adb-4641-83cb-3a2ba6faec0f	Узел 2	2	f	2	\N	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
-7ac42d90-80d0-428b-bb7c-35bac9e8cff0	Узел 1	1	f	2	\N	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
-27e18cb3-f652-4862-ac41-1b5b77a84bef	Изделие 2	2	f	1	0c7fb597-8743-4c72-87be-6a1f11e47598	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
-cfd71f62-cd3d-4556-ab51-f1726b0414ef	Изделие 1	1	t	1	cb9f28e1-e595-4ab5-85ce-5c89c6249044	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
+2b12f5de-39e9-4697-9f2f-6cb6115bac1b	Деталь 2	2	t	3	\N	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
+7941cb92-df27-42ab-bfe3-1ab0afebeabd	Узел 1	1	f	2	\N	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
+80586316-698a-4cbf-aae9-badb7dc46e69	Деталь 1	1	f	3	\N	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
+fb18bed3-5778-4c72-8138-ff29dd758830	Узел 2	2	f	2	\N	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
+2c165f01-f057-4589-8ec0-96ec8e50b01e	Изделие 1	1	t	1	62289cb0-22f2-40a0-bd0a-6bb3f3e8c8ea	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
+2fef3be5-7b03-4e56-a09e-6c6ee58ded0f	Изделие 2	2	f	1	a91016ca-94c7-4f7f-9d1e-406b2a7186da	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
 \.
 
 
@@ -502,11 +494,11 @@ cfd71f62-cd3d-4556-ab51-f1726b0414ef	Изделие 1	1	t	1	cb9f28e1-e595-4ab5-8
 --
 
 COPY public."Roles" ("Id", "Name") FROM stdin;
-3cff879f-45e3-4223-a80d-02a2ce7476cc	Admin
-84e08097-9020-4bf0-b39b-d9149239fa62	Master
-aecbccf7-12be-4a74-9e10-b64decbfb903	Executor
-dee43710-e6cc-4785-9811-cde4ecf59c40	TechUser
-28ef4057-ef60-46c0-aa6d-22a55123126a	Chief
+b352ce06-e9e9-4ca0-9716-425ee5d39372	Admin
+5e95f0d3-6755-4c09-8095-58b0f53333f7	Master
+ae11e92b-4a36-4bbd-a431-f086c0a4e6cd	Executor
+7f435ea7-33e5-4b0c-a57b-c5cddbc6e348	TechUser
+e0966c16-bf52-4832-bbba-d7271d221aeb	Chief
 \.
 
 
@@ -515,8 +507,8 @@ dee43710-e6cc-4785-9811-cde4ecf59c40	TechUser
 --
 
 COPY public."Seams" ("Id", "Number", "IsControlSubject", "ProductId", "ProductionAreaId", "WorkplaceId") FROM stdin;
-b8dcf6a8-8f2d-400d-a0f4-f9e9d3754686	2	t	27e18cb3-f652-4862-ac41-1b5b77a84bef	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
-deb02824-0b05-4e94-8fb0-74b363a68a61	1	f	cfd71f62-cd3d-4556-ab51-f1726b0414ef	7324bf38-98ce-4b95-849f-3ebdbc59aa64	25826fa4-4ea2-4756-a958-601ec4158681
+115dee8b-5e09-419f-8ddb-24fcabb03f93	1	f	2c165f01-f057-4589-8ec0-96ec8e50b01e	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
+6e00cacc-db9b-4007-8c75-ad71add47d08	2	t	2fef3be5-7b03-4e56-a09e-6c6ee58ded0f	0c293814-fda2-4870-a5c8-8bd46dd33a98	787822e5-1b9a-4c39-95f2-34dfb3240971
 \.
 
 
@@ -525,8 +517,8 @@ deb02824-0b05-4e94-8fb0-74b363a68a61	1	f	cfd71f62-cd3d-4556-ab51-f1726b0414ef	73
 --
 
 COPY public."TechnologicalInstruction" ("Id", "Number", "Name", "SeamId", "TechnologicalProcessId") FROM stdin;
-c79c8440-c709-425e-8d38-3e8fa867a78a	2	Инструкция 2	b8dcf6a8-8f2d-400d-a0f4-f9e9d3754686	0c7fb597-8743-4c72-87be-6a1f11e47598
-d533f7e0-0343-49cf-8073-16970fa45d18	1	Инструкция 1	deb02824-0b05-4e94-8fb0-74b363a68a61	cb9f28e1-e595-4ab5-85ce-5c89c6249044
+8e7a7c1d-b169-4ba7-9ae5-4a55f357adb3	1	Инструкция 1	115dee8b-5e09-419f-8ddb-24fcabb03f93	62289cb0-22f2-40a0-bd0a-6bb3f3e8c8ea
+9d81c980-bbbb-455d-ae20-eee8942f2c3d	2	Инструкция 2	6e00cacc-db9b-4007-8c75-ad71add47d08	a91016ca-94c7-4f7f-9d1e-406b2a7186da
 \.
 
 
@@ -535,8 +527,8 @@ d533f7e0-0343-49cf-8073-16970fa45d18	1	Инструкция 1	deb02824-0b05-4e94
 --
 
 COPY public."TechnologicalProcesses" ("Id", "Number", "Name", "PdmSystemFileLink") FROM stdin;
-0c7fb597-8743-4c72-87be-6a1f11e47598	2	Технологический процесс 2	Ссылка
-cb9f28e1-e595-4ab5-85ce-5c89c6249044	1	Технологический процесс 1	Ссылка
+62289cb0-22f2-40a0-bd0a-6bb3f3e8c8ea	1	Технологический процесс 1	Ссылка
+a91016ca-94c7-4f7f-9d1e-406b2a7186da	2	Технологический процесс 2	Ссылка
 \.
 
 
@@ -545,13 +537,13 @@ cb9f28e1-e595-4ab5-85ce-5c89c6249044	1	Технологический проце
 --
 
 COPY public."UserRoles" ("UserId", "RoleId") FROM stdin;
-54f73f47-60e1-4e6b-afc7-972873236dc5	28ef4057-ef60-46c0-aa6d-22a55123126a
-5b977dfd-3834-4ce7-8215-5a093afa9fe7	aecbccf7-12be-4a74-9e10-b64decbfb903
-6838b2b7-316b-461b-827b-aeea07046733	aecbccf7-12be-4a74-9e10-b64decbfb903
-9100a0ee-14f5-4225-bb97-e39aacf04e22	aecbccf7-12be-4a74-9e10-b64decbfb903
-7be51056-22de-41c6-9dae-076ac668ea5f	dee43710-e6cc-4785-9811-cde4ecf59c40
-60e2795d-781d-4868-a2fa-0be9ea4dea99	84e08097-9020-4bf0-b39b-d9149239fa62
-10f4f97d-014d-42bc-a1d4-20a4c412d55c	3cff879f-45e3-4223-a80d-02a2ce7476cc
+da4f258e-76e3-4024-8485-cff8b9042505	e0966c16-bf52-4832-bbba-d7271d221aeb
+27a3544d-9b37-4285-a6ee-b7c6168b103d	ae11e92b-4a36-4bbd-a431-f086c0a4e6cd
+59a5c238-68fc-4c81-a875-c566f9f14a58	ae11e92b-4a36-4bbd-a431-f086c0a4e6cd
+e2c7348f-6d96-40ff-a3a2-49e52e5f836f	ae11e92b-4a36-4bbd-a431-f086c0a4e6cd
+007d788a-4fdd-4510-a086-dc42994f02e2	7f435ea7-33e5-4b0c-a57b-c5cddbc6e348
+eda2538e-3752-418d-98ba-06f2fba1278e	5e95f0d3-6755-4c09-8095-58b0f53333f7
+1899ae2d-58ea-47cf-867c-23c609782ab3	b352ce06-e9e9-4ca0-9716-425ee5d39372
 \.
 
 
@@ -560,13 +552,13 @@ COPY public."UserRoles" ("UserId", "RoleId") FROM stdin;
 --
 
 COPY public."Users" ("Id", "FirstName", "LastName", "MiddleName", "UserName", "Email", "PasswordHash", "Position", "ServiceNumber", "CertificateValidityPeriod", "RfidTag", "ProductionAreaId") FROM stdin;
-54f73f47-60e1-4e6b-afc7-972873236dc5	Имя начальника цеха	Отчество начальника цеха	Фамилия начальника цеха	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка начальника цеха 1	7324bf38-98ce-4b95-849f-3ebdbc59aa64
-5b977dfd-3834-4ce7-8215-5a093afa9fe7	Имя 1	Отчество 1	Фамилия 1	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка сварщика 1	7324bf38-98ce-4b95-849f-3ebdbc59aa64
-6838b2b7-316b-461b-827b-aeea07046733	Имя 3	Отчество 3	Фамилия 3	UserName	Email	PasswordHash	Должность 3	Табельный номер 3	2025-03-03 00:00:00	RFID метка сварщика 3	dadbf6ba-7b25-4f4f-aa80-6e7a566baac4
-9100a0ee-14f5-4225-bb97-e39aacf04e22	Имя 2	Отчество 2	Фамилия 2	UserName	Email	PasswordHash	Должность 2	Табельный номер  2	2025-01-01 00:00:00	RFID метка сварщика 2	8e19bdc2-0fc2-4beb-843f-d28090087010
-7be51056-22de-41c6-9dae-076ac668ea5f	Имя Контролера	Имя Контролера	Имя Контролера	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка проверяющего 1	7324bf38-98ce-4b95-849f-3ebdbc59aa64
-60e2795d-781d-4868-a2fa-0be9ea4dea99	Имя мастера	Отчество мастера	Фамилия мастера	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка проверяющего 1	7324bf38-98ce-4b95-849f-3ebdbc59aa64
-10f4f97d-014d-42bc-a1d4-20a4c412d55c	Admin	Adminovich	Admin	admin1@admin.com	admin@admin.com	$MYHASH$V1$10000$+JbApnxr9pqPeUCg46o7vaWIkcEQ7Yf/UpeJannMFg0EC1Pu	\N	\N	\N	\N	\N
+da4f258e-76e3-4024-8485-cff8b9042505	Имя начальника цеха	Отчество начальника цеха	Фамилия начальника цеха	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка начальника цеха 1	0c293814-fda2-4870-a5c8-8bd46dd33a98
+27a3544d-9b37-4285-a6ee-b7c6168b103d	Имя 2	Отчество 2	Фамилия 2	UserName	Email	PasswordHash	Должность 2	Табельный номер  2	2025-01-01 00:00:00	RFID метка сварщика 2	8786400c-9873-4f88-a720-4fdf9efb382a
+59a5c238-68fc-4c81-a875-c566f9f14a58	Имя 1	Отчество 1	Фамилия 1	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка сварщика 1	0c293814-fda2-4870-a5c8-8bd46dd33a98
+e2c7348f-6d96-40ff-a3a2-49e52e5f836f	Имя 3	Отчество 3	Фамилия 3	UserName	Email	PasswordHash	Должность 3	Табельный номер 3	2025-03-03 00:00:00	RFID метка сварщика 3	bc8b8a84-5ee1-4afa-a71f-ffb452211179
+007d788a-4fdd-4510-a086-dc42994f02e2	Имя Контролера	Имя Контролера	Имя Контролера	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка проверяющего 1	0c293814-fda2-4870-a5c8-8bd46dd33a98
+eda2538e-3752-418d-98ba-06f2fba1278e	Имя мастера	Отчество мастера	Фамилия мастера	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка проверяющего 1	0c293814-fda2-4870-a5c8-8bd46dd33a98
+1899ae2d-58ea-47cf-867c-23c609782ab3	Admin	Adminovich	Admin	admin1@admin.com	admin@admin.com	$MYHASH$V1$10000$ItiIx7Vk9C5f6nstYV8EWpubP6ZslZ2TVY/iLAKy1oR2O/70	\N	\N	\N	\N	\N
 \.
 
 
@@ -575,8 +567,8 @@ COPY public."Users" ("Id", "FirstName", "LastName", "MiddleName", "UserName", "E
 --
 
 COPY public."WeldPassages" ("Id", "Name", "WeldingCurrentMin", "WeldingCurrentMax", "ArcVoltageMin", "ArcVoltageMax", "PreheatingTemperatureMin", "PreheatingTemperatureMax", "SeamId", "TechnologicalInstructionId") FROM stdin;
-14d3271d-4247-47a2-9f6f-9c9eecb3b052	Название прохода 1	1	100	5	50	10	60	b8dcf6a8-8f2d-400d-a0f4-f9e9d3754686	c79c8440-c709-425e-8d38-3e8fa867a78a
-9ec0dcbf-c1b2-4a7c-a2bc-6298599420f7	Название прохода 1	1	100	5	50	10	60	deb02824-0b05-4e94-8fb0-74b363a68a61	d533f7e0-0343-49cf-8073-16970fa45d18
+c4f7fa3b-7d4a-4663-9323-4e33c8121550	Название прохода 1	1	100	5	50	10	60	6e00cacc-db9b-4007-8c75-ad71add47d08	9d81c980-bbbb-455d-ae20-eee8942f2c3d
+f94445a9-0e5a-4a87-b696-1ea0e274dc37	Название прохода 1	1	100	5	50	10	60	115dee8b-5e09-419f-8ddb-24fcabb03f93	8e7a7c1d-b169-4ba7-9ae5-4a55f357adb3
 \.
 
 
@@ -584,10 +576,10 @@ COPY public."WeldPassages" ("Id", "Name", "WeldingCurrentMin", "WeldingCurrentMa
 -- Data for Name: Welders; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."Welders" ("Id", "UserId", "WorkplaceId", "CalendarId", "WeldingEquipmentId") FROM stdin;
-3bfcaf3d-997c-4529-a104-94a573284e73	6838b2b7-316b-461b-827b-aeea07046733	dd7c71e1-38ce-4d1b-a531-e9cee354a34f	\N	fda3add6-6823-429c-ba35-881c07e2796f
-51945bbb-2a11-4844-bf89-9c4ce3e9656f	9100a0ee-14f5-4225-bb97-e39aacf04e22	49ad33e2-a895-4d99-b690-adbab222a4ea	\N	aac04bd5-7beb-489f-b39f-20fecca77953
-e6ad29b0-2531-4eb1-a260-5ede4ccb14e1	5b977dfd-3834-4ce7-8215-5a093afa9fe7	\N	\N	977d922f-e3c3-4b5b-8609-4de466650aad
+COPY public."Welders" ("Id", "UserId", "WorkplaceId", "WeldingEquipmentId") FROM stdin;
+97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	27a3544d-9b37-4285-a6ee-b7c6168b103d	e6771d2b-d5a1-480f-ac40-8f2a5f3f57df	4ec3157b-d980-495e-b9ce-ecf7f5869245
+da116327-94c0-4674-b270-2aabe099b0db	59a5c238-68fc-4c81-a875-c566f9f14a58	\N	5c5dcc7f-be60-4385-97ee-42825fd3776c
+ffeeafe6-bff1-4c50-a6d7-e3db789e0783	e2c7348f-6d96-40ff-a3a2-49e52e5f836f	fd5f201f-61e9-4be5-b073-82c873d631cc	01cb5d04-a1af-4a58-b1ba-157efedb64c0
 \.
 
 
@@ -595,29 +587,14 @@ e6ad29b0-2531-4eb1-a260-5ede4ccb14e1	5b977dfd-3834-4ce7-8215-5a093afa9fe7	\N	\N	
 -- Data for Name: WeldingEquipmentConditionTimes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."WeldingEquipmentConditionTimes" ("Id", "Condition", "DowntimeReason", "ChangeConditionTime", "Time") FROM stdin;
-529a4b92-d705-4c50-b2f7-44779f1b2512	3	\N	\N	60
-587403f0-5f46-4c29-adce-15ca22cf5fd1	3	\N	\N	60
-79fc84b7-28cf-44cc-8ced-5bdef086b017	4	Какая-то причина простоя 3	12:50:00	60
-9c81dd3a-9efa-4eee-ba36-90a5d5b42fd1	4	Какая-то причина простоя 2	19:30:00	10
-a70327dc-a45f-44bc-a5d3-1e2872b71e62	3	\N	\N	30
-bc0f75a6-3e54-4bb6-a929-5640b3f38f90	3	\N	\N	60
-ceb93fb3-154e-45a7-b7a3-babdf421936e	4	Какая-то причина простоя	09:30:00	30
-\.
-
-
---
--- Data for Name: WeldingEquipmentWorkingShifts; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public."WeldingEquipmentWorkingShifts" ("WeldingEquipmentId", "WorkingShiftId", "WeldingEquipmentConditionTimeId") FROM stdin;
-977d922f-e3c3-4b5b-8609-4de466650aad	2ecf8374-dc2e-4250-ae92-ff217fcc67f8	bc0f75a6-3e54-4bb6-a929-5640b3f38f90
-977d922f-e3c3-4b5b-8609-4de466650aad	6e37c745-187c-41f4-8732-776bf83716dd	79fc84b7-28cf-44cc-8ced-5bdef086b017
-aac04bd5-7beb-489f-b39f-20fecca77953	2ecf8374-dc2e-4250-ae92-ff217fcc67f8	587403f0-5f46-4c29-adce-15ca22cf5fd1
-fda3add6-6823-429c-ba35-881c07e2796f	2ecf8374-dc2e-4250-ae92-ff217fcc67f8	529a4b92-d705-4c50-b2f7-44779f1b2512
-fda3add6-6823-429c-ba35-881c07e2796f	2ecf8374-dc2e-4250-ae92-ff217fcc67f8	ceb93fb3-154e-45a7-b7a3-babdf421936e
-fda3add6-6823-429c-ba35-881c07e2796f	6e37c745-187c-41f4-8732-776bf83716dd	a70327dc-a45f-44bc-a5d3-1e2872b71e62
-fda3add6-6823-429c-ba35-881c07e2796f	8be53b6b-888a-45ce-950b-9a2a63913c5c	9c81dd3a-9efa-4eee-ba36-90a5d5b42fd1
+COPY public."WeldingEquipmentConditionTimes" ("Id", "Condition", "DowntimeReason", "Date", "ChangeConditionTime", "Time", "WeldingEquipmentId") FROM stdin;
+1b257a0d-9cb4-4525-ba5c-d00c2a3cecae	4	Какая-то причина простоя 2	2023-01-16 00:00:00	19:30:00	10	4ec3157b-d980-495e-b9ce-ecf7f5869245
+2ae58238-b9af-40e9-bac4-72ba38dbfd34	4	Какая-то причина простоя 3	2023-01-16 00:00:00	12:50:00	60	01cb5d04-a1af-4a58-b1ba-157efedb64c0
+3d2d8f2b-b71e-40c5-8609-7d9a65002765	3	\N	2023-01-16 00:00:00	\N	60	5c5dcc7f-be60-4385-97ee-42825fd3776c
+6d317628-6aae-4917-8648-e315f68cbc0e	4	Какая-то причина простоя	2023-01-16 00:00:00	09:30:00	30	4ec3157b-d980-495e-b9ce-ecf7f5869245
+c117ffe0-01af-4e2d-92c3-43fc24f6f1ba	3	\N	2023-01-16 00:00:00	\N	30	4ec3157b-d980-495e-b9ce-ecf7f5869245
+ccf3bfb2-39ac-4dc5-9be9-f20897df8e10	3	\N	2023-01-16 00:00:00	\N	60	01cb5d04-a1af-4a58-b1ba-157efedb64c0
+eb6cba29-e765-47ed-b8fd-eb9f9f97728a	3	\N	2023-01-16 00:00:00	\N	60	4ec3157b-d980-495e-b9ce-ecf7f5869245
 \.
 
 
@@ -625,10 +602,10 @@ fda3add6-6823-429c-ba35-881c07e2796f	8be53b6b-888a-45ce-950b-9a2a63913c5c	9c81dd
 -- Data for Name: WeldingEquipments; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."WeldingEquipments" ("Id", "RfidTag", "Name", "Marking", "FactoryNumber", "CommissioningDate", "CurrentCondition", "Height", "Width", "Lenght", "GroupNumber", "ManufacturerName", "NextAttestationDate", "WeldingProcess", "IdleVoltage", "WeldingCurrentMin", "WeldingCurrentMax", "ArcVoltageMin", "ArcVoltageMax", "PostId", "CalendarId") FROM stdin;
-977d922f-e3c3-4b5b-8609-4de466650aad	RFID метка 3	Какое-то оборудование 3	Маркировка 3	32	2022-02-23 00:00:00	3	20	30	40	3	Изготовитель 3	2024-02-05 00:00:00	Способ сварки 3	12.3	5.5	10.9	6.1	7.9	\N	\N
-aac04bd5-7beb-489f-b39f-20fecca77953	RFID метка 2	Какое-то оборудование 2	Маркировка 2	22	2021-02-23 00:00:00	1	20	30	40	3	Изготовитель 2	2023-02-05 00:00:00	Способ сварки 2	12.3	5.5	10.9	6.1	7.9	77868873-6789-453d-a154-6cad3ac3264b	\N
-fda3add6-6823-429c-ba35-881c07e2796f	RFID метка 1	Какое-то оборудование 1	Маркировка 1	12	2020-01-23 00:00:00	2	20	30	40	3	Изготовитель 1	2023-02-05 00:00:00	Способ сварки 1	12.3	5.5	10.9	6.1	7.9	77868873-6789-453d-a154-6cad3ac3264b	\N
+COPY public."WeldingEquipments" ("Id", "RfidTag", "Name", "Marking", "FactoryNumber", "CommissioningDate", "CurrentCondition", "Height", "Width", "Lenght", "GroupNumber", "ManufacturerName", "NextAttestationDate", "WeldingProcess", "IdleVoltage", "WeldingCurrentMin", "WeldingCurrentMax", "ArcVoltageMin", "ArcVoltageMax", "PostId") FROM stdin;
+01cb5d04-a1af-4a58-b1ba-157efedb64c0	RFID метка 3	Какое-то оборудование 3	Маркировка 3	32	2022-02-23 00:00:00	3	20	30	40	3	Изготовитель 3	2024-02-05 00:00:00	Способ сварки 3	12.3	5.5	10.9	6.1	7.9	\N
+4ec3157b-d980-495e-b9ce-ecf7f5869245	RFID метка 1	Какое-то оборудование 1	Маркировка 1	12	2020-01-23 00:00:00	2	20	30	40	3	Изготовитель 1	2023-02-05 00:00:00	Способ сварки 1	12.3	5.5	10.9	6.1	7.9	7f7bec39-9822-4179-855f-24a12a055a5d
+5c5dcc7f-be60-4385-97ee-42825fd3776c	RFID метка 2	Какое-то оборудование 2	Маркировка 2	22	2021-02-23 00:00:00	1	20	30	40	3	Изготовитель 2	2023-02-05 00:00:00	Способ сварки 2	12.3	5.5	10.9	6.1	7.9	7f7bec39-9822-4179-855f-24a12a055a5d
 \.
 
 
@@ -637,14 +614,14 @@ fda3add6-6823-429c-ba35-881c07e2796f	RFID метка 1	Какое-то обор�
 --
 
 COPY public."WeldingTasks" ("Id", "Number", "WelderId", "MasterId", "InspectorId", "WeldingDate", "WeldingStartTime", "WeldingEndTime", "AmbientTemperature", "AirHumidity", "InterlayerTemperature", "CurrentLayerNumber", "PreheatingTemperature", "Status", "DefectReasons", "DefectsDetected", "WeldingCurrentValues", "ArcVoltageValues", "ShortTermDeviation", "LongTermDeviation", "BasicMaterial", "MainMaterialBatchNumber", "WeldingMaterial", "WeldingMaterialBatchNumber", "ProtectiveGas", "ProtectiveGasBatchNumber", "ProductId", "SeamId") FROM stdin;
-1ef89892-d849-4d3f-857a-778f876ed59e	2	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	3067	41	203	31	110	1	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	cfd71f62-cd3d-4556-ab51-f1726b0414ef	\N
-527328b0-aff1-491f-85b2-6cbcb28e3c6e	6	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	31	2	22	2	11	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	33f9bb20-c489-4d21-b6d8-cc207179530f	\N
-5d9a1276-6c32-404b-a4b2-f0e4e7db3fe1	3	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	390	81	820	81	170	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	2d23825c-7889-443d-bf30-1f441b3cc67f	\N
-91cd4fc3-aadf-4ea7-9c5c-9a5a7f03aa1a	4	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	320	1	220	12	2	3	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	\N	deb02824-0b05-4e94-8fb0-74b363a68a61
-b8fbe59d-ee1c-4449-9b15-8ea556bfc2c8	6	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	31	2	22	2	11	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	5b26c2b0-7adb-4641-83cb-3a2ba6faec0f	\N
-cdec0496-0d0e-4eb1-aabc-5d827b6fcd26	5	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	130	21	23	13	10	4	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	27e18cb3-f652-4862-ac41-1b5b77a84bef	\N
-d957bd7d-54b6-403b-a5bd-d6b50bb9f633	1	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	300	1	200	81	150	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	\N	b8dcf6a8-8f2d-400d-a0f4-f9e9d3754686
-fa00bcb4-18ea-41a6-8606-f270fa1dfd89	6	3bfcaf3d-997c-4529-a104-94a573284e73	6f08d4df-b70f-4df7-98ee-31746d9d47e6	26358587-e108-4173-a9ac-06d65b257bd1	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	31	2	22	2	11	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	7ac42d90-80d0-428b-bb7c-35bac9e8cff0	\N
+0c5b9181-d05e-4d74-98d7-75d53f89a819	4	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	320	1	220	12	2	3	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	\N	115dee8b-5e09-419f-8ddb-24fcabb03f93
+15ec2a2b-534e-400c-8bb6-e6c10f9dfe38	3	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	390	81	820	81	170	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	80586316-698a-4cbf-aae9-badb7dc46e69	\N
+521a9397-6884-4c62-b5ad-cbf52e77f908	6	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	31	2	22	2	11	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	7941cb92-df27-42ab-bfe3-1ab0afebeabd	\N
+6d4cefe6-c9a5-4db8-ac95-3ceb36fc60dd	2	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	3067	41	203	31	110	1	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	2c165f01-f057-4589-8ec0-96ec8e50b01e	\N
+76e6d6f3-ba70-4f55-9904-ac7060698ced	5	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	130	21	23	13	10	4	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	2fef3be5-7b03-4e56-a09e-6c6ee58ded0f	\N
+a9a034ba-76e2-4a8c-83b2-1a228a6248e1	6	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	31	2	22	2	11	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	fb18bed3-5778-4c72-8138-ff29dd758830	\N
+cee9fde9-787b-4050-bcb0-3cc260ba825d	1	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	300	1	200	81	150	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	\N	6e00cacc-db9b-4007-8c75-ad71add47d08
+f734961f-fbdc-4cbd-87c8-e8932dbe159b	6	97ae8fcd-7db7-4dbb-9c15-083c560f9e1a	79369079-fb96-4ccb-a665-cfb755885e63	05862b4d-30cc-4e8a-96a2-6a97aed40000	2022-01-01 00:00:00	2022-01-03 00:00:00	\N	31	2	22	2	11	2	\N	\N	{1.2,2.3,6.8}	{11.2,2.33,26.8}	\N	\N	Основной материал	№ сертификата	варочные материалы	№ сертификата	\N	\N	2b12f5de-39e9-4697-9f2f-6cb6115bac1b	\N
 \.
 
 
@@ -652,10 +629,7 @@ fa00bcb4-18ea-41a6-8606-f270fa1dfd89	6	3bfcaf3d-997c-4529-a104-94a573284e73	6f08
 -- Data for Name: WorkingShifts; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."WorkingShifts" ("Id", "Number", "ShiftStart", "ShiftEnd", "DayId") FROM stdin;
-2ecf8374-dc2e-4250-ae92-ff217fcc67f8	2	12:30:00	16:00:00	66edee4e-2b80-445b-b16b-ad6b0a964a0a
-6e37c745-187c-41f4-8732-776bf83716dd	3	16:30:00	20:00:00	66edee4e-2b80-445b-b16b-ad6b0a964a0a
-8be53b6b-888a-45ce-950b-9a2a63913c5c	1	08:00:00	12:00:00	66edee4e-2b80-445b-b16b-ad6b0a964a0a
+COPY public."WorkingShifts" ("Id", "Number", "ShiftStart", "ShiftEnd", "BreakStart", "BreakEnd", "DayId", "CalendarId") FROM stdin;
 \.
 
 
@@ -664,9 +638,9 @@ COPY public."WorkingShifts" ("Id", "Number", "ShiftStart", "ShiftEnd", "DayId") 
 --
 
 COPY public."Workplaces" ("Id", "Number", "PostId", "ProductionAreaId") FROM stdin;
-25826fa4-4ea2-4756-a958-601ec4158681	3	\N	dadbf6ba-7b25-4f4f-aa80-6e7a566baac4
-49ad33e2-a895-4d99-b690-adbab222a4ea	2	\N	8e19bdc2-0fc2-4beb-843f-d28090087010
-dd7c71e1-38ce-4d1b-a531-e9cee354a34f	1	\N	7324bf38-98ce-4b95-849f-3ebdbc59aa64
+787822e5-1b9a-4c39-95f2-34dfb3240971	1	\N	8786400c-9873-4f88-a720-4fdf9efb382a
+e6771d2b-d5a1-480f-ac40-8f2a5f3f57df	3	\N	bc8b8a84-5ee1-4afa-a71f-ffb452211179
+fd5f201f-61e9-4be5-b073-82c873d631cc	2	\N	0c293814-fda2-4870-a5c8-8bd46dd33a98
 \.
 
 
@@ -675,7 +649,7 @@ dd7c71e1-38ce-4d1b-a531-e9cee354a34f	1	\N	7324bf38-98ce-4b95-849f-3ebdbc59aa64
 --
 
 COPY public."Workshops" ("Id", "Name", "Number") FROM stdin;
-dd961c80-0d8d-421f-b52b-8da75116da47	Цех	1
+45615e12-2b26-4246-80c6-6b6dda24d68b	Цех	1
 \.
 
 
@@ -840,14 +814,6 @@ ALTER TABLE ONLY public."WeldingEquipmentConditionTimes"
 
 
 --
--- Name: WeldingEquipmentWorkingShifts PK_WeldingEquipmentWorkingShifts; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public."WeldingEquipmentWorkingShifts"
-    ADD CONSTRAINT "PK_WeldingEquipmentWorkingShifts" PRIMARY KEY ("WeldingEquipmentId", "WorkingShiftId", "WeldingEquipmentConditionTimeId");
-
-
---
 -- Name: WeldingEquipments PK_WeldingEquipments; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -885,6 +851,20 @@ ALTER TABLE ONLY public."Workplaces"
 
 ALTER TABLE ONLY public."Workshops"
     ADD CONSTRAINT "PK_Workshops" PRIMARY KEY ("Id");
+
+
+--
+-- Name: IX_Calendars_WelderId; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "IX_Calendars_WelderId" ON public."Calendars" USING btree ("WelderId");
+
+
+--
+-- Name: IX_Calendars_WeldingEquipmentId; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "IX_Calendars_WeldingEquipmentId" ON public."Calendars" USING btree ("WeldingEquipmentId");
 
 
 --
@@ -1049,13 +1029,6 @@ CREATE INDEX "IX_WeldPassages_TechnologicalInstructionId" ON public."WeldPassage
 
 
 --
--- Name: IX_Welders_CalendarId; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX "IX_Welders_CalendarId" ON public."Welders" USING btree ("CalendarId");
-
-
---
 -- Name: IX_Welders_UserId; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1077,24 +1050,10 @@ CREATE INDEX "IX_Welders_WorkplaceId" ON public."Welders" USING btree ("Workplac
 
 
 --
--- Name: IX_WeldingEquipmentWorkingShifts_WeldingEquipmentConditionTime~; Type: INDEX; Schema: public; Owner: -
+-- Name: IX_WeldingEquipmentConditionTimes_WeldingEquipmentId; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX "IX_WeldingEquipmentWorkingShifts_WeldingEquipmentConditionTime~" ON public."WeldingEquipmentWorkingShifts" USING btree ("WeldingEquipmentConditionTimeId");
-
-
---
--- Name: IX_WeldingEquipmentWorkingShifts_WorkingShiftId; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX "IX_WeldingEquipmentWorkingShifts_WorkingShiftId" ON public."WeldingEquipmentWorkingShifts" USING btree ("WorkingShiftId");
-
-
---
--- Name: IX_WeldingEquipments_CalendarId; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX "IX_WeldingEquipments_CalendarId" ON public."WeldingEquipments" USING btree ("CalendarId");
+CREATE INDEX "IX_WeldingEquipmentConditionTimes_WeldingEquipmentId" ON public."WeldingEquipmentConditionTimes" USING btree ("WeldingEquipmentId");
 
 
 --
@@ -1140,6 +1099,13 @@ CREATE INDEX "IX_WeldingTasks_WelderId" ON public."WeldingTasks" USING btree ("W
 
 
 --
+-- Name: IX_WorkingShifts_CalendarId; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "IX_WorkingShifts_CalendarId" ON public."WorkingShifts" USING btree ("CalendarId");
+
+
+--
 -- Name: IX_WorkingShifts_DayId; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1158,6 +1124,22 @@ CREATE INDEX "IX_Workplaces_PostId" ON public."Workplaces" USING btree ("PostId"
 --
 
 CREATE INDEX "IX_Workplaces_ProductionAreaId" ON public."Workplaces" USING btree ("ProductionAreaId");
+
+
+--
+-- Name: Calendars FK_Calendars_Welders_WelderId; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Calendars"
+    ADD CONSTRAINT "FK_Calendars_Welders_WelderId" FOREIGN KEY ("WelderId") REFERENCES public."Welders"("Id");
+
+
+--
+-- Name: Calendars FK_Calendars_WeldingEquipments_WeldingEquipmentId; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Calendars"
+    ADD CONSTRAINT "FK_Calendars_WeldingEquipments_WeldingEquipmentId" FOREIGN KEY ("WeldingEquipmentId") REFERENCES public."WeldingEquipments"("Id");
 
 
 --
@@ -1361,14 +1343,6 @@ ALTER TABLE ONLY public."WeldPassages"
 
 
 --
--- Name: Welders FK_Welders_Calendars_CalendarId; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public."Welders"
-    ADD CONSTRAINT "FK_Welders_Calendars_CalendarId" FOREIGN KEY ("CalendarId") REFERENCES public."Calendars"("Id");
-
-
---
 -- Name: Welders FK_Welders_Users_UserId; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1393,35 +1367,11 @@ ALTER TABLE ONLY public."Welders"
 
 
 --
--- Name: WeldingEquipmentWorkingShifts FK_WeldingEquipmentWorkingShifts_WeldingEquipmentConditionTime~; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: WeldingEquipmentConditionTimes FK_WeldingEquipmentConditionTimes_WeldingEquipments_WeldingEqu~; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public."WeldingEquipmentWorkingShifts"
-    ADD CONSTRAINT "FK_WeldingEquipmentWorkingShifts_WeldingEquipmentConditionTime~" FOREIGN KEY ("WeldingEquipmentConditionTimeId") REFERENCES public."WeldingEquipmentConditionTimes"("Id") ON DELETE CASCADE;
-
-
---
--- Name: WeldingEquipmentWorkingShifts FK_WeldingEquipmentWorkingShifts_WeldingEquipments_WeldingEqui~; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public."WeldingEquipmentWorkingShifts"
-    ADD CONSTRAINT "FK_WeldingEquipmentWorkingShifts_WeldingEquipments_WeldingEqui~" FOREIGN KEY ("WeldingEquipmentId") REFERENCES public."WeldingEquipments"("Id") ON DELETE CASCADE;
-
-
---
--- Name: WeldingEquipmentWorkingShifts FK_WeldingEquipmentWorkingShifts_WorkingShifts_WorkingShiftId; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public."WeldingEquipmentWorkingShifts"
-    ADD CONSTRAINT "FK_WeldingEquipmentWorkingShifts_WorkingShifts_WorkingShiftId" FOREIGN KEY ("WorkingShiftId") REFERENCES public."WorkingShifts"("Id") ON DELETE CASCADE;
-
-
---
--- Name: WeldingEquipments FK_WeldingEquipments_Calendars_CalendarId; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public."WeldingEquipments"
-    ADD CONSTRAINT "FK_WeldingEquipments_Calendars_CalendarId" FOREIGN KEY ("CalendarId") REFERENCES public."Calendars"("Id");
+ALTER TABLE ONLY public."WeldingEquipmentConditionTimes"
+    ADD CONSTRAINT "FK_WeldingEquipmentConditionTimes_WeldingEquipments_WeldingEqu~" FOREIGN KEY ("WeldingEquipmentId") REFERENCES public."WeldingEquipments"("Id") ON DELETE CASCADE;
 
 
 --
@@ -1473,11 +1423,19 @@ ALTER TABLE ONLY public."WeldingTasks"
 
 
 --
+-- Name: WorkingShifts FK_WorkingShifts_Calendars_CalendarId; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."WorkingShifts"
+    ADD CONSTRAINT "FK_WorkingShifts_Calendars_CalendarId" FOREIGN KEY ("CalendarId") REFERENCES public."Calendars"("Id");
+
+
+--
 -- Name: WorkingShifts FK_WorkingShifts_Days_DayId; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."WorkingShifts"
-    ADD CONSTRAINT "FK_WorkingShifts_Days_DayId" FOREIGN KEY ("DayId") REFERENCES public."Days"("Id") ON DELETE CASCADE;
+    ADD CONSTRAINT "FK_WorkingShifts_Days_DayId" FOREIGN KEY ("DayId") REFERENCES public."Days"("Id");
 
 
 --

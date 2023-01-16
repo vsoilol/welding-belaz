@@ -23,10 +23,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users
         [ForeignKey(nameof(WorkplaceId))]
         public Workplace? Workplace { get; set; }
         
-        public Guid? CalendarId { get; set; }
-        
-        [ForeignKey(nameof(CalendarId))]
-        public Calendar? Calendar { get; set; }
+        public List<Calendar>? Calendars { get; set; }
         
         public Guid? WeldingEquipmentId { get; set; }
         

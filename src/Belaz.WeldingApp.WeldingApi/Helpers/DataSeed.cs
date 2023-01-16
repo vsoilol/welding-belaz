@@ -17,11 +17,6 @@ public class DataSeed
     {
         await CreateRolesAsync(context);
 
-        if (!context.Calendars.Any())
-        {
-            await AddCalendar(context);
-        }
-
         if (!context.Workshops.Any())
         {
             await AddProduction(context);
@@ -71,48 +66,6 @@ public class DataSeed
                 await context.SaveChangesAsync();
             }
         }
-    }
-    
-    private static async Task AddCalendar(ApplicationContext context)
-    {
-        var calendar = new Calendar
-        {
-            Year = 2022,
-            IsMain = true,
-            WorkingDays = new List<Day>
-            {
-                new Day
-                {
-                    BreakBetweenShifts = 30,
-                    MonthNumber = 1,
-                    Number = 1,
-                    Shifts = new List<WorkingShift>
-                    {
-                        new WorkingShift
-                        {
-                            Number = 1,
-                            ShiftStart = new TimeSpan(8, 0, 0),
-                            ShiftEnd = new TimeSpan(12, 0, 0)
-                        },
-                        new WorkingShift
-                        {
-                            Number = 2,
-                            ShiftStart = new TimeSpan(12, 30, 0),
-                            ShiftEnd = new TimeSpan(16, 0, 0)
-                        },
-                        new WorkingShift
-                        {
-                            Number = 3,
-                            ShiftStart = new TimeSpan(16, 30, 0),
-                            ShiftEnd = new TimeSpan(20, 0, 0)
-                        }
-                    }
-                }
-            }
-        };
-
-        await context.Calendars.AddAsync(calendar);
-        await context.SaveChangesAsync();
     }
 
     private static async Task AddWelders(ApplicationContext context)
@@ -235,49 +188,37 @@ public class DataSeed
                 Post = post,
                 Welder = welders[0],
                 CurrentCondition = Condition.On,
-                WeldingEquipmentWorkingShifts = new List<WeldingEquipmentWorkingShift>
+                WeldingEquipmentConditionTime = new List<WeldingEquipmentConditionTime>
                 {
-                    new WeldingEquipmentWorkingShift
+                    new WeldingEquipmentConditionTime
                     {
-                        WorkingShift = shifts[0],
-                        WeldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-                        {
-                            Condition = Condition.AtWork,
-                            Time = 60,
-                        }
+                        Date = DateTime.Today,
+                        Condition = Condition.AtWork,
+                        Time = 60,
                     },
-                    new WeldingEquipmentWorkingShift
+                    new WeldingEquipmentConditionTime
                     {
-                        WorkingShift = shifts[1],
-                        WeldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-                        {
-                            Condition = Condition.AtWork,
-                            Time = 30,
-                        }
+                        Date = DateTime.Today,
+                        Condition = Condition.AtWork,
+                        Time = 30,
                     },
-                    new WeldingEquipmentWorkingShift
+                    new WeldingEquipmentConditionTime
                     {
-                        WorkingShift = shifts[0],
-                        WeldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-                        {
-                            Condition = Condition.ForcedDowntime,
-                            Time = 30,
-                            DowntimeReason = "Какая-то причина простоя",
-                            ChangeConditionTime = new TimeSpan(9, 30, 0),
-                        }
+                        Date = DateTime.Today,
+                        Condition = Condition.ForcedDowntime,
+                        Time = 30,
+                        DowntimeReason = "Какая-то причина простоя",
+                        ChangeConditionTime = new TimeSpan(9, 30, 0),
                     },
-                    new WeldingEquipmentWorkingShift
+                    new WeldingEquipmentConditionTime
                     {
-                        WorkingShift = shifts[2],
-                        WeldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-                        {
-                            Condition = Condition.ForcedDowntime,
-                            Time = 10,
-                            DowntimeReason = "Какая-то причина простоя 2",
-                            ChangeConditionTime = new TimeSpan(19, 30, 0),
-                        }
+                        Date = DateTime.Today,
+                        Condition = Condition.ForcedDowntime,
+                        Time = 10,
+                        DowntimeReason = "Какая-то причина простоя 2",
+                        ChangeConditionTime = new TimeSpan(19, 30, 0),
                     }
-                }
+                },
             },
             new WeldingEquipment
             {
@@ -302,18 +243,15 @@ public class DataSeed
                 Post = post,
                 Welder = welders[1],
                 CurrentCondition = Condition.Off,
-                WeldingEquipmentWorkingShifts = new List<WeldingEquipmentWorkingShift>
+                WeldingEquipmentConditionTime = new List<WeldingEquipmentConditionTime>
                 {
-                    new WeldingEquipmentWorkingShift
+                    new WeldingEquipmentConditionTime
                     {
-                        WorkingShift = shifts[0],
-                        WeldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-                        {
-                            Condition = Condition.AtWork,
-                            Time = 60,
-                        }
-                    },
-                }
+                        Date = DateTime.Today,
+                        Condition = Condition.AtWork,
+                        Time = 60,
+                    }
+                },
             },
             new WeldingEquipment
             {
@@ -337,29 +275,23 @@ public class DataSeed
                 ArcVoltageMax = 7.9,
                 Welder = welders[2],
                 CurrentCondition = Condition.AtWork,
-                WeldingEquipmentWorkingShifts = new List<WeldingEquipmentWorkingShift>
+                WeldingEquipmentConditionTime = new List<WeldingEquipmentConditionTime>
                 {
-                    new WeldingEquipmentWorkingShift
+                    new WeldingEquipmentConditionTime
                     {
-                        WorkingShift = shifts[0],
-                        WeldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-                        {
-                            Condition = Condition.AtWork,
-                            Time = 60,
-                        }
+                        Date = DateTime.Today,
+                        Condition = Condition.AtWork,
+                        Time = 60,
                     },
-                    new WeldingEquipmentWorkingShift
+                    new WeldingEquipmentConditionTime
                     {
-                        WorkingShift = shifts[1],
-                        WeldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-                        {
-                            Condition = Condition.ForcedDowntime,
-                            Time = 60,
-                            ChangeConditionTime = new TimeSpan(12, 50, 0),
-                            DowntimeReason = "Какая-то причина простоя 3"
-                        }
-                    },
-                }
+                        Date = DateTime.Today,
+                        Condition = Condition.ForcedDowntime,
+                        Time = 60,
+                        ChangeConditionTime = new TimeSpan(12, 50, 0),
+                        DowntimeReason = "Какая-то причина простоя 3"
+                    }
+                },
             }
         };
 
