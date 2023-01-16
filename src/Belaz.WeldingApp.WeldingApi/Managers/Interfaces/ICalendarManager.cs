@@ -14,4 +14,8 @@ public interface ICalendarManager
     Task<CalendarDto?> CreateAsync(CreateCalendarWithWelderIdRequest request);
     
     Task<CalendarDto?> GetByWelderIdAsync(GetByWelderIdRequest request);
+    
+    Task<CalendarDto?> CreateAsync(CreateCalendarWithEquipmentIdRequest request);
+    
+    Task<CalendarDto?> GetByEquipmentIdAsync(GetByEquipmentIdRequest request);
 }

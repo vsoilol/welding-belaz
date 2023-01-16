@@ -61,4 +61,21 @@ public class CalendarController : ControllerBase
     {
         return await _calendarManager.GetByWelderIdAsync(request);
     }
+    
+    [HttpPost("withEquipment")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto?>> CreateMainCalendarAsync(
+        [FromBody] CreateCalendarWithEquipmentIdRequest request)
+    {
+        return await _calendarManager.CreateAsync(request);
+    }
+
+    [HttpGet("byEquipment")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto?>> GetByEquipmentIdAsync([FromQuery] GetByEquipmentIdRequest request)
+    {
+        return await _calendarManager.GetByEquipmentIdAsync(request);
+    }
 }
