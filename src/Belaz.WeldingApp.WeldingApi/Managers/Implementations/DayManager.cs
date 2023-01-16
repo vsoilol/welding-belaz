@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Day;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo;
@@ -32,6 +33,18 @@ public class DayManager : IDayManager
             .Where(_ => _.Id == createdDay.Id)
             .ProjectTo<DayDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateAsync(UpdateDayRequest request)
+    {
+        var day = _mapper.Map<Day>(request);
+        
+        var isUpdate = await _dayRepository.UpdateAsync(day);
+
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(Calendar), request.Id);
+        }
     }
 
     public Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId)

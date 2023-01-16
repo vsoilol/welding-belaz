@@ -28,4 +28,12 @@ public class DayController  : ControllerBase
     {
         return await _dayManager.CreateAsync(request);
     }
+
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateDayRequest request)
+    {
+        await _dayManager.UpdateAsync(request);
+        return Ok();
+    }
 }
