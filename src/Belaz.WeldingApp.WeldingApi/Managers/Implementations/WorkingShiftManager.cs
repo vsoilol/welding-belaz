@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.WorkingShift;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo;
@@ -32,6 +33,18 @@ public class WorkingShiftManager : IWorkingShiftManager
             .Where(_ => _.Id == createdWorkingShift.Id)
             .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateAsync(UpdateWorkingShiftRequest request)
+    {
+        var workingShift = _mapper.Map<WorkingShift>(request);
+        
+        var isUpdate = await _workingShiftRepository.UpdateAsync(workingShift);
+
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(Calendar), request.Id);
+        }
     }
 
     public Task CreateRangeAsync(List<CreateWorkingShiftRequest> values, Guid calendarId)

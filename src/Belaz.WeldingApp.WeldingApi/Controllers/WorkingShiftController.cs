@@ -28,4 +28,12 @@ public class WorkingShiftController : ControllerBase
     {
         return await _workingShiftManager.CreateAsync(request);
     }
+    
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateWorkingShiftRequest request)
+    {
+        await _workingShiftManager.UpdateAsync(request);
+        return Ok();
+    }
 }

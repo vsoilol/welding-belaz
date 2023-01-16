@@ -8,5 +8,7 @@ public interface IWorkingShiftManager
 {
     Task<WorkingShiftDto?> CreateAsync(CreateWorkingShiftWithIdRequest request);
     
+    Task UpdateAsync(UpdateWorkingShiftRequest request);
+    
     Task CreateRangeAsync(List<CreateWorkingShiftRequest> values, Guid calendarId);
 }
