@@ -522,7 +522,7 @@
       "UpstreamPathTemplate": "/api/calendar/day",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST"
+        "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/calendar/day",
       "ServiceName": "welding",
