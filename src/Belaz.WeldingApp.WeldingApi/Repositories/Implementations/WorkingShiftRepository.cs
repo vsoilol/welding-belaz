@@ -8,6 +8,27 @@ public class WorkingShiftRepository : EntityFrameworkRepository<WorkingShift>
     public WorkingShiftRepository(ApplicationContext context, ILogger<EntityFrameworkRepository<WorkingShift>> logger) : base(context, logger)
     {
     }
+    
+    public override async Task<bool> UpdateAsync(WorkingShift entity)
+    {
+        var updatedWorkingShift = await Entities
+            .FirstOrDefaultAsync(_ => _.Id == entity.Id);
+
+        if (updatedWorkingShift is null)
+        {
+            return false;
+        }
+
+        updatedWorkingShift.Number = entity.Number;
+        updatedWorkingShift.ShiftStart = entity.ShiftStart;
+        updatedWorkingShift.ShiftEnd = entity.ShiftEnd;
+        updatedWorkingShift.BreakStart = entity.BreakStart;
+        updatedWorkingShift.BreakEnd = entity.BreakEnd;
+
+        await Context.SaveChangesAsync();
+
+        return true;
+    }
 
     public override async Task<bool> UpdateRangeAsync(IEnumerable<WorkingShift> entities)
     {

@@ -12,7 +12,7 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class DayController  : ControllerBase
+public class DayController : ControllerBase
 {
     private readonly IDayManager _dayManager;
 
@@ -30,7 +30,7 @@ public class DayController  : ControllerBase
     }
 
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateDayRequest request)
     {
         await _dayManager.UpdateAsync(request);
