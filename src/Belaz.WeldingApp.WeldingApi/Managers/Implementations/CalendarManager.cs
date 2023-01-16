@@ -45,4 +45,12 @@ public class CalendarManager : ICalendarManager
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<CalendarDto?> GetMainCalendarByYearAsync(int year)
+    {
+        return await _calendarRepository
+            .AsQueryableByFilter(_ => _.IsMain == true && _.Year == year)
+            .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
 }

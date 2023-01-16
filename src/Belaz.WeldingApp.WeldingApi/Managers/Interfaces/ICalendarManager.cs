@@ -6,4 +6,6 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 public interface ICalendarManager
 {
     Task<CalendarDto?> CreateAsync(CreateCalendarRequest request, bool isMain);
+    
+    Task<CalendarDto?> GetMainCalendarByYearAsync(int year);
 }
