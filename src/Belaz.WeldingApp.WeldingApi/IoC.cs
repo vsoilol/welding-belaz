@@ -1,6 +1,7 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Managers.Implementations;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
@@ -32,6 +33,9 @@ public static class IoC
         services.AddScoped<EntityFrameworkRepository<Inspector>, InspectorRepository>();
         services.AddScoped<EntityFrameworkRepository<Master>, MasterRepository>();
         services.AddScoped<EntityFrameworkRepository<TechnologicalInstruction>, TechnologicalInstructionRepository>();
+        services.AddScoped<EntityFrameworkRepository<Day>, DayRepository>();
+        services.AddScoped<EntityFrameworkRepository<Calendar>, CalendarRepository>();
+        services.AddScoped<EntityFrameworkRepository<WorkingShift>, WorkingShiftRepository>();
 
         // Managers
         services.AddScoped<IWelderManager, WelderManager>();
@@ -48,5 +52,8 @@ public static class IoC
         services.AddScoped<IInspectorManager, InspectorManager>();
         services.AddScoped<IMasterManager, MasterManager>();
         services.AddScoped<ITechnologicalInstructionManager, TechnologicalInstructionManager>();
+        services.AddScoped<IWorkingShiftManager, WorkingShiftManager>();
+        services.AddScoped<IDayManager, DayManager>();
+        services.AddScoped<ICalendarManager, CalendarManager>();
     }
 }

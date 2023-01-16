@@ -7,7 +7,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
         public int Year { get; set; }
         
         public bool IsMain { get; set; }
+        
+        public List<WorkingShift> MainWorkingShifts { get; set; } = null!;
 
-        public List<Day> WorkingDays { get; set; }
+        public List<Day>? Days { get; set; }
     }
 }

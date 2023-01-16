@@ -21,6 +21,12 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories
 
         protected readonly DbSet<T> Entities;
 
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await Entities.AddRangeAsync(entities);
+            await SaveAsync();
+        }
+
         public virtual IQueryable<T> AsQueryable()
         {
             return Entities.AsQueryable();

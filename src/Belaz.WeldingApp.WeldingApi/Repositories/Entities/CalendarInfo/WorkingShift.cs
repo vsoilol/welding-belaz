@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
 {
@@ -15,11 +13,18 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo
         
         public TimeSpan ShiftEnd { get; set; }
         
-        public Guid DayId { get; set; }
+        public TimeSpan? BreakStart { get; set; }
+        
+        public TimeSpan? BreakEnd { get; set; }
+        
+        public Guid? DayId { get; set; }
         
         [ForeignKey(nameof(DayId))]
-        public Day Day { get; set; }
+        public Day? Day { get; set; }
         
-        public List<WeldingEquipmentWorkingShift> WeldingEquipmentWorkingShifts { get; set; }
+        public Guid? CalendarId { get; set; }
+        
+        [ForeignKey(nameof(CalendarId))]
+        public Calendar? Calendar { get; set; }
     }
 }
