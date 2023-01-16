@@ -5,7 +5,7 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 
 public interface IDayManager
 {
-    Task<DayDto?> CreateAsync(CreateDayRequest request);
+    Task<DayDto?> CreateAsync(CreateDayWithCalendarIdRequest request);
     
     Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId);
 }

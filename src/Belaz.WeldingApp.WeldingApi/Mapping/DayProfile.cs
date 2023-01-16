@@ -11,6 +11,18 @@ public class DayProfile : Profile
     {
         CreateMapDayToDayDto();
         CreateMapCreateDayRequestToDay();
+        CreateMapUpdateDayRequestToDay();
+        CreateMapCreateDayWithCalendarIdRequestToDay();
+    }
+    
+    private void CreateMapCreateDayWithCalendarIdRequestToDay()
+    {
+        CreateMap<CreateDayWithCalendarIdRequest, Day>();
+    }
+    
+    private void CreateMapUpdateDayRequestToDay()
+    {
+        CreateMap<UpdateDayRequest, Day>();
     }
 
     private void CreateMapCreateDayRequestToDay()

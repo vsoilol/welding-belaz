@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Calendar;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.CalendarInfo;
@@ -44,6 +45,18 @@ public class CalendarManager : ICalendarManager
             .GetByIdAsQueryable(createdCalendar.Id)
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateAsync(UpdateCalendarRequest request)
+    {
+        var calendar = _mapper.Map<Calendar>(request);
+        
+        var isUpdate = await _calendarRepository.UpdateAsync(calendar);
+
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(Calendar), request.Id);
+        }
     }
 
     public async Task<CalendarDto?> GetMainCalendarByYearAsync(int year)
