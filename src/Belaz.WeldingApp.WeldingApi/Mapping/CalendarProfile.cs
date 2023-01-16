@@ -12,6 +12,16 @@ public class CalendarProfile : Profile
         CreateMapCalendarToCalendarDto();
         CreateMapCreateCalendarRequestToCalendar();
         CreateMapUpdateCalendarRequestToCalendar();
+        CreateMapCreateCalendarWithWelderIdRequestToCalendar();
+    }
+    
+    private void CreateMapCreateCalendarWithWelderIdRequestToCalendar()
+    {
+        CreateMap<CreateCalendarWithWelderIdRequest, Calendar>()
+            .ForMember(dto => dto.Days,
+                opt => opt.Ignore())
+            .ForMember(dto => dto.MainWorkingShifts,
+                opt => opt.Ignore());
     }
     
     private void CreateMapUpdateCalendarRequestToCalendar()

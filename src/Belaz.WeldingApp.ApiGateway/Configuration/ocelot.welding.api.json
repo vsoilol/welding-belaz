@@ -519,12 +519,54 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/calendar/day",
+      "UpstreamPathTemplate": "/api/calendar",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/calendar",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/calendar/byWelder",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/calendar/byWelder",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/calendar/withWelder",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/calendar/withWelder",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/day",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "POST", "PUT"
       ],
-      "DownstreamPathTemplate": "/api/calendar/day",
+      "DownstreamPathTemplate": "/api/day",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {

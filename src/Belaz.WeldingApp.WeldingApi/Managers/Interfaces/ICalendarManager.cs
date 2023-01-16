@@ -10,4 +10,8 @@ public interface ICalendarManager
     Task UpdateAsync(UpdateCalendarRequest request);
     
     Task<CalendarDto?> GetMainCalendarByYearAsync(int year);
+    
+    Task<CalendarDto?> CreateAsync(CreateCalendarWithWelderIdRequest request);
+    
+    Task<CalendarDto?> GetByWelderIdAsync(GetByWelderIdRequest request);
 }

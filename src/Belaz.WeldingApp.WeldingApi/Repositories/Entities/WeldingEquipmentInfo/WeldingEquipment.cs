@@ -95,10 +95,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         [ForeignKey(nameof(PostId))]
         public Post? Post { get; set; }
         
-        public Guid? CalendarId { get; set; }
-        
-        [ForeignKey(nameof(CalendarId))]
-        public Calendar? Calendar { get; set; }
+        public List<Calendar>? Calendars { get; set; }
         
         public Master? Master { get; set; }
 

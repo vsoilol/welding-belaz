@@ -28,12 +28,37 @@ public class CalendarController : ControllerBase
     {
         return await _calendarManager.CreateAsync(request, true);
     }
-    
+
     [HttpGet("main/{year}")]
     [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<CalendarDto?>> GetMainCalendarAsync([FromRoute] int year)
     {
         return await _calendarManager.GetMainCalendarByYearAsync(year);
+    }
+
+    [HttpPut]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateCalendarRequest request)
+    {
+        await _calendarManager.UpdateAsync(request);
+        return Ok();
+    }
+
+    [HttpPost("withWelder")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto?>> CreateMainCalendarAsync(
+        [FromBody] CreateCalendarWithWelderIdRequest request)
+    {
+        return await _calendarManager.CreateAsync(request);
+    }
+
+    [HttpGet("byWelder")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto?>> GetByWelderIdAsync([FromQuery] GetByWelderIdRequest request)
+    {
+        return await _calendarManager.GetByWelderIdAsync(request);
     }
 }
