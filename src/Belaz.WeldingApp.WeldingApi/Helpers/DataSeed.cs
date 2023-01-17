@@ -541,7 +541,8 @@ public class DataSeed
                             new WeldPassage
                             {
                                 Seam = seam,
-                                Name = "Название прохода 1",
+                                Name = "Корневой",
+                                Number = 1,
                                 WeldingCurrentMin = 1,
                                 WeldingCurrentMax = 100,
                                 ArcVoltageMin = 5,
@@ -571,7 +572,8 @@ public class DataSeed
                             new WeldPassage
                             {
                                 Seam = seam2,
-                                Name = "Название прохода 1",
+                                Number = 2,
+                                Name = "Заполняющий",
                                 WeldingCurrentMin = 1,
                                 WeldingCurrentMax = 100,
                                 ArcVoltageMin = 5,

@@ -6,6 +6,8 @@ public class WeldPassageDto
     
     public string Name { get; set; } = null!;
     
+    public int Number { get; set; }
+    
     /// <summary>
     /// Сварочный ток min
     /// </summary>

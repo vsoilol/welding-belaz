@@ -10,10 +10,10 @@ public class WeldingEquipmentDowntimeDto
     /// <summary>
     /// Причина простоя
     /// </summary>
-    public string DowntimeReason { get; set; }
+    public string DowntimeReason { get; set; } = null!;
 
     /// <summary>
     /// Время изменения состояния
     /// </summary>
-    public string ChangeConditionTime { get; set; }
+    public string ChangeConditionTime { get; set; } = null!;
 }

@@ -8,6 +8,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 /// </summary>
 public class WeldPassage : Entity
 {
+    public int Number { get; set; }
+    
     public string Name { get; set; } = null!;
 
     /// <summary>
