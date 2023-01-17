@@ -8,7 +8,7 @@ public class WorkplaceDto
     
     public int Number { get; set; }
         
-    public ProductionBriefDto? Post { get; set; }
+    public ProductionWithNameDto? Post { get; set; }
 
     public ProductionWithNameDto? ProductionArea { get; set; }
 }

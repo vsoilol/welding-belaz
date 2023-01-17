@@ -85,7 +85,7 @@ public class WeldingEquipmentDto
     /// </summary>
     public double ArcVoltageMax { get; set; }
 
-    public ProductionBriefDto? Post { get; set; }
+    public ProductionWithNameDto? Post { get; set; }
 
     /// <summary>
     /// Продолжительность включения (нагрузки), в минутах
