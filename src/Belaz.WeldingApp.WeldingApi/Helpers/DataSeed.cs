@@ -208,7 +208,7 @@ public class DataSeed
                         Condition = Condition.ForcedDowntime,
                         Time = 30,
                         DowntimeReason = "Какая-то причина простоя",
-                        ChangeConditionTime = new TimeSpan(9, 30, 0),
+                        StartConditionTime = new TimeSpan(9, 30, 0),
                     },
                     new WeldingEquipmentConditionTime
                     {
@@ -216,7 +216,7 @@ public class DataSeed
                         Condition = Condition.ForcedDowntime,
                         Time = 10,
                         DowntimeReason = "Какая-то причина простоя 2",
-                        ChangeConditionTime = new TimeSpan(19, 30, 0),
+                        StartConditionTime = new TimeSpan(19, 30, 0),
                     }
                 },
             },
@@ -288,7 +288,7 @@ public class DataSeed
                         Date = DateTime.Today,
                         Condition = Condition.ForcedDowntime,
                         Time = 60,
-                        ChangeConditionTime = new TimeSpan(12, 50, 0),
+                        StartConditionTime = new TimeSpan(12, 50, 0),
                         DowntimeReason = "Какая-то причина простоя 3"
                     }
                 },

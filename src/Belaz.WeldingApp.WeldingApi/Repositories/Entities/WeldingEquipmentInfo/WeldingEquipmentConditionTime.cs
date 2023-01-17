@@ -15,10 +15,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         
         public DateTime Date { get; set; }
         
-        /// <summary>
-        /// Время изменения состояния
-        /// </summary>
-        public TimeSpan? ChangeConditionTime { get; set; }
+        public TimeSpan StartConditionTime { get; set; }
 
         /// <summary>
         /// Сколько оборудование находиться в данном состоянии в минутах

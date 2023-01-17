@@ -5,15 +5,16 @@
 /// </summary>
 public class WeldingEquipmentDowntimeDto
 {
-    public WeldingEquipmentBriefDto WeldingEquipment { get; set; }
+    public WeldingEquipmentBriefDto WeldingEquipment { get; set; }  = null!;
 
     /// <summary>
     /// Причина простоя
     /// </summary>
     public string DowntimeReason { get; set; } = null!;
 
-    /// <summary>
-    /// Время изменения состояния
-    /// </summary>
-    public string ChangeConditionTime { get; set; } = null!;
+    public string Date { get; set; }  = null!;
+    
+    public string StartConditionTime { get; set; }  = null!;
+    
+    public int Time { get; set; }
 }
