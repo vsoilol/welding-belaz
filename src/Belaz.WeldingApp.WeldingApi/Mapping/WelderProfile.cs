@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Welder;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Mapping;
 
@@ -41,14 +42,28 @@ public class WelderProfile : Profile
         CreateMap<CreateWelderRequest, Welder>()
             .ForMember(dto => dto.UserInfo,
                 opt => opt
-                    .MapFrom(x => x));
+                    .MapFrom(x => x))
+            .ForMember(dto => dto.WeldingEquipments,
+                opt => opt
+                    .MapFrom(x => x.WeldingEquipmentIds
+                        .Select(_ => new WeldingEquipment
+                        {
+                            Id = _
+                        })));
     }
-    
+
     private void CreateMapForUpdateWelderRequestToWelder()
     {
         CreateMap<UpdateWelderRequest, Welder>()
             .ForMember(dto => dto.UserInfo,
                 opt => opt
-                    .MapFrom(x => x));
+                    .MapFrom(x => x))
+            .ForMember(dto => dto.WeldingEquipments,
+                opt => opt
+                    .MapFrom(x => x.WeldingEquipmentIds
+                        .Select(_ => new WeldingEquipment
+                        {
+                            Id = _
+                        })));
     }
 }

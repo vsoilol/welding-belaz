@@ -99,6 +99,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
         
         public Master? Master { get; set; }
 
+        public Guid? WelderId { get; set; }
+        
+        [ForeignKey(nameof(WelderId))]
         public Welder? Welder { get; set; }
         
         public Chief? Chief { get; set; }

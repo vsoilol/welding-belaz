@@ -14,5 +14,5 @@ public class CreateWelderRequest
     
     public Guid? WorkplaceId { get; set; }
 
-    public Guid? WeldingEquipmentId { get; set; }
+    public IReadOnlyList<Guid>? WeldingEquipmentIds { get; set; }
 }
