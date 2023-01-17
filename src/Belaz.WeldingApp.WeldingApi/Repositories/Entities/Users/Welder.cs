@@ -25,10 +25,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users
         
         public List<Calendar>? Calendars { get; set; }
         
-        public Guid? WeldingEquipmentId { get; set; }
-        
-        [ForeignKey(nameof(WeldingEquipmentId))]
-        public WeldingEquipment? WeldingEquipment { get; set; }
+        public List<WeldingEquipment>? WeldingEquipments { get; set; }
 
         public List<WeldingTask> WeldingTasks { get; set; } = null!;
     }

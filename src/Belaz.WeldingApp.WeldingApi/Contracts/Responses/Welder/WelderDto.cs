@@ -19,7 +19,7 @@ public class WelderDto
 
     public ProductionWithNameDto ProductionArea { get; set; } = null!;
 
-    public WeldingEquipmentBriefDto? WeldingEquipment { get; set; }
+    public IReadOnlyList<WeldingEquipmentBriefDto>? WeldingEquipments { get; set; }
 
     public ProductionBriefDto? Workplace { get; set; }
 }
