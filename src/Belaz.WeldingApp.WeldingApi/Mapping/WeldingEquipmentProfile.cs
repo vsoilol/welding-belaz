@@ -66,9 +66,12 @@ public class WeldingEquipmentProfile : Profile
     private void WeldingEquipmentConditionTimeToWeldingEquipmentDowntimeDto()
     {
         CreateMap<WeldingEquipmentConditionTime, WeldingEquipmentDowntimeDto>()
-            .ForMember(dto => dto.ChangeConditionTime,
+            .ForMember(dto => dto.StartConditionTime,
                 opt => opt
-                    .MapFrom(x => x.ChangeConditionTime.ToHoursMinutesSecondsString()))
+                    .MapFrom(x => x.StartConditionTime.ToHoursMinutesString()))
+            .ForMember(dto => dto.Date,
+                opt => opt
+                    .MapFrom(x => x.Date.ToDayInfoString()))
             .ForMember(dto => dto.WeldingEquipment,
                 opt => opt
                     .MapFrom(x => x.WeldingEquipment));
