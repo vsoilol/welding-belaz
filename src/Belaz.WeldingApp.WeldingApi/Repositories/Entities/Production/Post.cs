@@ -10,6 +10,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production
     {
         public int Number { get; set; }
 
+        public string Name { get; set; } = null!;
+
         public List<Workplace> Workplaces { get; set; }
         
         public Guid ProductionAreaId { get; set; }

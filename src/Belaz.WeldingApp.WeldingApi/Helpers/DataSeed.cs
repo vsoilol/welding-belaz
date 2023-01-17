@@ -318,7 +318,8 @@ public class DataSeed
                     {
                         new Post
                         {
-                            Number = 1
+                            Number = 1,
+                            Name = "Пост 1"
                         }
                     },
                     Workplaces = new List<Workplace>
@@ -337,7 +338,8 @@ public class DataSeed
                     {
                         new Post
                         {
-                            Number = 2
+                            Number = 2,
+                            Name = "Пост 2"
                         }
                     },
                     Workplaces = new List<Workplace>
@@ -356,7 +358,8 @@ public class DataSeed
                     {
                         new Post
                         {
-                            Number = 3
+                            Number = 3,
+                            Name = "Пост 3"
                         }
                     },
                     Workplaces = new List<Workplace>
