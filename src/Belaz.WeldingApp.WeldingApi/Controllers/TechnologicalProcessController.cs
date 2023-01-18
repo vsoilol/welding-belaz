@@ -39,10 +39,11 @@ public class TechnologicalProcessController : ControllerBase
     
     [HttpPost]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateTechnologicalProcessRequest request)
+    [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<TechnologicalProcessDto?>> CreateAsync([FromBody] CreateTechnologicalProcessRequest request)
     {
-        await _technologicalProcessManager.CreateAsync(request);
-        return Ok();
+        var technologicalProcess = await _technologicalProcessManager.CreateAsync(request);
+        return technologicalProcess;
     }
     
     [HttpPut]

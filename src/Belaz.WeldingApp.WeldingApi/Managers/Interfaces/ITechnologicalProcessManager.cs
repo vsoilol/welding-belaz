@@ -9,7 +9,7 @@ public interface ITechnologicalProcessManager
     
     Task<List<TechnologicalProcessDto>> GetAllAsync();
     
-    Task CreateAsync(CreateTechnologicalProcessRequest request);
+    Task<TechnologicalProcessDto?> CreateAsync(CreateTechnologicalProcessRequest request);
     
     Task UpdateAsync(UpdateTechnologicalProcessRequest request);
 }

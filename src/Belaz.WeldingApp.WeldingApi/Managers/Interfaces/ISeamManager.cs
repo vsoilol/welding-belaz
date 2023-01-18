@@ -12,7 +12,7 @@ public interface ISeamManager
     
     Task<List<SeamDto>> GetAllByControlSubject(bool isControlSubject);
     
-    Task CreateAsync(CreateSeamRequest request);
+    Task<SeamDto?> CreateAsync(CreateSeamRequest request);
     
     Task UpdateAsync(UpdateSeamRequest request);
 }
