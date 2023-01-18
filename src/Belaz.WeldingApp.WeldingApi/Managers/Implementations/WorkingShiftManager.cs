@@ -35,7 +35,7 @@ public class WorkingShiftManager : IWorkingShiftManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateWorkingShiftRequest request)
+    public async Task<WorkingShiftDto?> UpdateAsync(UpdateWorkingShiftRequest request)
     {
         var workingShift = _mapper.Map<WorkingShift>(request);
         
@@ -43,8 +43,13 @@ public class WorkingShiftManager : IWorkingShiftManager
 
         if (!isUpdate)
         {
-            throw new UpdateFailedException(typeof(Calendar), request.Id);
+            throw new UpdateFailedException(typeof(WorkingShift), request.Id);
         }
+        
+        return await _workingShiftRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
     public Task CreateRangeAsync(List<CreateWorkingShiftRequest> values, Guid calendarId)

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Workshop;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workshop;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
@@ -51,9 +52,19 @@ public class WorkshopManager : IWorkshopManager
             .FirstOrDefaultAsync();
     }
 
-    public Task<bool> UpdateAsync(UpdateWorkshopRequest request)
+    public async Task<WorkshopDto?> UpdateAsync(UpdateWorkshopRequest request)
     {
         var workshop = _mapper.Map<Workshop>(request);
-        return _workshopRepository.UpdateAsync(workshop);
+        var isUpdate = await _workshopRepository.UpdateAsync(workshop);
+        
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(Workshop), request.Id);
+        }
+        
+        return await _workshopRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<WorkshopDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

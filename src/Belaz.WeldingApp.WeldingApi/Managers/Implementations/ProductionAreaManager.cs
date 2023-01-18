@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.ProductionArea;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
@@ -50,9 +51,19 @@ public class ProductionAreaManager : IProductionAreaManager
             .FirstOrDefaultAsync();
     }
 
-    public Task<bool> UpdateAsync(UpdateProductionAreaRequest request)
+    public async Task<ProductionAreaDto?> UpdateAsync(UpdateProductionAreaRequest request)
     {
         var productionArea = _mapper.Map<ProductionArea>(request);
-        return _productionAreaRepository.UpdateAsync(productionArea);
+        var isUpdate = await _productionAreaRepository.UpdateAsync(productionArea);
+        
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(Post), request.Id);
+        }
+        
+        return await _productionAreaRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<ProductionAreaDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

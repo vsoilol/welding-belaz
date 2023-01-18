@@ -11,5 +11,5 @@ public interface IWorkshopManager
 
     Task<WorkshopDto?> CreateAsync(CreateWorkshopRequest request);
     
-    Task<bool> UpdateAsync(UpdateWorkshopRequest request);
+    Task<WorkshopDto?> UpdateAsync(UpdateWorkshopRequest request);
 }

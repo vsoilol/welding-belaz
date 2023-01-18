@@ -62,7 +62,7 @@ public class SeamManager : ISeamManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateSeamRequest request)
+    public async Task<SeamDto?> UpdateAsync(UpdateSeamRequest request)
     {
         var updatedSeam = await _seamRepository.GetByIdAsync(request.Id);
         
@@ -72,5 +72,10 @@ public class SeamManager : ISeamManager
         updatedSeam.WorkplaceId = request.WorkplaceId ?? updatedSeam.WorkplaceId;
         
         await _seamRepository.SaveAsync();
+        
+        return await _seamRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

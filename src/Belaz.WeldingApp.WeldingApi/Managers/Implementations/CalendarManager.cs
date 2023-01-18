@@ -47,7 +47,7 @@ public class CalendarManager : ICalendarManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateCalendarRequest request)
+    public async Task<CalendarDto?> UpdateAsync(UpdateCalendarRequest request)
     {
         var calendar = _mapper.Map<Calendar>(request);
 
@@ -57,6 +57,11 @@ public class CalendarManager : ICalendarManager
         {
             throw new UpdateFailedException(typeof(Calendar), request.Id);
         }
+        
+        return await _calendarRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
     public Task<CalendarDto?> GetMainCalendarByYearAsync(int year)

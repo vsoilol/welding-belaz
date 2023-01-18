@@ -2,9 +2,11 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Post;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Post;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations;
@@ -50,9 +52,19 @@ public class PostManager : IPostManager
             .FirstOrDefaultAsync();
     }
 
-    public Task<bool> UpdateAsync(UpdatePostRequest request)
+    public async Task<PostDto?> UpdateAsync(UpdatePostRequest request)
     {
         var productionArea = _mapper.Map<Post>(request);
-        return _postRepository.UpdateAsync(productionArea);
+        var isUpdate = await _postRepository.UpdateAsync(productionArea);
+        
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(Post), request.Id);
+        }
+        
+        return await _postRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<PostDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

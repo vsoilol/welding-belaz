@@ -7,7 +7,7 @@ public interface IDayManager
 {
     Task<DayDto?> CreateAsync(CreateDayWithCalendarIdRequest request);
     
-    Task UpdateAsync(UpdateDayRequest request);
+    Task<DayDto?> UpdateAsync(UpdateDayRequest request);
     
     Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId);
 }

@@ -39,9 +39,9 @@ public class ChiefController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
+    [ProducesResponseType(typeof(ChiefDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ChiefDto?>> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
     {
-        await _chiefManager.UpdateAsync(request);
-        return Ok();
+        return await _chiefManager.UpdateAsync(request);
     }
 }

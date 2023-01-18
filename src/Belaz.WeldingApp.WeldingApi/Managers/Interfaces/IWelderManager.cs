@@ -9,5 +9,5 @@ public interface IWelderManager
     
     Task<WelderDto?> CreateAsync(CreateWelderRequest request);
     
-    Task UpdateAsync(UpdateWelderRequest request);
+    Task<WelderDto?> UpdateAsync(UpdateWelderRequest request);
 }

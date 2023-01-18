@@ -31,17 +31,16 @@ public class TechnologicalInstructionController : ControllerBase
     
     [HttpPost]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateInstructionRequest request)
+    [ProducesResponseType(typeof(TechnologicalInstructionDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<TechnologicalInstructionDto?>> CreateAsync([FromBody] CreateInstructionRequest request)
     {
-        await _technologicalInstructionManager.CreateAsync(request);
-        return Ok();
+        return await _technologicalInstructionManager.CreateAsync(request);
     }
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateInstructionRequest request)
+    public async Task<ActionResult<TechnologicalInstructionDto?>>  UpdateAsync([FromBody] UpdateInstructionRequest request)
     {
-        await _technologicalInstructionManager.UpdateAsync(request);
-        return Ok();
+        return await _technologicalInstructionManager.UpdateAsync(request);
     }
 }

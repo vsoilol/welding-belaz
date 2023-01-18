@@ -41,10 +41,10 @@ public class TechnologicalProcessManager : ITechnologicalProcessManager
     public async Task<TechnologicalProcessDto?> CreateAsync(CreateTechnologicalProcessRequest request)
     {
         var technologicalProcess = _mapper.Map<TechnologicalProcess>(request);
-        
+
         var createdTechnologicalProcess = _technologicalProcessRepository.Add(technologicalProcess);
         await _technologicalProcessRepository.SaveAsync();
-        
+
         return await _technologicalProcessRepository
             .AsQueryable()
             .Where(_ => _.Id == createdTechnologicalProcess.Id)
@@ -52,14 +52,19 @@ public class TechnologicalProcessManager : ITechnologicalProcessManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateTechnologicalProcessRequest request)
+    public async Task<TechnologicalProcessDto?> UpdateAsync(UpdateTechnologicalProcessRequest request)
     {
         var updatedTechnologicalProcess = await _technologicalProcessRepository.GetByIdAsync(request.Id);
-        
+
         updatedTechnologicalProcess.Number = request.Number;
         updatedTechnologicalProcess.Name = request.Name;
         updatedTechnologicalProcess.PdmSystemFileLink = request.PdmSystemFileLink;
 
         await _technologicalProcessRepository.SaveAsync();
+
+        return await _technologicalProcessRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

@@ -11,5 +11,5 @@ public interface IPostManager
     
     Task<PostDto?> CreateAsync(CreatePostRequest request);
     
-    Task<bool> UpdateAsync(UpdatePostRequest request);
+    Task<PostDto?> UpdateAsync(UpdatePostRequest request);
 }

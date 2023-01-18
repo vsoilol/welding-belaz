@@ -31,9 +31,9 @@ public class WorkingShiftController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateWorkingShiftRequest request)
+    [ProducesResponseType(typeof(WorkingShiftDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WorkingShiftDto?>> UpdateAsync([FromBody] UpdateWorkingShiftRequest request)
     {
-        await _workingShiftManager.UpdateAsync(request);
-        return Ok();
+        return await _workingShiftManager.UpdateAsync(request);
     }
 }

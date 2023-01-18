@@ -31,15 +31,20 @@ public class TechnologicalInstructionManager : ITechnologicalInstructionManager
             .ToListAsync();
     }
 
-    public async Task CreateAsync(CreateInstructionRequest request)
+    public async Task<TechnologicalInstructionDto?> CreateAsync(CreateInstructionRequest request)
     {
         var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
 
-        _technologicalInstructionRepository.Add(technologicalInstruction);
+        var createdTechnologicalInstruction = _technologicalInstructionRepository.Add(technologicalInstruction);
         await _technologicalInstructionRepository.SaveAsync();
+        
+        return await _technologicalInstructionRepository
+            .GetByIdAsQueryable(createdTechnologicalInstruction.Id)
+            .ProjectTo<TechnologicalInstructionDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateInstructionRequest request)
+    public async Task<TechnologicalInstructionDto?> UpdateAsync(UpdateInstructionRequest request)
     {
         var updatedTechnologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
 
@@ -77,5 +82,10 @@ public class TechnologicalInstructionManager : ITechnologicalInstructionManager
 
         await _context.WeldPassages.AddRangeAsync(newWelderPassages);
         await _context.SaveChangesAsync();
+        
+        return await _technologicalInstructionRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<TechnologicalInstructionDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

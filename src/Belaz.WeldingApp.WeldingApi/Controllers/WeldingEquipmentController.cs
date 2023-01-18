@@ -50,22 +50,9 @@ public class WeldingEquipmentController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateEquipmentRequest request)
+    [ProducesResponseType(typeof(WeldingEquipmentDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingEquipmentDto?>> UpdateAsync([FromBody] UpdateEquipmentRequest request)
     {
-        var result = await _weldingEquipmentManager.UpdateAsync(request);
-
-        if (!result)
-        {
-            var problemDetails = new BadRequestResult
-            {
-                Title = "Update Error",
-                StatusCode = (int) (HttpStatusCode.BadRequest),
-                Errors = $"Error when update Welding Equipment with id {request.Id}",
-            };
-
-            return BadRequest(problemDetails);
-        }
-        
-        return Ok();
+        return await _weldingEquipmentManager.UpdateAsync(request);
     }
 }

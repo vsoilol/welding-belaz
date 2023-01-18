@@ -31,9 +31,9 @@ public class DayController : ControllerBase
 
     [HttpPut]
     [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateDayRequest request)
+    [ProducesResponseType(typeof(DayDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<DayDto?>> UpdateAsync([FromBody] UpdateDayRequest request)
     {
-        await _dayManager.UpdateAsync(request);
-        return Ok();
+        return await _dayManager.UpdateAsync(request);
     }
 }

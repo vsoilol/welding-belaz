@@ -56,9 +56,9 @@ public class SeamController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateSeamRequest request)
+    [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SeamDto?>> UpdateAsync([FromBody] UpdateSeamRequest request)
     {
-        await _seamManager.UpdateAsync(request);
-        return Ok();
+        return await _seamManager.UpdateAsync(request);
     }
 }

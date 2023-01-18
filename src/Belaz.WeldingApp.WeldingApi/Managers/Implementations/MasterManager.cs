@@ -46,15 +46,21 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations
                 .FirstOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(UpdateUserWithEquipmentRequest request)
+        public async Task<MasterDto?> UpdateAsync(UpdateUserWithEquipmentRequest request)
         {
             var master = _mapper.Map<Master>(request);
             var isUpdate = await _masterRepository.UpdateAsync(master);
 
             if (!isUpdate)
             {
-                throw new UpdateFailedException(typeof(Inspector), request.Id);
+                throw new UpdateFailedException(typeof(Master), request.Id);
             }
+            
+            return await _masterRepository
+                .AsQueryable()
+                .Where(_ => _.Id == request.Id)
+                .ProjectTo<MasterDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
         }
     }
 }

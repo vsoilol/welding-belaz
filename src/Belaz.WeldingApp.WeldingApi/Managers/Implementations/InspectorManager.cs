@@ -45,7 +45,7 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations
                 .FirstOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(UpdateUserRequest request)
+        public async Task<InspectorDto?> UpdateAsync(UpdateUserRequest request)
         {
             var inspector = _mapper.Map<Inspector>(request);
             var isUpdate = await _inspectorRepository.UpdateAsync(inspector);
@@ -54,6 +54,12 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations
             {
                 throw new UpdateFailedException(typeof(Inspector), request.Id);
             }
+            
+            return await _inspectorRepository
+                .AsQueryable()
+                .Where(_ => _.Id == request.Id)
+                .ProjectTo<InspectorDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
         }
     }
 }

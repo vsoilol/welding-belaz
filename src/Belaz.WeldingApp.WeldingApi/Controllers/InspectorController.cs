@@ -39,9 +39,9 @@ public class InspectorController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserRequest request)
+    [ProducesResponseType(typeof(InspectorDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<InspectorDto?>> UpdateAsync([FromBody] UpdateUserRequest request)
     {
-        await _inspectorManager.UpdateAsync(request);
-        return Ok();
+        return await _inspectorManager.UpdateAsync(request);
     }
 }
