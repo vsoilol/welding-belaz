@@ -32,7 +32,8 @@
       "UpstreamPathTemplate": "/api/detail",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST", "PUT"
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/detail",
       "ServiceName": "welding",
@@ -102,7 +103,8 @@
       "UpstreamPathTemplate": "/api/knot",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST", "PUT"
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/knot",
       "ServiceName": "welding",
@@ -158,7 +160,8 @@
       "UpstreamPathTemplate": "/api/product",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST", "PUT"
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/product",
       "ServiceName": "welding",
@@ -186,7 +189,8 @@
       "UpstreamPathTemplate": "/api/seam",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST", "PUT"
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/seam",
       "ServiceName": "welding",
@@ -242,7 +246,9 @@
       "UpstreamPathTemplate": "/api/post",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/post",
       "ServiceName": "welding",
@@ -270,7 +276,9 @@
       "UpstreamPathTemplate": "/api/ProductionArea",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/ProductionArea",
       "ServiceName": "welding",
@@ -298,7 +306,9 @@
       "UpstreamPathTemplate": "/api/Workplace",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/Workplace",
       "ServiceName": "welding",
@@ -326,7 +336,9 @@
       "UpstreamPathTemplate": "/api/Workshop",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/Workshop",
       "ServiceName": "welding",
@@ -354,7 +366,9 @@
       "UpstreamPathTemplate": "/api/TechnologicalProcess",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/TechnologicalProcess",
       "ServiceName": "welding",
@@ -368,7 +382,9 @@
       "UpstreamPathTemplate": "/api/Welder",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/Welder",
       "ServiceName": "welding",
@@ -382,7 +398,9 @@
       "UpstreamPathTemplate": "/api/WeldingEquipment",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/WeldingEquipment",
       "ServiceName": "welding",
@@ -396,7 +414,7 @@
       "UpstreamPathTemplate": "/api/WeldingEquipment/downtime",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/WeldingEquipment/downtime",
       "ServiceName": "welding",
@@ -438,7 +456,9 @@
       "UpstreamPathTemplate": "/api/TechnologicalInstruction",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/TechnologicalInstruction",
       "ServiceName": "welding",
@@ -452,7 +472,9 @@
       "UpstreamPathTemplate": "/api/Chief",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/Chief",
       "ServiceName": "welding",
@@ -466,7 +488,9 @@
       "UpstreamPathTemplate": "/api/Inspector",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/Inspector",
       "ServiceName": "welding",
@@ -480,7 +504,9 @@
       "UpstreamPathTemplate": "/api/Master",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/Master",
       "ServiceName": "welding",
@@ -564,7 +590,8 @@
       "UpstreamPathTemplate": "/api/day",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST", "PUT"
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/day",
       "ServiceName": "welding",
@@ -578,7 +605,8 @@
       "UpstreamPathTemplate": "/api/workingShift",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST", "PUT"
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/workingShift",
       "ServiceName": "welding",
@@ -609,6 +637,20 @@
         "POST"
       ],
       "DownstreamPathTemplate": "/api/calendar/withEquipment",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/downtimeReason",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/DowntimeReason",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {

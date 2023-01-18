@@ -25,7 +25,7 @@ public class WeldingEquipmentController : ControllerBase
     }
 
     [HttpGet]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WeldingEquipmentDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingEquipmentDto>>> GetAllWeldingEquipmentsAsync()
     {
@@ -33,26 +33,44 @@ public class WeldingEquipmentController : ControllerBase
     }
 
     [HttpGet("downtime")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WeldingEquipmentDowntimeDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingEquipmentDowntimeDto>>> GetAllWeldingEquipmentDowntimesAsync()
     {
         return await _weldingEquipmentManager.GetAllWeldingEquipmentDowntimesAsync();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(WeldingEquipmentDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<WeldingEquipmentDto?>> CreateAsync([FromBody] CreateEquipmentRequest request)
     {
         return await _weldingEquipmentManager.CreateAsync(request);
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(WeldingEquipmentDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<WeldingEquipmentDto?>> UpdateAsync([FromBody] UpdateEquipmentRequest request)
     {
         return await _weldingEquipmentManager.UpdateAsync(request);
+    }
+
+    [HttpPost("downtime")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(WeldingEquipmentDowntimeDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingEquipmentDowntimeDto?>> AddWeldingEquipmentDowntimeAsync(
+        [FromBody] CreateWeldingEquipmentDowntimeRequest request)
+    {
+        return await _weldingEquipmentManager.AddWeldingEquipmentDowntimeAsync(request);
+    }
+    
+    [HttpPut("downtime")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(WeldingEquipmentDowntimeDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingEquipmentDowntimeDto?>> UpdateWeldingEquipmentDowntimeAsync(
+        [FromBody] UpdateWeldingEquipmentDowntimeRequest request)
+    {
+        return await _weldingEquipmentManager.UpdateWeldingEquipmentDowntimeAsync(request);
     }
 }

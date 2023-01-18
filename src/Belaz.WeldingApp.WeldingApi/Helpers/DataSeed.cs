@@ -21,7 +21,7 @@ public class DataSeed
         {
             await AddProduction(context);
         }
-        
+
         if (!context.Chiefs.Any())
         {
             await AddChief(context);
@@ -30,6 +30,11 @@ public class DataSeed
         if (!context.Welders.Any())
         {
             await AddWelders(context);
+        }
+
+        if (!context.DowntimeReasons.Any())
+        {
+            await AddDowntimeReasons(context);
         }
 
         if (!context.WeldingEquipments.Any())
@@ -51,6 +56,117 @@ public class DataSeed
         {
             await AddWeldingTasks(context);
         }
+    }
+
+    private static async Task AddDowntimeReasons(ApplicationContext context)
+    {
+        var downtimeReasons = new List<DowntimeReason>
+        {
+            new DowntimeReason
+            {
+                Reason = "Нерабочее время по графику согласно сменности"
+            },
+            new DowntimeReason
+            {
+                Reason = "Праздники и выходные"
+            },
+            new DowntimeReason
+            {
+                Reason = "Обед"
+            },
+            new DowntimeReason
+            {
+                Reason = "Плановый ремонт централизованными службами"
+            },
+            new DowntimeReason
+            {
+                Reason = "Аварийный ремонт централизованными службами"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие заданий"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие материала, заготовок, деталей"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие инструмента, оснастки вспомогательного оборудования"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие крана, транспорта"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие оператора в связи с необеспеченностью"
+            },
+            new DowntimeReason
+            {
+                Reason = "Неявка оператора (б/лист, отпуск, и пр.)"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие энергоносителей"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие сотрудника ОТК"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие конструктора, технолога или ожидание его решения"
+            },
+            new DowntimeReason
+            {
+                Reason = "Естественные надобности"
+            },
+            new DowntimeReason
+            {
+                Reason = "Ознакомление с работой, документацией, инструктаж"
+            },
+            new DowntimeReason
+            {
+                Reason =
+                    "Переналадка оборудования, получение инструмента до начала работы, снятие/сдача по окончании работы"
+            },
+            new DowntimeReason
+            {
+                Reason = "Работа с управляющей программой"
+            },
+            new DowntimeReason
+            {
+                Reason = "Установка, выверка, снятие детали"
+            },
+            new DowntimeReason
+            {
+                Reason = "Установка, выверка, снятие детали"
+            },
+            new DowntimeReason
+            {
+                Reason = "Изменение режимов, смена инструмента, приспособления"
+            },
+            new DowntimeReason
+            {
+                Reason = "Контроль на рабочем месте"
+            },
+            new DowntimeReason
+            {
+                Reason = "Уборка, осмотр оборудования, чистка/смазка оборудования"
+            },
+            new DowntimeReason
+            {
+                Reason = "Сборочные операции"
+            },
+            new DowntimeReason
+            {
+                Reason = "Работа по карте несоответствий"
+            }
+        };
+
+        await context.DowntimeReasons.AddRangeAsync(downtimeReasons);
+        await context.SaveChangesAsync();
     }
 
     private static async Task CreateRolesAsync(ApplicationContext context)
@@ -162,6 +278,7 @@ public class DataSeed
         var productionArea = context.ProductionAreas.First();
         var shifts = context.WorkingShifts.ToList();
         var welders = context.Welders.ToList();
+        var downtimeReasons = await context.DowntimeReasons.Take(3).ToListAsync();
 
         var weldingEquipments = new List<WeldingEquipment>
         {
@@ -207,7 +324,7 @@ public class DataSeed
                         Date = DateTime.Today,
                         Condition = Condition.ForcedDowntime,
                         Time = 30,
-                        DowntimeReason = "Какая-то причина простоя",
+                        DowntimeReasonId = downtimeReasons[0].Id,
                         StartConditionTime = new TimeSpan(9, 30, 0),
                     },
                     new WeldingEquipmentConditionTime
@@ -215,7 +332,7 @@ public class DataSeed
                         Date = DateTime.Today,
                         Condition = Condition.ForcedDowntime,
                         Time = 10,
-                        DowntimeReason = "Какая-то причина простоя 2",
+                        DowntimeReasonId = downtimeReasons[1].Id,
                         StartConditionTime = new TimeSpan(19, 30, 0),
                     }
                 },
@@ -289,7 +406,7 @@ public class DataSeed
                         Condition = Condition.ForcedDowntime,
                         Time = 60,
                         StartConditionTime = new TimeSpan(12, 50, 0),
-                        DowntimeReason = "Какая-то причина простоя 3"
+                        DowntimeReasonId = downtimeReasons[2].Id,
                     }
                 },
             }
@@ -376,7 +493,7 @@ public class DataSeed
         await context.Workshops.AddAsync(workShop);
         await context.SaveChangesAsync();
     }
-    
+
     private static async Task AddChief(ApplicationContext context)
     {
         var chiefRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Chief));
@@ -423,14 +540,25 @@ public class DataSeed
                 Name = "Изделие 1",
                 Number = 1,
                 IsControlSubject = true,
+                Status = Status.Defective,
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
                 Workplace = workplace,
+                StatusReasons = new List<StatusReason>
+                {
+                    new StatusReason
+                    {
+                        Date = DateTime.Now,
+                        Status = Status.Defective,
+                        Reason = "Какая-то причина брака"
+                    }
+                },
                 Seams = new List<Seam>
                 {
                     new Seam
                     {
                         Number = 1,
+                        Status = Status.InProgress,
                         ProductionArea = productionArea,
                         Workplace = workplace,
                     }
@@ -443,6 +571,7 @@ public class DataSeed
                         {
                             Name = "Деталь 1",
                             Number = 1,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Detail,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -454,6 +583,7 @@ public class DataSeed
                         {
                             Name = "Узел 1",
                             Number = 1,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Knot,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -465,6 +595,7 @@ public class DataSeed
             {
                 Name = "Изделие 2",
                 Number = 2,
+                Status = Status.NotStarted,
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
                 Workplace = workplace,
@@ -473,6 +604,7 @@ public class DataSeed
                     new Seam
                     {
                         Number = 2,
+                        Status = Status.Manufactured,
                         IsControlSubject = true,
                         ProductionArea = productionArea,
                         Workplace = workplace,
@@ -486,6 +618,7 @@ public class DataSeed
                         {
                             Name = "Деталь 2",
                             Number = 2,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Detail,
                             IsControlSubject = true,
                             ProductionArea = productionArea,
@@ -498,6 +631,7 @@ public class DataSeed
                         {
                             Name = "Узел 2",
                             Number = 2,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Knot,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -526,7 +660,7 @@ public class DataSeed
             new TechnologicalProcess
             {
                 Name = "Технологический процесс 1",
-                Products = new List<Product>{product},
+                Products = new List<Product> { product },
                 Number = 1,
                 PdmSystemFileLink = "Ссылка",
                 TechnologicalInstructions = new List<TechnologicalInstruction>
@@ -559,7 +693,7 @@ public class DataSeed
                 Name = "Технологический процесс 2",
                 Number = 2,
                 PdmSystemFileLink = "Ссылка",
-                Products = new List<Product>{product2},
+                Products = new List<Product> { product2 },
                 TechnologicalInstructions = new List<TechnologicalInstruction>
                 {
                     new TechnologicalInstruction
@@ -610,7 +744,7 @@ public class DataSeed
 
         var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
         var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
-        
+
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
         var weldingEquipment = await context.WeldingEquipments.FirstOrDefaultAsync();
 
@@ -687,7 +821,6 @@ public class DataSeed
                 InterlayerTemperature = 200,
                 CurrentLayerNumber = 81,
                 PreheatingTemperature = 150,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Seam = seam2,
@@ -710,7 +843,6 @@ public class DataSeed
                 InterlayerTemperature = 203,
                 CurrentLayerNumber = 31,
                 PreheatingTemperature = 110,
-                Status = Status.Defective,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = product,
@@ -733,7 +865,6 @@ public class DataSeed
                 InterlayerTemperature = 820,
                 CurrentLayerNumber = 81,
                 PreheatingTemperature = 170,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = detail,
@@ -756,7 +887,6 @@ public class DataSeed
                 InterlayerTemperature = 220,
                 CurrentLayerNumber = 12,
                 PreheatingTemperature = 2,
-                Status = Status.InProgress,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Seam = seam,
@@ -779,7 +909,6 @@ public class DataSeed
                 InterlayerTemperature = 23,
                 CurrentLayerNumber = 13,
                 PreheatingTemperature = 10,
-                Status = Status.NotStarted,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = product2,
@@ -802,7 +931,6 @@ public class DataSeed
                 InterlayerTemperature = 22,
                 CurrentLayerNumber = 2,
                 PreheatingTemperature = 11,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = knot,
@@ -825,7 +953,6 @@ public class DataSeed
                 InterlayerTemperature = 22,
                 CurrentLayerNumber = 2,
                 PreheatingTemperature = 11,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = knot2,
@@ -848,7 +975,6 @@ public class DataSeed
                 InterlayerTemperature = 22,
                 CurrentLayerNumber = 2,
                 PreheatingTemperature = 11,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = detail2,

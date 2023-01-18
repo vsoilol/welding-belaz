@@ -5,6 +5,8 @@
 /// </summary>
 public class WeldingEquipmentDowntimeDto
 {
+    public Guid Id { get; set; }
+    
     public WeldingEquipmentBriefDto WeldingEquipment { get; set; }  = null!;
 
     /// <summary>

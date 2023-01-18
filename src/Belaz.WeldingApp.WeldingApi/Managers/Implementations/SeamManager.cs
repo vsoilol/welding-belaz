@@ -25,7 +25,7 @@ public class SeamManager : ISeamManager
     {
         return await _seamRepository
             .AsQueryable()
-            .Where(_ => _.WeldingTask.Status == status)
+            .Where(_ => _.Status == status)
             .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
