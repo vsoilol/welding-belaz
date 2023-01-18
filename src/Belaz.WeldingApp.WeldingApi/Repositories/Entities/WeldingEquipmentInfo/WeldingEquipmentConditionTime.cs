@@ -8,11 +8,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
     {
         public Condition Condition { get; set; }
 
-        /// <summary>
-        /// Причина простоя
-        /// </summary>
-        public string? DowntimeReason { get; set; }
-        
         public DateTime Date { get; set; }
         
         public TimeSpan StartConditionTime { get; set; }
@@ -26,5 +21,10 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo
 
         [ForeignKey(nameof(WeldingEquipmentId))]
         public WeldingEquipment WeldingEquipment { get; set; } = null!;
+        
+        public Guid? DowntimeReasonId { get; set; }
+        
+        [ForeignKey(nameof(DowntimeReasonId))]
+        public DowntimeReason? DowntimeReason { get; set; }
     }
 }

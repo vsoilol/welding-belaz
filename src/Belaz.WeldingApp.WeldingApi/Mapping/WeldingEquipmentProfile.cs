@@ -69,6 +69,9 @@ public class WeldingEquipmentProfile : Profile
             .ForMember(dto => dto.StartConditionTime,
                 opt => opt
                     .MapFrom(x => x.StartConditionTime.ToHoursMinutesString()))
+            .ForMember(dto => dto.DowntimeReason,
+                opt => opt
+                    .MapFrom(x => x.DowntimeReason.Reason))
             .ForMember(dto => dto.Date,
                 opt => opt
                     .MapFrom(x => x.Date.ToDayInfoString()))

@@ -25,6 +25,8 @@ public class ApplicationContext : DbContext
     public DbSet<Workplace> Workplaces { get; set; }
     
     public DbSet<StatusReason> StatusReasons { get; set; }
+    
+    public DbSet<DowntimeReason> DowntimeReasons { get; set; }
         
     public DbSet<Workshop> Workshops { get; set; }
         

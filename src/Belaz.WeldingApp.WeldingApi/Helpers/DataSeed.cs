@@ -32,6 +32,11 @@ public class DataSeed
             await AddWelders(context);
         }
 
+        if (!context.DowntimeReasons.Any())
+        {
+            await AddDowntimeReasons(context);
+        }
+
         if (!context.WeldingEquipments.Any())
         {
             await AddSeveralWeldingEquipment(context);
@@ -51,6 +56,117 @@ public class DataSeed
         {
             await AddWeldingTasks(context);
         }
+    }
+
+    private static async Task AddDowntimeReasons(ApplicationContext context)
+    {
+        var downtimeReasons = new List<DowntimeReason>
+        {
+            new DowntimeReason
+            {
+                Reason = "Нерабочее время по графику согласно сменности"
+            },
+            new DowntimeReason
+            {
+                Reason = "Праздники и выходные"
+            },
+            new DowntimeReason
+            {
+                Reason = "Обед"
+            },
+            new DowntimeReason
+            {
+                Reason = "Плановый ремонт централизованными службами"
+            },
+            new DowntimeReason
+            {
+                Reason = "Аварийный ремонт централизованными службами"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие заданий"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие материала, заготовок, деталей"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие инструмента, оснастки вспомогательного оборудования"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие крана, транспорта"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие оператора в связи с необеспеченностью"
+            },
+            new DowntimeReason
+            {
+                Reason = "Неявка оператора (б/лист, отпуск, и пр.)"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие энергоносителей"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие сотрудника ОТК"
+            },
+            new DowntimeReason
+            {
+                Reason = "Отсутствие конструктора, технолога или ожидание его решения"
+            },
+            new DowntimeReason
+            {
+                Reason = "Естественные надобности"
+            },
+            new DowntimeReason
+            {
+                Reason = "Ознакомление с работой, документацией, инструктаж"
+            },
+            new DowntimeReason
+            {
+                Reason =
+                    "Переналадка оборудования, получение инструмента до начала работы, снятие/сдача по окончании работы"
+            },
+            new DowntimeReason
+            {
+                Reason = "Работа с управляющей программой"
+            },
+            new DowntimeReason
+            {
+                Reason = "Установка, выверка, снятие детали"
+            },
+            new DowntimeReason
+            {
+                Reason = "Установка, выверка, снятие детали"
+            },
+            new DowntimeReason
+            {
+                Reason = "Изменение режимов, смена инструмента, приспособления"
+            },
+            new DowntimeReason
+            {
+                Reason = "Контроль на рабочем месте"
+            },
+            new DowntimeReason
+            {
+                Reason = "Уборка, осмотр оборудования, чистка/смазка оборудования"
+            },
+            new DowntimeReason
+            {
+                Reason = "Сборочные операции"
+            },
+            new DowntimeReason
+            {
+                Reason = "Работа по карте несоответствий"
+            }
+        };
+
+        await context.DowntimeReasons.AddRangeAsync(downtimeReasons);
+        await context.SaveChangesAsync();
     }
 
     private static async Task CreateRolesAsync(ApplicationContext context)
@@ -162,6 +278,7 @@ public class DataSeed
         var productionArea = context.ProductionAreas.First();
         var shifts = context.WorkingShifts.ToList();
         var welders = context.Welders.ToList();
+        var downtimeReasons = await context.DowntimeReasons.Take(3).ToListAsync();
 
         var weldingEquipments = new List<WeldingEquipment>
         {
@@ -207,7 +324,7 @@ public class DataSeed
                         Date = DateTime.Today,
                         Condition = Condition.ForcedDowntime,
                         Time = 30,
-                        DowntimeReason = "Какая-то причина простоя",
+                        DowntimeReasonId = downtimeReasons[0].Id,
                         StartConditionTime = new TimeSpan(9, 30, 0),
                     },
                     new WeldingEquipmentConditionTime
@@ -215,7 +332,7 @@ public class DataSeed
                         Date = DateTime.Today,
                         Condition = Condition.ForcedDowntime,
                         Time = 10,
-                        DowntimeReason = "Какая-то причина простоя 2",
+                        DowntimeReasonId = downtimeReasons[1].Id,
                         StartConditionTime = new TimeSpan(19, 30, 0),
                     }
                 },
@@ -289,7 +406,7 @@ public class DataSeed
                         Condition = Condition.ForcedDowntime,
                         Time = 60,
                         StartConditionTime = new TimeSpan(12, 50, 0),
-                        DowntimeReason = "Какая-то причина простоя 3"
+                        DowntimeReasonId = downtimeReasons[2].Id,
                     }
                 },
             }
