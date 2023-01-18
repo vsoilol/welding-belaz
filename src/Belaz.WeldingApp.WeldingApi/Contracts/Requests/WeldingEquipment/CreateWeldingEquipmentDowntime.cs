@@ -16,5 +16,5 @@ public class CreateWeldingEquipmentDowntime
     /// <summary>
     /// Причина простоя
     /// </summary>
-    public string? DowntimeReason { get; set; }
+    public Guid DowntimeReasonId { get; set; }
 }
