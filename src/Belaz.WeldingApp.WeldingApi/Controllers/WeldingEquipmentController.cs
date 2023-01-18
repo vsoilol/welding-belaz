@@ -64,4 +64,13 @@ public class WeldingEquipmentController : ControllerBase
     {
         return await _weldingEquipmentManager.AddWeldingEquipmentDowntimeAsync(request);
     }
+    
+    [HttpPut("downtime")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(WeldingEquipmentDowntimeDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingEquipmentDowntimeDto?>> UpdateWeldingEquipmentDowntimeAsync(
+        [FromBody] UpdateWeldingEquipmentDowntimeRequest request)
+    {
+        return await _weldingEquipmentManager.UpdateWeldingEquipmentDowntimeAsync(request);
+    }
 }

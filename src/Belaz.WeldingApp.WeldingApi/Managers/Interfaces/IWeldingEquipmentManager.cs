@@ -8,11 +8,14 @@ public interface IWeldingEquipmentManager
     Task<List<WeldingEquipmentDto>> GetAllAsync();
 
     Task<List<WeldingEquipmentDowntimeDto>> GetAllWeldingEquipmentDowntimesAsync();
-    
-        
+
+
     Task<WeldingEquipmentDto?> CreateAsync(CreateEquipmentRequest request);
-    
+
     Task<WeldingEquipmentDto?> UpdateAsync(UpdateEquipmentRequest request);
-    
+
     Task<WeldingEquipmentDowntimeDto?> AddWeldingEquipmentDowntimeAsync(CreateWeldingEquipmentDowntimeRequest request);
+
+    Task<WeldingEquipmentDowntimeDto?> UpdateWeldingEquipmentDowntimeAsync(
+        UpdateWeldingEquipmentDowntimeRequest request);
 }

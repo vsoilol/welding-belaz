@@ -88,8 +88,23 @@ public class WeldingEquipmentManager : IWeldingEquipmentManager
         await _weldingEquipmentConditionTimeRepository.SaveAsync();
 
         return await _weldingEquipmentConditionTimeRepository
-            .AsQueryable()
-            .Where(_ => _.Id == createdWeldingEquipmentConditionTime.Id)
+            .GetByIdAsQueryable(createdWeldingEquipmentConditionTime.Id)
+            .ProjectTo<WeldingEquipmentDowntimeDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<WeldingEquipmentDowntimeDto?> UpdateWeldingEquipmentDowntimeAsync(UpdateWeldingEquipmentDowntimeRequest request)
+    {
+        var weldingEquipmentConditionTime = _mapper.Map<WeldingEquipmentConditionTime>(request);
+        var isUpdate = await _weldingEquipmentConditionTimeRepository.UpdateAsync(weldingEquipmentConditionTime);
+
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(WeldingEquipmentConditionTime), request.Id);
+        }
+        
+        return await _weldingEquipmentConditionTimeRepository
+            .GetByIdAsQueryable(request.Id)
             .ProjectTo<WeldingEquipmentDowntimeDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }

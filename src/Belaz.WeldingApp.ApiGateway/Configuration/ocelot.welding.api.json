@@ -414,7 +414,7 @@
       "UpstreamPathTemplate": "/api/WeldingEquipment/downtime",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/WeldingEquipment/downtime",
       "ServiceName": "welding",
