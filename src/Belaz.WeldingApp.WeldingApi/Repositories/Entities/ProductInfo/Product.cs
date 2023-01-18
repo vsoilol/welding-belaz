@@ -24,6 +24,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
 
         public WeldingTask? WeldingTask { get; set; }
         
+        public Guid? TechnologicalProcessId { get; set; }
+    
+        [ForeignKey(nameof(TechnologicalProcessId))]
         public TechnologicalProcess? TechnologicalProcess { get; set; }
 
         public List<Seam> Seams { get; set; } = null!;
