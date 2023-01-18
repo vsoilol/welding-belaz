@@ -48,12 +48,18 @@ public class SeamManager : ISeamManager
             .ToListAsync();
     }
 
-    public async Task CreateAsync(CreateSeamRequest request)
+    public async Task<SeamDto?> CreateAsync(CreateSeamRequest request)
     {
         var seam = _mapper.Map<Seam>(request);
 
-        _seamRepository.Add(seam);
+        var createdSeam = _seamRepository.Add(seam);
         await _seamRepository.SaveAsync();
+        
+        return await _seamRepository
+            .AsQueryable()
+            .Where(_ => _.Id == createdSeam.Id)
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
     public async Task UpdateAsync(UpdateSeamRequest request)

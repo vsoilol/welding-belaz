@@ -53,7 +53,7 @@ public class ProductManager : IProductManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType)
+    public async Task<ProductDto?> CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType)
     {
         var product = _mapper.Map<Product>(request);
         product.ProductType = productType;
@@ -65,8 +65,14 @@ public class ProductManager : IProductManager
             product.Seams = seams.ToList();
         }
 
-        _productRepository.Add(product);
+        var createdProduct = _productRepository.Add(product);
         await _productRepository.SaveAsync();
+        
+        return await _productRepository
+            .AsQueryable()
+            .Where(_ => _.Id == createdProduct.Id)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
     public async Task UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType)

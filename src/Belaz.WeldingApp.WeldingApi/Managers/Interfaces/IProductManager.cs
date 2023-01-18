@@ -12,7 +12,7 @@ public interface IProductManager
 
     Task<ProductDto?> GetByIdAsync(Guid id);
     
-    Task CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType);
+    Task<ProductDto?> CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType);
     
     Task UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType);
 }

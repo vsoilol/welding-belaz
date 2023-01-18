@@ -38,12 +38,18 @@ public class TechnologicalProcessManager : ITechnologicalProcessManager
             .ToListAsync();
     }
 
-    public async Task CreateAsync(CreateTechnologicalProcessRequest request)
+    public async Task<TechnologicalProcessDto?> CreateAsync(CreateTechnologicalProcessRequest request)
     {
         var technologicalProcess = _mapper.Map<TechnologicalProcess>(request);
         
-        _technologicalProcessRepository.Add(technologicalProcess);
+        var createdTechnologicalProcess = _technologicalProcessRepository.Add(technologicalProcess);
         await _technologicalProcessRepository.SaveAsync();
+        
+        return await _technologicalProcessRepository
+            .AsQueryable()
+            .Where(_ => _.Id == createdTechnologicalProcess.Id)
+            .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
     public async Task UpdateAsync(UpdateTechnologicalProcessRequest request)

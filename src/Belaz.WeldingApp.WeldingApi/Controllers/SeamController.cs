@@ -47,10 +47,11 @@ public class SeamController : ControllerBase
     
     [HttpPost]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateSeamRequest request)
+    [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SeamDto?>> CreateAsync([FromBody] CreateSeamRequest request)
     {
-        await _seamManager.CreateAsync(request);
-        return Ok();
+        var seam = await _seamManager.CreateAsync(request);
+        return seam;
     }
     
     [HttpPut]

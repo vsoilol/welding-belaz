@@ -47,10 +47,11 @@ public class ProductController : ControllerBase
     
     [HttpPost]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateProductWithoutTypeRequest request)
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductDto?>> CreateAsync([FromBody] CreateProductWithoutTypeRequest request)
     {
-        await _productManager.CreateAsync(request, ProductType.Product);
-        return Ok();
+        var product = await _productManager.CreateAsync(request, ProductType.Product);
+        return product;
     }
     
     [HttpPut]
