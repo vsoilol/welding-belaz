@@ -46,7 +46,7 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations
                 .FirstOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(UpdateUserWithEquipmentRequest request)
+        public async Task<ChiefDto?> UpdateAsync(UpdateUserWithEquipmentRequest request)
         {
             var chief = _mapper.Map<Chief>(request);
             var isUpdate = await _chiefRepository.UpdateAsync(chief);
@@ -55,6 +55,12 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Implementations
             {
                 throw new UpdateFailedException(typeof(Inspector), request.Id);
             }
+            
+            return await _chiefRepository
+                .AsQueryable()
+                .Where(_ => _.Id == request.Id)
+                .ProjectTo<ChiefDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
         }
     }
 }

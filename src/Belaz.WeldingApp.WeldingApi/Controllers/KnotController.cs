@@ -56,10 +56,9 @@ public class KnotController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductWithoutTypeRequest request)
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductDto?>> UpdateAsync([FromBody] UpdateProductWithoutTypeRequest request)
     {
-        await _productManager.UpdateAsync(request, ProductType.Knot);
-        return Ok();
+        return await _productManager.UpdateAsync(request, ProductType.Knot);
     }
 }

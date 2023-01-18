@@ -75,7 +75,7 @@ public class ProductManager : IProductManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType)
+    public async Task<ProductDto?> UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType)
     {
         var updatedProduct = await _productRepository
             .AsQueryable()
@@ -110,5 +110,10 @@ public class ProductManager : IProductManager
         }
         
         await _productRepository.SaveAsync();
+        
+        return await _productRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

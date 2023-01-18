@@ -9,6 +9,6 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces
         
         Task<MasterDto?> CreateAsync(CreateUserWithEquipmentRequest request);
     
-        Task UpdateAsync(UpdateUserWithEquipmentRequest request);
+        Task<MasterDto?> UpdateAsync(UpdateUserWithEquipmentRequest request);
     }
 }

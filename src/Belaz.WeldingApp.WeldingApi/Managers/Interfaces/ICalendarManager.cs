@@ -7,7 +7,7 @@ public interface ICalendarManager
 {
     Task<CalendarDto?> CreateAsync(CreateCalendarRequest request, bool isMain);
     
-    Task UpdateAsync(UpdateCalendarRequest request);
+    Task<CalendarDto?> UpdateAsync(UpdateCalendarRequest request);
     
     Task<CalendarDto?> GetMainCalendarByYearAsync(int year);
     

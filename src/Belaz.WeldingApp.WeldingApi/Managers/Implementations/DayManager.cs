@@ -35,7 +35,7 @@ public class DayManager : IDayManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateDayRequest request)
+    public async Task<DayDto?> UpdateAsync(UpdateDayRequest request)
     {
         var day = _mapper.Map<Day>(request);
         
@@ -45,6 +45,12 @@ public class DayManager : IDayManager
         {
             throw new UpdateFailedException(typeof(Calendar), request.Id);
         }
+        
+        return await _dayRepository
+            .AsQueryable()
+            .Where(_ => _.Id == request.Id)
+            .ProjectTo<DayDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
     public Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId)

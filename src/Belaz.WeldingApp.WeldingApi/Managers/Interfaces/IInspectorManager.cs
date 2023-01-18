@@ -9,6 +9,6 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces
         
         Task<InspectorDto?> CreateAsync(CreateUserRequest request);
     
-        Task UpdateAsync(UpdateUserRequest request);
+        Task<InspectorDto?> UpdateAsync(UpdateUserRequest request);
     }
 }

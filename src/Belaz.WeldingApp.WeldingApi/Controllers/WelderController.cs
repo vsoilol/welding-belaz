@@ -39,9 +39,9 @@ public class WelderController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateWelderRequest request)
+    [ProducesResponseType(typeof(WelderDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WelderDto?>> UpdateAsync([FromBody] UpdateWelderRequest request)
     {
-        await _welderManager.UpdateAsync(request);
-        return Ok();
+        return await _welderManager.UpdateAsync(request);
     }
 }

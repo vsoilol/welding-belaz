@@ -50,22 +50,9 @@ public class PostController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdatePostRequest request)
+    [ProducesResponseType(typeof(PostDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PostDto?>> UpdateAsync([FromBody] UpdatePostRequest request)
     {
-        var result = await _postManager.UpdateAsync(request);
-
-        if (!result)
-        {
-            var problemDetails = new BadRequestResult
-            {
-                Title = "Update Error",
-                StatusCode = (int) (HttpStatusCode.BadRequest),
-                Errors = $"Error when update Post with id {request.Id}",
-            };
-
-            return BadRequest(problemDetails);
-        }
-        
-        return Ok();
+        return await _postManager.UpdateAsync(request);
     }
 }

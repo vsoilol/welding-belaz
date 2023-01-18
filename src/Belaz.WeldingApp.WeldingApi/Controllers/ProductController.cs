@@ -56,9 +56,9 @@ public class ProductController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductWithoutTypeRequest request)
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductDto?>> UpdateAsync([FromBody] UpdateProductWithoutTypeRequest request)
     {
-        await _productManager.UpdateAsync(request, ProductType.Product);
-        return Ok();
+        return await _productManager.UpdateAsync(request, ProductType.Product);
     }
 }

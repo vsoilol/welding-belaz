@@ -39,9 +39,9 @@ public class MasterController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
+    [ProducesResponseType(typeof(MasterDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<MasterDto?>> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
     {
-        await _masterManager.UpdateAsync(request);
-        return Ok();
+        return await _masterManager.UpdateAsync(request);
     }
 }

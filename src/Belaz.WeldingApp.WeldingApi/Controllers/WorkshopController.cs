@@ -49,22 +49,10 @@ public class WorkshopController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateWorkshopRequest request)
+    [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WorkshopDto?>> UpdateAsync([FromBody] UpdateWorkshopRequest request)
     {
         var result = await _workshopManager.UpdateAsync(request);
-
-        if (!result)
-        {
-            var problemDetails = new BadRequestResult
-            {
-                Title = "Update Error",
-                StatusCode = (int) (HttpStatusCode.BadRequest),
-                Errors = $"Error when update Workshop with id {request.Id}",
-            };
-
-            return BadRequest(problemDetails);
-        }
-        
-        return Ok();
+        return result;
     }
 }

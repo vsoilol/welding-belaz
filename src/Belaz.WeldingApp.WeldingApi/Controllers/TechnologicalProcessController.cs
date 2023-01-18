@@ -48,9 +48,9 @@ public class TechnologicalProcessController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateTechnologicalProcessRequest request)
+    [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<TechnologicalProcessDto?>> UpdateAsync([FromBody] UpdateTechnologicalProcessRequest request)
     {
-        await _technologicalProcessManager.UpdateAsync(request);
-        return Ok();
+        return await _technologicalProcessManager.UpdateAsync(request);
     }
 }

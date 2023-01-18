@@ -39,10 +39,10 @@ public class CalendarController : ControllerBase
 
     [HttpPut]
     [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateCalendarRequest request)
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto?>> UpdateAsync([FromBody] UpdateCalendarRequest request)
     {
-        await _calendarManager.UpdateAsync(request);
-        return Ok();
+        return await _calendarManager.UpdateAsync(request);
     }
 
     [HttpPost("withWelder")]

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.WeldingEquipment;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;
@@ -59,9 +62,19 @@ public class WeldingEquipmentManager : IWeldingEquipmentManager
             .FirstOrDefaultAsync();
     }
 
-    public Task<bool> UpdateAsync(UpdateEquipmentRequest request)
+    public async Task<WeldingEquipmentDto?> UpdateAsync(UpdateEquipmentRequest request)
     {
         var workplace = _mapper.Map<WeldingEquipment>(request);
-        return _weldingEquipmentRepository.UpdateAsync(workplace);
+        var isUpdate = await _weldingEquipmentRepository.UpdateAsync(workplace);
+        
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(WeldingEquipment), request.Id);
+        }
+        
+        return await _weldingEquipmentRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<WeldingEquipmentDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

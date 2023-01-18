@@ -14,5 +14,5 @@ public interface ISeamManager
     
     Task<SeamDto?> CreateAsync(CreateSeamRequest request);
     
-    Task UpdateAsync(UpdateSeamRequest request);
+    Task<SeamDto?> UpdateAsync(UpdateSeamRequest request);
 }

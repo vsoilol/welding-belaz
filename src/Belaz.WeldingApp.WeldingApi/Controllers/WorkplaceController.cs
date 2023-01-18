@@ -49,22 +49,10 @@ public class WorkplaceController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateWorkplaceRequest request)
+    [ProducesResponseType(typeof(WorkplaceDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WorkplaceDto?>> UpdateAsync([FromBody] UpdateWorkplaceRequest request)
     {
         var result = await _workplaceManager.UpdateAsync(request);
-
-        if (!result)
-        {
-            var problemDetails = new BadRequestResult
-            {
-                Title = "Update Error",
-                StatusCode = (int) (HttpStatusCode.BadRequest),
-                Errors = $"Error when update Workplace with id {request.Id}",
-            };
-
-            return BadRequest(problemDetails);
-        }
-        
-        return Ok();
+        return result;
     }
 }

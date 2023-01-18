@@ -62,7 +62,7 @@ public class WelderManager : IWelderManager
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateAsync(UpdateWelderRequest request)
+    public async Task<WelderDto?> UpdateAsync(UpdateWelderRequest request)
     {
         var welder = _mapper.Map<Welder>(request);
         var isUpdate = await _welderRepository.UpdateAsync(welder);
@@ -71,5 +71,10 @@ public class WelderManager : IWelderManager
         {
             throw new UpdateFailedException(typeof(Welder), request.Id);
         }
+        
+        return await _welderRepository
+            .GetByIdAsQueryable(request.Id)
+            .ProjectTo<WelderDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 }

@@ -11,5 +11,5 @@ public interface ITechnologicalProcessManager
     
     Task<TechnologicalProcessDto?> CreateAsync(CreateTechnologicalProcessRequest request);
     
-    Task UpdateAsync(UpdateTechnologicalProcessRequest request);
+    Task<TechnologicalProcessDto?> UpdateAsync(UpdateTechnologicalProcessRequest request);
 }

@@ -14,5 +14,5 @@ public interface IProductManager
     
     Task<ProductDto?> CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType);
     
-    Task UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType);
+    Task<ProductDto?> UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType);
 }

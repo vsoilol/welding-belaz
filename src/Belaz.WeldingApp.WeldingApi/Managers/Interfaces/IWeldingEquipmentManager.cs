@@ -12,5 +12,5 @@ public interface IWeldingEquipmentManager
         
     Task<WeldingEquipmentDto?> CreateAsync(CreateEquipmentRequest request);
     
-    Task<bool> UpdateAsync(UpdateEquipmentRequest request);
+    Task<WeldingEquipmentDto?> UpdateAsync(UpdateEquipmentRequest request);
 }

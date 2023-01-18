@@ -49,22 +49,9 @@ public class ProductionAreaController : ControllerBase
     
     [HttpPut]
     [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateProductionAreaRequest request)
+    [ProducesResponseType(typeof(ProductionAreaDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductionAreaDto?>> UpdateAsync([FromBody] UpdateProductionAreaRequest request)
     {
-        var result = await _productionAreaManager.UpdateAsync(request);
-
-        if (!result)
-        {
-            var problemDetails = new BadRequestResult
-            {
-                Title = "Update Error",
-                StatusCode = (int) (HttpStatusCode.BadRequest),
-                Errors = $"Error when update Workshop with id {request.Id}",
-            };
-
-            return BadRequest(problemDetails);
-        }
-        
-        return Ok();
+        return await _productionAreaManager.UpdateAsync(request);
     }
 }

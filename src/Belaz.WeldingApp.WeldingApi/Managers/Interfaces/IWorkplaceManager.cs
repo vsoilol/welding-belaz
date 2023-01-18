@@ -11,5 +11,5 @@ public interface IWorkplaceManager
     
     Task<WorkplaceDto?> CreateAsync(CreateWorkplaceRequest request);
     
-    Task<bool> UpdateAsync(UpdateWorkplaceRequest request);
+    Task<WorkplaceDto?> UpdateAsync(UpdateWorkplaceRequest request);
 }
