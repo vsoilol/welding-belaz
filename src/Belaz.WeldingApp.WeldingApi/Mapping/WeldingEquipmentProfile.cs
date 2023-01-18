@@ -15,6 +15,7 @@ public class WeldingEquipmentProfile : Profile
         WeldingEquipmentToWeldingEquipmentBriefDto();
         WeldingEquipmentToWeldingEquipmentDto();
         WeldingEquipmentConditionTimeToWeldingEquipmentDowntimeDto();
+        CreateMapForCreateWeldingEquipmentDowntimeToWeldingEquipmentConditionTime();
 
         CreateMap<CreateEquipmentRequest, WeldingEquipment>()
             .ForMember(dto => dto.NextAttestationDate,
@@ -31,6 +32,20 @@ public class WeldingEquipmentProfile : Profile
             .ForMember(dto => dto.CommissioningDate,
                 opt => opt
                     .MapFrom(x => DateTime.ParseExact(x.CommissioningDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)));
+    }
+
+    private void CreateMapForCreateWeldingEquipmentDowntimeToWeldingEquipmentConditionTime()
+    {
+        CreateMap<CreateWeldingEquipmentDowntimeRequest, WeldingEquipmentConditionTime>()
+            .ForMember(dto => dto.Condition,
+                opt => opt
+                    .MapFrom(x => Condition.ForcedDowntime))
+            .ForMember(dto => dto.Date,
+                opt => opt
+                    .MapFrom(x => x.Date.ToDateTime()))
+            .ForMember(dto => dto.StartConditionTime,
+                opt => opt
+                    .MapFrom(x => x.StartConditionTime.ToTimeSpan()));
     }
 
     private void WeldingEquipmentToWeldingEquipmentBriefDto()
