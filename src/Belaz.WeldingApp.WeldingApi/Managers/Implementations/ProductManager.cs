@@ -30,7 +30,7 @@ public class ProductManager : IProductManager
     {
         return await _productRepository
             .AsQueryable()
-            .Where(_ => _.WeldingTask.Status == status && _.ProductType == productType)
+            .Where(_ => _.Status == status && _.ProductType == productType)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

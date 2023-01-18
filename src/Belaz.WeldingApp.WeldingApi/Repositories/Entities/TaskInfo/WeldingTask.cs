@@ -9,21 +9,21 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
     public class WeldingTask : Entity
     {
         public int Number { get; set; }
-        
+
         public Guid WelderId { get; set; }
-        
-        [ForeignKey(nameof(WelderId))]
-        public Welder Welder { get; set; }
-        
+
+        [ForeignKey(nameof(WelderId))] 
+        public Welder Welder { get; set; } = null!;
+
         public Guid MasterId { get; set; }
-        
-        [ForeignKey(nameof(MasterId))]
-        public Master Master { get; set; }
-        
+
+        [ForeignKey(nameof(MasterId))] 
+        public Master Master { get; set; } = null!;
+
         public Guid InspectorId { get; set; }
-        
-        [ForeignKey(nameof(InspectorId))]
-        public Inspector Inspector { get; set; }
+
+        [ForeignKey(nameof(InspectorId))] 
+        public Inspector Inspector { get; set; } = null!;
 
         /// <summary>
         /// Дата выполнения сварки
@@ -34,7 +34,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// Время начала сварки
         /// </summary>
         public DateTime? WeldingStartTime { get; set; }
-        
+
         /// <summary>
         /// Время окончания сварки
         /// </summary>
@@ -49,7 +49,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// Влажность воздуха
         /// </summary>
         public int AirHumidity { get; set; }
-        
+
         /// <summary>
         /// Межслойная температура
         /// </summary>
@@ -64,34 +64,32 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// Температура предварительного нагрева
         /// </summary>
         public int PreheatingTemperature { get; set; }
-        
-        public Status Status { get; set; } = Status.NotStarted;
 
         /// <summary>
         /// Причины брака
         /// </summary>
         public string? DefectReasons { get; set; }
-        
+
         /// <summary>
         /// Обнаруженные дефекты (брак)
         /// </summary>
         public string? DefectsDetected { get; set; }
-        
+
         /// <summary>
         /// Значения сварочного тока
         /// </summary>
         public double[]? WeldingCurrentValues { get; set; }
-        
+
         /// <summary>
         /// Значения напряжения на дуге
         /// </summary>
         public double[]? ArcVoltageValues { get; set; }
-        
+
         /// <summary>
         /// Отклонение кратковременные, до 1 секунды
         /// </summary>
         public double? ShortTermDeviation { get; set; }
-        
+
         /// <summary>
         /// Отклонения длительные, более 1 секунды
         /// </summary>
@@ -105,13 +103,13 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// <summary>
         /// № сертификата (партии) основного материала
         /// </summary>
-        public string MainMaterialBatchNumber  { get; set; }
+        public string MainMaterialBatchNumber { get; set; }
 
         /// <summary>
         /// Сварочные материалы
         /// </summary>
         public string WeldingMaterial { get; set; }
-        
+
         /// <summary>
         /// № сертификата (партии) св. материала
         /// </summary>
@@ -121,20 +119,18 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// Защитный газ 
         /// </summary>
         public string? ProtectiveGas { get; set; }
-        
+
         /// <summary>
         /// № сертификата (партии) на защитный газ 
         /// </summary>
         public string? ProtectiveGasBatchNumber { get; set; }
 
         public Guid? ProductId { get; set; }
-        
-        [ForeignKey(nameof(ProductId))]
-        public Product? Product { get; set; }
-        
+
+        [ForeignKey(nameof(ProductId))] public Product? Product { get; set; }
+
         public Guid? SeamId { get; set; }
-        
-        [ForeignKey(nameof(SeamId))]
-        public Seam? Seam { get; set; }
+
+        [ForeignKey(nameof(SeamId))] public Seam? Seam { get; set; }
     }
 }

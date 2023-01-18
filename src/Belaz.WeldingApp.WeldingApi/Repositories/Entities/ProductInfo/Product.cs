@@ -15,6 +15,8 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
         
         public int Number { get; set; }
         
+        public Status Status { get; set; } = Status.NotStarted;
+        
         /// <summary>
         /// Подлежит ли контролю
         /// </summary>
@@ -44,5 +46,7 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
     
         [ForeignKey(nameof(WorkplaceId))]
         public Workplace? Workplace { get; set; }
+
+        public List<StatusReason> StatusReasons { get; set; } = null!;
     }
 }

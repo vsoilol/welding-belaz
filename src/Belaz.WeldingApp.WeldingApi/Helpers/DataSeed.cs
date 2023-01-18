@@ -21,7 +21,7 @@ public class DataSeed
         {
             await AddProduction(context);
         }
-        
+
         if (!context.Chiefs.Any())
         {
             await AddChief(context);
@@ -376,7 +376,7 @@ public class DataSeed
         await context.Workshops.AddAsync(workShop);
         await context.SaveChangesAsync();
     }
-    
+
     private static async Task AddChief(ApplicationContext context)
     {
         var chiefRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Chief));
@@ -423,14 +423,25 @@ public class DataSeed
                 Name = "Изделие 1",
                 Number = 1,
                 IsControlSubject = true,
+                Status = Status.Defective,
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
                 Workplace = workplace,
+                StatusReasons = new List<StatusReason>
+                {
+                    new StatusReason
+                    {
+                        Date = DateTime.Now,
+                        Status = Status.Defective,
+                        Reason = "Какая-то причина брака"
+                    }
+                },
                 Seams = new List<Seam>
                 {
                     new Seam
                     {
                         Number = 1,
+                        Status = Status.InProgress,
                         ProductionArea = productionArea,
                         Workplace = workplace,
                     }
@@ -443,6 +454,7 @@ public class DataSeed
                         {
                             Name = "Деталь 1",
                             Number = 1,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Detail,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -454,6 +466,7 @@ public class DataSeed
                         {
                             Name = "Узел 1",
                             Number = 1,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Knot,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -465,6 +478,7 @@ public class DataSeed
             {
                 Name = "Изделие 2",
                 Number = 2,
+                Status = Status.NotStarted,
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
                 Workplace = workplace,
@@ -473,6 +487,7 @@ public class DataSeed
                     new Seam
                     {
                         Number = 2,
+                        Status = Status.Manufactured,
                         IsControlSubject = true,
                         ProductionArea = productionArea,
                         Workplace = workplace,
@@ -486,6 +501,7 @@ public class DataSeed
                         {
                             Name = "Деталь 2",
                             Number = 2,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Detail,
                             IsControlSubject = true,
                             ProductionArea = productionArea,
@@ -498,6 +514,7 @@ public class DataSeed
                         {
                             Name = "Узел 2",
                             Number = 2,
+                            Status = Status.Manufactured,
                             ProductType = ProductType.Knot,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -526,7 +543,7 @@ public class DataSeed
             new TechnologicalProcess
             {
                 Name = "Технологический процесс 1",
-                Products = new List<Product>{product},
+                Products = new List<Product> { product },
                 Number = 1,
                 PdmSystemFileLink = "Ссылка",
                 TechnologicalInstructions = new List<TechnologicalInstruction>
@@ -559,7 +576,7 @@ public class DataSeed
                 Name = "Технологический процесс 2",
                 Number = 2,
                 PdmSystemFileLink = "Ссылка",
-                Products = new List<Product>{product2},
+                Products = new List<Product> { product2 },
                 TechnologicalInstructions = new List<TechnologicalInstruction>
                 {
                     new TechnologicalInstruction
@@ -610,7 +627,7 @@ public class DataSeed
 
         var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
         var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
-        
+
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
         var weldingEquipment = await context.WeldingEquipments.FirstOrDefaultAsync();
 
@@ -687,7 +704,6 @@ public class DataSeed
                 InterlayerTemperature = 200,
                 CurrentLayerNumber = 81,
                 PreheatingTemperature = 150,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Seam = seam2,
@@ -710,7 +726,6 @@ public class DataSeed
                 InterlayerTemperature = 203,
                 CurrentLayerNumber = 31,
                 PreheatingTemperature = 110,
-                Status = Status.Defective,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = product,
@@ -733,7 +748,6 @@ public class DataSeed
                 InterlayerTemperature = 820,
                 CurrentLayerNumber = 81,
                 PreheatingTemperature = 170,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = detail,
@@ -756,7 +770,6 @@ public class DataSeed
                 InterlayerTemperature = 220,
                 CurrentLayerNumber = 12,
                 PreheatingTemperature = 2,
-                Status = Status.InProgress,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Seam = seam,
@@ -779,7 +792,6 @@ public class DataSeed
                 InterlayerTemperature = 23,
                 CurrentLayerNumber = 13,
                 PreheatingTemperature = 10,
-                Status = Status.NotStarted,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = product2,
@@ -802,7 +814,6 @@ public class DataSeed
                 InterlayerTemperature = 22,
                 CurrentLayerNumber = 2,
                 PreheatingTemperature = 11,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = knot,
@@ -825,7 +836,6 @@ public class DataSeed
                 InterlayerTemperature = 22,
                 CurrentLayerNumber = 2,
                 PreheatingTemperature = 11,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = knot2,
@@ -848,7 +858,6 @@ public class DataSeed
                 InterlayerTemperature = 22,
                 CurrentLayerNumber = 2,
                 PreheatingTemperature = 11,
-                Status = Status.Manufactured,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Product = detail2,

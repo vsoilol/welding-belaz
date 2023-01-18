@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 
@@ -15,6 +16,8 @@ public class Seam : Entity
     /// Подлежит ли контролю
     /// </summary>
     public bool IsControlSubject { get; set; }
+    
+    public Status Status { get; set; } = Status.NotStarted;
 
     public Guid? ProductId { get; set; }
         
@@ -36,4 +39,6 @@ public class Seam : Entity
     
     [ForeignKey(nameof(WorkplaceId))]
     public Workplace? Workplace { get; set; }
+    
+    public List<StatusReason> StatusReasons { get; set; } = null!;
 }
