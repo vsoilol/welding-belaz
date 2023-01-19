@@ -10,6 +10,7 @@ import { instructionsSaga } from "store/instructions/sagas";
 import { workplaceSaga } from "store/workplace/sagas";
 ///Технологические 
 import { texprocweldingSaga } from "store/texprocwelding/sagas";
+import { CalendarSaga } from "store/calendar/sagas";
 
 
 
@@ -24,6 +25,7 @@ export default function* () {
   yield spawn(workplaceSaga);
   ///Технологические 
   yield spawn(texprocweldingSaga);
+  yield spawn(CalendarSaga);
 
 
 }

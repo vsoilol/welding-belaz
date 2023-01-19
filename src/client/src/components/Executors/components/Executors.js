@@ -16,7 +16,7 @@ import TableHead from "@material-ui/core/TableHead";
 import Paper from "@material-ui/core/Paper";
 import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import Calendars from "./Calendar";
+
 
 const useStyles = makeStyles(() => ({
   rowStyle: {
@@ -292,18 +292,9 @@ export const ExecutorsTable = ({
     variables["productionAreaId"]=valuetArea 
     variables["weldingEquipmentId"]=valuetEquipment 
     variables["workshopId"]=valueWorkshopa 
-    if (type==="master") {
-      localStorage.setItem("VkladkaExecutors",0)
-    }
-    if (type==="executor") {
-      localStorage.setItem("VkladkaExecutors",1)
-    }
-    if (type==="controller") {
-      localStorage.setItem("VkladkaExecutors",2)
-    } 
+   
     //Добавить  
-    if (valuetOpenModal === 0) {
-      console.log(valuetEquipment)
+    if (valuetOpenModal === 0) { 
       addExecutor(variables)
     } 
     // //Редактировать 
@@ -440,7 +431,11 @@ export const ExecutorsTable = ({
 
         />
       </div>
-      {/* <Calendars></Calendars> */}
+
+      <a className={styles.refCalendar} href="/calendar">Просмотреть календарь</a>
+ 
+ 
+
       <ResultsModal
         type={"EXECUTOR"}
         activeId={activeExecutor}

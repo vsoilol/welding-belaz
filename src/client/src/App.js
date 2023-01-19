@@ -1,10 +1,9 @@
 import Message from "components/shared/Message";
 import {
   EquipmentContainer,
- 
-  WorkPlacePage,
-  TexProcWeldingPage,
 
+  WorkPlacePage,
+  TexProcWeldingPage, 
 
   ExecutorsContainer,
   InstructionsContainer,
@@ -21,7 +20,9 @@ import { connect, useSelector } from "react-redux";
 import { Switch, withRouter } from "react-router-dom";
 import PrivateRoute from "services/HOCs/PrivateRoute";
 import ScrollToTop from "services/HOCs/ScrollToTop";
-import ErrorActions from "store/error/actions"; 
+import ErrorActions from "store/error/actions";
+
+import CalendarPage from "containers/Calendar.container"
 
 function App({ error, errorType, clearError }) {
   const isAuth = useSelector((state) => state.auth.isAuth);
@@ -79,7 +80,7 @@ function App({ error, errorType, clearError }) {
                 exact
                 component={TasksContainer}
                 redirectTo="/login"
-              /> 
+              />
               <PrivateRoute
                 allow={isAuth}
                 path="/production"
@@ -88,7 +89,14 @@ function App({ error, errorType, clearError }) {
                 redirectTo="/login"
               />
 
-             <PrivateRoute
+              <PrivateRoute
+                allow={isAuth}
+                path="/calendar"
+                exact
+                component={CalendarPage}
+                redirectTo="/login"
+              />
+              <PrivateRoute
                 allow={isAuth}
                 path="/tex-proc-welding"
                 exact

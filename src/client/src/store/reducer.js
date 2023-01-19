@@ -13,6 +13,7 @@ import history from "./history";
 import workplace from "./workplace/reducers";
 ///Технологические процессы
 import texprocwelding from "./texprocwelding/reducers";
+import calendar from "./calendar/reducers";
 
 const reducers = {
   router: connectRouter(history),
@@ -27,7 +28,9 @@ const reducers = {
   ///Производство 
   workplace,
   ///Технологические процессы
-  texprocwelding
+  texprocwelding,
+  calendar
+  
 };
 
 export default combineReducers(reducers);

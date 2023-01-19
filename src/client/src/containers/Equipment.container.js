@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
       state?.equipment?.isRequesting || state?.masters?.isRequesting,
     userRole: state.auth.user.role,
     posts:state.workplace.posts, 
+    reason:state.equipment.reason
     
   };
 };
@@ -21,6 +22,11 @@ const mapDispatchToProps = {
   editEquipment: Actions.Creators.editEquipmentRequest,
   loadMasters: MasterActions.Creators.loadMastersRequest,
   loadPosts: Actions.Creators.loadPostsRequest,
+
+  loadDowntime: Actions.Creators.loadReasonRequest,
+  addDowntime: Actions.Creators.addDowntimeRequest,
+  editDowntime: Actions.Creators.editDowntimeRequest,
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EquipmentPage);

@@ -23,6 +23,23 @@ const { Types, Creators } = createActions({
   deleteEquipmentSuccess: ["id"],
   deleteEquipmentFailure: ["error"],
 
+
+  ////Downtime
+  editDowntimeRequest: ["payload"],
+  editDowntimeSuccess: ["downtime"],
+  editDowntimeFailure: ["error"],
+
+  addDowntimeRequest: ["payload"],
+  addDowntimeSuccess: ["downtime"],
+  addDowntimeFailure: ["error"],
+
+
+
+  //loaddowntime
+  loadReasonRequest: ["payload"],
+  loadReasonSuccess: ["reason"],
+  loadReasonFailure: ["error"],
+
 });
 
 const equipmentActions = {

@@ -308,15 +308,11 @@ export const WorkPlace = ({
   };
 
   const [value_panel, setValue] = useState(0);
-
-  let valuePanels  = Number(localStorage.getItem("value_panel"))
+ 
   
  
 
-  const ChangePanels = (event, newValue) => {
-    localStorage.setItem("value_panel",newValue)
-
-    localStorage.removeItem("VkladkaWorkPlace")
+  const ChangePanels = (event, newValue) => { 
     setValue(newValue);
   };
 
@@ -325,9 +321,7 @@ export const WorkPlace = ({
 
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
-    if (localStorage.getItem("VkladkaWorkPlace")!=null) {  
-      setValue(Number(localStorage.getItem("VkladkaWorkPlace"))) 
-    } 
+     
     return <div hidden={value !== indPanel}>{children}</div>;
   };
 
@@ -462,8 +456,7 @@ export const WorkPlace = ({
     if (isModalNumb == 7) {
       editSeam(variables)
     }
-
-    localStorage.setItem("VkladkaWorkPlace",value_panel)
+ 
   }
 
   ///Изменение заголовка модалки
@@ -687,12 +680,9 @@ export const WorkPlace = ({
               onChange={(event) => setValuetSeam(event.value)}
               options={SeamOptions}
             />
-          </div>
+          </div> 
 
-
-        </div>
-
-
+        </div> 
       )
     }
   }

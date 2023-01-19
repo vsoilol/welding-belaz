@@ -24,26 +24,26 @@ const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
     workshop,
   };
 };
-const addWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => { 
+const addWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
   return {
     ...state,
     isRequesting: false,
     workshop: [...state.workshop, workshop],
   };
 };
-const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => { 
-  
-   
+const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
+
+
   return {
     ...state,
     isRequesting: false,
-    workshop: state.workshop?.map((shop) => {  
-      if (shop.id===workshop.id) {
-         shop.name=workshop.name
-         shop.id=workshop.id
-         shop.number=workshop.number 
+    workshop: state.workshop?.map((shop) => {
+      if (shop.id === workshop.id) {
+        shop.name = workshop.name
+        shop.id = workshop.id
+        shop.number = workshop.number
       }
-      return  shop;
+      return shop;
     }),
   };
 };
@@ -55,7 +55,7 @@ const loadAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
     productionArea,
   };
 };
-const addAreaSuccess = (state = INITIAL_STATE, { productionArea }) => { 
+const addAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
   return {
     ...state,
     isRequesting: false,
@@ -67,13 +67,13 @@ const editAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
   return {
     ...state,
     isRequesting: false,
-    productionArea: state.productionArea?.map((Area) => {   
-      if (Area.id===productionArea.id) {
-        Area.name=productionArea.name
-        Area.id=productionArea.id
-        Area.number=productionArea.number  
+    productionArea: state.productionArea?.map((Area) => {
+      if (Area.id === productionArea.id) {
+        Area.name = productionArea.name
+        Area.id = productionArea.id
+        Area.number = productionArea.number
       }
-      return  Area;
+      return Area;
     }),
   };
 };
@@ -85,7 +85,7 @@ const loadPostsSuccess = (state = INITIAL_STATE, { posts }) => {
     posts,
   };
 };
-const addPostsSuccess = (state = INITIAL_STATE, { posts }) => { 
+const addPostsSuccess = (state = INITIAL_STATE, { posts }) => {
   return {
     ...state,
     isRequesting: false,
@@ -96,13 +96,13 @@ const editPostsSuccess = (state = INITIAL_STATE, { posts }) => {
   return {
     ...state,
     isRequesting: false,
-    posts: state.posts?.map((Posts) => {   
-      if (Posts.id===posts.id) {
-        Posts.name=posts.name
-        Posts.id=posts.id
-        Posts.number=posts.number  
+    posts: state.posts?.map((Posts) => {
+      if (Posts.id === posts.id) {
+        Posts.name = posts.name
+        Posts.id = posts.id
+        Posts.number = posts.number
       }
-      return  Posts;
+      return Posts;
     }),
   };
 };
@@ -114,7 +114,7 @@ const loadWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
     workplace,
   };
 };
-const addWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => { 
+const addWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
   return {
     ...state,
     isRequesting: false,
@@ -125,13 +125,13 @@ const editWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
   return {
     ...state,
     isRequesting: false,
-    workplace: state.workplace?.map((Place) => {   
-      if (Place.id===workplace.id) {
-        Place.name=workplace.name
-        Place.id=workplace.id
-        Place.number=workplace.number  
+    workplace: state.workplace?.map((Place) => {
+      if (Place.id === workplace.id) {
+        Place.name = workplace.name
+        Place.id = workplace.id
+        Place.number = workplace.number
       }
-      return  Place;
+      return Place;
     }),
   };
 };
@@ -141,64 +141,27 @@ const editWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
 
 
 ///Изделия
-const loadProductSuccess = (state = INITIAL_STATE, { product }) => { 
+const loadProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
     ...state,
     isRequesting: false,
     product,
   };
 };
-const addProductSuccess = (state = INITIAL_STATE, { product }) => {  
-  console.log(product)
-  console.log(state.product) 
-  // return {
-  //   ...state,
-  //   isRequesting: false,
-  //   product: state.product?.map((Product) => {   
-  //     if (Product.id===product.id) {
-  //       Product.name=product.name
-  //       Product.id=product.id
-  //       Product.number=product.number   
-  //       Product.workshop.number=product.workshopNumber   
-  //       Product.productionArea.number=product.productionAreaNumber   
-  //       Product.technologicalProcess={
-  //         id:product.technologicalProcessId,
-  //         name:product.technologicalProcessName,
-  //         number:product.technologicalProcessNumber
-  //       }
-  //     }
-  //     return  Product;
-  //   }),
-  // };
-};
-const editProductSuccess = (state = INITIAL_STATE, { product }) => {  
-  console.log(product)
-  console.log(state.product)
- 
+const addProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
     ...state,
     isRequesting: false,
-    product: state.product?.map((Product) => {   
-      if (Product.id===product.id) {
-        Product.name=product.name
-        Product.id=product.id
-        Product.number=product.number   
-        Product.workshop.number=product.workshopNumber   
-        Product.productionArea.number=product.productionAreaNumber   
-        Product.technologicalProcess={
-          id:product.technologicalProcessId,
-          name:product.technologicalProcessName,
-          number:product.technologicalProcessNumber
-        }
-      }
-      return  Product;
-    }),
+    product: [...state.product, product],
   };
-  // return {
-  //   ...state,
-  //   isRequesting: false,
-  //   product: [...state.product, product],
-  // };
+};
+const editProductSuccess = (state = INITIAL_STATE, { product }) => { 
+  
+  return {
+    ...state,
+    isRequesting: false,
+    product: state.product.map((item,index) => item.id === product.id?state.product[index]=product:item)
+  }; 
 };
 ///Узлы
 const loadKnotSuccess = (state = INITIAL_STATE, { knot }) => {
@@ -208,51 +171,18 @@ const loadKnotSuccess = (state = INITIAL_STATE, { knot }) => {
     knot,
   };
 };
-const addKnotSuccess = (state = INITIAL_STATE, { knot }) => { 
-  console.log(knot)
-  console.log(state.knot)
-  window.location.reload()
+const addKnotSuccess = (state = INITIAL_STATE, { knot }) => {
   return {
     ...state,
     isRequesting: false,
-    knot: state.knot?.map((Knot) => {   
-      if (Knot.id===knot.id) {
-        Knot.name=knot.name
-        Knot.id=knot.id
-        Knot.number=knot.number   
-        Knot.workshop.number=knot.workshopNumber   
-        Knot.productionArea.number=knot.productionAreaNumber   
-        Knot.technologicalProcess={
-          id:knot.technologicalProcessId,
-          name:knot.technologicalProcessName,
-          number:knot.technologicalProcessNumber
-        }
-      }
-      return  Knot;
-    }),
+    knot: [...state.knot, knot],
   };
 };
-const editKnotSuccess = (state = INITIAL_STATE, { knot }) => {
-  console.log(knot)
-  console.log(state.knot) 
+const editKnotSuccess = (state = INITIAL_STATE, { knot }) => { 
   return {
     ...state,
     isRequesting: false,
-    knot: state.knot?.map((Knot) => {   
-      if (Knot.id===knot.id) {
-        Knot.name=knot.name
-        Knot.id=knot.id
-        Knot.number=knot.number   
-        Knot.workshop.number=knot.workshopNumber   
-        Knot.productionArea.number=knot.productionAreaNumber   
-        Knot.technologicalProcess={
-          id:knot.technologicalProcessId,
-          name:knot.technologicalProcessName,
-          number:knot.technologicalProcessNumber
-        }
-      }
-      return  Knot;
-    }),
+    knot: state.knot.map((item,index) => item.id === knot.id?state.knot[index]=knot:item)
   };
 };
 ///Детали
@@ -263,50 +193,18 @@ const loadDetailSuccess = (state = INITIAL_STATE, { detail }) => {
     detail,
   };
 };
-const addDetailSuccess = (state = INITIAL_STATE, { detail }) => { 
-  console.log(detail)
-  console.log(state.detail) 
+const addDetailSuccess = (state = INITIAL_STATE, { detail }) => {
   return {
     ...state,
     isRequesting: false,
-    detail: state.detail?.map((Detail) => {   
-      if (Detail.id===detail.id) {
-        Detail.name=detail.name
-        Detail.id=detail.id
-        Detail.number=detail.number   
-        Detail.workshop.number=detail.workshopNumber   
-        Detail.productionArea.number=detail.productionAreaNumber   
-        Detail.technologicalProcess={
-          id:detail.technologicalProcessId,
-          name:detail.technologicalProcessName,
-          number:detail.technologicalProcessNumber
-        }
-      }
-      return  Detail;
-    }),
+    detail: [...state.detail, detail],
   };
 };
 const editDetailSuccess = (state = INITIAL_STATE, { detail }) => {
-  console.log(detail)
-  console.log(state.detail) 
   return {
     ...state,
     isRequesting: false,
-    detail: state.detail?.map((Detail) => {   
-      if (Detail.id===detail.id) {
-        Detail.name=detail.name
-        Detail.id=detail.id
-        Detail.number=detail.number   
-        Detail.workshop.number=detail.workshopNumber   
-        Detail.productionArea.number=detail.productionAreaNumber   
-        Detail.technologicalProcess={
-          id:detail.technologicalProcessId,
-          name:detail.technologicalProcessName,
-          number:detail.technologicalProcessNumber
-        }
-      }
-      return  Detail;
-    }),
+    detail: state.detail.map((item,index) => item.id === detail.id?state.detail[index]=detail:item)
   };
 };
 ///Сварные швы
@@ -317,7 +215,7 @@ const loadSeamSuccess = (state = INITIAL_STATE, { seam }) => {
     seam,
   };
 };
-const addSeamSuccess = (state = INITIAL_STATE, { seam }) => { 
+const addSeamSuccess = (state = INITIAL_STATE, { seam }) => {
   return {
     ...state,
     isRequesting: false,
@@ -429,7 +327,7 @@ export const HANDLERS = {
   [Types.LOAD_DETAIL_REQUEST]: request,
   [Types.LOAD_DETAIL_SUCCESS]: loadDetailSuccess,
   [Types.LOAD_DETAIL_FAILURE]: failure,
-  
+
   [Types.ADD_DETAIL_REQUEST]: request,
   [Types.ADD_DETAIL_SUCCESS]: addDetailSuccess,
   [Types.ADD_DETAIL_FAILURE]: failure,

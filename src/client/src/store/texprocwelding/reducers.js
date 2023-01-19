@@ -44,27 +44,7 @@ const editInstSuccess = (state = INITIAL_STATE, { instructions }) => {
   return {
     ...state,
     isRequesting: false,
-    instructions: state.instructions?.map((Instructions) => {   
-      if (Instructions.id===instructions.id) {
-        Instructions.name=instructions.name
-        Instructions.id=instructions.id
-        Instructions.number=instructions.number 
-         
-        
-        Instructions.weldPassages[0].arcVoltageMax=instructions.arcVoltageMax  
-        Instructions.weldPassages[0].arcVoltageMin=instructions.arcVoltageMin  
-
-        Instructions.weldPassages[0].name=instructions.weldPassagesName  
-
-        Instructions.weldPassages[0].preheatingTemperatureMax=instructions.preheatingTemperatureMax  
-        Instructions.weldPassages[0].preheatingTemperatureMin=instructions.preheatingTemperatureMin  
-
-        Instructions.weldPassages[0].weldingCurrentMin=instructions.weldingCurrentMin  
-        Instructions.weldPassages[0].weldingCurrentMax=instructions.weldingCurrentMax  
-
-      }
-      return  Instructions;
-    }),
+    instructions:state.instructions.map((item,index) => item.id === instructions.id?state.instructions[index]=instructions:item)
   };
 };
 

@@ -103,9 +103,8 @@ function* editInst(variables) {
           "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
         }
       ]
-    });
-    window.location.reload();
-    // yield put(editInstSuccess(variables.payload));
+    }); 
+    yield put(editInstSuccess(data));
   } catch (error) {
     yield put(editInstFailure(error));
     yield put(setError(error.message));

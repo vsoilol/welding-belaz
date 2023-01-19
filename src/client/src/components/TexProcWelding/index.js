@@ -215,15 +215,11 @@ export const TexProcWelding = ({
 
 
   const [value_panel, setValue] = useState(0); 
-  const ChangePanels = (event, newValue) => {
-    localStorage.removeItem("Vkladka")
+  const ChangePanels = (event, newValue) => { 
     setValue(newValue);
   };
   const TabPanel = (props_panel) => {
-    const { children, value, indPanel } = props_panel; 
-    if (localStorage.getItem("Vkladka")!=null) {  
-      setValue(Number(localStorage.getItem("Vkladka"))) 
-    } 
+    const { children, value, indPanel } = props_panel;  
 
     return (
       <div hidden={value !== indPanel}  >
@@ -244,8 +240,7 @@ export const TexProcWelding = ({
          variables["id"] = modalData.id;
          variables["weldPassagesId"]=modalData?.weldPassages[0].id
          editInst(variables) 
-      }   
-      localStorage.setItem("Vkladka",1)
+      }    
     }
   ////////////////////////////////////////////////////////////////////
   return (

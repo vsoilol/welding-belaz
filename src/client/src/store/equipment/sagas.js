@@ -10,7 +10,13 @@ const {
     ADD_EQUIPMENT_REQUEST,
     EDIT_EQUIPMENT_REQUEST,
     ///Посты
-    LOAD_POSTS_REQUEST,
+    LOAD_POSTS_REQUEST, 
+    ///Downtime
+    EDIT_DOWNTIME_REQUEST,
+    ADD_DOWNTIME_REQUEST,
+
+
+    LOAD_REASON_REQUEST
   },
   Creators: {
     loadEquipmentSuccess,
@@ -28,6 +34,15 @@ const {
     ///Посты
     loadPostsSuccess,
     loadPostsFailure,
+    ///Downtime,
+    editDowntimeSuccess,
+    editDowntimeFailure,
+    addDowntimeSuccess,
+    addDowntimeFailure,
+
+
+    loadReasonSuccess,
+    loadReasonFailure
 
   },
 } = equipmentActions;
@@ -86,9 +101,8 @@ function* addEquipment({ payload }) {
       "arcVoltageMin": Number(payload.arcVoltageMin),
       "arcVoltageMax": Number(payload.arcVoltageMax),
       "postId": payload.postId
-    });
-    window.location.reload()
-    // yield put(addEquipmentSuccess(data));
+    }); 
+    yield put(addEquipmentSuccess(data));
   } catch (error) {
     yield put(addEquipmentFailure(error));
     yield put(setError(error.message));
@@ -118,9 +132,8 @@ function* editEquipment({ payload }) {
       "arcVoltageMin": Number(payload.arcVoltageMin),
       "arcVoltageMax": Number(payload.arcVoltageMax),
       "postId": payload.postId,
-    });
-    window.location.reload()
-    // yield put(editEquipmentSuccess(payload));
+    }); 
+    yield put(editEquipmentSuccess(data));
   } catch (error) {
     yield put(editEquipmentFailure(error));
     yield put(setError(error.message));
@@ -141,7 +154,58 @@ function* deleteEquipment({ payload }) {
 }
 
 
+///Downtime
+function* addDowntime({ payload }) {
+  try { 
+    const { data } = yield call(api.post, `/WeldingEquipment/downtime`, {
+      "weldingEquipmentId": payload.weldingEquipmentId,
+      "downtimeReasonId":  payload.downtimeReasonId,
+      "date":  payload.Date,
+      "startConditionTime":  payload.timeStates,
+      "time": payload.time
+    }); 
+    window.location.reload()
+    // yield put(addDowntimeSuccess(data)); 
+  } catch (error) {
+    yield put(addDowntimeFailure(error));
+    yield put(setError(error.message));
+  }
+}
 
+function* editDowntime({ payload }) {
+  try {   
+    console.log({
+      "id": payload.idDownti,
+      "weldingEquipmentId":  payload.weldingEquipmentId,
+      "downtimeReasonId": payload.downtimeReasonId,
+      "date":   payload.Date,
+      "startConditionTime":  payload.timeStates,
+      "time":  payload.time,
+    })
+    const { data } = yield call(api.put, `/WeldingEquipment/downtime`, {
+      "id": payload.idDownti,
+      "weldingEquipmentId":  payload.weldingEquipmentId,
+      "downtimeReasonId": payload.downtimeReasonId,
+      "date":   payload.Date,
+      "startConditionTime":  payload.timeStates,
+      "time":  payload.time,
+    }); 
+    window.location.reload()
+    // yield put(editDowntimeSuccess(data));
+  } catch (error) {
+    yield put(editDowntimeFailure(error));
+    yield put(setError(error.message));
+  }
+}
+function* loadDowntime() {
+  try {
+    const { data } = yield call(api.get, `/downtimeReason`); 
+    yield put(loadReasonSuccess(data));  
+  } catch (error) {
+    yield put(loadReasonFailure(error));
+    yield put(setError(error.message));
+  }
+}
 
 export function* equipmentSaga() {
   yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
@@ -149,7 +213,14 @@ export function* equipmentSaga() {
   yield takeLatest(DELETE_EQUIPMENT_REQUEST, deleteEquipment);
   yield takeLatest(EDIT_EQUIPMENT_REQUEST, editEquipment);
   ///Посты
-  yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
+  yield takeLatest(LOAD_POSTS_REQUEST, loadPosts); 
+  ///Downtime
+  yield takeLatest(ADD_DOWNTIME_REQUEST, addDowntime); 
+  yield takeLatest(EDIT_DOWNTIME_REQUEST, editDowntime);
 
 
+  yield takeLatest(LOAD_REASON_REQUEST, loadDowntime); 
+
+  
+  
 }

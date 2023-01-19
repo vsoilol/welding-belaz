@@ -32,11 +32,7 @@ const editExecutorSuccess = (state = INITIAL_STATE, { executor, userId }) => {
   return {
     ...state,
     isRequesting: false,
-    executors: state.executors?.map((item) => {
-      return item.executorId === userId
-        ? { ...item, ...flattenObject(executor) }
-        : item;
-    }),
+    executors:state.executors.map((item,index) => item.id === executor.id?state.executors[index]=executor:item)
   };
 };
 
@@ -52,8 +48,8 @@ const addExecutorSuccess = (state = INITIAL_STATE, { executor }) => {
   return {
     ...state,
     isRequesting: false,
-    executors: [...state.executors, flattenObject(executor)],
-  };
+    executors: [...state.executors, executor], 
+  }; 
 };
 
 const loadMastersSuccess = (state = INITIAL_STATE, { masters }) => {
@@ -70,10 +66,8 @@ const loadMastersSuccess = (state = INITIAL_STATE, { masters }) => {
 const editMasterSuccess = (state = INITIAL_STATE, { master, userId }) => {
   return {
     ...state,
-    isRequesting: false,
-    masters: state.masters?.map((item) =>
-      item.masterId === userId ? { ...item, ...flattenObject(master) } : item
-    ),
+    isRequesting: false, 
+    masters:state.masters.map((item,index) => item.id === master.id?state.masters[index]=master:item)
   };
 };
 
@@ -89,7 +83,7 @@ const addMasterSuccess = (state = INITIAL_STATE, { master }) => {
   return {
     ...state,
     isRequesting: false,
-    masters: [...state.masters, flattenObject(master)],
+    masters: [...state.masters, master],
   };
 };
 
@@ -106,10 +100,8 @@ const loadTechsSuccess = (state = INITIAL_STATE, { techs }) => {
 const editTechSuccess = (state = INITIAL_STATE, { tech, userId }) => {
   return {
     ...state,
-    isRequesting: false,
-    techs: state.techs?.map((item) =>
-      item.techUserId === userId ? { ...item, ...flattenObject(tech) } : item
-    ),
+    isRequesting: false,  
+    techs:state.techs.map((item,index) => item.id === tech.id?state.techs[index]=tech:item)
   };
 };
 
@@ -125,7 +117,7 @@ const addTechSuccess = (state = INITIAL_STATE, { tech }) => {
   return {
     ...state,
     isRequesting: false,
-    techs: [...state.techs, flattenObject(tech)],
+    techs: [...state.techs, tech], 
   };
 };
 

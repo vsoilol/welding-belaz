@@ -5,7 +5,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import ReactDOM from "react-dom";
 
-import "../components/styleCalendar.css";
+import "../Calendar/styleCalendar.css";
 
 const  Calendars = () => { 
   // Array to store month string values
@@ -48,25 +48,7 @@ const  Calendars = () => {
     /* setCalendarText(`${monthValue} Month  is selected`); */
   };
 
-
-   /* try {
-    setTimeout(() => {
-      CalendarEddings() 
-  
-      document.querySelector(".react-calendar__navigation").addEventListener("click",function () {
-         try {
-          setTimeout(() => {
-            CalendarEddings() 
-           }, 100);
-         } catch (error) {
-          
-         }
-      })
-  
-    }, 1000);
-   } catch (error) {
-    
-   } */
+ 
 
 
   function CalendarEddings() {

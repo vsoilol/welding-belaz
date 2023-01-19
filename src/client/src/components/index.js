@@ -1,7 +1,8 @@
 export { Executors } from "components/Executors";
  
 export { WorkPlace } from "components/WorkPlace";
-export { TexProcWelding } from "components/TexProcWelding";
+export { TexProcWelding } from "components/TexProcWelding"; 
+export { Calendar } from "components/Calendar"; 
 
 export { Equipment } from "components/Equipment";
 export { Instructions } from "components/Instructions";

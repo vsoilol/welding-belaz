@@ -85,9 +85,8 @@ function* addExecutor({ payload }) {
       "productionAreaId": payload.productionAreaId,
       "workplaceId": payload.workplaceId,
       "weldingEquipmentId": payload.weldingEquipment[0].id
-    });
-    window.location.reload()
-    // yield put(addExecutorSuccess(data));
+    }); 
+    yield put(addExecutorSuccess(data));
   } catch (error) {
     yield put(addExecutorFailure(error));
     yield put(setError(error.message));
@@ -105,9 +104,8 @@ function* editExecutor({ payload, userId }) {
       "productionAreaId": payload.productionAreaId,
       "workplaceId": payload.workplaceId,
       "weldingEquipmentId": payload.weldingEquipmentId
-    });
-    window.location.reload()
-    // yield put(editExecutorSuccess(data, userId));
+    }); 
+    yield put(editExecutorSuccess(data));
   } catch (error) {
     yield put(editExecutorFailure(error));
     yield put(setError(error.message));
@@ -138,18 +136,16 @@ function* loadMasters() {
 }
 
 function* addMaster({ payload }) {
-  try { 
-     
+  try {  
     const { data } = yield call(api.post, `/Master`, {
       "rfidTag": payload.rfidTag,
       "firstName": payload.firstName,
       "lastName": payload.lastName,
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId,
-      "weldingEquipmentId": payload.weldingEquipment[0].id
-    });
-    window.location.reload()
-    // yield put(addMasterSuccess(data));
+      "weldingEquipmentId": payload.weldingEquipmentId
+    }); 
+    yield put(addMasterSuccess(data));
   } catch (error) {
     yield put(addMasterFailure(error));
     yield put(setError(error.message));
@@ -157,19 +153,17 @@ function* addMaster({ payload }) {
 }
 
 function* editMaster({payload}) {
-  try { 
-    
+  try {  
     const { data } = yield call(api.put, `/Master`, {
       "rfidTag": payload.rfidTag,
       "firstName": payload.firstName,
       "lastName": payload.lastName,
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId,
-      "weldingEquipmentId": payload.weldingEquipment[0].id,
+      "weldingEquipmentId": payload.weldingEquipmentId,
       "id": payload.id
-    });
-    window.location.reload()
-    // yield put(editMasterSuccess(data, userId));
+    }); 
+    yield put(editMasterSuccess(data));
   } catch (error) {
     yield put(editMasterFailure(error));
     yield put(setError(error.message));
@@ -208,9 +202,8 @@ function* addTech({ payload }) {
       "lastName": payload.lastName,
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId
-    });
-    window.location.reload()
-    // yield put(addTechSuccess(data));
+    }); 
+    yield put(addTechSuccess(data));
   } catch (error) {
     yield put(addTechFailure(error));
     yield put(setError(error.message));
@@ -226,9 +219,8 @@ function* editTech({ payload, userId }) {
        "middleName": payload.middleName,
        "productionAreaId": payload.productionAreaId,
        "id": payload.id
-    });
-    window.location.reload()
-    // yield put(editTechSuccess(data, userId));
+    }); 
+    yield put(editTechSuccess(data));
   } catch (error) {
     yield put(editTechFailure(error));
     yield put(setError(error.message));
