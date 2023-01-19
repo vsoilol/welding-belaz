@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
@@ -48,5 +49,15 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo
         public Workplace? Workplace { get; set; }
 
         public List<StatusReason> StatusReasons { get; set; } = null!;
+        
+        public Guid? MasterId { get; set; }
+
+        [ForeignKey(nameof(MasterId))] 
+        public Master? Master { get; set; }
+        
+        public Guid? InspectorId { get; set; }
+
+        [ForeignKey(nameof(InspectorId))] 
+        public Inspector? Inspector { get; set; }
     }
 }

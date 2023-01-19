@@ -12,7 +12,15 @@ public interface IProductManager
 
     Task<ProductDto?> GetByIdAsync(Guid id);
     
+    Task<List<ProductDto>> GetAllByMasterIdAsync(Guid masterId, ProductType productType);
+    
+    Task<List<ProductDto>> GetAllByInspectorIdAsync(Guid inspectorId, ProductType productType);
+    
     Task<ProductDto?> CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType);
     
     Task<ProductDto?> UpdateAsync(UpdateProductWithoutTypeRequest request, ProductType productType);
+    
+    Task AssignProductToMasterAsync(AssignProductToMasterRequest request);
+    
+    Task AssignProductToInspectorAsync(AssignProductToInspectorRequest request);
 }

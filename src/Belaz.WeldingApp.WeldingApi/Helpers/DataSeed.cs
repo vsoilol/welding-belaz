@@ -42,6 +42,16 @@ public class DataSeed
             await AddSeveralWeldingEquipment(context);
         }
 
+        if (!context.Masters.Any())
+        {
+            await AddMasters(context);
+        }
+
+        if (!context.Inspectors.Any())
+        {
+            await AddInspectors(context);
+        }
+
         if (!context.Products.Any())
         {
             await AddProducts(context);
@@ -56,6 +66,76 @@ public class DataSeed
         {
             await AddWeldingTasks(context);
         }
+    }
+
+    private static async Task AddMasters(ApplicationContext context)
+    {
+        var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
+        var weldingEquipment = await context.WeldingEquipments.FirstOrDefaultAsync();
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
+
+        var master = new Master
+        {
+            WeldingEquipment = weldingEquipment,
+            UserInfo = new UserData
+            {
+                CertificateValidityPeriod = new DateTime(2025, 2, 2),
+                FirstName = "Имя мастера",
+                LastName = "Отчество мастера",
+                MiddleName = "Фамилия мастера",
+                UserName = "UserName",
+                Email = "Email",
+                PasswordHash = "PasswordHash",
+                Position = "Должность 1",
+                ServiceNumber = "Табельный номер  1",
+                RfidTag = "RFID метка проверяющего 1",
+                ProductionArea = productionArea,
+                UserRoles = new List<UserRole>
+                {
+                    new UserRole
+                    {
+                        Role = masterRole
+                    }
+                }
+            },
+        };
+
+        await context.Masters.AddAsync(master);
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task AddInspectors(ApplicationContext context)
+    {
+        var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
+
+        var inspector = new Inspector
+        {
+            UserInfo = new UserData
+            {
+                CertificateValidityPeriod = new DateTime(2025, 2, 2),
+                FirstName = "Имя Контролера",
+                LastName = "Имя Контролера",
+                MiddleName = "Имя Контролера",
+                UserName = "UserName",
+                Email = "Email",
+                PasswordHash = "PasswordHash",
+                Position = "Должность 1",
+                ServiceNumber = "Табельный номер  1",
+                RfidTag = "RFID метка проверяющего 1",
+                ProductionArea = productionArea,
+                UserRoles = new List<UserRole>
+                {
+                    new UserRole
+                    {
+                        Role = techUserRole
+                    }
+                }
+            },
+        };
+
+        await context.Inspectors.AddAsync(inspector);
+        await context.SaveChangesAsync();
     }
 
     private static async Task AddDowntimeReasons(ApplicationContext context)
@@ -532,6 +612,9 @@ public class DataSeed
     {
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
         var workplace = await context.Workplaces.FirstOrDefaultAsync();
+        var welder = await context.Welders.FirstOrDefaultAsync();
+        var inspector = await context.Inspectors.FirstOrDefaultAsync();
+        var master = await context.Masters.FirstOrDefaultAsync();
 
         var products = new List<Product>
         {
@@ -544,6 +627,8 @@ public class DataSeed
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
                 Workplace = workplace,
+                Inspector = inspector,
+                Master = master,
                 StatusReasons = new List<StatusReason>
                 {
                     new StatusReason
@@ -557,6 +642,8 @@ public class DataSeed
                 {
                     new Seam
                     {
+                        Welder = welder,
+                        Inspector = inspector,
                         Number = 1,
                         Status = Status.InProgress,
                         ProductionArea = productionArea,
@@ -569,6 +656,8 @@ public class DataSeed
                     {
                         InsideProduct = new Product
                         {
+                            Inspector = inspector,
+                            Master = master,
                             Name = "Деталь 1",
                             Number = 1,
                             Status = Status.Manufactured,
@@ -581,6 +670,8 @@ public class DataSeed
                     {
                         InsideProduct = new Product
                         {
+                            Inspector = inspector,
+                            Master = master,
                             Name = "Узел 1",
                             Number = 1,
                             Status = Status.Manufactured,
@@ -595,6 +686,8 @@ public class DataSeed
             {
                 Name = "Изделие 2",
                 Number = 2,
+                Inspector = inspector,
+                Master = master,
                 Status = Status.NotStarted,
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
@@ -608,6 +701,8 @@ public class DataSeed
                         IsControlSubject = true,
                         ProductionArea = productionArea,
                         Workplace = workplace,
+                        Inspector = inspector,
+                        Welder = welder
                     }
                 },
                 ProductInsides = new List<ProductInside>
@@ -616,6 +711,8 @@ public class DataSeed
                     {
                         InsideProduct = new Product
                         {
+                            Inspector = inspector,
+                            Master = master,
                             Name = "Деталь 2",
                             Number = 2,
                             Status = Status.Manufactured,
@@ -629,6 +726,8 @@ public class DataSeed
                     {
                         InsideProduct = new Product
                         {
+                            Inspector = inspector,
+                            Master = master,
                             Name = "Узел 2",
                             Number = 2,
                             Status = Status.Manufactured,
@@ -727,92 +826,14 @@ public class DataSeed
 
     private static async Task AddWeldingTasks(ApplicationContext context)
     {
-        var seam = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
-        var knot = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1 && _.ProductType == ProductType.Knot);
-        var detail =
-            await context.Products.FirstOrDefaultAsync(_ => _.Number == 1 && _.ProductType == ProductType.Detail);
-        var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
-                                                                      && _.ProductType == ProductType.Product);
-        var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
-                                                                       && _.ProductType == ProductType.Product);
-        var welder = await context.Welders.FirstOrDefaultAsync(_ => _.Workplace != null);
-
+        var seam1 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
         var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
-        var knot2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Knot);
-        var detail2 =
-            await context.Products.FirstOrDefaultAsync(_ => _.Number == 2 && _.ProductType == ProductType.Detail);
-
-        var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
-        var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
-
-        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
-        var weldingEquipment = await context.WeldingEquipments.FirstOrDefaultAsync();
-
-        var inspector = new Inspector
-        {
-            UserInfo = new UserData
-            {
-                CertificateValidityPeriod = new DateTime(2025, 2, 2),
-                FirstName = "Имя Контролера",
-                LastName = "Имя Контролера",
-                MiddleName = "Имя Контролера",
-                UserName = "UserName",
-                Email = "Email",
-                PasswordHash = "PasswordHash",
-                Position = "Должность 1",
-                ServiceNumber = "Табельный номер  1",
-                RfidTag = "RFID метка проверяющего 1",
-                ProductionArea = productionArea,
-                UserRoles = new List<UserRole>
-                {
-                    new UserRole
-                    {
-                        Role = techUserRole
-                    }
-                }
-            },
-        };
-
-        await context.Inspectors.AddAsync(inspector);
-        await context.SaveChangesAsync();
-
-        var master = new Master
-        {
-            WeldingEquipment = weldingEquipment,
-            UserInfo = new UserData
-            {
-                CertificateValidityPeriod = new DateTime(2025, 2, 2),
-                FirstName = "Имя мастера",
-                LastName = "Отчество мастера",
-                MiddleName = "Фамилия мастера",
-                UserName = "UserName",
-                Email = "Email",
-                PasswordHash = "PasswordHash",
-                Position = "Должность 1",
-                ServiceNumber = "Табельный номер  1",
-                RfidTag = "RFID метка проверяющего 1",
-                ProductionArea = productionArea,
-                UserRoles = new List<UserRole>
-                {
-                    new UserRole
-                    {
-                        Role = masterRole
-                    }
-                }
-            },
-        };
-
-        await context.Masters.AddAsync(master);
-        await context.SaveChangesAsync();
 
         var tasks = new List<WeldingTask>
         {
             new WeldingTask
             {
                 Number = 1,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
                 WeldingDate = new DateTime(2022, 01, 01),
                 WeldingStartTime = new DateTime(2022, 01, 03),
                 WeldingEndTime = null,
@@ -823,7 +844,7 @@ public class DataSeed
                 PreheatingTemperature = 150,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
-                Seam = seam2,
+                Seam = seam2!,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
@@ -832,53 +853,6 @@ public class DataSeed
             new WeldingTask
             {
                 Number = 2,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
-                WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 3067,
-                AirHumidity = 41,
-                InterlayerTemperature = 203,
-                CurrentLayerNumber = 31,
-                PreheatingTemperature = 110,
-                BasicMaterial = "Основной материал",
-                MainMaterialBatchNumber = "№ сертификата",
-                Product = product,
-                WeldingMaterial = "варочные материалы",
-                WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
-            },
-            new WeldingTask
-            {
-                Number = 3,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
-                WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 390,
-                AirHumidity = 81,
-                InterlayerTemperature = 820,
-                CurrentLayerNumber = 81,
-                PreheatingTemperature = 170,
-                BasicMaterial = "Основной материал",
-                MainMaterialBatchNumber = "№ сертификата",
-                Product = detail,
-                WeldingMaterial = "варочные материалы",
-                WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
-            },
-            new WeldingTask
-            {
-                Number = 4,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
                 WeldingDate = new DateTime(2022, 01, 01),
                 WeldingStartTime = new DateTime(2022, 01, 03),
                 WeldingEndTime = null,
@@ -889,95 +863,7 @@ public class DataSeed
                 PreheatingTemperature = 2,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
-                Seam = seam,
-                WeldingMaterial = "варочные материалы",
-                WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
-            },
-            new WeldingTask
-            {
-                Number = 5,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
-                WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 130,
-                AirHumidity = 21,
-                InterlayerTemperature = 23,
-                CurrentLayerNumber = 13,
-                PreheatingTemperature = 10,
-                BasicMaterial = "Основной материал",
-                MainMaterialBatchNumber = "№ сертификата",
-                Product = product2,
-                WeldingMaterial = "варочные материалы",
-                WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
-            },
-            new WeldingTask
-            {
-                Number = 6,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
-                WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 31,
-                AirHumidity = 2,
-                InterlayerTemperature = 22,
-                CurrentLayerNumber = 2,
-                PreheatingTemperature = 11,
-                BasicMaterial = "Основной материал",
-                MainMaterialBatchNumber = "№ сертификата",
-                Product = knot,
-                WeldingMaterial = "варочные материалы",
-                WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
-            },
-            new WeldingTask
-            {
-                Number = 6,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
-                WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 31,
-                AirHumidity = 2,
-                InterlayerTemperature = 22,
-                CurrentLayerNumber = 2,
-                PreheatingTemperature = 11,
-                BasicMaterial = "Основной материал",
-                MainMaterialBatchNumber = "№ сертификата",
-                Product = knot2,
-                WeldingMaterial = "варочные материалы",
-                WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
-            },
-            new WeldingTask
-            {
-                Number = 6,
-                Welder = welder,
-                Master = master,
-                Inspector = inspector,
-                WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 31,
-                AirHumidity = 2,
-                InterlayerTemperature = 22,
-                CurrentLayerNumber = 2,
-                PreheatingTemperature = 11,
-                BasicMaterial = "Основной материал",
-                MainMaterialBatchNumber = "№ сертификата",
-                Product = detail2,
+                Seam = seam1!,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
                 WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },

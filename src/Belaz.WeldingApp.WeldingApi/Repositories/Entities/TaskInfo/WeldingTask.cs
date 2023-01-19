@@ -10,21 +10,6 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
     {
         public int Number { get; set; }
 
-        public Guid WelderId { get; set; }
-
-        [ForeignKey(nameof(WelderId))] 
-        public Welder Welder { get; set; } = null!;
-
-        public Guid MasterId { get; set; }
-
-        [ForeignKey(nameof(MasterId))] 
-        public Master Master { get; set; } = null!;
-
-        public Guid InspectorId { get; set; }
-
-        [ForeignKey(nameof(InspectorId))] 
-        public Inspector Inspector { get; set; } = null!;
-
         /// <summary>
         /// Дата выполнения сварки
         /// </summary>
@@ -98,22 +83,22 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// <summary>
         /// Основной материал
         /// </summary>
-        public string BasicMaterial { get; set; }
+        public string BasicMaterial { get; set; } = null!;
 
         /// <summary>
         /// № сертификата (партии) основного материала
         /// </summary>
-        public string MainMaterialBatchNumber { get; set; }
+        public string MainMaterialBatchNumber { get; set; } = null!;
 
         /// <summary>
         /// Сварочные материалы
         /// </summary>
-        public string WeldingMaterial { get; set; }
+        public string WeldingMaterial { get; set; } = null!;
 
         /// <summary>
         /// № сертификата (партии) св. материала
         /// </summary>
-        public string WeldingMaterialBatchNumber { get; set; }
+        public string WeldingMaterialBatchNumber { get; set; } = null!;
 
         /// <summary>
         /// Защитный газ 
@@ -125,12 +110,9 @@ namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo
         /// </summary>
         public string? ProtectiveGasBatchNumber { get; set; }
 
-        public Guid? ProductId { get; set; }
+        public Guid SeamId { get; set; }
 
-        [ForeignKey(nameof(ProductId))] public Product? Product { get; set; }
-
-        public Guid? SeamId { get; set; }
-
-        [ForeignKey(nameof(SeamId))] public Seam? Seam { get; set; }
+        [ForeignKey(nameof(SeamId))] 
+        public Seam Seam { get; set; } = null!;
     }
 }

@@ -15,4 +15,12 @@ public interface ISeamManager
     Task<SeamDto?> CreateAsync(CreateSeamRequest request);
     
     Task<SeamDto?> UpdateAsync(UpdateSeamRequest request);
+    
+    Task<List<SeamDto>> GetAllByInspectorIdAsync(Guid inspectorId);
+    
+    Task<List<SeamDto>> GetAllByWelderIdAsync(Guid welderId);
+    
+    Task AssignSeamToWelderAsync(AssignSeamToWelderRequest request);
+    
+    Task AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request);
 }

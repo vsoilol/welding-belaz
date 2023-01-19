@@ -61,4 +61,36 @@ public class KnotController : ControllerBase
     {
         return await _productManager.UpdateAsync(request, ProductType.Knot);
     }
+    
+    [HttpGet("byInspector/{inspectorId}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByInspectorIdAsync([FromRoute] Guid inspectorId)
+    {
+        return await _productManager.GetAllByInspectorIdAsync(inspectorId, ProductType.Knot);
+    }
+    
+    [HttpGet("byMaster/{masterId}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByWelderIdAsync([FromRoute] Guid masterId)
+    {
+        return await _productManager.GetAllByMasterIdAsync(masterId, ProductType.Knot);
+    }
+    
+    [HttpPut("assignInspector")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<ActionResult> AssignProductToInspectorAsync([FromBody] AssignProductToInspectorRequest request)
+    {
+        await _productManager.AssignProductToInspectorAsync(request);
+        return Ok();
+    }
+    
+    [HttpPut("assignMaster")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<ActionResult> AssignProductToMasterAsync([FromBody] AssignProductToMasterRequest request)
+    {
+        await _productManager.AssignProductToMasterAsync(request);
+        return Ok();
+    }
 }
