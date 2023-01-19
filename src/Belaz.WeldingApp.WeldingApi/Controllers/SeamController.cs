@@ -61,4 +61,20 @@ public class SeamController : ControllerBase
     {
         return await _seamManager.UpdateAsync(request);
     }
+    
+    [HttpGet("byInspector/{inspectorId}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByInspectorIdAsync([FromRoute] Guid inspectorId)
+    {
+        return await _seamManager.GetAllByInspectorIdAsync(inspectorId);
+    }
+    
+    [HttpGet("byWelder/{welderId}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
+    {
+        return await _seamManager.GetAllByWelderIdAsync(welderId);
+    }
 }

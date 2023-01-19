@@ -78,4 +78,22 @@ public class SeamManager : ISeamManager
             .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
+
+    public Task<List<SeamDto>> GetAllByInspectorIdAsync(Guid inspectorId)
+    {
+        return _seamRepository
+            .AsQueryable()
+            .Where(_ => _.InspectorId == inspectorId)
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<SeamDto>> GetAllByWelderIdAsync(Guid welderId)
+    {
+        return _seamRepository
+            .AsQueryable()
+            .Where(_ => _.WelderId == welderId)
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
 }

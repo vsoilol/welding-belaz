@@ -61,4 +61,20 @@ public class ProductController : ControllerBase
     {
         return await _productManager.UpdateAsync(request, ProductType.Product);
     }
+    
+    [HttpGet("byInspector/{inspectorId}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByInspectorIdAsync([FromRoute] Guid inspectorId)
+    {
+        return await _productManager.GetAllByInspectorIdAsync(inspectorId, ProductType.Product);
+    }
+    
+    [HttpGet("byMaster/{masterId}")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllByWelderIdAsync([FromRoute] Guid masterId)
+    {
+        return await _productManager.GetAllByMasterIdAsync(masterId, ProductType.Product);
+    }
 }

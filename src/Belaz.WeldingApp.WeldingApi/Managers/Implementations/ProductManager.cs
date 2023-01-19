@@ -18,7 +18,9 @@ public class ProductManager : IProductManager
     private readonly EntityFrameworkRepository<TechnologicalProcess> _technologicalProcessRepository;
     private readonly EntityFrameworkRepository<Seam> _seamRepository;
 
-    public ProductManager(IMapper mapper, EntityFrameworkRepository<Product> productRepository, EntityFrameworkRepository<TechnologicalProcess> technologicalProcessRepository, EntityFrameworkRepository<Seam> seamRepository)
+    public ProductManager(IMapper mapper, EntityFrameworkRepository<Product> productRepository,
+        EntityFrameworkRepository<TechnologicalProcess> technologicalProcessRepository,
+        EntityFrameworkRepository<Seam> seamRepository)
     {
         _mapper = mapper;
         _productRepository = productRepository;
@@ -53,11 +55,29 @@ public class ProductManager : IProductManager
             .FirstOrDefaultAsync();
     }
 
+    public Task<List<ProductDto>> GetAllByMasterIdAsync(Guid masterId, ProductType productType)
+    {
+        return _productRepository
+            .AsQueryable()
+            .Where(_ => _.MasterId == masterId && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ProductDto>> GetAllByInspectorIdAsync(Guid inspectorId, ProductType productType)
+    {
+        return _productRepository
+            .AsQueryable()
+            .Where(_ => _.InspectorId == inspectorId && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public async Task<ProductDto?> CreateAsync(CreateProductWithoutTypeRequest request, ProductType productType)
     {
         var product = _mapper.Map<Product>(request);
         product.ProductType = productType;
-        
+
         if (request.Seams is not null)
         {
             var seams = await _seamRepository
@@ -67,7 +87,7 @@ public class ProductManager : IProductManager
 
         var createdProduct = _productRepository.Add(product);
         await _productRepository.SaveAsync();
-        
+
         return await _productRepository
             .AsQueryable()
             .Where(_ => _.Id == createdProduct.Id)
@@ -108,9 +128,9 @@ public class ProductManager : IProductManager
                 InsideProductId = _,
             }).ToList();
         }
-        
+
         await _productRepository.SaveAsync();
-        
+
         return await _productRepository
             .GetByIdAsQueryable(request.Id)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
