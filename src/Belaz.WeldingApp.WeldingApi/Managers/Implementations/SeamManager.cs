@@ -126,4 +126,18 @@ public class SeamManager : ISeamManager
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
+
+    public async Task<DefectiveSeamDto?> AddDefectiveReasonToSeamAsync(AddDefectiveReasonToSeamRequest request)
+    {
+        var statusReason = _mapper.Map<StatusReason>(request);
+
+        var createdStatusReason = _statusReasonRepository.Add(statusReason);
+        await _statusReasonRepository.SaveAsync();
+
+        return await _statusReasonRepository
+            .AsQueryable()
+            .Where(_ => _.Id == createdStatusReason.Id)
+            .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
 }

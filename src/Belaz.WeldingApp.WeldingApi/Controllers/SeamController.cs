@@ -20,85 +20,94 @@ public class SeamController : ControllerBase
     {
         _seamManager = seamManager;
     }
-    
+
     [HttpGet("byStatus/{status}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByTaskStatusAsync([FromRoute] Status status)
     {
         return await _seamManager.GetAllByWeldingTaskStatus(status);
     }
-    
+
     [HttpGet("{id}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<SeamDto?>> GetByIdAsync([FromRoute] Guid id)
     {
         return await _seamManager.GetByIdAsync(id);
     }
-    
+
     [HttpGet("byControlSubject/{isControlSubject}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByControlSubjectAsync([FromRoute] bool isControlSubject)
     {
         return await _seamManager.GetAllByControlSubject(isControlSubject);
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<SeamDto?>> CreateAsync([FromBody] CreateSeamRequest request)
     {
         var seam = await _seamManager.CreateAsync(request);
         return seam;
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<SeamDto?>> UpdateAsync([FromBody] UpdateSeamRequest request)
     {
         return await _seamManager.UpdateAsync(request);
     }
-    
+
     [HttpGet("byInspector/{inspectorId}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByInspectorIdAsync([FromRoute] Guid inspectorId)
     {
         return await _seamManager.GetAllByInspectorIdAsync(inspectorId);
     }
-    
+
     [HttpGet("byWelder/{welderId}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
     {
         return await _seamManager.GetAllByWelderIdAsync(welderId);
     }
-    
+
     [HttpPut("assignWelder")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     public async Task<ActionResult> AssignSeamToWelderAsync([FromBody] AssignSeamToWelderRequest request)
     {
         await _seamManager.AssignSeamToWelderAsync(request);
         return Ok();
     }
-    
+
     [HttpPut("assignInspector")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     public async Task<ActionResult> AssignSeamToInspectorAsync([FromBody] AssignSeamToInspectorRequest request)
     {
         await _seamManager.AssignSeamToInspectorAsync(request);
         return Ok();
     }
-    
+
     [HttpGet("defective")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<DefectiveSeamDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<DefectiveSeamDto>>> GetAllDefectiveSeamsAsync()
     {
         return await _seamManager.GetAllDefectiveSeamsAsync();
+    }
+
+    [HttpPost("defective")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(DefectiveSeamDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<DefectiveSeamDto?>> AddDefectiveReasonToSeamAsync(
+        [FromBody] AddDefectiveReasonToSeamRequest request)
+    {
+        return await _seamManager.AddDefectiveReasonToSeamAsync(request);
     }
 }

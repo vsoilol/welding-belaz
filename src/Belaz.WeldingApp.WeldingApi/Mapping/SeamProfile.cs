@@ -3,6 +3,7 @@ using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Seam;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Mapping;
 
@@ -33,6 +34,7 @@ public class SeamProfile : Profile
         CreateMap<Seam, SeamBriefDto>();
         CreateMap<CreateSeamRequest, Seam>();
         CreateMapStatusReasonToDefectiveSeamDto();
+        CreateMapAddDefectiveReasonToSeamRequestToStatusReason();
     }
 
     private void CreateMapStatusReasonToDefectiveSeamDto()
@@ -41,5 +43,16 @@ public class SeamProfile : Profile
             .ForMember(dto => dto.Date,
                 opt => opt
                     .MapFrom(x => x.Date.ToDayInfoString()));
+    }
+    
+    private void CreateMapAddDefectiveReasonToSeamRequestToStatusReason()
+    {
+        CreateMap<AddDefectiveReasonToSeamRequest, StatusReason>()
+            .ForMember(dto => dto.Date,
+                opt => opt
+                    .MapFrom(x => x.Date.ToDateTime()))
+            .ForMember(dto => dto.Status,
+                opt => opt
+                    .MapFrom(x => Status.Defective));
     }
 }

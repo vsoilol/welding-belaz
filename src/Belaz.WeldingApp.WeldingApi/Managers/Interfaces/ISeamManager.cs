@@ -25,4 +25,6 @@ public interface ISeamManager
     Task AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request);
     
     Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync();
+    
+    Task<DefectiveSeamDto?> AddDefectiveReasonToSeamAsync(AddDefectiveReasonToSeamRequest request);
 }
