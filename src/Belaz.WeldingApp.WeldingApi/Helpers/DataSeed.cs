@@ -612,7 +612,7 @@ public class DataSeed
     {
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
         var workplace = await context.Workplaces.FirstOrDefaultAsync();
-        var welder = await context.Welders.FirstOrDefaultAsync(_ => _.Workplace != null);
+        var welder = await context.Welders.FirstOrDefaultAsync();
         var inspector = await context.Inspectors.FirstOrDefaultAsync();
         var master = await context.Masters.FirstOrDefaultAsync();
 

@@ -96,4 +96,22 @@ public class SeamManager : ISeamManager
             .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
+
+    public async Task AssignSeamToWelderAsync(AssignSeamToWelderRequest request)
+    {
+        var seam = await _seamRepository.GetByIdAsync(request.SeamId);
+
+        seam.WelderId = request.WelderId;
+
+        await _seamRepository.SaveAsync();
+    }
+
+    public async Task AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request)
+    {
+        var seam = await _seamRepository.GetByIdAsync(request.SeamId);
+
+        seam.InspectorId = request.InspectorId;
+
+        await _seamRepository.SaveAsync();
+    }
 }

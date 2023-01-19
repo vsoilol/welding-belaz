@@ -19,4 +19,8 @@ public interface ISeamManager
     Task<List<SeamDto>> GetAllByInspectorIdAsync(Guid inspectorId);
     
     Task<List<SeamDto>> GetAllByWelderIdAsync(Guid welderId);
+    
+    Task AssignSeamToWelderAsync(AssignSeamToWelderRequest request);
+    
+    Task AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request);
 }

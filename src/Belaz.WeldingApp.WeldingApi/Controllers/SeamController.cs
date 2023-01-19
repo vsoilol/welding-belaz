@@ -77,4 +77,20 @@ public class SeamController : ControllerBase
     {
         return await _seamManager.GetAllByWelderIdAsync(welderId);
     }
+    
+    [HttpPut("assignWelder")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<ActionResult> AssignSeamToWelderAsync([FromBody] AssignSeamToWelderRequest request)
+    {
+        await _seamManager.AssignSeamToWelderAsync(request);
+        return Ok();
+    }
+    
+    [HttpPut("assignInspector")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<ActionResult> AssignSeamToInspectorAsync([FromBody] AssignSeamToInspectorRequest request)
+    {
+        await _seamManager.AssignSeamToInspectorAsync(request);
+        return Ok();
+    }
 }

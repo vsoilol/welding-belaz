@@ -136,4 +136,22 @@ public class ProductManager : IProductManager
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
+
+    public async Task AssignProductToMasterAsync(AssignProductToMasterRequest request)
+    {
+        var product = await _productRepository.GetByIdAsync(request.ProductId);
+
+        product.InspectorId = request.MasterId;
+
+        await _productRepository.SaveAsync();
+    }
+
+    public async Task AssignProductToInspectorAsync(AssignProductToInspectorRequest request)
+    {
+        var product = await _productRepository.GetByIdAsync(request.ProductId);
+
+        product.InspectorId = request.InspectorId;
+
+        await _productRepository.SaveAsync();
+    }
 }

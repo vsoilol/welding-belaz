@@ -77,4 +77,20 @@ public class DetailController : ControllerBase
     {
         return await _productManager.GetAllByMasterIdAsync(masterId, ProductType.Detail);
     }
+    
+    [HttpPut("assignInspector")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<ActionResult> AssignProductToInspectorAsync([FromBody] AssignProductToInspectorRequest request)
+    {
+        await _productManager.AssignProductToInspectorAsync(request);
+        return Ok();
+    }
+    
+    [HttpPut("assignMaster")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    public async Task<ActionResult> AssignProductToMasterAsync([FromBody] AssignProductToMasterRequest request)
+    {
+        await _productManager.AssignProductToMasterAsync(request);
+        return Ok();
+    }
 }
