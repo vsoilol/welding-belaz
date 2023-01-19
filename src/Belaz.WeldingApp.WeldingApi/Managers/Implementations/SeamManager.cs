@@ -2,6 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Seam;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingEquipment;
+using Belaz.WeldingApp.WeldingApi.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Repositories;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
@@ -137,6 +139,22 @@ public class SeamManager : ISeamManager
         return await _statusReasonRepository
             .AsQueryable()
             .Where(_ => _.Id == createdStatusReason.Id)
+            .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<DefectiveSeamDto?> UpdateDefectiveReasonSeamAsync(UpdateDefectiveReasonToSeamRequest request)
+    {
+        var statusReason = _mapper.Map<StatusReason>(request);
+        var isUpdate = await _statusReasonRepository.UpdateAsync(statusReason);
+
+        if (!isUpdate)
+        {
+            throw new UpdateFailedException(typeof(StatusReason), request.Id);
+        }
+
+        return await _statusReasonRepository
+            .GetByIdAsQueryable(request.Id)
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }

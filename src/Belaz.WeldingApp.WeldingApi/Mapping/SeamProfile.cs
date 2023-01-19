@@ -35,6 +35,7 @@ public class SeamProfile : Profile
         CreateMap<CreateSeamRequest, Seam>();
         CreateMapStatusReasonToDefectiveSeamDto();
         CreateMapAddDefectiveReasonToSeamRequestToStatusReason();
+        CreateMapUpdateDefectiveReasonToSeamRequestToStatusReason();
     }
 
     private void CreateMapStatusReasonToDefectiveSeamDto()
@@ -48,6 +49,17 @@ public class SeamProfile : Profile
     private void CreateMapAddDefectiveReasonToSeamRequestToStatusReason()
     {
         CreateMap<AddDefectiveReasonToSeamRequest, StatusReason>()
+            .ForMember(dto => dto.Date,
+                opt => opt
+                    .MapFrom(x => x.Date.ToDateTime()))
+            .ForMember(dto => dto.Status,
+                opt => opt
+                    .MapFrom(x => Status.Defective));
+    }
+    
+    private void CreateMapUpdateDefectiveReasonToSeamRequestToStatusReason()
+    {
+        CreateMap<UpdateDefectiveReasonToSeamRequest, StatusReason>()
             .ForMember(dto => dto.Date,
                 opt => opt
                     .MapFrom(x => x.Date.ToDateTime()))

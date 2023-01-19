@@ -110,4 +110,13 @@ public class SeamController : ControllerBase
     {
         return await _seamManager.AddDefectiveReasonToSeamAsync(request);
     }
+    
+    [HttpPut("defective")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(DefectiveSeamDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<DefectiveSeamDto?>> UpdateDefectiveReasonSeamAsync(
+        [FromBody] UpdateDefectiveReasonToSeamRequest request)
+    {
+        return await _seamManager.UpdateDefectiveReasonSeamAsync(request);
+    }
 }

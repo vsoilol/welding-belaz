@@ -27,4 +27,6 @@ public interface ISeamManager
     Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync();
     
     Task<DefectiveSeamDto?> AddDefectiveReasonToSeamAsync(AddDefectiveReasonToSeamRequest request);
+    
+    Task<DefectiveSeamDto?> UpdateDefectiveReasonSeamAsync(UpdateDefectiveReasonToSeamRequest request);
 }
