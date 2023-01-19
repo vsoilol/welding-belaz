@@ -37,6 +37,7 @@ public static class IoC
         services.AddScoped<EntityFrameworkRepository<Calendar>, CalendarRepository>();
         services.AddScoped<EntityFrameworkRepository<WorkingShift>, WorkingShiftRepository>();
         services.AddScoped<EntityFrameworkRepository<DowntimeReason>, DowntimeReasonRepository>();
+        services.AddScoped<EntityFrameworkRepository<StatusReason>, StatusReasonRepository>();
 
         // Managers
         services.AddScoped<IWelderManager, WelderManager>();

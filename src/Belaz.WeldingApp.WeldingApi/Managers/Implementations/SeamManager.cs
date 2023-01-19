@@ -14,11 +14,14 @@ public class SeamManager : ISeamManager
 {
     private readonly IMapper _mapper;
     private readonly EntityFrameworkRepository<Seam> _seamRepository;
+    private readonly EntityFrameworkRepository<StatusReason> _statusReasonRepository;
 
-    public SeamManager(EntityFrameworkRepository<Seam> seamRepository, IMapper mapper)
+    public SeamManager(EntityFrameworkRepository<Seam> seamRepository, IMapper mapper,
+        EntityFrameworkRepository<StatusReason> statusReasonRepository)
     {
         _seamRepository = seamRepository;
         _mapper = mapper;
+        _statusReasonRepository = statusReasonRepository;
     }
 
     public async Task<List<SeamDto>> GetAllByWeldingTaskStatus(Status status)
@@ -54,7 +57,7 @@ public class SeamManager : ISeamManager
 
         var createdSeam = _seamRepository.Add(seam);
         await _seamRepository.SaveAsync();
-        
+
         return await _seamRepository
             .AsQueryable()
             .Where(_ => _.Id == createdSeam.Id)
@@ -65,14 +68,14 @@ public class SeamManager : ISeamManager
     public async Task<SeamDto?> UpdateAsync(UpdateSeamRequest request)
     {
         var updatedSeam = await _seamRepository.GetByIdAsync(request.Id);
-        
+
         updatedSeam.Number = request.Number ?? updatedSeam.Number;
         updatedSeam.IsControlSubject = request.IsControlSubject ?? updatedSeam.IsControlSubject;
         updatedSeam.ProductionAreaId = request.ProductionAreaId ?? updatedSeam.ProductionAreaId;
         updatedSeam.WorkplaceId = request.WorkplaceId ?? updatedSeam.WorkplaceId;
-        
+
         await _seamRepository.SaveAsync();
-        
+
         return await _seamRepository
             .GetByIdAsQueryable(request.Id)
             .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
@@ -113,5 +116,14 @@ public class SeamManager : ISeamManager
         seam.InspectorId = request.InspectorId;
 
         await _seamRepository.SaveAsync();
+    }
+
+    public Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync()
+    {
+        return _statusReasonRepository
+            .AsQueryable()
+            .Where(_ => _.Status == Status.Defective && _.Seam != null)
+            .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 }

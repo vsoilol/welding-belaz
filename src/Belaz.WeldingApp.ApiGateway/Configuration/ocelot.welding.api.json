@@ -369,6 +369,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/seam/defective",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/seam/defective",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/seam/assignWelder",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [

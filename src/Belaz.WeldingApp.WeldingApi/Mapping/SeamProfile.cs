@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Seam;
 using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Mapping;
@@ -30,7 +31,15 @@ public class SeamProfile : Profile
                     .MapFrom(x => x.Workplace));
 
         CreateMap<Seam, SeamBriefDto>();
-        
         CreateMap<CreateSeamRequest, Seam>();
+        CreateMapStatusReasonToDefectiveSeamDto();
+    }
+
+    private void CreateMapStatusReasonToDefectiveSeamDto()
+    {
+        CreateMap<StatusReason, DefectiveSeamDto>()
+            .ForMember(dto => dto.Date,
+                opt => opt
+                    .MapFrom(x => x.Date.ToDayInfoString()));
     }
 }

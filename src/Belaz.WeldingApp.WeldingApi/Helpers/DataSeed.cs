@@ -648,6 +648,15 @@ public class DataSeed
                         Status = Status.InProgress,
                         ProductionArea = productionArea,
                         Workplace = workplace,
+                        StatusReasons = new List<StatusReason>
+                        {
+                            new StatusReason
+                            {
+                                Date = DateTime.Now,
+                                Status = Status.Defective,
+                                Reason = "Какая-то причина брака"
+                            }
+                        }
                     }
                 },
                 ProductInsides = new List<ProductInside>

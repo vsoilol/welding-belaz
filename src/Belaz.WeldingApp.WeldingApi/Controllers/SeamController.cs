@@ -93,4 +93,12 @@ public class SeamController : ControllerBase
         await _seamManager.AssignSeamToInspectorAsync(request);
         return Ok();
     }
+    
+    [HttpGet("defective")]
+    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<DefectiveSeamDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<DefectiveSeamDto>>> GetAllDefectiveSeamsAsync()
+    {
+        return await _seamManager.GetAllDefectiveSeamsAsync();
+    }
 }

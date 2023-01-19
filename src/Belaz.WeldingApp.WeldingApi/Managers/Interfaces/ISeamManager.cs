@@ -23,4 +23,6 @@ public interface ISeamManager
     Task AssignSeamToWelderAsync(AssignSeamToWelderRequest request);
     
     Task AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request);
+    
+    Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync();
 }
