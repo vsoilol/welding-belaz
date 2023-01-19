@@ -13,12 +13,12 @@ public class WeldingTaskProfile : Profile
         CreateMap<WeldingTask, WeldingTaskFullNamesDto>()
             .ForMember(dto => dto.Inspector,
                 opt => opt
-                    .MapFrom(x => x.Inspector.UserInfo))
+                    .MapFrom(x => x.Seam.Inspector.UserInfo))
             .ForMember(dto => dto.Welder,
                 opt => opt
-                    .MapFrom(x => x.Welder.UserInfo))
+                    .MapFrom(x => x.Seam.Welder.UserInfo))
             .ForMember(dto => dto.Master,
                 opt => opt
-                    .MapFrom(x => x.Master.UserInfo));
+                    .MapFrom(x => x.Seam.Product.Master.UserInfo));
     }
 }

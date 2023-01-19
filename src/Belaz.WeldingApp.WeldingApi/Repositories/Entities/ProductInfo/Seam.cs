@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Repositories.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Repositories.Entities.Users;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Repositories.Entities.ProductInfo;
@@ -41,4 +42,14 @@ public class Seam : Entity
     public Workplace? Workplace { get; set; }
     
     public List<StatusReason> StatusReasons { get; set; } = null!;
+    
+    public Guid? WelderId { get; set; }
+
+    [ForeignKey(nameof(WelderId))] 
+    public Welder? Welder { get; set; }
+
+    public Guid? InspectorId { get; set; }
+
+    [ForeignKey(nameof(InspectorId))] 
+    public Inspector? Inspector { get; set; }
 }
