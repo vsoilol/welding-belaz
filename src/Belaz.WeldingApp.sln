@@ -35,6 +35,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WeldingApp.ApiGateway", "We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.ApiGateway", "Belaz.WeldingApp.ApiGateway\Belaz.WeldingApp.ApiGateway.csproj", "{1BF1E6F2-EAC2-4719-AB3F-F86F0F75147A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.WeldingApi.Domain", "Belaz.WeldingApp.WeldingApi.Domain\Belaz.WeldingApp.WeldingApi.Domain.csproj", "{B5914BE7-1B5A-4FDF-8D94-66A820CE053C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.WeldingApi.DataLayer", "Belaz.WeldingApp.WeldingApi.DataLayer\Belaz.WeldingApp.WeldingApi.DataLayer.csproj", "{5302EF52-6A7E-4F48-AF57-0C4FACD5907A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{1BF1E6F2-EAC2-4719-AB3F-F86F0F75147A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BF1E6F2-EAC2-4719-AB3F-F86F0F75147A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BF1E6F2-EAC2-4719-AB3F-F86F0F75147A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5914BE7-1B5A-4FDF-8D94-66A820CE053C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5914BE7-1B5A-4FDF-8D94-66A820CE053C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5914BE7-1B5A-4FDF-8D94-66A820CE053C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5914BE7-1B5A-4FDF-8D94-66A820CE053C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5302EF52-6A7E-4F48-AF57-0C4FACD5907A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5302EF52-6A7E-4F48-AF57-0C4FACD5907A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5302EF52-6A7E-4F48-AF57-0C4FACD5907A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5302EF52-6A7E-4F48-AF57-0C4FACD5907A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7E98BE2A-D405-434C-B340-C70B7A23B477} = {9366AF82-BA2C-4E32-8453-3C8ABBFBB48A}
@@ -92,5 +104,7 @@ Global
 		{A7130CC1-0A47-4DB9-8808-1AC75A157906} = {A2B1C1E6-6669-46DE-939C-82B6E6EECC8F}
 		{9CEDAC05-E82A-4F43-B9DB-D4804CF935F6} = {381831C9-A5D2-4C2D-9EBE-DC8D153E3597}
 		{1BF1E6F2-EAC2-4719-AB3F-F86F0F75147A} = {290DA6B2-BA8F-4FAB-9D6B-F718AF128648}
+		{B5914BE7-1B5A-4FDF-8D94-66A820CE053C} = {A2B1C1E6-6669-46DE-939C-82B6E6EECC8F}
+		{5302EF52-6A7E-4F48-AF57-0C4FACD5907A} = {A2B1C1E6-6669-46DE-939C-82B6E6EECC8F}
 	EndGlobalSection
 EndGlobal

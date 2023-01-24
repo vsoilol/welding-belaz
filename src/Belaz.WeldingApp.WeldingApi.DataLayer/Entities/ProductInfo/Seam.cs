@@ -1,0 +1,55 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.Users;
+using WeldingApp.Common.Enums;
+
+namespace Belaz.WeldingApp.WeldingApi.DataLayer.Entities.ProductInfo;
+
+/// <summary>
+/// Сварной шов
+/// </summary>
+public class Seam : Entity
+{
+    public int Number { get; set; }
+    
+    /// <summary>
+    /// Подлежит ли контролю
+    /// </summary>
+    public bool IsControlSubject { get; set; }
+    
+    public Status Status { get; set; } = Status.NotStarted;
+
+    public Guid? ProductId { get; set; }
+        
+    [ForeignKey(nameof(ProductId))]
+    public Product? Product { get; set; }
+
+    public WeldingTask? WeldingTask { get; set; }
+
+    public List<WeldPassage> WeldPassages { get; set; } = null!;
+    
+    public TechnologicalInstruction? TechnologicalInstruction { get; set; }
+    
+    public Guid? ProductionAreaId { get; set; }
+    
+    [ForeignKey(nameof(ProductionAreaId))]
+    public ProductionArea? ProductionArea { get; set; }
+        
+    public Guid? WorkplaceId { get; set; }
+    
+    [ForeignKey(nameof(WorkplaceId))]
+    public Workplace? Workplace { get; set; }
+    
+    public List<StatusReason> StatusReasons { get; set; } = null!;
+    
+    public Guid? WelderId { get; set; }
+
+    [ForeignKey(nameof(WelderId))] 
+    public Welder? Welder { get; set; }
+
+    public Guid? InspectorId { get; set; }
+
+    [ForeignKey(nameof(InspectorId))] 
+    public Inspector? Inspector { get; set; }
+}
