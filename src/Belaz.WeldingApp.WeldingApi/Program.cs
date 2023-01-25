@@ -11,8 +11,6 @@ using Belaz.WeldingApp.WeldingApi.DataLayer;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
 using Belaz.WeldingApp.WeldingApi.Domain;
 using Belaz.WeldingApp.WeldingApi.Middlewares;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using ApplicationContext = Belaz.WeldingApp.WeldingApi.DataLayer.ApplicationContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,11 +41,7 @@ builder.Services.AddDataLayer(connectionString);
 
 builder.Services.AddBusinessLayer();
 
-builder.Services.AddFluentValidationClientsideAdapters();
-
-builder.Services.AddControllers(
-    options => { options.Filters.Add<ApiValidationFilter>(); })
-    .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
