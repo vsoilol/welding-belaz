@@ -87,4 +87,22 @@ public class ExceptionHandlerMiddleware
 
         await context.Response.WriteAsync(serializedResponseMessage);
     }
+    
+    private async Task HandleExceptionAsync(HttpContext context, string errorMessage, string title, HttpStatusCode statusCode)
+    {
+        context.Response.Clear();
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)statusCode;
+
+        var badRequestResult = new BadRequestResult
+        {
+            Errors = errorMessage, 
+            StatusCode = context.Response.StatusCode, 
+            Title = title
+        };
+
+        var serializedResponseMessage = JsonSerializer.Serialize(badRequestResult);
+
+        await context.Response.WriteAsync(serializedResponseMessage);
+    }
 }
