@@ -141,7 +141,7 @@ public class ProductManager : IProductManager
     {
         var product = await _productRepository.GetByIdAsync(request.ProductId);
 
-        product.InspectorId = request.MasterId;
+        product.MasterId = request.MasterId;
 
         await _productRepository.SaveAsync();
     }
