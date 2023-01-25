@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
-using Belaz.WeldingApp.WeldingApi.Domain.Contracts.Responses;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -41,6 +41,13 @@ public class CalendarRepository : ICalendarRepository
             .Where(_ => _.Id == id)
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
+    }
+
+    public Task<List<CalendarDto>> GetAllAsync()
+    {
+        return _context.Calendars
+            .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public Task<IQueryable<Calendar>> AddAsync(Guid id)

@@ -1,36 +1,61 @@
-﻿using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.Users;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations
+namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
+
+public class ChiefRepository : IChiefRepository
 {
-    public class ChiefRepository : EntityFrameworkRepository<Chief>
+    private readonly ApplicationContext _context;
+    private readonly IMapper _mapper;
+
+    public ChiefRepository(ApplicationContext context, IMapper mapper)
     {
-        public ChiefRepository(ApplicationContext context, ILogger<EntityFrameworkRepository<Chief>> logger) : base(
-        context, logger)
+        _context = context;
+        _mapper = mapper;
+    }
+
+    public Task<List<ChiefDto>> GetAllAsync()
+    {
+        return _context.Chiefs
+            .ProjectTo<ChiefDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public async Task<bool> UpdateAsync(Chief entity)
+    {
+        var updatedWelder = await _context.Chiefs
+            .Include(_ => _.UserInfo)
+            .FirstOrDefaultAsync(_ => _.Id == entity.Id);
+
+        if (updatedWelder is null)
         {
+            return false;
         }
-        
-        public override async Task<bool> UpdateAsync(Chief entity)
-        {
-            var updatedWelder = await Entities
-                .Include(_ => _.UserInfo)
-                .FirstOrDefaultAsync(_ => _.Id == entity.Id);
 
-            if (updatedWelder is null)
-            {
-                return false;
-            }
+        updatedWelder.WeldingEquipmentId = entity.WeldingEquipmentId;
+        updatedWelder.UserInfo.RfidTag = entity.UserInfo.RfidTag;
+        updatedWelder.UserInfo.FirstName = entity.UserInfo.FirstName;
+        updatedWelder.UserInfo.MiddleName = entity.UserInfo.MiddleName;
+        updatedWelder.UserInfo.LastName = entity.UserInfo.LastName;
+        updatedWelder.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
 
-            updatedWelder.WeldingEquipmentId = entity.WeldingEquipmentId;
-            updatedWelder.UserInfo.RfidTag = entity.UserInfo.RfidTag;
-            updatedWelder.UserInfo.FirstName = entity.UserInfo.FirstName;
-            updatedWelder.UserInfo.MiddleName = entity.UserInfo.MiddleName;
-            updatedWelder.UserInfo.LastName = entity.UserInfo.LastName;
-            updatedWelder.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
+        await _context.SaveChangesAsync();
 
-            await Context.SaveChangesAsync();
+        return true;
+    }
 
-            return true;
-        }
+    public async Task<ChiefDto> CreateAsync(Chief entity)
+    {
+        var newChief = _context.Chiefs.Add(entity).Entity;
+        await _context.SaveChangesAsync();
+
+        return (await _context.Chiefs
+            .Where(_ => _.Id == newChief.Id)
+            .ProjectTo<ChiefDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync())!;
     }
 }

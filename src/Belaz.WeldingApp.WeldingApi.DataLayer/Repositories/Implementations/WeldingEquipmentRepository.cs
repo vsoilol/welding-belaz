@@ -1,45 +1,26 @@
-﻿using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.WeldingEquipmentInfo;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
 
-public class WeldingEquipmentRepository : EntityFrameworkRepository<WeldingEquipment>
+public class WeldingEquipmentRepository : IWeldingEquipmentRepository
 {
-    public WeldingEquipmentRepository(ApplicationContext context,
-        ILogger<EntityFrameworkRepository<WeldingEquipment>> logger) : base(context, logger)
+    private readonly ApplicationContext _context;
+    private readonly IMapper _mapper;
+
+    public WeldingEquipmentRepository(ApplicationContext context, IMapper mapper)
     {
+        _context = context;
+        _mapper = mapper;
     }
 
-    public override async Task<bool> UpdateAsync(WeldingEquipment entity)
+    public Task<List<WeldingEquipmentDto>> GetAllAsync()
     {
-        var updatedWeldingEquipment = await Entities.FirstOrDefaultAsync(_ => _.Id == entity.Id);
-
-        if (updatedWeldingEquipment is null)
-        {
-            return false;
-        }
-
-        updatedWeldingEquipment.PostId = entity.PostId;
-        updatedWeldingEquipment.ArcVoltageMax = entity.ArcVoltageMax;
-        updatedWeldingEquipment.ArcVoltageMin = entity.ArcVoltageMin;
-        updatedWeldingEquipment.WeldingCurrentMax = entity.WeldingCurrentMax;
-        updatedWeldingEquipment.WeldingCurrentMin = entity.WeldingCurrentMin;
-        updatedWeldingEquipment.IdleVoltage = entity.IdleVoltage;
-        updatedWeldingEquipment.WeldingProcess = entity.WeldingProcess;
-        updatedWeldingEquipment.NextAttestationDate = entity.NextAttestationDate;
-        updatedWeldingEquipment.ManufacturerName = entity.ManufacturerName;
-        updatedWeldingEquipment.GroupNumber = entity.GroupNumber;
-        updatedWeldingEquipment.Lenght = entity.Lenght;
-        updatedWeldingEquipment.Width = entity.Width;
-        updatedWeldingEquipment.Height = entity.Height;
-        updatedWeldingEquipment.CommissioningDate = entity.CommissioningDate;
-        updatedWeldingEquipment.FactoryNumber = entity.FactoryNumber;
-        updatedWeldingEquipment.Marking = entity.Marking;
-        updatedWeldingEquipment.Name = entity.Name;
-        updatedWeldingEquipment.RfidTag = entity.RfidTag;
-        
-        await Context.SaveChangesAsync();
-
-        return true;
+        return _context.WeldingEquipments
+            .ProjectTo<WeldingEquipmentDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 }

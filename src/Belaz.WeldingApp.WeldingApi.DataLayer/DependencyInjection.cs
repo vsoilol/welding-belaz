@@ -1,7 +1,6 @@
-﻿using System.Reflection;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories;
+﻿using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer;
@@ -12,8 +11,11 @@ public static class DependencyInjection
     {
         services.AddDbContext<ApplicationContext>(options =>
             options.UseNpgsql(connectionString));
-        
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddScoped<ICalendarRepository, CalendarRepository>();
+        services.AddScoped<IChiefRepository, ChiefRepository>();
+        services.AddScoped<IProductionAreaRepository, ProductionAreaRepository>();
+        services.AddScoped<IWeldingEquipmentRepository, WeldingEquipmentRepository>();
         
         return services;
     }

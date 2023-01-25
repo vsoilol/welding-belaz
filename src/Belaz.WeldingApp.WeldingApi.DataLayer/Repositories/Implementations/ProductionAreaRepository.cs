@@ -1,29 +1,26 @@
-﻿using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.Production;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductioArea;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
 
-public class ProductionAreaRepository : EntityFrameworkRepository<ProductionArea>
+public class ProductionAreaRepository : IProductionAreaRepository
 {
-    public ProductionAreaRepository(ApplicationContext context, ILogger<EntityFrameworkRepository<ProductionArea>> logger) : base(context, logger)
+    private readonly ApplicationContext _context;
+    private readonly IMapper _mapper;
+
+    public ProductionAreaRepository(ApplicationContext context, IMapper mapper)
     {
+        _context = context;
+        _mapper = mapper;
     }
-    
-    public override async Task<bool> UpdateAsync(ProductionArea entity)
+
+    public Task<List<ProductionAreaDto>> GetAllAsync()
     {
-        var updatedProductionArea = await Entities.FirstOrDefaultAsync(_ => _.Id == entity.Id);
-
-        if (updatedProductionArea is null)
-        {
-            return false;
-        }
-
-        updatedProductionArea.Name = entity.Name;
-        updatedProductionArea.Number = entity.Number;
-        updatedProductionArea.WorkshopId = entity.WorkshopId;
-        
-        await Context.SaveChangesAsync();
-
-        return true;
+        return _context.ProductionAreas
+            .ProjectTo<ProductionAreaDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 }

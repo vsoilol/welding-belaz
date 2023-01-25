@@ -1,11 +1,11 @@
-﻿using Belaz.WeldingApp.WeldingApi.DataLayer.Entities;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.CalendarInfo;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.IdentityUser;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.ProductInfo;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.Production;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.TaskInfo;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.Users;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Entities.WeldingEquipmentInfo;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer;
