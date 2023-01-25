@@ -17,7 +17,7 @@ public class DayProfile : Profile
     
     private void CreateMapCreateDayWithCalendarIdRequestToDay()
     {
-        CreateMap<CreateDayWithCalendarIdRequest, Day>();
+        CreateMap<CreateDayWithYearRequest, Day>();
     }
     
     private void CreateMapUpdateDayRequestToDay()
@@ -32,6 +32,9 @@ public class DayProfile : Profile
 
     private void CreateMapDayToDayDto()
     {
-        CreateMap<Day, DayDto>();
+        CreateMap<Day, DayDto>()
+            .ForMember(dto => dto.Year,
+                opt => opt
+                    .MapFrom(x => x.Calendar.Year));
     }
 }

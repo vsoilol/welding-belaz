@@ -5,7 +5,13 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 
 public interface IDayManager
 {
-    Task<DayDto?> CreateAsync(CreateDayWithCalendarIdRequest request);
+    Task<DayDto?> CreateAsync(CreateDayWithYearRequest request);
+    
+    Task<List<DayDto>> GetAllMainAsync();
+    
+    Task<List<DayDto>> GetAllByWelderIdAsync(Guid welderId);
+    
+    Task<List<DayDto>> GetAllByEquipmentIdAsync(Guid equipmentId);
     
     Task<DayDto?> UpdateAsync(UpdateDayRequest request);
     

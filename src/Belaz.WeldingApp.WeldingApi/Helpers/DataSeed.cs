@@ -16,6 +16,11 @@ public class DataSeed
     public static async Task SeedSampleDataAsync(ApplicationContext context)
     {
         await CreateRolesAsync(context);
+        
+        if (!context.Calendars.Any())
+        {
+            await AddCalendar(context);
+        }
 
         if (!context.Workshops.Any())
         {
@@ -66,6 +71,65 @@ public class DataSeed
         {
             await AddWeldingTasks(context);
         }
+    }
+
+    private static async Task AddCalendar(ApplicationContext context)
+    {
+        var calendar = new Calendar
+        {
+            Year = 2023,
+            IsMain = true,
+            Days = new List<Day>
+            {
+                new Day
+                {
+                    MonthNumber = 1,
+                    Number = 10,
+                    IsWorkingDay = true,
+                    WorkingShifts = new List<WorkingShift>
+                    {
+                        new WorkingShift
+                        {
+                            Number = 1,
+                            ShiftStart = new TimeSpan(12, 10, 0),
+                            ShiftEnd = new TimeSpan(13, 10, 0),
+                            BreakStart = new TimeSpan(13, 20, 0),
+                            BreakEnd = new TimeSpan(13, 50, 0),
+                        }
+                    }
+                }
+            },
+            MainWorkingShifts = new List<WorkingShift>
+            {
+                new WorkingShift
+                {
+                    Number = 1,
+                    ShiftStart = new TimeSpan(12, 0, 0),
+                    ShiftEnd = new TimeSpan(13, 0, 0),
+                    BreakStart = new TimeSpan(13, 10, 0),
+                    BreakEnd = new TimeSpan(13, 40, 0),
+                },
+                new WorkingShift
+                {
+                    Number = 2,
+                    ShiftStart = new TimeSpan(14, 0, 0),
+                    ShiftEnd = new TimeSpan(15, 0, 0),
+                    BreakStart = new TimeSpan(15, 10, 0),
+                    BreakEnd = new TimeSpan(15, 40, 0),
+                },
+                new WorkingShift
+                {
+                    Number = 3,
+                    ShiftStart = new TimeSpan(16, 0, 0),
+                    ShiftEnd = new TimeSpan(17, 0, 0),
+                    BreakStart = new TimeSpan(17, 10, 0),
+                    BreakEnd = new TimeSpan(17, 40, 0),
+                }
+            }
+        };
+
+        await context.Calendars.AddAsync(calendar);
+        await context.SaveChangesAsync();
     }
 
     private static async Task AddMasters(ApplicationContext context)

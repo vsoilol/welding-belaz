@@ -12,4 +12,6 @@ public class UpdateDayRequest
     public int Number { get; set; }
 
     public bool IsWorkingDay { get; set; }
+    
+    public int Year { get; set; }
 }

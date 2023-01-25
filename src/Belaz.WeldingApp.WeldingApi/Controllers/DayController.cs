@@ -24,7 +24,7 @@ public class DayController : ControllerBase
     [HttpPost]
     [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(DayDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<DayDto?>> CreateAsync([FromBody] CreateDayWithCalendarIdRequest request)
+    public async Task<ActionResult<DayDto?>> CreateAsync([FromBody] CreateDayWithYearRequest request)
     {
         return await _dayManager.CreateAsync(request);
     }
@@ -35,5 +35,29 @@ public class DayController : ControllerBase
     public async Task<ActionResult<DayDto?>> UpdateAsync([FromBody] UpdateDayRequest request)
     {
         return await _dayManager.UpdateAsync(request);
+    }
+    
+    [HttpGet("main")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllMainAsync()
+    {
+        return await _dayManager.GetAllMainAsync();
+    }
+    
+    [HttpGet("byWelder/{welderId}")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
+    {
+        return await _dayManager.GetAllByWelderIdAsync(welderId);
+    }
+    
+    [HttpGet("byEquipment/{equipmentId}")]
+    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByEquipmentIdAsync([FromRoute] Guid equipmentId)
+    {
+        return await _dayManager.GetAllByEquipmentIdAsync(equipmentId);
     }
 }

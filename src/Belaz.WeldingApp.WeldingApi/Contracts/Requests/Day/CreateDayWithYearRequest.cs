@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.Contracts.Requests.Day;
 
-public class CreateDayWithCalendarIdRequest
+public class CreateDayWithYearRequest
 {
     public int MonthNumber { get; set; }
         
@@ -10,7 +10,11 @@ public class CreateDayWithCalendarIdRequest
 
     public bool IsWorkingDay { get; set; }
 
-    public Guid CalendarId { get; set; }
+    public int Year { get; set; }
+    
+    public Guid? WeldingEquipmentId { get; set; }
+    
+    public Guid? WelderId { get; set; }
     
     public List<CreateWorkingShiftRequest>? WorkingShifts { get; set; }
 }

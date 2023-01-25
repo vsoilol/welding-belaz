@@ -7,6 +7,8 @@ public class DayDto
     public int MonthNumber { get; set; }
         
     public int Number { get; set; }
+    
+    public int Year { get; set; }
 
     public bool IsWorkingDay { get; set; }
 
