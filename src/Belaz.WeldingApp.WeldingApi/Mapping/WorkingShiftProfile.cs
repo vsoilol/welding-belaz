@@ -18,7 +18,7 @@ public class WorkingShiftProfile : Profile
     
     private void CreateMapCreateWorkingShiftWithIdRequestToWorkingShift()
     {
-        CreateMap<CreateWorkingShiftWithIdRequest, WorkingShift>()
+        CreateMap<CreateWorkingShiftWithYearRequest, WorkingShift>()
             .ForMember(dto => dto.ShiftStart,
                 opt => opt
                     .MapFrom(x => x.ShiftStart.ToTimeSpan()))

@@ -1,6 +1,6 @@
 ﻿namespace Belaz.WeldingApp.WeldingApi.Contracts.Requests.WorkingShift;
 
-public class CreateWorkingShiftWithIdRequest
+public class CreateWorkingShiftWithYearRequest
 {
     public int Number { get; set; }
 
@@ -12,7 +12,7 @@ public class CreateWorkingShiftWithIdRequest
 
     public string? BreakEnd { get; set; }
 
-    public Guid? CalendarId { get; set; }
+    public int? Year { get; set; }
     
     public Guid? DayId { get; set; }
 }

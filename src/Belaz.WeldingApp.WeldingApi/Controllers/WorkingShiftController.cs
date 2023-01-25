@@ -24,7 +24,7 @@ public class WorkingShiftController : ControllerBase
     [HttpPost]
     [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(WorkingShiftDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkingShiftDto?>> CreateAsync([FromBody] CreateWorkingShiftWithIdRequest request)
+    public async Task<ActionResult<WorkingShiftDto?>> CreateAsync([FromBody] CreateWorkingShiftWithYearRequest request)
     {
         return await _workingShiftManager.CreateAsync(request);
     }

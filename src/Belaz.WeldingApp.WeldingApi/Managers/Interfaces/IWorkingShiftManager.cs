@@ -6,7 +6,7 @@ namespace Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
 
 public interface IWorkingShiftManager
 {
-    Task<WorkingShiftDto?> CreateAsync(CreateWorkingShiftWithIdRequest request);
+    Task<WorkingShiftDto?> CreateAsync(CreateWorkingShiftWithYearRequest request);
     
     Task<WorkingShiftDto?> UpdateAsync(UpdateWorkingShiftRequest request);
     

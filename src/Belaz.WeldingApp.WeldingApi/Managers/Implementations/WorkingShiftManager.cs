@@ -14,17 +14,40 @@ public class WorkingShiftManager : IWorkingShiftManager
 {
     private readonly IMapper _mapper;
     private readonly EntityFrameworkRepository<WorkingShift> _workingShiftRepository;
+    private readonly EntityFrameworkRepository<Calendar> _calendarRepository;
 
-    public WorkingShiftManager(EntityFrameworkRepository<WorkingShift> workingShiftRepository, IMapper mapper)
+    public WorkingShiftManager(EntityFrameworkRepository<WorkingShift> workingShiftRepository, IMapper mapper,
+        EntityFrameworkRepository<Calendar> calendarRepository)
     {
         _workingShiftRepository = workingShiftRepository;
         _mapper = mapper;
+        _calendarRepository = calendarRepository;
     }
 
-    public async Task<WorkingShiftDto?> CreateAsync(CreateWorkingShiftWithIdRequest request)
+    public async Task<WorkingShiftDto?> CreateAsync(CreateWorkingShiftWithYearRequest request)
     {
         var workingShift = _mapper.Map<WorkingShift>(request);
-        
+
+        if (request.Year is not null)
+        {
+            var calendar = (await _calendarRepository
+                    .GetByFilterAsync(_ => _.Year == request.Year && _.IsMain))
+                .FirstOrDefault();
+
+            if (calendar is null)
+            {
+                var newCalendar = new Calendar
+                {
+                    Year = (int)request.Year,
+                    IsMain = true
+                };
+
+                calendar = _calendarRepository.Add(newCalendar);
+            }
+            
+            workingShift.CalendarId = calendar.Id;
+        }
+
         var createdWorkingShift = _workingShiftRepository.Add(workingShift);
         await _workingShiftRepository.SaveAsync();
 
@@ -38,14 +61,14 @@ public class WorkingShiftManager : IWorkingShiftManager
     public async Task<WorkingShiftDto?> UpdateAsync(UpdateWorkingShiftRequest request)
     {
         var workingShift = _mapper.Map<WorkingShift>(request);
-        
+
         var isUpdate = await _workingShiftRepository.UpdateAsync(workingShift);
 
         if (!isUpdate)
         {
             throw new UpdateFailedException(typeof(WorkingShift), request.Id);
         }
-        
+
         return await _workingShiftRepository
             .GetByIdAsQueryable(request.Id)
             .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
