@@ -16,6 +16,8 @@ public static class DependencyInjection
         services.AddScoped<IChiefRepository, ChiefRepository>();
         services.AddScoped<IProductionAreaRepository, ProductionAreaRepository>();
         services.AddScoped<IWeldingEquipmentRepository, WeldingEquipmentRepository>();
+        services.AddScoped<IWorkingShiftRepository, WorkingShiftRepository>();
+        services.AddScoped<IDayRepository, DayRepository>();
         
         return services;
     }

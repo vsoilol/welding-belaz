@@ -1,4 +1,6 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Domain.Contracts.Contracts.Requests.Calendar;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 
 public class GetByWelderIdRequest
 {

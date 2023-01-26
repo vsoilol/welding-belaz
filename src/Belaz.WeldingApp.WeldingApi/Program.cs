@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +11,7 @@ using WeldingApp.Common.Filters;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
 using Belaz.WeldingApp.WeldingApi.Domain;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities;
 using Belaz.WeldingApp.WeldingApi.Middlewares;
 using ApplicationContext = Belaz.WeldingApp.WeldingApi.DataLayer.ApplicationContext;
 
@@ -35,7 +37,10 @@ builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
 
 var connectionString = builder.Configuration.GetConnectionString("WeldingDatabase");
 
-builder.Services.AddDomainLayer();
+var domainProjectAssembly = typeof(Belaz.WeldingApp.WeldingApi.Domain.Mappings.MappingProfile).Assembly;
+var businessLayerProjectAssembly = typeof(Belaz.WeldingApp.WeldingApi.BusinessLayer.Mappings.MappingProfile).Assembly;
+
+builder.Services.AddAutoMapper(domainProjectAssembly, businessLayerProjectAssembly);
 
 builder.Services.AddDataLayer(connectionString);
 

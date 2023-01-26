@@ -4,7 +4,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WorkingShift;
 
-public class CreateWorkingShiftRequest : IMapTo<Domain.Entities.CalendarInfo.WorkingShift>
+public class CreateWorkingShiftWithYearRequest : IMapTo<Domain.Entities.CalendarInfo.WorkingShift>
 {
     public int Number { get; set; }
 
@@ -16,9 +16,13 @@ public class CreateWorkingShiftRequest : IMapTo<Domain.Entities.CalendarInfo.Wor
 
     public string? BreakEnd { get; set; }
 
+    public int? Year { get; set; }
+
+    public Guid? DayId { get; set; }
+
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<CreateWorkingShiftRequest, Domain.Entities.CalendarInfo.WorkingShift>()
+        profile.CreateMap<CreateWorkingShiftWithYearRequest, Domain.Entities.CalendarInfo.WorkingShift>()
             .ForMember(dto => dto.ShiftStart,
                 opt => opt
                     .MapFrom(x => x.ShiftStart.ToTimeSpan()))

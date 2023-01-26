@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,10 +12,11 @@ public static class DependencyInjection
     public static IServiceCollection AddBusinessLayer(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        //services.Add(ServiceDescriptor.Transient(typeof(IValidatorFactory), config.ValidatorFactoryType ?? typeof(ServiceProviderValidatorFactory))); 
-        
+        //services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
         services.AddScoped<IValidationService, ValidationService>();
-        services.AddScoped<IChiefService, ChiefService>();
+        services.AddScoped<IWorkingShiftService, WorkingShiftService>();
+        services.AddScoped<IDayService, DayService>();
         
         return services;
     }

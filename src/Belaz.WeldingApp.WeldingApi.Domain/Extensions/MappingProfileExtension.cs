@@ -20,9 +20,14 @@ public static class MappingProfileExtension
             var instance = Activator.CreateInstance(type);
 
             var methodInfo = type.GetMethod("Mapping")
-                             ?? type.GetInterface("IMapFrom`1")!.GetMethod("Mapping");
+                             ?? GetInterface(type).GetMethod("Mapping");
 
             methodInfo?.Invoke(instance, new object[] { profile });
         }
+    }
+
+    private static Type GetInterface(Type type)
+    {
+        return type.GetInterface("IMapFrom`1") ?? type.GetInterface("IMapTo`1")!;
     }
 }
