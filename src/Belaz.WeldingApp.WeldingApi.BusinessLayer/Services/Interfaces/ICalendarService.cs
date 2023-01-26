@@ -1,21 +1,22 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface ICalendarService
 {
-    Task<CalendarDto> CreateAsync(CreateCalendarRequest request, bool isMain);
+    Task<Result<CalendarDto>> CreateAsync(CreateCalendarRequest request, bool isMain);
     
-    Task<CalendarDto> CreateForEquipmentAsync(CreateCalendarWithEquipmentIdRequest request);
+    Task<Result<CalendarDto>> CreateForEquipmentAsync(CreateCalendarWithEquipmentIdRequest request);
     
-    Task<CalendarDto> CreateForWelderAsync(CreateCalendarWithWelderIdRequest request);
+    Task<Result<CalendarDto>> CreateForWelderAsync(CreateCalendarWithWelderIdRequest request);
     
-    Task<CalendarDto> UpdateAsync(UpdateCalendarRequest request);
+    Task<Result<CalendarDto>> UpdateAsync(UpdateCalendarRequest request);
     
-    Task<CalendarDto?> GetMainCalendarByYearAsync(int year);
+    Task<Result<CalendarDto?>> GetMainCalendarByYearAsync(GetMainCalendarByYearRequest request);
 
-    Task<CalendarDto?> GetByWelderIdAsync(GetByWelderIdRequest request);
+    Task<Result<CalendarDto?>> GetByWelderIdAndYearAsync(GetByWelderIdRequest request);
     
-    Task<CalendarDto?> GetByEquipmentIdAsync(GetByEquipmentIdRequest request);
+    Task<Result<CalendarDto?>> GetByEquipmentIdAndYearAsync(GetByEquipmentIdRequest request);
 }

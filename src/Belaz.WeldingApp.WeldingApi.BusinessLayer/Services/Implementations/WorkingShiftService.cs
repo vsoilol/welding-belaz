@@ -47,12 +47,4 @@ public class WorkingShiftService : IWorkingShiftService
             return _workingShiftRepository.UpdateAsync(workingShift);
         });
     }
-
-    public Task CreateRangeAsync(List<CreateWorkingShiftRequest> values, Guid calendarId)
-    {
-        var workingShifts = _mapper.Map<List<WorkingShift>>(values);
-        workingShifts.ForEach(_ => _.CalendarId = calendarId);
-
-        return _workingShiftRepository.AddRangeAsync(workingShifts);
-    }
 }

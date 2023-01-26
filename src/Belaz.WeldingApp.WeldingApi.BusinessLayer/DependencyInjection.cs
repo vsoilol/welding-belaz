@@ -12,11 +12,11 @@ public static class DependencyInjection
     public static IServiceCollection AddBusinessLayer(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        //services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<IWorkingShiftService, WorkingShiftService>();
         services.AddScoped<IDayService, DayService>();
+        services.AddScoped<ICalendarService, CalendarService>();
         
         return services;
     }

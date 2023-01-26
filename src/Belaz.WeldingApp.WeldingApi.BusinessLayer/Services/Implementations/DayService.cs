@@ -69,12 +69,4 @@ public class DayService : IDayService
             return _dayRepository.UpdateAsync(day);
         });
     }
-
-    public Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId)
-    {
-        var days = _mapper.Map<List<Day>>(values);
-        days.ForEach(_ => _.CalendarId = calendarId);
-
-        return _dayRepository.AddRangeAsync(days);
-    }
 }

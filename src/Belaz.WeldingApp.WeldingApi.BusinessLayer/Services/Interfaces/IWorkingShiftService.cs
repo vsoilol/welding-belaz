@@ -9,6 +9,4 @@ public interface IWorkingShiftService
     Task<Result<WorkingShiftDto>> CreateAsync(CreateWorkingShiftWithYearRequest request);
     
     Task<Result<WorkingShiftDto>> UpdateAsync(UpdateWorkingShiftRequest request);
-    
-    Task CreateRangeAsync(List<CreateWorkingShiftRequest> values, Guid calendarId);
 }

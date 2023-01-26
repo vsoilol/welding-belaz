@@ -5,6 +5,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Calendar;
 
@@ -12,16 +13,16 @@ public class CreateCalendarWithEquipmentIdRequestValidator : AbstractValidator<C
 {
     public CreateCalendarWithEquipmentIdRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Year)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetValidator(new YearValidatorFor<CreateCalendarWithEquipmentIdRequest>());
-
         RuleFor(model => model.WeldingEquipmentId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<CreateCalendarWithEquipmentIdRequest, WeldingEquipment>(context));
         
+        RuleFor(model => model)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetAsyncValidator(new EquipmentYearValidatorFor(context));
+
         RuleFor(model => model.MainWorkingShift)
             .Cascade(CascadeMode.Stop)
             .NotNull()
@@ -38,5 +39,18 @@ public class CreateCalendarWithEquipmentIdRequestValidator : AbstractValidator<C
                     .Cascade(CascadeMode.Stop)
                     .SetValidator(new CreateDayRequestValidator());
             });
+    }
+
+    private async Task<bool> IsYearValid(ApplicationContext context, CreateCalendarWithEquipmentIdRequest data)
+    {
+        if (data.Year is < 1000 or > 2999)
+        {
+            return false;
+        }
+
+        var isExist = await context.Calendars.AnyAsync(_ => _.Year == data.Year && 
+                                                            _.WeldingEquipmentId == data.WeldingEquipmentId);
+
+        return !isExist;
     }
 }

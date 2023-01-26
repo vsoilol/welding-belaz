@@ -12,16 +12,16 @@ public class CreateCalendarWithWelderIdRequestValidator : AbstractValidator<Crea
 {
     public CreateCalendarWithWelderIdRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Year)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetValidator(new YearValidatorFor<CreateCalendarWithWelderIdRequest>());
-
         RuleFor(model => model.WelderId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<CreateCalendarWithWelderIdRequest, Welder>(context));
-        
+
+        RuleFor(model => model)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetAsyncValidator(new WelderYearValidatorFor(context));
+
         RuleFor(model => model.MainWorkingShift)
             .Cascade(CascadeMode.Stop)
             .NotNull()
@@ -30,7 +30,7 @@ public class CreateCalendarWithWelderIdRequestValidator : AbstractValidator<Crea
         RuleForEach(model => model.MainWorkingShift)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new CreateWorkingShiftRequestValidator());
-        
+
         When(_ => _.Days is not null,
             () =>
             {

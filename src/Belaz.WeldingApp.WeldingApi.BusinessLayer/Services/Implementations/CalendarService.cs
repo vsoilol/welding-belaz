@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
 
@@ -20,38 +23,87 @@ public class CalendarService : ICalendarService
         _calendarRepository = calendarRepository;
     }
 
-    public Task<CalendarDto> CreateAsync(CreateCalendarRequest request, bool isMain)
+    public async Task<Result<CalendarDto>> CreateAsync(CreateCalendarRequest request, bool isMain)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+        {
+            var calendar = _mapper.Map<Calendar>(request);
+            calendar.IsMain = isMain;
+
+            var days = _mapper.Map<List<Day>>(request.Days);
+            var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+
+            return _calendarRepository.CreateAsync(calendar, days, workingShifts);
+        });
     }
 
-    public Task<CalendarDto> CreateForEquipmentAsync(CreateCalendarWithEquipmentIdRequest request)
+    public async Task<Result<CalendarDto>> CreateForEquipmentAsync(CreateCalendarWithEquipmentIdRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+        {
+            var calendar = _mapper.Map<Calendar>(request);
+            calendar.IsMain = false;
+
+            var days = _mapper.Map<List<Day>>(request.Days);
+            var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+
+            return _calendarRepository.CreateAsync(calendar, days, workingShifts);
+        });
     }
 
-    public Task<CalendarDto> CreateForWelderAsync(CreateCalendarWithWelderIdRequest request)
+    public async Task<Result<CalendarDto>> CreateForWelderAsync(CreateCalendarWithWelderIdRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+        {
+            var calendar = _mapper.Map<Calendar>(request);
+            calendar.IsMain = false;
+
+            var days = _mapper.Map<List<Day>>(request.Days);
+            var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+
+            return _calendarRepository.CreateAsync(calendar, days, workingShifts);
+        });
     }
 
-    public Task<CalendarDto> UpdateAsync(UpdateCalendarRequest request)
+    public async Task<Result<CalendarDto>> UpdateAsync(UpdateCalendarRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+        {
+            var calendar = _mapper.Map<Calendar>(request);
+
+            return _calendarRepository.UpdateAsync(calendar);
+        });
     }
 
-    public Task<CalendarDto?> GetMainCalendarByYearAsync(int year)
+    public async Task<Result<CalendarDto?>> GetMainCalendarByYearAsync(GetMainCalendarByYearRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _calendarRepository.GetMainCalendarByYearAsync(request.Year));
     }
 
-    public Task<CalendarDto?> GetByWelderIdAsync(GetByWelderIdRequest request)
+    public async Task<Result<CalendarDto?>> GetByWelderIdAndYearAsync(GetByWelderIdRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _calendarRepository.GetByWelderIdAndYearAsync(request.WelderId, request.Year));
     }
 
-    public Task<CalendarDto?> GetByEquipmentIdAsync(GetByEquipmentIdRequest request)
+    public async Task<Result<CalendarDto?>> GetByEquipmentIdAndYearAsync(GetByEquipmentIdRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _calendarRepository.GetByEquipmentIdAndYearAsync(request.WeldingEquipmentId, request.Year));
     }
 }

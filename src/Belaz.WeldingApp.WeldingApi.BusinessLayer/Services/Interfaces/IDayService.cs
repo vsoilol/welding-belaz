@@ -15,6 +15,4 @@ public interface IDayService
     Task<Result<List<DayDto>>> GetAllByEquipmentIdAsync(GetDaysByEquipmentIdRequest request);
     
     Task<Result<DayDto>> UpdateAsync(UpdateDayRequest request);
-    
-    Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId);
 }
