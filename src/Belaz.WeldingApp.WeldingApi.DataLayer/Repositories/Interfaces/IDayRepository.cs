@@ -13,11 +13,7 @@ public interface IDayRepository
 
     Task<DayDto> UpdateAsync(Day day);
 
-    Task<bool> UpdateRangeAsync(IEnumerable<Day> days);
-    
     Task<DayDto> CreateAsync(Day day, int year, Guid? weldingEquipmentId, Guid? welderId);
     
     Task<DayDto> GetByIdAsync(Guid id);
-    
-    Task AddRangeAsync(IEnumerable<Day> workingShifts);
 }

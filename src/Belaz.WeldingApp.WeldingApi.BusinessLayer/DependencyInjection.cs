@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddScoped<IWorkingShiftService, WorkingShiftService>();
         services.AddScoped<IDayService, DayService>();
         services.AddScoped<ICalendarService, CalendarService>();
+        services.AddScoped<IWorkshopService, WorkshopService>();
         
         return services;
     }

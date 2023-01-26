@@ -62,27 +62,6 @@ public class DayRepository : IDayRepository
         return await GetByIdAsync(day.Id);
     }
 
-    public async Task<bool> UpdateRangeAsync(IEnumerable<Day> days)
-    {
-        var entityDict = await _context.Days
-            .Where(_ => days.Any(day => day.Id == _.Id))
-            .ToDictionaryAsync(e => e.Id);
-
-        foreach (var day in days)
-        {
-            if (entityDict.TryGetValue(day.Id, out Day? updatedDay))
-            {
-                updatedDay.MonthNumber = day.MonthNumber;
-                updatedDay.Number = day.Number;
-                updatedDay.IsWorkingDay = day.IsWorkingDay;
-            }
-        }
-
-        await _context.SaveChangesAsync();
-
-        return true;
-    }
-
     public async Task<DayDto> CreateAsync(Day day, int year, Guid? weldingEquipmentId, Guid? welderId)
     {
         var calendar = await _context.Calendars
@@ -117,10 +96,5 @@ public class DayRepository : IDayRepository
             .Where(_ => _.Id == id)
             .ProjectTo<DayDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
-    }
-
-    public Task AddRangeAsync(IEnumerable<Day> workingShifts)
-    {
-        throw new NotImplementedException();
     }
 }

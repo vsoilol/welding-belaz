@@ -17,30 +17,7 @@ public class WorkingShiftRepository : IWorkingShiftRepository
         _context = context;
         _mapper = mapper;
     }
-
-    public async Task<bool> UpdateRangeAsync(IEnumerable<WorkingShift> entities)
-    {
-        var entityDict = await _context.WorkingShifts
-            .Where(_ => entities.Any(workingShift => workingShift.Id == _.Id))
-            .ToDictionaryAsync(e => e.Id);
-
-        foreach (var day in entities)
-        {
-            if (entityDict.TryGetValue(day.Id, out WorkingShift? updatedWorkingShift))
-            {
-                updatedWorkingShift.Number = day.Number;
-                updatedWorkingShift.ShiftStart = day.ShiftStart;
-                updatedWorkingShift.ShiftEnd = day.ShiftEnd;
-                updatedWorkingShift.BreakStart = day.BreakStart;
-                updatedWorkingShift.BreakEnd = day.BreakEnd;
-            }
-        }
-
-        await _context.SaveChangesAsync();
-
-        return true;
-    }
-
+    
     public async Task<WorkingShiftDto> UpdateAsync(WorkingShift entity)
     {
         var updatedWorkingShift = (await _context.WorkingShifts
@@ -71,11 +48,5 @@ public class WorkingShiftRepository : IWorkingShiftRepository
             .Where(_ => _.Id == id)
             .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
-    }
-
-    public async Task AddRangeAsync(IEnumerable<WorkingShift> workingShifts)
-    {
-        await _context.WorkingShifts.AddRangeAsync(workingShifts);
-        await _context.SaveChangesAsync();
     }
 }

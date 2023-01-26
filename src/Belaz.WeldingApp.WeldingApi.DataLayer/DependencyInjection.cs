@@ -13,12 +13,12 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString));
 
         services.AddScoped<ICalendarRepository, CalendarRepository>();
-        services.AddScoped<IChiefRepository, ChiefRepository>();
         services.AddScoped<IProductionAreaRepository, ProductionAreaRepository>();
         services.AddScoped<IWeldingEquipmentRepository, WeldingEquipmentRepository>();
         services.AddScoped<IWorkingShiftRepository, WorkingShiftRepository>();
         services.AddScoped<IDayRepository, DayRepository>();
         services.AddScoped<ICalendarRepository, CalendarRepository>();
+        services.AddScoped<IWorkshopRepository, WorkshopRepository>();
         
         return services;
     }
