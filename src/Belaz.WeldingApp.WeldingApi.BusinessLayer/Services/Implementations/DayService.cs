@@ -42,23 +42,32 @@ public class DayService : IDayService
         return _dayRepository.GetAllMainAsync();
     }
 
-    public Task<List<DayDto>> GetAllByWelderIdAsync(Guid welderId)
+    public async Task<Result<List<DayDto>>> GetAllByWelderIdAsync(GetDaysByWelderIdRequest request)
     {
-        return _dayRepository.GetAllByWelderIdAsync(welderId);
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _dayRepository.GetAllByWelderIdAsync(request.WelderId));
     }
 
-    public Task<List<DayDto>> GetAllByEquipmentIdAsync(Guid equipmentId)
+    public async Task<Result<List<DayDto>>> GetAllByEquipmentIdAsync(GetDaysByEquipmentIdRequest request)
     {
-        return _dayRepository.GetAllByWelderIdAsync(equipmentId);
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _dayRepository.GetAllByWelderIdAsync(request.EquipmentId));
     }
 
-    public async Task<DayDto> UpdateAsync(UpdateDayRequest request)
+    public async Task<Result<DayDto>> UpdateAsync(UpdateDayRequest request)
     {
-        await _validationService.ValidateAsync(request);
+        var validationResult = await _validationService.ValidateAsync(request);
 
-        var day = _mapper.Map<Day>(request);
+        return await validationResult.ToDataResult(() =>
+        {
+            var day = _mapper.Map<Day>(request);
 
-        return await _dayRepository.UpdateAsync(day);
+            return _dayRepository.UpdateAsync(day);
+        });
     }
 
     public Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId)

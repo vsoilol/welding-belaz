@@ -10,11 +10,11 @@ public interface IDayService
     
     Task<List<DayDto>> GetAllMainAsync();
     
-    Task<List<DayDto>> GetAllByWelderIdAsync(Guid welderId);
+    Task<Result<List<DayDto>>> GetAllByWelderIdAsync(GetDaysByWelderIdRequest request);
     
-    Task<List<DayDto>> GetAllByEquipmentIdAsync(Guid equipmentId);
+    Task<Result<List<DayDto>>> GetAllByEquipmentIdAsync(GetDaysByEquipmentIdRequest request);
     
-    Task<DayDto> UpdateAsync(UpdateDayRequest request);
+    Task<Result<DayDto>> UpdateAsync(UpdateDayRequest request);
     
     Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId);
 }

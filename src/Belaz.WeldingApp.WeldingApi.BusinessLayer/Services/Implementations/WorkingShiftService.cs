@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WorkingShift;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
 
@@ -22,22 +24,28 @@ public class WorkingShiftService : IWorkingShiftService
         _workingShiftRepository = workingShiftRepository;
     }
 
-    public async Task<WorkingShiftDto> CreateAsync(CreateWorkingShiftWithYearRequest request)
+    public async Task<Result<WorkingShiftDto>> CreateAsync(CreateWorkingShiftWithYearRequest request)
     {
-        await _validationService.ValidateAsync(request);
+        var validationResult = await _validationService.ValidateAsync(request);
 
-        var workingShift = _mapper.Map<WorkingShift>(request);
+        return await validationResult.ToDataResult(() =>
+        {
+            var workingShift = _mapper.Map<WorkingShift>(request);
 
-        return await _workingShiftRepository.CreateAsync(workingShift);
+            return _workingShiftRepository.CreateAsync(workingShift);
+        });
     }
 
-    public async Task<WorkingShiftDto> UpdateAsync(UpdateWorkingShiftRequest request)
+    public async Task<Result<WorkingShiftDto>> UpdateAsync(UpdateWorkingShiftRequest request)
     {
-        await _validationService.ValidateAsync(request);
+        var validationResult = await _validationService.ValidateAsync(request);
 
-        var workingShift = _mapper.Map<WorkingShift>(request);
+        return await validationResult.ToDataResult(() =>
+        {
+            var workingShift = _mapper.Map<WorkingShift>(request);
 
-        return await _workingShiftRepository.UpdateAsync(workingShift);
+            return _workingShiftRepository.UpdateAsync(workingShift);
+        });
     }
 
     public Task CreateRangeAsync(List<CreateWorkingShiftRequest> values, Guid calendarId)

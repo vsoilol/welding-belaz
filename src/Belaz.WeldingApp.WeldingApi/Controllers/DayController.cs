@@ -1,6 +1,4 @@
-﻿
-
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
@@ -33,29 +31,33 @@ public class DayController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(DayDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<DayDto?>> UpdateAsync([FromBody] UpdateDayRequest request)
+    public async Task<ActionResult<DayDto>> UpdateAsync([FromBody] UpdateDayRequest request)
     {
-        return await _dayService.UpdateAsync(request);
+        var result = await _dayService.UpdateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpGet("main")]
     [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<DayDto>>> GetAllMainAsync()
     {
         return await _dayService.GetAllMainAsync();
     }
-    
+
     [HttpGet("byWelder/{welderId}")]
-    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
+    [ProducesResponseType(typeof(List<DayDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<DayDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
     {
-        return await _dayService.GetAllByWelderIdAsync(welderId);
+        var result = await _dayService.GetAllByWelderIdAsync(new GetDaysByWelderIdRequest { WelderId = welderId });
+        return result.ToOk();
     }
-    
+
     [HttpGet("byEquipment/{equipmentId}")]
-    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByEquipmentIdAsync([FromRoute] Guid equipmentId)
+    [ProducesResponseType(typeof(List<DayDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<DayDto>>> GetAllByEquipmentIdAsync([FromRoute] Guid equipmentId)
     {
-        return await _dayService.GetAllByEquipmentIdAsync(equipmentId);
+        var result = await _dayService
+            .GetAllByEquipmentIdAsync(new GetDaysByEquipmentIdRequest { EquipmentId = equipmentId });
+        return result.ToOk();
     }
 }
