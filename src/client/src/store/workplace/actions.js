@@ -1,7 +1,6 @@
 import { createActions } from "reduxsauce";
 
-const { Types, Creators } = createActions({
-
+const { Types, Creators } = createActions({ 
   ///Цеха 
   loadWorkshopRequest: ["payload"],
   loadWorkshopSuccess: ["workshop"],
@@ -111,6 +110,13 @@ const { Types, Creators } = createActions({
   loadTexprocweldingRequest: ["payload"],
   loadTexprocweldingSuccess: ["texprocwelding"],
   loadTexprocweldingFailure: ["error"],
+
+
+
+  ///Закрепленные детали  за инспектором
+  loadDetailbyinspectorRequest: ["payload"],
+  loadDetailbyinspectorSuccess: ["detailbyinspector"],
+  loadDetailbyinspectorFailure: ["error"],
 
 });
 

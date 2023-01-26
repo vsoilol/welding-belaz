@@ -19,7 +19,7 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-
+import imgcalendar from "assets/icons/calendar.png";
 
 
 
@@ -129,9 +129,16 @@ export const Equipment = ({
     { title: "Наименование изготовителя", field: "manufacturerName" },
     { title: "Дата очередной аттестации", field: "nextAttestationDate" },
 
-    { title: "Процесс (способ) сварки", field: "weldingProcess" },
-    { title: "Напряжение холостого хода", field: "idleVoltage" },
+    // { title: "Процесс (способ) сварки", field: "weldingProcess" },
+    // { title: "Напряжение холостого хода", field: "idleVoltage" },
     { title: "Номер поста", field: "post.number" },
+    { title: "Наименование поста", field: "post.name" },
+    {
+      title:"Просмотреть календарь",
+      render: (rowData) => {
+        return <img onClick={e=>OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
+      },
+    }
   ];
 
   const columns2 = [
@@ -155,7 +162,14 @@ export const Equipment = ({
     setOpen(true);
   };
 
-
+  function OpenCalendar(rowData){
+    window.localStorage.removeItem("executorId")  
+    window.localStorage.setItem("equipment",`Оборудование: ${rowData.name}  `)  
+    window.localStorage.setItem("equipmentId",rowData.id)   
+    setTimeout(() => {
+      window.location.href="/calendar"
+    }, 500); 
+  }
 
   const renderRowChildren = (rowData) => {
     return (
@@ -172,6 +186,7 @@ export const Equipment = ({
                 >
                   Процесс сварки
                 </TableCell>
+                
                 <TableCell
                   style={{
                     borderBottom: 0,
@@ -205,8 +220,8 @@ export const Equipment = ({
                   align="center"
                 >
                   Продолжительность включения/нагрузки, %
-                </TableCell>
-                <TableCell
+                </TableCell> 
+                {/* <TableCell
                   style={{
                     borderBottom: 0,
                   }}
@@ -214,7 +229,7 @@ export const Equipment = ({
                   colSpan={3}
                 >
                   Габариты
-                </TableCell>
+                </TableCell> */}
               </TableRow>
               <TableRow>
                 <TableCell />
@@ -224,9 +239,9 @@ export const Equipment = ({
                 <TableCell align="center">min</TableCell>
                 <TableCell align="center">max</TableCell>
                 <TableCell />
-                <TableCell align="center">Длина</TableCell>
+                {/* <TableCell align="center">Длина</TableCell>
                 <TableCell align="center">Высота</TableCell>
-                <TableCell align="center">Ширина</TableCell>
+                <TableCell align="center">Ширина</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -252,7 +267,7 @@ export const Equipment = ({
                 <TableCell align="center" component="th" scope="row">
                   {rowData?.activationDuration ?? "-"}
                 </TableCell>
-                <TableCell align="center" component="th" scope="row">
+                {/* <TableCell align="center" component="th" scope="row">
                   {rowData?.lenght ?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
@@ -260,7 +275,7 @@ export const Equipment = ({
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
                   {rowData?.width ?? "-"}
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableBody>
           </MaterialTable>
@@ -401,6 +416,7 @@ export const Equipment = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(1); 
+                      console.log(rowData)
                       setEquipmentNumb(rowData.id)
                       setValuetPosts(rowData.post?.id)
                     },

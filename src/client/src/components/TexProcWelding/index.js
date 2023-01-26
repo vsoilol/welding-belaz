@@ -120,9 +120,11 @@ export const TexProcWelding = ({
     },
     {
       title: "Сборочные узлы",
-      render: (rowData) => (
-        <span>Сборочный узел {rowData.technologicalInstructions[0].seam.product.number}</span>
-      ),
+      render: (rowData) => { 
+        return (
+          <span>Сборочный узел {rowData.technologicalInstructions[0]?.seam.product?.number}</span>
+        );
+      } 
     },
     {
       title: "Детали", field: "technologicalInstructions[0].seam.product.name",
@@ -133,7 +135,7 @@ export const TexProcWelding = ({
     {
       title: "Диапазоны допустимых значений контролируемых параметров (сварочный ток, напряжение на дуге)",
       render: (rowData) => (
-        <span>{rowData.technologicalInstructions[0].weldPassages[0].arcVoltageMin} - {rowData.technologicalInstructions[0].weldPassages[0].arcVoltageMax}</span>
+        <span>{rowData.technologicalInstructions[0]?.weldPassages[0]?.arcVoltageMin} - {rowData.technologicalInstructions[0]?.weldPassages[0]?.arcVoltageMax}</span>
       ),
     },
     {
@@ -155,7 +157,7 @@ export const TexProcWelding = ({
       render: (rowData) => {
         return (
           <p>
-            Cварочный шов {rowData.seam.number}
+            Cварочный шов {rowData.seam?.number}
           </p>
         );
       }
@@ -169,7 +171,7 @@ export const TexProcWelding = ({
       render: (rowData) => {
         return (
           <p>
-            {`${rowData.weldPassages[0].weldingCurrentMin} - ${rowData.weldPassages[0].weldingCurrentMax}`}
+            {`${rowData.weldPassages[0]?.weldingCurrentMin} - ${rowData.weldPassages[0]?.weldingCurrentMax}`}
           </p>
         );
       },
@@ -179,7 +181,7 @@ export const TexProcWelding = ({
       render: (rowData) => {
         return (
           <p>
-            {`${rowData.weldPassages[0].arcVoltageMin} - ${rowData.weldPassages[0].arcVoltageMax}`}
+            {`${rowData.weldPassages[0]?.arcVoltageMin} - ${rowData.weldPassages[0]?.arcVoltageMax}`}
           </p>
         );
       },
@@ -189,13 +191,121 @@ export const TexProcWelding = ({
       render: (rowData) => {
         return (
           <p>
-            {`${rowData.weldPassages[0].preheatingTemperatureMin} - ${rowData.weldPassages[0].preheatingTemperatureMax}`}
+            {`${rowData.weldPassages[0]?.preheatingTemperatureMin} - ${rowData.weldPassages[0]?.preheatingTemperatureMax}`}
           </p>
         );
       },
     }
   ]
+  const renderRowChildren = (rowData) => {
+    console.log(rowData)
+    return (
+      rowData && (
+        <TableContainer component={Paper}>
+          <MaterialTable aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  № прохода
+
+                </TableCell>
+                
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Наименование прохода
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                  colSpan={2}
+                >
+                  Температура предварительного нагрева, °С
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                  colSpan={2}
+                >
+                  Сварочный ток, А
+                </TableCell>
  
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="right"
+                >
+                  Напряжение на дуге, В
+                </TableCell>  
+              </TableRow>
+              <TableRow>
+                <TableCell />
+                <TableCell />
+                <TableCell align="center">min</TableCell>
+                <TableCell align="center">max</TableCell>
+                <TableCell align="center">min</TableCell>
+                <TableCell align="center">max</TableCell>  
+
+                <TableCell align="center">min</TableCell>
+                <TableCell align="left">max</TableCell>
+                
+
+                {/* <TableCell align="center">Длина</TableCell>
+                <TableCell align="center">Высота</TableCell>
+                <TableCell align="center">Ширина</TableCell> */}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassages[0].number?? "-"}
+                </TableCell>
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassages[0].name?? "-"}
+                </TableCell> 
+
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassages[0].preheatingTemperatureMin?? "-"}
+                </TableCell>
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassages[0].preheatingTemperatureMax?? "-"}
+                </TableCell> 
+
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassages[0].weldingCurrentMin?? "-"}
+                </TableCell>
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassages[0].weldingCurrentMax?? "-"}
+                </TableCell> 
+ 
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassages[0].arcVoltageMin?? "-"}
+                </TableCell>
+                <TableCell align="left" component="th" scope="row">
+                  {rowData?.weldPassages[0].arcVoltageMax?? "-"}
+                </TableCell> 
+               
+
+              </TableRow>
+            </TableBody>
+          </MaterialTable>
+        </TableContainer>
+      )
+    );
+  };
   //select Сварочный шов  
   const SeamOptions = seam?.map((item) => {
     return {
@@ -290,6 +400,7 @@ export const TexProcWelding = ({
             value={0}
             data={texprocwelding} 
             isLoading={isRequesting}
+            
             actions={
               userRole === "admin"
                 ? [
@@ -313,6 +424,7 @@ export const TexProcWelding = ({
                 ]
                 : []
             }
+       
             deleteAction={userRole === "admin" ? deleteEquipment : null}
           />
         </TabPanel>
@@ -357,6 +469,7 @@ export const TexProcWelding = ({
                 ]
                 : []
             }
+            renderRowChildren={renderRowChildren}
             deleteAction={userRole === "admin" ? deleteEquipment : null}
           />
         </TabPanel>

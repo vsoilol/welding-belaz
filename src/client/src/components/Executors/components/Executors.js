@@ -16,7 +16,7 @@ import TableHead from "@material-ui/core/TableHead";
 import Paper from "@material-ui/core/Paper";
 import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-
+import imgcalendar from "assets/icons/calendar.png";
 
 const useStyles = makeStyles(() => ({
   rowStyle: {
@@ -109,7 +109,7 @@ export const ExecutorsTable = ({
     {
       title: "Производственный участок",
       field: "productionArea.name",
-    },
+    }, 
   ]; 
 
 
@@ -178,6 +178,12 @@ export const ExecutorsTable = ({
         return <p>{renderValue(rowData.workplaceNumber)}</p>;
       },
     },
+    {
+      title:"Просмотреть календарь",
+      render: (rowData) => {
+        return <img onClick={e=>OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
+      },
+    }
   ];
 
   const renderRowChildren = (rowData) => { 
@@ -267,6 +273,14 @@ export const ExecutorsTable = ({
     );
   };
 
+  function OpenCalendar(rowData){ 
+    window.localStorage.setItem("executorId",rowData.id)   
+    window.localStorage.setItem("executor",`Сварщик: ${rowData.middleName} ${rowData.firstName} ${rowData.lastName}`)   
+    window.localStorage.removeItem("equipmentId")   
+    setTimeout(() => {
+      window.location.href="/calendar"
+    }, 500); 
+  }
 
   const optworkshop = workshop?.map((item) => {
     return {
@@ -432,7 +446,7 @@ export const ExecutorsTable = ({
         />
       </div>
 
-      <a className={styles.refCalendar} href="/calendar">Просмотреть календарь</a>
+      
  
  
 

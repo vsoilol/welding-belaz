@@ -45,6 +45,11 @@
   background-color: #3f51b5;
   width: fit-content;
 }
+
+.imgcalendar{
+  width: 30px; 
+  cursor: pointer;
+}
 @media (max-width: 1440px) {
   .tableWrapper {
     margin-top: 40px;

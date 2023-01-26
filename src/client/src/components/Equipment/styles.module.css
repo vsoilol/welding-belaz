@@ -53,7 +53,10 @@
 .button:hover {
   text-decoration: underline;
 }
-
+.imgcalendar{
+  width: 30px; 
+  cursor: pointer;
+}
 @media (max-width: 1440px) {
   .tableWrapper {
     margin-top: 40px;

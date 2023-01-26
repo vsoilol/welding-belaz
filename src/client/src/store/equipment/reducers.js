@@ -23,7 +23,7 @@ const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
   };
 }; 
 
-const editEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
+const editEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => { 
   window.location.reload()
   return {
     ...state,

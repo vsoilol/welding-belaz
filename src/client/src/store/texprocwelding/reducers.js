@@ -36,7 +36,7 @@ const addInstSuccess = (state = INITIAL_STATE, { instructions }) => {
   return {
     ...state,
     isRequesting: false,
-    instructions,
+    instructions: [...state.instructions, instructions],
   };
 };
 

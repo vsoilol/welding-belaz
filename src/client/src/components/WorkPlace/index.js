@@ -37,6 +37,9 @@ const dateOptions = {
 };
 
 export const WorkPlace = ({
+  addFixedProduct,
+  loadMasters,
+  loadTechs,
   ///Workshop
   loadWorkshop,
   addWorkshop,
@@ -76,6 +79,7 @@ export const WorkPlace = ({
   deleteEquipment,
   isRequesting,
   masters,
+  techs,
   userRole,
 
 
@@ -87,9 +91,17 @@ export const WorkPlace = ({
   knot,
   detail,
   seam,
-  texprocwelding
+  texprocwelding,
+
+  executors,
+  loadExecutors,
+
+
+  detailbyinspector,
+  getDetailByInspector
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalSeamOpen, setIsModalSeamOpen] = useState(false);
   const [isModalNumb, setIsModalNumb] = useState(0);
 
   const [modalData, setModalData] = useState(null);
@@ -105,7 +117,27 @@ export const WorkPlace = ({
   const [valuetSeam, setValuetSeam] = useState();
   const [valueWorkplace, setValueWorkplace] = useState();
 
-  
+
+  const [isModalFixProduct, setIsModalFixOpen] = useState(false);
+  const [isModalFixKnot, setIsModalFixKnotOpen] = useState(false);
+  const [isModalFixDetail, setIsModalFixDetailOpen] = useState(false);
+  const [isModalFixSeam, setIsModalFixSeamOpen] = useState(false);
+
+
+  const [masterValue, setIsmasterValue] = useState(0);
+  const [valueIdProduct, setvalueIdProduct] = useState(0);
+  const [valueSeamId, setvalueSeamId] = useState(0);
+  const [techsValue, setIstechsValue] = useState(0);
+  const [valueExecutors, setValueExecutors] = useState(1);
+
+  const [valueTypeFixed, setValueTypeFixed] = useState(0);
+
+
+  const [isModalDisplayFix, setIsModalDisplayFix] = useState(false);
+
+
+
+
 
 
   const initialValues = {
@@ -118,16 +150,25 @@ export const WorkPlace = ({
     workplaceNumber: modalData?.productionInfo?.workplaceNumber ?? "",
     technologicalProcessname: modalData?.technologicalProcess?.name ?? "",
     technologicalProcessnumber: modalData?.technologicalProcess?.number ?? "",
-
-
-
   };
 
 
   const formattedMasters = masters?.map((item) => {
     return {
-      value: item.masterId,
-      label: `${item.surname} ${item.name}`,
+      value: item.id,
+      label: `${item.middleName} ${item.firstName}`,
+    };
+  });
+  const formattedTechs = techs?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName}`,
+    };
+  });
+  const formattedWelder = executors?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName}`,
     };
   });
 
@@ -141,6 +182,11 @@ export const WorkPlace = ({
     loadDetail();
     loadSeam();
     loadTexprocwelding();
+    loadMasters();
+    loadTechs();
+    loadExecutors();
+
+
   }, [
     loadWorkshop,
     loadArea,
@@ -149,7 +195,11 @@ export const WorkPlace = ({
     loadProduct,
     loadKnot,
     loadDetail,
-    loadTexprocwelding
+    loadTexprocwelding,
+    loadMasters,
+    loadTechs,
+    loadExecutors,
+
   ]);
 
   //////////////////////////////////////////////////////////////////// 
@@ -222,6 +272,18 @@ export const WorkPlace = ({
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p onClick={e => onClickFixedGoods(rowData.id)} className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      {
+        title: "Просмотреть закрепленные",
+        render: (rowData) => {
+          return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+        },
+      },
     ],
     node: [
       {
@@ -246,6 +308,18 @@ export const WorkPlace = ({
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p onClick={e => onClickFixedKnot(rowData.id)} className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      {
+        title: "Просмотреть закрепленные",
+        render: (rowData) => {
+          return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+        },
+      },
     ],
     details: [
       {
@@ -269,6 +343,18 @@ export const WorkPlace = ({
       },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p onClick={e => onClickFixedDetails(rowData.id)} className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      {
+        title: "Просмотреть закрепленные",
+        render: (rowData) => {
+          return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+        },
       },
     ],
     welding_seam: [
@@ -297,8 +383,43 @@ export const WorkPlace = ({
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
+      {
+        title: "Закрепить задание",
+        render: (rowData) => {
+          return <p onClick={e => onClickFixedSeam(rowData.id)} className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      {
+        title: "Просмотреть закрепленные",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Просмотреть</p>;
+        },
+      },
     ],
   };
+
+
+  function onClickFixedGoods(id) {
+    setValueTypeFixed(1)
+    setIsModalFixOpen(true);
+    setvalueIdProduct(id);
+  }
+  function onClickFixedKnot(id) {
+    setValueTypeFixed(2)
+    setIsModalFixKnotOpen(true);
+    setvalueIdProduct(id);
+  }
+  function onClickFixedDetails(id) {
+    setValueTypeFixed(3)
+    setIsModalFixDetailOpen(true);
+    setvalueIdProduct(id);
+  }
+  function onClickFixedSeam(id) {
+    setValueTypeFixed(4)
+    setIsModalFixSeamOpen(true);
+    setvalueSeamId(id);
+  }
+
 
 
   const requiredKeys = ["name", "nextInspectionDate"];
@@ -308,20 +429,21 @@ export const WorkPlace = ({
   };
 
   const [value_panel, setValue] = useState(0);
- 
-  
- 
 
-  const ChangePanels = (event, newValue) => { 
+
+
+
+  const ChangePanels = (event, newValue) => {
     setValue(newValue);
   };
 
 
-  
+
+
 
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
-     
+
     return <div hidden={value !== indPanel}>{children}</div>;
   };
 
@@ -342,22 +464,22 @@ export const WorkPlace = ({
         }
       }
     }
-     ///post
-     if (index === 2) {
+    ///post
+    if (index === 2) {
       for (let index = 0; index < posts.length; index++) {
         if (posts[index].id === valueId) {
           return posts[index].number
         }
       }
     }
-     ///texprocwelding
-     if (index === 3) {
+    ///texprocwelding
+    if (index === 3) {
       for (let index = 0; index < texprocwelding.length; index++) {
         if (texprocwelding[index].id === valueId) {
           return texprocwelding[index].number
         }
       }
-    } 
+    }
     ///texprocwelding
     if (index === 4) {
       for (let index = 0; index < texprocwelding.length; index++) {
@@ -365,8 +487,8 @@ export const WorkPlace = ({
           return texprocwelding[index].name
         }
       }
-    }  
-  } 
+    }
+  }
 
   //Запрос на редактирование или добавление
   function SendData(variables) {
@@ -376,15 +498,15 @@ export const WorkPlace = ({
     variables["productionAreaId"] = valuetPosts
     variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
 
-    variables["postId"] = valuetWorkPlace 
+    variables["postId"] = valuetWorkPlace
     variables["postNumber"] = SetValue(valuetWorkPlace, 2)
 
     variables["technologicalProcessId"] = valuetTechProc
     variables["technologicalProcessNumber"] = SetValue(valuetTechProc, 3)
     variables["technologicalProcessName"] = SetValue(valuetTechProc, 4)
-    
-    variables["workplaceId"] = valueWorkplace  
- 
+
+    variables["workplaceId"] = valueWorkplace
+
     //Добавить Цех 
     if (isModalNumb == 8) {
       addWorkshop(variables)
@@ -456,7 +578,7 @@ export const WorkPlace = ({
     if (isModalNumb == 7) {
       editSeam(variables)
     }
- 
+
   }
 
   ///Изменение заголовка модалки
@@ -512,6 +634,44 @@ export const WorkPlace = ({
     }
   }
 
+
+
+  const exec = [
+    {
+      id: 1,
+      name: "Мастера"
+    },
+    {
+      id: 2,
+      name: "Контролеры"
+    },
+  ]
+
+  const exec2 = [
+    {
+      id: 1,
+      name: "Сварщики"
+    },
+    {
+      id: 2,
+      name: "Контролеры"
+    },
+  ]
+
+  //Select выбор сотрудника
+  const optExecutors = exec?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  //Select выбор сотрудника
+  const optWelders = exec2?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
 
   //select Производственные участки  
 
@@ -635,17 +795,17 @@ export const WorkPlace = ({
       return (
         <div>
           <div className={styles.row}>
-              <Select
-                name="valueWorkplace"
-                value={valueWorkplace}
-                width="380px"
-                placeholder="Рабочее место"
-                onChange={(event) => {
-                  setValueWorkplace(event.value)
-                }}
-                options={workplaceIdOptions}
-              />
-          </div> 
+            <Select
+              name="valueWorkplace"
+              value={valueWorkplace}
+              width="380px"
+              placeholder="Рабочее место"
+              onChange={(event) => {
+                setValueWorkplace(event.value)
+              }}
+              options={workplaceIdOptions}
+            />
+          </div>
 
           <div className={styles.row}>
             <Select
@@ -680,13 +840,46 @@ export const WorkPlace = ({
               onChange={(event) => setValuetSeam(event.value)}
               options={SeamOptions}
             />
-          </div> 
+          </div>
 
-        </div> 
+        </div>
       )
     }
   }
-  
+
+  function FixedProduct(param, valEx) {
+
+    param["valEx"] = valueExecutors
+    param["masterId"] = masterValue
+    param["inspectorId"] = techsValue
+    param["productId"] = valueIdProduct
+    param["seamId"] = valueSeamId
+    if (valueTypeFixed === 1) {
+      addProduct(param)
+    }
+    if (valueTypeFixed === 2) {
+      addKnot(param)
+    }
+    if (valueTypeFixed === 3) {
+      addDetail(param)
+    }
+    if (valueTypeFixed === 4) {
+      addSeam(param)
+    }
+  }
+
+
+
+  function displayFixedProd() {
+    if (valueExecutors === 1) {
+      
+    } 
+    if (valueExecutors === 2) {
+      getDetailByInspector(techsValue)
+      console.log(detailbyinspector)
+    } 
+  }
+
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -747,9 +940,9 @@ export const WorkPlace = ({
                     tooltip: "Редактировать цех",
                     onClick: (event, rowData) => {
                       setModalData(rowData);
-                      setIsModalOpen(true); 
+                      setIsModalOpen(true);
                       setIsModalNumb(0);
-                      
+
                     },
                   },
                 ]
@@ -784,7 +977,7 @@ export const WorkPlace = ({
                       setValueProdArea("")
                       setValuetTechProc("")
                       setValuetPosts("")
-                      setValuetWorkPlace("") 
+                      setValuetWorkPlace("")
                     },
                   },
                   {
@@ -794,7 +987,7 @@ export const WorkPlace = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(1)
-                      setValueProdArea(rowData.workshop.id) 
+                      setValueProdArea(rowData.workshop.id)
                     },
                   },
                 ]
@@ -823,10 +1016,12 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить пост",
                     isFreeAction: true,
-                    onClick: () => { setIsModalOpen(true); setIsModalNumb(10) ; setValueProdArea("")
-                    setValuetTechProc("")
-                    setValuetPosts("")
-                    setValuetWorkPlace("") },
+                    onClick: () => {
+                      setIsModalOpen(true); setIsModalNumb(10); setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("")
+                    },
                   },
                   {
                     icon: "edit",
@@ -834,8 +1029,8 @@ export const WorkPlace = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(2) 
-                      setValuetPosts(rowData.productionArea.id) 
+                      setIsModalNumb(2)
+                      setValuetPosts(rowData.productionArea.id)
                     },
                   },
                 ]
@@ -864,14 +1059,14 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить рабочее место",
                     isFreeAction: true,
-                    onClick: () => { 
-                      setIsModalOpen(true); 
-                      setIsModalNumb(11) 
+                    onClick: () => {
+                      setIsModalOpen(true);
+                      setIsModalNumb(11)
 
                       setValueProdArea("")
                       setValuetTechProc("")
                       setValuetPosts("")
-                      setValuetWorkPlace("") 
+                      setValuetWorkPlace("")
                     },
                   },
                   {
@@ -880,13 +1075,13 @@ export const WorkPlace = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(3) 
+                      setIsModalNumb(3)
 
                       console.log(rowData)
                       setValueProdArea(rowData.workshop?.id)
                       setValuetTechProc(rowData.technologicalProcess?.id)
                       setValuetPosts(rowData.productionArea?.id)
-                      setValuetWorkPlace(rowData.workplace?.id) 
+                      setValuetWorkPlace(rowData.workplace?.id)
                     },
                   },
                 ]
@@ -915,14 +1110,14 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить изделие",
                     isFreeAction: true,
-                    onClick: () => { 
-                      setIsModalOpen(true); 
-                      setIsModalNumb(12) 
+                    onClick: () => {
+                      setIsModalOpen(true);
+                      setIsModalNumb(12)
 
                       setValueProdArea("")
                       setValuetTechProc("")
-                      setValuetPosts("") 
-                      setValueWorkplace("")  
+                      setValuetPosts("")
+                      setValueWorkplace("")
 
                     },
                   },
@@ -932,14 +1127,12 @@ export const WorkPlace = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(4) 
-
-                      console.log(rowData)
+                      setIsModalNumb(4)
 
                       setValueProdArea(rowData.workshop?.id)
                       setValuetTechProc(rowData.technologicalProcess?.id)
                       setValuetPosts(rowData.productionArea?.id)
-                      setValueWorkplace(rowData.workplace?.id)  
+                      setValueWorkplace(rowData.workplace?.id)
                     },
                   },
                 ]
@@ -967,13 +1160,13 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить узел",
                     isFreeAction: true,
-                    onClick: () => { 
-                      setIsModalOpen(true); 
+                    onClick: () => {
+                      setIsModalOpen(true);
                       setIsModalNumb(13);
                       setValueProdArea("")
                       setValuetTechProc("")
                       setValuetPosts("")
-                      setValuetWorkPlace("") 
+                      setValuetWorkPlace("")
                     },
                   },
                   {
@@ -986,7 +1179,7 @@ export const WorkPlace = ({
                       setValueProdArea(rowData.workshop?.id)
                       setValuetTechProc(rowData.technologicalProcess?.id)
                       setValuetPosts(rowData.productionArea?.id)
-                      setValuetWorkPlace(rowData.workplace?.id) 
+                      setValuetWorkPlace(rowData.workplace?.id)
                     },
                   },
                 ]
@@ -1014,13 +1207,13 @@ export const WorkPlace = ({
                     icon: "add",
                     tooltip: "Добавить деталь",
                     isFreeAction: true,
-                    onClick: () => { 
-                      setIsModalOpen(true); 
+                    onClick: () => {
+                      setIsModalOpen(true);
                       setIsModalNumb(14);
                       setValueProdArea("")
                       setValuetTechProc("")
                       setValuetPosts("")
-                      setValuetWorkPlace("") 
+                      setValuetWorkPlace("")
                     },
                   },
                   {
@@ -1033,7 +1226,7 @@ export const WorkPlace = ({
                       setValueProdArea(rowData.workshop?.id)
                       setValuetTechProc(rowData.technologicalProcess?.id)
                       setValuetPosts(rowData.productionArea?.id)
-                      setValuetWorkPlace(rowData.workplace?.id) 
+                      setValuetWorkPlace(rowData.workplace?.id)
                     },
                   },
                 ]
@@ -1055,13 +1248,20 @@ export const WorkPlace = ({
             data={seam}
             isLoading={isRequesting}
             actions={
-              userRole === "admin"
+              userRole === "Admin"
                 ? [
                   {
                     icon: "add",
                     tooltip: "Добавить шов",
                     isFreeAction: true,
-                    onClick: () => { setIsModalOpen(true); setIsModalNumb(15) },
+                    onClick: () => {
+                      setIsModalOpen(true);
+                      setIsModalNumb(15);
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("")
+                    },
                   },
                   {
                     icon: "edit",
@@ -1070,6 +1270,10 @@ export const WorkPlace = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(7)
+                      setValueProdArea(rowData.workshop?.id)
+                      setValuetTechProc(rowData.technologicalProcess?.id)
+                      setValuetPosts(rowData.productionArea?.id)
+                      setValuetWorkPlace(rowData.workplace?.id)
                     },
                   },
                 ]
@@ -1149,9 +1353,9 @@ export const WorkPlace = ({
                   <div className={styles.row}>
                     <Button
                       disabled={
-                        values.number==""||values.name=="" 
+                        values.number == "" || values.name == ""
                       }
-                        type="submit"
+                      type="submit"
                     >
                       {modalData ? "Сохранить" : "Создать"}
                     </Button>
@@ -1209,8 +1413,8 @@ export const WorkPlace = ({
                     <Button
                       type="submit"
                       disabled={
-                        values.number==""||values.name==""||valueWorkplace==""||
-                        valuetTechProc==""||valuetPosts==""
+                        values.number == "" || values.name == "" || valueWorkplace == "" ||
+                        valuetTechProc == "" || valuetPosts == ""
                       }
                     >
                       {modalData ? "Сохранить" : "Создать"}
@@ -1225,6 +1429,420 @@ export const WorkPlace = ({
 
       </ModalWindow>
 
+
+
+
+      {/*Закрепить  изделие*/}
+      <ModalWindow
+        isOpen={isModalFixProduct}
+        headerText="Закрепить  изделие"
+        setIsOpen={(state) => {
+          setIsModalFixOpen(state);
+          setModalData(null);
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setIsModalFixOpen(false);
+            setModalData(null);
+            FixedProduct(variables, valueExecutors)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <div className={styles.row}>
+                <Select
+                  name="valueExecutors"
+                  width="380px"
+                  value={valueExecutors}
+                  placeholder="Сотрудники"
+                  onChange={(event) => setValueExecutors(event.value)}
+                  options={optExecutors}
+                />
+              </div>
+
+
+              {valueExecutors === 1
+                ? (
+                  <div className={styles.row}>
+                    <Select
+                      name="masterValue"
+                      width="380px"
+                      value={masterValue}
+                      placeholder="Мастера"
+                      onChange={(event) => setIsmasterValue(event.value)}
+                      options={formattedMasters}
+                    />
+                  </div>
+                )
+                : (
+                  <div className={styles.row}>
+                    <Select
+                      name="techsValue"
+                      width="380px"
+                      value={techsValue}
+                      placeholder="Контролеры"
+                      onChange={(event) => setIstechsValue(event.value)}
+                      options={formattedTechs}
+                    />
+                  </div>
+                )
+              }
+
+
+              <div className={styles.row}>
+                <Button
+                  disabled={
+                    values.workDay == ""
+                  }
+                  type="submit"
+                >
+                  {modalData ? "Закрепить" : "Закрепить"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+      {/*Закрепить  узел*/}
+      <ModalWindow
+        isOpen={isModalFixKnot}
+        headerText="Закрепить  узел"
+        setIsOpen={(state) => {
+          setIsModalFixKnotOpen(state);
+          setModalData(null);
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setIsModalFixKnotOpen(false);
+            setModalData(null);
+            FixedProduct(variables, valueExecutors)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div className={styles.row}>
+                <Select
+                  name="valueExecutors"
+                  width="380px"
+                  value={valueExecutors}
+                  placeholder="Сотрудники"
+                  onChange={(event) => setValueExecutors(event.value)}
+                  options={optExecutors}
+                />
+              </div>
+              {valueExecutors === 1 && valueExecutors != 0
+                ? (
+                  <div className={styles.row}>
+                    <Select
+                      name="masterValue"
+                      width="380px"
+                      value={masterValue}
+                      placeholder="Мастера"
+                      onChange={(event) => setIsmasterValue(event.value)}
+                      options={formattedMasters}
+                    />
+                  </div>
+                )
+                : (
+                  <div className={styles.row}>
+                    <Select
+                      name="techsValue"
+                      width="380px"
+                      value={techsValue}
+                      placeholder="Контролеры"
+                      onChange={(event) => setIstechsValue(event.value)}
+                      options={formattedTechs}
+                    />
+                  </div>
+                )
+              }
+
+
+              <div className={styles.row}>
+                <Button
+                  disabled={
+                    values.workDay == ""
+                  }
+                  type="submit"
+                >
+                  {modalData ? "Закрепить" : "Закрепить"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+      {/*Закрепить  деталь*/}
+      <ModalWindow
+        isOpen={isModalFixDetail}
+        headerText="Закрепить  деталь"
+        setIsOpen={(state) => {
+          setIsModalFixDetailOpen(state);
+          setModalData(null);
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setIsModalFixDetailOpen(false);
+            setModalData(null);
+            FixedProduct(variables, valueExecutors)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div className={styles.row}>
+                <Select
+                  name="valueExecutors"
+                  width="380px"
+                  value={valueExecutors}
+                  placeholder="Сотрудники"
+                  onChange={(event) => setValueExecutors(event.value)}
+                  options={optExecutors}
+                />
+              </div>
+              {valueExecutors === 1 && valueExecutors != 0
+                ? (
+                  <div className={styles.row}>
+                    <Select
+                      name="masterValue"
+                      width="380px"
+                      value={masterValue}
+                      placeholder="Мастера"
+                      onChange={(event) => setIsmasterValue(event.value)}
+                      options={formattedMasters}
+                    />
+                  </div>
+                )
+                : (
+                  <div className={styles.row}>
+                    <Select
+                      name="techsValue"
+                      width="380px"
+                      value={techsValue}
+                      placeholder="Контролеры"
+                      onChange={(event) => setIstechsValue(event.value)}
+                      options={formattedTechs}
+                    />
+                  </div>
+                )
+              }
+
+
+              <div className={styles.row}>
+                <Button
+                  disabled={
+                    values.workDay == ""
+                  }
+                  type="submit"
+                >
+                  {modalData ? "Закрепить" : "Закрепить"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+      {/*Закрепить  швов*/}
+      <ModalWindow
+        isOpen={isModalFixSeam}
+        headerText="Закрепить  шов"
+        setIsOpen={(state) => {
+          setIsModalFixSeamOpen(state);
+          setModalData(null);
+
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setIsModalFixSeamOpen(false);
+            setModalData(null);
+            FixedProduct(variables, valueExecutors)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div className={styles.row}>
+                <Select
+                  name="valueExecutors"
+                  width="380px"
+                  value={valueExecutors}
+                  placeholder="Сотрудники"
+                  onChange={(event) => setValueExecutors(event.value)}
+                  options={optWelders}
+                />
+              </div>
+              {valueExecutors === 1 && valueExecutors != 0
+                ? (
+                  <div className={styles.row}>
+                    <Select
+                      name="masterValue"
+                      width="380px"
+                      value={masterValue}
+                      placeholder="Сварщики"
+                      onChange={(event) => setIsmasterValue(event.value)}
+                      options={formattedWelder}
+                    />
+                  </div>
+                )
+                : (
+                  <div className={styles.row}>
+                    <Select
+                      name="techsValue"
+                      width="380px"
+                      value={techsValue}
+                      placeholder="Контролеры"
+                      onChange={(event) => setIstechsValue(event.value)}
+                      options={formattedTechs}
+                    />
+                  </div>
+                )
+              }
+
+
+              <div className={styles.row}>
+                <Button
+                  disabled={
+                    values.workDay == ""
+                  }
+                  type="submit"
+                >
+                  {modalData ? "Закрепить" : "Закрепить"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+
+
+
+      {/*Показать Закрепленые изделия*/}
+      <ModalWindow
+        isOpen={isModalDisplayFix}
+        headerText="Закрепленные детали"
+        setIsOpen={(state) => {
+          setIsModalDisplayFix(state);
+          setModalData(null);
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setIsModalDisplayFix(false);
+            setModalData(null);
+           
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <div>
+              <div className={styles.row}>
+                <Select
+                  name="valueExecutors"
+                  width="380px"
+                  value={valueExecutors}
+                  placeholder="Сотрудники"
+                  onChange={(event) => setValueExecutors(event.value)}
+                  options={optExecutors}
+                />
+              </div>
+
+
+              {valueExecutors === 1
+                ? (
+                  <div className={styles.row}>
+                    <Select
+                      name="masterValue"
+                      width="380px"
+                      value={masterValue}
+                      placeholder="Мастера"
+                      onChange={(event) => setIsmasterValue(event.value)}
+                      options={formattedMasters}
+                    />
+                  </div>
+                )
+                : (
+                  <div className={styles.row}>
+                    <Select
+                      name="techsValue"
+                      width="380px"
+                      value={techsValue}
+                      placeholder="Контролеры"
+                      onChange={(event) => setIstechsValue(event.value)}
+                      options={formattedTechs}
+                    />
+                  </div>
+                )
+              }
+
+                <div className={styles.row}>
+                  <Button 
+                    type="submit"
+                    disabled={
+                      masterValue == "" &&  techsValue == ""
+                    }
+                    onClick={displayFixedProd}
+                >
+                  {modalData ? "Показать " : "Показать"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </Formik>
+      </ModalWindow>
       {/* <div className={styles.row}>
         <Input
           onChange={(e) => {

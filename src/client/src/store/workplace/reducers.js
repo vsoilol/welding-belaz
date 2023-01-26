@@ -139,7 +139,6 @@ const editWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
 
 
 
-
 ///Изделия
 const loadProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
@@ -155,13 +154,13 @@ const addProductSuccess = (state = INITIAL_STATE, { product }) => {
     product: [...state.product, product],
   };
 };
-const editProductSuccess = (state = INITIAL_STATE, { product }) => { 
-  
+const editProductSuccess = (state = INITIAL_STATE, { product }) => {
+
   return {
     ...state,
     isRequesting: false,
-    product: state.product.map((item,index) => item.id === product.id?state.product[index]=product:item)
-  }; 
+    product: state.product.map((item, index) => item.id === product.id ? state.product[index] = product : item)
+  };
 };
 ///Узлы
 const loadKnotSuccess = (state = INITIAL_STATE, { knot }) => {
@@ -178,11 +177,11 @@ const addKnotSuccess = (state = INITIAL_STATE, { knot }) => {
     knot: [...state.knot, knot],
   };
 };
-const editKnotSuccess = (state = INITIAL_STATE, { knot }) => { 
+const editKnotSuccess = (state = INITIAL_STATE, { knot }) => {
   return {
     ...state,
     isRequesting: false,
-    knot: state.knot.map((item,index) => item.id === knot.id?state.knot[index]=knot:item)
+    knot: state.knot.map((item, index) => item.id === knot.id ? state.knot[index] = knot : item)
   };
 };
 ///Детали
@@ -204,7 +203,7 @@ const editDetailSuccess = (state = INITIAL_STATE, { detail }) => {
   return {
     ...state,
     isRequesting: false,
-    detail: state.detail.map((item,index) => item.id === detail.id?state.detail[index]=detail:item)
+    detail: state.detail.map((item, index) => item.id === detail.id ? state.detail[index] = detail : item)
   };
 };
 ///Сварные швы
@@ -226,7 +225,7 @@ const editSeamSuccess = (state = INITIAL_STATE, { seam }) => {
   return {
     ...state,
     isRequesting: false,
-    seam: [...state.seam, seam],
+    seam: state.seam.map((item, index) => item.id === seam.id ? state.seam[index] = seam : item)
   };
 };
 ///Технологические процессы 
@@ -237,8 +236,14 @@ const loadTexprocweldingSuccess = (state = INITIAL_STATE, { texprocwelding }) =>
     texprocwelding,
   };
 };
-
-
+///Закрепленные детали  за инспектором
+const loadDetailbyinspectorSuccess = (state = INITIAL_STATE, { detailbyinspector }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    detailbyinspector,
+  };
+};
 
 const failure = (state = INITIAL_STATE, { error }) => {
   console.log(error)
@@ -351,6 +356,12 @@ export const HANDLERS = {
   [Types.LOAD_TEXPROCWELDING_REQUEST]: request,
   [Types.LOAD_TEXPROCWELDING_SUCCESS]: loadTexprocweldingSuccess,
   [Types.LOAD_TEXPROCWELDING_FAILURE]: failure,
+
+
+  ///Закрепленные детали  за инспектором
+  [Types.LOAD_DETAILBYINSPECTOR_REQUEST]: request,
+  [Types.LOAD_DETAILBYINSPECTOR_SUCCESS]: loadDetailbyinspectorSuccess,
+  [Types.LOAD_DETAILBYINSPECTOR_FAILURE]: failure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

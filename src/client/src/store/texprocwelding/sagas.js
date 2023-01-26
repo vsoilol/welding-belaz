@@ -61,11 +61,11 @@ function* loadInstructions() {
 }
 
 function* addInst(variables) {
-  try {  
+  try {   
     const { data } = yield call(api.post, `/TechnologicalInstruction`, {
       "number": Number(variables.payload.number),
       "name": variables.payload.name,
-      "seamId": "4140c6a7-2ecd-4baf-a33f-2cbed1c1f933",
+      "seamId": variables.payload.seamId,
       "technologicalProcessId": variables.payload.technologicalProcessId,
       "weldPassages": [
         {
@@ -79,7 +79,8 @@ function* addInst(variables) {
         }
       ]
     });
-    yield put(addInstSuccess(variables.payload));
+    window.location.reload();
+    // yield put(addInstSuccess(variables.payload));
   } catch (error) {
     yield put(addInstFailure(error));
     yield put(setError(error.message));
