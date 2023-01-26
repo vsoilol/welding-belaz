@@ -1,11 +1,14 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
+﻿
+
+using System.Net;
+using System.Text.Json;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using Belaz.WeldingApp.WeldingApi.Domain.Exceptions;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
+using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -22,9 +25,10 @@ public class DayController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(DayDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<DayDto?>> CreateAsync([FromBody] CreateDayWithYearRequest request)
+    public async Task<ActionResult<DayDto>> CreateAsync([FromBody] CreateDayWithYearRequest request)
     {
-        return await _dayService.CreateAsync(request);
+        var result = await _dayService.CreateAsync(request);
+        return result.ToOk();
     }
 
     [HttpPut]

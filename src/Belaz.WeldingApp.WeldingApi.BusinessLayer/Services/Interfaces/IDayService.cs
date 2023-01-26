@@ -1,11 +1,12 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface IDayService
 {
-    Task<DayDto> CreateAsync(CreateDayWithYearRequest request);
+    Task<Result<DayDto>> CreateAsync(CreateDayWithYearRequest request);
     
     Task<List<DayDto>> GetAllMainAsync();
     

@@ -1,6 +1,10 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
+﻿using FluentValidation.Results;
+using LanguageExt;
+using LanguageExt.Common;
+
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 
 public interface IValidationService
 {
-    Task ValidateAsync<T>(T entity);
+    Task<Result<Unit>> ValidateAsync<T>(T entity);
 }
