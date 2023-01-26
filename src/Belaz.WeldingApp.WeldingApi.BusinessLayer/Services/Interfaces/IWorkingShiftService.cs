@@ -5,9 +5,9 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface IWorkingShiftService
 {
-    Task<WorkingShiftDto?> CreateAsync(CreateWorkingShiftWithYearRequest request);
+    Task<WorkingShiftDto> CreateAsync(CreateWorkingShiftWithYearRequest request);
     
-    Task<WorkingShiftDto?> UpdateAsync(UpdateWorkingShiftRequest request);
+    Task<WorkingShiftDto> UpdateAsync(UpdateWorkingShiftRequest request);
     
     Task CreateRangeAsync(List<CreateWorkingShiftRequest> values, Guid calendarId);
 }

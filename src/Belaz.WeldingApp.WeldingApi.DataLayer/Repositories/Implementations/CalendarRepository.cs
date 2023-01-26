@@ -18,60 +18,70 @@ public class CalendarRepository : ICalendarRepository
         _mapper = mapper;
     }
 
-    public async Task<bool> UpdateAsync(Calendar entity)
+    public async Task<CalendarDto> CreateAsync(Calendar calendar, List<Day>? days, List<WorkingShift> workingShifts)
     {
-        var updatedCalendar = await _context.Calendars
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id);
+        var createdCalendar = _context.Calendars.Add(calendar).Entity;
 
-        if (updatedCalendar is null)
+        if (days is not null)
         {
-            return false;
+            days.ForEach(_ => _.CalendarId = createdCalendar.Id);
+            _context.Days.AddRange(days);
         }
 
-        updatedCalendar.Year = entity.Year;
+        workingShifts.ForEach(_ => _.CalendarId = createdCalendar.Id);
+        _context.WorkingShifts.AddRange(workingShifts);
 
         await _context.SaveChangesAsync();
 
-        return true;
+        return await GetByIdAsync(createdCalendar.Id);
     }
 
-    public Task<CalendarDto?> GetByIdAsync(Guid id)
+    public async Task<CalendarDto> UpdateAsync(Calendar calendar)
+    {
+        var updatedCalendar = (await _context.Calendars
+            .FirstOrDefaultAsync(_ => _.Id == calendar.Id))!;
+
+        updatedCalendar.Year = calendar.Year;
+
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(calendar.Id);
+    }
+
+    public Task<CalendarDto?> GetMainCalendarByYearAsync(int year)
     {
         return _context.Calendars
-            .Where(_ => _.Id == id)
+            .Where(_ => _.IsMain == true && _.Year == year)
+            .OrderByDescending(_ => _.Year)
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
 
-    public Task<List<CalendarDto>> GetAllAsync()
+    public Task<CalendarDto?> GetByWelderIdAndYearAsync(Guid welderId, int year)
     {
         return _context.Calendars
+            .Where(_ => _.IsMain == false 
+                                      && _.WelderId == welderId 
+                                      && _.Year == year)
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .FirstOrDefaultAsync();
     }
 
-    public Task<IQueryable<Calendar>> AddAsync(Guid id)
+    public Task<CalendarDto?> GetByEquipmentIdAndYearAsync(Guid weldingEquipmentId, int year)
     {
-        throw new NotImplementedException();
+        return _context.Calendars
+            .Where(_ => _.IsMain == false 
+                        && _.WeldingEquipmentId == weldingEquipmentId 
+                        && _.Year == year)
+            .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
-    public Task<IQueryable<Calendar>> UpdateAsync(Guid id)
+    public Task<CalendarDto> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<IQueryable<Calendar>> GetMainCalendarByYearAsync(int year)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IQueryable<Calendar>> GetByWelderIdAsync(int year, Guid welderId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IQueryable<Calendar>> GetByEquipmentIdAsync(int year, Guid weldingEquipmentId)
-    {
-        throw new NotImplementedException();
+        return _context.Calendars
+            .Where(_ => _.Id == id)
+            .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
     }
 }

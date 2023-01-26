@@ -21,7 +21,7 @@ public class DayService : IDayService
         _dayRepository = dayRepository;
     }
 
-    public async Task<DayDto?> CreateAsync(CreateDayWithYearRequest request)
+    public async Task<DayDto> CreateAsync(CreateDayWithYearRequest request)
     {
         await _validationService.ValidateAsync(request);
 
@@ -46,7 +46,7 @@ public class DayService : IDayService
         return _dayRepository.GetAllByWelderIdAsync(equipmentId);
     }
 
-    public async Task<DayDto?> UpdateAsync(UpdateDayRequest request)
+    public async Task<DayDto> UpdateAsync(UpdateDayRequest request)
     {
         await _validationService.ValidateAsync(request);
 

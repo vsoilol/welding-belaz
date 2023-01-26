@@ -5,7 +5,7 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface IDayService
 {
-    Task<DayDto?> CreateAsync(CreateDayWithYearRequest request);
+    Task<DayDto> CreateAsync(CreateDayWithYearRequest request);
     
     Task<List<DayDto>> GetAllMainAsync();
     
@@ -13,7 +13,7 @@ public interface IDayService
     
     Task<List<DayDto>> GetAllByEquipmentIdAsync(Guid equipmentId);
     
-    Task<DayDto?> UpdateAsync(UpdateDayRequest request);
+    Task<DayDto> UpdateAsync(UpdateDayRequest request);
     
     Task CreateRangeAsync(List<CreateDayRequest> values, Guid calendarId);
 }

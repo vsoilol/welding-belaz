@@ -5,17 +5,15 @@ namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 
 public interface ICalendarRepository
 {
-    Task<CalendarDto?> GetByIdAsync(Guid id);
+    Task<CalendarDto> CreateAsync(Calendar calendar, List<Day>? days, List<WorkingShift> workingShifts);
 
-    Task<List<CalendarDto>> GetAllAsync();
+    Task<CalendarDto> UpdateAsync(Calendar calendar);
 
-    Task<IQueryable<Calendar>> AddAsync(Guid id);
+    Task<CalendarDto?> GetMainCalendarByYearAsync(int year);
 
-    Task<IQueryable<Calendar>> UpdateAsync(Guid id);
+    Task<CalendarDto?> GetByWelderIdAndYearAsync(Guid welderId, int year);
 
-    Task<IQueryable<Calendar>> GetMainCalendarByYearAsync(int year);
-
-    Task<IQueryable<Calendar>> GetByWelderIdAsync(int year, Guid welderId);
-
-    Task<IQueryable<Calendar>> GetByEquipmentIdAsync(int year, Guid weldingEquipmentId);
+    Task<CalendarDto?> GetByEquipmentIdAndYearAsync(Guid weldingEquipmentId, int year);
+    
+    Task<CalendarDto> GetByIdAsync(Guid id);
 }

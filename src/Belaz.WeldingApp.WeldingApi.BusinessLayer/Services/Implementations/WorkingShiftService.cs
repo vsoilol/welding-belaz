@@ -22,7 +22,7 @@ public class WorkingShiftService : IWorkingShiftService
         _workingShiftRepository = workingShiftRepository;
     }
 
-    public async Task<WorkingShiftDto?> CreateAsync(CreateWorkingShiftWithYearRequest request)
+    public async Task<WorkingShiftDto> CreateAsync(CreateWorkingShiftWithYearRequest request)
     {
         await _validationService.ValidateAsync(request);
 
@@ -31,7 +31,7 @@ public class WorkingShiftService : IWorkingShiftService
         return await _workingShiftRepository.CreateAsync(workingShift);
     }
 
-    public async Task<WorkingShiftDto?> UpdateAsync(UpdateWorkingShiftRequest request)
+    public async Task<WorkingShiftDto> UpdateAsync(UpdateWorkingShiftRequest request)
     {
         await _validationService.ValidateAsync(request);
 
