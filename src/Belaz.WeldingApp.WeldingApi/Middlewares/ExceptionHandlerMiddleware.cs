@@ -24,26 +24,10 @@ public class ExceptionHandlerMiddleware
         {
             await _next(httpContext);
         }
-        catch (CreateFailedException ex)
-        {
-            _logger.LogError(ex, ex.Message);
-            await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
-        }
-        catch (UpdateFailedException ex)
-        {
-            _logger.LogError(ex, ex.Message);
-            await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
-        }
         catch (NotSuchValidatorException ex)
         {
             _logger.LogError(ex, ex.Message);
             await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
-        }
-        catch (ValidationException ex)
-        {
-            _logger.LogError(ex, ex.Message);
-            var errors = ex.Errors.ToDictionary(x => x.PropertyName, x => x.ErrorMessage);
-            await HandleExceptionAsync(httpContext, errors, HttpStatusCode.BadRequest, "Validation Error");
         }
         catch (Exception ex)
         {
@@ -63,42 +47,6 @@ public class ExceptionHandlerMiddleware
             Errors = errorMessage, 
             StatusCode = context.Response.StatusCode, 
             Title = "Internal Server Error"
-        };
-
-        var serializedResponseMessage = JsonSerializer.Serialize(badRequestResult);
-
-        await context.Response.WriteAsync(serializedResponseMessage);
-    }
-    
-    private async Task HandleExceptionAsync(HttpContext context, object error, HttpStatusCode statusCode, string title)
-    {
-        context.Response.Clear();
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)statusCode;
-
-        var badRequestResult = new BadRequestResult
-        {
-            Errors = error, 
-            StatusCode = context.Response.StatusCode, 
-            Title = title
-        };
-
-        var serializedResponseMessage = JsonSerializer.Serialize(badRequestResult);
-
-        await context.Response.WriteAsync(serializedResponseMessage);
-    }
-    
-    private async Task HandleExceptionAsync(HttpContext context, string errorMessage, string title, HttpStatusCode statusCode)
-    {
-        context.Response.Clear();
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)statusCode;
-
-        var badRequestResult = new BadRequestResult
-        {
-            Errors = errorMessage, 
-            StatusCode = context.Response.StatusCode, 
-            Title = title
         };
 
         var serializedResponseMessage = JsonSerializer.Serialize(badRequestResult);
