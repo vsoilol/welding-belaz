@@ -39,10 +39,7 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos
                         .MapFrom(x => x.UserInfo.LastName))
                 .ForMember(dto => dto.ProductionArea,
                     opt => opt
-                        .MapFrom(x => x.UserInfo.ProductionArea))
-                .ForMember(dto => dto.WeldingEquipment,
-                    opt => opt
-                        .MapFrom(x => x.WeldingEquipment));
+                        .MapFrom(x => x.UserInfo.ProductionArea));
         }
     }
 }

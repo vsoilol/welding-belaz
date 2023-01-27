@@ -43,16 +43,16 @@ public class ChiefRepository : IChiefRepository
 
     public async Task<ChiefDto> UpdateAsync(Chief entity)
     {
-        var updatedWelder = (await _context.Chiefs
+        var updatedChief = (await _context.Chiefs
             .Include(_ => _.UserInfo)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
-        updatedWelder.WeldingEquipmentId = entity.WeldingEquipmentId;
-        updatedWelder.UserInfo.RfidTag = entity.UserInfo.RfidTag;
-        updatedWelder.UserInfo.FirstName = entity.UserInfo.FirstName;
-        updatedWelder.UserInfo.MiddleName = entity.UserInfo.MiddleName;
-        updatedWelder.UserInfo.LastName = entity.UserInfo.LastName;
-        updatedWelder.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
+        updatedChief.WeldingEquipmentId = entity.WeldingEquipmentId;
+        updatedChief.UserInfo.RfidTag = entity.UserInfo.RfidTag;
+        updatedChief.UserInfo.FirstName = entity.UserInfo.FirstName;
+        updatedChief.UserInfo.MiddleName = entity.UserInfo.MiddleName;
+        updatedChief.UserInfo.LastName = entity.UserInfo.LastName;
+        updatedChief.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
 
         await _context.SaveChangesAsync();
 
