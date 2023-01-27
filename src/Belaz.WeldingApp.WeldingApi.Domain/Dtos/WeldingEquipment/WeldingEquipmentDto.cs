@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 using WeldingApp.Common.Enums;

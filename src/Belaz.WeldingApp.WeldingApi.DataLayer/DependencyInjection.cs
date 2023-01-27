@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IDayRepository, DayRepository>();
         services.AddScoped<ICalendarRepository, CalendarRepository>();
         services.AddScoped<IWorkshopRepository, WorkshopRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
         
         return services;
     }

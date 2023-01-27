@@ -42,9 +42,9 @@ public class ProductionAreaService : IProductionAreaService
         
         return await validationResult.ToDataResult(() =>
         {
-            var workshop = _mapper.Map<ProductionArea>(request);
+            var productionArea = _mapper.Map<ProductionArea>(request);
 
-            return _productionAreaRepository.CreateAsync(workshop);
+            return _productionAreaRepository.CreateAsync(productionArea);
         });
     }
 
@@ -54,9 +54,9 @@ public class ProductionAreaService : IProductionAreaService
         
         return await validationResult.ToDataResult(() =>
         {
-            var workshop = _mapper.Map<ProductionArea>(request);
+            var productionArea = _mapper.Map<ProductionArea>(request);
 
-            return _productionAreaRepository.UpdateAsync(workshop);
+            return _productionAreaRepository.UpdateAsync(productionArea);
         });
     }
 }
