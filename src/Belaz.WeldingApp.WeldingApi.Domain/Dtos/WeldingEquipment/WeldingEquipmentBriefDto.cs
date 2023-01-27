@@ -12,24 +12,24 @@ public class WeldingEquipmentBriefDto : IMapFrom<Domain.Entities.WeldingEquipmen
     /// <summary>
     /// RFID-метка
     /// </summary>
-    public string RfidTag { get; set; }
+    public string RfidTag { get; set; } = null!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// Маркировка
     /// </summary>
-    public string Marking { get; set; }
+    public string Marking { get; set; } = null!;
 
     /// <summary>
     /// Заводской (инвентарный) номер
     /// </summary>
-    public string FactoryNumber { get; set; }
+    public string FactoryNumber { get; set; } = null!;
 
     /// <summary>
     /// Дата ввода в эксплуатацию
     /// </summary>
-    public string CommissioningDate { get; set; }
+    public string CommissioningDate { get; set; } = null!;
 
     /// <summary>
     /// Текущее состояние

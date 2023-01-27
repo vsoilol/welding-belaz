@@ -20,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<ICalendarRepository, CalendarRepository>();
         services.AddScoped<IWorkshopRepository, WorkshopRepository>();
         services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<IWorkplaceRepository, WorkplaceRepository>();
         
         return services;
     }

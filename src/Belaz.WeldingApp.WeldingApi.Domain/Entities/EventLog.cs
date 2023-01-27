@@ -6,9 +6,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities
 {
     public class EventLog : Entity
     {
-        [Required]
-        [MaxLength(200)]
-        public string Information { get; set; }
+        [Required] [MaxLength(200)] 
+        public string Information { get; set; } = null!;
         
         [Required]
         public DateTime DateTime { get; set; }

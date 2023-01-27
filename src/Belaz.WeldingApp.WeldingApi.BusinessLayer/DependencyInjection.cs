@@ -20,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IWorkshopService, WorkshopService>();
         services.AddScoped<IProductionAreaService, ProductionAreaService>();
         services.AddScoped<IPostService, PostService>();
+        services.AddScoped<IWorkplaceService, WorkplaceService>();
         
         return services;
     }

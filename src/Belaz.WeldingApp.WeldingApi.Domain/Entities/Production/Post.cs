@@ -12,11 +12,11 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.Production
 
         public string Name { get; set; } = null!;
 
-        public List<Workplace> Workplaces { get; set; }
-        
+        public List<Workplace> Workplaces { get; set; } = null!;
+
         public Guid ProductionAreaId { get; set; }
-        
-        [ForeignKey(nameof(ProductionAreaId))]
-        public ProductionArea ProductionArea { get; set; }
+
+        [ForeignKey(nameof(ProductionAreaId))] 
+        public ProductionArea ProductionArea { get; set; } = null!;
     }
 }
