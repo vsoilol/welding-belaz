@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddScoped<IProductionAreaService, ProductionAreaService>();
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<IWorkplaceService, WorkplaceService>();
+        services.AddScoped<IDowntimeReasonService, DowntimeReasonService>();
         
         return services;
     }

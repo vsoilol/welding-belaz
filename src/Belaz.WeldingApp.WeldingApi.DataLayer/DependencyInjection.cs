@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddScoped<IWorkshopRepository, WorkshopRepository>();
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<IWorkplaceRepository, WorkplaceRepository>();
+        services.AddScoped<IDowntimeReasonRepository, DowntimeReasonRepository>();
         
         return services;
     }
