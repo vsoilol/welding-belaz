@@ -54,6 +54,12 @@ public class CreateWorkingShiftWithYearRequestValidator : AbstractValidator<Crea
                 RuleFor(model => model.DayId)
                     .Cascade(CascadeMode.Stop)
                     .Null();
+                
+                RuleFor(model => model.Year)
+                    .Cascade(CascadeMode.Stop)
+                    .NotNull()
+                    .NotEmpty()
+                    .SetValidator(new YearValidatorFor<CreateWorkingShiftWithYearRequest>());
             });
 
         When(_ => _.DayId is not null,
@@ -62,6 +68,12 @@ public class CreateWorkingShiftWithYearRequestValidator : AbstractValidator<Crea
                 RuleFor(model => model.Year)
                     .Cascade(CascadeMode.Stop)
                     .Null();
+                
+                RuleFor(model => model.DayId)
+                    .Cascade(CascadeMode.Stop)
+                    .NotNull()
+                    .SetValidator(new SqlIdValidatorFor<CreateWorkingShiftWithYearRequest,
+                        Domain.Entities.CalendarInfo.Day>(context));
             });
 
         When(_ => _.DayId is null,
