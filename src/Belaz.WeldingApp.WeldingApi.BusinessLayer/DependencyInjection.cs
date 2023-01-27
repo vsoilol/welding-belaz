@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<IWorkplaceService, WorkplaceService>();
         services.AddScoped<IDowntimeReasonService, DowntimeReasonService>();
+        services.AddScoped<IWeldingEquipmentService, WeldingEquipmentService>();
         
         return services;
     }

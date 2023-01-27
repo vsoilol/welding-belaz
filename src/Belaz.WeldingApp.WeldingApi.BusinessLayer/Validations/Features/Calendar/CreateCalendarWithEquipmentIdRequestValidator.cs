@@ -16,8 +16,10 @@ public class CreateCalendarWithEquipmentIdRequestValidator : AbstractValidator<C
         RuleFor(model => model.WeldingEquipmentId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateCalendarWithEquipmentIdRequest, WeldingEquipment>(context));
-        
+            .SetValidator(
+                new SqlIdValidatorFor<CreateCalendarWithEquipmentIdRequest,
+                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
+
         RuleFor(model => model)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
@@ -31,7 +33,7 @@ public class CreateCalendarWithEquipmentIdRequestValidator : AbstractValidator<C
         RuleForEach(model => model.MainWorkingShift)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new CreateWorkingShiftRequestValidator());
-        
+
         When(_ => _.Days is not null,
             () =>
             {
@@ -39,18 +41,5 @@ public class CreateCalendarWithEquipmentIdRequestValidator : AbstractValidator<C
                     .Cascade(CascadeMode.Stop)
                     .SetValidator(new CreateDayRequestValidator());
             });
-    }
-
-    private async Task<bool> IsYearValid(ApplicationContext context, CreateCalendarWithEquipmentIdRequest data)
-    {
-        if (data.Year is < 1000 or > 2999)
-        {
-            return false;
-        }
-
-        var isExist = await context.Calendars.AnyAsync(_ => _.Year == data.Year && 
-                                                            _.WeldingEquipmentId == data.WeldingEquipmentId);
-
-        return !isExist;
     }
 }

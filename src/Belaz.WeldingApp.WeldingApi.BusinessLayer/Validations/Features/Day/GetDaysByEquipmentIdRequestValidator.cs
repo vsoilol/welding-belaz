@@ -14,6 +14,8 @@ public class GetDaysByEquipmentIdRequestValidator : AbstractValidator<GetDaysByE
         RuleFor(model => model.EquipmentId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetDaysByEquipmentIdRequest, WeldingEquipment>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<GetDaysByEquipmentIdRequest,
+                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
     }
 }

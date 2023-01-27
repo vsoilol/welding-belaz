@@ -18,6 +18,7 @@ public class GetByEquipmentIdRequestValidator : AbstractValidator<GetByEquipment
         RuleFor(model => model.WeldingEquipmentId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetByEquipmentIdRequest, WeldingEquipment>(context));
+            .SetValidator(new SqlIdValidatorFor<GetByEquipmentIdRequest,
+                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
     }
 }

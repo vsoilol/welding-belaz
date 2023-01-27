@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingEquipment;
 
-public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>
+public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>
 {
     public Guid Id { get; set; }
 
@@ -29,6 +27,7 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
 
     /// <summary>
     /// Дата ввода в эксплуатацию
+    /// Формат dd.mm.yyyy
     /// </summary>
     public string CommissioningDate { get; set; } = null!;
 
@@ -50,13 +49,9 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
 
     /// <summary>
     /// Дата очередной аттестации
+    /// Формат dd.mm.yyyy
     /// </summary>
     public string NextAttestationDate { get; set; } = null!;
-
-    /// <summary>
-    /// Ответственный за сварочное оборудование
-    /// </summary>
-    public UserFullNameDto? ResponsiblePerson { get; set; }
 
     /// <summary>
     /// Процесс (способ) сварки
@@ -88,29 +83,16 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
     /// </summary>
     public double ArcVoltageMax { get; set; }
 
-    public PostBriefDto? Post { get; set; }
-
-    /// <summary>
-    /// Продолжительность включения (нагрузки), в минутах
-    /// </summary>
-    public int ActivationDuration { get; set; }
+    public Guid? PostId { get; set; }
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment, WeldingEquipmentDto>()
-            .ForMember(dto => dto.CommissioningDate,
-                opt => opt
-                    .MapFrom(x => x.CommissioningDate.ToDayInfoString()))
+        profile.CreateMap<UpdateEquipmentRequest, Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>()
             .ForMember(dto => dto.NextAttestationDate,
                 opt => opt
-                    .MapFrom(x => x.NextAttestationDate.ToDayInfoString()))
-            .ForMember(dto => dto.ResponsiblePerson,
+                    .MapFrom(x => x.NextAttestationDate.ToDateTime()))
+            .ForMember(dto => dto.CommissioningDate,
                 opt => opt
-                    .MapFrom(x => x.Welder == null ? null : x.Welder.UserInfo))
-            .ForMember(dto => dto.ActivationDuration,
-                opt => opt
-                    .MapFrom(x => x.WeldingEquipmentConditionTime
-                        .Where(_ => _.Condition == Condition.AtWork)
-                        .Sum(_ => _.Time)));
+                    .MapFrom(x => x.CommissioningDate.ToDateTime()));
     }
 }
