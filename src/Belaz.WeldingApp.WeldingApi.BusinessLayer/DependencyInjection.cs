@@ -28,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<IMasterService, MasterService>();
         services.AddScoped<IWelderService, WelderService>();
         services.AddScoped<IWeldingTaskService, WeldingTaskService>();
+        services.AddScoped<ISeamService, SeamService>();
         
         return services;
     }
