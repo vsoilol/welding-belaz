@@ -3,6 +3,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WorkingShift;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Day;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.WorkingShift;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 

@@ -4,7 +4,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductioArea;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using LanguageExt.Common;
 

@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductioArea;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;

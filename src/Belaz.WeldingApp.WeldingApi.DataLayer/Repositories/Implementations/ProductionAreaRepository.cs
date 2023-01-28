@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductioArea;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,10 +1,9 @@
 ﻿using Belaz.WeldingApp.WeldingApi.DataLayer;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using FluentValidation;
 using FluentValidation.Validators;
 
-namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 
 public class SqlIdValidatorFor<T, TEntity> : PropertyValidator<T, Guid>
     where TEntity : Entity

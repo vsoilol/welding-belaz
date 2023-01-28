@@ -1,10 +1,9 @@
 ﻿using Belaz.WeldingApp.WeldingApi.DataLayer;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities;
 using FluentValidation;
 using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
 
-namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 
 public class ExistYearValidatorFor<T> : AsyncPropertyValidator<T, int>
 {

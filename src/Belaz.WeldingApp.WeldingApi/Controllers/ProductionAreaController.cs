@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductioArea;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using WeldingApp.Common.Attributes;

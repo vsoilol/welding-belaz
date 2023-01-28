@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductioArea;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;

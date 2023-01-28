@@ -1,5 +1,7 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Chief;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Chief;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
@@ -36,6 +38,7 @@ public class CreateChiefRequestValidator : AbstractValidator<CreateChiefRequest>
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<CreateChiefRequest,
                 Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context))
+            .SetAsyncValidator(new IsEquipmentAlreadyAssignValidatorForCreateChief(context))
             .When(_ => _.WeldingEquipmentId is not null);
     }
 }

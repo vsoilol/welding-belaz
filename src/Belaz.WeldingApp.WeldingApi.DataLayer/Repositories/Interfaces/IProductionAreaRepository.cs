@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductioArea;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;

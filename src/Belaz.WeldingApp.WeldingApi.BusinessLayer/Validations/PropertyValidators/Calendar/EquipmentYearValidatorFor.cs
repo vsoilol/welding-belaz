@@ -4,7 +4,7 @@ using FluentValidation;
 using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
 
-namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Calendar;
 
 public class EquipmentYearValidatorFor : AsyncPropertyValidator<CreateCalendarWithEquipmentIdRequest,
     CreateCalendarWithEquipmentIdRequest>

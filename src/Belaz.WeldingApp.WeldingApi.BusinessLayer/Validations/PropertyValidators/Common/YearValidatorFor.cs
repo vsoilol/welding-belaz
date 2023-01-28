@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Validators;
 
-namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 
 public class YearValidatorFor<T> : PropertyValidator<T, int>
 {

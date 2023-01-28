@@ -2,9 +2,9 @@
 using FluentValidation;
 using FluentValidation.Validators;
 
-namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 
-public class DateValidatorFor<T> : PropertyValidator<T, string>
+public class TimeValidatorFor<T> : PropertyValidator<T, string>
 {
     public override bool IsValid(ValidationContext<T> context, string value)
     {
@@ -13,13 +13,13 @@ public class DateValidatorFor<T> : PropertyValidator<T, string>
             return false;
         }
         
-        Regex checkDate = new Regex(@"(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20|21)\d\d");
+        Regex checktime = new Regex(@"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
         
-        return checkDate.IsMatch(value);
+        return checktime.IsMatch(value);
     }
 
-    public override string Name => "DateValidatorFor";
+    public override string Name => "TimeValidatorFor";
 
     protected override string GetDefaultMessageTemplate(string errorCode)
-        => "Date is not valid";
+        => "Time is not valid";
 }
