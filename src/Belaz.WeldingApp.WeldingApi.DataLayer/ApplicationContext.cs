@@ -10,59 +10,59 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer;
 
-public class ApplicationContext : DbContext
+public sealed class ApplicationContext : DbContext
 {
-    public DbSet<UserData> Users { get; set; }
-        
-    public DbSet<RoleData> Roles { get; set; }
-        
-    public DbSet<UserRole> UserRoles { get; set; }
-        
-    public DbSet<Post> Posts { get; set; }
-        
-    public DbSet<ProductionArea> ProductionAreas { get; set; }
-        
-    public DbSet<Workplace> Workplaces { get; set; }
-    
-    public DbSet<StatusReason> StatusReasons { get; set; }
-    
-    public DbSet<DowntimeReason> DowntimeReasons { get; set; }
-        
-    public DbSet<Workshop> Workshops { get; set; }
-        
-    public DbSet<Calendar> Calendars { get; set; }
-        
-    public DbSet<Day> Days { get; set; }
-        
-    public DbSet<WorkingShift> WorkingShifts { get; set; }
-        
-    public DbSet<Chief> Chiefs { get; set; }
+    public DbSet<UserData> Users { get; set; } = null!;
 
-    public DbSet<Inspector> Inspectors { get; set; }
+    public DbSet<RoleData> Roles { get; set; } = null!;
         
-    public DbSet<Master> Masters { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; } = null!;
         
-    public DbSet<Welder> Welders { get; set; }
+    public DbSet<Post> Posts { get; set; } = null!;
         
-    public DbSet<WeldingEquipment> WeldingEquipments { get; set; }
+    public DbSet<ProductionArea> ProductionAreas { get; set; } = null!;
+        
+    public DbSet<Workplace> Workplaces { get; set; } = null!;
+    
+    public DbSet<StatusReason> StatusReasons { get; set; } = null!;
+    
+    public DbSet<DowntimeReason> DowntimeReasons { get; set; } = null!;
+        
+    public DbSet<Workshop> Workshops { get; set; } = null!;
+        
+    public DbSet<Calendar> Calendars { get; set; } = null!;
+        
+    public DbSet<Day> Days { get; set; } = null!;
+        
+    public DbSet<WorkingShift> WorkingShifts { get; set; } = null!;
+        
+    public DbSet<Chief> Chiefs { get; set; } = null!;
 
-    public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; }
+    public DbSet<Inspector> Inspectors { get; set; } = null!;
         
-    public DbSet<LayerInstruction> LayerInstructions { get; set; }
+    public DbSet<Master> Masters { get; set; } = null!;
         
-    public DbSet<TechnologicalProcess> TechnologicalProcesses { get; set; }
+    public DbSet<Welder> Welders { get; set; } = null!;
         
-    public DbSet<WeldingTask> WeldingTasks { get; set; }
-        
-    public DbSet<EventLog> EventLogs { get; set; }
+    public DbSet<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-    public DbSet<Product> Products { get; set; }
+    public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; } = null!;
+        
+    public DbSet<LayerInstruction> LayerInstructions { get; set; } = null!;
+        
+    public DbSet<TechnologicalProcess> TechnologicalProcesses { get; set; } = null!;
+        
+    public DbSet<WeldingTask> WeldingTasks { get; set; } = null!;
+        
+    public DbSet<EventLog> EventLogs { get; set; } = null!;
+
+    public DbSet<Product> Products { get; set; } = null!;
     
-    public DbSet<ProductInside> ProductInsides { get; set; }
+    public DbSet<ProductInside> ProductInsides { get; set; } = null!;
     
-    public DbSet<WeldPassage> WeldPassages { get; set; }
+    public DbSet<WeldPassage> WeldPassages { get; set; } = null!;
     
-    public DbSet<Seam> Seams { get; set; }
+    public DbSet<Seam> Seams { get; set; } = null!;
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {

@@ -68,7 +68,7 @@ public class DataSeed
 
     private static async Task AddMasters(ApplicationContext context)
     {
-        var masterRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master));
+        var masterRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master)))!;
         var weldingEquipment = await context.WeldingEquipments.FirstOrDefaultAsync();
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
 
@@ -104,7 +104,7 @@ public class DataSeed
 
     private static async Task AddInspectors(ApplicationContext context)
     {
-        var techUserRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser));
+        var techUserRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser)))!;
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
 
         var inspector = new Inspector
@@ -266,7 +266,7 @@ public class DataSeed
     {
         var productionAreas = await context.ProductionAreas.ToListAsync();
         var workPlaces = context.Workplaces.ToList();
-        var welderRole = context.Roles.FirstOrDefault(_ => _.Name == "Executor");
+        var welderRole = context.Roles.FirstOrDefault(_ => _.Name == "Executor")!;
 
         var welders = new List<Welder>
         {
@@ -353,8 +353,6 @@ public class DataSeed
     private static async Task AddSeveralWeldingEquipment(ApplicationContext context)
     {
         var post = context.Posts.FirstOrDefault(_ => _.Number == 1);
-        var productionArea = context.ProductionAreas.First();
-        var shifts = context.WorkingShifts.ToList();
         var welders = context.Welders.ToList();
         var downtimeReasons = await context.DowntimeReasons.Take(3).ToListAsync();
 
@@ -574,7 +572,7 @@ public class DataSeed
 
     private static async Task AddChief(ApplicationContext context)
     {
-        var chiefRole = await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Chief));
+        var chiefRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Chief)))!;
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
 
         var chief = new Chief
@@ -753,13 +751,13 @@ public class DataSeed
 
     private static async Task AddTechnologicalProcesses(ApplicationContext context)
     {
-        var seam = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1);
-        var seam2 = await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2);
+        var seam = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1))!;
+        var seam2 = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2))!;
 
-        var product = await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
-                                                                      && _.ProductType == ProductType.Product);
-        var product2 = await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
-                                                                       && _.ProductType == ProductType.Product);
+        var product = (await context.Products.FirstOrDefaultAsync(_ => _.Number == 1
+                                                                       && _.ProductType == ProductType.Product))!;
+        var product2 = (await context.Products.FirstOrDefaultAsync(_ => _.Number == 2
+                                                                        && _.ProductType == ProductType.Product))!;
 
         var technologicalProcesses = new List<TechnologicalProcess>
         {
@@ -854,8 +852,8 @@ public class DataSeed
                 Seam = seam2!,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+                WeldingCurrentValues = new[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new[] { 11.2, 2.33, 26.8 },
             },
             new WeldingTask
             {
@@ -873,8 +871,8 @@ public class DataSeed
                 Seam = seam1!,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new double[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new double[] { 11.2, 2.33, 26.8 },
+                WeldingCurrentValues = new[] { 1.2, 2.3, 6.8 },
+                ArcVoltageValues = new[] { 11.2, 2.33, 26.8 },
             }
         };
 
