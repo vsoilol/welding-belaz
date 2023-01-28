@@ -17,7 +17,8 @@ public class CreateCalendarWithWelderIdRequestValidator : AbstractValidator<Crea
         RuleFor(model => model.WelderId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateCalendarWithWelderIdRequest, Welder>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<CreateCalendarWithWelderIdRequest, Domain.Entities.Users.Welder>(context));
 
         RuleFor(model => model)
             .Cascade(CascadeMode.Stop)

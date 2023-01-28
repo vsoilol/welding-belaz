@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IChiefRepository, ChiefRepository>();
         services.AddScoped<IInspectorRepository, InspectorRepository>();
         services.AddScoped<IMasterRepository, MasterRepository>();
+        services.AddScoped<IWelderRepository, WelderRepository>();
         
         return services;
     }

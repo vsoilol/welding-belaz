@@ -19,6 +19,6 @@ public class GetByWelderIdRequestValidator : AbstractValidator<GetByWelderIdRequ
         RuleFor(model => model.WelderId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetByWelderIdRequest, Welder>(context));
+            .SetValidator(new SqlIdValidatorFor<GetByWelderIdRequest, Domain.Entities.Users.Welder>(context));
     }
 }

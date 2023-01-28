@@ -15,6 +15,6 @@ public class GetDaysByWelderIdRequestValidator : AbstractValidator<GetDaysByWeld
         RuleFor(model => model.WelderId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetDaysByWelderIdRequest, Welder>(context));
+            .SetValidator(new SqlIdValidatorFor<GetDaysByWelderIdRequest, Domain.Entities.Users.Welder>(context));
     }
 }
