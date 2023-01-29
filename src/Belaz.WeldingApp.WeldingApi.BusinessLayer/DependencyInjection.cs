@@ -31,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<ISeamService, SeamService>();
         services.AddScoped<ITechnologicalProcessService, TechnologicalProcessService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ITechnologicalInstructionService, TechnologicalInstructionService>();
 
         return services;
     }

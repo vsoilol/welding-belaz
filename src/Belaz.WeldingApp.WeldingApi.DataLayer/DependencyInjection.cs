@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<ISeamRepository, SeamRepository>();
         services.AddScoped<ITechnologicalProcessRepository, TechnologicalProcessRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ITechnologicalInstructionRepository, TechnologicalInstructionRepository>();
 
         return services;
     }
