@@ -8,11 +8,13 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 public class WeldingEquipmentBriefDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     /// <summary>
     /// RFID-метка
     /// </summary>
-    public string RfidTag { get; set; } = null!;
+    public string? RfidTag { get; set; }
 
     public string Name { get; set; } = null!;
 

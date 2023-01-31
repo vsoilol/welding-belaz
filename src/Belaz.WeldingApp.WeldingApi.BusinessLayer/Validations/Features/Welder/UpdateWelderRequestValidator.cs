@@ -1,6 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Welder;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Welder;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
@@ -48,7 +47,6 @@ public class UpdateWelderRequestValidator : AbstractValidator<UpdateWelderReques
         RuleForEach(model => model.WeldingEquipmentIds)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new SqlIdValidatorFor<UpdateWelderRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context))
-            .SetAsyncValidator(new IsEquipmentAlreadyAssignValidatorForUpdateWelder(context));
+                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
     }
 }

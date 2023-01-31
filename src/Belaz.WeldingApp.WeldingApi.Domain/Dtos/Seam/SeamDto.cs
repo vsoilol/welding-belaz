@@ -12,6 +12,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
 

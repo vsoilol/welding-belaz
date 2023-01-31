@@ -15,11 +15,4 @@ public class CreateInstructionRequest : IMapTo<Domain.Entities.TaskInfo.Technolo
     public Guid TechnologicalProcessId { get; set; }
 
     public List<CreateWeldPassageRequest> WeldPassages { get; set; } = null!;
-    
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<CreateInstructionRequest, Domain.Entities.TaskInfo.TechnologicalInstruction>()
-            .ForMember(dto => dto.WeldPassages,
-                opt => opt.Ignore());
-    }
 }

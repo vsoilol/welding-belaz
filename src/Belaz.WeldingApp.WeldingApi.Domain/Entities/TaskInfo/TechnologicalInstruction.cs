@@ -9,8 +9,6 @@ public class TechnologicalInstruction : Entity
 
     public string Name { get; set; } = null!;
 
-    public List<WeldPassage> WeldPassages { get; set; } = null!;
-    
     public Guid SeamId { get; set; }
         
     [ForeignKey(nameof(SeamId))]

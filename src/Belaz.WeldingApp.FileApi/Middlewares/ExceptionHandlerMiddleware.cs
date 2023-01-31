@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using Belaz.WeldingApp.FileApi.Domain.Exceptions;
 using WeldingApp.Common.Models;
 
 namespace Belaz.WeldingApp.FileApi.Middlewares;
@@ -23,6 +24,11 @@ public class ExceptionHandlerMiddleware
         {
             await _next(httpContext);
         }
+        catch (NotSuchValidatorException ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            await HandleExceptionAsync(httpContext, ex.Message, HttpStatusCode.BadRequest);
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.Message);
@@ -38,7 +44,9 @@ public class ExceptionHandlerMiddleware
 
         var badRequestResult = new BadRequestResult
         {
-            Errors = errorMessage, StatusCode = context.Response.StatusCode, Title = "Internal Server Error"
+            Errors = errorMessage, 
+            StatusCode = context.Response.StatusCode, 
+            Title = "Internal Server Error"
         };
 
         var serializedResponseMessage = JsonSerializer.Serialize(badRequestResult);

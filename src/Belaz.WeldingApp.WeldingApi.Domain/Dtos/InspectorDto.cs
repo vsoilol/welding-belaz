@@ -8,6 +8,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 public class InspectorDto : IMapFrom<Inspector>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     public string RfidTag { get; set; } = null!;
 
@@ -16,6 +18,13 @@ public class InspectorDto : IMapFrom<Inspector>
     public string LastName { get; set; } = null!;
 
     public string MiddleName { get; set; } = null!;
+    
+    public string? Position { get; set; }
+    
+    /// <summary>
+    /// Табельный номер 
+    /// </summary>
+    public string? ServiceNumber { get; set; }
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
     
@@ -34,8 +43,14 @@ public class InspectorDto : IMapFrom<Inspector>
             .ForMember(dto => dto.LastName,
                 opt => opt
                     .MapFrom(x => x.UserInfo.LastName))
+            .ForMember(dto => dto.Position,
+                opt => opt
+                    .MapFrom(x => x.UserInfo.Position))
             .ForMember(dto => dto.ProductionArea,
                 opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea));
+                    .MapFrom(x => x.UserInfo.ProductionArea))
+            .ForMember(dto => dto.ServiceNumber,
+                opt => opt
+                    .MapFrom(x => x.UserInfo.ServiceNumber));
     }
 }

@@ -12,10 +12,12 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     public string? Name { get; set; }
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public WorkplaceBriefDto? Workplace { get; set; }
 
@@ -53,8 +55,6 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x =>
-                        x.TechnologicalProcess ?? x.ProductMains
-                            .FirstOrDefault(_ => _.MainProduct.ProductType == ProductType.Product)!
-                            .MainProduct.TechnologicalProcess));
+                        x.TechnologicalProcess ?? x.ProductMain!.MainProduct.TechnologicalProcess));
     }
 }

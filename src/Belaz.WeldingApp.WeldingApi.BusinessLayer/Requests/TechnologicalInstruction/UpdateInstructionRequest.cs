@@ -13,11 +13,4 @@ public class UpdateInstructionRequest : IMapTo<Domain.Entities.TaskInfo.Technolo
     public string Name { get; set; } = null!;
 
     public List<UpdateWeldPassageRequest> WeldPassages { get; set; } = null!;
-
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<UpdateInstructionRequest, Domain.Entities.TaskInfo.TechnologicalInstruction>()
-            .ForMember(dto => dto.WeldPassages,
-                opt => opt.Ignore());
-    }
 }
