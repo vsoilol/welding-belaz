@@ -15,7 +15,7 @@ public class DataSeed
     public static async Task SeedSampleDataAsync(ApplicationContext context)
     {
         await CreateRolesAsync(context);
-        
+
         if (!context.Calendars.Any())
         {
             await AddCalendar(context);
@@ -683,8 +683,7 @@ public class DataSeed
             {
                 Name = "Изделие 1",
                 Number = 1,
-                IsControlSubject = true,
-                Status = Status.Defective,
+                Status = ProductStatus.Defective,
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
                 Workplace = workplace,
@@ -706,7 +705,7 @@ public class DataSeed
                         Welder = welder,
                         Inspector = inspector,
                         Number = 1,
-                        Status = Status.InProgress,
+                        Status = ProductStatus.Defective,
                         ProductionArea = productionArea,
                         Workplace = workplace,
                         StatusReasons = new List<StatusReason>
@@ -730,7 +729,7 @@ public class DataSeed
                             Master = master,
                             Name = "Деталь 1",
                             Number = 1,
-                            Status = Status.Manufactured,
+                            Status = ProductStatus.Accept,
                             ProductType = ProductType.Detail,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -744,7 +743,8 @@ public class DataSeed
                             Master = master,
                             Name = "Узел 1",
                             Number = 1,
-                            Status = Status.Manufactured,
+                            Status = ProductStatus.Manufactured,
+                            IsControlSubject = true,
                             ProductType = ProductType.Knot,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -758,7 +758,7 @@ public class DataSeed
                 Number = 2,
                 Inspector = inspector,
                 Master = master,
-                Status = Status.NotStarted,
+                Status = ProductStatus.NotManufactured,
                 ProductType = ProductType.Product,
                 ProductionArea = productionArea,
                 Workplace = workplace,
@@ -767,7 +767,7 @@ public class DataSeed
                     new Seam
                     {
                         Number = 2,
-                        Status = Status.Manufactured,
+                        Status = ProductStatus.Manufactured,
                         IsControlSubject = true,
                         ProductionArea = productionArea,
                         Workplace = workplace,
@@ -785,8 +785,8 @@ public class DataSeed
                             Master = master,
                             Name = "Деталь 2",
                             Number = 2,
-                            Status = Status.Manufactured,
                             ProductType = ProductType.Detail,
+                            Status = ProductStatus.Manufactured,
                             IsControlSubject = true,
                             ProductionArea = productionArea,
                             Workplace = workplace,
@@ -800,7 +800,7 @@ public class DataSeed
                             Master = master,
                             Name = "Узел 2",
                             Number = 2,
-                            Status = Status.Manufactured,
+                            Status = ProductStatus.Accept,
                             ProductType = ProductType.Knot,
                             ProductionArea = productionArea,
                             Workplace = workplace,

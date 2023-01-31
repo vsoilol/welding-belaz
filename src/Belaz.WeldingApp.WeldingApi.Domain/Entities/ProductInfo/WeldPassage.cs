@@ -41,6 +41,11 @@ public class WeldPassage : Entity
     /// Температура предварительного нагрева max
     /// </summary>
     public double PreheatingTemperatureMax { get; set; }
+
+    /// <summary>
+    /// Выполнен ли без нарушения требований технологической инструкции
+    /// </summary>
+    public bool IsDone { get; set; } = false;
     
     public Guid SeamId { get; set; }
     
