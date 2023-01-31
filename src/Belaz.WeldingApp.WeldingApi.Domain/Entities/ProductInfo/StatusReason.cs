@@ -7,7 +7,7 @@ public class StatusReason : Entity
 {
     public DateTime Date { get; set; }
 
-    public Status Status { get; set; }
+    public ProductStatus Status { get; set; }
 
     public string Reason { get; set; } = null!;
 

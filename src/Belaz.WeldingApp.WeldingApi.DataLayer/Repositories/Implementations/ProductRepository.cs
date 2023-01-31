@@ -43,6 +43,19 @@ public class ProductRepository : IProductRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public async Task<ProductDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually)
+    {
+        var updatedProduct = (await _context.Products
+            .FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        updatedProduct.Status = status;
+        updatedProduct.IsAddManually = isAddManually;
+        
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
+    }
+
     public Task<List<ProductDto>> GetAllByMasterIdAsync(Guid masterId, ProductType productType)
     {
         return _context.Products

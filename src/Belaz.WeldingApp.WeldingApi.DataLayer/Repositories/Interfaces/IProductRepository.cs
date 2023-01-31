@@ -11,6 +11,8 @@ public interface IProductRepository
     Task<List<ProductDto>> GetAllByControlSubjectAsync(bool isControlSubject, ProductType productType);
 
     Task<ProductDto> GetByIdAsync(Guid id);
+    
+    Task<ProductDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually);
 
     Task<List<ProductDto>> GetAllByMasterIdAsync(Guid masterId, ProductType productType);
 

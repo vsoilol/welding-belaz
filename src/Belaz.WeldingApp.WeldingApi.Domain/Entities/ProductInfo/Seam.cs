@@ -20,6 +20,11 @@ public class Seam : Entity
     /// </summary>
     public bool IsControlSubject { get; set; }
 
+    /// <summary>
+    /// Добавлен ли вручную
+    /// </summary>
+    public bool IsAddManually { get; set; }
+
     public Guid? ProductId { get; set; }
 
     [ForeignKey(nameof(ProductId))] public Product? Product { get; set; }

@@ -694,7 +694,7 @@ public class DataSeed
                     new StatusReason
                     {
                         Date = DateTime.Now,
-                        Status = Status.Defective,
+                        Status = ProductStatus.Defective,
                         Reason = "Какая-то причина брака"
                     }
                 },
@@ -713,7 +713,7 @@ public class DataSeed
                             new StatusReason
                             {
                                 Date = DateTime.Now,
-                                Status = Status.Defective,
+                                Status = ProductStatus.Defective,
                                 Reason = "Какая-то причина брака"
                             }
                         }

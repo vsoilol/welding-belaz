@@ -40,7 +40,7 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.GetByIdAsync(new GetProductByIdRequest { Id = id });
         return result.ToOk();
     }
-    
+
     /// <summary>
     /// Gets all products by status
     /// </summary>
@@ -120,6 +120,14 @@ public abstract class CommonProductController : ControllerBase
     public async Task<ActionResult<Unit>> AssignProductToMasterAsync([FromBody] AssignProductToMasterRequest request)
     {
         var result = await _productService.AssignProductToMasterAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("changeStatus")]
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductDto>> ChangeStatusAsync([FromBody] ChangeProductStatusRequest request)
+    {
+        var result = await _productService.ChangeStatusAsync(request);
         return result.ToOk();
     }
 }

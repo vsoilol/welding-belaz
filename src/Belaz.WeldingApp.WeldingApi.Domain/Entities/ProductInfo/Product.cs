@@ -21,6 +21,11 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo
         /// Подлежит ли контролю
         /// </summary>
         public bool IsControlSubject { get; set; }
+        
+        /// <summary>
+        /// Добавлен ли вручную
+        /// </summary>
+        public bool IsAddManually { get; set; }
 
         public ProductType ProductType { get; set; }
 

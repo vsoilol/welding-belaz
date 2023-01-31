@@ -24,6 +24,6 @@ public class UpdateDefectiveReasonToSeamRequest : IMapTo<StatusReason>
                     .MapFrom(x => x.Date.ToDateTime()))
             .ForMember(dto => dto.Status,
                 opt => opt
-                    .MapFrom(x => Status.Defective));
+                    .MapFrom(x => ProductStatus.Defective));
     }
 }

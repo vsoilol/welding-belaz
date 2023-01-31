@@ -102,7 +102,7 @@ public class SeamRepository : ISeamRepository
     public Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync()
     {
         return _context.StatusReasons
-            .Where(_ => _.Status == Status.Defective && _.Seam != null)
+            .Where(_ => _.Status == ProductStatus.Defective && _.Seam != null)
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

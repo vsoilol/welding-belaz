@@ -115,4 +115,12 @@ public class ProductService : IProductService
             return Unit.Default;
         });
     }
+
+    public async Task<Result<ProductDto>> ChangeStatusAsync(ChangeProductStatusRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _productRepository.ChangeStatusAsync(request.Id, request.Status, request.IsAddManually));
+    }
 }
