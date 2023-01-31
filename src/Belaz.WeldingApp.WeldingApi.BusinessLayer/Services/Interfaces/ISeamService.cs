@@ -8,11 +8,11 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface ISeamService
 {
-    Task<List<SeamDto>> GetAllByWeldingTaskStatus(Status status);
+    Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status);
 
     Task<Result<SeamDto>> GetByIdAsync(GetSeamByIdRequest request);
 
-    Task<List<SeamDto>> GetAllByControlSubject(bool isControlSubject);
+    Task<List<SeamDto>> GetAllByControlSubjectAsync(bool isControlSubject);
 
     Task<Result<SeamDto>> CreateAsync(CreateSeamRequest request);
 

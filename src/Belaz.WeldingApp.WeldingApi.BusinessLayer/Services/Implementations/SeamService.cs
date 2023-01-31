@@ -25,9 +25,9 @@ public class SeamService : ISeamService
         _seamRepository = seamRepository;
     }
 
-    public Task<List<SeamDto>> GetAllByWeldingTaskStatus(Status status)
+    public Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status)
     {
-        return _seamRepository.GetAllByStatus(status);
+        return _seamRepository.GetAllByStatusAsync(status);
     }
 
     public async Task<Result<SeamDto>> GetByIdAsync(GetSeamByIdRequest request)
@@ -38,9 +38,9 @@ public class SeamService : ISeamService
             _seamRepository.GetByIdAsync(request.Id));
     }
 
-    public Task<List<SeamDto>> GetAllByControlSubject(bool isControlSubject)
+    public Task<List<SeamDto>> GetAllByControlSubjectAsync(bool isControlSubject)
     {
-        return _seamRepository.GetAllByControlSubject(isControlSubject);
+        return _seamRepository.GetAllByControlSubjectAsync(isControlSubject);
     }
 
     public async Task<Result<SeamDto>> CreateAsync(CreateSeamRequest request)

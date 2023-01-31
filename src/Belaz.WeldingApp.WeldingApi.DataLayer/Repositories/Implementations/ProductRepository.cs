@@ -19,18 +19,18 @@ public class ProductRepository : IProductRepository
         _mapper = mapper;
     }
 
-    public Task<List<ProductDto>> GetAllByStatusAsync(Status status, ProductType productType)
-    {
-        return _context.Products
-            .Where(_ => _.Status == status && _.ProductType == productType)
-            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
     public Task<List<ProductDto>> GetAllByControlSubjectAsync(bool isControlSubject, ProductType productType)
     {
         return _context.Products
             .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ProductDto>> GetAllByStatusAsync(ProductStatus status, ProductType productType)
+    {
+        return _context.Products
+            .Where(_ => _.Status == status && _.ProductType == productType)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

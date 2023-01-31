@@ -19,7 +19,7 @@ public class SeamRepository : ISeamRepository
         _mapper = mapper;
     }
 
-    public Task<List<SeamDto>> GetAllByStatus(Status status)
+    public Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status)
     {
         return _context.Seams
             .Where(_ => _.Status == status)
@@ -35,7 +35,7 @@ public class SeamRepository : ISeamRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public Task<List<SeamDto>> GetAllByControlSubject(bool isControlSubject)
+    public Task<List<SeamDto>> GetAllByControlSubjectAsync(bool isControlSubject)
     {
         return _context.Seams
             .Where(_ => _.IsControlSubject == isControlSubject)

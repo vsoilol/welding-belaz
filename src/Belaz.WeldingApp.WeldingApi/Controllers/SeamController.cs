@@ -19,11 +19,15 @@ public class SeamController : ControllerBase
         _seamService = seamService;
     }
 
+    /// <summary>
+    /// Gets all seams by status
+    /// </summary>
+    /// <param name="status">1 - Не изготовлен, 2 - Изготовлен, но не принят или не проверен, 3 - Принят, 4 - Забракован</param>
     [HttpGet("byStatus/{status}")]
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByTaskStatusAsync([FromRoute] Status status)
+    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByStatusAsync([FromRoute] ProductStatus status)
     {
-        return await _seamService.GetAllByWeldingTaskStatus(status);
+        return await _seamService.GetAllByStatusAsync(status);
     }
 
     [HttpGet("{id}")]
@@ -38,7 +42,7 @@ public class SeamController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByControlSubjectAsync([FromRoute] bool isControlSubject)
     {
-        return await _seamService.GetAllByControlSubject(isControlSubject);
+        return await _seamService.GetAllByControlSubjectAsync(isControlSubject);
     }
 
     [HttpPost]

@@ -40,10 +40,14 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.GetByIdAsync(new GetProductByIdRequest { Id = id });
         return result.ToOk();
     }
-
+    
+    /// <summary>
+    /// Gets all products by status
+    /// </summary>
+    /// <param name="status">1 - Не изготовлен, 2 - Изготовлен, но не принят или не проверен, 3 - Принят, 4 - Забракован</param>
     [HttpGet("byStatus/{status}")]
     [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ProductDto>>> GetAllByStatusAsync([FromRoute] Status status)
+    public async Task<ActionResult<List<ProductDto>>> GetAllByStatusAsync([FromRoute] ProductStatus status)
     {
         var result = await _productService.GetAllByStatusAsync(
             new GetAllByTaskStatusRequest
