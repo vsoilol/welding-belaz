@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo
@@ -114,5 +115,10 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo
 
         [ForeignKey(nameof(SeamId))] 
         public Seam Seam { get; set; } = null!;
+
+        public Guid? WeldingEquipmentId { get; set; }
+        
+        [ForeignKey(nameof(WeldingEquipmentId))] 
+        public WeldingEquipment? WeldingEquipment { get; set; }
     }
 }

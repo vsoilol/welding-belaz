@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using WeldingApp.Common.Enums;
 
@@ -16,7 +17,7 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo
         /// RFID-метка
         /// </summary>
         public string RfidTag { get; set; } = null!;
-        
+
         public string Name { get; set; } = null!;
 
         /// <summary>
@@ -40,9 +41,9 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo
         public Condition CurrentCondition { get; set; } = Condition.Off;
 
         public int Height { get; set; }
-        
+
         public int Width { get; set; }
-        
+
         public int Lenght { get; set; }
 
         /// <summary>
@@ -69,12 +70,12 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo
         /// Напряжение холостого хода
         /// </summary>
         public double IdleVoltage { get; set; }
-        
+
         /// <summary>
         /// Сварочный ток min
         /// </summary>
         public double WeldingCurrentMin { get; set; }
-        
+
         /// <summary>
         /// Сварочный ток max
         /// </summary>
@@ -84,28 +85,28 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo
         /// Напряжения на дуге min
         /// </summary>
         public double ArcVoltageMin { get; set; }
-        
+
         /// <summary>
         /// Напряжения на дуге max
         /// </summary>
         public double ArcVoltageMax { get; set; }
-        
+
         public Guid? PostId { get; set; }
-        
-        [ForeignKey(nameof(PostId))]
-        public Post? Post { get; set; }
-        
+
+        [ForeignKey(nameof(PostId))] public Post? Post { get; set; }
+
         public List<Calendar>? Calendars { get; set; }
-        
+
         public Master? Master { get; set; }
 
         public Guid? WelderId { get; set; }
-        
-        [ForeignKey(nameof(WelderId))]
-        public Welder? Welder { get; set; }
-        
+
+        [ForeignKey(nameof(WelderId))] public Welder? Welder { get; set; }
+
         public Chief? Chief { get; set; }
 
         public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTime { get; set; } = null!;
+
+        public List<WeldingTask> WeldingTasks { get; set; } = null!;
     }
 }
