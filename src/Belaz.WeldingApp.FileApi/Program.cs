@@ -1,17 +1,15 @@
+using System.Reflection;
 using System.Text;
 using Belaz.WeldingApp.FileApi;
+using Belaz.WeldingApp.FileApi.BusinessLayer;
+using Belaz.WeldingApp.FileApi.DataLayer;
 using Belaz.WeldingApp.FileApi.Middlewares;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using WeldingApp.Common.Extensions;
-using WeldingApp.Common.Filters;
-using WeldingApp.Common.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,22 +31,21 @@ builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
     config.AddEnvironmentVariables();
 });
 
-builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
+var connectionString = builder.Configuration.GetConnectionString("WeldingDatabase");
 
-builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+var domainProjectAssembly = typeof(Belaz.WeldingApp.FileApi.Domain.Mappings.MappingProfile).Assembly;
+var businessLayerProjectAssembly = typeof(Belaz.WeldingApp.FileApi.BusinessLayer.Mappings.MappingProfile).Assembly;
 
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddAutoMapper(domainProjectAssembly, businessLayerProjectAssembly);
 
-builder.Services.RegisterDependency();
+builder.Services.AddDataLayer(connectionString);
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddBusinessLayer();
 
-builder.Services.AddControllers(
-        options => { options.Filters.Add<ApiValidationFilter>(); })
-    .RegisterValidatorsInAssembly(typeof(Program).Assembly);
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -62,6 +59,9 @@ builder.Services.AddSwaggerGen(options =>
         });
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
+    
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -77,8 +77,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-    policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -89,18 +88,15 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentname}/swagger.json"; });
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz Identity");
+    c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz");
     c.RoutePrefix = "api/swagger";
 });
 
-app.UseCors("NgOrigins");
 app.UseHttpsRedirection();
-
-app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+app.MapControllers();
 
 app.Run();
