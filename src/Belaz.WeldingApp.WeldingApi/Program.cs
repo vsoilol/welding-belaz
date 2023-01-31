@@ -1,16 +1,19 @@
+using System.Reflection;
 using System.Text;
-using Belaz.WeldingApp.WeldingApi;
-using Belaz.WeldingApp.WeldingApi.Helpers;
-using Belaz.WeldingApp.WeldingApi.Repositories;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using WeldingApp.Common.Extensions;
 using WeldingApp.Common.Filters;
-
+using Belaz.WeldingApp.WeldingApi.DataLayer;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
+using Belaz.WeldingApp.WeldingApi.Domain;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities;
+using Belaz.WeldingApp.WeldingApi.Middlewares;
+using ApplicationContext = Belaz.WeldingApp.WeldingApi.DataLayer.ApplicationContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,16 +37,16 @@ builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
 
 var connectionString = builder.Configuration.GetConnectionString("WeldingDatabase");
 
-builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql(connectionString));
+var domainProjectAssembly = typeof(Belaz.WeldingApp.WeldingApi.Domain.Mappings.MappingProfile).Assembly;
+var businessLayerProjectAssembly = typeof(Belaz.WeldingApp.WeldingApi.BusinessLayer.Mappings.MappingProfile).Assembly;
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(domainProjectAssembly, businessLayerProjectAssembly);
 
-builder.Services.RegisterDependency();
+builder.Services.AddDataLayer(connectionString);
 
-builder.Services.AddControllers(
-        options => { options.Filters.Add<ApiValidationFilter>(); })
-    .RegisterValidatorsInAssembly(typeof(Program).Assembly);
+builder.Services.AddBusinessLayer();
+
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -86,6 +89,8 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ApplicationContext>();
     await DataSeed.SeedSampleDataAsync(context);
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentname}/swagger.json"; });
 app.UseSwaggerUI(c =>

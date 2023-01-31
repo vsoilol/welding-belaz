@@ -1,58 +1,54 @@
-﻿using System.Net;
-using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Post;
-using Belaz.WeldingApp.WeldingApi.Contracts.Requests.ProductInfo;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Post;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Post;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeldingApp.Common.Attributes;
 using WeldingApp.Common.Enums;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class PostController : ControllerBase
 {
-    private readonly IPostManager _postManager;
+    private readonly IPostService _postService;
 
-    public PostController(IPostManager postManager)
+    public PostController(IPostService postService)
     {
-        _postManager = postManager;
+        _postService = postService;
     }
-    
+
     [HttpGet]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<PostDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PostDto>>> GetAllAsync()
     {
-        return await _postManager.GetAllAsync();
+        return await _postService.GetAllAsync();
     }
-    
+
     [HttpGet("{id}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(PostDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<PostDto?>> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<PostDto>> GetByIdAsync([FromRoute] Guid id)
     {
-        return await _postManager.GetByIdAsync(id);
+        var result = await _postService.GetByIdAsync(new GetPostByIdRequest { Id = id });
+        return result.ToOk();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(PostDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<PostDto?>> CreateAsync([FromBody] CreatePostRequest request)
+    public async Task<ActionResult<PostDto>> CreateAsync([FromBody] CreatePostRequest request)
     {
-        return await _postManager.CreateAsync(request);
+        var result = await _postService.CreateAsync(request);
+        return result.ToOk();
     }
-    
-    [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
+
+    [HttpPut]   
     [ProducesResponseType(typeof(PostDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<PostDto?>> UpdateAsync([FromBody] UpdatePostRequest request)
+    public async Task<ActionResult<PostDto>> UpdateAsync([FromBody] UpdatePostRequest request)
     {
-        return await _postManager.UpdateAsync(request);
+        var result = await _postService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

@@ -1,47 +1,42 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Welder;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Welder;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Welder;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class WelderController : ControllerBase
 {
-    private readonly IWelderManager _welderManager;
+    private readonly IWelderService _welderService;
 
-    public WelderController(IWelderManager welderManager)
+    public WelderController(IWelderService welderService)
     {
-        _welderManager = welderManager;
+        _welderService = welderService;
     }
 
     [HttpGet]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WelderDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WelderDto>>> GetAllWeldersAsync()
     {
-        return await _welderManager.GetAllAsync();
+        return await _welderService.GetAllAsync();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WelderDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WelderDto?>> CreateAsync([FromBody] CreateWelderRequest request)
+    public async Task<ActionResult<WelderDto>> CreateAsync([FromBody] CreateWelderRequest request)
     {
-        return await _welderManager.CreateAsync(request);
+        var result = await _welderService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WelderDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WelderDto?>> UpdateAsync([FromBody] UpdateWelderRequest request)
+    public async Task<ActionResult<WelderDto>> UpdateAsync([FromBody] UpdateWelderRequest request)
     {
-        return await _welderManager.UpdateAsync(request);
+        var result = await _welderService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

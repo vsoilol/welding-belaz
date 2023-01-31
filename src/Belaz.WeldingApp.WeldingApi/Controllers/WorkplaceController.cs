@@ -1,58 +1,50 @@
-﻿using System.Net;
-using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Workplace;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workplace;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Workplace;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class WorkplaceController : ControllerBase
 {
-    private readonly IWorkplaceManager _workplaceManager;
+    private readonly IWorkplaceService _workplaceService;
 
-    public WorkplaceController(IWorkplaceManager workplaceManager)
+    public WorkplaceController(IWorkplaceService workplaceService)
     {
-        _workplaceManager = workplaceManager;
+        _workplaceService = workplaceService;
     }
-    
+
     [HttpGet]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WorkplaceDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WorkplaceDto>>> GetAllAsync()
     {
-        return await _workplaceManager.GetAllAsync();
+        return await _workplaceService.GetAllAsync();
     }
-    
+
     [HttpGet("{id}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WorkplaceDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkplaceDto?>> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<WorkplaceDto>> GetByIdAsync([FromRoute] Guid id)
     {
-        return await _workplaceManager.GetByIdAsync(id);
+        var result = await _workplaceService.GetByIdAsync(new GetWorkplaceByIdRequest { Id = id });
+        return result.ToOk();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WorkplaceDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkplaceDto?>> CreateAsync([FromBody] CreateWorkplaceRequest request)
+    public async Task<ActionResult<WorkplaceDto>> CreateAsync([FromBody] CreateWorkplaceRequest request)
     {
-        return await _workplaceManager.CreateAsync(request);
+        var result = await _workplaceService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WorkplaceDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkplaceDto?>> UpdateAsync([FromBody] UpdateWorkplaceRequest request)
+    public async Task<ActionResult<WorkplaceDto>> UpdateAsync([FromBody] UpdateWorkplaceRequest request)
     {
-        var result = await _workplaceManager.UpdateAsync(request);
-        return result;
+        var result = await _workplaceService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

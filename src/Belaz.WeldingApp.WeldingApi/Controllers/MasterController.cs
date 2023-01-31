@@ -1,47 +1,42 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Master;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class MasterController : ControllerBase
 {
-    private readonly IMasterManager _masterManager;
+    private readonly IMasterService _masterService;
 
-    public MasterController(IMasterManager masterManager)
+    public MasterController(IMasterService masterService)
     {
-        _masterManager = masterManager;
+        _masterService = masterService;
     }
 
     [HttpGet]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<MasterDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<MasterDto>>> GetAllWeldersAsync()
     {
-        return await _masterManager.GetAllAsync();
+        return await _masterService.GetAllAsync();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(MasterDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<MasterDto?>> CreateAsync([FromBody] CreateUserWithEquipmentRequest request)
+    public async Task<ActionResult<MasterDto>> CreateAsync([FromBody] CreateMasterRequest request)
     {
-        return await _masterManager.CreateAsync(request);
+        var result = await _masterService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(MasterDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<MasterDto?>> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
+    public async Task<ActionResult<MasterDto>> UpdateAsync([FromBody] UpdateMasterRequest request)
     {
-        return await _masterManager.UpdateAsync(request);
+        var result = await _masterService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

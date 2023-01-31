@@ -1,47 +1,42 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Chief;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Chief;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ChiefController : ControllerBase
 {
-    private readonly IChiefManager _chiefManager;
+    private readonly IChiefService _chiefService;
 
-    public ChiefController(IChiefManager chiefManager)
+    public ChiefController(IChiefService chiefService)
     {
-        _chiefManager = chiefManager;
+        _chiefService = chiefService;
     }
 
     [HttpGet]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<ChiefDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ChiefDto>>> GetAllWeldersAsync()
     {
-        return await _chiefManager.GetAllAsync();
+        return await _chiefService.GetAllAsync();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(ChiefDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ChiefDto?>> CreateAsync([FromBody] CreateUserWithEquipmentRequest request)
+    public async Task<ActionResult<ChiefDto>> CreateAsync([FromBody] CreateChiefRequest request)
     {
-        return await _chiefManager.CreateAsync(request);
+        var result = await _chiefService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(ChiefDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ChiefDto?>> UpdateAsync([FromBody] UpdateUserWithEquipmentRequest request)
+    public async Task<ActionResult<ChiefDto>> UpdateAsync([FromBody] UpdateChiefRequest request)
     {
-        return await _chiefManager.UpdateAsync(request);
+        var result = await _chiefService.UpdateAsync(request);
+        return result.ToOk();
     }
 }
