@@ -1,6 +1,7 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.TechnologicalProcess;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalProcess;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,45 +13,47 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class TechnologicalProcessController : ControllerBase
 {
-    private readonly ITechnologicalProcessManager _technologicalProcessManager;
+    private readonly ITechnologicalProcessService _technologicalProcessService;
 
-    public TechnologicalProcessController(ITechnologicalProcessManager technologicalProcessManager)
+    public TechnologicalProcessController(ITechnologicalProcessService technologicalProcessService)
     {
-        _technologicalProcessManager = technologicalProcessManager;
+        _technologicalProcessService = technologicalProcessService;
     }
 
     [HttpGet("{id}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<TechnologicalProcessDto?>> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<TechnologicalProcessDto>> GetByIdAsync([FromRoute] Guid id)
     {
-        return await _technologicalProcessManager.GetByIdAsync(id);
+        var result = await _technologicalProcessService
+            .GetByIdAsync(new GetTechnologicalProcessByIdRequest { Id = id });
+        return result.ToOk();
     }
-    
+
     [HttpGet]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<TechnologicalProcessDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<TechnologicalProcessDto>>> GetAllAsync()
     {
-        return await _technologicalProcessManager.GetAllAsync();
+        return await _technologicalProcessService.GetAllAsync();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<TechnologicalProcessDto?>> CreateAsync([FromBody] CreateTechnologicalProcessRequest request)
+    public async Task<ActionResult<TechnologicalProcessDto>> CreateAsync(
+        [FromBody] CreateTechnologicalProcessRequest request)
     {
-        var technologicalProcess = await _technologicalProcessManager.CreateAsync(request);
-        return technologicalProcess;
+        var result = await _technologicalProcessService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<TechnologicalProcessDto?>> UpdateAsync([FromBody] UpdateTechnologicalProcessRequest request)
+    public async Task<ActionResult<TechnologicalProcessDto>> UpdateAsync(
+        [FromBody] UpdateTechnologicalProcessRequest request)
     {
-        return await _technologicalProcessManager.UpdateAsync(request);
+        var result = await _technologicalProcessService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

@@ -1,58 +1,56 @@
-﻿using System.Net;
-using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Workshop;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Workshop;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Workshop;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeldingApp.Common.Attributes;
 using WeldingApp.Common.Enums;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class WorkshopController : ControllerBase
 {
-    private readonly IWorkshopManager _workshopManager;
+    private readonly IWorkshopService _workshopService;
 
-    public WorkshopController(IWorkshopManager workshopManager)
+    public WorkshopController(IWorkshopService workshopService)
     {
-        _workshopManager = workshopManager;
+        _workshopService = workshopService;
     }
-    
+
     [HttpGet]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WorkshopDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WorkshopDto>>> GetAllAsync()
     {
-        return await _workshopManager.GetAllAsync();
+        return await _workshopService.GetAllAsync();
     }
-    
+
     [HttpGet("{id}")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkshopDto?>> GetByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<WorkshopDto>> GetByIdAsync([FromRoute] Guid id)
     {
-        return await _workshopManager.GetByIdAsync(id);
+        var result = await _workshopService.GetByIdAsync(new GetByIdRequest { Id = id });
+        return result.ToOk();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkshopDto?>> CreateAsync([FromBody] CreateWorkshopRequest request)
+    public async Task<ActionResult<WorkshopDto>> CreateAsync([FromBody] CreateWorkshopRequest request)
     {
-        return await _workshopManager.CreateAsync(request);
+        var result = await _workshopService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkshopDto?>> UpdateAsync([FromBody] UpdateWorkshopRequest request)
+    public async Task<ActionResult<WorkshopDto>> UpdateAsync([FromBody] UpdateWorkshopRequest request)
     {
-        var result = await _workshopManager.UpdateAsync(request);
-        return result;
+        var result = await _workshopService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

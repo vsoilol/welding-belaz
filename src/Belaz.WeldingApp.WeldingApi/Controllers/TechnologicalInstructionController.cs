@@ -1,6 +1,7 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.TechnologicalInstruction;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalInstruction;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,35 +13,38 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class TechnologicalInstructionController : ControllerBase
 {
-    private readonly ITechnologicalInstructionManager _technologicalInstructionManager;
+    private readonly ITechnologicalInstructionService _technologicalInstructionService;
 
-    public TechnologicalInstructionController(ITechnologicalInstructionManager technologicalInstructionManager)
+    public TechnologicalInstructionController(ITechnologicalInstructionService technologicalInstructionService)
     {
-        _technologicalInstructionManager = technologicalInstructionManager;
+        _technologicalInstructionService = technologicalInstructionService;
     }
-    
+
     [HttpGet]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<TechnologicalInstructionDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<TechnologicalInstructionDto>>> GetAllAsync()
     {
-        return await _technologicalInstructionManager.GetAllAsync();
+        return await _technologicalInstructionService.GetAllAsync();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(TechnologicalInstructionDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<TechnologicalInstructionDto?>> CreateAsync([FromBody] CreateInstructionRequest request)
+    public async Task<ActionResult<TechnologicalInstructionDto>> CreateAsync(
+        [FromBody] CreateInstructionRequest request)
     {
-        return await _technologicalInstructionManager.CreateAsync(request);
+        var result = await _technologicalInstructionService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
-    public async Task<ActionResult<TechnologicalInstructionDto?>>  UpdateAsync([FromBody] UpdateInstructionRequest request)
+    [ProducesResponseType(typeof(TechnologicalInstructionDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<TechnologicalInstructionDto>> UpdateAsync(
+        [FromBody] UpdateInstructionRequest request)
     {
-        return await _technologicalInstructionManager.UpdateAsync(request);
+        var result = await _technologicalInstructionService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

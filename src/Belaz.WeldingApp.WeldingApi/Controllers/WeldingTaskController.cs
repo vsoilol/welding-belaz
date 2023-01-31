@@ -1,5 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Responses.WeldingTask;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,28 +11,27 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class WeldingTaskController : ControllerBase
 {
-    private readonly IWeldingTaskManager _weldingTaskManager;
+    private readonly IWeldingTaskService _weldingTaskService;
 
-    public WeldingTaskController(IWeldingTaskManager weldingTaskManager)
+    public WeldingTaskController(IWeldingTaskService weldingTaskService)
     {
-        _weldingTaskManager = weldingTaskManager;
+        _weldingTaskService = weldingTaskService;
     }
-    
+
     [HttpGet("fullNames")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WeldingTaskFullNamesDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingTaskFullNamesDto>>> GetAllWithFullNamesAsync()
     {
-        return await _weldingTaskManager.GetAllWithFullNamesAsync();
+        return await _weldingTaskService.GetAllWithFullNamesAsync();
     }
-    
+
     [HttpGet("registrarInfo")]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<WeldingTaskRegistrarInfoDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingTaskRegistrarInfoDto>>> GetAllRegistrarInfoAsync()
     {
-        return await _weldingTaskManager.GetAllRegistrarInfoAsync();
+        return await _weldingTaskService.GetAllRegistrarInfoAsync();
     }
 }

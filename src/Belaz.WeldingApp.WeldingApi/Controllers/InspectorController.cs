@@ -1,6 +1,7 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Common;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses.Inspector;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Inspector;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,36 +13,36 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class InspectorController : ControllerBase
 {
-    private readonly IInspectorManager _inspectorManager;
+    private readonly IInspectorService _inspectorService;
 
-    public InspectorController(IInspectorManager inspectorManager)
+    public InspectorController(IInspectorService inspectorService)
     {
-        _inspectorManager = inspectorManager;
+        _inspectorService = inspectorService;
     }
 
     [HttpGet]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<InspectorDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<InspectorDto>>> GetAllWeldersAsync()
     {
-        return await _inspectorManager.GetAllAsync();
+        return await _inspectorService.GetAllAsync();
     }
-    
+
     [HttpPost]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(InspectorDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<InspectorDto?>> CreateAsync([FromBody] CreateUserRequest request)
+    public async Task<ActionResult<InspectorDto>> CreateAsync([FromBody] CreateInspectorRequest request)
     {
-        return await _inspectorManager.CreateAsync(request);
+        var result = await _inspectorService.CreateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpPut]
-    [AuthorizeRoles(Role.Admin,Role.Master,Role.TechUser)]
     [ProducesResponseType(typeof(InspectorDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<InspectorDto?>> UpdateAsync([FromBody] UpdateUserRequest request)
+    public async Task<ActionResult<InspectorDto>> UpdateAsync([FromBody] UpdateInspectorRequest request)
     {
-        return await _inspectorManager.UpdateAsync(request);
+        var result = await _inspectorService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

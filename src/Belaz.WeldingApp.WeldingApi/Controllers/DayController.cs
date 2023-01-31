@@ -1,6 +1,7 @@
-﻿using Belaz.WeldingApp.WeldingApi.Contracts.Requests.Day;
-using Belaz.WeldingApp.WeldingApi.Contracts.Responses;
-using Belaz.WeldingApp.WeldingApi.Managers.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,52 +13,53 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class DayController : ControllerBase
 {
-    private readonly IDayManager _dayManager;
+    private readonly IDayService _dayService;
 
-    public DayController(IDayManager dayManager)
+    public DayController(IDayService dayService)
     {
-        _dayManager = dayManager;
+        _dayService = dayService;
     }
 
     [HttpPost]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(DayDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<DayDto?>> CreateAsync([FromBody] CreateDayWithYearRequest request)
+    public async Task<ActionResult<DayDto>> CreateAsync([FromBody] CreateDayWithYearRequest request)
     {
-        return await _dayManager.CreateAsync(request);
+        var result = await _dayService.CreateAsync(request);
+        return result.ToOk();
     }
 
     [HttpPut]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(DayDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<DayDto?>> UpdateAsync([FromBody] UpdateDayRequest request)
+    public async Task<ActionResult<DayDto>> UpdateAsync([FromBody] UpdateDayRequest request)
     {
-        return await _dayManager.UpdateAsync(request);
+        var result = await _dayService.UpdateAsync(request);
+        return result.ToOk();
     }
-    
+
     [HttpGet("main")]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
     [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<DayDto>>> GetAllMainAsync()
     {
-        return await _dayManager.GetAllMainAsync();
+        return await _dayService.GetAllMainAsync();
     }
-    
+
     [HttpGet("byWelder/{welderId}")]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
+    [ProducesResponseType(typeof(List<DayDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<DayDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
     {
-        return await _dayManager.GetAllByWelderIdAsync(welderId);
+        var result = await _dayService.GetAllByWelderIdAsync(new GetDaysByWelderIdRequest { WelderId = welderId });
+        return result.ToOk();
     }
-    
+
     [HttpGet("byEquipment/{equipmentId}")]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByEquipmentIdAsync([FromRoute] Guid equipmentId)
+    [ProducesResponseType(typeof(List<DayDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<DayDto>>> GetAllByEquipmentIdAsync([FromRoute] Guid equipmentId)
     {
-        return await _dayManager.GetAllByEquipmentIdAsync(equipmentId);
+        var result = await _dayService
+            .GetAllByEquipmentIdAsync(new GetDaysByEquipmentIdRequest { EquipmentId = equipmentId });
+        return result.ToOk();
     }
 }
