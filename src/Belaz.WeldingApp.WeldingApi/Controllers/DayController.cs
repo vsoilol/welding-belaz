@@ -60,28 +60,4 @@ public class DayController : ControllerBase
             .GetAllByEquipmentIdAsync(new GetDaysByEquipmentIdRequest { EquipmentId = equipmentId });
         return result.ToOk();
     }
-    
-    [HttpGet("main")]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllMainAsync()
-    {
-        return await _dayManager.GetAllMainAsync();
-    }
-    
-    [HttpGet("byWelder/{welderId}")]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
-    {
-        return await _dayManager.GetAllByWelderIdAsync(welderId);
-    }
-    
-    [HttpGet("byEquipment/{equipmentId}")]
-    [AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
-    [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<DayDto>>> GetAllByEquipmentIdAsync([FromRoute] Guid equipmentId)
-    {
-        return await _dayManager.GetAllByEquipmentIdAsync(equipmentId);
-    }
 }

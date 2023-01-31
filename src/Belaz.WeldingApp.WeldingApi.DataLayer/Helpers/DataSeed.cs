@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;

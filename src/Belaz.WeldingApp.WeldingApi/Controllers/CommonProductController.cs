@@ -14,7 +14,7 @@ public abstract class CommonProductController : ControllerBase
     private readonly IProductService _productService;
     private readonly ProductType _type;
 
-    public CommonProductController(IProductService productService, ProductType type)
+    protected CommonProductController(IProductService productService, ProductType type)
     {
         _productService = productService;
         _type = type;
