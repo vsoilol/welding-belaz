@@ -1252,7 +1252,7 @@ public class DataSeed
                         Number = "75580-2401008",
                         Name = "Картер заднего моста",
                         Status = ProductStatus.NotManufactured,
-                        ProductType = ProductType.Product,
+                        ProductType = ProductType.Knot,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
                         {
@@ -1433,7 +1433,7 @@ public class DataSeed
                         Number = "75310-1183100",
                         Name = "Кронштейн",
                         Status = ProductStatus.NotManufactured,
-                        ProductType = ProductType.Product,
+                        ProductType = ProductType.Knot,
                         ProductionArea = productionArea4,
                         TechnologicalProcess = new TechnologicalProcess
                         {
