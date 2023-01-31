@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +14,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddScoped<IValidationService, ValidationService>();
+        services.AddScoped<IFileService, FileService>();
 
         return services;
     }

@@ -81,7 +81,7 @@ public sealed class ApplicationContext : DbContext
 
         modelBuilder.Entity<ProductInside>()
             .HasOne(e => e.InsideProduct)
-            .WithMany(e => e.ProductMains)
+            .WithOne(e => e.ProductMain)
             .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<UserRole>().HasKey(t => new { t.RoleId, t.UserId });

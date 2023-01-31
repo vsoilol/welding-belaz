@@ -1,23 +1,23 @@
-﻿using Belaz.WeldingApp.FileApi.DataLayer;
+﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.Controllers;
 
-[Route("api/files")]
 [ApiController]
+[Route("api/[controller]")]
 public class FileController : ControllerBase
 {
-    private readonly ApplicationContext _context;
+    private readonly IFileService _fileService;
 
-    public FileController(ApplicationContext context)
+    public FileController(IFileService fileService)
     {
-        _context = context;
+        _fileService = fileService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetSeamPassportAsync()
     {
-        return Ok(await _context.Chiefs.ToListAsync());
+        var result = await _fileService.GenerateSeamPassportAsync();
+        return File(result.Bytes, result.FileType, result.FileName);
     }
 }

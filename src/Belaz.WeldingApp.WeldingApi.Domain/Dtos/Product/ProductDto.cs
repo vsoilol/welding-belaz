@@ -53,8 +53,6 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x =>
-                        x.TechnologicalProcess ?? x.ProductMains
-                            .FirstOrDefault(_ => _.MainProduct.ProductType == ProductType.Product)!
-                            .MainProduct.TechnologicalProcess));
+                        x.TechnologicalProcess ?? x.ProductMain!.MainProduct.TechnologicalProcess));
     }
 }

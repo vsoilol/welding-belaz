@@ -40,7 +40,7 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo
 
         public List<ProductInside> ProductInsides { get; set; } = null!;
 
-        public List<ProductInside> ProductMains { get; set; } = null!;
+        public ProductInside? ProductMain { get; set; }
 
         public Guid? ProductionAreaId { get; set; }
 
