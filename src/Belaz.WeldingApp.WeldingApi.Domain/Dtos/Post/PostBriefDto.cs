@@ -5,6 +5,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
 public class PostBriefDto : IMapFrom<Entities.Production.Post>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
 

@@ -7,6 +7,8 @@ public class PostDto : IMapFrom<Entities.Production.Post>
 {
     public Guid Id { get; set; }
     
+    public string? IdFromSystem { get; set; }
+    
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;

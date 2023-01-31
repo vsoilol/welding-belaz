@@ -13,7 +13,7 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo
     {
         public string? Name { get; set; }
 
-        public int Number { get; set; }
+        public string Number { get; set; } = null!;
 
         public ProductStatus Status { get; set; } = ProductStatus.NotManufactured;
 

@@ -8,6 +8,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 public class DefectiveSeamDto : IMapFrom<StatusReason>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     public SeamDto Seam { get; set; } = null!;
 

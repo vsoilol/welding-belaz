@@ -5,6 +5,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 public class WorkshopBriefDto : IMapFrom<Entities.Production.Workshop>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
 

@@ -10,10 +10,12 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
 {
     public Guid Id { get; set; }
 
+    public string? IdFromSystem { get; set; }
+
     /// <summary>
     /// RFID-метка
     /// </summary>
-    public string RfidTag { get; set; } = null!;
+    public string? RfidTag { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -32,16 +34,17 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
     /// </summary>
     public string CommissioningDate { get; set; } = null!;
 
-    public int Height { get; set; }
+    public int? Height { get; set; }
 
-    public int Width { get; set; }
+    public int? Width { get; set; }
 
-    public int Lenght { get; set; }
+    public int? Lenght { get; set; }
+
 
     /// <summary>
     /// Номер группы оборудования
     /// </summary>
-    public int GroupNumber { get; set; }
+    public string GroupNumber { get; set; } = null!;
 
     /// <summary>
     /// Наименование изготовителя
@@ -51,12 +54,12 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
     /// <summary>
     /// Дата очередной аттестации
     /// </summary>
-    public string NextAttestationDate { get; set; } = null!;
+    public string? NextAttestationDate { get; set; }
 
     /// <summary>
-    /// Ответственный за сварочное оборудование
+    /// Ответственные за сварочное оборудование
     /// </summary>
-    public UserFullNameDto? ResponsiblePerson { get; set; }
+    public List<UserFullNameDto> ResponsiblePersons { get; set; } = null!;
 
     /// <summary>
     /// Процесс (способ) сварки
@@ -66,27 +69,32 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
     /// <summary>
     /// Напряжение холостого хода
     /// </summary>
-    public double IdleVoltage { get; set; }
+    public double? IdleVoltage { get; set; }
 
     /// <summary>
     /// Сварочный ток min
     /// </summary>
-    public double WeldingCurrentMin { get; set; }
+    public double? WeldingCurrentMin { get; set; }
 
     /// <summary>
     /// Сварочный ток max
     /// </summary>
-    public double WeldingCurrentMax { get; set; }
+    public double? WeldingCurrentMax { get; set; }
 
     /// <summary>
     /// Напряжения на дуге min
     /// </summary>
-    public double ArcVoltageMin { get; set; }
+    public double? ArcVoltageMin { get; set; }
 
     /// <summary>
     /// Напряжения на дуге max
     /// </summary>
-    public double ArcVoltageMax { get; set; }
+    public double? ArcVoltageMax { get; set; }
+
+    /// <summary>
+    /// Продолжительность нагрузки
+    /// </summary>
+    public double? LoadDuration { get; set; }
 
     public PostBriefDto? Post { get; set; }
 
@@ -104,9 +112,9 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
             .ForMember(dto => dto.NextAttestationDate,
                 opt => opt
                     .MapFrom(x => x.NextAttestationDate.ToDayInfoString()))
-            .ForMember(dto => dto.ResponsiblePerson,
+            .ForMember(dto => dto.ResponsiblePersons,
                 opt => opt
-                    .MapFrom(x => x.Welder == null ? null : x.Welder.UserInfo))
+                    .MapFrom(x => x.Welders.Select(_ => _.UserInfo)))
             .ForMember(dto => dto.ActivationDuration,
                 opt => opt
                     .MapFrom(x => x.WeldingEquipmentConditionTime

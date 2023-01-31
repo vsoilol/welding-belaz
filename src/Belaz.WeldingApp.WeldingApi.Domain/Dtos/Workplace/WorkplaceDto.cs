@@ -8,6 +8,8 @@ public class WorkplaceDto : IMapFrom<Entities.Production.Workplace>
 {
     public Guid Id { get; set; }
     
+    public string? IdFromSystem { get; set; }
+    
     public int Number { get; set; }
         
     public PostBriefDto? Post { get; set; }

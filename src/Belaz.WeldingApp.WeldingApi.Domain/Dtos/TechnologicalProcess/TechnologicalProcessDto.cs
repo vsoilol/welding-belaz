@@ -6,6 +6,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
 public class TechnologicalProcessDto : IMapFrom<Entities.TaskInfo.TechnologicalProcess>
 {
     public Guid Id { get; set; }
+    
+    public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
 
