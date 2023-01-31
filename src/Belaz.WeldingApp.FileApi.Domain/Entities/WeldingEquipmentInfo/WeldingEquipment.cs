@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.FileApi.Domain.Entities.CalendarInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
+using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Users;
 using WeldingApp.Common.Enums;
 
@@ -107,5 +108,7 @@ namespace Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo
         public Chief? Chief { get; set; }
 
         public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTime { get; set; } = null!;
+
+        public List<WeldingTask> WeldingTasks { get; set; } = null!;
     }
 }
