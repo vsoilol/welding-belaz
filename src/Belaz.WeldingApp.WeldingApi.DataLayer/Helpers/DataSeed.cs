@@ -716,6 +716,20 @@ public class DataSeed
                                 Status = ProductStatus.Defective,
                                 Reason = "Какая-то причина брака"
                             }
+                        },
+                        WeldPassages = new List<WeldPassage>
+                        {
+                            new WeldPassage
+                            {
+                                Name = "Корневой",
+                                Number = 1,
+                                WeldingCurrentMin = 1,
+                                WeldingCurrentMax = 100,
+                                ArcVoltageMin = 5,
+                                ArcVoltageMax = 50,
+                                PreheatingTemperatureMin = 10,
+                                PreheatingTemperatureMax = 60,
+                            }
                         }
                     }
                 },
@@ -772,7 +786,21 @@ public class DataSeed
                         ProductionArea = productionArea,
                         Workplace = workplace,
                         Inspector = inspector,
-                        Welder = welder
+                        Welder = welder,
+                        WeldPassages = new List<WeldPassage>
+                        {
+                            new WeldPassage
+                            {
+                                Number = 2,
+                                Name = "Заполняющий",
+                                WeldingCurrentMin = 1,
+                                WeldingCurrentMax = 100,
+                                ArcVoltageMin = 5,
+                                ArcVoltageMax = 50,
+                                PreheatingTemperatureMin = 10,
+                                PreheatingTemperatureMax = 60,
+                            }
+                        }
                     }
                 },
                 ProductInsides = new List<ProductInside>
@@ -838,22 +866,7 @@ public class DataSeed
                     {
                         Name = "Инструкция 1",
                         Number = 1,
-                        Seam = seam,
-                        WeldPassages = new List<WeldPassage>
-                        {
-                            new WeldPassage
-                            {
-                                Seam = seam,
-                                Name = "Корневой",
-                                Number = 1,
-                                WeldingCurrentMin = 1,
-                                WeldingCurrentMax = 100,
-                                ArcVoltageMin = 5,
-                                ArcVoltageMax = 50,
-                                PreheatingTemperatureMin = 10,
-                                PreheatingTemperatureMax = 60,
-                            }
-                        }
+                        Seam = seam
                     }
                 }
             },
@@ -869,22 +882,7 @@ public class DataSeed
                     {
                         Name = "Инструкция 2",
                         Number = 2,
-                        Seam = seam2,
-                        WeldPassages = new List<WeldPassage>
-                        {
-                            new WeldPassage
-                            {
-                                Seam = seam2,
-                                Number = 2,
-                                Name = "Заполняющий",
-                                WeldingCurrentMin = 1,
-                                WeldingCurrentMax = 100,
-                                ArcVoltageMin = 5,
-                                ArcVoltageMax = 50,
-                                PreheatingTemperatureMin = 10,
-                                PreheatingTemperatureMax = 60,
-                            }
-                        }
+                        Seam = seam2
                     }
                 }
             }
@@ -905,39 +903,21 @@ public class DataSeed
             {
                 Number = 1,
                 WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 300,
-                AirHumidity = 01,
-                InterlayerTemperature = 200,
-                CurrentLayerNumber = 81,
-                PreheatingTemperature = 150,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Seam = seam2!,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new[] { 11.2, 2.33, 26.8 },
             },
             new WeldingTask
             {
                 Number = 2,
                 WeldingDate = new DateTime(2022, 01, 01),
-                WeldingStartTime = new DateTime(2022, 01, 03),
-                WeldingEndTime = null,
-                AmbientTemperature = 320,
-                AirHumidity = 1,
-                InterlayerTemperature = 220,
-                CurrentLayerNumber = 12,
-                PreheatingTemperature = 2,
                 BasicMaterial = "Основной материал",
                 MainMaterialBatchNumber = "№ сертификата",
                 Seam = seam1!,
                 WeldingMaterial = "варочные материалы",
                 WeldingMaterialBatchNumber = "№ сертификата",
-                WeldingCurrentValues = new[] { 1.2, 2.3, 6.8 },
-                ArcVoltageValues = new[] { 11.2, 2.33, 26.8 },
             }
         };
 

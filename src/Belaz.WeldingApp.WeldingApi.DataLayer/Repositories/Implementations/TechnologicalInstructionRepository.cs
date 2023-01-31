@@ -42,8 +42,7 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
             weldPassage.SeamId = entity.SeamId;
         }
 
-        entity.WeldPassages = weldPassages;
-
+        _context.WeldPassages.AddRange(weldPassages);
         var newTechnologicalInstruction = _context.TechnologicalInstructions.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
@@ -54,7 +53,8 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         List<WeldPassage> weldPassages)
     {
         var updatedTechnologicalInstruction = (await _context.TechnologicalInstructions
-            .Include(_ => _.WeldPassages)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.WeldPassages)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
         updatedTechnologicalInstruction.Name = updatedTechnologicalInstruction.Name;
@@ -62,9 +62,8 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
 
         var createdWelderPassages = weldPassages.Where(_ => _.Id == Guid.Empty).ToList();
         
-        UpdateWeldPassages(updatedTechnologicalInstruction.WeldPassages, weldPassages);
-        CreateWeldPassages(createdWelderPassages, updatedTechnologicalInstruction.SeamId,
-            updatedTechnologicalInstruction.Id);
+        UpdateWeldPassages(updatedTechnologicalInstruction.Seam.WeldPassages, weldPassages);
+        CreateWeldPassages(createdWelderPassages, updatedTechnologicalInstruction.SeamId);
         
         await _context.SaveChangesAsync();
 
@@ -88,12 +87,11 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         }
     }
 
-    private void CreateWeldPassages(List<WeldPassage> weldPassages, Guid seamId, Guid technologicalInstructionId)
+    private void CreateWeldPassages(List<WeldPassage> weldPassages, Guid seamId)
     {
         foreach (var weldPassage in weldPassages)
         {
             weldPassage.SeamId = seamId;
-            weldPassage.TechnologicalInstructionId = technologicalInstructionId;
         }
 
         _context.WeldPassages.AddRange(weldPassages);
