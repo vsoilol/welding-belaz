@@ -12,6 +12,8 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class PostController : ControllerBase
 {
     private readonly IPostService _postService;
@@ -44,7 +46,7 @@ public class PostController : ControllerBase
         return result.ToOk();
     }
 
-    [HttpPut]   
+    [HttpPut]
     [ProducesResponseType(typeof(PostDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<PostDto>> UpdateAsync([FromBody] UpdatePostRequest request)
     {

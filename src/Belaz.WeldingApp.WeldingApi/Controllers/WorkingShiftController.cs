@@ -1,5 +1,4 @@
-﻿
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WorkingShift;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WorkingShift;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Extensions;
@@ -13,6 +12,8 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class WorkingShiftController : ControllerBase
 {
     private readonly IWorkingShiftService _workingShiftService;
@@ -29,7 +30,7 @@ public class WorkingShiftController : ControllerBase
         var result = await _workingShiftService.CreateAsync(request);
         return result.ToOk();
     }
-    
+
     [HttpPut]
     [ProducesResponseType(typeof(WorkingShiftDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<WorkingShiftDto>> UpdateAsync([FromBody] UpdateWorkingShiftRequest request)

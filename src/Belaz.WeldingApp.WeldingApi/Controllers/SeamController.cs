@@ -3,13 +3,18 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using LanguageExt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WeldingApp.Common.Attributes;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class SeamController : ControllerBase
 {
     private readonly ISeamService _seamService;
@@ -116,7 +121,7 @@ public class SeamController : ControllerBase
         var result = await _seamService.UpdateDefectiveReasonSeamAsync(request);
         return result.ToOk();
     }
-    
+
     [HttpPut("changeStatus")]
     [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<SeamDto>> ChangeStatusAsync([FromBody] ChangeSeamStatusRequest request)

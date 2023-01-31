@@ -1,17 +1,19 @@
-﻿using System.Net;
-using System.Text.Json;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Belaz.WeldingApp.WeldingApi.Domain.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
+using WeldingApp.Common.Attributes;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
 public class DayController : ControllerBase
 {
     private readonly IDayService _dayService;
