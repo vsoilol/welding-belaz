@@ -134,4 +134,12 @@ public class SeamService : ISeamService
             return _seamRepository.UpdateDefectiveReasonSeamAsync(statusReason);
         });
     }
+
+    public async Task<Result<SeamDto>> ChangeStatusAsync(ChangeSeamStatusRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _seamRepository.ChangeStatusAsync(request.Id, request.Status, request.IsAddManually));
+    }
 }

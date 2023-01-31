@@ -31,4 +31,6 @@ public interface ISeamRepository
     Task<DefectiveSeamDto> AddDefectiveReasonToSeamAsync(StatusReason entity);
     
     Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(StatusReason entity);
+    
+    Task<SeamDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually);
 }

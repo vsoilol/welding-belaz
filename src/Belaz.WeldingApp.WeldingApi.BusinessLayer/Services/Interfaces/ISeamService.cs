@@ -31,4 +31,6 @@ public interface ISeamService
     Task<Result<DefectiveSeamDto>> AddDefectiveReasonToSeamAsync(AddDefectiveReasonToSeamRequest request);
 
     Task<Result<DefectiveSeamDto>> UpdateDefectiveReasonSeamAsync(UpdateDefectiveReasonToSeamRequest request);
+    
+    Task<Result<SeamDto>> ChangeStatusAsync(ChangeSeamStatusRequest request);
 }

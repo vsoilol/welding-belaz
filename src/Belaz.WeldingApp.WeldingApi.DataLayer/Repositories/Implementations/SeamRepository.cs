@@ -135,4 +135,17 @@ public class SeamRepository : ISeamRepository
 
         return await GetDefectiveReasonByIdAsync(entity.Id);
     }
+
+    public async Task<SeamDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually)
+    {
+        var updatedSeam = (await _context.Seams
+            .FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        updatedSeam.Status = status;
+        updatedSeam.IsAddManually = isAddManually;
+        
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
+    }
 }

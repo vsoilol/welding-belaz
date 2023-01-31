@@ -26,6 +26,8 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
 
     public TechnologicalInstructionBriefDto TechnologicalInstruction { get; set; } = null!;
+    
+    public bool IsAddManually { get; set; }
 
     public void Mapping(Profile profile)
     {

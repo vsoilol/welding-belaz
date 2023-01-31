@@ -116,4 +116,12 @@ public class SeamController : ControllerBase
         var result = await _seamService.UpdateDefectiveReasonSeamAsync(request);
         return result.ToOk();
     }
+    
+    [HttpPut("changeStatus")]
+    [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SeamDto>> ChangeStatusAsync([FromBody] ChangeSeamStatusRequest request)
+    {
+        var result = await _seamService.ChangeStatusAsync(request);
+        return result.ToOk();
+    }
 }
