@@ -19,7 +19,7 @@ public class FileService : IFileService
 
     public async Task<DocumentDto> GenerateSeamPassportAsync()
     {
-        var task = await _taskRepository.GetByIdAsync(Guid.Parse("505e0036-4f14-4098-a016-9caca9058c25"));
+        var task = await _taskRepository.GetByIdAsync(Guid.Parse("8a52f206-26b3-49bb-a89d-a8b9ace29c58"));
         
         
         var myReport = Document.Create(container =>

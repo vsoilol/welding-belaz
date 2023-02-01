@@ -1596,6 +1596,7 @@ public class DataSeed
         var inspectorRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser)))!;
 
         var detail = (await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536276803"))!;
+        var detailWithoutKnot = (await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536384399"))!;
 
         var welder = new Welder
         {
@@ -1661,6 +1662,7 @@ public class DataSeed
         };
 
         detail.Master = master;
+        detailWithoutKnot.Master = master;
 
         await context.SaveChangesAsync();
 
@@ -1875,6 +1877,95 @@ public class DataSeed
                         }
                     },
                     Product = detail
+                }
+            },
+            new WeldingTask
+            {
+                Number = 2,
+                WeldingDate = DateTime.Now,
+                BasicMaterial = "Сталь 20",
+                MainMaterialBatchNumber = "454578",
+                WeldingMaterial = "Проволока 1,2 Св-08Г2С",
+                WeldingMaterialBatchNumber = "00252565",
+                ProtectiveGas = "Какой-то Защитный газ",
+                ProtectiveGasBatchNumber = "111111",
+                WeldingEquipment = new WeldingEquipment
+                {
+                    Name = "QINEO TRONIC",
+                    Marking = "ECO600CQWDM2",
+                    FactoryNumber = "49505",
+                    CommissioningDate = new DateTime(2013, 1, 1),
+                    NextAttestationDate = new DateTime(2023, 6, 25),
+                    GroupNumber = "3.11",
+                    ManufacturerName = "CLOOS",
+                    WeldingProcess = "Полуавтоматическая сварка"
+                },
+                Seam = new Seam
+                {
+                    Number = 2,
+                    Status = ProductStatus.Accept,
+                    IsControlSubject = true,
+                    ProductionArea = productionArea4,
+                    Welder = welder,
+                    Inspector = inspector,
+                    WeldPassages = new List<WeldPassage>
+                    {
+                        new()
+                        {
+                            Number = 1,
+                            Name = "Корневой",
+                            WeldingCurrentValues = currentValues1,
+                            ArcVoltageValues = voltageValues1,
+                            ShortTermDeviation = 0.11,
+                            LongTermDeviation = 0.68,
+                            WeldingStartTime = weldingStartTime1,
+                            WeldingEndTime = weldingEndTime1,
+                            PreheatingTemperature = 82,
+                        },
+                        new()
+                        {
+                            Number = 2,
+                            Name = "Заполняющий",
+                            WeldingCurrentValues = currentValues2,
+                            ArcVoltageValues = voltageValues2,
+                            ShortTermDeviation = 0.22,
+                            LongTermDeviation = 0.44,
+                            WeldingStartTime = weldingStartTime2,
+                            WeldingEndTime = weldingEndTime2,
+                            PreheatingTemperature = 100,
+                        }
+                    },
+                    TechnologicalInstruction = new TechnologicalInstruction
+                    {
+                        Number = 1,
+                        Name = "ИТП",
+                        WeldPassageInstructions = new List<WeldPassageInstruction>
+                        {
+                            new()
+                            {
+                                Number = 1,
+                                Name = "Корневой",
+                                PreheatingTemperatureMin = 50,
+                                PreheatingTemperatureMax = 250,
+                                WeldingCurrentMin = 80,
+                                WeldingCurrentMax = 120,
+                                ArcVoltageMin = null,
+                                ArcVoltageMax = null,
+                            },
+                            new()
+                            {
+                                Number = 2,
+                                Name = "Заполняющий",
+                                PreheatingTemperatureMin = 50,
+                                PreheatingTemperatureMax = 250,
+                                WeldingCurrentMin = 80,
+                                WeldingCurrentMax = 120,
+                                ArcVoltageMin = 21,
+                                ArcVoltageMax = 25,
+                            }
+                        }
+                    },
+                    Product = detailWithoutKnot
                 }
             }
         };

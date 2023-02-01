@@ -66,8 +66,8 @@ public class TaskRepository : ITaskRepository
             return null;
         }
 
-        return (await _context.Products.FirstOrDefaultAsync(_ => _.ProductInsides
-            .Any(inside => inside.InsideProductId == childProduct.Id)))!;
+        return await _context.Products.FirstOrDefaultAsync(_ => _.ProductInsides
+            .Any(inside => inside.InsideProductId == childProduct.Id));
     }
 
     private void SetProductsToSeam(SeamDto seam, IEnumerable<Product> products)
