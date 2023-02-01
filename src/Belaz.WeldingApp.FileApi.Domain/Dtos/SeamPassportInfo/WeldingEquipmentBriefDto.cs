@@ -3,7 +3,7 @@ using Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Dtos;
+namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 
 public class WeldingEquipmentBriefDto : IMapFrom<WeldingEquipment>
 {

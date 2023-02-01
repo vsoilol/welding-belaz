@@ -1,4 +1,5 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using QuestPDF.Fluent;
@@ -9,8 +10,18 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 
 public class FileService : IFileService
 {
+    private readonly ITaskRepository _taskRepository;
+
+    public FileService(ITaskRepository taskRepository)
+    {
+        _taskRepository = taskRepository;
+    }
+
     public async Task<DocumentDto> GenerateSeamPassportAsync()
     {
+        var task = await _taskRepository.GetByIdAsync(Guid.Parse("505e0036-4f14-4098-a016-9caca9058c25"));
+        
+        
         var myReport = Document.Create(container =>
             {
                 container.Page(page =>

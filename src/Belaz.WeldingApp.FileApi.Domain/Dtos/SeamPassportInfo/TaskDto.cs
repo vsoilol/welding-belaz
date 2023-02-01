@@ -1,7 +1,10 @@
-﻿using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+﻿using AutoMapper;
+using Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser;
+using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Dtos;
+namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 
 public class TaskDto : IMapFrom<WeldingTask>
 {
@@ -51,4 +54,18 @@ public class TaskDto : IMapFrom<WeldingTask>
     /// № сертификата (партии) на защитный газ 
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
+    
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<WeldingTask, TaskDto>()
+            .ForMember(dto => dto.Welder,
+                opt => opt
+                    .MapFrom(x => x.Seam.Welder!.UserInfo))
+            .ForMember(dto => dto.Inspector,
+                opt => opt
+                    .MapFrom(x => x.Seam.Inspector!.UserInfo))
+            .ForMember(dto => dto.Master,
+                opt => opt
+                    .MapFrom(x => x.Seam.Product!.Master!.UserInfo));
+    }
 }

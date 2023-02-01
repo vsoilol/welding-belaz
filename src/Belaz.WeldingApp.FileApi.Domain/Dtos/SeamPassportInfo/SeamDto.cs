@@ -2,7 +2,7 @@
 using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Dtos;
+namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 
 public class SeamDto : IMapFrom<Seam>
 {
@@ -32,6 +32,8 @@ public class SeamDto : IMapFrom<Seam>
             .ForMember(dto => dto.Detail,
                 opt => opt.Ignore())
             .ForMember(dto => dto.Knot,
+                opt => opt.Ignore())
+            .ForMember(dto => dto.DefectiveReason,
                 opt => opt.Ignore())
             .ForMember(dto => dto.Workshop,
                 opt => opt
