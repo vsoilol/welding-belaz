@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
 using Belaz.WeldingApp.FileApi.Domain.Entities.CalendarInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;

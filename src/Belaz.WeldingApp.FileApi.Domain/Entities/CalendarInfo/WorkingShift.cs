@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.CalendarInfo
 {

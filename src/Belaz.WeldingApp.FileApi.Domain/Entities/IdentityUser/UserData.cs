@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser

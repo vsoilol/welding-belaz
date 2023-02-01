@@ -6,16 +6,15 @@ namespace Belaz.WeldingApp.FileApi.Domain.Entities
 {
     public class EventLog : Entity
     {
-        [Required] 
-        [MaxLength(200)] 
+        [Required] [MaxLength(200)] 
         public string Information { get; set; } = null!;
-
-        [Required] 
+        
+        [Required]
         public DateTime DateTime { get; set; }
-
+        
         public Guid? UserId { get; set; }
-
-        [ForeignKey(nameof(UserId))] 
+        
+        [ForeignKey(nameof(UserId))]
         public UserData? User { get; set; }
     }
 }

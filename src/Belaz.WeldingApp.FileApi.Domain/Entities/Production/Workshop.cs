@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
 using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.Production

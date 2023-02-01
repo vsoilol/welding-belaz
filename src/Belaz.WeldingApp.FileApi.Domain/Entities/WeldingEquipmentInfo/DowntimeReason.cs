@@ -1,6 +1,4 @@
-﻿using Belaz.WeldingApp.FileApi.Domain.Entities;
-
-namespace Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
+﻿namespace Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
 
 /// <summary>
 /// Причина простоя
