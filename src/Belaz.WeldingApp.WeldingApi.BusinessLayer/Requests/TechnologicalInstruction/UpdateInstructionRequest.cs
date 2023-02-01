@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldPassage;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldPassageInstruction;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalInstruction;
 
-public class UpdateInstructionRequest : IMapTo<Domain.Entities.TaskInfo.TechnologicalInstruction>
+public class UpdateInstructionRequest : IMapTo<Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction>
 {
     public Guid Id { get; set; }
 
@@ -12,5 +12,5 @@ public class UpdateInstructionRequest : IMapTo<Domain.Entities.TaskInfo.Technolo
 
     public string Name { get; set; } = null!;
 
-    public List<UpdateWeldPassageRequest> WeldPassages { get; set; } = null!;
+    public List<UpdateWeldPassageInstructionRequest> WeldPassages { get; set; } = null!;
 }

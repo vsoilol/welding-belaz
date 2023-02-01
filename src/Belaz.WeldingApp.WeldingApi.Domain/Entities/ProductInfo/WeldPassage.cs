@@ -13,34 +13,39 @@ public class WeldPassage : Entity
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Сварочный ток min
+    /// Значения сварочного тока
     /// </summary>
-    public double WeldingCurrentMin { get; set; }
+    public double[] WeldingCurrentValues { get; set; } = null!;
 
     /// <summary>
-    /// Сварочный ток max
+    /// Значения напряжения на дуге
     /// </summary>
-    public double WeldingCurrentMax { get; set; }
+    public double[] ArcVoltageValues { get; set; } = null!;
 
     /// <summary>
-    /// Напряжения на дуге min
+    /// Отклонение кратковременные, до 1 секунды
     /// </summary>
-    public double? ArcVoltageMin { get; set; }
+    public double? ShortTermDeviation { get; set; }
 
     /// <summary>
-    /// Напряжения на дуге max
+    /// Отклонения длительные, более 1 секунды
     /// </summary>
-    public double? ArcVoltageMax { get; set; }
+    public double? LongTermDeviation { get; set; }
 
     /// <summary>
-    /// Температура предварительного нагрева min
+    /// Время начала сварки
     /// </summary>
-    public double PreheatingTemperatureMin { get; set; }
+    public TimeSpan WeldingStartTime { get; set; }
 
     /// <summary>
-    /// Температура предварительного нагрева max
+    /// Время окончания сварки
     /// </summary>
-    public double PreheatingTemperatureMax { get; set; }
+    public TimeSpan WeldingEndTime { get; set; }
+
+    /// <summary>
+    /// Температура предварительного нагрева
+    /// </summary>
+    public int PreheatingTemperature { get; set; }
 
     /// <summary>
     /// Выполнен ли без нарушения требований технологической инструкции
@@ -49,10 +54,6 @@ public class WeldPassage : Entity
 
     public Guid SeamId { get; set; }
 
-    [ForeignKey(nameof(SeamId))] public Seam Seam { get; set; } = null!;
-
-    public Guid? WeldPassageResultId { get; set; }
-
-    [ForeignKey(nameof(WeldPassageResultId))]
-    public WeldPassageResult? WeldPassageResult { get; set; }
+    [ForeignKey(nameof(SeamId))] 
+    public Seam Seam { get; set; } = null!;
 }

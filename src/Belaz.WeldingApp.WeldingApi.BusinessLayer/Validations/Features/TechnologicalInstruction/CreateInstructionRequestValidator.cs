@@ -1,5 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalInstruction;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.WeldPassage;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.WeldPassageInstruction;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.TechnologicalInstruction;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
@@ -20,7 +20,7 @@ public class CreateInstructionRequestValidator : AbstractValidator<CreateInstruc
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<CreateInstructionRequest,
-                Domain.Entities.TaskInfo.TechnologicalProcess>(context));
+                Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>(context));
 
         RuleFor(model => model.Name)
             .Cascade(CascadeMode.Stop)
@@ -29,9 +29,14 @@ public class CreateInstructionRequestValidator : AbstractValidator<CreateInstruc
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1);
+        
+        RuleFor(model => model.WeldPassages)
+            .Cascade(CascadeMode.Stop)
+            .NotNull()
+            .NotEmpty();
 
         RuleForEach(model => model.WeldPassages)
             .Cascade(CascadeMode.Stop)
-            .SetValidator(new CreateWeldPassageRequestValidator());
+            .SetValidator(new CreateWeldPassageInstructionRequestValidator());
     }
 }

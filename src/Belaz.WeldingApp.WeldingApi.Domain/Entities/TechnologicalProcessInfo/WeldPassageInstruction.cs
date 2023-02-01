@@ -1,15 +1,12 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 
-public class WeldPassageDto : IMapFrom<WeldPassage>
+public class WeldPassageInstruction : Entity
 {
-    public Guid Id { get; set; }
+    public int Number { get; set; }
 
     public string Name { get; set; } = null!;
-
-    public int Number { get; set; }
 
     /// <summary>
     /// Сварочный ток min
@@ -40,4 +37,9 @@ public class WeldPassageDto : IMapFrom<WeldPassage>
     /// Температура предварительного нагрева max
     /// </summary>
     public double PreheatingTemperatureMax { get; set; }
+    
+    public Guid TechnologicalInstructionId { get; set; }
+
+    [ForeignKey(nameof(TechnologicalInstructionId))] 
+    public TechnologicalInstruction TechnologicalInstruction { get; set; } = null!;
 }

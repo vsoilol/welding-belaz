@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 
-public class TechnologicalInstructionDto : IMapFrom<Entities.TaskInfo.TechnologicalInstruction>
+public class TechnologicalInstructionDto : IMapFrom<Entities.TechnologicalProcessInfo.TechnologicalInstruction>
 {
     public Guid Id { get; set; }
 
@@ -14,13 +15,5 @@ public class TechnologicalInstructionDto : IMapFrom<Entities.TaskInfo.Technologi
 
     public SeamDto Seam { get; set; } = null!;
 
-    public List<WeldPassageDto> WeldPassages { get; set; } = null!;
-
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<Entities.TaskInfo.TechnologicalInstruction, TechnologicalInstructionDto>()
-            .ForMember(dto => dto.WeldPassages,
-                opt => opt
-                    .MapFrom(x => x.Seam.WeldPassages));
-    }
+    public List<WeldPassageInstructionDto> WeldPassageInstructions { get; set; } = null!;
 }

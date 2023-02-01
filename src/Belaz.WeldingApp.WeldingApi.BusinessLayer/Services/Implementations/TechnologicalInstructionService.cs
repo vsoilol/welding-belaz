@@ -7,6 +7,7 @@ using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -37,7 +38,7 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
         return await validationResult.ToDataResult(() =>
         {
             var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
-            var weldPassages = _mapper.Map<List<WeldPassage>>(request.WeldPassages);
+            var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
 
             return _technologicalInstructionRepository.CreateAsync(technologicalInstruction, weldPassages);
         });
@@ -50,7 +51,7 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
         return await validationResult.ToDataResult(() =>
         {
             var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
-            var weldPassages = _mapper.Map<List<WeldPassage>>(request.WeldPassages);
+            var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
 
             return _technologicalInstructionRepository.UpdateAsync(technologicalInstruction, weldPassages);
         });

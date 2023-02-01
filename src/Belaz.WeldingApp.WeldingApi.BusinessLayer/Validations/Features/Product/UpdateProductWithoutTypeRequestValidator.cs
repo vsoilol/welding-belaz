@@ -41,7 +41,7 @@ public class UpdateProductWithoutTypeRequestValidator : AbstractValidator<Update
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<UpdateProductWithoutTypeRequest,
-                Domain.Entities.TaskInfo.TechnologicalProcess>(context));
+                Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>(context));
 
         When(_ => _.InsideProducts is not null, () =>
         {

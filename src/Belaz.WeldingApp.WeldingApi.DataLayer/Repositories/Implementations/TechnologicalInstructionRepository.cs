@@ -4,6 +4,7 @@ using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -35,47 +36,47 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
     }
 
     public async Task<TechnologicalInstructionDto> CreateAsync(TechnologicalInstruction entity,
-        List<WeldPassage> weldPassages)
+        List<WeldPassageInstruction> weldPassages)
     {
-        foreach (var weldPassage in weldPassages)
-        {
-            weldPassage.SeamId = entity.SeamId;
-        }
-
-        _context.WeldPassages.AddRange(weldPassages);
+        entity.WeldPassageInstructions = weldPassages;
         var newTechnologicalInstruction = _context.TechnologicalInstructions.Add(entity).Entity;
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(newTechnologicalInstruction.Id);
     }
 
     public async Task<TechnologicalInstructionDto> UpdateAsync(TechnologicalInstruction entity,
-        List<WeldPassage> weldPassages)
+        List<WeldPassageInstruction> weldPassages)
     {
         var updatedTechnologicalInstruction = (await _context.TechnologicalInstructions
-            .Include(_ => _.Seam)
-            .ThenInclude(_ => _.WeldPassages)
+            .Include(_ => _.WeldPassageInstructions)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
-        updatedTechnologicalInstruction.Name = updatedTechnologicalInstruction.Name;
-        updatedTechnologicalInstruction.Number = updatedTechnologicalInstruction.Number;
+        updatedTechnologicalInstruction.Name = entity.Name;
+        updatedTechnologicalInstruction.Number = entity.Number;
 
         var createdWelderPassages = weldPassages.Where(_ => _.Id == Guid.Empty).ToList();
-        
-        UpdateWeldPassages(updatedTechnologicalInstruction.Seam.WeldPassages, weldPassages);
-        CreateWeldPassages(createdWelderPassages, updatedTechnologicalInstruction.SeamId);
-        
+
+        UpdateWeldPassages(updatedTechnologicalInstruction.WeldPassageInstructions, weldPassages);
+        CreateWeldPassages(createdWelderPassages, updatedTechnologicalInstruction.Id);
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
     }
 
-    private void UpdateWeldPassages(List<WeldPassage> updatedWelderPassages,
-        List<WeldPassage> weldPassages)
+    private void UpdateWeldPassages(List<WeldPassageInstruction> updatedWelderPassages,
+        List<WeldPassageInstruction> weldPassages)
     {
         foreach (var weldPassage in updatedWelderPassages)
         {
-            var newWelderPassage = weldPassages.FirstOrDefault(_ => _.Id == weldPassage.Id)!;
+            var newWelderPassage = weldPassages.FirstOrDefault(_ => _.Id == weldPassage.Id);
+
+            if (newWelderPassage is null)
+            {
+                continue;
+            }
 
             weldPassage.Name = newWelderPassage.Name;
             weldPassage.ArcVoltageMax = newWelderPassage.ArcVoltageMax;
@@ -87,13 +88,13 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         }
     }
 
-    private void CreateWeldPassages(List<WeldPassage> weldPassages, Guid seamId)
+    private void CreateWeldPassages(List<WeldPassageInstruction> weldPassages, Guid technologicalInstructionId)
     {
         foreach (var weldPassage in weldPassages)
         {
-            weldPassage.SeamId = seamId;
+            weldPassage.TechnologicalInstructionId = technologicalInstructionId;
         }
 
-        _context.WeldPassages.AddRange(weldPassages);
+        _context.WeldPassageInstructions.AddRange(weldPassages);
     }
 }

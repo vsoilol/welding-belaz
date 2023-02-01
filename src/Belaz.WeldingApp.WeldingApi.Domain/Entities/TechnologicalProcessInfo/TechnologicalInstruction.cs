@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 
 public class TechnologicalInstruction : Entity
 {
@@ -10,12 +10,14 @@ public class TechnologicalInstruction : Entity
     public string Name { get; set; } = null!;
 
     public Guid SeamId { get; set; }
-        
-    [ForeignKey(nameof(SeamId))]
+
+    [ForeignKey(nameof(SeamId))] 
     public Seam Seam { get; set; } = null!;
-    
+
     public Guid? TechnologicalProcessId { get; set; }
-        
+
     [ForeignKey(nameof(TechnologicalProcessId))]
     public TechnologicalProcess? TechnologicalProcess { get; set; }
+
+    public List<WeldPassageInstruction> WeldPassageInstructions { get; set; } = null!;
 }

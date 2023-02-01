@@ -22,6 +22,8 @@ public class SeamDto : IMapFrom<Seam>
     
     public TechnologicalInstructionBriefDto TechnologicalInstruction { get; set; } = null!;
     
+    public List<WeldPassageDto> WeldPassages { get; set; } = null!;
+    
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Seam, SeamDto>()
