@@ -58,6 +58,9 @@ public class TaskDto : IMapFrom<WeldingTask>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<WeldingTask, TaskDto>()
+            .ForMember(dto => dto.WeldingDate,
+                opt => opt
+                    .MapFrom(x => x.WeldingDate.ToDayInfoString()))
             .ForMember(dto => dto.Welder,
                 opt => opt
                     .MapFrom(x => x.Seam.Welder!.UserInfo))
