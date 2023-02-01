@@ -8,6 +8,4 @@ public class TechnologicalInstructionBriefDto : IMapFrom<TechnologicalInstructio
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;
-
-    public List<WeldPassageDto> WeldPassages { get; set; } = null!;
 }

@@ -1,4 +1,4 @@
-﻿namespace Belaz.WeldingApp.FileApi.Domain.Contants;
+﻿namespace Belaz.WeldingApp.FileApi.Domain.Constants;
 
 public static class FileTypes
 {

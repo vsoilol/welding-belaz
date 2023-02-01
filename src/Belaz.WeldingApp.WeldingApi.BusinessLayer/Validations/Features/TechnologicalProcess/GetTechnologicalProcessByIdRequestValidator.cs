@@ -13,6 +13,6 @@ public class GetTechnologicalProcessByIdRequestValidator : AbstractValidator<Get
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<GetTechnologicalProcessByIdRequest,
-                Domain.Entities.TaskInfo.TechnologicalProcess>(context));
+                Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>(context));
     }
 }

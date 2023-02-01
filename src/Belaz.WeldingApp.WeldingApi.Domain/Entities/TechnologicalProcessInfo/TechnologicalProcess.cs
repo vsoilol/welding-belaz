@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo
 {
     public class TechnologicalProcess : Entity
     {

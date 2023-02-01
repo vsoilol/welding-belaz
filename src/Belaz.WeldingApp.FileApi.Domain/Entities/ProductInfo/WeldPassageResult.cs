@@ -1,4 +1,6 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+﻿using Belaz.WeldingApp.FileApi.Domain.Entities;
+
+namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 
 public class WeldPassageResult : Entity
 {

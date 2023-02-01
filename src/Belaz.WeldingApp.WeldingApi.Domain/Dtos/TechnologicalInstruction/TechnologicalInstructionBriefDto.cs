@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 
-public class TechnologicalInstructionBriefDto : IMapFrom<Entities.TaskInfo.TechnologicalInstruction>
+public class TechnologicalInstructionBriefDto : IMapFrom<Entities.TechnologicalProcessInfo.TechnologicalInstruction>
 {
     public string Name { get; set; } = null!;
 

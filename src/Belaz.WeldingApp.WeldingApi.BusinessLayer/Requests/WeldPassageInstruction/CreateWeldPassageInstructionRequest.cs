@@ -1,11 +1,10 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldPassage;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldPassageInstruction;
 
-public class UpdateWeldPassageRequest : IMapTo<Domain.Entities.ProductInfo.WeldPassage>
+public class
+    CreateWeldPassageInstructionRequest : IMapTo<Domain.Entities.TechnologicalProcessInfo.WeldPassageInstruction>
 {
-    public Guid? Id { get; set; }
-
     public string Name { get; set; } = null!;
 
     public int Number { get; set; }

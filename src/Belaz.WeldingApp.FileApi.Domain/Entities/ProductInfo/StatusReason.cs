@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.FileApi.Domain.Entities;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;

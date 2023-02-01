@@ -13,7 +13,7 @@ public class UpdateTechnologicalProcessRequestValidator : AbstractValidator<Upda
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<UpdateTechnologicalProcessRequest,
-                Domain.Entities.TaskInfo.TechnologicalProcess>(context));
+                Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>(context));
         
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)

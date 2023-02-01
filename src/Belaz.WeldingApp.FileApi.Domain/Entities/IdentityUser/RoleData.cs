@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Belaz.WeldingApp.FileApi.Domain.Entities;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser
 {

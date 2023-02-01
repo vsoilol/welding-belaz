@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalProcess;
 
-public class UpdateTechnologicalProcessRequest : IMapTo<Domain.Entities.TaskInfo.TechnologicalProcess>
+public class UpdateTechnologicalProcessRequest : IMapTo<Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>
 {
     public Guid Id { get; set; }
 

@@ -1,17 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
-using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 
-/// <summary>
-/// Проход для сварного шва
-/// </summary>
-public class WeldPassage : Entity
+public class WeldPassageInstructionDto : IMapFrom<WeldPassageInstruction>
 {
-    public int Number { get; set; }
+    public Guid Id { get; set; }
 
     public string Name { get; set; } = null!;
+
+    public int Number { get; set; }
 
     /// <summary>
     /// Сварочный ток min
@@ -42,18 +40,4 @@ public class WeldPassage : Entity
     /// Температура предварительного нагрева max
     /// </summary>
     public double PreheatingTemperatureMax { get; set; }
-
-    /// <summary>
-    /// Выполнен ли без нарушения требований технологической инструкции
-    /// </summary>
-    public bool IsDone { get; set; } = false;
-
-    public Guid SeamId { get; set; }
-
-    [ForeignKey(nameof(SeamId))] public Seam Seam { get; set; } = null!;
-
-    public Guid? WeldPassageResultId { get; set; }
-
-    [ForeignKey(nameof(WeldPassageResultId))]
-    public WeldPassageResult? WeldPassageResult { get; set; }
 }
