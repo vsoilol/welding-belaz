@@ -48,8 +48,6 @@ public sealed class ApplicationContext : DbContext
 
     public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; } = null!;
 
-    public DbSet<LayerInstruction> LayerInstructions { get; set; } = null!;
-
     public DbSet<TechnologicalProcess> TechnologicalProcesses { get; set; } = null!;
 
     public DbSet<TechnologicalInstruction> TechnologicalInstructions { get; set; } = null!;

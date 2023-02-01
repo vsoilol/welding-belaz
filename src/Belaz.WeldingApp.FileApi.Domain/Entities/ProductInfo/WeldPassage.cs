@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.FileApi.Domain.Entities;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
@@ -9,14 +10,14 @@ namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 public class WeldPassage : Entity
 {
     public int Number { get; set; }
-    
+
     public string Name { get; set; } = null!;
 
     /// <summary>
     /// Сварочный ток min
     /// </summary>
     public double WeldingCurrentMin { get; set; }
-        
+
     /// <summary>
     /// Сварочный ток max
     /// </summary>
@@ -26,7 +27,7 @@ public class WeldPassage : Entity
     /// Напряжения на дуге min
     /// </summary>
     public double? ArcVoltageMin { get; set; }
-        
+
     /// <summary>
     /// Напряжения на дуге max
     /// </summary>
@@ -36,7 +37,7 @@ public class WeldPassage : Entity
     /// Температура предварительного нагрева min
     /// </summary>
     public double PreheatingTemperatureMin { get; set; }
-        
+
     /// <summary>
     /// Температура предварительного нагрева max
     /// </summary>
@@ -46,14 +47,13 @@ public class WeldPassage : Entity
     /// Выполнен ли без нарушения требований технологической инструкции
     /// </summary>
     public bool IsDone { get; set; } = false;
-    
+
     public Guid SeamId { get; set; }
-    
-    [ForeignKey(nameof(SeamId))]
-    public Seam Seam { get; set; } = null!;
-    
-    public Guid TechnologicalInstructionId { get; set; }
-    
-    [ForeignKey(nameof(TechnologicalInstructionId))]
-    public TechnologicalInstruction TechnologicalInstruction { get; set; } = null!;
+
+    [ForeignKey(nameof(SeamId))] public Seam Seam { get; set; } = null!;
+
+    public Guid? WeldPassageResultId { get; set; }
+
+    [ForeignKey(nameof(WeldPassageResultId))]
+    public WeldPassageResult? WeldPassageResult { get; set; }
 }
