@@ -70,17 +70,17 @@ export const TexProcWelding = ({
 
   const initialValues = {
 
-    id:modalData?.weldPassages.id??"",
+    id:modalData?.weldPassageInstructions.id??"",
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
-    weldPassagesName: modalData?.weldPassages[0].name ?? "",
-    weldingCurrentMin:modalData?.weldPassages[0].weldingCurrentMin ?? "",
-    weldingCurrentMax:modalData?.weldPassages[0].weldingCurrentMax ?? "",
-    arcVoltageMin:modalData?.weldPassages[0].arcVoltageMin ?? "",
-    arcVoltageMax:modalData?.weldPassages[0].arcVoltageMax ?? "",
-    preheatingTemperatureMin:modalData?.weldPassages[0].preheatingTemperatureMin ?? "",
-    preheatingTemperatureMax:modalData?.weldPassages[0].preheatingTemperatureMax ?? "",
-    weldPassagesId:modalData?.weldPassages[0].id ?? "",
+    weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
+    weldingCurrentMin:modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
+    weldingCurrentMax:modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
+    arcVoltageMin:modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
+    arcVoltageMax:modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
+    preheatingTemperatureMin:modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
+    preheatingTemperatureMax:modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
+    weldPassagesId:modalData?.weldPassageInstructions[0].id ?? "",
   }; 
 
   const formattedMasters = masters?.map((item) => {
@@ -121,8 +121,8 @@ export const TexProcWelding = ({
     {
       title: "Сборочные узлы",
       render: (rowData) => { 
-        return (
-          <span>Сборочный узел {rowData.technologicalInstructions[0]?.seam.product?.number}</span>
+        return ( 
+          <span>Сборочный узел {rowData?.technologicalInstructions[0]?.seam?.number}</span>
         );
       } 
     },
@@ -135,7 +135,10 @@ export const TexProcWelding = ({
     {
       title: "Диапазоны допустимых значений контролируемых параметров (сварочный ток, напряжение на дуге)",
       render: (rowData) => (
-        <span>{rowData.technologicalInstructions[0]?.weldPassages[0]?.arcVoltageMin} - {rowData.technologicalInstructions[0]?.weldPassages[0]?.arcVoltageMax}</span>
+        <span>
+          {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMin} 
+          - {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMax}
+          </span>
       ),
     },
     {
@@ -157,21 +160,21 @@ export const TexProcWelding = ({
       render: (rowData) => {
         return (
           <p>
-            Cварочный шов {rowData.seam?.number}
+            Cварочный шов {rowData?.seam?.number}
           </p>
         );
       }
     },
     {
       title: "Наименование прохода", 
-      field: "weldPassages[0].name",   
+      field: "weldPassageInstructions[0].name",   
     },
     {
       title: "Время сварки ",
       render: (rowData) => {
         return (
           <p>
-            {`${rowData.weldPassages[0]?.weldingCurrentMin} - ${rowData.weldPassages[0]?.weldingCurrentMax}`}
+            {`${rowData?.weldPassageInstructions[0]?.weldingCurrentMin} - ${rowData?.weldPassageInstructions[0]?.weldingCurrentMax}`}
           </p>
         );
       },
@@ -181,7 +184,7 @@ export const TexProcWelding = ({
       render: (rowData) => {
         return (
           <p>
-            {`${rowData.weldPassages[0]?.arcVoltageMin} - ${rowData.weldPassages[0]?.arcVoltageMax}`}
+            {`${rowData?.weldPassageInstructions[0]?.arcVoltageMin} - ${rowData?.weldPassageInstructions[0]?.arcVoltageMax}`}
           </p>
         );
       },
@@ -191,7 +194,7 @@ export const TexProcWelding = ({
       render: (rowData) => {
         return (
           <p>
-            {`${rowData.weldPassages[0]?.preheatingTemperatureMin} - ${rowData.weldPassages[0]?.preheatingTemperatureMax}`}
+            {`${rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin} - ${rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax}`}
           </p>
         );
       },
@@ -270,32 +273,33 @@ export const TexProcWelding = ({
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassages[0].number?? "-"}
+              <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassageInstructions[0]?.number?? "-"}
                 </TableCell>
+                
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassages[0].name?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.name?? "-"}
                 </TableCell> 
 
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassages[0].preheatingTemperatureMin?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassages[0].preheatingTemperatureMax?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax?? "-"}
                 </TableCell> 
 
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassages[0].weldingCurrentMin?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMin?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassages[0].weldingCurrentMax?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMax?? "-"}
                 </TableCell> 
  
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassages[0].arcVoltageMin?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.arcVoltageMin?? "-"}
                 </TableCell>
                 <TableCell align="left" component="th" scope="row">
-                  {rowData?.weldPassages[0].arcVoltageMax?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.arcVoltageMax?? "-"}
                 </TableCell> 
                
 
@@ -343,12 +347,13 @@ export const TexProcWelding = ({
       variables["seamId"] = valuetSeam;
       variables["technologicalProcessId"] = texprocwelding[0].id;
       
+ 
       if (isModalOpenNumb===0) {  
          addInst(variables)  
       }
       if (isModalOpenNumb===1) {  
          variables["id"] = modalData.id;
-         variables["weldPassagesId"]=modalData?.weldPassages[0].id
+         variables["weldPassagesId"]=modalData?.weldPassageInstructions[0].id
          editInst(variables) 
       }    
     }

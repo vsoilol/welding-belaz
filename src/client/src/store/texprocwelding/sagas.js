@@ -70,6 +70,7 @@ function* addInst(variables) {
       "weldPassages": [
         {
           "name": variables.payload.weldPassagesName,
+          "number": Number(variables.payload.number),
           "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
           "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
           "arcVoltageMin": Number(variables.payload.arcVoltageMin),
@@ -95,6 +96,7 @@ function* editInst(variables) {
       "weldPassages": [
         {
           "id": variables.payload.weldPassagesId,
+          "number": Number(variables.payload.number),
           "name": variables.payload.weldPassagesName,
           "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
           "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),

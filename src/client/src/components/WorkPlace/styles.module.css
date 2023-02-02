@@ -3,7 +3,7 @@
 
 .tableWrapper {
   margin-top: 80px;
-  width: 70%;
+  width: calc(100% - 100px);
 }
 
 .innerWrapper {
@@ -30,10 +30,24 @@
   justify-content: space-around;
   margin: 16px;
 }
-
+.goOver{
+  color: blue;
+  cursor: pointer;
+  width: fit-content;
+  border-bottom: 1px solid;
+}
+.goOver:nth-child(n+2){
+  margin-top: 10px;
+}
 .row:first-child {
   margin-top: 30px;
 }
+
+.hiddenTable{ 
+  border: 2px solid red;
+}
+
+
 
 .row:last-child {
   margin-bottom: 30px;

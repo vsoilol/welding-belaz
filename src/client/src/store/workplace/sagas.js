@@ -287,7 +287,7 @@ function* editWorkplace(variables) {
 ///Изделия
 function* loadProduct() {
   try {
-    const { data } = yield call(api.get, `/product/byControlSubject/true`);
+    const { data } = yield call(api.get, `/product/byStatus/1`);
     yield put(loadProductSuccess(data));
   } catch (error) {
     yield put(loadProductFailure(error));
@@ -326,7 +326,7 @@ function* addProduct(variables) {
   }
 }
 function* editProduct(variables) {
-  try {
+  try {        
     const { data } = yield call(api.put, `/product`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
@@ -355,7 +355,7 @@ function* getDetailByInspector(variables) {
 ///Узлы
 function* loadKnot() {
   try {
-    const { data } = yield call(api.get, `/knot/byControlSubject/false`);
+    const { data } = yield call(api.get, `/knot/byStatus/1`);
     yield put(loadKnotSuccess(data));
   } catch (error) {
     yield put(loadKnotFailure(error));
@@ -415,7 +415,7 @@ function* editKnot(variables) {
 ///Детали
 function* loadDetail() {
   try {
-    const { data } = yield call(api.get, `/detail/byControlSubject/true`);
+    const { data } = yield call(api.get, `/detail/byStatus/1`);
     yield put(loadDetailSuccess(data));
   } catch (error) {
     yield put(loadDetailFailure(error));
@@ -475,7 +475,7 @@ function* editDetail(variables) {
 ///Сварные швы
 function* loadSeam() {
   try {
-    const { data } = yield call(api.get, `/seam/byControlSubject/true`);
+    const { data } = yield call(api.get, `/seam/byStatus/1`);
     yield put(loadSeamSuccess(data));
   } catch (error) {
     yield put(loadSeamFailure(error));

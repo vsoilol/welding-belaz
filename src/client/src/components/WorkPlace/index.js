@@ -202,6 +202,8 @@ export const WorkPlace = ({
 
   ]);
 
+
+
   //////////////////////////////////////////////////////////////////// 
   const columns = {
     workshops: [
@@ -213,6 +215,12 @@ export const WorkPlace = ({
         title: "Номер  цеха",
         field: "number",
       },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e=>{GoTo(1,"Производственные участки",rowData.id)}}>Производственный участок</p>;
+        },
+      },
     ],
     production_sites: [
       {
@@ -222,6 +230,12 @@ export const WorkPlace = ({
       {
         title: "Номер  производственного участка ",
         field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e=>{GoTo(2,"Посты",rowData.id)}}>Пост</p>;
+        },
       },
     ],
     posts: [
@@ -234,6 +248,12 @@ export const WorkPlace = ({
       {
         title: "Номер  поста ",
         field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e=>{GoTo(9,"Рабочие места")}}>Рабочее место</p>;
+        },
       },
     ],
     jobs_place: [
@@ -278,10 +298,22 @@ export const WorkPlace = ({
           return <p onClick={e => onClickFixedGoods(rowData.id)} className={styles.Fix}>Закрепить</p>;
         },
       },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
       {
-        title: "Просмотреть закрепленные",
+        title: "Перерейти к",
         render: (rowData) => {
-          return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e=>{GoTo(6,"Детали ",rowData.id)}}>Деталь</p>
+              <p className={styles.goOver} onClick={e=>{GoTo(5,"Узлы",rowData.id)}}>Узел </p>
+              <p className={styles.goOver} onClick={e=>{GoTo(7,"Сварные швы",rowData.id)}}>Сварной шов</p>
+            </div>
+          )
         },
       },
     ],
@@ -314,12 +346,24 @@ export const WorkPlace = ({
           return <p onClick={e => onClickFixedKnot(rowData.id)} className={styles.Fix}>Закрепить</p>;
         },
       },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
       {
-        title: "Просмотреть закрепленные",
+        title: "Перерейти к",
         render: (rowData) => {
-          return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+          return (
+            <div>  
+              <p className={styles.goOver} onClick={e=>{GoTo(8,"Детали",rowData.id)}}>Деталь</p>
+              <p className={styles.goOver} onClick={e=>{GoTo(7,"Сварные швы",rowData.id)}}>Сварной шов</p>
+            </div>
+          )
         },
       },
+
     ],
     details: [
       {
@@ -350,10 +394,20 @@ export const WorkPlace = ({
           return <p onClick={e => onClickFixedDetails(rowData.id)} className={styles.Fix}>Закрепить</p>;
         },
       },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
       {
-        title: "Просмотреть закрепленные",
+        title: "Перерейти к",
         render: (rowData) => {
-          return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+          return (
+            <div>   
+              <p className={styles.goOver} onClick={e=>{GoTo(7,"Сварные швы")}}>Сварной шов</p>
+            </div>
+          )
         },
       },
     ],
@@ -389,12 +443,12 @@ export const WorkPlace = ({
           return <p onClick={e => onClickFixedSeam(rowData.id)} className={styles.Fix}>Закрепить</p>;
         },
       },
-      {
-        title: "Просмотреть закрепленные",
-        render: (rowData) => {
-          return <p className={styles.Fix}>Просмотреть</p>;
-        },
-      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
     ],
   };
 
@@ -429,14 +483,40 @@ export const WorkPlace = ({
   };
 
   const [value_panel, setValue] = useState(0);
+  const [value_panel2, setValue2] = useState(-1);
+  const [value_workplace, setValueworkplace] = useState(0);
+  const [value_goTo, setValuegoTo] = useState(0);
+
+
+
+
+
+  const [value_goToTitle, setValuegoToTitle] = useState("");
+  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.workshops);
+  const [value_goToBodyTable, setValuegoToBodyTable] = useState(workshop);
+
 
 
 
 
   const ChangePanels = (event, newValue) => {
-    setValue(newValue);
+    if (value_workplace === 0) {
+      setValue(newValue);
+      setValue2(-1);
+      setValuegoTo(-1)
+    }
+    else {
+      setValue(-1);
+      setValue2(newValue);
+      setValuegoTo(-1)
+    }
+
   };
 
+
+  const ChangePanelsworkplace = (event, newValue) => {
+    setValueworkplace(newValue)
+  }
 
 
 
@@ -872,14 +952,130 @@ export const WorkPlace = ({
 
   function displayFixedProd() {
     if (valueExecutors === 1) {
-      
-    } 
+
+    }
     if (valueExecutors === 2) {
       getDetailByInspector(techsValue)
-      console.log(detailbyinspector)
-    } 
+    }
   }
 
+
+  function GoTo(param,title,id) { 
+     setValuegoToTitle(title) 
+     setValuegoTo(1)
+
+     
+     setValue(-1);
+     setValue2(-1);
+
+     setValuegoToHeadTable(columns[Object.keys(columns)[param]])  
+     if (param!=3&&param!=8&&param!=9) {
+        // columns[Object.keys(columns)[param]].pop()
+     } 
+     //Вывести Производственные участки для Цеха
+     if (param===1) {  
+        setValuegoToBodyTable(GetProductionArea(id))
+     }
+     if (param===2) {  
+        setValuegoToBodyTable(GetPost(id))
+     }
+     if (param===6) {   
+        console.log(GetDetailProd(id))
+        setValuegoToBodyTable(GetDetailProd(id))
+     }
+     if (param===5) {    
+        setValuegoToHeadTable(columns[Object.keys(columns)[5]])   
+        setValuegoToBodyTable([knot[0],knot[2]])
+    }
+
+     if (param===7) {  
+        console.log(GetSeam(id))
+        setValuegoToBodyTable(GetSeam(id))
+     }
+
+
+      if (param===8) {  
+          setValuegoToHeadTable(columns[Object.keys(columns)[6]])   
+          setValuegoToBodyTable([detail[0],detail[8]])
+      }
+      if (param===9) {   
+         setValuegoToHeadTable(columns[Object.keys(columns)[3]])   
+         setValuegoToBodyTable([workplace[0],workplace[8]])
+      }
+  
+  }
+
+
+  //Вывести Производственные участки для Цеха
+  function GetProductionArea(id) {
+      let areaNew = [] 
+      for (let index = 0; index < area.length; index++) {
+          if (area[index].workshop.id===id) {
+             areaNew.push(area[index])
+          } 
+      }
+      return areaNew
+  }
+  //Вывести Посты  для Производственные участки
+  function GetPost(id) {
+      let postsNew = [] 
+      for (let index = 0; index < posts.length; index++) {
+          if (posts[index].productionArea.id===id) {
+            postsNew.push(posts[index])
+          } 
+      }
+      return postsNew
+  }
+
+
+  function GetSeam(id) {
+      let seamNew = [] 
+      for (let index = 0; index < seam.length; index++) {
+          if (seam[index].productionArea.id===id) {
+            seamNew.push(seam[index])
+          } 
+      }
+      return seamNew
+  }
+
+
+
+
+   //Вывести Детали  для  Изделия
+    function GetDetailProd(id) { 
+      let detailNew = []   
+      for (let index = 0; index < product.length; index++) {
+          if (product[index].id===id) {
+
+            for (let index2 = 0; index2 < detail.length; index2++) {
+
+                for (let index3 = 0; index3 < product[index].insideProducts.length; index3++) {
+                    if (detail[index2].id===product[index].insideProducts[index3].id) {
+                       detailNew.push(detail[index2])
+                    }
+                } 
+              
+            } 
+            // detailNew.push(...product[index].insideProducts) 
+          } 
+      }
+      return detailNew
+    }
+    function GetDetailKnot(id) {  
+        let detailNew = []   
+        for (let index = 0; index < knot.length; index++) {
+            if (knot[index].id===id) { 
+              for (let index2 = 0; index2 < detail.length; index2++) { 
+                  for (let index3 = 0; index3 < knot[index].insideProducts.length; index3++) {
+                      if (detail[index2].id===knot[index].insideProducts[index3].id) {
+                        detailNew.push(detail[index2])
+                      }
+                  }  
+              }  
+            } 
+        }
+        return detailNew
+    }
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -896,22 +1092,49 @@ export const WorkPlace = ({
       ) : null}
 
       <Tabs
-        value={value_panel}
-        onChange={ChangePanels}
+        value={value_workplace}
+        onChange={ChangePanelsworkplace}
         indicatorColor="primary"
         textColor="primary"
         aria-label="full width tabs example"
       >
-        <Tab label="Цеха" />
-        <Tab label="Производственные участки" />
-        <Tab label="Посты" />
-        <Tab label="Рабочие места" />
-
-        <Tab label="Изделия" />
-        <Tab label="Узлы" />
-        <Tab label="Детали" />
-        <Tab label="Сварные швы" />
+        <Tab label="Структура производства" />
+        <Tab label="Структура продукции" />
       </Tabs>
+
+      {value_workplace === 0
+        ? (
+
+          <Tabs
+            value={value_panel}
+            onChange={ChangePanels}
+            indicatorColor="primary"
+            textColor="primary"
+            aria-label="full width tabs example"
+          >
+            <Tab label="Цеха" />
+            <Tab label="Производственные участки" />
+            <Tab label="Посты" />
+            <Tab label="Рабочие места" />
+          </Tabs>
+        )
+        : (
+          <Tabs
+            value={value_panel2}
+            onChange={ChangePanels}
+            indicatorColor="primary"
+            textColor="primary"
+            aria-label="full width tabs example"
+          >
+
+            <Tab label="Изделия" />
+            <Tab label="Узлы" />
+            <Tab label="Детали" />
+            <Tab label="Сварные швы" />
+          </Tabs>
+        )
+      }
+
 
       <div className={styles.tableWrapper}>
         {/*Цеха*/}
@@ -1093,14 +1316,14 @@ export const WorkPlace = ({
 
         {/*Изделия*/}
         <TabPanel
-          value={value_panel}
-          indPanel={4}
+          value={value_panel2}
+          indPanel={0}
           style={{ minWidth: "800px" }}
         >
           <Table
             title="Изделия"
             columns={columns.goods}
-            value={4}
+            value={0}
             data={product}
             isLoading={isRequesting}
             actions={
@@ -1143,14 +1366,14 @@ export const WorkPlace = ({
         </TabPanel>
         {/*Узлы*/}
         <TabPanel
-          value={value_panel}
-          indPanel={5}
+          value={value_panel2}
+          indPanel={1}
           style={{ minWidth: "800px" }}
         >
           <Table
             title="Узлы"
             columns={columns.node}
-            value={5}
+            value={1}
             data={knot}
             isLoading={isRequesting}
             actions={
@@ -1190,14 +1413,14 @@ export const WorkPlace = ({
         </TabPanel>
         {/*Детали*/}
         <TabPanel
-          value={value_panel}
-          indPanel={6}
+          value={value_panel2}
+          indPanel={2}
           style={{ minWidth: "800px" }}
         >
           <Table
             title="Детали"
             columns={columns.details}
-            value={6}
+            value={2}
             data={detail}
             isLoading={isRequesting}
             actions={
@@ -1237,14 +1460,14 @@ export const WorkPlace = ({
         </TabPanel>
         {/*Сварные швы*/}
         <TabPanel
-          value={value_panel}
-          indPanel={7}
+          value={value_panel2}
+          indPanel={3}
           style={{ minWidth: "800px" }}
         >
           <Table
             title="Сварные швы"
             columns={columns.welding_seam}
-            value={7}
+            value={3}
             data={seam}
             isLoading={isRequesting}
             actions={
@@ -1282,6 +1505,28 @@ export const WorkPlace = ({
             deleteAction={userRole === "Admin" ? deleteEquipment : null}
           />
         </TabPanel>
+
+
+
+        {/*Перейти к */}
+        <div className="TableToGo">
+          <TabPanel
+            value={value_goTo}
+            indPanel={1}
+            style={{ minWidth: "800px" }}
+          >
+            <Table
+              title={value_goToTitle}
+              columns={value_goToHeadTable}
+              value={3}
+              data={value_goToBodyTable}
+              isLoading={isRequesting}
+
+              deleteAction={userRole === "Admin" ? deleteEquipment : null}
+            />
+          </TabPanel>
+        </div>
+
       </div>
 
 
@@ -1778,7 +2023,7 @@ export const WorkPlace = ({
             const { id, ...dataToSend } = variables;
             setIsModalDisplayFix(false);
             setModalData(null);
-           
+
           }}
         >
           {({
@@ -1828,13 +2073,13 @@ export const WorkPlace = ({
                 )
               }
 
-                <div className={styles.row}>
-                  <Button 
-                    type="submit"
-                    disabled={
-                      masterValue == "" &&  techsValue == ""
-                    }
-                    onClick={displayFixedProd}
+              <div className={styles.row}>
+                <Button
+                  type="submit"
+                  disabled={
+                    masterValue == "" && techsValue == ""
+                  }
+                  onClick={displayFixedProd}
                 >
                   {modalData ? "Показать " : "Показать"}
                 </Button>

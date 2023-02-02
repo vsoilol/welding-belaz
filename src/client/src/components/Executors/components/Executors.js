@@ -24,22 +24,22 @@ const useStyles = makeStyles(() => ({
     border: "1px solid red",
   },
 }));
- 
+
 
 export const ExecutorsTable = ({
-  addExecutor, 
+  addExecutor,
   deleteExecutor,
   editExecutor,
   editMaster,
   editTech,
-  executors, 
+  executors,
   isRequesting,
   type,
   userRole,
 
   equipment,
   workshop,
-  area,   
+  area,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -52,13 +52,13 @@ export const ExecutorsTable = ({
   const [valuetOpenModal, setValuetOpenModal] = useState();
   const [valuetOpenVkladka, setValuetOpenVkladka] = useState(0);
 
-  const classes = useStyles(); 
-  const initialValues = { 
+  const classes = useStyles();
+  const initialValues = {
     id: modalData?.id ?? "",
     rfidTag: modalData?.rfidTag ?? "",
     firstName: modalData?.firstName ?? "",
     lastName: modalData?.lastName ?? "",
-    middleName: modalData?.middleName ?? "", 
+    middleName: modalData?.middleName ?? "",
     weldingEquipment: modalData?.weldingEquipment ?? [
       {
         id: modalData?.weldingEquipment?.id ?? null,
@@ -70,8 +70,8 @@ export const ExecutorsTable = ({
         currentCondition: "",
       },
     ],
-  }; 
- 
+  };
+
 
   const requiredKeys = [
     "rfidTag",
@@ -86,7 +86,9 @@ export const ExecutorsTable = ({
   const controllerColumns = [
     {
       title: "RFID-метка",
-      field: "rfidTag",
+      render: (rowData) => {
+        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+      },
     },
     {
       title: "Имя",
@@ -109,19 +111,19 @@ export const ExecutorsTable = ({
     {
       title: "Производственный участок",
       field: "productionArea.name",
-    }, 
-  ]; 
+    },
+  ];
 
 
-  function ReturnWorkshop(Area){  
-    if (area!=undefined) {
+  function ReturnWorkshop(Area) {
+    if (area != undefined) {
       for (let index = 0; index < area.length; index++) {
-        if (area[index].id===Area) {
+        if (area[index].id === Area) {
           return area[index].workshop.name
         }
-      } 
-    } 
-    
+      }
+    }
+
   }
 
   const renderValue = (value) => {
@@ -147,7 +149,9 @@ export const ExecutorsTable = ({
   const extraUserColumns = [
     {
       title: "RFID-метка",
-      field: "rfidTag",
+      render: (rowData) => {
+        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+      },
     },
     {
       title: "Имя",
@@ -179,14 +183,15 @@ export const ExecutorsTable = ({
       },
     },
     {
-      title:"Просмотреть календарь",
+      title: "Просмотреть календарь",
       render: (rowData) => {
-        return <img onClick={e=>OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
+        return <img onClick={e => OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
       },
     }
   ];
 
-  const renderRowChildren = (rowData) => { 
+  const renderRowChildren = (rowData) => {
+    console.log(rowData)
     return (
       rowData?.weldingEquipment && (
         <TableContainer component={Paper}>
@@ -273,13 +278,13 @@ export const ExecutorsTable = ({
     );
   };
 
-  function OpenCalendar(rowData){ 
-    window.localStorage.setItem("executorId",rowData.id)   
-    window.localStorage.setItem("executor",`Сварщик: ${rowData.middleName} ${rowData.firstName} ${rowData.lastName}`)   
-    window.localStorage.removeItem("equipmentId")   
+  function OpenCalendar(rowData) {
+    window.localStorage.setItem("executorId", rowData.id)
+    window.localStorage.setItem("executor", `Сварщик: ${rowData.middleName} ${rowData.firstName} ${rowData.lastName}`)
+    window.localStorage.removeItem("equipmentId")
     setTimeout(() => {
-      window.location.href="/calendar"
-    }, 500); 
+      window.location.href = "/calendar"
+    }, 500);
   }
 
   const optworkshop = workshop?.map((item) => {
@@ -294,33 +299,33 @@ export const ExecutorsTable = ({
       label: item.name,
     };
   });
-  const optequipment = equipment?.map((item) => { 
+  const optequipment = equipment?.map((item) => {
     return {
       value: item.id,
       label: item.name,
     };
   });
   //Запрос на редактирование или добавление
-  function SendData(variables) {  
- 
-    variables["productionAreaId"]=valuetArea 
-    variables["weldingEquipmentId"]=valuetEquipment 
-    variables["workshopId"]=valueWorkshopa 
-   
+  function SendData(variables) {
+
+    variables["productionAreaId"] = valuetArea
+    variables["weldingEquipmentId"] = valuetEquipment
+    variables["workshopId"] = valueWorkshopa
+
     //Добавить  
-    if (valuetOpenModal === 0) { 
+    if (valuetOpenModal === 0) {
       addExecutor(variables)
-    } 
+    }
     // //Редактировать 
-    if (valuetOpenModal === 1 && type==="master") {  
+    if (valuetOpenModal === 1 && type === "master") {
       editMaster(variables)
-    }   
-    if (valuetOpenModal === 1 && type==="executor") {  
+    }
+    if (valuetOpenModal === 1 && type === "executor") {
       editExecutor(variables)
-    }   
-    if (valuetOpenModal === 1 && type==="controller") {  
+    }
+    if (valuetOpenModal === 1 && type === "controller") {
       editTech(variables)
-    }   
+    }
   }
   function DisplaySelects(params) {
 
@@ -405,7 +410,7 @@ export const ExecutorsTable = ({
         </div>
       )
     }
-  } 
+  }
   return (
     <>
       <div className={styles.tableWrapper}>
@@ -424,10 +429,10 @@ export const ExecutorsTable = ({
                 {
                   icon: "edit",
                   tooltip: "Редактировать пользователя",
-                  onClick: (event, rowData) => {  
+                  onClick: (event, rowData) => {
                     setModalData(rowData);
                     setIsModalOpen(true);
-                    setValuetOpenModal(1);    
+                    setValuetOpenModal(1);
 
                     setValueWorkshop(rowData.workshop?.id)
                     setValuetArea(rowData.productionArea.id)
@@ -441,14 +446,14 @@ export const ExecutorsTable = ({
           renderRowChildren={renderRowChildren}
           rowStyle={classes.rowStyle}
           columns={type === "executor" ? extraUserColumns : controllerColumns}
-          data={executors} 
+          data={executors}
 
         />
       </div>
 
-      
- 
- 
+
+
+
 
       <ResultsModal
         type={"EXECUTOR"}
@@ -469,12 +474,12 @@ export const ExecutorsTable = ({
       >
         <Formik
           initialValues={initialValues}
-          enableReinitialize 
+          enableReinitialize
           onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables; 
-            SendData(variables,type)
+            const { id, ...dataToSend } = variables;
+            SendData(variables, type)
             setIsModalOpen(false);
-            setModalData(null); 
+            setModalData(null);
           }}
         >
           {({
@@ -483,7 +488,7 @@ export const ExecutorsTable = ({
             values,
             setFieldValue,
             handleBlur,
-          }) => ( 
+          }) => (
             <form className={styles.form} onSubmit={handleSubmit}>
 
               <div className={styles.row}>
@@ -540,7 +545,7 @@ export const ExecutorsTable = ({
               <div className={styles.row}>
                 <Button
                   disabled={
-                    values.middleName==""||values.firstName==""||values.lastName==""||values.rfidTag==""
+                    values.middleName == "" || values.firstName == "" || values.lastName == "" || values.rfidTag == ""
                   }
                   type="submit"
                 >

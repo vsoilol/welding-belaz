@@ -122,7 +122,13 @@ export const Equipment = ({
   const columns = [
     { title: "Наименование", field: "name" },
     { title: "Маркировка", field: "marking" },
-    { title: "RFID метка", field: "rfidTag" },
+    { 
+      title: "RFID метка", 
+      render: (rowData) => {
+        return <p>{rowData?.rfidTag ??rowData?.idFromSystem}</p>;
+      }, 
+  
+    },
     { title: "Заводской  (инвентарный) номер", field: "factoryNumber" },
     { title: "Дата ввода в эксплуатацию", field: "commissioningDate" },
     { title: "Номер группы оборудования", field: "groupNumber" },
@@ -143,13 +149,17 @@ export const Equipment = ({
 
   const columns2 = [
     {
-      title: "Время изменения состояния",
+      title: "Дата",
+      field: "date"
+    },
+    {
+      title: "Время начала простоя",
       field: "startConditionTime"
     },
     {
-      title: "Текущее состояние",
-      field: "weldingEquipment.currentCondition"
-    },
+      title: "Длительность",
+      field: "time"
+    }, 
     {
       title: "Причина простоя",
       field: "downtimeReason"
@@ -171,7 +181,7 @@ export const Equipment = ({
     }, 500); 
   }
 
-  const renderRowChildren = (rowData) => {
+  const renderRowChildren = (rowData) => { 
     return (
       rowData && (
         <TableContainer component={Paper}>
@@ -323,7 +333,7 @@ export const Equipment = ({
     variables["postId"] = valuetPosts
     variables["postNumber"] = valuetPostsNumber
     variables["commissioningDate"] = variables.commissioningDate
-    variables["nextAttestationDate"] = variables.nextAttestationDate
+    variables["nextAttestationDate"] = new Date(variables.nextAttestationDate).toLocaleDateString()
     //Добавить Оборудование 
     if (isModalNumb == 0) {
       addEquipment(variables)
@@ -359,6 +369,7 @@ export const Equipment = ({
     }
   }
 
+  
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -415,8 +426,7 @@ export const Equipment = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(1); 
-                      console.log(rowData)
+                      setIsModalNumb(1);  
                       setEquipmentNumb(rowData.id)
                       setValuetPosts(rowData.post?.id)
                     },
