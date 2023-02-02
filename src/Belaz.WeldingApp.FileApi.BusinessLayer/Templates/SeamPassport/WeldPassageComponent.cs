@@ -36,6 +36,7 @@ public class WeldPassageComponent : IComponent
 
             column.Item().Element(ComposePreheatingTemperatureTable);
             column.Item().Element(ComposeWeldInfoTable);
+            column.Item().PageBreak();
             column.Item().Element(ComposeCharts);
         });
     }
@@ -192,7 +193,20 @@ public class WeldPassageComponent : IComponent
             column.Item().Text("Графики").Style(Typography.Normal);
 
             //var arcVoltageChartImageBytes = DownloadImage(GetArcVoltageChartImageUrl());
-            var arcVoltageChartImageBytes = GetArcVoltageChartImageByte();
+            var weldingCurrentChartImageBytes = GetArcVoltageChartImageByte("А", 
+                $"Показания сварочного тока по слою №{WeldPassageInfo.Number}",
+                "Показания силы тока",
+                WeldPassageInfo.WeldingCurrentValues,
+                WeldPassageInstructionInfo.WeldingCurrentMin,
+                WeldPassageInstructionInfo.WeldingCurrentMax);
+            column.Item().AlignCenter().Image(weldingCurrentChartImageBytes);
+            
+            var arcVoltageChartImageBytes = GetArcVoltageChartImageByte("В", 
+                $"Показания напряжения на дуге по слою №{WeldPassageInfo.Number}",
+                "Показания напряжения",
+                WeldPassageInfo.ArcVoltageValues,
+                WeldPassageInstructionInfo.ArcVoltageMin,
+                WeldPassageInstructionInfo.ArcVoltageMax);
             column.Item().AlignCenter().Image(arcVoltageChartImageBytes);
 
             //column.Item().Image(arcVoltageChartImageBytes, ImageScaling.FitArea);
@@ -209,11 +223,12 @@ public class WeldPassageComponent : IComponent
         return condition ? "Да" : "Нет";
     }
 
-    private byte[] GetArcVoltageChartImageByte()
+    private byte[] GetArcVoltageChartImageByte(string measurementUnit, string title, string mainPlotTitle, double[] values,
+        double? min, double? max)
     {
         var model = new PlotModel
         {
-            Title = $"Показания напряжения на дуге по слою №{WeldPassageInfo.Number}, В",
+            Title = $"{title}, {measurementUnit}",
             DefaultFont = "Arial",
             TitleFontWeight = FontWeights.Bold,
             TitleFontSize = 22
@@ -230,32 +245,32 @@ public class WeldPassageComponent : IComponent
 
         var main = new LineSeries
         {
-            Title = "Показания напряжения, В",
+            Title = $"{mainPlotTitle}, {measurementUnit}",
             Color = OxyColors.Red,
             StrokeThickness = 2,
         };
 
         var weldingStartTimeTemp = WeldPassageInfo.WeldingStartTime;
-        var times = WeldPassageInfo.WeldingCurrentValues.Select(x =>
+        var times = values.Select(x =>
         {
             var time = weldingStartTimeTemp;
             weldingStartTimeTemp = weldingStartTimeTemp.Add(TimeSpan.FromSeconds(0.1));
             return time;
         }).ToArray();
-        
-        for (int i = 0; i < WeldPassageInfo.ArcVoltageValues.Length; i++)
+
+        for (int i = 0; i < values.Length; i++)
         {
-            main.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(times[i]), WeldPassageInfo.ArcVoltageValues[i]));
+            main.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(times[i]), values[i]));
         }
-        
+
         model.Series.Add(main);
-        
+
         model.Axes.Add(new LinearAxis
         {
             Position = AxisPosition.Left,
             ExtraGridlines = new[] { 0.0 },
             Minimum = 0,
-            Maximum = WeldPassageInfo.ArcVoltageValues.Max() + 10,
+            Maximum = values.Max() + 10,
             MajorStep = 10,
             FontSize = 14
         });
@@ -269,7 +284,7 @@ public class WeldPassageComponent : IComponent
 
         var minValue = TimeSpanAxis.ToDouble(startTime);
         var maxValue = TimeSpanAxis.ToDouble(endTime);
-        
+
         model.Axes.Add(new TimeSpanAxis()
         {
             ExtraGridlines = new[] { 0.0 },
@@ -283,19 +298,18 @@ public class WeldPassageComponent : IComponent
             StartPosition = 0.015,
         });
 
-        if (WeldPassageInstructionInfo.ArcVoltageMax is not null &&
-            WeldPassageInstructionInfo.ArcVoltageMin is not null)
+        if (max is not null && min is not null)
         {
-            var maxLine = GetStraightLine("Максимум, В", OxyColors.Blue, startTime, endTime,
-                (double)WeldPassageInstructionInfo.ArcVoltageMax);
-            
-            var minLine = GetStraightLine("Минимум, В", OxyColors.Green, startTime, endTime,
-                (double)WeldPassageInstructionInfo.ArcVoltageMin);
+            var maxLine = GetStraightLine($"Максимум, {measurementUnit}", OxyColors.Blue, startTime, endTime,
+                (double)max);
+
+            var minLine = GetStraightLine($"Минимум, {measurementUnit}", OxyColors.Green, startTime, endTime,
+                (double)min);
 
             model.Series.Add(maxLine);
             model.Series.Add(minLine);
         }
-        
+
         using var stream = new MemoryStream();
         var exporterPng = new PngExporter
         {
