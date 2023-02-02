@@ -67,6 +67,19 @@ public class SeamPassportDocument : IDocument
             column.Item().Element(ComposeWeldPassageInstructionsTable);
             column.Item().Element(ComposeAdditionalInfoTable);
             column.Item().Element(ComposeInspectorTable);
+            
+            column.Item().Column(row =>
+            {
+                foreach (var weldPassage in Task.Seam.WeldPassages)
+                {
+                    var weldPassageInstruction = Task.Seam
+                        .TechnologicalInstruction
+                        .WeldPassageInstructions
+                        .FirstOrDefault(_ => _.Number == weldPassage.Number)!;
+                    
+                    row.Item().Component(new WeldPassageComponent(weldPassageInstruction, weldPassage));
+                }
+            });
         });
     }
 
@@ -368,11 +381,9 @@ public class SeamPassportDocument : IDocument
                         .Text(arcVoltageMaxText)
                         .Style(Typography.Normal);
                 }
-
-                static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
+                
                 static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
             });
-            ;
         });
     }
 
@@ -434,7 +445,7 @@ public class SeamPassportDocument : IDocument
 
     private void ComposeInspectorTable(IContainer container)
     {
-         container.Table(table =>
+        container.Table(table =>
         {
             table.ColumnsDefinition(columns =>
             {
@@ -448,21 +459,21 @@ public class SeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text($"{Task.Inspector.MiddleName} {Task.Inspector.FirstName} {Task.Inspector.LastName}")
                 .Style(Typography.Italic);
-            
+
             table.Cell().Element(BlockLeft).Text("Срок действия удостоверения")
                 .Style(Typography.Normal);
             table.Cell()
                 .Element(BlockLeft)
                 .Text(Task.Inspector.CertificateValidityPeriod)
                 .Style(Typography.Italic);
-            
+
             table.Cell().Element(BlockLeft).Text("Обнаруженные дефекты (брак)")
                 .Style(Typography.Normal);
             table.Cell()
                 .Element(BlockLeft)
-                .Text(Task.Seam.DefectiveReason is not null ? "Да" : "-")
+                .Text(Task.Seam.DetectedDefects ?? "-")
                 .Style(Typography.Italic);
-            
+
             table.Cell().Element(BlockLeft).Text("Причины брака")
                 .Style(Typography.Normal);
             table.Cell()

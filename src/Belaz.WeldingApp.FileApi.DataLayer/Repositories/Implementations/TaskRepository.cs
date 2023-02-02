@@ -45,6 +45,7 @@ public class TaskRepository : ITaskRepository
                 .FirstOrDefaultAsync(_ => _.SeamId == seamEntity.Id && _.Status == ProductStatus.Defective))!;
 
             seam.DefectiveReason = defectiveReason.Reason;
+            seam.DetectedDefects = defectiveReason.DetectedDefects;
         }
     }
 

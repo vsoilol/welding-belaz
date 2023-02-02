@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Jurassic" Version="3.2.6" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
         <PackageReference Include="QuestPDF" Version="2022.12.1" />
         <PackageReference Include="AutoMapper" Version="12.0.0" />
@@ -19,6 +20,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
         <PackageReference Include="FluentValidation" Version="11.4.0" />
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
+        <PackageReference Include="QuickChart" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup>

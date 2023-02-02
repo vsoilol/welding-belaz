@@ -9,7 +9,9 @@ public class StatusReason : Entity
 
     public ProductStatus Status { get; set; }
 
-    public string Reason { get; set; } = null!;
+    public string? Reason { get; set; }
+
+    public string? DetectedDefects { get; set; }
 
     public Guid? ProductId { get; set; }
     

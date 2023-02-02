@@ -10,6 +10,8 @@ public class SeamDto : IMapFrom<Seam>
     
     public string? DefectiveReason { get; set; }
     
+    public string? DetectedDefects { get; set; }
+    
     public ProductBriefDto? Product { get; set; }
     
     public ProductBriefDto? Detail { get; set; }
