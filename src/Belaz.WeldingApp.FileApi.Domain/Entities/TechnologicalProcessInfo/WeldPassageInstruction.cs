@@ -11,12 +11,12 @@ public class WeldPassageInstruction : Entity
     /// <summary>
     /// Сварочный ток min
     /// </summary>
-    public double WeldingCurrentMin { get; set; }
+    public double? WeldingCurrentMin { get; set; }
 
     /// <summary>
     /// Сварочный ток max
     /// </summary>
-    public double WeldingCurrentMax { get; set; }
+    public double? WeldingCurrentMax { get; set; }
 
     /// <summary>
     /// Напряжения на дуге min

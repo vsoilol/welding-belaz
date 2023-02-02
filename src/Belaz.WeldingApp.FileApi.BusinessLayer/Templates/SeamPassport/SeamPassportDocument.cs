@@ -70,7 +70,7 @@ public class SeamPassportDocument : IDocument
             
             column.Item().Column(row =>
             {
-                foreach (var weldPassage in Task.Seam.WeldPassages)
+                foreach (var weldPassage in Task.Seam.WeldPassages.OrderBy(_ => _.Number))
                 {
                     var weldPassageInstruction = Task.Seam
                         .TechnologicalInstruction
@@ -355,12 +355,12 @@ public class SeamPassportDocument : IDocument
 
                     table.Cell()
                         .Element(BlockLeft)
-                        .Text(weldPassageInstructions.WeldingCurrentMin.ToString(CultureInfo.InvariantCulture))
+                        .Text(CheckValueForNull(weldPassageInstructions.WeldingCurrentMin))
                         .Style(Typography.Normal);
 
                     table.Cell()
                         .Element(BlockLeft)
-                        .Text(weldPassageInstructions.WeldingCurrentMax.ToString(CultureInfo.InvariantCulture))
+                        .Text(CheckValueForNull(weldPassageInstructions.WeldingCurrentMax))
                         .Style(Typography.Normal);
 
                     var arcVoltageMinText = weldPassageInstructions.ArcVoltageMin is not null
@@ -385,6 +385,11 @@ public class SeamPassportDocument : IDocument
                 static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
             });
         });
+    }
+    
+    private string CheckValueForNull<T>(T value)
+    {
+        return (value is not null ? value.ToString() : "-")!;
     }
 
     private void ComposeAdditionalInfoTable(IContainer container)

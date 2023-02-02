@@ -4,9 +4,13 @@ using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using Newtonsoft.Json;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Legends;
+using OxyPlot.Series;
+using OxyPlot.SkiaSharp;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
-using QuickChart;
 using WeldingApp.Common.Extensions;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
@@ -187,7 +191,9 @@ public class WeldPassageComponent : IComponent
 
             column.Item().Text("Графики").Style(Typography.Normal);
 
-            var arcVoltageChartImageBytes = DownloadImage(GetArcVoltageChartImageUrl());
+            //var arcVoltageChartImageBytes = DownloadImage(GetArcVoltageChartImageUrl());
+            var arcVoltageChartImageBytes = GetArcVoltageChartImageByte();
+            column.Item().AlignCenter().Image(arcVoltageChartImageBytes);
 
             //column.Item().Image(arcVoltageChartImageBytes, ImageScaling.FitArea);
         });
@@ -203,197 +209,120 @@ public class WeldPassageComponent : IComponent
         return condition ? "Да" : "Нет";
     }
 
-    private string GetArcVoltageChartImageUrl()
+    private byte[] GetArcVoltageChartImageByte()
     {
-        var weldingStartTimeTemp = WeldPassageInfo.WeldingStartTime;
-        var labels = WeldPassageInfo.ArcVoltageValues.Select(x =>
+        var model = new PlotModel
         {
-            var label = weldingStartTimeTemp.ToHoursMinutesSecondsString();
-            weldingStartTimeTemp = weldingStartTimeTemp.Add(TimeSpan.FromSeconds(0.1));
-            return label;
+            Title = $"Показания напряжения на дуге по слою №{WeldPassageInfo.Number}, В",
+            DefaultFont = "Arial",
+            TitleFontWeight = FontWeights.Bold,
+            TitleFontSize = 22
+        };
+
+        model.Legends.Add(new Legend
+        {
+            LegendPlacement = LegendPlacement.Outside,
+            LegendPosition = LegendPosition.TopCenter,
+            LegendOrientation = LegendOrientation.Horizontal,
+            LegendLineSpacing = 8,
+            LegendFontSize = 15
         });
 
-        var chartConfig = new ChartConfig
+        var main = new LineSeries
         {
-            Type = "line",
-            Data = new ChartData
-            {
-                Labels = labels.ToArray(),
-            },
-            Options = new ChartOptions
-            {
-                Responsive = true,
-                Plugins = new ChartPlugins
-                {
-                    Legend = new ChartLegend
-                    {
-                        Position = "top",
-                        Labels = new ChartLabels
-                        {
-                            Font = new ChartFont
-                            {
-                                Size = 20
-                            }
-                        }
-                    },
-                    Title = new ChartTitle
-                    {
-                        Display = true,
-                        Text = $"Показания напряжения на дуге по слою №{WeldPassageInfo.Number}, В",
-                        FullSize = true,
-                        Font = new ChartFont
-                        {
-                            Size = 24,
-                        }
-                    }
-                },
-                Elements = new ChartElements
-                {
-                    Point = new ChartPoint
-                    {
-                        Radius = 1
-                    },
-                    Line = new ChartLine
-                    {
-                        BorderWidth = 1
-                    }
-                }
-            }
+            Title = "Показания напряжения, В",
+            Color = OxyColors.Red,
+            StrokeThickness = 2,
         };
-        
-        
 
-        /**/
-
-        if (WeldPassageInstructionInfo.ArcVoltageMin is null && WeldPassageInstructionInfo.ArcVoltageMax is null)
+        var weldingStartTimeTemp = WeldPassageInfo.WeldingStartTime;
+        var times = WeldPassageInfo.WeldingCurrentValues.Select(x =>
         {
-            chartConfig.Data.Datasets = new ChartDatasets[]
-            {
-                new()
-                {
-                    Data = WeldPassageInfo.ArcVoltageValues,
-                    Label = "Показания напряжения, В",
-                    BackgroundColor = "rgba(0, 35, 255, 1)",
-                    BorderColor = "rgba(0, 35, 255, 1)",
-                    Fill = false
-                }
-            };
+            var time = weldingStartTimeTemp;
+            weldingStartTimeTemp = weldingStartTimeTemp.Add(TimeSpan.FromSeconds(0.1));
+            return time;
+        }).ToArray();
+        
+        for (int i = 0; i < WeldPassageInfo.ArcVoltageValues.Length; i++)
+        {
+            main.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(times[i]), WeldPassageInfo.ArcVoltageValues[i]));
         }
-        else
+        
+        model.Series.Add(main);
+        
+        model.Axes.Add(new LinearAxis
         {
-            chartConfig.Data.Datasets = new ChartDatasets[]
-            {
-                new()
-                {
-                    Data = WeldPassageInfo.ArcVoltageValues
-                        .Select(_ => (double)WeldPassageInstructionInfo.ArcVoltageMax!).ToArray(),
-                    Label = "Максимум, В",
-                    BackgroundColor = "rgba(133, 0, 0, 1)",
-                    BorderColor = "rgba(133, 0, 0, 1)",
-                    Fill = false
-                },
-                new()
-                {
-                    Data = WeldPassageInfo.ArcVoltageValues,
-                    Label = "Показания напряжения, В",
-                    BackgroundColor = "rgba(0, 35, 255, 1)",
-                    BorderColor = "rgba(0, 35, 255, 1)",
-                    Fill = false
-                },
-                new()
-                {
-                    Data = WeldPassageInfo.ArcVoltageValues
-                        .Select(_ => (double)WeldPassageInstructionInfo.ArcVoltageMin!).ToArray(),
-                    Label = "Минимум, В",
-                    BackgroundColor = "rgba(0, 18, 133, 1)",
-                    BorderColor = "rgba(0, 18, 133, 1)",
-                    Fill = false
-                },
-            };
+            Position = AxisPosition.Left,
+            ExtraGridlines = new[] { 0.0 },
+            Minimum = 0,
+            Maximum = WeldPassageInfo.ArcVoltageValues.Max() + 10,
+            MajorStep = 10,
+            FontSize = 14
+        });
+
+        var startTime = times.First();
+        var endTime = times.Last();
+
+        var seconds = (int)Math.Round(endTime.Subtract(startTime).TotalSeconds);
+
+        var step = seconds / (double)28;
+
+        var minValue = TimeSpanAxis.ToDouble(startTime);
+        var maxValue = TimeSpanAxis.ToDouble(endTime);
+        
+        model.Axes.Add(new TimeSpanAxis()
+        {
+            ExtraGridlines = new[] { 0.0 },
+            Position = AxisPosition.Bottom,
+            Minimum = minValue,
+            Maximum = maxValue,
+            StringFormat = "hh:mm:ss",
+            MajorStep = TimeSpanAxis.ToDouble(TimeSpan.FromSeconds(step)),
+            Angle = -45,
+            FontSize = 14,
+            StartPosition = 0.015,
+        });
+
+        if (WeldPassageInstructionInfo.ArcVoltageMax is not null &&
+            WeldPassageInstructionInfo.ArcVoltageMin is not null)
+        {
+            var maxLine = GetStraightLine("Максимум, В", OxyColors.Blue, startTime, endTime,
+                (double)WeldPassageInstructionInfo.ArcVoltageMax);
+            
+            var minLine = GetStraightLine("Минимум, В", OxyColors.Green, startTime, endTime,
+                (double)WeldPassageInstructionInfo.ArcVoltageMin);
+
+            model.Series.Add(maxLine);
+            model.Series.Add(minLine);
         }
-
-        /*chartConfig = new ChartConfig
+        
+        using var stream = new MemoryStream();
+        var exporterPng = new PngExporter
         {
-            Type = "bar",
-            Data = new ChartData
-            {
-                Labels = new[] { "Q1", "Q2", "Q3", "Q4" },
-                Datasets = new ChartDatasets[]
-                {
-                    new ChartDatasets
-                    {
-                        Label = "Users",
-                        Data = new double[]{50, 60, 70, 180}
-                    }
-                }
-            },
-            Options = new ChartOptions
-            {
-                Title = new ChartTitle
-                {
-                    Text = "Basic chart title"
-                }
-            }
-        };*/
-        
-        var content = JsonConvert.SerializeObject(chartConfig);
+            Width = 1300,
+            Height = 700,
+            Dpi = 150,
+            UseTextShaping = true
+        };
 
-        var engine = new Jurassic.ScriptEngine();
-        engine.SetGlobalValue("imgData", 0);
-        engine.ExecuteFile(@"C:\Data\test.js");
-        var imgData = engine.GetGlobalValue<byte[]>("imgData");
+        exporterPng.Export(model, stream);
 
-        var contentBase64 = Base64Encode(content);
-        
-        Chart qc = new Chart();
-        /*qc.Width = 500;
-        qc.Height = 300;*/
-        qc.Version = "4.2.0";
-        qc.Config = content;
-
-        var url = qc.GetShortUrl();
-        
-        /*
-        var stringContent =  new StringContent(
-            JsonConvert.SerializeObject(chartConfig),
-            Encoding.Ba,
-            "application/json"
-        )
-        */
-        
-        using var httpClient = new HttpClient();
-
-        /*var perfResp = AsyncHelper.RunSync(() => httpClient.PostAsync(
-            "https://quickchart.io/chart/create",
-           
-        ));*/
-        
-        //var perfRespData = AsyncHelper.RunSync(() => perfResp.Content.ReadAsStringAsync());
-
-        //var chartResponse = JsonConvert.DeserializeObject<ChartResponse>(perfRespData);
-        //var perfRespData = await perfResp.Content.ReadAsStringAsync();
-
-        return $"https://image-charts.com/chart.js/2.8.0?bkg=white&c={contentBase64}&encoding=base64";
-    }
-    
-    public static string Base64Encode(string plainText) {
-        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-        return System.Convert.ToBase64String(plainTextBytes);
+        var bytes = stream.ToArray();
+        return bytes;
     }
 
-    private byte[] DownloadImage(string imageUrl)
+    private LineSeries GetStraightLine(string title, OxyColor color, TimeSpan startTime, TimeSpan endTime, double value)
     {
-        var uri = new Uri(imageUrl);
+        var line = new LineSeries()
+        {
+            Title = title,
+            Color = color,
+            StrokeThickness = 2,
+        };
 
-        using var httpClient = new HttpClient();
+        line.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(startTime), value));
+        line.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(2))), value));
 
-        // Get the file extension
-        var uriWithoutQuery = uri.GetLeftPart(UriPartial.Path);
-        var fileExtension = Path.GetExtension(uriWithoutQuery);
-
-        // Download the image and write to the file
-        // ReSharper disable once AccessToDisposedClosure
-       // var bytes = AsyncHelper.RunSync(() => httpClient.GetByteArrayAsync(uri));
-        return new byte[]{1};
+        return line;
     }
 }
