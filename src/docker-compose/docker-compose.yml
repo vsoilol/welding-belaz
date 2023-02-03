@@ -13,20 +13,10 @@ services:
     volumes:
       - ./docker-storage/databasedata:/var/lib/postgresql/data/
       - ../../database/init-script.sql:/docker-entrypoint-initdb.d/init.sql
-    
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: root@root.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - "5050:80"
-    volumes:
-      - ./docker-storage/pdadmin_data:/var/lib/pgadmin
 
   welding-api:
     image: welding-app/welding-api
+    restart: on-failure
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
@@ -42,6 +32,7 @@ services:
         
   identity-api:
     image: welding-app/identity-api
+    restart: on-failure
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
@@ -54,9 +45,11 @@ services:
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
+      - welding-api
     
   file-api:
     image: welding-app/file-api
+    restart: on-failure
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
@@ -69,6 +62,7 @@ services:
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - postgresql_database
+      - welding-api
       
   gateway-api:
     image: welding-app/gateway-api

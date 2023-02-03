@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
-
-namespace Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser
+﻿namespace Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser
 {
     public class RoleData : Entity
     {

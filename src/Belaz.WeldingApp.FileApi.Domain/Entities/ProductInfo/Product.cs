@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.FileApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Users;
 using WeldingApp.Common.Enums;
 
@@ -22,7 +22,7 @@ namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo
         /// Подлежит ли контролю
         /// </summary>
         public bool IsControlSubject { get; set; }
-        
+
         /// <summary>
         /// Добавлен ли вручную
         /// </summary>

@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Implementations;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -15,6 +17,7 @@ public static class DependencyInjection
 
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IMarkEstimateService, MarkEstimateService>();
 
         return services;
     }

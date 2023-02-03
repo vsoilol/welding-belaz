@@ -7,4 +7,6 @@ public interface IWeldingTaskService
     Task<List<WeldingTaskFullNamesDto>> GetAllWithFullNamesAsync();
 
     Task<List<WeldingTaskRegistrarInfoDto>> GetAllRegistrarInfoAsync();
+
+    Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync();
 }

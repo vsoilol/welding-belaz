@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
+using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer;
@@ -9,6 +11,8 @@ public static class DependencyInjection
     {
         services.AddDbContext<ApplicationContext>(options =>
             options.UseNpgsql(connectionString));
+        
+        services.AddScoped<ITaskRepository, TaskRepository>();
 
         return services;
     }

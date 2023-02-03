@@ -1,27 +1,16 @@
-﻿using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
-using Belaz.WeldingApp.FileApi.Domain.Mappings;
+﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
+using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
+using WeldingApp.Common.Enums;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Dtos;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 
-public class TaskDto : IMapFrom<WeldingTask>
+public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
 {
+    public Guid Id { get; set; }
+    
     public int Number { get; set; }
-
-    /// <summary>
-    /// Дата выполнения сварки
-    /// </summary>
-    public string WeldingDate { get; set; } = null!;
-
-    public SeamDto Seam { get; set; } = null!;
-
-    public UserBriefDto Master { get; set; } = null!;
-
-    public UserBriefDto Welder { get; set; } = null!;
-
-    public UserBriefDto Inspector { get; set; } = null!;
-
-    public WeldingEquipmentBriefDto WeldingEquipment { get; set; } = null!;
-
+    
     /// <summary>
     /// Основной материал
     /// </summary>
@@ -51,4 +40,16 @@ public class TaskDto : IMapFrom<WeldingTask>
     /// № сертификата (партии) на защитный газ 
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
+
+    public ProductStatus Status { get; set; }
+
+    public SeamBriefDto Seam { get; set; } = null!;
+    
+    public void Mapping(Profile profile)
+    {
+        profile.CreateMap<Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
+            .ForMember(dto => dto.Status,
+                opt => opt
+                    .MapFrom(x => x.Seam.Status));
+    }
 }

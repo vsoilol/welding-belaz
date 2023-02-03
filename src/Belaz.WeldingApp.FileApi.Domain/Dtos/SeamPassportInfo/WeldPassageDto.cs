@@ -1,9 +1,14 @@
-﻿using Belaz.WeldingApp.FileApi.Domain.Entities;
+﻿using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 
-public class WeldPassageResult : Entity
+public class WeldPassageDto : IMapFrom<WeldPassage>
 {
+    public int Number { get; set; }
+
+    public string Name { get; set; } = null!;
+
     /// <summary>
     /// Значения сварочного тока
     /// </summary>
@@ -38,6 +43,4 @@ public class WeldPassageResult : Entity
     /// Температура предварительного нагрева
     /// </summary>
     public int PreheatingTemperature { get; set; }
-
-    public List<WeldPassage> WeldPassages { get; set; } = null!;
 }

@@ -4,6 +4,7 @@ using Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser;
 using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.FileApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Users;
 using Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
@@ -64,8 +65,11 @@ public sealed class ApplicationContext : DbContext
 
     public DbSet<Seam> Seams { get; set; } = null!;
 
+    public DbSet<WeldPassageInstruction> WeldPassageInstructions { get; set; } = null!;
+
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

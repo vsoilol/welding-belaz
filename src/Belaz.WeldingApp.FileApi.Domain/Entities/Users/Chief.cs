@@ -1,6 +1,5 @@
 ﻿using Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser;
 using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
 using Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.Users
