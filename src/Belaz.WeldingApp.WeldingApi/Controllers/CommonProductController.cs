@@ -13,7 +13,7 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public abstract class CommonProductController : ControllerBase
 {
     private readonly IProductService _productService;

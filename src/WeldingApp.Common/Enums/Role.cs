@@ -5,8 +5,8 @@
     {
         Admin = 1,
         Master = 2,
-        Executor = 3,
-        TechUser = 4,
+        Welder = 3,
+        Inspector = 4,
         Chief = 5,
     }
 }

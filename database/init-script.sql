@@ -203,7 +203,8 @@ CREATE TABLE public."StatusReasons" (
     "Id" uuid NOT NULL,
     "Date" timestamp without time zone NOT NULL,
     "Status" integer NOT NULL,
-    "Reason" text NOT NULL,
+    "Reason" text,
+    "DetectedDefects" text,
     "ProductId" uuid,
     "SeamId" uuid,
     "IdFromSystem" text
@@ -276,8 +277,8 @@ CREATE TABLE public."WeldPassageInstructions" (
     "Id" uuid NOT NULL,
     "Number" integer NOT NULL,
     "Name" text NOT NULL,
-    "WeldingCurrentMin" double precision NOT NULL,
-    "WeldingCurrentMax" double precision NOT NULL,
+    "WeldingCurrentMin" double precision,
+    "WeldingCurrentMax" double precision,
     "ArcVoltageMin" double precision,
     "ArcVoltageMax" double precision,
     "PreheatingTemperatureMin" double precision NOT NULL,
@@ -443,7 +444,7 @@ CREATE TABLE public."Workshops" (
 --
 
 COPY public."Calendars" ("Id", "Year", "IsMain", "WelderId", "WeldingEquipmentId", "IdFromSystem") FROM stdin;
-54132500-0a46-48a9-8fd0-0d4651cd8c52	2023	t	\N	\N	\N
+a9af3b6e-b917-4d26-8fb6-9a41c66236f8	2023	t	\N	\N	\N
 \.
 
 
@@ -452,7 +453,7 @@ COPY public."Calendars" ("Id", "Year", "IsMain", "WelderId", "WeldingEquipmentId
 --
 
 COPY public."Chiefs" ("Id", "UserId", "WeldingEquipmentId", "IdFromSystem") FROM stdin;
-33416470-aba2-4906-918c-3b8575b4734b	1c4a85fb-0693-4e37-90b9-7aae24acf777	\N	\N
+c6b50cc1-0803-422e-ada6-fad2efb06156	7bbfda84-f5b8-4c80-a145-22839083125a	\N	\N
 \.
 
 
@@ -461,7 +462,7 @@ COPY public."Chiefs" ("Id", "UserId", "WeldingEquipmentId", "IdFromSystem") FROM
 --
 
 COPY public."Days" ("Id", "MonthNumber", "Number", "IsWorkingDay", "CalendarId", "IdFromSystem") FROM stdin;
-d7182742-194e-4dd8-b06f-3d7af4c48fb3	1	10	t	54132500-0a46-48a9-8fd0-0d4651cd8c52	\N
+ac622970-9ad1-4453-987e-f55fd09ad18e	1	10	t	a9af3b6e-b917-4d26-8fb6-9a41c66236f8	\N
 \.
 
 
@@ -470,31 +471,31 @@ d7182742-194e-4dd8-b06f-3d7af4c48fb3	1	10	t	54132500-0a46-48a9-8fd0-0d4651cd8c52
 --
 
 COPY public."DowntimeReasons" ("Id", "Reason", "IdFromSystem") FROM stdin;
-1293ac5b-e171-4478-8f81-7faeb6eb82a8	Изменение режимов, смена инструмента, приспособления	\N
-1ca9f86b-d814-4e7e-9993-daf3b54b5ee4	Отсутствие крана, транспорта	\N
-32207fab-f264-46fe-a5e0-aceead157125	Аварийный ремонт централизованными службами	\N
-3765b872-4fee-4060-8f36-b78b5fc91e33	Нерабочее время по графику согласно сменности	\N
-3a40c4ca-a355-4fb3-a3fa-922e54b5dffd	Уборка, осмотр оборудования, чистка/смазка оборудования	\N
-4cd356e5-c454-452b-b4d9-bcd72ab4ee8e	Отсутствие оператора в связи с необеспеченностью	\N
-546fa571-a0e8-4989-8ec6-119878b89586	Установка, выверка, снятие детали	\N
-5a348d37-a9d1-4345-882c-187fb34635e6	Сборочные операции	\N
-608c4118-b6e0-42dc-874e-9ddab48e051d	Установка, выверка, снятие детали	\N
-628cd014-e6f7-453b-a97a-abbba235ec4c	Отсутствие материала, заготовок, деталей	\N
-6358366a-64de-4c39-9d5f-386bf44b51a8	Отсутствие инструмента, оснастки вспомогательного оборудования	\N
-669a2a9e-d511-43ca-b306-f536e3149d1b	Отсутствие сотрудника ОТК	\N
-74067d7e-a98f-4fc7-9c35-761febe9a6a3	Праздники и выходные	\N
-90236e7c-acdc-4dd0-ac4f-7e4b9385a2fd	Неявка оператора (б/лист, отпуск, и пр.)	\N
-96246ae7-7ffa-4d26-8d68-f3613229c1cf	Отсутствие конструктора, технолога или ожидание его решения	\N
-9dd2633f-96db-4333-b243-afa51fda657a	Плановый ремонт централизованными службами	\N
-a6110df9-c03c-4651-b001-b05145b72d9b	Работа по карте несоответствий	\N
-be37b2ae-5581-4b77-957a-d03f020c5bfa	Ознакомление с работой, документацией, инструктаж	\N
-c1d50bad-727c-4b03-8251-f509f278988c	Отсутствие энергоносителей	\N
-c52350f9-fdbf-461b-83a7-c3426a631c7e	Отсутствие заданий	\N
-ca08bb39-fa3f-493f-8729-b59e384569e7	Работа с управляющей программой	\N
-f25ceac3-f5fc-4532-8fd2-1842303afb39	Переналадка оборудования, получение инструмента до начала работы, снятие/сдача по окончании работы	\N
-f67b3905-63a0-4f79-a013-7a802aec2bfd	Естественные надобности	\N
-f92cb006-56bb-4b9b-8332-afd239075012	Обед	\N
-fa4fcb73-149f-440a-bacf-7433be08e798	Контроль на рабочем месте	\N
+02429c17-4d1d-4992-82d3-335136e6d063	Отсутствие инструмента, оснастки вспомогательного оборудования	\N
+0985726c-9a3a-4cc7-9530-20d75734233c	Естественные надобности	\N
+272f5d48-3802-4b52-9189-a06248c60a12	Работа с управляющей программой	\N
+2b347a71-c452-409a-9d5b-d1575ca5c99d	Установка, выверка, снятие детали	\N
+2b89c1af-a1b4-4080-934f-b921906e6aa1	Отсутствие оператора в связи с необеспеченностью	\N
+2ca30a64-4c4f-4f46-a7b0-c12ce5773a4d	Праздники и выходные	\N
+2eb3baeb-9c1a-427d-a22b-3e410a7568f5	Уборка, осмотр оборудования, чистка/смазка оборудования	\N
+4bdfea13-dabe-4a07-a240-bc969408fb81	Сборочные операции	\N
+507faaa7-d4b5-4ea6-88bc-e6efc1c140dd	Контроль на рабочем месте	\N
+521bf3f3-33fc-4c73-9777-0b893eee8b50	Переналадка оборудования, получение инструмента до начала работы, снятие/сдача по окончании работы	\N
+536b1adf-c6b4-4455-90fe-3bc8b093b9b5	Плановый ремонт централизованными службами	\N
+5c642857-0454-4095-b8c5-8793ddd32037	Ознакомление с работой, документацией, инструктаж	\N
+7cfa17bc-8fac-4b3e-b30d-6990ef319101	Неявка оператора (б/лист, отпуск, и пр.)	\N
+7d355ded-2097-4fec-9be7-a2a2595c8fd0	Нерабочее время по графику согласно сменности	\N
+7d61c645-bf3e-4fa0-b041-6b8dd2fc0591	Аварийный ремонт централизованными службами	\N
+8215be24-1f20-4263-8744-ad2c1e557914	Отсутствие энергоносителей	\N
+82180056-ed60-49d3-a245-a17f4a5043dc	Отсутствие заданий	\N
+82ce9d27-ef10-4d69-b748-ec9d5b30f4c6	Изменение режимов, смена инструмента, приспособления	\N
+8aded3a9-6a9b-4c7c-a5d6-1bc2acd4e705	Отсутствие материала, заготовок, деталей	\N
+bedce9a3-644d-4f29-ab19-36d58f65f10c	Отсутствие конструктора, технолога или ожидание его решения	\N
+c51b6825-626d-47c6-be34-903450934132	Отсутствие крана, транспорта	\N
+e3ba8dab-e433-4a55-bcf0-c5ed4096b12d	Обед	\N
+f182718d-ec1b-4ea7-9be8-f804e9415832	Работа по карте несоответствий	\N
+f9f8fd17-56e0-469b-abf4-57dcf7e7aafb	Отсутствие сотрудника ОТК	\N
+ffffc7e1-4900-4e74-aa18-39bd414862f0	Установка, выверка, снятие детали	\N
 \.
 
 
@@ -511,9 +512,10 @@ COPY public."EventLogs" ("Id", "Information", "DateTime", "UserId", "IdFromSyste
 --
 
 COPY public."Inspectors" ("Id", "UserId", "IdFromSystem") FROM stdin;
-09f9a092-24f2-450d-9c17-592b44553ea1	e4c64967-5955-4a74-aa86-c6fc1052e532	256467
-79295d32-8aa4-4669-b22e-0650e644c4da	42629d2a-c0d2-4260-8ce6-0dc035794af8	235565
-f683d779-1c2f-41be-b124-1361daf60611	3ae4d8d1-e969-47ee-ae48-fe1ddf24109f	251534
+30e2a6c1-fba1-428e-8098-bbcdd8110c7f	bf8ee0a6-fde9-4529-86cf-0f70e4eb1b7d	235565
+803a35bf-9a20-4dc6-bcb6-dcc9eb3a2bcb	646fad25-bcf8-4c50-9752-6ad9ca4b4e76	251534
+d6992935-335d-42c8-85b0-d793ab0db199	1e50a9d6-09f2-42f2-8754-9b91df3c1565	256467
+0feb3ce5-cb67-4123-9b4e-e46a51a6b8da	843f5c5f-28a2-4d01-a3aa-9ad6920aac4a	\N
 \.
 
 
@@ -522,11 +524,12 @@ f683d779-1c2f-41be-b124-1361daf60611	3ae4d8d1-e969-47ee-ae48-fe1ddf24109f	251534
 --
 
 COPY public."Masters" ("Id", "UserId", "WeldingEquipmentId", "IdFromSystem") FROM stdin;
-0ed50098-fd1a-4da9-98b1-cb01167f9534	a7ecb42b-4609-4041-92a3-30f7a1342f05	\N	614208
-770fc4f8-1120-41f7-ae92-230b05c90c14	bd5ef2b6-e08f-44e9-8b52-1e6bce19a77e	\N	613668
-8a4d5be6-fdda-4e69-b91d-bcdc0ed1c041	8557e574-2f5d-4794-bb16-18a6c4e34a8a	\N	617215
-8f14c352-6de8-48d4-a644-60803c165fc9	785ddb95-9222-41b9-86d7-35a5a7e01f82	\N	643759
-95d83640-753c-429b-b965-b617ed537fe4	5dfd69e4-cb3b-4700-bbbc-1a0a74742bc7	\N	612000
+2d204bf1-7524-410e-8bb7-e739768a5b11	d02b0081-350f-45e9-8db8-6fb70436aff4	\N	613668
+68a10a8f-0e3e-4c7d-a596-3bb7bcab0e4c	eb342252-4cc8-4a7d-9180-d6259fae9a0a	\N	643759
+88027041-3301-4c69-bc83-a6e1a258fb18	1aeb0adf-9497-41cc-b24a-159a008c91e7	\N	617215
+90735cbd-7223-48fc-9c3e-c7caaeb148e8	a6d34751-940a-4efb-b69b-55a6b4b5010b	\N	612000
+db07b406-b09e-4edc-9f1b-104144ef4765	40f70825-a7e4-4d2d-8629-75b1a22a89aa	\N	614208
+768611e8-b69c-4a5c-8e35-246fea64f652	eb6736e2-bd25-480c-816c-bd4503b45b4a	\N	\N
 \.
 
 
@@ -535,8 +538,8 @@ COPY public."Masters" ("Id", "UserId", "WeldingEquipmentId", "IdFromSystem") FRO
 --
 
 COPY public."Posts" ("Id", "Number", "Name", "ProductionAreaId", "IdFromSystem") FROM stdin;
-c7a8d212-e44f-4c84-977d-6f25f3987e19	2	Пост 2	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-cabe0d9d-0eb5-4f37-8d22-1987d0e513ef	1	Пост 1	0eae52c1-80bb-4025-89e7-173eed67e04d	\N
+10581d2d-825f-4d3e-a619-77a17851a6b8	2	Пост 2	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+72db3679-ef24-41f3-a93e-7e54fe1736c1	1	Пост 1	5fef4716-891e-4ec6-9df2-697ac632b7af	\N
 \.
 
 
@@ -545,30 +548,30 @@ cabe0d9d-0eb5-4f37-8d22-1987d0e513ef	1	Пост 1	0eae52c1-80bb-4025-89e7-173eed
 --
 
 COPY public."ProductInsides" ("MainProductId", "InsideProductId") FROM stdin;
-69e7486d-dc8d-4b87-a3fb-bb0b3f542bbd	1789873e-c919-4d86-a80e-88e9ea4ed9e7
-619cb04f-95d6-4712-8257-e6ea90705eda	1f4a7edd-8768-45d1-bc85-b1857ea5add6
-d54ca02f-82f3-443f-a7fb-7e13ea225b03	20d22bd2-9ac4-4568-869e-2e19bfc053bd
-d54ca02f-82f3-443f-a7fb-7e13ea225b03	22592a79-6760-47ed-a0ee-add1b7669973
-e655dc44-b200-48eb-903d-a64869ba3bdc	2925df94-97ec-4607-90b1-34e3342efda0
-d54ca02f-82f3-443f-a7fb-7e13ea225b03	319c03a9-aae8-47aa-ae9c-d2d6f23b3fec
-bb6c4dfb-91b8-4add-b31e-32e4be9b6c9c	466f6ba7-3277-443a-b0b5-7e5e28c0a5aa
-bb6c4dfb-91b8-4add-b31e-32e4be9b6c9c	4b02460d-19a0-42ef-a236-971d9c97d722
-319c03a9-aae8-47aa-ae9c-d2d6f23b3fec	4c386bff-9e9e-4aa0-bd36-11c612699c9a
-1789873e-c919-4d86-a80e-88e9ea4ed9e7	5c90346d-afaf-4b16-94f8-b67ffb841961
-e655dc44-b200-48eb-903d-a64869ba3bdc	619cb04f-95d6-4712-8257-e6ea90705eda
-619cb04f-95d6-4712-8257-e6ea90705eda	92368348-18ad-4312-a574-0bd8e58ca2c1
-d54ca02f-82f3-443f-a7fb-7e13ea225b03	9b383657-4c45-4b70-96a1-82b5d7e43134
-e655dc44-b200-48eb-903d-a64869ba3bdc	abe96b7b-1d76-49c4-a6f8-12b9fbfdc818
-20d22bd2-9ac4-4568-869e-2e19bfc053bd	b372b8c2-d197-4b35-a25a-898a60393267
-69e7486d-dc8d-4b87-a3fb-bb0b3f542bbd	b6478f7c-417c-41bf-bfd0-8a0f6329052d
-e655dc44-b200-48eb-903d-a64869ba3bdc	bb6c4dfb-91b8-4add-b31e-32e4be9b6c9c
-69e7486d-dc8d-4b87-a3fb-bb0b3f542bbd	bc0ef99e-97de-40f5-a521-6e09a7000a5b
-319c03a9-aae8-47aa-ae9c-d2d6f23b3fec	cfacafdb-375d-4ae3-8569-a31c8db53c4d
-bc0ef99e-97de-40f5-a521-6e09a7000a5b	d13c241f-766b-4baa-b4f0-34cea557458f
-20d22bd2-9ac4-4568-869e-2e19bfc053bd	d3569fe9-70f0-4cdd-a2ea-aaa6efb9ab71
-1789873e-c919-4d86-a80e-88e9ea4ed9e7	d634d3ab-2865-4bc6-838c-e9ed4fc7bd80
-69e7486d-dc8d-4b87-a3fb-bb0b3f542bbd	e1914f5e-96d8-4ba8-ac39-2a093e4fabb6
-bc0ef99e-97de-40f5-a521-6e09a7000a5b	fd17f7b0-aee7-47d7-8e24-967ee1bf2c67
+c3d87244-3a72-4351-90c5-c57246b1b409	067e0bf3-774b-4aa4-9fc5-78c5765fc5d6
+c3f99ccb-73e8-45c4-933c-9ca2950586a4	0ef68564-9547-49d1-babd-990e3787eca5
+93244c3f-0a26-41b2-b0ca-bdbc674a0352	22b7bfb1-31e2-4687-a6ce-17018550cd78
+e8159941-c5fb-440e-9880-5255b37bbd38	36231fe4-e3d9-4da7-9a96-c5089dbfc901
+5df66ca3-6ec5-4eba-b672-6e74245e0c19	489f143e-d949-45db-8b87-0b7769c9c74f
+5df66ca3-6ec5-4eba-b672-6e74245e0c19	493a2358-7fea-42b3-954a-13048fec86b1
+e8159941-c5fb-440e-9880-5255b37bbd38	4ebc0a60-a7fd-44a7-8b3b-e0c5147e21da
+0ef68564-9547-49d1-babd-990e3787eca5	550efdf4-27ef-48ba-b7d7-45e5afd0c979
+097b00d8-5a41-4aff-abd6-015fafe8da75	5707493f-5b37-4095-933b-45d57bd33a9b
+097b00d8-5a41-4aff-abd6-015fafe8da75	5df66ca3-6ec5-4eba-b672-6e74245e0c19
+e8159941-c5fb-440e-9880-5255b37bbd38	921d6856-07de-462a-9c08-46a01a633563
+c3f99ccb-73e8-45c4-933c-9ca2950586a4	93244c3f-0a26-41b2-b0ca-bdbc674a0352
+d5a15588-63d7-4e92-afda-b776681ca9a4	a9d40448-e74c-448a-a985-5dd6d4ea9e0a
+93244c3f-0a26-41b2-b0ca-bdbc674a0352	b457aa57-daa6-4967-9e89-3e9d0bc66548
+097b00d8-5a41-4aff-abd6-015fafe8da75	bd64eada-4ff6-46c8-a393-e3ea2270182c
+c3f99ccb-73e8-45c4-933c-9ca2950586a4	c1be2e3a-9525-495a-befb-d977a533f378
+e8159941-c5fb-440e-9880-5255b37bbd38	c3d87244-3a72-4351-90c5-c57246b1b409
+36231fe4-e3d9-4da7-9a96-c5089dbfc901	c855e1c0-8632-4a97-8945-0e44223fb7bf
+0ef68564-9547-49d1-babd-990e3787eca5	d1545b2e-2dcd-4542-9953-cd513ecc7a01
+097b00d8-5a41-4aff-abd6-015fafe8da75	d5a15588-63d7-4e92-afda-b776681ca9a4
+c3f99ccb-73e8-45c4-933c-9ca2950586a4	d8a4a1c0-4ae9-431f-bf6b-7e8531bb68d2
+c3d87244-3a72-4351-90c5-c57246b1b409	dc0c1a8c-803b-4b5f-a795-404212c3a9d4
+d5a15588-63d7-4e92-afda-b776681ca9a4	ec1c17b1-001a-462c-b544-ec45d0194eec
+36231fe4-e3d9-4da7-9a96-c5089dbfc901	ef8ea3c7-2d69-484f-ba81-26c32a4d681b
 \.
 
 
@@ -577,9 +580,9 @@ bc0ef99e-97de-40f5-a521-6e09a7000a5b	fd17f7b0-aee7-47d7-8e24-967ee1bf2c67
 --
 
 COPY public."ProductionAreas" ("Id", "Name", "Number", "WorkshopId", "IdFromSystem") FROM stdin;
-0eae52c1-80bb-4025-89e7-173eed67e04d	Сборка, сварка мостов	1	4327bb30-9856-41e7-81a4-8c53a7772f2d	01
-3bf0d970-306b-42c0-afb9-7ff0a7fa0b73	Производственный участок 5	5	8495bdc7-83c0-42c4-862e-1c8d7d5ef069	05
-9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	Сборка, сварка узл. и рам к/с г/п 120-220т	4	4327bb30-9856-41e7-81a4-8c53a7772f2d	04
+5c6b16bf-84ad-4186-8e7c-c0179de02584	Производственный участок 5	5	c8b6b066-35f3-4888-979c-442ccfb49682	05
+5fef4716-891e-4ec6-9df2-697ac632b7af	Сборка, сварка мостов	1	05691a0c-8ca4-4595-9a19-3d16c04b5d4a	01
+954426d6-cd6a-47ce-aa38-5d250d12f2bb	Сборка, сварка узл. и рам к/с г/п 120-220т	4	05691a0c-8ca4-4595-9a19-3d16c04b5d4a	04
 \.
 
 
@@ -588,33 +591,33 @@ COPY public."ProductionAreas" ("Id", "Name", "Number", "WorkshopId", "IdFromSyst
 --
 
 COPY public."Products" ("Id", "Name", "Number", "Status", "IsControlSubject", "IsAddManually", "ProductType", "WeldingTaskId", "TechnologicalProcessId", "ProductionAreaId", "WorkplaceId", "MasterId", "InspectorId", "IdFromSystem") FROM stdin;
-1789873e-c919-4d86-a80e-88e9ea4ed9e7	Кронштейн амортизатора левый	75304-1001251	1	f	f	2	\N	8de28928-75ea-4e0f-a916-c4fd386b25a2	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536248707
-1f4a7edd-8768-45d1-bc85-b1857ea5add6	Кольцо	75580-2401227	1	f	f	3	\N	cc7fedb5-4d6c-40f8-bff5-09b2837dfa54	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536384312
-20d22bd2-9ac4-4568-869e-2e19bfc053bd	Картер заднего моста	75132-2401008-50	1	f	f	2	\N	b43b9eb2-3986-4bee-9b5b-e7cc2114a3d0	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536467565
-22592a79-6760-47ed-a0ee-add1b7669973	Панель	75132-2105522	1	f	f	3	\N	b9cf60ac-1dbf-45e7-ab73-e00900709ee5	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536417730
-2925df94-97ec-4607-90b1-34e3342efda0	Кронштейн	75580-2113192	1	f	f	3	\N	b5bd36e5-ab26-42d2-b1bd-bb77e9aceaad	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536384314
-319c03a9-aae8-47aa-ae9c-d2d6f23b3fec	Кронштейн	7521-2401220	1	f	f	2	\N	cfe68b5c-2c37-478c-8e14-2568c250e921	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536273956
-466f6ba7-3277-443a-b0b5-7e5e28c0a5aa	Труба картера	75580-2401132-10	1	f	f	3	\N	712f6e77-b84b-43d0-836d-9b6356522cb6	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536386250
-4b02460d-19a0-42ef-a236-971d9c97d722	Фланец картера	75580-2401114-11	1	f	f	3	\N	8d74921c-bd97-4f98-9cd6-02f67d2acfbe	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536386265
-4c386bff-9e9e-4aa0-bd36-11c612699c9a	Распорка	7521-3932688	1	f	f	3	\N	b1dc59bf-4540-41f7-9bf4-39595dbe8b86	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536273606
-5c90346d-afaf-4b16-94f8-b67ffb841961	Кронштейн	75304-1001253	1	f	f	3	\N	4d26a7a6-3642-44f3-b3e0-3c6d5635b976	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536248708
-619cb04f-95d6-4712-8257-e6ea90705eda	Картер заднего моста	75580-2401008	1	f	f	2	\N	e8dfa0c0-a2fb-4370-b30f-57dc98cac2c7	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536384295
-69e7486d-dc8d-4b87-a3fb-bb0b3f542bbd	Рама	75313-2800010-20	1	f	f	1	\N	a72f2134-b060-4b18-914d-744537899007	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536287819
-92368348-18ad-4312-a574-0bd8e58ca2c1	Втулка	75303-2128438	1	f	f	3	\N	2adb4d1c-7059-401d-ab51-00ac95cf8a94	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536248270
-9b383657-4c45-4b70-96a1-82b5d7e43134	Кронштейн	75131-2113296-10	1	f	f	3	\N	adbbabdc-66b3-4853-9f3c-904dd0ee7769	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536461620
-abe96b7b-1d76-49c4-a6f8-12b9fbfdc818	Панель	75580-2105522	1	f	f	3	\N	9fe0f7ad-9c5f-4601-8bf5-98f9296bccf0	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536384399
-b372b8c2-d197-4b35-a25a-898a60393267	Пластина	75132-2401106	1	f	f	3	\N	acf5cd39-94a7-423c-875a-3327e2f01037	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536444153
-b6478f7c-417c-41bf-bfd0-8a0f6329052d	Накладка	549Б-1015842	1	f	f	3	\N	d67f40a2-51f6-46ad-a3da-2eb4d5cb2371	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536196288
-bb6c4dfb-91b8-4add-b31e-32e4be9b6c9c	Труба картера заднего моста	75580-2401010-01	1	f	f	2	\N	9dcdbc8d-8ea6-4862-82f8-5c7e7362376d	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536386240
-bc0ef99e-97de-40f5-a521-6e09a7000a5b	Кронштейн	75310-1183100	1	f	f	2	\N	50f2238b-73c3-487f-ac72-b8fee332ae78	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536267493
-cfacafdb-375d-4ae3-8569-a31c8db53c4d	Проушина	7521-2401224	1	f	f	3	\N	822a3e9f-f1aa-4695-bbfd-15627b1186db	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536274170
-d13c241f-766b-4baa-b4f0-34cea557458f	Кронштейн	75310-1183102	1	f	f	3	\N	9c723195-d12b-4cfb-b460-2cd55f7a0b69	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536267484
-d3569fe9-70f0-4cdd-a2ea-aaa6efb9ab71	Опора	75211-2401122	1	f	f	3	\N	8506165e-3928-4e35-977b-8bff8b3f1fba	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536276803
-d54ca02f-82f3-443f-a7fb-7e13ea225b03	Картер заднего моста	75132-2401006-50	1	f	f	1	\N	aab7480e-4d7c-472a-b762-c572c2819ed2	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536467567
-d634d3ab-2865-4bc6-838c-e9ed4fc7bd80	Кронштейн	75303-1001293	1	f	f	3	\N	192a8da5-1d50-4fb6-8ea5-40a6cae81e8d	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536247228
-e1914f5e-96d8-4ba8-ac39-2a093e4fabb6	Кронштейн	75211-1018162	1	f	f	3	\N	9ff15037-922e-4011-a13f-2f729c22454e	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536270344
-e655dc44-b200-48eb-903d-a64869ba3bdc	Картер заднего моста	75580-2401006	1	f	f	1	\N	26ecc0f6-5c9d-412e-a5e0-145d9d66977b	0eae52c1-80bb-4025-89e7-173eed67e04d	\N	\N	\N	4536384294
-fd17f7b0-aee7-47d7-8e24-967ee1bf2c67	Кронштейн	75310-1183106	1	f	f	3	\N	2439d9da-ebb1-45b0-8ece-8799369c17d8	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N	\N	\N	4536267485
+067e0bf3-774b-4aa4-9fc5-78c5765fc5d6	Кронштейн	75303-1001293	1	f	f	3	\N	72200315-f300-4f69-9e46-977031e90767	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536247228
+097b00d8-5a41-4aff-abd6-015fafe8da75	Картер заднего моста	75132-2401006-50	1	f	f	1	\N	70461af2-a803-47a5-99cb-63db9f99a7a2	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536467567
+0ef68564-9547-49d1-babd-990e3787eca5	Труба картера заднего моста	75580-2401010-01	1	f	f	2	\N	eb4ddcc2-c848-4a56-bac9-e97c0e8746f3	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536386240
+22b7bfb1-31e2-4687-a6ce-17018550cd78	Кольцо	75580-2401227	1	f	f	3	\N	d0f24999-7011-4148-a18e-3d4fea4151a7	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536384312
+36231fe4-e3d9-4da7-9a96-c5089dbfc901	Кронштейн	75310-1183100	1	f	f	2	\N	3329050f-6484-4885-b2d6-f0c145c906d0	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536267493
+489f143e-d949-45db-8b87-0b7769c9c74f	Распорка	7521-3932688	1	f	f	3	\N	6778b35a-a89a-4c47-beaa-f9f5efbbc281	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536273606
+493a2358-7fea-42b3-954a-13048fec86b1	Проушина	7521-2401224	1	f	f	3	\N	87a2bc73-52f9-4c75-8901-75daf762c6d7	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536274170
+4ebc0a60-a7fd-44a7-8b3b-e0c5147e21da	Кронштейн	75211-1018162	1	f	f	3	\N	254f202c-dbaf-4d35-8236-22e5d5a1f8c9	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536270344
+550efdf4-27ef-48ba-b7d7-45e5afd0c979	Фланец картера	75580-2401114-11	1	f	f	3	\N	53172fa4-ff2f-4b46-8bf8-c47b0dab3303	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536386265
+5707493f-5b37-4095-933b-45d57bd33a9b	Кронштейн	75131-2113296-10	1	f	f	3	\N	001028fb-7d45-4fc0-9691-7163540eb2da	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536461620
+5df66ca3-6ec5-4eba-b672-6e74245e0c19	Кронштейн	7521-2401220	1	f	f	2	\N	75732a9a-9350-48ea-97f5-b0340737a2d7	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536273956
+921d6856-07de-462a-9c08-46a01a633563	Накладка	549Б-1015842	1	f	f	3	\N	65a641c4-deee-4361-a67f-0c10918541a3	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536196288
+93244c3f-0a26-41b2-b0ca-bdbc674a0352	Картер заднего моста	75580-2401008	1	f	f	2	\N	139dc661-89d5-47c8-8522-1880f44d4f35	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536384295
+a9d40448-e74c-448a-a985-5dd6d4ea9e0a	Пластина	75132-2401106	1	f	f	3	\N	abd82f73-dbc5-4d70-bafc-bd37cc469b9d	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536444153
+b457aa57-daa6-4967-9e89-3e9d0bc66548	Втулка	75303-2128438	1	f	f	3	\N	b665af62-feb4-48e8-a471-09e8535ca0b2	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536248270
+bd64eada-4ff6-46c8-a393-e3ea2270182c	Панель	75132-2105522	1	f	f	3	\N	1315bdce-dc20-4b6d-a8df-30f7cf90bd52	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536417730
+c1be2e3a-9525-495a-befb-d977a533f378	Кронштейн	75580-2113192	1	f	f	3	\N	8e579e1c-2864-43be-a16c-b1d17d36721b	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536384314
+c3d87244-3a72-4351-90c5-c57246b1b409	Кронштейн амортизатора левый	75304-1001251	1	f	f	2	\N	6dc2f951-cd39-4b53-be7d-2b1bff913099	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536248707
+c3f99ccb-73e8-45c4-933c-9ca2950586a4	Картер заднего моста	75580-2401006	1	f	f	1	\N	bb79afc5-8938-46b5-954e-032b825c46ac	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536384294
+c855e1c0-8632-4a97-8945-0e44223fb7bf	Кронштейн	75310-1183106	1	f	f	3	\N	bb03e158-4cb3-4dd9-a925-ecfb96e4b8ba	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536267485
+d1545b2e-2dcd-4542-9953-cd513ecc7a01	Труба картера	75580-2401132-10	1	f	f	3	\N	a82c289b-faf6-450d-85e1-ce8ed5d01165	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536386250
+d5a15588-63d7-4e92-afda-b776681ca9a4	Картер заднего моста	75132-2401008-50	1	f	f	2	\N	c50b99fc-f350-4029-ba47-d98a9a345099	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	\N	\N	4536467565
+dc0c1a8c-803b-4b5f-a795-404212c3a9d4	Кронштейн	75304-1001253	1	f	f	3	\N	f9e2148a-988f-4484-a4ef-58bf4853df18	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536248708
+e8159941-c5fb-440e-9880-5255b37bbd38	Рама	75313-2800010-20	1	f	f	1	\N	53221e86-fe2b-46c0-a0f5-15e7069a9102	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536287819
+ef8ea3c7-2d69-484f-ba81-26c32a4d681b	Кронштейн	75310-1183102	1	f	f	3	\N	577cedf3-fc4b-4638-b119-8d4516a8a309	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	\N	\N	4536267484
+d8a4a1c0-4ae9-431f-bf6b-7e8531bb68d2	Панель	75580-2105522	1	f	f	3	\N	1fe0e49d-d7a7-421e-81ce-d01c026065c3	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	768611e8-b69c-4a5c-8e35-246fea64f652	\N	4536384399
+ec1c17b1-001a-462c-b544-ec45d0194eec	Опора	75211-2401122	1	f	f	3	\N	68a06ab3-9ef3-4d7b-b0af-b91876ba85de	5fef4716-891e-4ec6-9df2-697ac632b7af	\N	768611e8-b69c-4a5c-8e35-246fea64f652	\N	4536276803
 \.
 
 
@@ -623,11 +626,11 @@ fd17f7b0-aee7-47d7-8e24-967ee1bf2c67	Кронштейн	75310-1183106	1	f	f	3	\N
 --
 
 COPY public."Roles" ("Id", "Name", "IdFromSystem") FROM stdin;
-e31bb69e-e515-4664-ae9d-f2429adacfda	Admin	\N
-fcbe8db0-81e6-4108-8418-c4dc849dd5db	Master	\N
-574d280e-9185-4091-9ef5-07e93817c3f8	Executor	\N
-913db1d4-aaab-48ca-b4f9-ebfe3c3fa12e	TechUser	\N
-5bf9ae5f-651b-4f17-a2c8-3713124f1783	Chief	\N
+a0358457-b726-4ad1-9b4a-60a215ce281e	Admin	\N
+7a72c637-524d-4cee-a881-04f09789330a	Master	\N
+e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e	Welder	\N
+88473306-fb16-4dc2-9922-e8cd108aa743	Inspector	\N
+dce7713e-4bfd-4f3a-affa-e96bd38bdafc	Chief	\N
 \.
 
 
@@ -636,6 +639,8 @@ fcbe8db0-81e6-4108-8418-c4dc849dd5db	Master	\N
 --
 
 COPY public."Seams" ("Id", "Number", "Status", "IsControlSubject", "IsAddManually", "ProductId", "ProductionAreaId", "WorkplaceId", "WelderId", "InspectorId", "IdFromSystem") FROM stdin;
+4fc78d2b-23d1-4cc9-8dd4-4fc9bebd3014	2	3	t	f	ec1c17b1-001a-462c-b544-ec45d0194eec	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	e001fff3-c6be-4e3b-8833-84d9f756de7d	0feb3ce5-cb67-4123-9b4e-e46a51a6b8da	\N
+8ade0c96-fe20-4065-be86-4888fd5a2810	2	3	t	f	d8a4a1c0-4ae9-431f-bf6b-7e8531bb68d2	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N	e001fff3-c6be-4e3b-8833-84d9f756de7d	0feb3ce5-cb67-4123-9b4e-e46a51a6b8da	\N
 \.
 
 
@@ -643,7 +648,7 @@ COPY public."Seams" ("Id", "Number", "Status", "IsControlSubject", "IsAddManuall
 -- Data for Name: StatusReasons; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."StatusReasons" ("Id", "Date", "Status", "Reason", "ProductId", "SeamId", "IdFromSystem") FROM stdin;
+COPY public."StatusReasons" ("Id", "Date", "Status", "Reason", "DetectedDefects", "ProductId", "SeamId", "IdFromSystem") FROM stdin;
 \.
 
 
@@ -652,6 +657,8 @@ COPY public."StatusReasons" ("Id", "Date", "Status", "Reason", "ProductId", "Sea
 --
 
 COPY public."TechnologicalInstructions" ("Id", "Number", "Name", "SeamId", "TechnologicalProcessId", "IdFromSystem") FROM stdin;
+43fecfaf-e167-4c58-93ec-c816fb6c6c4f	1	ИТП	4fc78d2b-23d1-4cc9-8dd4-4fc9bebd3014	\N	\N
+d96d7bc3-8ccf-4fcc-a09b-b9d23629a8fa	1	ИТП	8ade0c96-fe20-4065-be86-4888fd5a2810	\N	\N
 \.
 
 
@@ -660,33 +667,33 @@ COPY public."TechnologicalInstructions" ("Id", "Number", "Name", "SeamId", "Tech
 --
 
 COPY public."TechnologicalProcesses" ("Id", "Number", "Name", "PdmSystemFileLink", "IdFromSystem") FROM stdin;
-192a8da5-1d50-4fb6-8ea5-40a6cae81e8d	3049271	Технологический процесс	Ссылка	3049271
-2439d9da-ebb1-45b0-8ece-8799369c17d8	1119363	Технологический процесс	Ссылка	1119363
-26ecc0f6-5c9d-412e-a5e0-145d9d66977b	2433634	Технологический процесс	Ссылка	2433634
-2adb4d1c-7059-401d-ab51-00ac95cf8a94	3011514	Технологический процесс	Ссылка	3011514
-4d26a7a6-3642-44f3-b3e0-3c6d5635b976	1492964	Технологический процесс	Ссылка	1492964
-50f2238b-73c3-487f-ac72-b8fee332ae78	1823031	Технологический процесс	Ссылка	1823031
-712f6e77-b84b-43d0-836d-9b6356522cb6	2822569	Технологический процесс	Ссылка	2822569
-822a3e9f-f1aa-4695-bbfd-15627b1186db	1124147	Технологический процесс	Ссылка	1124147
-8506165e-3928-4e35-977b-8bff8b3f1fba	3211246	Технологический процесс	Ссылка	3211246
-8d74921c-bd97-4f98-9cd6-02f67d2acfbe	3338649	Технологический процесс	Ссылка	3338649
-8de28928-75ea-4e0f-a916-c4fd386b25a2	1334123	Технологический процесс	Ссылка	1334123
-9c723195-d12b-4cfb-b460-2cd55f7a0b69	1104641	Технологический процесс	Ссылка	1104641
-9dcdbc8d-8ea6-4862-82f8-5c7e7362376d	2915477	Технологический процесс	Ссылка	2915477
-9fe0f7ad-9c5f-4601-8bf5-98f9296bccf0	1405307	Технологический процесс	Ссылка	1405307
-9ff15037-922e-4011-a13f-2f729c22454e	2841119	Технологический процесс	Ссылка	2841119
-a72f2134-b060-4b18-914d-744537899007	3239598	Технологический процесс	Ссылка	3239598
-aab7480e-4d7c-472a-b762-c572c2819ed2	3090319	Технологический процесс	Ссылка	3090319
-acf5cd39-94a7-423c-875a-3327e2f01037	1003048	Технологический процесс	Ссылка	1003048
-adbbabdc-66b3-4853-9f3c-904dd0ee7769	526870	Технологический процесс	Ссылка	526870
-b1dc59bf-4540-41f7-9bf4-39595dbe8b86	908693	Технологический процесс	Ссылка	908693
-b43b9eb2-3986-4bee-9b5b-e7cc2114a3d0	3232836	Технологический процесс	Ссылка	3232836
-b5bd36e5-ab26-42d2-b1bd-bb77e9aceaad	1405914	Технологический процесс	Ссылка	1405914
-b9cf60ac-1dbf-45e7-ab73-e00900709ee5	1053809	Технологический процесс	Ссылка	1053809
-cc7fedb5-4d6c-40f8-bff5-09b2837dfa54	1402616	Технологический процесс	Ссылка	1402616
-cfe68b5c-2c37-478c-8e14-2568c250e921	1362989	Технологический процесс	Ссылка	1362989
-d67f40a2-51f6-46ad-a3da-2eb4d5cb2371	1426226	Технологический процесс	Ссылка	1426226
-e8dfa0c0-a2fb-4370-b30f-57dc98cac2c7	3232938	Технологический процесс	Ссылка	3232938
+001028fb-7d45-4fc0-9691-7163540eb2da	526870	Технологический процесс	Ссылка	526870
+1315bdce-dc20-4b6d-a8df-30f7cf90bd52	1053809	Технологический процесс	Ссылка	1053809
+139dc661-89d5-47c8-8522-1880f44d4f35	3232938	Технологический процесс	Ссылка	3232938
+1fe0e49d-d7a7-421e-81ce-d01c026065c3	1405307	Технологический процесс	Ссылка	1405307
+254f202c-dbaf-4d35-8236-22e5d5a1f8c9	2841119	Технологический процесс	Ссылка	2841119
+3329050f-6484-4885-b2d6-f0c145c906d0	1823031	Технологический процесс	Ссылка	1823031
+53172fa4-ff2f-4b46-8bf8-c47b0dab3303	3338649	Технологический процесс	Ссылка	3338649
+53221e86-fe2b-46c0-a0f5-15e7069a9102	3239598	Технологический процесс	Ссылка	3239598
+577cedf3-fc4b-4638-b119-8d4516a8a309	1104641	Технологический процесс	Ссылка	1104641
+65a641c4-deee-4361-a67f-0c10918541a3	1426226	Технологический процесс	Ссылка	1426226
+6778b35a-a89a-4c47-beaa-f9f5efbbc281	908693	Технологический процесс	Ссылка	908693
+68a06ab3-9ef3-4d7b-b0af-b91876ba85de	3211246	Технологический процесс	Ссылка	3211246
+6dc2f951-cd39-4b53-be7d-2b1bff913099	1334123	Технологический процесс	Ссылка	1334123
+70461af2-a803-47a5-99cb-63db9f99a7a2	3090319	Технологический процесс	Ссылка	3090319
+72200315-f300-4f69-9e46-977031e90767	3049271	Технологический процесс	Ссылка	3049271
+75732a9a-9350-48ea-97f5-b0340737a2d7	1362989	Технологический процесс	Ссылка	1362989
+87a2bc73-52f9-4c75-8901-75daf762c6d7	1124147	Технологический процесс	Ссылка	1124147
+8e579e1c-2864-43be-a16c-b1d17d36721b	1405914	Технологический процесс	Ссылка	1405914
+a82c289b-faf6-450d-85e1-ce8ed5d01165	2822569	Технологический процесс	Ссылка	2822569
+abd82f73-dbc5-4d70-bafc-bd37cc469b9d	1003048	Технологический процесс	Ссылка	1003048
+b665af62-feb4-48e8-a471-09e8535ca0b2	3011514	Технологический процесс	Ссылка	3011514
+bb03e158-4cb3-4dd9-a925-ecfb96e4b8ba	1119363	Технологический процесс	Ссылка	1119363
+bb79afc5-8938-46b5-954e-032b825c46ac	2433634	Технологический процесс	Ссылка	2433634
+c50b99fc-f350-4029-ba47-d98a9a345099	3232836	Технологический процесс	Ссылка	3232836
+d0f24999-7011-4148-a18e-3d4fea4151a7	1402616	Технологический процесс	Ссылка	1402616
+eb4ddcc2-c848-4a56-bac9-e97c0e8746f3	2915477	Технологический процесс	Ссылка	2915477
+f9e2148a-988f-4484-a4ef-58bf4853df18	1492964	Технологический процесс	Ссылка	1492964
 \.
 
 
@@ -695,30 +702,36 @@ e8dfa0c0-a2fb-4370-b30f-57dc98cac2c7	3232938	Технологический пр
 --
 
 COPY public."UserRoles" ("UserId", "RoleId") FROM stdin;
-3ae4d8d1-e969-47ee-ae48-fe1ddf24109f	913db1d4-aaab-48ca-b4f9-ebfe3c3fa12e
-42629d2a-c0d2-4260-8ce6-0dc035794af8	913db1d4-aaab-48ca-b4f9-ebfe3c3fa12e
-e4c64967-5955-4a74-aa86-c6fc1052e532	913db1d4-aaab-48ca-b4f9-ebfe3c3fa12e
-5dfd69e4-cb3b-4700-bbbc-1a0a74742bc7	fcbe8db0-81e6-4108-8418-c4dc849dd5db
-785ddb95-9222-41b9-86d7-35a5a7e01f82	fcbe8db0-81e6-4108-8418-c4dc849dd5db
-8557e574-2f5d-4794-bb16-18a6c4e34a8a	fcbe8db0-81e6-4108-8418-c4dc849dd5db
-a7ecb42b-4609-4041-92a3-30f7a1342f05	fcbe8db0-81e6-4108-8418-c4dc849dd5db
-bd5ef2b6-e08f-44e9-8b52-1e6bce19a77e	fcbe8db0-81e6-4108-8418-c4dc849dd5db
-07a2be6c-3581-4878-98da-ec6c00ba4472	574d280e-9185-4091-9ef5-07e93817c3f8
-24fadfaf-ba8a-47e9-b6e7-64bc6c30dec0	574d280e-9185-4091-9ef5-07e93817c3f8
-30ff8586-7074-4ddb-b4db-0c7a6720797d	574d280e-9185-4091-9ef5-07e93817c3f8
-3c6e7c1a-49da-4fb9-b064-85f434963232	574d280e-9185-4091-9ef5-07e93817c3f8
-590d2bdb-bc09-4d2d-a490-8bc527d5fc0f	574d280e-9185-4091-9ef5-07e93817c3f8
-60c3cbdd-f8d9-4d47-999e-f7dc80218195	574d280e-9185-4091-9ef5-07e93817c3f8
-85c0b3ce-9f39-4cad-a197-7f88f8706fb1	574d280e-9185-4091-9ef5-07e93817c3f8
-86b2344a-4a1f-4b55-935e-8bc5145f0cf8	574d280e-9185-4091-9ef5-07e93817c3f8
-ac7be631-7d64-49c0-bc69-651d8c9ebb94	574d280e-9185-4091-9ef5-07e93817c3f8
-b00043d7-5af1-49be-ad6e-955fec0876a9	574d280e-9185-4091-9ef5-07e93817c3f8
-b1586316-7fd4-45be-a3d5-699f339a6bb3	574d280e-9185-4091-9ef5-07e93817c3f8
-c6e062de-64a7-49f7-b2be-d4516f844cd9	574d280e-9185-4091-9ef5-07e93817c3f8
-e3e60cac-df04-4aea-a09b-16478f8529da	574d280e-9185-4091-9ef5-07e93817c3f8
-ecfa3bb8-e6f7-4255-8c7b-569af536674b	574d280e-9185-4091-9ef5-07e93817c3f8
-1c4a85fb-0693-4e37-90b9-7aae24acf777	5bf9ae5f-651b-4f17-a2c8-3713124f1783
-1a74760f-278a-47d4-97cf-363db169d5f0	e31bb69e-e515-4664-ae9d-f2429adacfda
+1e50a9d6-09f2-42f2-8754-9b91df3c1565	88473306-fb16-4dc2-9922-e8cd108aa743
+646fad25-bcf8-4c50-9752-6ad9ca4b4e76	88473306-fb16-4dc2-9922-e8cd108aa743
+bf8ee0a6-fde9-4529-86cf-0f70e4eb1b7d	88473306-fb16-4dc2-9922-e8cd108aa743
+1aeb0adf-9497-41cc-b24a-159a008c91e7	7a72c637-524d-4cee-a881-04f09789330a
+40f70825-a7e4-4d2d-8629-75b1a22a89aa	7a72c637-524d-4cee-a881-04f09789330a
+a6d34751-940a-4efb-b69b-55a6b4b5010b	7a72c637-524d-4cee-a881-04f09789330a
+d02b0081-350f-45e9-8db8-6fb70436aff4	7a72c637-524d-4cee-a881-04f09789330a
+eb342252-4cc8-4a7d-9180-d6259fae9a0a	7a72c637-524d-4cee-a881-04f09789330a
+0026ab9e-eb09-459e-9eb3-858e1143d653	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+228d9e83-dd63-4859-925a-c907733558e4	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+2ccc6d37-8562-4f15-979b-ff2d4af6c703	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+655c0bc9-a639-4533-b608-03bdd08b2d77	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+68ca3e49-8740-4517-874a-0c316f60811a	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+79c16b39-9a59-4d2d-a055-e5e09ec3ec76	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+89c8785d-3c34-469b-b08f-4e38792fa7cc	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+8abe4439-0184-4de1-94dc-8aba68c5c18f	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+8d80740e-61e3-45f5-b61e-3ebce8c92ab7	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+94271bf8-6f76-4fda-a769-ba54c44578e9	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+b7004c1e-3c69-49e4-bcf7-52ece3453f75	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+bb78cccb-fd49-4b07-bb7d-008130c88f79	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+c38221f4-7181-4a03-8bf2-ad43f23caf0b	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+f59e0ec5-c4b8-435d-aba1-f6c0bedef996	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+7bbfda84-f5b8-4c80-a145-22839083125a	dce7713e-4bfd-4f3a-affa-e96bd38bdafc
+eb6736e2-bd25-480c-816c-bd4503b45b4a	7a72c637-524d-4cee-a881-04f09789330a
+843f5c5f-28a2-4d01-a3aa-9ad6920aac4a	88473306-fb16-4dc2-9922-e8cd108aa743
+4ea5ffdb-2870-41d9-8fdc-9b2f59aef4d8	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+fb8c5f81-0e01-4b51-9563-5609f3ce6578	a0358457-b726-4ad1-9b4a-60a215ce281e
+9d24c556-ef5c-485b-a45d-13841160066f	e1eab37d-a0e4-4646-8ecb-91cdfcdbda1e
+6a1fd0f1-bd2d-4363-bbe6-f7ef0cf5c137	88473306-fb16-4dc2-9922-e8cd108aa743
+ed4d99e2-ae00-4ddc-b643-2ef46bc173d3	dce7713e-4bfd-4f3a-affa-e96bd38bdafc
 \.
 
 
@@ -727,30 +740,36 @@ ecfa3bb8-e6f7-4255-8c7b-569af536674b	574d280e-9185-4091-9ef5-07e93817c3f8
 --
 
 COPY public."Users" ("Id", "FirstName", "LastName", "MiddleName", "UserName", "Email", "PasswordHash", "Position", "ServiceNumber", "CertificateValidityPeriod", "RfidTag", "ProductionAreaId", "IdFromSystem") FROM stdin;
-3ae4d8d1-e969-47ee-ae48-fe1ddf24109f	Ирина	Алексеевна	Люцко	\N	\N	\N	Контролер сварочных работ	51534	\N	\N	3bf0d970-306b-42c0-afb9-7ff0a7fa0b73	\N
-42629d2a-c0d2-4260-8ce6-0dc035794af8	Татьяна	Стефановна	Долгая	\N	\N	\N	Контролер сварочных работ	35565	\N	\N	3bf0d970-306b-42c0-afb9-7ff0a7fa0b73	\N
-e4c64967-5955-4a74-aa86-c6fc1052e532	Елена	Викторовна	Михальченко	\N	\N	\N	Контролер сварочных работ	56467	\N	\N	3bf0d970-306b-42c0-afb9-7ff0a7fa0b73	\N
-5dfd69e4-cb3b-4700-bbbc-1a0a74742bc7	Денис	Александрович	Подобед	\N	\N	\N	Мастер производственного участка	12000	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-785ddb95-9222-41b9-86d7-35a5a7e01f82	Игорь	Сергеевич	Шаврук	\N	\N	\N	Мастер производственного участка	43759	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-8557e574-2f5d-4794-bb16-18a6c4e34a8a	Сергей	Николаевич	Слабухо	\N	\N	\N	Старший мастер производственного участка	17215	\N	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	\N
-a7ecb42b-4609-4041-92a3-30f7a1342f05	Александр	Михайлович	Кузьминский	\N	\N	\N	Мастер производственного участка	14208	\N	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	\N
-bd5ef2b6-e08f-44e9-8b52-1e6bce19a77e	Павел	Анатольевич	Яичкин	\N	\N	\N	Старший мастер производственного участка	13668	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-07a2be6c-3581-4878-98da-ec6c00ba4472	Александр	Сергеевич	Смородин	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	50402	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-24fadfaf-ba8a-47e9-b6e7-64bc6c30dec0	Вячеслав	Сергеевич	Распутин	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	56298	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-30ff8586-7074-4ddb-b4db-0c7a6720797d	Максим	Александрович	Баркетов	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52441	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-3c6e7c1a-49da-4fb9-b064-85f434963232	Александр	Николаевич	Спиридонов	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	51861	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-590d2bdb-bc09-4d2d-a490-8bc527d5fc0f	Дмитрий	Сергеевич	Малиновский	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	53274	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-60c3cbdd-f8d9-4d47-999e-f7dc80218195	Сергей	Анатольевич	Хурсанов	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52444	\N	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	\N
-85c0b3ce-9f39-4cad-a197-7f88f8706fb1	Александр	Анатольевич	Слаёк	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	56278	\N	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	\N
-86b2344a-4a1f-4b55-935e-8bc5145f0cf8	Александр	Николаевич	Денисенко	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	21537	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-ac7be631-7d64-49c0-bc69-651d8c9ebb94	Павел	Антонович	Ходот	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52365	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-b00043d7-5af1-49be-ad6e-955fec0876a9	Иван	Игоревич	Редько	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	55288	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-b1586316-7fd4-45be-a3d5-699f339a6bb3	Василий	Николаевич	Денисенко	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	21538	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-c6e062de-64a7-49f7-b2be-d4516f844cd9	Владислав	Николаевич	Курто	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52207	\N	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	\N
-e3e60cac-df04-4aea-a09b-16478f8529da	Егор	Николаевич	Пучнин	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	47329	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-ecfa3bb8-e6f7-4255-8c7b-569af536674b	Вадим	Александрович	Ильюшонок	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	49921	\N	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	\N
-1c4a85fb-0693-4e37-90b9-7aae24acf777	Имя начальника цеха	Отчество начальника цеха	Фамилия начальника цеха	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка начальника цеха 1	0eae52c1-80bb-4025-89e7-173eed67e04d	\N
-1a74760f-278a-47d4-97cf-363db169d5f0	Admin	Adminovich	Admin	admin1@admin.com	admin@admin.com	$MYHASH$V1$10000$LYsc/GJ3+70qurmt5zfHWxViRflIOBVjGtYuS/jM21I2Dyl/	\N	\N	\N	\N	\N	\N
+1e50a9d6-09f2-42f2-8754-9b91df3c1565	Елена	Викторовна	Михальченко	\N	\N	\N	Контролер сварочных работ	56467	\N	\N	5c6b16bf-84ad-4186-8e7c-c0179de02584	\N
+646fad25-bcf8-4c50-9752-6ad9ca4b4e76	Ирина	Алексеевна	Люцко	\N	\N	\N	Контролер сварочных работ	51534	\N	\N	5c6b16bf-84ad-4186-8e7c-c0179de02584	\N
+bf8ee0a6-fde9-4529-86cf-0f70e4eb1b7d	Татьяна	Стефановна	Долгая	\N	\N	\N	Контролер сварочных работ	35565	\N	\N	5c6b16bf-84ad-4186-8e7c-c0179de02584	\N
+1aeb0adf-9497-41cc-b24a-159a008c91e7	Сергей	Николаевич	Слабухо	\N	\N	\N	Старший мастер производственного участка	17215	\N	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	\N
+40f70825-a7e4-4d2d-8629-75b1a22a89aa	Александр	Михайлович	Кузьминский	\N	\N	\N	Мастер производственного участка	14208	\N	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	\N
+a6d34751-940a-4efb-b69b-55a6b4b5010b	Денис	Александрович	Подобед	\N	\N	\N	Мастер производственного участка	12000	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+d02b0081-350f-45e9-8db8-6fb70436aff4	Павел	Анатольевич	Яичкин	\N	\N	\N	Старший мастер производственного участка	13668	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+eb342252-4cc8-4a7d-9180-d6259fae9a0a	Игорь	Сергеевич	Шаврук	\N	\N	\N	Мастер производственного участка	43759	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+0026ab9e-eb09-459e-9eb3-858e1143d653	Александр	Сергеевич	Смородин	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	50402	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+228d9e83-dd63-4859-925a-c907733558e4	Александр	Николаевич	Спиридонов	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	51861	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+2ccc6d37-8562-4f15-979b-ff2d4af6c703	Вячеслав	Сергеевич	Распутин	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	56298	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+655c0bc9-a639-4533-b608-03bdd08b2d77	Иван	Игоревич	Редько	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	55288	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+68ca3e49-8740-4517-874a-0c316f60811a	Егор	Николаевич	Пучнин	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	47329	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+79c16b39-9a59-4d2d-a055-e5e09ec3ec76	Василий	Николаевич	Денисенко	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	21538	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+89c8785d-3c34-469b-b08f-4e38792fa7cc	Александр	Анатольевич	Слаёк	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	56278	\N	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	\N
+8abe4439-0184-4de1-94dc-8aba68c5c18f	Сергей	Анатольевич	Хурсанов	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52444	\N	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	\N
+8d80740e-61e3-45f5-b61e-3ebce8c92ab7	Дмитрий	Сергеевич	Малиновский	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	53274	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+94271bf8-6f76-4fda-a769-ba54c44578e9	Вадим	Александрович	Ильюшонок	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	49921	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+b7004c1e-3c69-49e4-bcf7-52ece3453f75	Павел	Антонович	Ходот	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52365	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+bb78cccb-fd49-4b07-bb7d-008130c88f79	Владислав	Николаевич	Курто	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52207	\N	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	\N
+c38221f4-7181-4a03-8bf2-ad43f23caf0b	Максим	Александрович	Баркетов	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	52441	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+f59e0ec5-c4b8-435d-aba1-f6c0bedef996	Александр	Николаевич	Денисенко	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	21537	\N	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+7bbfda84-f5b8-4c80-a145-22839083125a	Имя начальника цеха	Отчество начальника цеха	Фамилия начальника цеха	UserName	Email	PasswordHash	Должность 1	Табельный номер  1	2025-02-02 00:00:00	RFID метка начальника цеха 1	5c6b16bf-84ad-4186-8e7c-c0179de02584	\N
+eb6736e2-bd25-480c-816c-bd4503b45b4a	Павел	Анатольевич	Яичкин	\N	\N	\N	Старший мастер производственного участка	13668	2021-01-30 00:00:00	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+4ea5ffdb-2870-41d9-8fdc-9b2f59aef4d8	Александр	Николаевич	Денисенко	\N	\N	\N	Электросварщик на автоматических и полуавтоматических машинах	21537	2023-05-12 00:00:00	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+843f5c5f-28a2-4d01-a3aa-9ad6920aac4a	Татьяна	Стефановна	Долгая	\N	\N	\N	Контролер сварочных работ	35565	2023-01-30 00:00:00	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	\N
+fb8c5f81-0e01-4b51-9563-5609f3ce6578	Admin	Adminovich	Admin	admin1@admin.com	admin@admin.com	$MYHASH$V1$10000$cV+BsH3JXsHdFmGVAT2g/SIE8ED+5FhVns9Rpej92Z2VV9XW	\N	\N	\N	\N	\N	\N
+9d24c556-ef5c-485b-a45d-13841160066f	Имя сварщика	Отчество сварщика	Фамилия сварщика	welder@welder.com	welder@welder.com	$MYHASH$V1$10000$P5kS0AJ2GFrFrhSiryMGVs/kwKdwt/VQl2uOgqdGWMWHWsbG	\N	\N	\N	\N	\N	\N
+6a1fd0f1-bd2d-4363-bbe6-f7ef0cf5c137	Имя контролера	Отчество контролера	Фамилия контролера	inspector@inspector.com	inspector@inspector.com	$MYHASH$V1$10000$iNmnpAjhCtTYjXyFujCq8ChOnq9WbUVYh29oqypeIRE1t1dG	\N	\N	\N	\N	\N	\N
+ed4d99e2-ae00-4ddc-b643-2ef46bc173d3	Имя начальника цеха	Отчество начальника цеха	Фамилия начальника цеха	chief@chief.com	chief@chief.com	$MYHASH$V1$10000$6Cx+0gcEWC9sWWBdWIX6vPurZwDGSZLWHNLEZlun4TulAFHp	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -759,6 +778,10 @@ ecfa3bb8-e6f7-4255-8c7b-569af536674b	Вадим	Александрович	Ил�
 --
 
 COPY public."WeldPassageInstructions" ("Id", "Number", "Name", "WeldingCurrentMin", "WeldingCurrentMax", "ArcVoltageMin", "ArcVoltageMax", "PreheatingTemperatureMin", "PreheatingTemperatureMax", "TechnologicalInstructionId", "IdFromSystem") FROM stdin;
+2af067cf-b48b-47da-9925-8fbadfa54166	1	Корневой	80	120	22	24	50	250	43fecfaf-e167-4c58-93ec-c816fb6c6c4f	\N
+72732930-a474-4b01-9efc-ffaf0c1cda38	2	Заполняющий	80	120	21	25	50	250	43fecfaf-e167-4c58-93ec-c816fb6c6c4f	\N
+955bebad-0a0c-4ee8-a06a-3c5e8b8ee045	2	Заполняющий	80	120	21	25	50	250	d96d7bc3-8ccf-4fcc-a09b-b9d23629a8fa	\N
+a2cae425-4494-416e-975c-ace291c48369	1	Корневой	80	120	\N	\N	50	250	d96d7bc3-8ccf-4fcc-a09b-b9d23629a8fa	\N
 \.
 
 
@@ -767,6 +790,10 @@ COPY public."WeldPassageInstructions" ("Id", "Number", "Name", "WeldingCurrentMi
 --
 
 COPY public."WeldPassages" ("Id", "Number", "Name", "WeldingCurrentValues", "ArcVoltageValues", "ShortTermDeviation", "LongTermDeviation", "WeldingStartTime", "WeldingEndTime", "PreheatingTemperature", "IsDone", "SeamId", "IdFromSystem") FROM stdin;
+2db5e504-95fe-41d2-91fd-0431cb8a72b2	1	Корневой	{115.8,135.4,87.8,150,103,133.1,122.6,122.9,146.9,122.2,146.9,124.6,117.5,134.4,106,109.7,111.4,103.3,107,96.2,109.4,123.6,109.7,70.59,101,125,51.3,95.2,94.2,83.4,140.19,62.5,95.2,132,62.1,94.9,77.7,78.7,120.6,52.3,78,102.3,77.7,57.4,119.2,91.2,52.3,101,87.8,68.5,101.6,53.3,124.6,57,111.4,29.7,77,22.2,66.8,49.6,81.7,99.6,8.4,35.79,40.5,47.2,28.3,27,16.2,22.6,35.4,14.5,43.5,21.2,16.5,15.2,10.1,37.1,35.4,35.4,23.9,19.89,28,27.3,17.2,55.4,27.7,46.9,38.5,21.2,15.5,66.2,18.5,8.1,13.1,30,43.5,55.4,49.3,17.5,81.4,61.1,7.4,11.4,2.7,18.2,15.5,32.7,53.7,76.59,16.8,44.2,57,29.3,112.5,44.2,65.5,41.5,58.4,116.2,29.3,46.2,44.5,19.89,53.7,36.79,136.8,43.2,28,40.79,100.3,98.6,7,8.1,6.7,130.69,118.9,8.4,8.1,125.3,23.3,13.5,58.1,130.69,43.2,86.8,9.1,34.7,136.1,24.6,84.7,15.5,53,130,8.69,146.9,30.7,63.1,88.1,77.3,37.1,22.9,121.2,45.9,62.8,78.3,56.4,92.9,54.3,66.5,23.3,59.1,116.2,86.1,11.8,118.5,72.2,26.6,31.7,159.69,28.7,159.4,34.4,147.6,8.1,25.6,140.8,78,130.4,53.3,134.1,97.6,105,103,125.6,79.7,139.5,62.8,159.4,23.3,140.5,37.5,127.3,78.3,74.59,95.6,99.3,94.5,60.1,132.4,96.9,142.9,93.2,116.2,95.2,113.5,90.2,128.69,66.5,110.1,114.1,81.4,116.8,98.3,109.4,100.3,108.1,94.2,100.6,118.2,96.2,107,112.1,101.3,105.4,106,114.1,97.2,116.5,99.3,106.4,121.2,92.2,116.5,89.8,105.7,127.7,96.6,95.6,107,127.3,86.8,124.6,91.5,91.8,128,92.2,116.5,55.4,130.4,128.3,88.1,130.4,91.8,106.7,108.4,112.1,115.5,124.3,69.2,115.2,102,119.9,106,104,122.6,107.7,111.1,82.4,121.2,85.8,88.5,102.7,113.8,100.6,117.2}	{23.2,25.3,26.8,23.8,27,24.9,25.3,25,24.6,24.9,23.8,25,25,22.4,21.2,21.4,21,20.9,20.7,21.5,20.6,20.39,20.3,22.1,21.2,19.7,22.1,21.4,21.5,20.7,18.89,21,20.8,19.7,21.6,19.6,22.1,20,18,21.6,19.2,19,20,20.2,17.6,19,20.1,18.7,18.2,20.2,18.3,19.6,17.7,19.6,16.8,30.3,17.1,30.9,16.89,17.8,15.7,18.5,22,18.3,17.8,16.2,17.1,18,25.9,22.8,22.7,57.3,21.8,27.4,18.2,18,18.1,14.7,15.6,15.4,15.9,16.7,14.8,15.2,16.2,13.1,16,13.6,17.8,17.1,16.2,11.9,16.5,17.8,16.8,14.3,13.2,12,12.2,15.6,9.5,13.4,18.39,59.3,63.4,39.6,44.7,14.7,11.5,10.6,45.3,21.8,18.7,38.7,10.6,15.6,14.6,14.7,14.1,11.6,25.8,17.5,13.9,34.79,19.89,14.9,10.5,18.7,15.9,15.8,12.2,16.5,41.2,28.1,36.2,10.1,14,29,29,8.8,57.5,56.4,23.1,8.8,23.4,14.8,22.5,43.1,9.3,20.6,33.1,29.8,17.8,11.8,35.9,9.9,18.8,15.1,15.4,13.6,49,56.6,10.4,16.1,13.9,13.6,14.5,16.6,14.8,17.5,16.8,17.5,13.7,18.1,47.1,12.2,16.2,19,17.3,15.5,19.8,14.4,21.2,15.7,32.79,48.6,16.3,20.2,15.4,19.3,16.7,17.5,18.6,18.39,17.89,19,17.1,20.6,16.2,64.7,22.5,21.1,18,24.6,19,23.5,17.8,19.7,20.6,17.89,18.7,18.39,19.1,18.8,19.6,21.4,19.7,18.39,20.5,19.6,18.8,20.3,19,20.39,19.3,19.6,19.39,20.3,20.5,19.5,20,20,19.6,20,19.7,19.7,20.1,19.5,19.89,20.5,19.6,20.2,19.89,20.2,20.7,20,19.5,19.8,20.39,19.3,19.6,21,18.7,21.2,20.39,19.1,20.7,19.1,21.8,19.39,20.1,20.1,20.1,20.9,20,19.7,19.89,19.39,19.3,21.2,19.6,20.5,19.6,20.3,19.8,19,20.6,19.6,21.1,19.6,20.6,20.5,19.6,20.39,20,19.7}	0.11	0.68	13:25:43	13:26:12	82	f	8ade0c96-fe20-4065-be86-4888fd5a2810	\N
+40572120-405a-4e64-a954-2dace0676252	2	Заполняющий	{53.3,52.7,53,53,52.7,52.7,52.7,53,54,101.3,102.7,100.3,100.6,102.7,100.6,100.3,100.3,100.3,100.6,100.3,100.3,100.3,100.3,100.3,100.3,100.3,102.7,100.6,100.6,100.3,100.6,100,100.3,100.3,100.6,100.6,100.3,100,100.3,101,102.3,100.3,100,102.3,100.3,100.3,100.3,100,100,100,100,100.3,100.6,99.6,99.6,100,102.3,100,100,99.6,100,100,100,100,100,100,100,100,99.6,100.6,102,100,100,102,100.3,100,99.6,99.6,99.6,100,99.6,175,178,178.3,178.3,178.3,178.3,178.3,178.3,178.3,178.7,178.7,178.7,179,179,179,179,179,178.7,179,179,178.7,178.7,178.7,178.7,178.3,178.7,178.7,178.3,178.7,178.3,178.7,178.3,178.3,178.3,178.3,178.3,178.7,178.3,178.3,178.3,177,162.1,156.69,157,156.69,156.69,156.4,156.4,156.4,156,156.4,156.4,156.69,156,156,156.4,156.4,156.69,156,156.4,156.69,156.4,156.4,156.4,156.4,156.4,156,155.69,156,156,156.4,156,156,155.69,156,156,156,156.4,156,156,156,156,156.4,155.69,155.69,156,155.69,156,155.4,155.4,156,156.4,146.9,114.5,116.8,114.1,119.2,138.5,138.5,138.8,138.5,138.5,138.5,138.8,138.8,138.5,138.5,138.5,138.5,138.5,138.5,138.5,138.1,138.1,138.1,138.5,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,137.8,123.6,113.8,115.8,115.2,113.5,116.2,113.8,116.2,113.5,113.5,113.5,116.2,113.5,113.8,116.2,113.5,116.5,113.8,113.8,113.1,113.5,116.2,113.5,113.1,113.5,113.5,113.8,113.5,113.8,113.1,113.5,115.8,115.2,113.5,113.1,113.1,113.5,113.8,113.5,113.1,113.8,113.1,115.8,113.1,113.1,113.1,113.1,113.1,113.5,112.8,113.1,113.1,113.1,113.1,115.8,112.8,112.8,113.1,113.1,112.8,113.1,112.8,113.1,113.1,113.1,112.8,115.2,112.8,112.5,115.2,112.8,112.8,112.8,112.5,112.8,112.8,112.5,112.8,114.8,120.9,122.2,122.2,122.2,122.2,122.2,122.2,122.2,122.6,122.2,122.2,122.2,122.2,122.6,122.2,116.2,112.1,112.1,112.5,114.5,112.5,112.5,114.5,112.1,112.5,112.5,112.1,112.1,112.1,112.5,111.8,112.5,112.1,112.1,112.1,114.5,113.1,112.1,111.8,112.1,111.8,111.8,112.1,112.1,112.1,111.8,111.8,112.5,112.5,114.5,111.8,112.1,114.5,112.5,111.8,112.1,112.1,112.5,112.5,111.8,112.1,111.8,111.8,112.1,111.8,114.5,113.1,111.4,111.8,111.8,111.8,111.8,111.4,111.8,111.4,111.8,111.4,111.4,111.4,114.1,111.8,111.4,114.1,111.8,111.8,111.8,112.1,112.1,111.8,111.4,111.4,111.4,111.4,111.8,111.8,113.8,112.5,111.4,111.8,111.8,111.4,111.4,111.4,111.8,111.1,111.1,111.8,111.8,121.2,120.9,121.2,120.9,121.2,121.2,120.9,120.9,120.9,120.9,120.9,120.9,120.6,115.5,111.4,111.4,111.4,111.1,110.8,111.1,111.8,113.8,111.4,111.1,113.1,111.1,111.1,111.4,111.8,110.8,110.8,110.8,111.1,110.4,110.8,130.69,134.69,134.4,134.69,113.5,53,52,51,51.6,52.3,51,51.6,51.6,51,51.3,51.3,51.6}	{79.2,78.7,78.7,78.9,78.2,78.09,78.09,78.7,77.7,51.3,52,50.9,50.9,52,50.9,50.9,50.9,50.8,50.9,50.8,50.9,50.8,50.9,50.8,50.8,50.9,51.9,50.9,51,50.9,51,50.9,50.9,50.8,50.9,50.9,51,50.7,50.8,51.1,51.8,50.8,50.9,51.9,50.9,50.9,50.9,50.8,50.9,50.7,50.8,50.9,51,50.8,50.8,50.7,51.8,50.9,50.8,50.7,50.8,50.9,50.8,50.9,51,50.9,50.9,50.8,50.9,51.2,52.1,51,51,51.9,51,50.9,51,50.9,50.9,50.9,50.9,40.7,40.4,40.5,40.4,40.29,40.29,40.29,40.4,40.4,40.29,40.4,40.4,40.4,40.5,40.4,40.6,40.4,40.5,40.4,40.4,40.5,40.4,40.4,40.4,40.4,40.4,40.4,40.4,40.4,40.4,40.5,40.5,40.5,40.4,40.4,40.4,40.4,40.4,40.5,40.4,40.6,41.2,41.5,41.4,41.5,41.3,41.5,41.6,41.5,41.6,41.5,41.4,41.3,41.4,41.7,41.5,41.7,41.3,41.8,41.5,41.7,41.5,41.6,41.6,41.5,41.3,41.5,41.7,41.2,41.5,41.5,41.7,41.6,41.5,41.6,41.2,41.4,41.4,41.5,41.5,41.8,41.4,41.2,41.5,41.7,41.4,41.5,41.5,41.8,41.5,41.6,41.2,42.8,44.7,45.6,44.7,43.7,43.3,43.3,43.3,43.4,43.4,43.3,43.4,43.3,43.3,43.3,43.2,43.3,43.3,43.3,43.3,43.3,43.2,43.2,43.3,43.3,43.3,43.2,43.2,43.3,43.3,43.3,43.3,43.3,43.3,43.2,43.3,43.3,43.3,43.4,45.7,44.7,45.5,45.5,44.7,45.7,44.8,45.7,44.7,44.7,44.8,45.7,44.7,44.8,45.7,44.9,45.9,44.9,44.9,44.8,44.7,45.8,44.9,44.8,44.9,44.8,45,44.9,45,44.9,44.9,45.7,45.6,44.9,44.9,44.9,45,45,44.9,45,45.1,45,45.9,44.9,45,44.9,45,45,45,44.9,45,45,45,45,45.9,45,44.9,45,44.9,45,45,45,45,45,45,44.9,45.9,45,45,45.9,45,45,45.1,44.9,45,45,44.9,45.1,45.9,46.2,45.9,45.8,45.8,45.7,45.7,45.7,45.7,45.8,45.7,45.9,45.9,45.8,45.9,45.9,45.8,45,45,45,46,45.2,45.3,46.1,45.1,45.1,45.1,45.1,45.2,45.2,45.2,45.1,45.3,45.1,45.2,45.2,45.9,45.6,45.3,45,45.2,45.1,45.2,45.2,45.2,45.2,45.1,45.1,45.3,45.3,46.2,45.2,45.3,46.2,45.4,45.2,45.3,45.3,45.3,45.3,45.2,45.3,45.3,45.3,45.3,45.3,46.2,45.8,45.2,45.3,45.3,45.4,45.2,45.2,45.3,45.1,45.3,45.2,45.3,45.3,46.4,45.3,45.3,46.3,45.4,45.4,45.4,45.6,45.6,45.4,45.4,45.4,45.3,45.3,45.3,45.6,46.3,45.9,45.3,45.5,45.5,45.5,45.4,45.5,45.6,45.4,45.4,45.6,45.4,46.1,45.9,46.2,46.2,46.1,46.2,46.1,46.1,46.3,46.1,46,46.1,46.3,45.9,45.6,45.6,45.6,45.5,45.5,45.6,45.7,46.6,45.7,45.7,46.5,45.7,45.5,45.7,45.8,45.6,45.6,45.6,45.6,45.5,45.6,44.4,43.7,43.6,43.7,48.8,78.7,78.09,77,77.5,78.5,76.59,77.59,77.3,76.7,77.09,77.59,77.3}	0.22	0.44	19:43:13	19:43:58	100	f	8ade0c96-fe20-4065-be86-4888fd5a2810	\N
+ba0bf6b2-5bed-4bf8-bd67-75dfbea8d6e6	1	Корневой	{115.8,135.4,87.8,150,103,133.1,122.6,122.9,146.9,122.2,146.9,124.6,117.5,134.4,106,109.7,111.4,103.3,107,96.2,109.4,123.6,109.7,70.59,101,125,51.3,95.2,94.2,83.4,140.19,62.5,95.2,132,62.1,94.9,77.7,78.7,120.6,52.3,78,102.3,77.7,57.4,119.2,91.2,52.3,101,87.8,68.5,101.6,53.3,124.6,57,111.4,29.7,77,22.2,66.8,49.6,81.7,99.6,8.4,35.79,40.5,47.2,28.3,27,16.2,22.6,35.4,14.5,43.5,21.2,16.5,15.2,10.1,37.1,35.4,35.4,23.9,19.89,28,27.3,17.2,55.4,27.7,46.9,38.5,21.2,15.5,66.2,18.5,8.1,13.1,30,43.5,55.4,49.3,17.5,81.4,61.1,7.4,11.4,2.7,18.2,15.5,32.7,53.7,76.59,16.8,44.2,57,29.3,112.5,44.2,65.5,41.5,58.4,116.2,29.3,46.2,44.5,19.89,53.7,36.79,136.8,43.2,28,40.79,100.3,98.6,7,8.1,6.7,130.69,118.9,8.4,8.1,125.3,23.3,13.5,58.1,130.69,43.2,86.8,9.1,34.7,136.1,24.6,84.7,15.5,53,130,8.69,146.9,30.7,63.1,88.1,77.3,37.1,22.9,121.2,45.9,62.8,78.3,56.4,92.9,54.3,66.5,23.3,59.1,116.2,86.1,11.8,118.5,72.2,26.6,31.7,159.69,28.7,159.4,34.4,147.6,8.1,25.6,140.8,78,130.4,53.3,134.1,97.6,105,103,125.6,79.7,139.5,62.8,159.4,23.3,140.5,37.5,127.3,78.3,74.59,95.6,99.3,94.5,60.1,132.4,96.9,142.9,93.2,116.2,95.2,113.5,90.2,128.69,66.5,110.1,114.1,81.4,116.8,98.3,109.4,100.3,108.1,94.2,100.6,118.2,96.2,107,112.1,101.3,105.4,106,114.1,97.2,116.5,99.3,106.4,121.2,92.2,116.5,89.8,105.7,127.7,96.6,95.6,107,127.3,86.8,124.6,91.5,91.8,128,92.2,116.5,55.4,130.4,128.3,88.1,130.4,91.8,106.7,108.4,112.1,115.5,124.3,69.2,115.2,102,119.9,106,104,122.6,107.7,111.1,82.4,121.2,85.8,88.5,102.7,113.8,100.6,117.2}	{23.2,25.3,26.8,23.8,27,24.9,25.3,25,24.6,24.9,23.8,25,25,22.4,21.2,21.4,21,20.9,20.7,21.5,20.6,20.39,20.3,22.1,21.2,19.7,22.1,21.4,21.5,20.7,18.89,21,20.8,19.7,21.6,19.6,22.1,20,18,21.6,19.2,19,20,20.2,17.6,19,20.1,18.7,18.2,20.2,18.3,19.6,17.7,19.6,16.8,30.3,17.1,30.9,16.89,17.8,15.7,18.5,22,18.3,17.8,16.2,17.1,18,25.9,22.8,22.7,57.3,21.8,27.4,18.2,18,18.1,14.7,15.6,15.4,15.9,16.7,14.8,15.2,16.2,13.1,16,13.6,17.8,17.1,16.2,11.9,16.5,17.8,16.8,14.3,13.2,12,12.2,15.6,9.5,13.4,18.39,59.3,63.4,39.6,44.7,14.7,11.5,10.6,45.3,21.8,18.7,38.7,10.6,15.6,14.6,14.7,14.1,11.6,25.8,17.5,13.9,34.79,19.89,14.9,10.5,18.7,15.9,15.8,12.2,16.5,41.2,28.1,36.2,10.1,14,29,29,8.8,57.5,56.4,23.1,8.8,23.4,14.8,22.5,43.1,9.3,20.6,33.1,29.8,17.8,11.8,35.9,9.9,18.8,15.1,15.4,13.6,49,56.6,10.4,16.1,13.9,13.6,14.5,16.6,14.8,17.5,16.8,17.5,13.7,18.1,47.1,12.2,16.2,19,17.3,15.5,19.8,14.4,21.2,15.7,32.79,48.6,16.3,20.2,15.4,19.3,16.7,17.5,18.6,18.39,17.89,19,17.1,20.6,16.2,64.7,22.5,21.1,18,24.6,19,23.5,17.8,19.7,20.6,17.89,18.7,18.39,19.1,18.8,19.6,21.4,19.7,18.39,20.5,19.6,18.8,20.3,19,20.39,19.3,19.6,19.39,20.3,20.5,19.5,20,20,19.6,20,19.7,19.7,20.1,19.5,19.89,20.5,19.6,20.2,19.89,20.2,20.7,20,19.5,19.8,20.39,19.3,19.6,21,18.7,21.2,20.39,19.1,20.7,19.1,21.8,19.39,20.1,20.1,20.1,20.9,20,19.7,19.89,19.39,19.3,21.2,19.6,20.5,19.6,20.3,19.8,19,20.6,19.6,21.1,19.6,20.6,20.5,19.6,20.39,20,19.7}	0.11	0.68	13:25:43	13:26:12	82	f	4fc78d2b-23d1-4cc9-8dd4-4fc9bebd3014	\N
+c4736273-2d3a-41df-81c9-eb181e38f688	2	Заполняющий	{53.3,52.7,53,53,52.7,52.7,52.7,53,54,101.3,102.7,100.3,100.6,102.7,100.6,100.3,100.3,100.3,100.6,100.3,100.3,100.3,100.3,100.3,100.3,100.3,102.7,100.6,100.6,100.3,100.6,100,100.3,100.3,100.6,100.6,100.3,100,100.3,101,102.3,100.3,100,102.3,100.3,100.3,100.3,100,100,100,100,100.3,100.6,99.6,99.6,100,102.3,100,100,99.6,100,100,100,100,100,100,100,100,99.6,100.6,102,100,100,102,100.3,100,99.6,99.6,99.6,100,99.6,175,178,178.3,178.3,178.3,178.3,178.3,178.3,178.3,178.7,178.7,178.7,179,179,179,179,179,178.7,179,179,178.7,178.7,178.7,178.7,178.3,178.7,178.7,178.3,178.7,178.3,178.7,178.3,178.3,178.3,178.3,178.3,178.7,178.3,178.3,178.3,177,162.1,156.69,157,156.69,156.69,156.4,156.4,156.4,156,156.4,156.4,156.69,156,156,156.4,156.4,156.69,156,156.4,156.69,156.4,156.4,156.4,156.4,156.4,156,155.69,156,156,156.4,156,156,155.69,156,156,156,156.4,156,156,156,156,156.4,155.69,155.69,156,155.69,156,155.4,155.4,156,156.4,146.9,114.5,116.8,114.1,119.2,138.5,138.5,138.8,138.5,138.5,138.5,138.8,138.8,138.5,138.5,138.5,138.5,138.5,138.5,138.5,138.1,138.1,138.1,138.5,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,138.1,137.8,123.6,113.8,115.8,115.2,113.5,116.2,113.8,116.2,113.5,113.5,113.5,116.2,113.5,113.8,116.2,113.5,116.5,113.8,113.8,113.1,113.5,116.2,113.5,113.1,113.5,113.5,113.8,113.5,113.8,113.1,113.5,115.8,115.2,113.5,113.1,113.1,113.5,113.8,113.5,113.1,113.8,113.1,115.8,113.1,113.1,113.1,113.1,113.1,113.5,112.8,113.1,113.1,113.1,113.1,115.8,112.8,112.8,113.1,113.1,112.8,113.1,112.8,113.1,113.1,113.1,112.8,115.2,112.8,112.5,115.2,112.8,112.8,112.8,112.5,112.8,112.8,112.5,112.8,114.8,120.9,122.2,122.2,122.2,122.2,122.2,122.2,122.2,122.6,122.2,122.2,122.2,122.2,122.6,122.2,116.2,112.1,112.1,112.5,114.5,112.5,112.5,114.5,112.1,112.5,112.5,112.1,112.1,112.1,112.5,111.8,112.5,112.1,112.1,112.1,114.5,113.1,112.1,111.8,112.1,111.8,111.8,112.1,112.1,112.1,111.8,111.8,112.5,112.5,114.5,111.8,112.1,114.5,112.5,111.8,112.1,112.1,112.5,112.5,111.8,112.1,111.8,111.8,112.1,111.8,114.5,113.1,111.4,111.8,111.8,111.8,111.8,111.4,111.8,111.4,111.8,111.4,111.4,111.4,114.1,111.8,111.4,114.1,111.8,111.8,111.8,112.1,112.1,111.8,111.4,111.4,111.4,111.4,111.8,111.8,113.8,112.5,111.4,111.8,111.8,111.4,111.4,111.4,111.8,111.1,111.1,111.8,111.8,121.2,120.9,121.2,120.9,121.2,121.2,120.9,120.9,120.9,120.9,120.9,120.9,120.6,115.5,111.4,111.4,111.4,111.1,110.8,111.1,111.8,113.8,111.4,111.1,113.1,111.1,111.1,111.4,111.8,110.8,110.8,110.8,111.1,110.4,110.8,130.69,134.69,134.4,134.69,113.5,53,52,51,51.6,52.3,51,51.6,51.6,51,51.3,51.3,51.6}	{79.2,78.7,78.7,78.9,78.2,78.09,78.09,78.7,77.7,51.3,52,50.9,50.9,52,50.9,50.9,50.9,50.8,50.9,50.8,50.9,50.8,50.9,50.8,50.8,50.9,51.9,50.9,51,50.9,51,50.9,50.9,50.8,50.9,50.9,51,50.7,50.8,51.1,51.8,50.8,50.9,51.9,50.9,50.9,50.9,50.8,50.9,50.7,50.8,50.9,51,50.8,50.8,50.7,51.8,50.9,50.8,50.7,50.8,50.9,50.8,50.9,51,50.9,50.9,50.8,50.9,51.2,52.1,51,51,51.9,51,50.9,51,50.9,50.9,50.9,50.9,40.7,40.4,40.5,40.4,40.29,40.29,40.29,40.4,40.4,40.29,40.4,40.4,40.4,40.5,40.4,40.6,40.4,40.5,40.4,40.4,40.5,40.4,40.4,40.4,40.4,40.4,40.4,40.4,40.4,40.4,40.5,40.5,40.5,40.4,40.4,40.4,40.4,40.4,40.5,40.4,40.6,41.2,41.5,41.4,41.5,41.3,41.5,41.6,41.5,41.6,41.5,41.4,41.3,41.4,41.7,41.5,41.7,41.3,41.8,41.5,41.7,41.5,41.6,41.6,41.5,41.3,41.5,41.7,41.2,41.5,41.5,41.7,41.6,41.5,41.6,41.2,41.4,41.4,41.5,41.5,41.8,41.4,41.2,41.5,41.7,41.4,41.5,41.5,41.8,41.5,41.6,41.2,42.8,44.7,45.6,44.7,43.7,43.3,43.3,43.3,43.4,43.4,43.3,43.4,43.3,43.3,43.3,43.2,43.3,43.3,43.3,43.3,43.3,43.2,43.2,43.3,43.3,43.3,43.2,43.2,43.3,43.3,43.3,43.3,43.3,43.3,43.2,43.3,43.3,43.3,43.4,45.7,44.7,45.5,45.5,44.7,45.7,44.8,45.7,44.7,44.7,44.8,45.7,44.7,44.8,45.7,44.9,45.9,44.9,44.9,44.8,44.7,45.8,44.9,44.8,44.9,44.8,45,44.9,45,44.9,44.9,45.7,45.6,44.9,44.9,44.9,45,45,44.9,45,45.1,45,45.9,44.9,45,44.9,45,45,45,44.9,45,45,45,45,45.9,45,44.9,45,44.9,45,45,45,45,45,45,44.9,45.9,45,45,45.9,45,45,45.1,44.9,45,45,44.9,45.1,45.9,46.2,45.9,45.8,45.8,45.7,45.7,45.7,45.7,45.8,45.7,45.9,45.9,45.8,45.9,45.9,45.8,45,45,45,46,45.2,45.3,46.1,45.1,45.1,45.1,45.1,45.2,45.2,45.2,45.1,45.3,45.1,45.2,45.2,45.9,45.6,45.3,45,45.2,45.1,45.2,45.2,45.2,45.2,45.1,45.1,45.3,45.3,46.2,45.2,45.3,46.2,45.4,45.2,45.3,45.3,45.3,45.3,45.2,45.3,45.3,45.3,45.3,45.3,46.2,45.8,45.2,45.3,45.3,45.4,45.2,45.2,45.3,45.1,45.3,45.2,45.3,45.3,46.4,45.3,45.3,46.3,45.4,45.4,45.4,45.6,45.6,45.4,45.4,45.4,45.3,45.3,45.3,45.6,46.3,45.9,45.3,45.5,45.5,45.5,45.4,45.5,45.6,45.4,45.4,45.6,45.4,46.1,45.9,46.2,46.2,46.1,46.2,46.1,46.1,46.3,46.1,46,46.1,46.3,45.9,45.6,45.6,45.6,45.5,45.5,45.6,45.7,46.6,45.7,45.7,46.5,45.7,45.5,45.7,45.8,45.6,45.6,45.6,45.6,45.5,45.6,44.4,43.7,43.6,43.7,48.8,78.7,78.09,77,77.5,78.5,76.59,77.59,77.3,76.7,77.09,77.59,77.3}	0.22	0.44	19:43:13	19:43:58	100	f	4fc78d2b-23d1-4cc9-8dd4-4fc9bebd3014	\N
 \.
 
 
@@ -775,20 +802,20 @@ COPY public."WeldPassages" ("Id", "Number", "Name", "WeldingCurrentValues", "Arc
 --
 
 COPY public."WelderWeldingEquipment" ("WeldersId", "WeldingEquipmentsId") FROM stdin;
-2e04b005-5d97-4963-ac8f-cfa7aa092fbe	4c81e8ba-77f1-4234-a1e9-7693eef819aa
-3a9b3759-59e1-4ede-8165-7cfda9143e96	60d58e89-43a6-42e1-9c1c-4638f60ff9b9
-4ab7d8d4-6b1f-4c42-b88f-896f5bf6e833	45a93efe-82c7-4b8e-888f-5332bcbb769c
-68a153df-f1b6-42e1-bc30-be51b294d203	8dbe1c9a-a6ec-4796-a1b4-9947c9dc3a5d
-716705c0-506e-4111-8b5a-a44fd31b6035	8dbe1c9a-a6ec-4796-a1b4-9947c9dc3a5d
-a0497864-22d4-4227-99c8-c35c20c8f6b9	45a93efe-82c7-4b8e-888f-5332bcbb769c
-aa48cc41-8109-4a34-9dcb-f4681af9a51c	45a93efe-82c7-4b8e-888f-5332bcbb769c
-c18c8f14-30e2-4a10-8a02-e74c1370031b	4c81e8ba-77f1-4234-a1e9-7693eef819aa
-ce9f32a8-e8fd-4983-8f80-676de288bc5f	8dbe1c9a-a6ec-4796-a1b4-9947c9dc3a5d
-d8fc8221-f517-415c-9eac-ff2f02d9623f	45a93efe-82c7-4b8e-888f-5332bcbb769c
-df55b5d8-d617-43cc-b8b9-e4af25bbe8ed	60d58e89-43a6-42e1-9c1c-4638f60ff9b9
-ecbb5e4e-2271-49ed-a1c5-9e23a7d07075	8dbe1c9a-a6ec-4796-a1b4-9947c9dc3a5d
-ee3e8c31-b3ac-4718-a5d3-4a429b2cc5c7	8dbe1c9a-a6ec-4796-a1b4-9947c9dc3a5d
-f57fdda7-7277-44f6-a22a-730ac5b64992	60d58e89-43a6-42e1-9c1c-4638f60ff9b9
+21b63acb-e7dd-458f-b55b-d711b62721d4	4978563a-63a1-4389-a560-49b6edfdc10c
+4394c899-ad50-4831-a1e2-4d675825ead4	028a4c52-ab91-4c28-ba4a-88abd3a7e448
+506f5496-e90f-4ac2-a109-ef43b5630cdb	028a4c52-ab91-4c28-ba4a-88abd3a7e448
+70cea860-c6e4-4187-bf36-29a14d7970d9	76d5d064-3182-432a-9b03-6a7200c963c2
+84e3aefc-40b2-4633-b198-5a357f7e025d	028a4c52-ab91-4c28-ba4a-88abd3a7e448
+859a4fc0-3492-4f45-bf5c-d7cc9a44440d	bcb54dcb-66df-4d0f-abe0-02ccdd7a715c
+910eca23-90e4-4187-8dfc-1d57b3ccc022	76d5d064-3182-432a-9b03-6a7200c963c2
+9ce1ce35-5000-4ec8-9011-32b26cae5dce	76d5d064-3182-432a-9b03-6a7200c963c2
+a0d346fe-634e-452c-b719-74209695e82e	4978563a-63a1-4389-a560-49b6edfdc10c
+a71c9966-a6ee-40e6-95b0-359d6d0bc391	028a4c52-ab91-4c28-ba4a-88abd3a7e448
+b453d865-a4e6-4a55-9343-d76a5ce886f7	76d5d064-3182-432a-9b03-6a7200c963c2
+bfd55812-26cf-407e-a21c-44e8c6ced603	028a4c52-ab91-4c28-ba4a-88abd3a7e448
+c0568afd-9f4d-401e-8696-c22bfd66bbeb	bcb54dcb-66df-4d0f-abe0-02ccdd7a715c
+e0fb0666-0d23-4b52-8fd0-a4f6f4c1208e	4978563a-63a1-4389-a560-49b6edfdc10c
 \.
 
 
@@ -797,20 +824,21 @@ f57fdda7-7277-44f6-a22a-730ac5b64992	60d58e89-43a6-42e1-9c1c-4638f60ff9b9
 --
 
 COPY public."Welders" ("Id", "UserId", "WorkplaceId", "IdFromSystem") FROM stdin;
-2e04b005-5d97-4963-ac8f-cfa7aa092fbe	ecfa3bb8-e6f7-4255-8c7b-569af536674b	\N	149921
-3a9b3759-59e1-4ede-8165-7cfda9143e96	60c3cbdd-f8d9-4d47-999e-f7dc80218195	\N	152444
-4ab7d8d4-6b1f-4c42-b88f-896f5bf6e833	b00043d7-5af1-49be-ad6e-955fec0876a9	\N	155288
-68a153df-f1b6-42e1-bc30-be51b294d203	e3e60cac-df04-4aea-a09b-16478f8529da	\N	147329
-716705c0-506e-4111-8b5a-a44fd31b6035	b1586316-7fd4-45be-a3d5-699f339a6bb3	\N	121538
-a0497864-22d4-4227-99c8-c35c20c8f6b9	3c6e7c1a-49da-4fb9-b064-85f434963232	\N	151861
-aa48cc41-8109-4a34-9dcb-f4681af9a51c	590d2bdb-bc09-4d2d-a490-8bc527d5fc0f	\N	153274
-c18c8f14-30e2-4a10-8a02-e74c1370031b	07a2be6c-3581-4878-98da-ec6c00ba4472	\N	150402
-ce9f32a8-e8fd-4983-8f80-676de288bc5f	24fadfaf-ba8a-47e9-b6e7-64bc6c30dec0	\N	156298
-d8fc8221-f517-415c-9eac-ff2f02d9623f	30ff8586-7074-4ddb-b4db-0c7a6720797d	\N	152441
-df55b5d8-d617-43cc-b8b9-e4af25bbe8ed	c6e062de-64a7-49f7-b2be-d4516f844cd9	\N	152207
-ecbb5e4e-2271-49ed-a1c5-9e23a7d07075	86b2344a-4a1f-4b55-935e-8bc5145f0cf8	\N	121537
-ee3e8c31-b3ac-4718-a5d3-4a429b2cc5c7	ac7be631-7d64-49c0-bc69-651d8c9ebb94	\N	152365
-f57fdda7-7277-44f6-a22a-730ac5b64992	85c0b3ce-9f39-4cad-a197-7f88f8706fb1	\N	156278
+21b63acb-e7dd-458f-b55b-d711b62721d4	8abe4439-0184-4de1-94dc-8aba68c5c18f	\N	152444
+4394c899-ad50-4831-a1e2-4d675825ead4	f59e0ec5-c4b8-435d-aba1-f6c0bedef996	\N	121537
+506f5496-e90f-4ac2-a109-ef43b5630cdb	2ccc6d37-8562-4f15-979b-ff2d4af6c703	\N	156298
+70cea860-c6e4-4187-bf36-29a14d7970d9	228d9e83-dd63-4859-925a-c907733558e4	\N	151861
+84e3aefc-40b2-4633-b198-5a357f7e025d	b7004c1e-3c69-49e4-bcf7-52ece3453f75	\N	152365
+859a4fc0-3492-4f45-bf5c-d7cc9a44440d	0026ab9e-eb09-459e-9eb3-858e1143d653	\N	150402
+910eca23-90e4-4187-8dfc-1d57b3ccc022	8d80740e-61e3-45f5-b61e-3ebce8c92ab7	\N	153274
+9ce1ce35-5000-4ec8-9011-32b26cae5dce	655c0bc9-a639-4533-b608-03bdd08b2d77	\N	155288
+a0d346fe-634e-452c-b719-74209695e82e	89c8785d-3c34-469b-b08f-4e38792fa7cc	\N	156278
+a71c9966-a6ee-40e6-95b0-359d6d0bc391	68ca3e49-8740-4517-874a-0c316f60811a	\N	147329
+b453d865-a4e6-4a55-9343-d76a5ce886f7	c38221f4-7181-4a03-8bf2-ad43f23caf0b	\N	152441
+bfd55812-26cf-407e-a21c-44e8c6ced603	79c16b39-9a59-4d2d-a055-e5e09ec3ec76	\N	121538
+c0568afd-9f4d-401e-8696-c22bfd66bbeb	94271bf8-6f76-4fda-a769-ba54c44578e9	\N	149921
+e0fb0666-0d23-4b52-8fd0-a4f6f4c1208e	bb78cccb-fd49-4b07-bb7d-008130c88f79	\N	152207
+e001fff3-c6be-4e3b-8833-84d9f756de7d	4ea5ffdb-2870-41d9-8fdc-9b2f59aef4d8	\N	\N
 \.
 
 
@@ -827,10 +855,12 @@ COPY public."WeldingEquipmentConditionTimes" ("Id", "Condition", "Date", "StartC
 --
 
 COPY public."WeldingEquipments" ("Id", "RfidTag", "Name", "Marking", "FactoryNumber", "CommissioningDate", "CurrentCondition", "Height", "Width", "Lenght", "GroupNumber", "ManufacturerName", "NextAttestationDate", "WeldingProcess", "IdleVoltage", "WeldingCurrentMin", "WeldingCurrentMax", "ArcVoltageMin", "ArcVoltageMax", "LoadDuration", "PostId", "IdFromSystem") FROM stdin;
-45a93efe-82c7-4b8e-888f-5332bcbb769c	\N	QINEO TRONIC	ECO600CQWDM2	49506	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	162
-4c81e8ba-77f1-4234-a1e9-7693eef819aa	\N	QINEO TRONIC	ECO600CQWDM2	49504	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	146
-60d58e89-43a6-42e1-9c1c-4638f60ff9b9	\N	QINEO TRONIC	ECO600CQWDM2	49505	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	114
-8dbe1c9a-a6ec-4796-a1b4-9947c9dc3a5d	\N	QINEO TRONIC	ECO600CQWDM2	49451	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	70	10	500	14.5	39	100	\N	8008336102-130
+028a4c52-ab91-4c28-ba4a-88abd3a7e448	\N	QINEO TRONIC	ECO600CQWDM2	49451	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	70	10	500	14.5	39	100	\N	8008336102-130
+4978563a-63a1-4389-a560-49b6edfdc10c	\N	QINEO TRONIC	ECO600CQWDM2	49505	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	114
+76d5d064-3182-432a-9b03-6a7200c963c2	\N	QINEO TRONIC	ECO600CQWDM2	49506	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	162
+bcb54dcb-66df-4d0f-abe0-02ccdd7a715c	\N	QINEO TRONIC	ECO600CQWDM2	49504	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	\N	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	146
+627d9ee5-0980-41bc-8ebe-e26b046683b0	\N	QINEO TRONIC	ECO600CQWDM2	49505	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	2023-06-25 00:00:00	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	\N
+d25b9390-57ae-432d-8850-ea53e31ffb82	\N	QINEO TRONIC	ECO600CQWDM2	49505	2013-01-01 00:00:00	1	\N	\N	\N	3.11	CLOOS	2023-06-25 00:00:00	Полуавтоматическая сварка	\N	\N	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -839,6 +869,8 @@ COPY public."WeldingEquipments" ("Id", "RfidTag", "Name", "Marking", "FactoryNum
 --
 
 COPY public."WeldingTasks" ("Id", "Number", "WeldingDate", "BasicMaterial", "MainMaterialBatchNumber", "WeldingMaterial", "WeldingMaterialBatchNumber", "ProtectiveGas", "ProtectiveGasBatchNumber", "SeamId", "WeldingEquipmentId", "IdFromSystem") FROM stdin;
+110b98d3-6225-40af-b48a-79180f7ac351	2	2023-02-03 17:54:11.543987	Сталь 20	454578	Проволока 1,2 Св-08Г2С	00252565	Какой-то Защитный газ	111111	8ade0c96-fe20-4065-be86-4888fd5a2810	627d9ee5-0980-41bc-8ebe-e26b046683b0	\N
+9e8e825e-c4bc-4e52-87f8-08d6bf0936d7	1	2023-02-03 17:54:11.541623	Сталь 20	454578	Проволока 1,2 Св-08Г2С	00252565	Какой-то Защитный газ	111111	4fc78d2b-23d1-4cc9-8dd4-4fc9bebd3014	d25b9390-57ae-432d-8850-ea53e31ffb82	\N
 \.
 
 
@@ -847,10 +879,10 @@ COPY public."WeldingTasks" ("Id", "Number", "WeldingDate", "BasicMaterial", "Mai
 --
 
 COPY public."WorkingShifts" ("Id", "Number", "ShiftStart", "ShiftEnd", "BreakStart", "BreakEnd", "DayId", "CalendarId", "IdFromSystem") FROM stdin;
-52d2f882-3000-4932-8997-2c80a641bdf2	3	16:00:00	17:00:00	17:10:00	17:40:00	\N	54132500-0a46-48a9-8fd0-0d4651cd8c52	\N
-83b203e7-c5f6-485f-9481-5cd10d452589	1	12:00:00	13:00:00	13:10:00	13:40:00	\N	54132500-0a46-48a9-8fd0-0d4651cd8c52	\N
-91095eb5-101a-46d5-b95c-78839df63956	2	14:00:00	15:00:00	15:10:00	15:40:00	\N	54132500-0a46-48a9-8fd0-0d4651cd8c52	\N
-04f7f3a9-11a2-4488-b581-3e4164da2bb1	1	12:10:00	13:10:00	13:20:00	13:50:00	d7182742-194e-4dd8-b06f-3d7af4c48fb3	\N	\N
+60222662-e1c7-4563-abf1-5199b0bbcc17	1	12:00:00	13:00:00	13:10:00	13:40:00	\N	a9af3b6e-b917-4d26-8fb6-9a41c66236f8	\N
+62d76afe-2493-4d38-a02b-1922efd41445	3	16:00:00	17:00:00	17:10:00	17:40:00	\N	a9af3b6e-b917-4d26-8fb6-9a41c66236f8	\N
+f5b9a0c7-a201-4639-96e4-a0061ca69ec4	2	14:00:00	15:00:00	15:10:00	15:40:00	\N	a9af3b6e-b917-4d26-8fb6-9a41c66236f8	\N
+822f73f2-a7d8-4b25-a113-39bc2c59b277	1	12:10:00	13:10:00	13:20:00	13:50:00	ac622970-9ad1-4453-987e-f55fd09ad18e	\N	\N
 \.
 
 
@@ -859,17 +891,17 @@ COPY public."WorkingShifts" ("Id", "Number", "ShiftStart", "ShiftEnd", "BreakSta
 --
 
 COPY public."Workplaces" ("Id", "Number", "PostId", "ProductionAreaId", "IdFromSystem") FROM stdin;
-0a1d0672-15e2-4920-84de-f57404d10b73	2150	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	2150
-78eef16d-ca8b-4831-a27a-68f96750bb81	2050	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	2050
-7a84a013-2f30-4315-b1a1-6f99e7f2a913	1390	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1390
-800866a3-b9fe-4a31-b305-b2828589bf60	1260	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1260
-945a557b-b59a-4d5e-9792-8ccef4c5af31	1270	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1270
-bb2d7e7c-6250-4019-9495-9ed5d2b77a4e	1400	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1400
-d10e223c-2acc-4c8f-a18e-db313d1eeea4	1550	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1550
-d28c24cd-9779-48ef-8b27-e24763e4be08	1360	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1360
-f6e93240-e975-4f9d-8fa3-53a0ebc2fa50	1280	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1280
-f8928d5a-fcb5-4f13-8387-a2199083d1d3	2130	\N	0eae52c1-80bb-4025-89e7-173eed67e04d	2130
-fd90ff6e-b54e-4918-8ce8-0b9f27908e87	1380	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d388	1380
+068c7d05-f803-463a-80b6-d14c5f9fdd55	1550	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1550
+14174cad-b2c6-4580-b071-6d42f0cd2e8c	2130	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	2130
+23e9e822-9e31-43cb-baae-b7778a53ddc1	1400	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1400
+3ca7c1eb-699b-41ac-8b6a-58fabec05b20	1360	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1360
+45505097-bdf0-4e15-80ae-d957291d3be8	1280	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1280
+60d1e891-8ae7-40d6-9872-21d76c09d8dd	2050	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	2050
+75b89872-c806-4dcf-8a8d-900202e73da6	1390	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1390
+910a8335-8b7a-4188-8db1-918c21a15304	2150	\N	5fef4716-891e-4ec6-9df2-697ac632b7af	2150
+98a50bf3-9ba3-43ad-a7f7-3301860e1b01	1260	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1260
+d84d0723-6329-4df4-b663-3cd78c453be8	1270	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1270
+e1388c1f-1e4f-496e-b858-a8cca4dbb3eb	1380	\N	954426d6-cd6a-47ce-aa38-5d250d12f2bb	1380
 \.
 
 
@@ -878,8 +910,8 @@ fd90ff6e-b54e-4918-8ce8-0b9f27908e87	1380	\N	9ce8cf6a-18e5-427c-9c47-6af8f7f1d38
 --
 
 COPY public."Workshops" ("Id", "Name", "Number", "IdFromSystem") FROM stdin;
-4327bb30-9856-41e7-81a4-8c53a7772f2d	Цех 50	50	050
-8495bdc7-83c0-42c4-862e-1c8d7d5ef069	Цех 480	480	480
+05691a0c-8ca4-4595-9a19-3d16c04b5d4a	Цех 50	50	050
+c8b6b066-35f3-4888-979c-442ccfb49682	Цех 480	480	480
 \.
 
 

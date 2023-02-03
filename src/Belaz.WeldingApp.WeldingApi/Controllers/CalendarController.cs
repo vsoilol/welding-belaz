@@ -13,7 +13,7 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.TechUser)]
+[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public class CalendarController : ControllerBase
 {
     private readonly ICalendarService _calendarService;
