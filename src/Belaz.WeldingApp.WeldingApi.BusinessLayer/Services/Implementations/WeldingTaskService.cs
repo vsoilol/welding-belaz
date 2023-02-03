@@ -22,4 +22,9 @@ public class WeldingTaskService : IWeldingTaskService
     {
         return _weldingTaskRepository.GetAllRegistrarInfoAsync();
     }
+
+    public Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
+    {
+        return _weldingTaskRepository.GetAllCompletedTaskAsync();
+    }
 }

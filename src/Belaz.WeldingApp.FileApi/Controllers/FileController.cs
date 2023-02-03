@@ -1,5 +1,13 @@
-﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
+﻿using System.Net;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.FileApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Belaz.WeldingApp.FileApi.Domain.Exceptions;
+using LanguageExt.Common;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.FileApi.Controllers;
 
@@ -14,10 +22,14 @@ public class FileController : ControllerBase
         _fileService = fileService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetSeamPassportAsync()
+    [HttpGet("seamPassport/{taskId}")]
+    public async Task<IActionResult> GetSeamPassportAsync([FromRoute] Guid taskId)
     {
-        var result = await _fileService.GenerateSeamPassportAsync();
-        return File(result.Bytes, result.FileType, result.FileName);
+        var result = await _fileService.GenerateSeamPassportByTaskIdAsync(new GenerateSeamPassportByTaskIdRequest
+        {
+            TaskId = taskId
+        });
+
+        return result.ToFile();
     }
 }

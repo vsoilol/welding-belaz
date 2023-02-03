@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Microsoft.EntityFrameworkCore;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
 
@@ -28,6 +29,14 @@ public class WeldingTaskRepository : IWeldingTaskRepository
     {
         return _context.WeldingTasks
             .ProjectTo<WeldingTaskRegistrarInfoDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
+    {
+        return _context.WeldingTasks
+            .Where(_ => _.Seam.Status != ProductStatus.NotManufactured)
+            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 }

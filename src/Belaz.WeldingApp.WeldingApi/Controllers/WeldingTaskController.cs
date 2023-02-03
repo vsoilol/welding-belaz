@@ -44,4 +44,11 @@ public class WeldingTaskController : ControllerBase
         return Task
             .FromResult<ActionResult<IEnumerable<WeldingTaskRegistrarInfoDto>>>(BadRequest(badRequestResult));
     }
+    
+    [HttpGet("completed")]
+    [ProducesResponseType(typeof(IEnumerable<WeldingTaskDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<WeldingTaskDto>>> GetAllCompletedTaskAsync()
+    {
+        return await _weldingTaskService.GetAllCompletedTaskAsync();
+    }
 }
