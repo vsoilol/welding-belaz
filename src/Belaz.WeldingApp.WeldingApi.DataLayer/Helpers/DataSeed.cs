@@ -455,7 +455,7 @@ public class DataSeed
 
     private static async Task AddInspectors(ApplicationContext context)
     {
-        var techUserRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser)))!;
+        var techUserRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Inspector)))!;
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "05");
 
         var inspectors = new List<Inspector>
@@ -651,7 +651,7 @@ public class DataSeed
         var weldingEquipment114 = (await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "114"))!;
         var weldingEquipment146 = (await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "146"))!;
 
-        var welderRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Executor)))!;
+        var welderRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Welder)))!;
 
         var welders = new List<Welder>
         {
@@ -1591,9 +1591,9 @@ public class DataSeed
     {
         var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
 
-        var welderRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Executor)))!;
+        var welderRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Welder)))!;
         var masterRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master)))!;
-        var inspectorRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.TechUser)))!;
+        var inspectorRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Inspector)))!;
 
         var detail = (await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536276803"))!;
         var detailWithoutKnot = (await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536384399"))!;

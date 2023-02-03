@@ -12,6 +12,78 @@ public class DataSeed
     {
         await CreateRolesAsync(roleRepository);
         await CreateAdminAsync(roleRepository, userRepository);
+        await CreateWelderAsync(roleRepository, userRepository);
+        await CreateInspectorAsync(roleRepository, userRepository);
+        await CreateChiefAsync(roleRepository, userRepository);
+    }
+
+    private static async Task CreateChiefAsync(IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository)
+    {
+        var chief = new UserData()
+        {
+            Email = "chief@chief.com",
+            FirstName = "Имя начальника цеха",
+            MiddleName = "Фамилия начальника цеха",
+            LastName = "Отчество начальника цеха",
+            UserName = "chief@chief.com",
+            PasswordHash = SecurePasswordHasher.Hash("chief12345"),
+        };
+
+        var chiefRole = await roleRepository.GetByFilterAsync(_ => _.Name == nameof(Role.Chief));
+        chief.UserRoles = chiefRole.Select(_ => new UserRole { Role = _ }).ToList();
+
+        if (!(await userRepository.GetByFilterAsync(_ => _.UserName == chief.UserName)).Any())
+        {
+            await userRepository.AddAsync(chief);
+            await userRepository.SaveAsync();
+        }
+    }
+
+    private static async Task CreateInspectorAsync(IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository)
+    {
+        var inspector = new UserData()
+        {
+            Email = "inspector@inspector.com",
+            FirstName = "Имя контролера",
+            MiddleName = "Фамилия контролера",
+            LastName = "Отчество контролера",
+            UserName = "inspector@inspector.com",
+            PasswordHash = SecurePasswordHasher.Hash("inspector12345"),
+        };
+
+        var inspectorRole = await roleRepository.GetByFilterAsync(_ => _.Name == nameof(Role.Inspector));
+        inspector.UserRoles = inspectorRole.Select(_ => new UserRole { Role = _ }).ToList();
+
+        if (!(await userRepository.GetByFilterAsync(_ => _.UserName == inspector.UserName)).Any())
+        {
+            await userRepository.AddAsync(inspector);
+            await userRepository.SaveAsync();
+        }
+    }
+
+    private static async Task CreateWelderAsync(IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository)
+    {
+        var welder = new UserData()
+        {
+            Email = "welder@welder.com",
+            FirstName = "Имя сварщика",
+            MiddleName = "Фамилия сварщика",
+            LastName = "Отчество сварщика",
+            UserName = "welder@welder.com",
+            PasswordHash = SecurePasswordHasher.Hash("welder12345"),
+        };
+
+        var welderRole = await roleRepository.GetByFilterAsync(_ => _.Name == nameof(Role.Welder));
+        welder.UserRoles = welderRole.Select(_ => new UserRole { Role = _ }).ToList();
+
+        if (!(await userRepository.GetByFilterAsync(_ => _.UserName == welder.UserName)).Any())
+        {
+            await userRepository.AddAsync(welder);
+            await userRepository.SaveAsync();
+        }
     }
 
     private static async Task CreateAdminAsync(IRepository<RoleData> roleRepository,
