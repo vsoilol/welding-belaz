@@ -1860,8 +1860,8 @@ public class DataSeed
                                 PreheatingTemperatureMax = 250,
                                 WeldingCurrentMin = 80,
                                 WeldingCurrentMax = 120,
-                                ArcVoltageMin = null,
-                                ArcVoltageMax = null,
+                                ArcVoltageMin = 22,
+                                ArcVoltageMax = 24,
                             },
                             new()
                             {

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 using Microsoft.AspNetCore.Hosting;
@@ -12,11 +13,13 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 public class SeamPassportDocument : IDocument
 {
     private readonly string _fontsPath;
+    private readonly IMarkEstimateService _markEstimateService;
 
-    public SeamPassportDocument(TaskDto task, string fontsPath)
+    public SeamPassportDocument(TaskDto task, string fontsPath, IMarkEstimateService markEstimateService)
     {
         Task = task;
         _fontsPath = fontsPath;
+        _markEstimateService = markEstimateService;
     }
 
     public TaskDto Task { get; }
@@ -67,7 +70,7 @@ public class SeamPassportDocument : IDocument
             column.Item().Element(ComposeWeldPassageInstructionsTable);
             column.Item().Element(ComposeAdditionalInfoTable);
             column.Item().Element(ComposeInspectorTable);
-            
+
             column.Item().Column(row =>
             {
                 foreach (var weldPassage in Task.Seam.WeldPassages.OrderBy(_ => _.Number))
@@ -76,8 +79,8 @@ public class SeamPassportDocument : IDocument
                         .TechnologicalInstruction
                         .WeldPassageInstructions
                         .FirstOrDefault(_ => _.Number == weldPassage.Number)!;
-                    
-                    row.Item().Component(new WeldPassageComponent(weldPassageInstruction, weldPassage));
+
+                    row.Item().Component(new WeldPassageComponent(weldPassageInstruction, weldPassage, _markEstimateService));
                 }
             });
         });
@@ -381,12 +384,12 @@ public class SeamPassportDocument : IDocument
                         .Text(arcVoltageMaxText)
                         .Style(Typography.Normal);
                 }
-                
+
                 static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
             });
         });
     }
-    
+
     private string CheckValueForNull<T>(T value)
     {
         return (value is not null ? value.ToString() : "-")!;

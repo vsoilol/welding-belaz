@@ -1,9 +1,10 @@
-﻿using System.Text;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Models.Chart;
+﻿using System.Globalization;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Extensions;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
-using Newtonsoft.Json;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Legends;
@@ -11,16 +12,19 @@ using OxyPlot.Series;
 using OxyPlot.SkiaSharp;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
-using WeldingApp.Common.Extensions;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 
 public class WeldPassageComponent : IComponent
 {
-    public WeldPassageComponent(WeldPassageInstructionDto weldPassageInstruction, WeldPassageDto weldPassage)
+    private readonly IMarkEstimateService _markEstimateService;
+
+    public WeldPassageComponent(WeldPassageInstructionDto weldPassageInstruction, WeldPassageDto weldPassage,
+        IMarkEstimateService markEstimateService)
     {
         WeldPassageInstructionInfo = weldPassageInstruction;
         WeldPassageInfo = weldPassage;
+        _markEstimateService = markEstimateService;
     }
 
     public WeldPassageInstructionDto WeldPassageInstructionInfo { get; }
@@ -36,8 +40,8 @@ public class WeldPassageComponent : IComponent
 
             column.Item().Element(ComposePreheatingTemperatureTable);
             column.Item().Element(ComposeWeldInfoTable);
-            column.Item().PageBreak();
             column.Item().Element(ComposeCharts);
+            column.Item().Element(ComposeCurrencyAndVoltageTable);
         });
     }
 
@@ -76,10 +80,11 @@ public class WeldPassageComponent : IComponent
                         .Style(Typography.Normal);
                 });
 
-                var ensuringAccessText = GetYesOrNoByCondition(WeldPassageInfo.PreheatingTemperature <=
-                                                               WeldPassageInstructionInfo.PreheatingTemperatureMax &&
-                                                               WeldPassageInfo.PreheatingTemperature >=
-                                                               WeldPassageInstructionInfo.PreheatingTemperatureMin);
+                var ensuringAccessText = DocumentExtensions
+                    .GetYesOrNoByCondition(WeldPassageInfo.PreheatingTemperature <=
+                                           WeldPassageInstructionInfo.PreheatingTemperatureMax &&
+                                           WeldPassageInfo.PreheatingTemperature >=
+                                           WeldPassageInstructionInfo.PreheatingTemperatureMin);
 
                 table.Cell()
                     .Element(BlockLeft)
@@ -171,12 +176,12 @@ public class WeldPassageComponent : IComponent
 
             table.Cell()
                 .Element(BlockCenter)
-                .Text(CheckValueForNull(WeldPassageInfo.ShortTermDeviation))
+                .Text(DocumentExtensions.CheckValueForNull(WeldPassageInfo.ShortTermDeviation))
                 .Style(Typography.Italic);
 
             table.Cell()
                 .Element(BlockCenter)
-                .Text(CheckValueForNull(WeldPassageInfo.LongTermDeviation))
+                .Text(DocumentExtensions.CheckValueForNull(WeldPassageInfo.LongTermDeviation))
                 .Style(Typography.Italic);
 
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
@@ -190,40 +195,198 @@ public class WeldPassageComponent : IComponent
         {
             column.Spacing(2);
 
-            column.Item().Text("Графики").Style(Typography.Normal);
+            /*column.Item().Text("Графики").Style(Typography.Normal);*/
 
-            //var arcVoltageChartImageBytes = DownloadImage(GetArcVoltageChartImageUrl());
-            var weldingCurrentChartImageBytes = GetArcVoltageChartImageByte("А", 
+            var weldingCurrentChartImageBytes = GetArcVoltageChartImageByte("А",
                 $"Показания сварочного тока по слою №{WeldPassageInfo.Number}",
                 "Показания силы тока",
                 WeldPassageInfo.WeldingCurrentValues,
                 WeldPassageInstructionInfo.WeldingCurrentMin,
                 WeldPassageInstructionInfo.WeldingCurrentMax);
             column.Item().AlignCenter().Image(weldingCurrentChartImageBytes);
-            
-            var arcVoltageChartImageBytes = GetArcVoltageChartImageByte("В", 
+
+            var arcVoltageChartImageBytes = GetArcVoltageChartImageByte("В",
                 $"Показания напряжения на дуге по слою №{WeldPassageInfo.Number}",
                 "Показания напряжения",
                 WeldPassageInfo.ArcVoltageValues,
                 WeldPassageInstructionInfo.ArcVoltageMin,
                 WeldPassageInstructionInfo.ArcVoltageMax);
             column.Item().AlignCenter().Image(arcVoltageChartImageBytes);
-
-            //column.Item().Image(arcVoltageChartImageBytes, ImageScaling.FitArea);
         });
     }
 
-    private string CheckValueForNull<T>(T value)
+    private void ComposeCurrencyAndVoltageTable(IContainer container)
     {
-        return (value is not null ? value.ToString() : "-")!;
+        container.Table(table =>
+        {
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn(1.3f);
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+            });
+
+            table.Header(header =>
+            {
+                table.Cell()
+                    .RowSpan(2)
+                    .Element(BlockLeft)
+                    .Text("Наименование параметра")
+                    .Style(Typography.Normal);
+
+                table.Cell()
+                    .ColumnSpan(3)
+                    .Element(BlockCenter)
+                    .Text("Значение")
+                    .Style(Typography.Normal);
+
+                table.Cell()
+                    .RowSpan(2)
+                    .Element(BlockLeft)
+                    .Text("Обеспечение допуска")
+                    .Style(Typography.Normal);
+
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("Минимальное")
+                    .Style(Typography.Normal);
+
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("Максимальное")
+                    .Style(Typography.Normal);
+
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("Среднее")
+                    .Style(Typography.Normal);
+
+                var voltageParameterResult = GetParametersResult(WeldPassageInfo.ArcVoltageValues,
+                    WeldPassageInstructionInfo.ArcVoltageMin, WeldPassageInstructionInfo.ArcVoltageMax);
+
+                var currencyParameterResult = GetParametersResult(WeldPassageInfo.WeldingCurrentValues,
+                    WeldPassageInstructionInfo.WeldingCurrentMin, WeldPassageInstructionInfo.WeldingCurrentMax);
+
+                var estimation = _markEstimateService.GetAverageEstimation(WeldPassageInfo.WeldingCurrentValues,
+                    WeldPassageInfo.ArcVoltageValues,
+                    WeldPassageInstructionInfo.WeldingCurrentMin,
+                    WeldPassageInstructionInfo.WeldingCurrentMax,
+                    WeldPassageInstructionInfo.ArcVoltageMin,
+                    WeldPassageInstructionInfo.ArcVoltageMax);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("Сварочный ток, А")
+                    .Style(Typography.Normal);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(currencyParameterResult.Min.ToString(CultureInfo.InvariantCulture))
+                    .Style(Typography.Italic);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(currencyParameterResult.Max.ToString(CultureInfo.InvariantCulture))
+                    .Style(Typography.Italic);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(currencyParameterResult.Average.ToString(CultureInfo.InvariantCulture))
+                    .Style(Typography.ItalicBold);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(currencyParameterResult.EnsuringAccess)
+                    .Style(GetEnsuringAccessTextStyle(currencyParameterResult.EnsuringAccess));
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("Напряжение на дуге, В")
+                    .Style(Typography.Normal);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(voltageParameterResult.Min.ToString(CultureInfo.InvariantCulture))
+                    .Style(Typography.Italic);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(voltageParameterResult.Max.ToString(CultureInfo.InvariantCulture))
+                    .Style(Typography.Italic);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(voltageParameterResult.Average.ToString(CultureInfo.InvariantCulture))
+                    .Style(Typography.ItalicBold);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(voltageParameterResult.EnsuringAccess)
+                    .Style(GetEnsuringAccessTextStyle(voltageParameterResult.EnsuringAccess));
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("Оценка")
+                    .Style(Typography.Bold);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("-")
+                    .Style(Typography.Normal);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("-")
+                    .Style(Typography.Normal);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text(DocumentExtensions.CheckValueForNull(estimation))
+                    .Style(Typography.ItalicBold);
+                
+                table.Cell()
+                    .Element(BlockLeft)
+                    .Text("-")
+                    .Style(Typography.Normal);
+            });
+
+            static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
+            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
+        });
     }
 
-    private string GetYesOrNoByCondition(bool condition)
+    private TextStyle GetEnsuringAccessTextStyle(string ensuringAccess)
     {
-        return condition ? "Да" : "Нет";
+        return ensuringAccess == "Да" ? Typography.Italic : Typography.ItalicBold;
     }
 
-    private byte[] GetArcVoltageChartImageByte(string measurementUnit, string title, string mainPlotTitle, double[] values,
+    private ParametersResult GetParametersResult(double[] values, double? min, double? max)
+    {
+        var ensuringAccess = "Да";
+
+        if (min is not null && max is not null)
+        {
+            var outOfAllowance = values.Count(x => x <= min || x >= max) >= 50;
+            ensuringAccess = outOfAllowance ? "Нет" : "Да";
+        }
+
+        var valueMin = Math.Round(values.Min(), 2);
+        var valueMax = Math.Round(values.Max(), 2);
+        var valueAverage = Math.Round(values.Average(), 2);
+
+        return new ParametersResult
+        {
+            Average = valueAverage,
+            Min = valueMin,
+            Max = valueMax,
+            EnsuringAccess = ensuringAccess
+        };
+    }
+
+    private byte[] GetArcVoltageChartImageByte(string measurementUnit, string title, string mainPlotTitle,
+        double[] values,
         double? min, double? max)
     {
         var model = new PlotModel
@@ -265,14 +428,29 @@ public class WeldPassageComponent : IComponent
 
         model.Series.Add(main);
 
+        var minValue = values.Min();
+
+        var valuesDifference = values.Max() - minValue;
+        var leftAxesStep = 10;
+
+        if (valuesDifference / 10 > 15)
+        {
+            leftAxesStep = (int)(valuesDifference / 15);
+        }
+
+        var minimumAxes = minValue <= 10 || min < minValue || max < minValue ? 0 : minValue - 10;
+
         model.Axes.Add(new LinearAxis
         {
             Position = AxisPosition.Left,
-            ExtraGridlines = new[] { 0.0 },
-            Minimum = 0,
+            MajorGridlineColor = OxyColors.Gray,
+            MajorGridlineStyle = LineStyle.Solid,
+            MajorGridlineThickness = 1,
+            Minimum = minimumAxes,
             Maximum = values.Max() + 10,
-            MajorStep = 10,
-            FontSize = 14
+            MajorStep = leftAxesStep,
+            FontSize = 14,
+            
         });
 
         var startTime = times.First();
@@ -282,20 +460,23 @@ public class WeldPassageComponent : IComponent
 
         var step = seconds / (double)28;
 
-        var minValue = TimeSpanAxis.ToDouble(startTime);
-        var maxValue = TimeSpanAxis.ToDouble(endTime);
+        var minValueTime = TimeSpanAxis.ToDouble(startTime);
+        var maxValueTime = TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(1)));
 
         model.Axes.Add(new TimeSpanAxis()
         {
             ExtraGridlines = new[] { 0.0 },
             Position = AxisPosition.Bottom,
-            Minimum = minValue,
-            Maximum = maxValue,
+            Minimum = minValueTime,
+            Maximum = maxValueTime,
             StringFormat = "hh:mm:ss",
             MajorStep = TimeSpanAxis.ToDouble(TimeSpan.FromSeconds(step)),
             Angle = -45,
             FontSize = 14,
             StartPosition = 0.015,
+            MajorGridlineColor = OxyColors.Gray,
+            MajorGridlineStyle = LineStyle.Solid,
+            MajorGridlineThickness = 1,
         });
 
         if (max is not null && min is not null)
