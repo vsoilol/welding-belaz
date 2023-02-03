@@ -23,8 +23,8 @@ public class MarkEstimateService : IMarkEstimateService
         {
             var estimation = GetEstimation
             (
-                weldingCurrents[i], (double)minAllowanceWeldingCurrent!, (double)maxAllowanceWeldingCurrent!,
-                voltages[i], (double)minAllowanceVoltage!, (double)maxAllowanceVoltage!
+                weldingCurrents[i], minAllowanceWeldingCurrent, maxAllowanceWeldingCurrent,
+                voltages[i], minAllowanceVoltage, maxAllowanceVoltage
             );
 
             estimations.Add(estimation);
@@ -38,17 +38,23 @@ public class MarkEstimateService : IMarkEstimateService
     private bool IsAllowancesNullOrEqualZero(double? minAllowanceWeldingCurrent, double? maxAllowanceWeldingCurrent,
         double? minAllowanceVoltage, double? maxAllowanceVoltage)
     {
-        return minAllowanceWeldingCurrent is null or 0 ||
-               maxAllowanceWeldingCurrent is null or 0 ||
-               minAllowanceVoltage is null or 0 ||
+        return minAllowanceWeldingCurrent is null or 0 &&
+               maxAllowanceWeldingCurrent is null or 0 &&
+               minAllowanceVoltage is null or 0 &&
                maxAllowanceVoltage is null or 0;
     }
 
-    private double GetEstimation(double currencyValue, double minAllowanceWeldingCurrent, double maxAllowanceWeldingCurrent,
-        double voltageValue, double minAllowanceVoltage, double maxAllowanceVoltage)
+    private double GetEstimation(double currencyValue, double? minAllowanceWeldingCurrent,
+        double? maxAllowanceWeldingCurrent,
+        double voltageValue, double? minAllowanceVoltage, double? maxAllowanceVoltage)
     {
-        var Io = GetMark(currencyValue, minAllowanceWeldingCurrent, maxAllowanceWeldingCurrent);
-        var Uo = GetMark(voltageValue, minAllowanceVoltage, maxAllowanceVoltage);
+        var Io = minAllowanceWeldingCurrent is null || maxAllowanceWeldingCurrent is null
+            ? 0
+            : GetMark(currencyValue, (double)minAllowanceWeldingCurrent, (double)maxAllowanceWeldingCurrent);
+
+        var Uo = minAllowanceVoltage is null || maxAllowanceVoltage is null
+            ? 0
+            : GetMark(voltageValue, (double)minAllowanceVoltage, (double)maxAllowanceVoltage);
 
         if (Io == 0 && Uo != 0)
         {

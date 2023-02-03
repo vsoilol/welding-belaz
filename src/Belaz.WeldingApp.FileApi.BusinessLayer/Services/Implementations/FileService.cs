@@ -27,7 +27,7 @@ public class FileService : IFileService
 
     public async Task<DocumentDto> GenerateSeamPassportAsync()
     {
-        var task = await _taskRepository.GetByIdAsync(Guid.Parse("5737c18a-5756-431e-819e-62280c7e2d5a"));
+        var task = await _taskRepository.GetByIdAsync(Guid.Parse("cc61244a-3e7c-408f-bd2e-419e4bbb369f"));
 
         var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
         var document = new SeamPassportDocument(task, fontsPath, _markEstimateService);
