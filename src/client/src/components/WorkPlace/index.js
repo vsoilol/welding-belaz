@@ -38,8 +38,8 @@ const dateOptions = {
 
 export const WorkPlace = ({
   addFixedProduct,
-  loadMasters,
-  loadTechs,
+  // loadMasters,
+  // loadTechs,
   ///Workshop
   loadWorkshop,
   addWorkshop,
@@ -94,7 +94,7 @@ export const WorkPlace = ({
   texprocwelding,
 
   executors,
-  loadExecutors,
+  // loadExecutors,
 
 
   detailbyinspector,
@@ -182,9 +182,9 @@ export const WorkPlace = ({
     loadDetail();
     loadSeam();
     loadTexprocwelding();
-    loadMasters();
-    loadTechs();
-    loadExecutors();
+    // loadMasters();
+    // loadTechs();
+    // loadExecutors();
 
 
   }, [
@@ -196,9 +196,9 @@ export const WorkPlace = ({
     loadKnot,
     loadDetail,
     loadTexprocwelding,
-    loadMasters,
-    loadTechs,
-    loadExecutors,
+    // loadMasters,
+    // loadTechs,
+    // loadExecutors,
 
   ]);
 

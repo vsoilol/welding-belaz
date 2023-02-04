@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { WorkPlacePage } from "pages/WorkPlace";
 import Actions from "store/workplace/actions";
-import ActionsExecuters from "store/executors/actions";
+// import ActionsExecuters from "store/executors/actions";
 import MasterActions from "store/workplace/actions";
 
 const mapStateToProps = (state) => {
@@ -44,9 +44,9 @@ const mapDispatchToProps = {
   addFixedProduct: Actions.Creators.loadfixedRequest,
 
 
-  loadMasters: ActionsExecuters.Creators.loadMastersRequest,
-  loadTechs: ActionsExecuters.Creators.loadTechsRequest,
-  loadExecutors: ActionsExecuters.Creators.loadExecutorsRequest,
+  // loadMasters: ActionsExecuters.Creators.loadMastersRequest,
+  // loadTechs: ActionsExecuters.Creators.loadTechsRequest,
+  // loadExecutors: ActionsExecuters.Creators.loadExecutorsRequest,
 
   ///Цеха 
   loadWorkshop: Actions.Creators.loadWorkshopRequest,
