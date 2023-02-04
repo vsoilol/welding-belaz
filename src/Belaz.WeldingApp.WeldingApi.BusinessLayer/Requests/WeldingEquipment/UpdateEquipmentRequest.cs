@@ -11,7 +11,7 @@ public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
     /// <summary>
     /// RFID-метка
     /// </summary>
-    public string RfidTag { get; set; } = null!;
+    public string? RfidTag { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 
@@ -31,16 +31,16 @@ public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
     /// </summary>
     public string CommissioningDate { get; set; } = null!;
 
-    public int Height { get; set; }
+    public int? Height { get; set; }
 
-    public int Width { get; set; }
+    public int? Width { get; set; }
 
-    public int Lenght { get; set; }
+    public int? Lenght { get; set; }
 
     /// <summary>
     /// Номер группы оборудования
     /// </summary>
-    public int GroupNumber { get; set; }
+    public string GroupNumber { get; set; } = null!;
 
     /// <summary>
     /// Наименование изготовителя
@@ -61,27 +61,32 @@ public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
     /// <summary>
     /// Напряжение холостого хода
     /// </summary>
-    public double IdleVoltage { get; set; }
+    public double? IdleVoltage { get; set; }
 
     /// <summary>
     /// Сварочный ток min
     /// </summary>
-    public double WeldingCurrentMin { get; set; }
+    public double? WeldingCurrentMin { get; set; }
 
     /// <summary>
     /// Сварочный ток max
     /// </summary>
-    public double WeldingCurrentMax { get; set; }
+    public double? WeldingCurrentMax { get; set; }
 
     /// <summary>
     /// Напряжения на дуге min
     /// </summary>
-    public double ArcVoltageMin { get; set; }
+    public double? ArcVoltageMin { get; set; }
 
     /// <summary>
     /// Напряжения на дуге max
     /// </summary>
-    public double ArcVoltageMax { get; set; }
+    public double? ArcVoltageMax { get; set; }
+
+    /// <summary>
+    /// Продолжительность нагрузки
+    /// </summary>
+    public double? LoadDuration { get; set; }
 
     public Guid? PostId { get; set; }
 
