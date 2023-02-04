@@ -87,6 +87,7 @@ services:
       - welding-api
 
   proxy:
+    restart: always
     image: nginx:mainline
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
