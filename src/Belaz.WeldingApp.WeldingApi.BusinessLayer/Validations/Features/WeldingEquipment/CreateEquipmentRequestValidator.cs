@@ -12,7 +12,8 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
     {
         RuleFor(model => model.RfidTag)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+            .NotEmpty()
+            .When(_ => _.RfidTag is not null);
 
         RuleFor(model => model.Name)
             .Cascade(CascadeMode.Stop)
@@ -32,19 +33,22 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
 
         RuleFor(model => model.Height)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .GreaterThanOrEqualTo(1)
+            .When(_ => _.Height is not null);
 
         RuleFor(model => model.Width)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .GreaterThanOrEqualTo(1)
+            .When(_ => _.Width is not null);
 
         RuleFor(model => model.Lenght)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .GreaterThanOrEqualTo(1)
+            .When(_ => _.Lenght is not null);
 
         RuleFor(model => model.GroupNumber)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .NotEmpty();
 
         RuleFor(model => model.ManufacturerName)
             .Cascade(CascadeMode.Stop)
@@ -60,23 +64,33 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
 
         RuleFor(model => model.IdleVoltage)
             .Cascade(CascadeMode.Stop)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .When(_ => _.IdleVoltage is not null);
 
         RuleFor(model => model.WeldingCurrentMin)
             .Cascade(CascadeMode.Stop)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .When(_ => _.WeldingCurrentMin is not null);
 
         RuleFor(model => model.WeldingCurrentMax)
             .Cascade(CascadeMode.Stop)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .When(_ => _.WeldingCurrentMax is not null);
 
         RuleFor(model => model.ArcVoltageMin)
             .Cascade(CascadeMode.Stop)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .When(_ => _.ArcVoltageMin is not null);
 
         RuleFor(model => model.ArcVoltageMax)
             .Cascade(CascadeMode.Stop)
-            .GreaterThan(0);
+            .GreaterThan(0)
+            .When(_ => _.ArcVoltageMax is not null);
+        
+        RuleFor(model => model.LoadDuration)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThan(0)
+            .When(_ => _.LoadDuration is not null);
 
         RuleFor(model => model.PostId)
             .Cascade(CascadeMode.Stop)
