@@ -119,8 +119,7 @@ export const Calendar = ({
     loadExecutors();
     loadEquipment();
     (window.localStorage.getItem("executorId")) ? loadDayByWelder(window.localStorage.getItem("executorId")) : loadDayByEquipment(window.localStorage.getItem("equipmentId"))
-  }, [loadCalendaryear, loadExecutors, loadEquipment]);
-  // loadDayByWelder(window.localStorage.getItem("executorId"))
+  }, [loadCalendaryear, loadExecutors, loadEquipment]); 
 
 
   const getDocument = (activeId) => {

@@ -51,7 +51,7 @@ const {
   Creators: { setError },
 } = errorActions;
 
-function* loadEquipment() {
+function* loadEquipment() { 
   try {
     const { data } = yield call(api.get, `/WeldingEquipment`);
     const downtime = yield call(api.get, `/WeldingEquipment/downtime`);
@@ -63,15 +63,15 @@ function* loadEquipment() {
   }
 }
 ///Посты
-function* loadPosts() {
-  try {
-    const { data } = yield call(api.get, `/post`);
-    yield put(loadPostsSuccess(data));
-  } catch (error) {
-    yield put(loadPostsFailure(error));
-    yield put(setError(error.message));
-  }
-}
+// function* loadPosts() {
+//   try {
+//     const { data } = yield call(api.get, `/post`);
+//     yield put(loadPostsSuccess(data));
+//   } catch (error) {
+//     yield put(loadPostsFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
 
 
 
@@ -235,7 +235,7 @@ export function* equipmentSaga() {
   yield takeLatest(DELETE_EQUIPMENT_REQUEST, deleteEquipment);
   yield takeLatest(EDIT_EQUIPMENT_REQUEST, editEquipment);
   ///Посты
-  yield takeLatest(LOAD_POSTS_REQUEST, loadPosts); 
+  // yield takeLatest(LOAD_POSTS_REQUEST, loadPosts); 
   ///Downtime
   yield takeLatest(ADD_DOWNTIME_REQUEST, addDowntime); 
   yield takeLatest(EDIT_DOWNTIME_REQUEST, editDowntime);

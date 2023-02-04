@@ -241,37 +241,38 @@ function* deleteTech({ payload }) {
 }
 
 ///Оборудование
-function* loadEquipment() {
-  try {
-    const { data } = yield call(api.get, `/WeldingEquipment`);
-    const downtime = yield call(api.get, `/WeldingEquipment/downtime`);
-    let data_equipment = [data, downtime.data]
-    yield put(loadEquipmentSuccess(data_equipment));
-  } catch (error) {
-    yield put(loadEquipmentFailure(error));
-    yield put(setError(error.message));
-  }
-}
+// function* loadEquipment() {
+//   try {
+//     console.log("Exe")
+//     const { data } = yield call(api.get, `/WeldingEquipment`);
+//     const downtime = yield call(api.get, `/WeldingEquipment/downtime`);
+//     let data_equipment = [data, downtime.data]
+//     yield put(loadEquipmentSuccess(data_equipment));
+//   } catch (error) {
+//     yield put(loadEquipmentFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
 ///Производственные участки 
-function* loadArea() {
-  try {
-    const { data } = yield call(api.get, `/ProductionArea`);
-    yield put(loadAreaSuccess(data));
-  } catch (error) {
-    yield put(loadAreaFailure(error));
-    yield put(setError(error.message));
-  }
-}
+// function* loadArea() {
+//   try {
+//     const { data } = yield call(api.get, `/ProductionArea`);
+//     yield put(loadAreaSuccess(data));
+//   } catch (error) {
+//     yield put(loadAreaFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
 ///Цеха 
-function* loadWorkshop() {
-  try {
-    const { data } = yield call(api.get, `/Workshop`);
-    yield put(loadWorkshopSuccess(data));
-  } catch (error) {
-    yield put(loadWorkshopFailure(error));
-    yield put(setError(error.message));
-  }
-}
+// function* loadWorkshop() {
+//   try {
+//     const { data } = yield call(api.get, `/Workshop`);
+//     yield put(loadWorkshopSuccess(data));
+//   } catch (error) {
+//     yield put(loadWorkshopFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
 export function* executorsSaga() {
   yield takeLatest(LOAD_EXECUTORS_REQUEST, loadExecutors);
   yield takeLatest(ADD_EXECUTOR_REQUEST, addExecutor);
@@ -287,11 +288,11 @@ export function* executorsSaga() {
   yield takeLatest(EDIT_TECH_REQUEST, editTech);
 
 
-  yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
+  // yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
 
    ///Цеха 
-   yield takeLatest(LOAD_WORKSHOP_REQUEST, loadWorkshop);
+  //  yield takeLatest(LOAD_WORKSHOP_REQUEST, loadWorkshop);
    ///Производственные участки 
-  yield takeLatest(LOAD_AREA_REQUEST, loadArea);
+  // yield takeLatest(LOAD_AREA_REQUEST, loadArea);
 
 }

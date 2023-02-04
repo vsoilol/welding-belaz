@@ -415,7 +415,7 @@ export const WorkPlace = ({
       {
         title: "Наименование сварного шва ",
         render: (rowData) => {
-          return <p>Cварочный шов {rowData.number}</p>;
+          return <p>{rowData.number}</p>;
         },
       },
       {

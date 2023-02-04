@@ -302,27 +302,28 @@ function* loadCalendarequipment() {
   }
 }
 ///Executor
-function* loadExecutors() {
-  try {
-    const { data } = yield call(api.get, `/welder`);
-    yield put(loadExecutorsSuccess(data));
-  } catch (error) {
-    yield put(loadExecutorsFailure(error));
-    yield put(setError(error.message));
-  }
-}
+// function* loadExecutors() {
+//   try {
+//     const { data } = yield call(api.get, `/welder`);  
+//     yield put(loadExecutorsSuccess(data)); 
+//   } catch (error) {
+//     yield put(loadExecutorsFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
 ///Equipment
-function* loadEquipment() {
-  try {
-    const { data } = yield call(api.get, `/WeldingEquipment`);
-    const downtime = yield call(api.get, `/WeldingEquipment/downtime`);
-    let data_equipment = [data, downtime.data]
-    yield put(loadEquipmentSuccess(data_equipment));
-  } catch (error) {
-    yield put(loadEquipmentFailure(error));
-    yield put(setError(error.message));
-  }
-}
+// function* loadEquipment() { 
+//   try {
+//     const { data } = yield call(api.get, `/WeldingEquipment`);
+//     const downtime = yield call(api.get, `/WeldingEquipment/downtime`);
+//     let data_equipment = [data, downtime.data]
+ 
+//     yield put(loadEquipmentSuccess(data_equipment)); 
+//   } catch (error) {
+//     yield put(loadEquipmentFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
 
 
 ///WorkingShift
@@ -492,9 +493,9 @@ export function* CalendarSaga() {
   yield takeLatest(LOAD_CALENDAREQUIPMENT_REQUEST, loadCalendarequipment);
 
   ///Executor
-  yield takeLatest(LOAD_EXECUTORS_REQUEST, loadExecutors);
+  // yield takeLatest(LOAD_EXECUTORS_REQUEST, loadExecutors);
   ///Equipment
-  yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
+  // yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
 
   ///WorkingShift
 

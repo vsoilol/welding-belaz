@@ -88,10 +88,13 @@ export const Tasks = ({
     loadTasks();
     loadTechs();
     loadMasters();
-    loadInstructions();
-    loadInfo();
+    // loadInstructions();
+    // loadInfo();
     loadSeam();
-  }, [loadInstructions, loadMasters, loadTasks, loadTechs,loadInfo,loadSeam]);
+  }, [//loadInstructions,
+   loadMasters, loadTasks, loadTechs,
+     //loadInfo,
+   loadSeam]);
 
   const formattedTechs = techs?.map((item) => {
     return {

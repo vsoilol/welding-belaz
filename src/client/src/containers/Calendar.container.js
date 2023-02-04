@@ -1,9 +1,6 @@
 import { connect } from "react-redux";
 import { CalendarPage } from "pages/Calendar";
-import Actions from "store/calendar/actions";
-import ExecutorsActions from "store/executors/actions";
-import InstructionsActions from "store/instructions/actions";
-import EquipmentActions from "store/equipment/actions";
+import Actions from "store/calendar/actions";  
 
 const mapStateToProps = (state) => {
   return { 

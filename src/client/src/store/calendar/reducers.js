@@ -67,7 +67,7 @@ const loadCalendarequipmentSuccess = (state = INITIAL_STATE, { loadEquipment }) 
   };
 }
 ///Executor
-const loadExecutorsSuccess = (state = INITIAL_STATE, { executors }) => {
+const loadExecutorsSuccess = (state = INITIAL_STATE, { executors }) => { 
   return {
     ...state,
     isRequesting: false,
@@ -78,6 +78,7 @@ const loadExecutorsSuccess = (state = INITIAL_STATE, { executors }) => {
 };
 ///Equipment
 const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
+  console.log(equipment)
   return {
     ...state,
     isRequesting: false,

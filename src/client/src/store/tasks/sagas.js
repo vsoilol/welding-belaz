@@ -85,20 +85,20 @@ function* deleteTask({ payload }) {
   }
 }
 ///Сварные швы
-function* loadSeam() {
-  try {
-    const { data } = yield call(api.get, `/seam/byControlSubject/true`);
-    yield put(loadSeamSuccess(data));
-  } catch (error) {
-    yield put(loadSeamFailure(error));
-    yield put(setError(error.message));
-  }
-}
+// function* loadSeam() {
+//   try {
+//     const { data } = yield call(api.get, `/seam/byControlSubject/true`);
+//     yield put(loadSeamSuccess(data));
+//   } catch (error) {
+//     yield put(loadSeamFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
 
 export function* tasksSaga() {
   yield takeLatest(LOAD_TASKS_REQUEST, loadTasks);
   yield takeLatest(LOAD_INFO_REQUEST, loadInfo);
-  yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
+  // yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
 
 
   yield takeLatest(ADD_TASK_REQUEST, addTask);
