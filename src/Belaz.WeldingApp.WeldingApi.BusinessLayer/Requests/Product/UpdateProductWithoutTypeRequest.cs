@@ -9,7 +9,7 @@ public class UpdateProductWithoutTypeRequest : IMapTo<Domain.Entities.ProductInf
 
     public string? Name { get; set; }
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     /// <summary>
     /// Подлежит ли контролю

@@ -16,7 +16,7 @@ public class CreateProductWithoutTypeRequestValidator : AbstractValidator<Create
 
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)

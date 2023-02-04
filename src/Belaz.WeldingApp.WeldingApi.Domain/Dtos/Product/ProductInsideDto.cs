@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
@@ -9,7 +8,7 @@ using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 
-public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
+public class ProductInsideDto: IMapFrom<Entities.ProductInfo.Product>
 {
     public Guid Id { get; set; }
     
@@ -26,23 +25,14 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
     public WorkshopBriefDto Workshop { get; set; } = null!;
 
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
-
-    public List<ProductInsideDto> InsideProducts { get; set; } = null!;
-
-    public List<SeamBriefDto> Seams { get; set; } = null!;
+    
+    public ProductType ProductType { get; set; }
     
     public bool IsAddManually { get; set; }
-
+    
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Entities.ProductInfo.Product, ProductDto>()
-            .ForMember(dto => dto.InsideProducts,
-                opt => opt
-                    .MapFrom(
-                        x => x.ProductInsides.Select(_ => _.InsideProduct)))
-            .ForMember(dto => dto.Seams,
-                opt => opt
-                    .MapFrom(x => x.Seams))
+        profile.CreateMap<Entities.ProductInfo.Product, ProductInsideDto>()
             .ForMember(dto => dto.ProductionArea,
                 opt => opt
                     .MapFrom(x => x.ProductionArea))
