@@ -19,6 +19,7 @@ services:
   
   welding-api:
     image: welding-app/welding-api
+    restart: on-failure
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
@@ -35,6 +36,7 @@ services:
 
   identity-api:
     image: welding-app/identity-api
+    restart: on-failure
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
@@ -48,9 +50,11 @@ services:
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
+      - welding-api
 
   file-api:
     image: welding-app/file-api
+    restart: on-failure
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
@@ -64,6 +68,7 @@ services:
       - "5012:80"
     depends_on:
       - belaz-postgres
+      - welding-api
         
   gateway-api:
     image: welding-app/gateway-api
@@ -79,6 +84,7 @@ services:
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
       - belaz-postgres
+      - welding-api
 
   proxy:
     image: nginx:mainline
