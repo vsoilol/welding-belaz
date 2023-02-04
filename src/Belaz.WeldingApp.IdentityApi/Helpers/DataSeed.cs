@@ -15,6 +15,30 @@ public class DataSeed
         await CreateWelderAsync(roleRepository, userRepository);
         await CreateInspectorAsync(roleRepository, userRepository);
         await CreateChiefAsync(roleRepository, userRepository);
+        await CreateMasterAsync(roleRepository, userRepository);
+    }
+
+    private static async Task CreateMasterAsync(IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository)
+    {
+        var master = new UserData()
+        {
+            Email = "master@master.com",
+            FirstName = "Имя начальника цеха",
+            MiddleName = "Фамилия начальника цеха",
+            LastName = "Отчество начальника цеха",
+            UserName = "master@master.com",
+            PasswordHash = SecurePasswordHasher.Hash("master12345"),
+        };
+
+        var masterRole = await roleRepository.GetByFilterAsync(_ => _.Name == nameof(Role.Master));
+        master.UserRoles = masterRole.Select(_ => new UserRole { Role = _ }).ToList();
+
+        if (!(await userRepository.GetByFilterAsync(_ => _.UserName == master.UserName)).Any())
+        {
+            await userRepository.AddAsync(master);
+            await userRepository.SaveAsync();
+        }
     }
 
     private static async Task CreateChiefAsync(IRepository<RoleData> roleRepository,
