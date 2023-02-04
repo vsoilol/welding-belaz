@@ -92,8 +92,6 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "4001:80"
-    depends_on:
-      - belaz-postgres
         
   belaz-client:
     image: belaz-client
