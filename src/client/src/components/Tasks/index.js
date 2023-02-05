@@ -72,6 +72,8 @@ export const Tasks = ({
     instructionId: modalData?.instruction.id ?? "",
     id: modalData?.id ?? "",
   };
+ 
+
 
   const requiredKeys = [
     "object",
@@ -148,15 +150,24 @@ export const Tasks = ({
     {
       title: "Руководитель сварочных работ",
       field: "masterId",
-      render: (rowData) => {
-        return (
-          <p>{`
-            ${rowData?.masters?.middleName} 
-            ${rowData?.masters?.firstName} 
-            ${rowData?.masters?.lastName}
-            `} 
-          </p>
-        );
+      render: (rowData) => { 
+        if (rowData?.master==null) {
+          return (
+            <p>{`-`} 
+            </p>
+          );
+        }
+        else{
+          return (
+            <p>{`
+              ${rowData?.master?.middleName} 
+              ${rowData?.master?.firstName} 
+              ${rowData?.master?.lastName}
+              `} 
+            </p>
+          );
+        }
+        
       },
     },
     {
