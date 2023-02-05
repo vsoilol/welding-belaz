@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 
@@ -16,6 +17,8 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
+    
+    public ProductStatus Status { get; set; }
 
     public ProductBriefDto Product { get; set; } = null!;
 

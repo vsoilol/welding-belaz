@@ -7,6 +7,8 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface IProductService
 {
+    Task<List<ProductDto>> GetAllAsync();
+    
     Task<Result<List<ProductDto>>> GetAllByStatusAsync(GetAllByTaskStatusRequest request);
 
     Task<Result<List<ProductDto>>> GetAllByControlSubjectAsync(GetAllByControlSubjectRequest request);

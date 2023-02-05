@@ -32,6 +32,8 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
     public List<SeamBriefDto> Seams { get; set; } = null!;
     
     public bool IsAddManually { get; set; }
+    
+    public ProductStatus Status { get; set; }
 
     public void Mapping(Profile profile)
     {

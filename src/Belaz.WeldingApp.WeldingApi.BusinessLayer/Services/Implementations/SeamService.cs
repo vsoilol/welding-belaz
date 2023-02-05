@@ -25,6 +25,11 @@ public class SeamService : ISeamService
         _seamRepository = seamRepository;
     }
 
+    public Task<List<SeamDto>> GetAllAsync()
+    {
+        return _seamRepository.GetAllAsync();
+    }
+
     public Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status)
     {
         return _seamRepository.GetAllByStatusAsync(status);

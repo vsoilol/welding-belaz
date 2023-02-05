@@ -24,6 +24,13 @@ public abstract class CommonProductController : ControllerBase
         _productService = productService;
         _type = type;
     }
+    
+    [HttpGet]
+    [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductDto>>> GetAllAsync()
+    {
+        return await _productService.GetAllAsync();
+    }
 
     [HttpGet("byControlSubject/{isControlSubject}")]
     [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]

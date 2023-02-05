@@ -24,6 +24,11 @@ public class ProductService : IProductService
         _productRepository = productRepository;
     }
 
+    public Task<List<ProductDto>> GetAllAsync()
+    {
+        return _productRepository.GetAllAsync();
+    }
+
     public async Task<Result<List<ProductDto>>> GetAllByStatusAsync(GetAllByTaskStatusRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);

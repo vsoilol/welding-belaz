@@ -19,6 +19,13 @@ public class SeamRepository : ISeamRepository
         _mapper = mapper;
     }
 
+    public Task<List<SeamDto>> GetAllAsync()
+    {
+        return _context.Seams
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status)
     {
         return _context.Seams

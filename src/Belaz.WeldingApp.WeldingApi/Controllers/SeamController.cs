@@ -23,6 +23,13 @@ public class SeamController : ControllerBase
     {
         _seamService = seamService;
     }
+    
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllAsync()
+    {
+        return await _seamService.GetAllAsync();
+    }
 
     /// <summary>
     /// Gets all seams by status

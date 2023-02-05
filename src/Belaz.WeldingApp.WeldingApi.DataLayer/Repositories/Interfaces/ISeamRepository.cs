@@ -6,6 +6,8 @@ namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 
 public interface ISeamRepository
 {
+    Task<List<SeamDto>> GetAllAsync();
+    
     Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status);
     
     Task<List<SeamDto>> GetAllByControlSubjectAsync(bool isControlSubject);

@@ -27,6 +27,13 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
+    public Task<List<ProductDto>> GetAllAsync()
+    {
+        return _context.Products
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<List<ProductDto>> GetAllByStatusAsync(ProductStatus status, ProductType productType)
     {
         return _context.Products
