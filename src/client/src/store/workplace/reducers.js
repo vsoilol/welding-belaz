@@ -17,8 +17,7 @@ const request = (state = INITIAL_STATE) => {
   };
 };
 ///Цеха 
-const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
-  console.log(workshop)
+const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => { 
   return {
     ...state,
     isRequesting: false,

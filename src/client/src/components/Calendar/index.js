@@ -204,13 +204,13 @@ export const Calendar = ({
   const executorsOptions = executors?.map((item) => {
     return {
       value: item.id,
-      label: item.middleName,
+      label: `${item.middleName} ${item.firstName} ${item.lastName}`,
     };
   });
   const equipmentOptions = equipment[0]?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.factoryNumber}  `,
     };
   });
 
@@ -647,7 +647,7 @@ export const Calendar = ({
 
         <div className={styles.RowToolsBtns}>
           <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
-          <button onClick={setIsModalAddShift}>Создать рабочую смену</button>
+          {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
         </div>
 
 

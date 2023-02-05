@@ -330,6 +330,15 @@ function* loadCalendarequipment() {
 function* addShift({ payload }) {
   try {  
 
+    console.log({
+      "number": payload.shiftNumb,
+      "shiftStart": payload.shiftStart,
+      "shiftEnd": payload.shiftEnd,
+      "breakStart": payload.breakStart,
+      "breakEnd": payload.breakEnd,
+      "year": 2023,
+      "dayId": null
+    })
     const { data } = yield call(api.post, `/workingShift`, {
       "number": payload.shiftNumb,
       "shiftStart": payload.shiftStart,
@@ -339,7 +348,7 @@ function* addShift({ payload }) {
       "year": 2023,
       "dayId": null
     }); 
-    window.location.reload()
+    // window.location.reload()
     yield put(addShiftSuccess(data)); 
   } catch (error) {
     yield put(addShiftFailure(error));
@@ -410,6 +419,23 @@ function* addDay({ payload }) {
       // }); 
     }
     else {
+      console.log({
+        "monthNumber": payload.monthNumber,
+        "number": payload.number,
+        "isWorkingDay": true,
+        "year": payload.year,
+        "weldingEquipmentId": payload.valueEquipment,
+        "welderId": payload.valueExecutors,
+        "workingShifts": [
+          {
+            "number": payload.workingShifts.number,
+            "shiftStart": payload.workingShifts.shiftStart,
+            "shiftEnd": payload.workingShifts.shiftEnd,
+            "breakStart": payload.workingShifts.breakStart,
+            "breakEnd": payload.workingShifts.breakEnd
+          }
+        ]
+      })
       const { data } = yield call(api.post, `/day`, {
         "monthNumber": payload.monthNumber,
         "number": payload.number,
@@ -427,7 +453,7 @@ function* addDay({ payload }) {
           }
         ]
       });
-      window.location.reload()
+      // window.location.reload()
     }
     // yield put(addDaySuccess(data)); 
   } catch (error) {

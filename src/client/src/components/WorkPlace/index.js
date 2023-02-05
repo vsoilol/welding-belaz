@@ -38,9 +38,11 @@ const dateOptions = {
 
 export const WorkPlace = ({
   addFixedProduct,
-  // loadMasters,
-  // loadTechs,
+  loadMasters,
+  loadTechs,
+  loadExecutors,
   ///Workshop
+
   loadWorkshop,
   addWorkshop,
   editWorkshop,
@@ -94,7 +96,7 @@ export const WorkPlace = ({
   texprocwelding,
 
   executors,
-  // loadExecutors,
+
 
 
   detailbyinspector,
@@ -114,7 +116,7 @@ export const WorkPlace = ({
   const [valuetPosts, setValuetPosts] = useState();
   const [valuetWorkPlace, setValuetWorkPlace] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
-  const [valuetSeam, setValuetSeam] = useState();
+  const [valuetSeam, setValuetSeam] = useState([]);
   const [valueWorkplace, setValueWorkplace] = useState();
 
 
@@ -182,9 +184,9 @@ export const WorkPlace = ({
     loadDetail();
     loadSeam();
     loadTexprocwelding();
-    // loadMasters();
-    // loadTechs();
-    // loadExecutors();
+    loadMasters();
+    loadTechs();
+    loadExecutors();
 
 
   }, [
@@ -196,12 +198,12 @@ export const WorkPlace = ({
     loadKnot,
     loadDetail,
     loadTexprocwelding,
-    // loadMasters,
-    // loadTechs,
-    // loadExecutors,
+    loadMasters,
+    loadTechs,
+    loadExecutors,
 
   ]);
-
+ 
 
 
   //////////////////////////////////////////////////////////////////// 
@@ -218,7 +220,7 @@ export const WorkPlace = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e=>{GoTo(1,"Производственные участки",rowData.id)}}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
         },
       },
     ],
@@ -233,8 +235,16 @@ export const WorkPlace = ({
       },
       {
         title: "Перерейти к",
-        render: (rowData) => {
-          return <p className={styles.goOver} onClick={e=>{GoTo(2,"Посты",rowData.id)}}>Пост</p>;
+        render: (rowData) => { 
+
+          return(
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+            </div>
+          )
+
+          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
         },
       },
     ],
@@ -252,7 +262,7 @@ export const WorkPlace = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e=>{GoTo(9,"Рабочие места")}}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
         },
       },
     ],
@@ -309,9 +319,9 @@ export const WorkPlace = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e=>{GoTo(6,"Детали ",rowData.id)}}>Деталь</p>
-              <p className={styles.goOver} onClick={e=>{GoTo(5,"Узлы",rowData.id)}}>Узел </p>
-              <p className={styles.goOver} onClick={e=>{GoTo(7,"Сварные швы",rowData.id)}}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id) }}>Узел </p>
+              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id) }}>Сварной шов</p>
             </div>
           )
         },
@@ -356,9 +366,9 @@ export const WorkPlace = ({
         title: "Перерейти к",
         render: (rowData) => {
           return (
-            <div>  
-              <p className={styles.goOver} onClick={e=>{GoTo(8,"Детали",rowData.id)}}>Деталь</p>
-              <p className={styles.goOver} onClick={e=>{GoTo(7,"Сварные швы",rowData.id)}}>Сварной шов</p>
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id) }}>Сварной шов</p>
             </div>
           )
         },
@@ -404,8 +414,8 @@ export const WorkPlace = ({
         title: "Перерейти к",
         render: (rowData) => {
           return (
-            <div>   
-              <p className={styles.goOver} onClick={e=>{GoTo(7,"Сварные швы")}}>Сварной шов</p>
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы") }}>Сварной шов</p>
             </div>
           )
         },
@@ -474,6 +484,7 @@ export const WorkPlace = ({
     setvalueSeamId(id);
   }
 
+ 
 
 
   const requiredKeys = ["name", "nextInspectionDate"];
@@ -503,12 +514,12 @@ export const WorkPlace = ({
     if (value_workplace === 0) {
       setValue(newValue);
       setValue2(-1);
-      setValuegoTo(-1)
+      setValuegoTo(0)
     }
     else {
       setValue(-1);
       setValue2(newValue);
-      setValuegoTo(-1)
+      setValuegoTo(0)
     }
 
   };
@@ -586,6 +597,7 @@ export const WorkPlace = ({
     variables["technologicalProcessName"] = SetValue(valuetTechProc, 4)
 
     variables["workplaceId"] = valueWorkplace
+    variables["seams"] = [valuetSeam]
 
     //Добавить Цех 
     if (isModalNumb == 8) {
@@ -618,10 +630,22 @@ export const WorkPlace = ({
 
     //Добавить Рабочие места
     if (isModalNumb == 11) {
+      if (variables.postId.length<2) {
+         variables.postId=null
+      }
+      else{
+        variables.productionAreaId=null
+      } 
       addWorkplace(variables)
     }
     //Редактировать Рабочие места
     if (isModalNumb == 3) {
+      if (variables.postId.length<2) {
+        variables.postId=null
+      }
+      else{
+        variables.productionAreaId=null
+      } 
       editWorkplace(variables)
     }
 
@@ -801,6 +825,7 @@ export const WorkPlace = ({
   });
   ///Отображение Selects
   function DisplaySelects(select) {
+ 
     if (select.select === 0 || select.select === 8) {
       return (
         <div  ></div>
@@ -911,16 +936,27 @@ export const WorkPlace = ({
           </div>
 
 
-          <div className={styles.row}>
-            <Select
-              name="valuetTechProc"
-              width="380px"
-              value={valuetSeam}
-              placeholder="Сварочный шов"
-              onChange={(event) => setValuetSeam(event.value)}
-              options={SeamOptions}
-            />
-          </div>
+          {isModalNumb != 15
+            ? (
+              <div className={styles.row}>
+                <Select
+                  name="valuetTechProc"
+                  width="380px"
+                  value={valuetSeam}
+                  placeholder="Сварочный шов"
+                  onChange={(event) => setValuetSeam(event.value)}
+                  options={SeamOptions}
+                />
+              </div>
+            )
+            : (
+              <div className={styles.row}>
+
+              </div>
+            )
+
+          }
+
 
         </div>
       )
@@ -960,122 +996,152 @@ export const WorkPlace = ({
   }
 
 
-  function GoTo(param,title,id) { 
-     setValuegoToTitle(title) 
-     setValuegoTo(1)
-
-     
-     setValue(-1);
-     setValue2(-1);
-
-     setValuegoToHeadTable(columns[Object.keys(columns)[param]])  
-     if (param!=3&&param!=8&&param!=9) {
-        // columns[Object.keys(columns)[param]].pop()
-     } 
-     //Вывести Производственные участки для Цеха
-     if (param===1) {  
-        setValuegoToBodyTable(GetProductionArea(id))
-     }
-     if (param===2) {  
-        setValuegoToBodyTable(GetPost(id))
-     }
-     if (param===6) {   
-        console.log(GetDetailProd(id))
-        setValuegoToBodyTable(GetDetailProd(id))
-     }
-     if (param===5) {    
-        setValuegoToHeadTable(columns[Object.keys(columns)[5]])   
-        setValuegoToBodyTable([knot[0],knot[2]])
-    }
-
-     if (param===7) {  
-        console.log(GetSeam(id))
-        setValuegoToBodyTable(GetSeam(id))
-     }
+  function GoTo(param, title, id) {
+    setValuegoToTitle(title)
+    setValuegoTo(1)
 
 
-      if (param===8) {  
-          setValuegoToHeadTable(columns[Object.keys(columns)[6]])   
-          setValuegoToBodyTable([detail[0],detail[8]])
-      }
-      if (param===9) {   
-         setValuegoToHeadTable(columns[Object.keys(columns)[3]])   
-         setValuegoToBodyTable([workplace[0],workplace[8]])
-      }
-  
-  }
-
-
-  //Вывести Производственные участки для Цеха
-  function GetProductionArea(id) {
-      let areaNew = [] 
+    setValue(-1);
+    setValue2(-1);
+    setValuegoToHeadTable(columns[Object.keys(columns)[param]])
+    //Вывод Производственный участок для цеха
+    if (param === 1) {
+      let areaNew = []
       for (let index = 0; index < area.length; index++) {
-          if (area[index].workshop.id===id) {
-             areaNew.push(area[index])
-          } 
-      }
-      return areaNew
-  }
-  //Вывести Посты  для Производственные участки
-  function GetPost(id) {
-      let postsNew = [] 
-      for (let index = 0; index < posts.length; index++) {
-          if (posts[index].productionArea.id===id) {
-            postsNew.push(posts[index])
-          } 
-      }
-      return postsNew
-  }
-
-
-  function GetSeam(id) {
-      let seamNew = [] 
-      for (let index = 0; index < seam.length; index++) {
-          if (seam[index].productionArea.id===id) {
-            seamNew.push(seam[index])
-          } 
-      }
-      return seamNew
-  }
-
-
-
-
-   //Вывести Детали  для  Изделия
-    function GetDetailProd(id) { 
-      let detailNew = []   
-      for (let index = 0; index < product.length; index++) {
-          if (product[index].id===id) {
-
-            for (let index2 = 0; index2 < detail.length; index2++) {
-
-                for (let index3 = 0; index3 < product[index].insideProducts.length; index3++) {
-                    if (detail[index2].id===product[index].insideProducts[index3].id) {
-                       detailNew.push(detail[index2])
-                    }
-                } 
-              
-            } 
-            // detailNew.push(...product[index].insideProducts) 
-          } 
-      }
-      return detailNew
-    }
-    function GetDetailKnot(id) {  
-        let detailNew = []   
-        for (let index = 0; index < knot.length; index++) {
-            if (knot[index].id===id) { 
-              for (let index2 = 0; index2 < detail.length; index2++) { 
-                  for (let index3 = 0; index3 < knot[index].insideProducts.length; index3++) {
-                      if (detail[index2].id===knot[index].insideProducts[index3].id) {
-                        detailNew.push(detail[index2])
-                      }
-                  }  
-              }  
-            } 
+        if (area[index].workshop.id === id) {
+          areaNew.push(area[index])
         }
-        return detailNew
+      }
+      setValuegoToBodyTable(areaNew)
     }
+    //Вывод постов для Производственных участоков
+    if (param === 2) {
+      let postsNew = []
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].productionArea.id === id) {
+          postsNew.push(posts[index])
+        } 
+      }
+      setValuegoToBodyTable(postsNew)
+    } 
+    //Вывод Рабочее место для производственного участка 
+    if (param === 3) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].productionArea?.id === id) {
+          workplaceNew.push(workplace[index])
+        } 
+      }
+      setValuegoToBodyTable(workplaceNew)
+    } 
+    //Вывод Рабочее место для производственного участка 
+    if (param === 9) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].post?.id!=undefined) { 
+          if (workplace[index].post.id === id) {  
+             workplaceNew.push(workplace[index])
+          } 
+        } 
+      } 
+      setValuegoToBodyTable(workplaceNew) 
+      setValuegoToHeadTable(columns[Object.keys(columns)[3]])
+    } 
+    /////////////////
+    //Вывод деталей для изделий
+    if (param === 6) {
+      let detailNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id  ) {
+
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+             if (product[index].insideProducts[index2].productType === 3) { 
+                detailNew.push(product[index].insideProducts[index2])
+             } 
+          } 
+        }
+      }
+      setValuegoToBodyTable(detailNew) 
+    } 
+    //Вывод узлов для изделий
+    if (param === 5) {
+      let knotNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id  ) { 
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+             if (product[index].insideProducts[index2].productType === 2) { 
+                knotNew.push(product[index].insideProducts[index2])
+             } 
+          } 
+        }
+      }
+      setValuegoToBodyTable(knotNew) 
+    }
+    //Вывод швов для изделий
+    if (param === 7) {
+      let seamNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id  ) {  
+           seamNew = product[index].seams
+        }
+      }
+      setValuegoToBodyTable(seamNew) 
+    } 
+    /////////////////
+    //Вывод деталей для узла
+    if (param === 10) {
+      let detailNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id  ) {
+
+          for (let index2 = 0; index2 < knot[index].insideProducts.length; index2++) {
+             if (knot[index].insideProducts[index2].productType === 3) { 
+                detailNew.push(knot[index].insideProducts[index2])
+             } 
+          } 
+        }
+      } 
+      setValuegoToHeadTable(columns[Object.keys(columns)[6]])
+      setValuegoToBodyTable(detailNew) 
+    }
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id  ) {  
+           seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew) 
+    } 
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id  ) {  
+           seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew) 
+    } 
+     //Вывод швов для деталей
+    if (param === 12) {
+      let seamNew = []
+      for (let index = 0; index < detail.length; index++) {
+        if (detail[index].id === id  ) {  
+           seamNew = detail[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew) 
+    }  
+
+    
+
+  }
+
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -1530,6 +1596,21 @@ export const WorkPlace = ({
       </div>
 
 
+      {/*Закрепить*/}
+      {/* <TabPanel
+        value={value_panel}
+        indPanel={0}
+        style={{ minWidth: "800px" }}
+      >
+        <Table
+          title="Цеха"
+          columns={columns.workshops}
+          value={0}
+          data={workshop}
+          isLoading={isRequesting} 
+        />
+      </TabPanel> */}
+
 
 
       <ResultsModal
@@ -1675,419 +1756,6 @@ export const WorkPlace = ({
       </ModalWindow>
 
 
-
-
-      {/*Закрепить  изделие*/}
-      <ModalWindow
-        isOpen={isModalFixProduct}
-        headerText="Закрепить  изделие"
-        setIsOpen={(state) => {
-          setIsModalFixOpen(state);
-          setModalData(null);
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setIsModalFixOpen(false);
-            setModalData(null);
-            FixedProduct(variables, valueExecutors)
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <form onSubmit={handleSubmit}>
-              <div className={styles.row}>
-                <Select
-                  name="valueExecutors"
-                  width="380px"
-                  value={valueExecutors}
-                  placeholder="Сотрудники"
-                  onChange={(event) => setValueExecutors(event.value)}
-                  options={optExecutors}
-                />
-              </div>
-
-
-              {valueExecutors === 1
-                ? (
-                  <div className={styles.row}>
-                    <Select
-                      name="masterValue"
-                      width="380px"
-                      value={masterValue}
-                      placeholder="Мастера"
-                      onChange={(event) => setIsmasterValue(event.value)}
-                      options={formattedMasters}
-                    />
-                  </div>
-                )
-                : (
-                  <div className={styles.row}>
-                    <Select
-                      name="techsValue"
-                      width="380px"
-                      value={techsValue}
-                      placeholder="Контролеры"
-                      onChange={(event) => setIstechsValue(event.value)}
-                      options={formattedTechs}
-                    />
-                  </div>
-                )
-              }
-
-
-              <div className={styles.row}>
-                <Button
-                  disabled={
-                    values.workDay == ""
-                  }
-                  type="submit"
-                >
-                  {modalData ? "Закрепить" : "Закрепить"}
-                </Button>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
-      {/*Закрепить  узел*/}
-      <ModalWindow
-        isOpen={isModalFixKnot}
-        headerText="Закрепить  узел"
-        setIsOpen={(state) => {
-          setIsModalFixKnotOpen(state);
-          setModalData(null);
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setIsModalFixKnotOpen(false);
-            setModalData(null);
-            FixedProduct(variables, valueExecutors)
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <form onSubmit={handleSubmit}>
-
-              <div className={styles.row}>
-                <Select
-                  name="valueExecutors"
-                  width="380px"
-                  value={valueExecutors}
-                  placeholder="Сотрудники"
-                  onChange={(event) => setValueExecutors(event.value)}
-                  options={optExecutors}
-                />
-              </div>
-              {valueExecutors === 1 && valueExecutors != 0
-                ? (
-                  <div className={styles.row}>
-                    <Select
-                      name="masterValue"
-                      width="380px"
-                      value={masterValue}
-                      placeholder="Мастера"
-                      onChange={(event) => setIsmasterValue(event.value)}
-                      options={formattedMasters}
-                    />
-                  </div>
-                )
-                : (
-                  <div className={styles.row}>
-                    <Select
-                      name="techsValue"
-                      width="380px"
-                      value={techsValue}
-                      placeholder="Контролеры"
-                      onChange={(event) => setIstechsValue(event.value)}
-                      options={formattedTechs}
-                    />
-                  </div>
-                )
-              }
-
-
-              <div className={styles.row}>
-                <Button
-                  disabled={
-                    values.workDay == ""
-                  }
-                  type="submit"
-                >
-                  {modalData ? "Закрепить" : "Закрепить"}
-                </Button>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
-      {/*Закрепить  деталь*/}
-      <ModalWindow
-        isOpen={isModalFixDetail}
-        headerText="Закрепить  деталь"
-        setIsOpen={(state) => {
-          setIsModalFixDetailOpen(state);
-          setModalData(null);
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setIsModalFixDetailOpen(false);
-            setModalData(null);
-            FixedProduct(variables, valueExecutors)
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <form onSubmit={handleSubmit}>
-
-              <div className={styles.row}>
-                <Select
-                  name="valueExecutors"
-                  width="380px"
-                  value={valueExecutors}
-                  placeholder="Сотрудники"
-                  onChange={(event) => setValueExecutors(event.value)}
-                  options={optExecutors}
-                />
-              </div>
-              {valueExecutors === 1 && valueExecutors != 0
-                ? (
-                  <div className={styles.row}>
-                    <Select
-                      name="masterValue"
-                      width="380px"
-                      value={masterValue}
-                      placeholder="Мастера"
-                      onChange={(event) => setIsmasterValue(event.value)}
-                      options={formattedMasters}
-                    />
-                  </div>
-                )
-                : (
-                  <div className={styles.row}>
-                    <Select
-                      name="techsValue"
-                      width="380px"
-                      value={techsValue}
-                      placeholder="Контролеры"
-                      onChange={(event) => setIstechsValue(event.value)}
-                      options={formattedTechs}
-                    />
-                  </div>
-                )
-              }
-
-
-              <div className={styles.row}>
-                <Button
-                  disabled={
-                    values.workDay == ""
-                  }
-                  type="submit"
-                >
-                  {modalData ? "Закрепить" : "Закрепить"}
-                </Button>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
-      {/*Закрепить  швов*/}
-      <ModalWindow
-        isOpen={isModalFixSeam}
-        headerText="Закрепить  шов"
-        setIsOpen={(state) => {
-          setIsModalFixSeamOpen(state);
-          setModalData(null);
-
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setIsModalFixSeamOpen(false);
-            setModalData(null);
-            FixedProduct(variables, valueExecutors)
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <form onSubmit={handleSubmit}>
-
-              <div className={styles.row}>
-                <Select
-                  name="valueExecutors"
-                  width="380px"
-                  value={valueExecutors}
-                  placeholder="Сотрудники"
-                  onChange={(event) => setValueExecutors(event.value)}
-                  options={optWelders}
-                />
-              </div>
-              {valueExecutors === 1 && valueExecutors != 0
-                ? (
-                  <div className={styles.row}>
-                    <Select
-                      name="masterValue"
-                      width="380px"
-                      value={masterValue}
-                      placeholder="Сварщики"
-                      onChange={(event) => setIsmasterValue(event.value)}
-                      options={formattedWelder}
-                    />
-                  </div>
-                )
-                : (
-                  <div className={styles.row}>
-                    <Select
-                      name="techsValue"
-                      width="380px"
-                      value={techsValue}
-                      placeholder="Контролеры"
-                      onChange={(event) => setIstechsValue(event.value)}
-                      options={formattedTechs}
-                    />
-                  </div>
-                )
-              }
-
-
-              <div className={styles.row}>
-                <Button
-                  disabled={
-                    values.workDay == ""
-                  }
-                  type="submit"
-                >
-                  {modalData ? "Закрепить" : "Закрепить"}
-                </Button>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
-
-
-
-      {/*Показать Закрепленые изделия*/}
-      <ModalWindow
-        isOpen={isModalDisplayFix}
-        headerText="Закрепленные детали"
-        setIsOpen={(state) => {
-          setIsModalDisplayFix(state);
-          setModalData(null);
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setIsModalDisplayFix(false);
-            setModalData(null);
-
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <div>
-              <div className={styles.row}>
-                <Select
-                  name="valueExecutors"
-                  width="380px"
-                  value={valueExecutors}
-                  placeholder="Сотрудники"
-                  onChange={(event) => setValueExecutors(event.value)}
-                  options={optExecutors}
-                />
-              </div>
-
-
-              {valueExecutors === 1
-                ? (
-                  <div className={styles.row}>
-                    <Select
-                      name="masterValue"
-                      width="380px"
-                      value={masterValue}
-                      placeholder="Мастера"
-                      onChange={(event) => setIsmasterValue(event.value)}
-                      options={formattedMasters}
-                    />
-                  </div>
-                )
-                : (
-                  <div className={styles.row}>
-                    <Select
-                      name="techsValue"
-                      width="380px"
-                      value={techsValue}
-                      placeholder="Контролеры"
-                      onChange={(event) => setIstechsValue(event.value)}
-                      options={formattedTechs}
-                    />
-                  </div>
-                )
-              }
-
-              <div className={styles.row}>
-                <Button
-                  type="submit"
-                  disabled={
-                    masterValue == "" && techsValue == ""
-                  }
-                  onClick={displayFixedProd}
-                >
-                  {modalData ? "Показать " : "Показать"}
-                </Button>
-              </div>
-            </div>
-          )}
-        </Formik>
-      </ModalWindow>
       {/* <div className={styles.row}>
         <Input
           onChange={(e) => {
