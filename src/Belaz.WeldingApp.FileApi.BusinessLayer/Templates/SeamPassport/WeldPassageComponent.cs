@@ -275,77 +275,77 @@ public class WeldPassageComponent : IComponent
                     WeldPassageInstructionInfo.WeldingCurrentMax,
                     WeldPassageInstructionInfo.ArcVoltageMin,
                     WeldPassageInstructionInfo.ArcVoltageMax);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text("Сварочный ток, А")
                     .Style(Typography.Normal);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(currencyParameterResult.Min.ToString(CultureInfo.InvariantCulture))
                     .Style(Typography.Italic);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(currencyParameterResult.Max.ToString(CultureInfo.InvariantCulture))
                     .Style(Typography.Italic);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(currencyParameterResult.Average.ToString(CultureInfo.InvariantCulture))
                     .Style(Typography.ItalicBold);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(currencyParameterResult.EnsuringAccess)
                     .Style(GetEnsuringAccessTextStyle(currencyParameterResult.EnsuringAccess));
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text("Напряжение на дуге, В")
                     .Style(Typography.Normal);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(voltageParameterResult.Min.ToString(CultureInfo.InvariantCulture))
                     .Style(Typography.Italic);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(voltageParameterResult.Max.ToString(CultureInfo.InvariantCulture))
                     .Style(Typography.Italic);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(voltageParameterResult.Average.ToString(CultureInfo.InvariantCulture))
                     .Style(Typography.ItalicBold);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(voltageParameterResult.EnsuringAccess)
                     .Style(GetEnsuringAccessTextStyle(voltageParameterResult.EnsuringAccess));
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text("Оценка")
                     .Style(Typography.Bold);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text("-")
                     .Style(Typography.Normal);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text("-")
                     .Style(Typography.Normal);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text(DocumentExtensions.CheckValueForNull(estimation))
                     .Style(Typography.ItalicBold);
-                
+
                 table.Cell()
                     .Element(BlockLeft)
                     .Text("-")
@@ -450,7 +450,6 @@ public class WeldPassageComponent : IComponent
             Maximum = values.Max() + 10,
             MajorStep = leftAxesStep,
             FontSize = 14,
-            
         });
 
         var startTime = times.First();
@@ -497,7 +496,6 @@ public class WeldPassageComponent : IComponent
             Width = 1300,
             Height = 700,
             Dpi = 150,
-            UseTextShaping = true
         };
 
         exporterPng.Export(model, stream);
