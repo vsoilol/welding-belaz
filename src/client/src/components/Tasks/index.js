@@ -151,9 +151,9 @@ export const Tasks = ({
       render: (rowData) => {
         return (
           <p>{`
-            ${rowData?.master?.middleName} 
-            ${rowData?.master?.firstName} 
-            ${rowData?.master?.lastName}
+            ${rowData?.masters?.middleName} 
+            ${rowData?.masters?.firstName} 
+            ${rowData?.masters?.lastName}
             `} 
           </p>
         );
