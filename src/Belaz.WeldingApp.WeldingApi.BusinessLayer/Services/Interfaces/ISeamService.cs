@@ -25,6 +25,10 @@ public interface ISeamService
     Task<Result<Unit>> AssignSeamToWelderAsync(AssignSeamToWelderRequest request);
 
     Task<Result<Unit>> AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request);
+    
+    Task<Result<Unit>> AssignSeamsToWelderAsync(AssignSeamsToWelderRequest request);
+    
+    Task<Result<Unit>> AssignSeamsToInspectorAsync(AssignSeamsToInspectorRequest request);
 
     Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync();
 

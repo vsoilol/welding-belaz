@@ -22,7 +22,11 @@ public interface ISeamRepository
     
     Task AssignSeamToWelderAsync(Guid seamId, Guid welderId);
     
+    Task AssignSeamsToWelderAsync(List<Guid> seamIds, Guid welderId);
+    
     Task AssignSeamToInspectorAsync(Guid seamId, Guid inspectorId);
+    
+    Task AssignSeamsToInspectorAsync(List<Guid> seamIds, Guid inspectorId);
     
     Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync();
     

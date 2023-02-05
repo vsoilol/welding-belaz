@@ -90,12 +90,36 @@ public class SeamRepository : ISeamRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task AssignSeamsToWelderAsync(List<Guid> seamIds, Guid welderId)
+    {
+        var welder = (await _context.Welders.FirstOrDefaultAsync(_ => _.Id == welderId))!;
+        var seams = await _context.Seams
+            .Where(_ => seamIds.Any(seamId => seamId == _.Id) || _.WelderId == welder.Id)
+            .ToListAsync();
+
+        welder.Seams = seams;
+        
+        await _context.SaveChangesAsync();
+    }
+
     public async Task AssignSeamToInspectorAsync(Guid seamId, Guid inspectorId)
     {
         var seam = (await _context.Seams.FirstOrDefaultAsync(_ => _.Id == seamId))!;
 
         seam.InspectorId = inspectorId;
 
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AssignSeamsToInspectorAsync(List<Guid> seamIds, Guid inspectorId)
+    {
+        var inspector = (await _context.Inspectors.FirstOrDefaultAsync(_ => _.Id == inspectorId))!;
+        var seams = await _context.Seams
+            .Where(_ => seamIds.Any(seamId => seamId == _.Id) || _.InspectorId == inspector.Id)
+            .ToListAsync();
+
+        inspector.Seams = seams;
+        
         await _context.SaveChangesAsync();
     }
 
@@ -143,7 +167,7 @@ public class SeamRepository : ISeamRepository
 
         updatedSeam.Status = status;
         updatedSeam.IsAddManually = isAddManually;
-        
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(id);

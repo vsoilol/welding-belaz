@@ -105,6 +105,28 @@ public class SeamService : ISeamService
         });
     }
 
+    public async Task<Result<Unit>> AssignSeamsToWelderAsync(AssignSeamsToWelderRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _seamRepository.AssignSeamsToWelderAsync(request.SeamIds, request.WelderId);
+            return Unit.Default;
+        });
+    }
+
+    public async Task<Result<Unit>> AssignSeamsToInspectorAsync(AssignSeamsToInspectorRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _seamRepository.AssignSeamsToInspectorAsync(request.SeamIds, request.InspectorId);
+            return Unit.Default;
+        });
+    }
+
     public Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync()
     {
         return _seamRepository.GetAllDefectiveSeamsAsync();

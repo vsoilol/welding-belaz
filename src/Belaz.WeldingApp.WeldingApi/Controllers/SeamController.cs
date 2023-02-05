@@ -83,17 +83,32 @@ public class SeamController : ControllerBase
         return result.ToOk();
     }
 
+    /*
     [HttpPut("assignWelder")]
     public async Task<ActionResult<Unit>> AssignSeamToWelderAsync([FromBody] AssignSeamToWelderRequest request)
     {
         var result = await _seamService.AssignSeamToWelderAsync(request);
         return result.ToOk();
+    }*/
+    
+    [HttpPut("assignWelder")]
+    public async Task<ActionResult<Unit>> AssignSeamsToWelderAsync([FromBody] AssignSeamsToWelderRequest request)
+    {
+        var result = await _seamService.AssignSeamsToWelderAsync(request);
+        return result.ToOk();
     }
 
-    [HttpPut("assignInspector")]
+    /*[HttpPut("assignInspector")]
     public async Task<ActionResult<Unit>> AssignSeamToInspectorAsync([FromBody] AssignSeamToInspectorRequest request)
     {
         var result = await _seamService.AssignSeamToInspectorAsync(request);
+        return result.ToOk();
+    }*/
+    
+    [HttpPut("assignInspector")]
+    public async Task<ActionResult<Unit>> AssignSeamsToInspectorAsync([FromBody] AssignSeamsToInspectorRequest request)
+    {
+        var result = await _seamService.AssignSeamsToInspectorAsync(request);
         return result.ToOk();
     }
 
