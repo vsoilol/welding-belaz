@@ -137,9 +137,9 @@ export const Tasks = ({
       render: (rowData) => {
         return (
           <p>{`
-            ${rowData.welder.middleName} 
-            ${rowData.welder.firstName} 
-            ${rowData.welder.lastName}
+            ${rowData?.welder?.middleName} 
+            ${rowData?.welder?.firstName} 
+            ${rowData?.welder?.lastName}
             `} 
           </p>
         );
@@ -151,9 +151,9 @@ export const Tasks = ({
       render: (rowData) => {
         return (
           <p>{`
-            ${rowData.master.middleName} 
-            ${rowData.master.firstName} 
-            ${rowData.master.lastName}
+            ${rowData?.master?.middleName} 
+            ${rowData?.master?.firstName} 
+            ${rowData?.master?.lastName}
             `} 
           </p>
         );
@@ -165,9 +165,9 @@ export const Tasks = ({
       render: (rowData) => {
         return (
           <p>{`
-            ${rowData.inspector.middleName} 
-            ${rowData.inspector.firstName} 
-            ${rowData.inspector.lastName}
+            ${rowData?.inspector?.middleName} 
+            ${rowData?.inspector?.firstName} 
+            ${rowData?.inspector?.lastName}
             `} 
           </p>
         );
