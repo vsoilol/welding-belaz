@@ -116,12 +116,36 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task AssignProductsToMasterAsync(List<Guid> productIds, Guid masterId)
+    {
+        var master = (await _context.Masters.FirstOrDefaultAsync(_ => _.Id == masterId))!;
+        var products = await _context.Products
+            .Where(_ => productIds.Any(productId => productId == _.Id) || _.MasterId == master.Id)
+            .ToListAsync();
+
+        master.Products = products;
+        
+        await _context.SaveChangesAsync();
+    }
+
     public async Task AssignProductToInspectorAsync(Guid productId, Guid inspectorId)
     {
         var product = (await _context.Products.FirstOrDefaultAsync(_ => _.Id == productId))!;
 
         product.InspectorId = inspectorId;
 
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AssignProductsToInspectorAsync(List<Guid> productIds, Guid inspectorId)
+    {
+        var inspector = (await _context.Inspectors.FirstOrDefaultAsync(_ => _.Id == inspectorId))!;
+        var products = await _context.Products
+            .Where(_ => productIds.Any(productId => productId == _.Id) || _.InspectorId == inspector.Id)
+            .ToListAsync();
+
+        inspector.Products = products;
+        
         await _context.SaveChangesAsync();
     }
 

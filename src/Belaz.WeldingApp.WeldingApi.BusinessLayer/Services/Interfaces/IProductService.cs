@@ -25,6 +25,10 @@ public interface IProductService
 
     Task<Result<Unit>> AssignProductToInspectorAsync(AssignProductToInspectorRequest request);
     
+    Task<Result<Unit>> AssignProductsToMasterAsync(AssignProductsToMasterRequest request);
+
+    Task<Result<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request);
+    
     Task<Result<ProductDto>> ChangeStatusAsync(ChangeProductStatusRequest request);
 
 }

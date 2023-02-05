@@ -23,6 +23,10 @@ public interface IProductRepository
     Task<ProductDto> UpdateAsync(Product entity, IReadOnlyList<Guid>? seamIds, IReadOnlyList<Guid>? insideProductIds);
 
     Task AssignProductToMasterAsync(Guid productId, Guid masterId);
+    
+    Task AssignProductsToMasterAsync(List<Guid> productIds, Guid masterId);
 
     Task AssignProductToInspectorAsync(Guid productId, Guid inspectorId);
+    
+    Task AssignProductsToInspectorAsync(List<Guid> productIds, Guid inspectorId);
 }

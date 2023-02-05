@@ -61,7 +61,7 @@ public class ProductService : IProductService
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(() =>
-            _productRepository.GetAllByMasterIdAsync(request.InspectorId, request.Type));
+            _productRepository.GetAllByInspectorIdAsync(request.InspectorId, request.Type));
     }
 
     public async Task<Result<ProductDto>> CreateAsync(CreateProductRequest request)
@@ -112,6 +112,28 @@ public class ProductService : IProductService
         return await validationResult.ToDataResult(async () =>
         {
             await _productRepository.AssignProductToInspectorAsync(request.ProductId, request.InspectorId);
+            return Unit.Default;
+        });
+    }
+
+    public async Task<Result<Unit>> AssignProductsToMasterAsync(AssignProductsToMasterRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _productRepository.AssignProductsToMasterAsync(request.ProductIds, request.MasterId);
+            return Unit.Default;
+        });
+    }
+
+    public async Task<Result<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _productRepository.AssignProductsToInspectorAsync(request.ProductIds, request.InspectorId);
             return Unit.Default;
         });
     }

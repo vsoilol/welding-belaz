@@ -113,7 +113,7 @@ public abstract class CommonProductController : ControllerBase
         return result.ToOk();
     }
 
-    [HttpPut("assignInspector")]
+    /*[HttpPut("assignInspector")]
     public async Task<ActionResult<Unit>> AssignProductToInspectorAsync(
         [FromBody] AssignProductToInspectorRequest request)
     {
@@ -125,6 +125,21 @@ public abstract class CommonProductController : ControllerBase
     public async Task<ActionResult<Unit>> AssignProductToMasterAsync([FromBody] AssignProductToMasterRequest request)
     {
         var result = await _productService.AssignProductToMasterAsync(request);
+        return result.ToOk();
+    }*/
+    
+    [HttpPut("assignInspector")]
+    public async Task<ActionResult<Unit>> AssignProductsToInspectorAsync(
+        [FromBody] AssignProductsToInspectorRequest request)
+    {
+        var result = await _productService.AssignProductsToInspectorAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("assignMaster")]
+    public async Task<ActionResult<Unit>> AssignProductsToMasterAsync([FromBody] AssignProductsToMasterRequest request)
+    {
+        var result = await _productService.AssignProductsToMasterAsync(request);
         return result.ToOk();
     }
 
