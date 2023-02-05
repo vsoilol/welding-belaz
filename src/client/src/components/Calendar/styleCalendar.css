@@ -1,0 +1,218 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.calendar-wrapper {
+    width: calc(100% - 120px);
+    margin: 30px auto 50px auto;
+    padding: 2em;
+    border: 1px solid #7f7f7f;
+    border-radius: 5px;
+    background: #fff;
+}
+.calendar-wrapper  h2{
+    margin-bottom: 50px;
+}
+.calendar-wrapper table {
+    clear: both;
+    width: 100%;
+    border: 1px solid #7f7f7f;
+    border-radius: 3px;
+    border-collapse: collapse;
+    color: #444;
+}
+
+.calendar-wrapper td {
+    height: 90px;
+    text-align: center;
+    vertical-align: middle;
+    border-right: 1px solid #7f7f7f;
+    border-top: 1px solid #7f7f7f;
+    width: 14.28571429%;
+    font-size: 20px;
+}
+
+.calendar-wrapper thead td {
+    border: none;
+    color: #28283b;
+    text-transform: uppercase;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.calendar-wrapper td.not-current {
+    color: #c0c0c0;
+}
+
+.calendar-wrapper td.today {
+    font-weight: 700;
+    color: yellow;
+    font-size: 23px;
+    background-color: rgb(63, 81, 181 , 0.35);
+    
+} 
+
+.calendar-wrapper #btnPrev {
+    float: left;
+    margin-bottom: 20px;
+}
+
+.calendar-wrapper #btnPrev:before {
+    content: ' '; 
+    padding-right: 4px;
+}
+
+.calendar-wrapper #btnNext {
+    float: right;
+    margin-bottom: 20px;
+}
+
+.calendar-wrapper #btnNext:after {
+    content: ' '; 
+    padding-left: 4px;
+}
+
+.calendar-wrapper #btnPrev,
+.calendar-wrapper #btnNext {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    color: #878787;
+    cursor: pointer;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.calendar-wrapper #btnPrev:hover,
+.calendar-wrapper #btnNext:hover {
+    color: black; 
+}
+
+
+.calendar-wrapper #divCal tr:not(.days) td:nth-child(n+6) {
+    color: red;
+}
+
+#divCal table td {
+    position: relative;
+}
+#divCal table td span{  
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-weight: 500;
+}
+
+.calendar-wrapper #divCal table td .imgSmena{
+    width: 45px;
+    position: absolute;
+    left: 20px;
+    top: calc(50% - 13px);
+    display: none;
+}
+.calendar-wrapper #divCal table td .vkladka{
+    width: 350px;
+    position: absolute;
+    left: calc(50% - 175px);
+    bottom: -145px;
+    display: block;
+    background: white;
+    padding: 10px 10px;
+    height: 130px;
+    border-radius: 10px;
+    display: none;
+    z-index: 10;
+    /* border: 1px solid #919191; */
+    box-shadow: 0px 3px 1px -4px rgb(0 0 0 / 48%), 0px 2px 2px 0px rgb(0 0 0 / 38%), 0px 1px 20px 0px rgb(0 0 0 / 43%);
+}
+.calendar-wrapper #divCal table td .vkladka .events{
+    overflow-y: scroll;
+    height: 130px;
+}
+
+.calendar-wrapper #divCal table td .vkladka .events::-webkit-scrollbar {
+    width: 0;
+}
+
+.calendar-wrapper #divCal table td .vkladka .events::-webkit-scrollbar {
+    width: 0;
+}
+
+.calendar-wrapper #divCal table td .vkladka .events::-webkit-scrollbar {
+    width: 2px;
+}
+
+.calendar-wrapper #divCal table td .vkladka .events::-webkit-scrollbar-track {
+    background: rgba(50, 50, 50, 0.2);
+}
+
+.calendar-wrapper #divCal table td .vkladka .events::-webkit-scrollbar-thumb {
+    background: rgba(50, 50, 50);
+}
+
+
+.calendar-wrapper #divCal table td.Smena {
+    cursor: pointer;
+}
+.calendar-wrapper #divCal table td.Smena .imgSmena {
+    display: block; 
+}
+
+.calendar-wrapper #divCal table td  .imgEdit{
+    width: 25px;
+    position: absolute;
+    right: 20px;
+    top: calc(50% - -5px);
+    display: none;
+}
+.calendar-wrapper #divCal table td.Smena .imgEdit{ 
+    display: block;
+}
+
+.calendar-wrapper #divCal table td.Smena:hover  .vkladka{
+    display: block;
+}
+#divCal table td.smena:not(.today){
+    cursor: pointer;
+}
+#divCal table td.smena:not(.today):hover{
+    box-shadow: 2px 2px 0 #febc59 inset, -2px -2px 0 #febc59 inset;
+}
+
+.calendar-wrapper .days td{
+    height: 45px;
+    font-weight: bold;
+    border: 1px solid black;
+    background-color: whitesmoke;
+}
+
+.calendar-wrapper .days td:nth-child(n+6) {
+    color: red;
+}
+.calendar-wrapper table thead td{
+    height: 55px;
+    background: whitesmoke;
+}
+ 
+
+
+.calendar-wrapper #divCal table td .row{
+    margin-bottom: 10px;
+    color: black !important;
+    font-weight: 400;
+}
+
+.calendar-wrapper #divCal table td .row abbr{
+    position: static;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+
+span.obj{
+    display: block;
+}

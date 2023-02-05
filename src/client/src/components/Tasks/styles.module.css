@@ -1,0 +1,83 @@
+.tableWrapper {
+  margin-top: 80px;
+  width: 90%;
+}
+
+p {
+  text-align: left;
+}
+
+.bold {
+  font-family: "Muller Extra Bold";
+}
+
+.innerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px;
+}
+
+.row:first-child {
+  margin-top: 30px;
+}
+
+.row:last-child {
+  margin-bottom: 30px;
+}
+
+.downloadButton {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+
+.downloadButton:hover {
+  opacity: 0.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}  
+.button {
+  cursor: pointer;
+  display: block;
+  font-family: "Muller Extra Bold";
+  margin: 16px 40px 0 auto;
+  height: 36px;
+  width: 240px;
+  background-color: transparent;
+  border: 2px solid gray;
+}
+
+.button:hover {
+  text-decoration: underline;
+}
+
+.column {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+@media (max-width: 1440px) {
+  .tableWrapper {
+    margin-top: 40px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .tableWrapper {
+    margin-top: 0;
+  }
+}
