@@ -25,6 +25,19 @@
           }
         }
       ]
+    },
+    {
+      "Key": "file",
+      "Config": [
+        {
+          "Name": "File API",
+          "Version": "v1",
+          "Service": {
+            "Name": "file",
+            "Path": "/api/swagger/v1/swagger.json"
+          }
+        }
+      ]
     }
   ]
 }
