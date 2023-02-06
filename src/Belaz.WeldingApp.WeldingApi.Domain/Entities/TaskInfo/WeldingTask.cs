@@ -45,12 +45,11 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo
 
         public Guid SeamId { get; set; }
 
-        [ForeignKey(nameof(SeamId))] 
-        public Seam Seam { get; set; } = null!;
+        [ForeignKey(nameof(SeamId))] public Seam Seam { get; set; } = null!;
 
         public Guid? WeldingEquipmentId { get; set; }
-        
-        [ForeignKey(nameof(WeldingEquipmentId))] 
+
+        [ForeignKey(nameof(WeldingEquipmentId))]
         public WeldingEquipment? WeldingEquipment { get; set; }
     }
 }
