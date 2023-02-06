@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
+using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,5 +52,28 @@ public class WeldingTaskController : ControllerBase
     public async Task<ActionResult<IEnumerable<WeldingTaskDto>>> GetAllCompletedTaskAsync()
     {
         return await _weldingTaskService.GetAllCompletedTaskAsync();
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<WeldingTaskDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<WeldingTaskDto>>> GetAllAsync()
+    {
+        return await _weldingTaskService.GetAllAsync();
+    }
+    
+    [HttpPost]
+    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingTaskDto>> CreateAsync([FromBody] CreateWeldingTaskRequest request)
+    {
+        var result = await _weldingTaskService.CreateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut]
+    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingTaskDto>> UpdateAsync([FromBody] UpdateWeldingTaskRequest request)
+    {
+        var result = await _weldingTaskService.UpdateAsync(request);
+        return result.ToOk();
     }
 }

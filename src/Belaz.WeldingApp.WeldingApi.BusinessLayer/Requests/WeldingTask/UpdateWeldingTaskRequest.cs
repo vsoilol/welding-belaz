@@ -1,19 +1,20 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
+namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
 
-public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
+public class UpdateWeldingTaskRequest : IMapTo<Domain.Entities.TaskInfo.WeldingTask>
 {
     public Guid Id { get; set; }
     
     public int Number { get; set; }
 
-    public string? WeldingDate { get; set; }
-    
+    /// <summary>
+    /// Дата выполнения сварки
+    /// </summary>
+    public string WeldingDate { get; set; } = null!;
+
     /// <summary>
     /// Основной материал
     /// </summary>
@@ -44,18 +45,13 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
 
-    public ProductStatus Status { get; set; }
+    public Guid SeamId { get; set; }
 
-    public SeamBriefDto Seam { get; set; } = null!;
-    
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
-            .ForMember(dto => dto.Status,
-                opt => opt
-                    .MapFrom(x => x.Seam.Status))
+        profile.CreateMap<UpdateWeldingTaskRequest, Domain.Entities.TaskInfo.WeldingTask>()
             .ForMember(dto => dto.WeldingDate,
                 opt => opt
-                    .MapFrom(x => x.WeldingDate.ToDayInfoString()));
+                    .MapFrom(x => x.WeldingDate.ToDateTime()));
     }
 }
