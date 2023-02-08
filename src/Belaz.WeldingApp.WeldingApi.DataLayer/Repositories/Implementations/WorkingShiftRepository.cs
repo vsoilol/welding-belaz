@@ -34,8 +34,28 @@ public class WorkingShiftRepository : IWorkingShiftRepository
         return await GetByIdAsync(entity.Id);
     }
 
-    public async Task<WorkingShiftDto> CreateAsync(WorkingShift entity)
+    public async Task<WorkingShiftDto> CreateAsync(WorkingShift entity, int? year)
     {
+        if (year is not null)
+        {
+            var calendar = await _context.Calendars
+                .Where(_ => _.Year == year)
+                .FirstOrDefaultAsync();
+        
+            if (calendar is null)
+            {
+                var newCalendar = new Calendar
+                {
+                    Year = (int)year,
+                    IsMain = true
+                };
+
+                calendar = _context.Calendars.Add(newCalendar).Entity;
+            }
+
+            entity.CalendarId = calendar.Id;
+        }
+
         var newWorkingShift = _context.WorkingShifts.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
