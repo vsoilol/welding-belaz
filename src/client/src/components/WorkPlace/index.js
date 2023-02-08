@@ -123,28 +123,28 @@ export const WorkPlace = ({
   useEffect(() => {
     loadWorkshop();
     loadArea();
-    // loadPosts();
-    // loadWorkplace();
-    // loadProduct();
-    // loadKnot();
-    // loadDetail();
-    // loadSeam();
-    // loadTexprocwelding();
-    // loadMasters();
-    // loadTechs();
-    // loadExecutors();
+    loadPosts();
+    loadWorkplace();
+    loadProduct();
+    loadKnot();
+    loadDetail();
+    loadSeam();
+    loadTexprocwelding();
+    loadMasters();
+    loadTechs();
+    loadExecutors();
   }, [
     loadWorkshop,
     loadArea,
-    // loadPosts,
-    // loadWorkplace,
-    // loadProduct,
-    // loadKnot,
-    // loadDetail,
-    // loadTexprocwelding,
-    // loadMasters,
-    // loadTechs,
-    // loadExecutors,
+    loadPosts,
+    loadWorkplace,
+    loadProduct,
+    loadKnot,
+    loadDetail,
+    loadTexprocwelding,
+    loadMasters,
+    loadTechs,
+    loadExecutors,
   ]);
 
   const ChangePanelsworkplace = (event, newValue) => {
