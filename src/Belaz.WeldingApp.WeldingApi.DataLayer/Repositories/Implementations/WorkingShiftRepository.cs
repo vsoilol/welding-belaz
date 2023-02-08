@@ -39,7 +39,7 @@ public class WorkingShiftRepository : IWorkingShiftRepository
         if (year is not null)
         {
             var calendar = await _context.Calendars
-                .Where(_ => _.Year == year)
+                .Where(_ => _.Year == year && _.IsMain)
                 .FirstOrDefaultAsync();
         
             if (calendar is null)
