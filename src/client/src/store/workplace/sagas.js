@@ -535,18 +535,7 @@ function* editSeam(variables) {
     yield put(editSeamFailure(error));
     yield put(setError(error.message));
   }
-}
-///Технологические процессы 
-// function* loadTexprocwelding() {
-//   try {
-//     const { data } = yield call(api.get, `/TechnologicalProcess`);
-//     yield put(loadTexprocweldingSuccess(data));
-//   } catch (error) {
-//     yield put(loadTexprocweldingFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
- 
+} 
 
 
 export function* workplaceSaga() {
@@ -583,8 +572,7 @@ export function* workplaceSaga() {
   yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
   yield takeLatest(ADD_SEAM_REQUEST, addSeam);
   yield takeLatest(EDIT_SEAM_REQUEST, editSeam)
-  ///Технологические процессы 
-  // yield takeLatest(LOAD_TEXPROCWELDING_REQUEST, loadTexprocwelding);
+  ///Технологические процессы  
   yield takeLatest(LOAD_DETAILBYINSPECTOR_REQUEST, getDetailByInspector);
 }
 

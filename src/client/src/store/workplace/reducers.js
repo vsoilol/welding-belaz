@@ -31,9 +31,7 @@ const addWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
     workshop: [...state.workshop, workshop],
   };
 };
-const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
-
-
+const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => { 
   return {
     ...state,
     isRequesting: false,
