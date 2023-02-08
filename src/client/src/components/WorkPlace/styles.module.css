@@ -2,7 +2,8 @@
 
 
 .tableWrapper {
-  margin-top: 80px; 
+  margin-top: 80px;  
+  width: calc(100vw - 100px);
 }
 
 .innerWrapper {

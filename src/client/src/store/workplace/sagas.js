@@ -383,7 +383,7 @@ function* addKnot(variables) {
     if (variables.payload.valEx === undefined) {
       const { data } = yield call(api.post, `/knot`, {
         "name": variables.payload.name,
-        "number": Number(variables.payload.number),
+        "number": variables.payload.number,
         "isControlSubject": false,
         "productionAreaId": variables.payload.productionAreaId,
         "workplaceId": variables.payload.workplaceId,
@@ -403,7 +403,7 @@ function* editKnot(variables) {
     const { data } = yield call(api.put, `/knot`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": Number(variables.payload.number),
+      "number": variables.payload.number,
       "isControlSubject": false,
       "productionAreaId": variables.payload.productionAreaId,
       "technologicalProcessId": variables.payload.technologicalProcessId,

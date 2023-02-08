@@ -35,6 +35,13 @@ import { Posts } from "components/WorkPlace/components";
 import { Place } from "components/WorkPlace/components";
 
 
+import { Product } from "components/WorkPlace/components";
+import { Knot } from "components/WorkPlace/components";
+import { Detail } from "components/WorkPlace/components";
+import { Seam } from "components/WorkPlace/components";
+
+
+
 
 
 const dateOptions = {
@@ -172,9 +179,7 @@ export const WorkPlace = ({
     let secondPanel = value_panel
     if (primaryPanel == 1) {
       secondPanel = value_panel2
-    }
-
-    console.log(primaryPanel, secondPanel)
+    } 
 
 
     if (primaryPanel === 0 && secondPanel === 0) { 
@@ -235,6 +240,81 @@ export const WorkPlace = ({
         />
       )
     }
+
+
+    else if (primaryPanel === 1 && secondPanel === 0) {
+      return (
+        <Product   
+          product={product}
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          seam={seam}
+          texprocwelding={texprocwelding}
+          value_panel={value_panel}
+          value_panel2={value_panel2}
+          userRole={userRole}
+          
+          addProduct={addProduct}
+          editProduct={editProduct}
+        />
+      )
+    }
+    else if (primaryPanel === 1 && secondPanel === 1) {
+      return (
+        <Knot
+          knot={knot}
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          seam={seam}
+          texprocwelding={texprocwelding}
+          value_panel={value_panel}
+          value_panel2={value_panel2}
+          userRole={userRole}
+          
+          addKnot={addKnot}
+          editKnot={editKnot}
+        />
+      )
+    }
+    else if (primaryPanel === 1 && secondPanel === 2) {
+      return (
+        <Detail
+          detail={detail}
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          seam={seam}
+          texprocwelding={texprocwelding}
+          value_panel={value_panel}
+          value_panel2={value_panel2}
+          userRole={userRole}
+          
+          addDetail={addDetail}
+          editDetail={editDetail}
+        />
+      )
+    }
+    else if (primaryPanel === 1 && secondPanel === 3) {
+      return (
+        <Seam 
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          seam={seam}
+          texprocwelding={texprocwelding}
+          value_panel={value_panel}
+          value_panel2={value_panel2}
+          userRole={userRole}
+          
+          addSeam={addSeam}
+          editSeam={editSeam}
+        />
+      )
+    }
+
+    
     else {
       return (
         <div></div>
