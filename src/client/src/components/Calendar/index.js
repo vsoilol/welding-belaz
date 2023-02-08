@@ -647,7 +647,7 @@ export const Calendar = ({
 
         <div className={styles.RowToolsBtns}>
           <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
-          {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
+          <button onClick={setIsModalAddShift}>Создать рабочую смену</button>
         </div>
 
 

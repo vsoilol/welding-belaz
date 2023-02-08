@@ -37,27 +37,30 @@ const dateOptions = {
 };
 
 
-export const Workshop = ({
-  workshop,
+export const Place = ({
   area,
-  userRole,
-
-
+  posts,
+  workplace,
   value_panel,
   value_panel2,
-
-  addWorkshop,
-  editWorkshop
+  userRole,
+  addWorkplace,
+  editWorkplace,
 }) => {
 
   const [modalData, setModalData] = useState(null);
   const [isModalNumb, setIsModalNumb] = useState(0);
   const [value_goToTitle, setValuegoToTitle] = useState("");
 
-  const [value_goToBodyTable, setValuegoToBodyTable] = useState(workshop);
+  const [valueProdArea, setValueProdArea] = useState();
+  const [valuetTechProc, setValuetTechProc] = useState();
+  const [valuetPosts, setValuetPosts] = useState();
+  const [valuetWorkPlace, setValuetWorkPlace] = useState();
 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [valueWorkplace, setValueWorkplace] = useState();
 
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
@@ -70,38 +73,77 @@ export const Workshop = ({
 
   };
 
+  function SetValue(valueId, index) {
 
+    ///area
+    if (index === 1) {
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].id === valueId) {
+          return area[index].number
+        }
+      }
+    }
+    ///post
+    if (index === 2) {
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].id === valueId) {
+          return posts[index].number
+        }
+      }
+    }
+  }
   //Запрос на редактирование или добавление
   function SendData(variables) {
 
-    //Добавить Цех 
-    if (isModalNumb == 8) {
-      addWorkshop(variables)
+    variables["workshopId"] = valueProdArea
+    variables["workshopNumber"] = SetValue(valueProdArea, 0)
+
+    variables["productionAreaId"] = valuetPosts
+    variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
+
+
+    variables["postId"] = valuetWorkPlace
+    variables["workplaceId"] = valueWorkplace
+ 
+
+    //Добавить Рабочие места
+    if (isModalNumb == 11) {
+      if (variables.postId.length < 2) {
+        variables.postId = null
+      }
+      else {
+        variables.productionAreaId = null
+      }
+      console.log(variables)
+      addWorkplace(variables)
     }
-    //Редактировать Цех
-    if (isModalNumb == 0) {
-      editWorkshop(variables)
+    //Редактировать Рабочие места
+    if (isModalNumb == 3) {
+      if (variables.postId.length < 2) {
+        variables.postId = null
+      }
+      else {
+        variables.productionAreaId = null
+      }
+      console.log(variables)
+      editWorkplace(variables)
     }
 
   }
 
   const columns = [
     {
-      title: "Наименование цеха",
-      field: "name",
+      title: "Наименование рабочего места ",
+      render: (rowData) => {
+        return <p>Рабочее место {rowData.number}</p>;
+      },
     },
     {
-      title: "Номер  цеха",
+      title: "Номер  рабочего места ",
       field: "number",
     },
-    {
-      title: "Перерейти к",
-      render: (rowData) => {
-        return <p className={styles.goOver} onClick={e => { GoTo("Производственные участки", rowData.id) }}>Производственный участок</p>;
-      },
-    }
   ]
- 
+
 
   const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns);
   const [value_goTo, setValuegoTo] = useState(0);
@@ -109,17 +151,30 @@ export const Workshop = ({
 
   ///Изменение заголовка модалки
   function TitleTextModal(params) {
-    if (params === 0) {
-      return "Редактировать Цех"
-    }  
+    if (params === 3) {
+      return "Редактировать Рабочее место"
+    }
 
-    if (params === 8) {
-      return "Добавить Цех"
-    } 
+    if (params === 11) {
+      return "Добавить Рабочее место"
+    }
   }
 
 
-
+  //select Посты   
+  const optPosts = area?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+//select Рабочие места 
+const WorkPlaceOpt = posts?.map((item) => {
+  return {
+    value: item.id,
+    label: "Пост " + item.number,
+  };
+});
 
   ///Перейти к 
   function GoTo(title, id) {
@@ -131,14 +186,14 @@ export const Workshop = ({
     setValue2(-1);
 
     setValuegoToHeadTable(columns)
-    //Вывод Производственный участок для цеха
-    let areaNew = []
-    for (let index = 0; index < area.length; index++) {
-      if (area[index].workshop.id === id) {
-        areaNew.push(area[index])
+    //Вывод Рабочее место для производственного участка 
+    let workplaceNew = []
+    for (let index = 0; index < workplace.length; index++) {
+      if (workplace[index].productionArea?.id === id) {
+        workplaceNew.push(workplace[index])
       }
     }
-    setValuegoToBodyTable(areaNew)
+    setValuegoToBodyTable(workplaceNew)
 
   }
 
@@ -146,39 +201,52 @@ export const Workshop = ({
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
-
+ 
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
 
       <div className={styles.tableWrapper}>
-        {/*Цеха*/}
+        {/*Рабочие места */}
         <TabPanel
+          value={value_panel}
+          indPanel={3}
           style={{ minWidth: "800px" }}
         >
           <Table
-            title="Цеха"
+            title="Рабочие места"
             columns={columns}
-            data={workshop}
+            className="workshops"
+            data={workplace}
             actions={
               userRole === "Admin"
                 ? [
                   {
                     icon: "add",
-                    tooltip: "Добавить цех",
+                    tooltip: "Добавить рабочее место",
                     isFreeAction: true,
                     onClick: () => {
-                      setIsModalOpen(true); 
-                      setIsModalNumb(8)
+                      setIsModalOpen(true);
+                      setIsModalNumb(11)
+
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("")
                     },
                   },
                   {
                     icon: "edit",
-                    tooltip: "Редактировать цех",
+                    tooltip: "Редактировать рабочее место",
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(0); 
+                      setIsModalNumb(3)
+
+                      setValueProdArea(rowData.workshop?.id)
+                      setValuetTechProc(rowData.technologicalProcess?.id)
+                      setValuetPosts(rowData.productionArea?.id)
+                      setValuetWorkPlace(rowData.workplace?.id)
                     },
                   },
                 ]
@@ -192,17 +260,16 @@ export const Workshop = ({
         <div className="TableToGo">
           <TabPanel
             value={value_goTo}
-            indPanel={1}
             style={{ minWidth: "800px" }}
           >
             <Table
               title={value_goToTitle}
-              columns={value_goToHeadTable} 
-              data={value_goToBodyTable} 
+              columns={value_goToHeadTable}
+              data={value_goToBodyTable}
             />
           </TabPanel>
         </div>
- 
+
 
         <ModalWindow
           isOpen={isModalOpen}
@@ -254,13 +321,34 @@ export const Workshop = ({
                     onBlur={handleBlur}
                   />
                 </div>
- 
+
+                <div className={styles.row}>
+                  <Select
+                    name="valuetWorkPlace"
+                    width="380px"
+                    value={valuetWorkPlace}
+                    placeholder="Пост"
+                    onChange={(event) => setValuetWorkPlace(event.value)}
+                    options={WorkPlaceOpt}
+                  />
+                </div>
+
+                <div className={styles.row}>
+                  <Select
+                    name="valuetPosts"
+                    width="380px"
+                    value={valuetPosts}
+                    placeholder="Производственные участки"
+                    onChange={(event) => setValuetPosts(event.value)}
+                    options={optPosts}
+                  />
+                </div>
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == ""  
+                      values.number == "" || values.name == ""
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

@@ -30,6 +30,9 @@ import api from "services/api";
 
 /////компоненты
 import { Workshop } from "components/WorkPlace/components";
+import { ProductionArea } from "components/WorkPlace/components";
+import { Posts } from "components/WorkPlace/components";
+import { Place } from "components/WorkPlace/components";
 
 
 
@@ -160,19 +163,21 @@ export const WorkPlace = ({
     else {
       setValue(0);
       setValue2(newValue);
-    } 
+    }
   };
 
 
   function DisplayWorkPlace(panel1, panel2) {
     let primaryPanel = workplaceValue
-    let secondPanel = panel1.primaryPanel
+    let secondPanel = value_panel
+    if (primaryPanel == 1) {
+      secondPanel = value_panel2
+    }
 
-    console.log(primaryPanel , secondPanel)
+    console.log(primaryPanel, secondPanel)
 
 
-    if (primaryPanel === 0 && secondPanel === 0) {
-
+    if (primaryPanel === 0 && secondPanel === 0) { 
       return (
         <Workshop
           workshop={workshop}
@@ -180,10 +185,56 @@ export const WorkPlace = ({
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
+          addWorkshop={addWorkshop}
+          editWorkshop={editWorkshop}
         />
       )
     }
-
+    else if (primaryPanel === 0 && secondPanel === 1) {
+      return (
+        <ProductionArea  
+          area={area}
+          workplace={workplace}
+          workshop={workshop}
+          value_panel={value_panel}
+          value_panel2={value_panel2}
+          userRole={userRole}
+          
+          addArea={addArea}
+          editArea={editArea}
+        />
+      )
+    }
+    else if (primaryPanel === 0 && secondPanel === 2) {
+      return (
+        <Posts  
+          area={area}
+          posts={posts}
+          workplace={workplace} 
+          value_panel={value_panel}
+          value_panel2={value_panel2}
+          userRole={userRole}
+          
+          addPosts={addPosts}
+          editPosts={editPosts}
+        />
+      )
+    }
+    else if (primaryPanel === 0 && secondPanel === 3) {
+      return (
+        <Place  
+          area={area} 
+          posts={posts}
+          workplace={workplace} 
+          value_panel={value_panel}
+          value_panel2={value_panel2}
+          userRole={userRole}
+          
+          addWorkplace={addWorkplace}
+          editWorkplace={editWorkplace}
+        />
+      )
+    }
     else {
       return (
         <div></div>
