@@ -38,22 +38,7 @@ public class WorkingShiftRepository : IWorkingShiftRepository
     {
         if (year is not null)
         {
-            var calendar = await _context.Calendars
-                .Where(_ => _.Year == year && _.IsMain)
-                .FirstOrDefaultAsync();
-        
-            if (calendar is null)
-            {
-                var newCalendar = new Calendar
-                {
-                    Year = (int)year,
-                    IsMain = true
-                };
-
-                calendar = _context.Calendars.Add(newCalendar).Entity;
-            }
-
-            entity.CalendarId = calendar.Id;
+            await CreateCalendarIfNotExit(entity, (int)year);
         }
 
         var newWorkingShift = _context.WorkingShifts.Add(entity).Entity;
@@ -68,5 +53,25 @@ public class WorkingShiftRepository : IWorkingShiftRepository
             .Where(_ => _.Id == id)
             .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
+    }
+
+    private async Task CreateCalendarIfNotExit(WorkingShift entity, int year)
+    {
+        var calendar = await _context.Calendars
+            .Where(_ => _.Year == year && _.IsMain)
+            .FirstOrDefaultAsync();
+        
+        if (calendar is null)
+        {
+            var newCalendar = new Calendar
+            {
+                Year = year,
+                IsMain = true
+            };
+
+            calendar = _context.Calendars.Add(newCalendar).Entity;
+        }
+
+        entity.CalendarId = calendar.Id;
     }
 }
