@@ -32,7 +32,7 @@ public class WorkingShiftService : IWorkingShiftService
         {
             var workingShift = _mapper.Map<WorkingShift>(request);
 
-            return _workingShiftRepository.CreateAsync(workingShift);
+            return _workingShiftRepository.CreateAsync(workingShift, request.Year);
         });
     }
 
