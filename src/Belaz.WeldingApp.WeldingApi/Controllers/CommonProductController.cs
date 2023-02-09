@@ -154,6 +154,13 @@ public abstract class CommonProductController : ControllerBase
         return result.ToOk();
     }
 
+    [HttpPut("assignWelder")]
+    public async Task<ActionResult<Unit>> AssignProductToWeldersAsync([FromBody] AssignProductToWeldersRequest request)
+    {
+        var result = await _productService.AssignProductToWeldersAsync(request);
+        return result.ToOk();
+    }
+
     [HttpPut("changeStatus")]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<ProductDto>> ChangeStatusAsync([FromBody] ChangeProductStatusRequest request)

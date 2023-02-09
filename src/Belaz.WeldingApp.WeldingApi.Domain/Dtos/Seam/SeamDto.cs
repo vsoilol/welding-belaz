@@ -38,6 +38,8 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     
     public bool IsControlSubject { get; set; }
 
+    public List<WelderDto> Welders { get; set; } = null!;
+
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Entities.ProductInfo.Seam, SeamDto>()

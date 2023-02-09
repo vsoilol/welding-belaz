@@ -146,6 +146,17 @@ public class ProductService : IProductService
         });
     }
 
+    public async Task<Result<Unit>> AssignProductToWeldersAsync(AssignProductToWeldersRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _productRepository.AssignProductToWeldersAsync(request.ProductId, request.WelderIds);
+            return Unit.Default;
+        });
+    }
+
     public async Task<Result<ProductDto>> ChangeStatusAsync(ChangeProductStatusRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);

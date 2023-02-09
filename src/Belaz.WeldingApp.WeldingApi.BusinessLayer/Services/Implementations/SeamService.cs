@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Extensions;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
@@ -9,6 +10,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using LanguageExt;
 using LanguageExt.Common;
 using WeldingApp.Common.Enums;
+using GetAllByInspectorIdRequest = Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam.GetAllByInspectorIdRequest;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
 
@@ -88,17 +90,6 @@ public class SeamService : ISeamService
             _seamRepository.GetAllByWelderIdAsync(request.WelderId));
     }
 
-    public async Task<Result<Unit>> AssignSeamToWelderAsync(AssignSeamToWelderRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(async () =>
-        {
-            await _seamRepository.AssignSeamToWelderAsync(request.SeamId, request.WelderId);
-            return Unit.Default;
-        });
-    }
-
     public async Task<Result<Unit>> AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
@@ -106,17 +97,6 @@ public class SeamService : ISeamService
         return await validationResult.ToDataResult(async () =>
         {
             await _seamRepository.AssignSeamToInspectorAsync(request.SeamId, request.InspectorId);
-            return Unit.Default;
-        });
-    }
-
-    public async Task<Result<Unit>> AssignSeamsToWelderAsync(AssignSeamsToWelderRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(async () =>
-        {
-            await _seamRepository.AssignSeamsToWelderAsync(request.SeamIds, request.WelderId);
             return Unit.Default;
         });
     }

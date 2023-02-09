@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;
 
@@ -58,7 +59,7 @@ public class ProductRepository : IProductRepository
 
         updatedProduct.Status = status;
         updatedProduct.IsAddManually = isAddManually;
-        
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(id);
@@ -132,7 +133,7 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
 
         master.Products = products;
-        
+
         await _context.SaveChangesAsync();
     }
 
@@ -153,9 +154,53 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
 
         inspector.Products = products;
-        
+
         await _context.SaveChangesAsync();
     }
+
+    public async Task AssignProductToWeldersAsync(Guid productId, List<Guid> welderIds)
+    {
+        var seams = await _context.Seams
+            .Include(_ => _.Welders)
+            .Include(_ => _.WeldingTask)
+            .Where(_ => _.ProductId == productId)
+            .ToListAsync();
+
+        var welders = await _context.Welders
+            .Where(_ => welderIds.Any(welderId => welderId == _.Id))
+            .ToListAsync();
+
+        seams.ForEach(_ => _.Welders = welders);
+
+        var weldingTasks = seams
+            .Where(_ => _.WeldingTask == null)
+            .Select(_ => new WeldingTask
+            {
+                Seam = _,
+            });
+
+        _context.WeldingTasks.AddRange(weldingTasks);
+        await _context.SaveChangesAsync();
+    }
+
+    /*public async Task AssignProductsToWelderAsync(List<Guid> productIds, Guid welderId)
+    {
+        var welder = (await _context.Welders.FirstOrDefaultAsync(_ => _.Id == welderId))!;
+
+        var seams = await _context.Products
+            .Where(_ => productIds.Any(productId => productId == _.Id))
+            .SelectMany(_ => _.Seams)
+            .ToListAsync();
+
+        var weldingTasks = seams.Select(_ => new WeldingTask
+        {
+            Seam = _,
+        });
+        
+        _context.WeldingTasks.AddRange(weldingTasks);
+
+        welder.Seams = seams;
+    }*/
 
     private async Task<List<Seam>> GetSeamsByIdsAsync(IReadOnlyList<Guid>? seamIds)
     {

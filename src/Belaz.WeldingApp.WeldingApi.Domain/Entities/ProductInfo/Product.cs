@@ -30,8 +30,6 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo
 
         public ProductType ProductType { get; set; }
 
-        public WeldingTask? WeldingTask { get; set; }
-
         public Guid? TechnologicalProcessId { get; set; }
 
         [ForeignKey(nameof(TechnologicalProcessId))]

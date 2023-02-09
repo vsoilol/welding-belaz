@@ -21,7 +21,7 @@ public class WeldingTaskFullNamesDto : IMapFrom<Entities.TaskInfo.WeldingTask>
                     .MapFrom(x => x.Seam.Inspector!.UserInfo))
             .ForMember(dto => dto.Welder,
                 opt => opt
-                    .MapFrom(x => x.Seam.Welder!.UserInfo))
+                    .MapFrom(x => x.Welder!.UserInfo))
             .ForMember(dto => dto.Master,
                 opt => opt
                     .MapFrom(x => x.Seam.Product!.Master!.UserInfo));

@@ -10,10 +10,6 @@ public class CreateWeldingTaskRequestValidator : AbstractValidator<CreateWelding
 {
     public CreateWeldingTaskRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
-
         RuleFor(model => model.WeldingDate)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new DateValidatorFor<CreateWeldingTaskRequest>());

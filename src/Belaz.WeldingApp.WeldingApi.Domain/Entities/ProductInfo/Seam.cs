@@ -17,7 +17,7 @@ public class Seam : Entity
     public int Length { get; set; }
 
     public ProductStatus Status { get; set; } = ProductStatus.NotManufactured;
-    
+
     /// <summary>
     /// Подлежит ли контролю
     /// </summary>
@@ -30,8 +30,7 @@ public class Seam : Entity
 
     public Guid? ProductId { get; set; }
 
-    [ForeignKey(nameof(ProductId))] 
-    public Product? Product { get; set; }
+    [ForeignKey(nameof(ProductId))] public Product? Product { get; set; }
 
     public WeldingTask? WeldingTask { get; set; }
 
@@ -39,28 +38,22 @@ public class Seam : Entity
 
     public Guid? TechnologicalInstructionId { get; set; }
 
-    [ForeignKey(nameof(TechnologicalInstructionId))] 
+    [ForeignKey(nameof(TechnologicalInstructionId))]
     public TechnologicalInstruction? TechnologicalInstruction { get; set; }
 
     public Guid? ProductionAreaId { get; set; }
 
-    [ForeignKey(nameof(ProductionAreaId))] 
-    public ProductionArea? ProductionArea { get; set; }
+    [ForeignKey(nameof(ProductionAreaId))] public ProductionArea? ProductionArea { get; set; }
 
     public Guid? WorkplaceId { get; set; }
 
-    [ForeignKey(nameof(WorkplaceId))] 
-    public Workplace? Workplace { get; set; }
+    [ForeignKey(nameof(WorkplaceId))] public Workplace? Workplace { get; set; }
 
     public List<StatusReason> StatusReasons { get; set; } = null!;
 
-    public Guid? WelderId { get; set; }
-
-    [ForeignKey(nameof(WelderId))] 
-    public Welder? Welder { get; set; }
-
     public Guid? InspectorId { get; set; }
 
-    [ForeignKey(nameof(InspectorId))] 
-    public Inspector? Inspector { get; set; }
+    [ForeignKey(nameof(InspectorId))] public Inspector? Inspector { get; set; }
+
+    public List<Welder> Welders { get; set; } = null!;
 }

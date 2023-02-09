@@ -71,7 +71,7 @@ public class DataSeed
         {
             await AddTechnologicalProcesses(context);
         }
-        
+
         if (!context.TechnologicalInstructions.Any())
         {
             await AddTechnologicalInstruction(context);
@@ -1162,6 +1162,23 @@ public class DataSeed
                         },
                     }
                 }
+            },
+            Seams = new List<Seam>
+            {
+                new Seam
+                {
+                    Number = 1,
+                    Length = 111,
+                    IsControlSubject = true,
+                    ProductionArea = productionArea1,
+                },
+                new Seam
+                {
+                    Number = 2,
+                    Length = 222,
+                    IsControlSubject = true,
+                    ProductionArea = productionArea1,
+                }
             }
         };
 
@@ -1523,6 +1540,23 @@ public class DataSeed
                         },
                     }
                 }
+            },
+            Seams = new List<Seam>
+            {
+                new Seam
+                {
+                    Number = 3,
+                    Length = 333,
+                    IsControlSubject = true,
+                    ProductionArea = productionArea1,
+                },
+                new Seam
+                {
+                    Number = 4,
+                    Length = 222,
+                    IsControlSubject = true,
+                    ProductionArea = productionArea1,
+                }
             }
         };
 
@@ -1735,7 +1769,6 @@ public class DataSeed
         {
             new WeldingTask
             {
-                Number = 1,
                 WeldingDate = DateTime.Now,
                 BasicMaterial = "Сталь 20",
                 MainMaterialBatchNumber = "454578",
@@ -1761,7 +1794,7 @@ public class DataSeed
                     Status = ProductStatus.Accept,
                     IsControlSubject = true,
                     ProductionArea = productionArea4,
-                    Welder = welder,
+                    Welders = new List<Welder> { welder },
                     Inspector = inspector,
                     WeldPassages = new List<WeldPassage>
                     {
@@ -1825,7 +1858,6 @@ public class DataSeed
             },
             new WeldingTask
             {
-                Number = 2,
                 WeldingDate = DateTime.Now,
                 BasicMaterial = "Сталь 20",
                 MainMaterialBatchNumber = "454578",
@@ -1851,7 +1883,7 @@ public class DataSeed
                     Status = ProductStatus.Accept,
                     IsControlSubject = true,
                     ProductionArea = productionArea4,
-                    Welder = welder,
+                    Welders = new List<Welder> { welder },
                     Inspector = inspector,
                     WeldPassages = new List<WeldPassage>
                     {

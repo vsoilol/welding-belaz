@@ -6,8 +6,6 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
 
 public class CreateWeldingTaskRequest : IMapTo<Domain.Entities.TaskInfo.WeldingTask>
 {
-    public int Number { get; set; }
-
     /// <summary>
     /// Дата выполнения сварки
     /// </summary>

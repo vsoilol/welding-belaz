@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Extensions;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeldingApp.Common.Attributes;
 using WeldingApp.Common.Enums;
+using GetAllByInspectorIdRequest = Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam.GetAllByInspectorIdRequest;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -97,13 +99,6 @@ public class SeamController : ControllerBase
         var result = await _seamService.AssignSeamToWelderAsync(request);
         return result.ToOk();
     }*/
-    
-    [HttpPut("assignWelder")]
-    public async Task<ActionResult<Unit>> AssignSeamsToWelderAsync([FromBody] AssignSeamsToWelderRequest request)
-    {
-        var result = await _seamService.AssignSeamsToWelderAsync(request);
-        return result.ToOk();
-    }
 
     /*[HttpPut("assignInspector")]
     public async Task<ActionResult<Unit>> AssignSeamToInspectorAsync([FromBody] AssignSeamToInspectorRequest request)
