@@ -7,8 +7,6 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
 public class UpdateWeldingTaskRequest : IMapTo<Domain.Entities.TaskInfo.WeldingTask>
 {
     public Guid Id { get; set; }
-    
-    public int Number { get; set; }
 
     /// <summary>
     /// Дата выполнения сварки

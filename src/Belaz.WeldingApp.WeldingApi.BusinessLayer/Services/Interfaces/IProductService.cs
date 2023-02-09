@@ -2,12 +2,13 @@
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using LanguageExt;
 using LanguageExt.Common;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface IProductService
 {
-    Task<List<ProductDto>> GetAllAsync();
+    Task<Result<List<ProductDto>>> GetAllAsync(GetAllProductsRequest request);
     
     Task<Result<List<ProductDto>>> GetAllByStatusAsync(GetAllByTaskStatusRequest request);
 
@@ -30,6 +31,8 @@ public interface IProductService
     Task<Result<Unit>> AssignProductsToMasterAsync(AssignProductsToMasterRequest request);
 
     Task<Result<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request);
+    
+    Task<Result<Unit>> AssignProductToWeldersAsync(AssignProductToWeldersRequest request);
     
     Task<Result<ProductDto>> ChangeStatusAsync(ChangeProductStatusRequest request);
 

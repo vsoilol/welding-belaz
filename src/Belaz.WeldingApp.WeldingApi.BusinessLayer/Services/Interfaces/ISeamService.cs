@@ -1,8 +1,10 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using LanguageExt;
 using LanguageExt.Common;
 using WeldingApp.Common.Enums;
+using GetAllByInspectorIdRequest = Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam.GetAllByInspectorIdRequest;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
@@ -24,12 +26,8 @@ public interface ISeamService
 
     Task<Result<List<SeamDto>>> GetAllByWelderIdAsync(GetAllByWelderIdRequest request);
 
-    Task<Result<Unit>> AssignSeamToWelderAsync(AssignSeamToWelderRequest request);
-
     Task<Result<Unit>> AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request);
-    
-    Task<Result<Unit>> AssignSeamsToWelderAsync(AssignSeamsToWelderRequest request);
-    
+
     Task<Result<Unit>> AssignSeamsToInspectorAsync(AssignSeamsToInspectorRequest request);
 
     Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync();

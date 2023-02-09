@@ -25,5 +25,12 @@ public class CreateSeamRequestValidator : AbstractValidator<CreateSeamRequest>
             .SetValidator(new SqlIdValidatorFor<CreateSeamRequest,
                 Domain.Entities.Production.Workplace>(context))
             .When(_ => _.WorkplaceId is not null);
+        
+        RuleFor(model => model.TechnologicalInstructionId)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetValidator(new SqlIdValidatorFor<CreateSeamRequest,
+                Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction>(context))
+            .When(_ => _.TechnologicalInstructionId is not null);
     }
 }

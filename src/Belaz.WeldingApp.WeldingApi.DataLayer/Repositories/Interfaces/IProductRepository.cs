@@ -6,7 +6,7 @@ namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 
 public interface IProductRepository
 {
-    Task<List<ProductDto>> GetAllAsync();
+    Task<List<ProductDto>> GetAllAsync(ProductType productType);
     
     Task<List<ProductDto>> GetAllByStatusAsync(ProductStatus status, ProductType productType);
 
@@ -31,4 +31,6 @@ public interface IProductRepository
     Task AssignProductToInspectorAsync(Guid productId, Guid inspectorId);
     
     Task AssignProductsToInspectorAsync(List<Guid> productIds, Guid inspectorId);
+    
+    Task AssignProductToWeldersAsync(Guid productId, List<Guid> welderIds);
 }

@@ -9,10 +9,6 @@ public class CreateInstructionRequest : IMapTo<Domain.Entities.TechnologicalProc
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;
-    
-    public Guid SeamId { get; set; }
-    
-    public Guid TechnologicalProcessId { get; set; }
 
     public List<CreateWeldPassageInstructionRequest> WeldPassages { get; set; } = null!;
 }

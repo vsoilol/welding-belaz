@@ -24,12 +24,16 @@ public abstract class CommonProductController : ControllerBase
         _productService = productService;
         _type = type;
     }
-    
+
     [HttpGet]
     [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProductDto>>> GetAllAsync()
     {
-        return await _productService.GetAllAsync();
+        var result = await _productService.GetAllAsync(new GetAllProductsRequest
+        {
+            Type = _type
+        });
+        return result.ToOk();
     }
 
     [HttpGet("byControlSubject/{isControlSubject}")]
@@ -134,7 +138,7 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.AssignProductToMasterAsync(request);
         return result.ToOk();
     }*/
-    
+
     [HttpPut("assignInspector")]
     public async Task<ActionResult<Unit>> AssignProductsToInspectorAsync(
         [FromBody] AssignProductsToInspectorRequest request)
@@ -147,6 +151,13 @@ public abstract class CommonProductController : ControllerBase
     public async Task<ActionResult<Unit>> AssignProductsToMasterAsync([FromBody] AssignProductsToMasterRequest request)
     {
         var result = await _productService.AssignProductsToMasterAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("assignWelders")]
+    public async Task<ActionResult<Unit>> AssignProductToWeldersAsync([FromBody] AssignProductToWeldersRequest request)
+    {
+        var result = await _productService.AssignProductToWeldersAsync(request);
         return result.ToOk();
     }
 

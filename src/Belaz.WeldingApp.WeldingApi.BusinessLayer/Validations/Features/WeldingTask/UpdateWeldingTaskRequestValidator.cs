@@ -15,10 +15,6 @@ public class UpdateWeldingTaskRequestValidator : AbstractValidator<UpdateWelding
             .SetValidator(
                 new SqlIdValidatorFor<UpdateWeldingTaskRequest, Domain.Entities.TaskInfo.WeldingTask>(context));
 
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
-
         RuleFor(model => model.WeldingDate)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new DateValidatorFor<UpdateWeldingTaskRequest>());
