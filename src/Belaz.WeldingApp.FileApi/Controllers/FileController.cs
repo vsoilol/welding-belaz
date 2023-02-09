@@ -32,4 +32,11 @@ public class FileController : ControllerBase
 
         return result.ToFile();
     }
+    
+    [HttpGet("excelChart")]
+    public async Task<IActionResult> GetExcelChartAsync()
+    {
+        var result = await _fileService.GenerateExcelChartAsync();
+        return result.ToFile();
+    }
 }
