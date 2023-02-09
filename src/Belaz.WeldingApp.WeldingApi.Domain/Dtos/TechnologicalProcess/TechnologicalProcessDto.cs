@@ -14,6 +14,4 @@ public class TechnologicalProcessDto : IMapFrom<Entities.TechnologicalProcessInf
     public string Name { get; set; } = null!;
 
     public string PdmSystemFileLink { get; set; } = null!;
-
-    public List<TechnologicalInstructionDto> TechnologicalInstructions { get; set; } = null!;
 }
