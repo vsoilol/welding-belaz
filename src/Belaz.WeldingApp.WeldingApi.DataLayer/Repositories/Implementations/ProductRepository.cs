@@ -27,9 +27,10 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
-    public Task<List<ProductDto>> GetAllAsync()
+    public Task<List<ProductDto>> GetAllAsync(ProductType productType)
     {
         return _context.Products
+            .Where(_ => _.ProductType == productType)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
