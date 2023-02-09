@@ -11,17 +11,6 @@ public class CreateInstructionRequestValidator : AbstractValidator<CreateInstruc
 {
     public CreateInstructionRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.SeamId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetAsyncValidator(new SeamIdValidatorForCreateInstruction(context));
-
-        RuleFor(model => model.TechnologicalProcessId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateInstructionRequest,
-                Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>(context));
-
         RuleFor(model => model.Name)
             .Cascade(CascadeMode.Stop)
             .NotEmpty();

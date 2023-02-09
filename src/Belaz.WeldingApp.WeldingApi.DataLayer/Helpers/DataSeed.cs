@@ -67,22 +67,15 @@ public class DataSeed
             await AddWeldingTasks(context);
         }
 
-        /*
-
-        if (!context.Products.Any())
-        {
-            await AddProducts(context);
-        }
-
         if (!context.TechnologicalProcesses.Any())
         {
             await AddTechnologicalProcesses(context);
         }
-
-        if (!context.WeldingTasks.Any())
+        
+        if (!context.TechnologicalInstructions.Any())
         {
-            await AddWeldingTasks(context);
-        }*/
+            await AddTechnologicalInstruction(context);
+        }
     }
 
     private static async Task CreateRolesAsync(ApplicationContext context)
@@ -1537,56 +1530,6 @@ public class DataSeed
         await context.SaveChangesAsync();
     }
 
-    private static async Task AddTechnologicalProcesses(ApplicationContext context)
-    {
-        var seam = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1))!;
-        var seam2 = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2))!;
-
-        var product = (await context.Products.FirstOrDefaultAsync(_ => _.Number == "4536467567"
-                                                                       && _.ProductType == ProductType.Product))!;
-        var product2 = (await context.Products.FirstOrDefaultAsync(_ => _.Number == "4536384294"
-                                                                        && _.ProductType == ProductType.Product))!;
-
-        var technologicalProcesses = new List<TechnologicalProcess>
-        {
-            new TechnologicalProcess
-            {
-                Name = "Технологический процесс 1",
-                Products = new List<Product> { product },
-                Number = 1,
-                PdmSystemFileLink = "Ссылка",
-                TechnologicalInstructions = new List<TechnologicalInstruction>
-                {
-                    new TechnologicalInstruction
-                    {
-                        Name = "Инструкция 1",
-                        Number = 1,
-                        Seam = seam
-                    }
-                }
-            },
-            new TechnologicalProcess
-            {
-                Name = "Технологический процесс 2",
-                Number = 2,
-                PdmSystemFileLink = "Ссылка",
-                Products = new List<Product> { product2 },
-                TechnologicalInstructions = new List<TechnologicalInstruction>
-                {
-                    new TechnologicalInstruction
-                    {
-                        Name = "Инструкция 2",
-                        Number = 2,
-                        Seam = seam2
-                    }
-                }
-            }
-        };
-
-        await context.TechnologicalProcesses.AddRangeAsync(technologicalProcesses);
-        await context.SaveChangesAsync();
-    }
-
     private static async Task AddWeldingTasks(ApplicationContext context)
     {
         var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
@@ -1814,6 +1757,7 @@ public class DataSeed
                 Seam = new Seam
                 {
                     Number = 2,
+                    Length = 100,
                     Status = ProductStatus.Accept,
                     IsControlSubject = true,
                     ProductionArea = productionArea4,
@@ -1903,6 +1847,7 @@ public class DataSeed
                 Seam = new Seam
                 {
                     Number = 2,
+                    Length = 200,
                     Status = ProductStatus.Accept,
                     IsControlSubject = true,
                     ProductionArea = productionArea4,
@@ -1971,6 +1916,60 @@ public class DataSeed
         };
 
         await context.WeldingTasks.AddRangeAsync(tasks);
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task AddTechnologicalProcesses(ApplicationContext context)
+    {
+        var product = (await context.Products.FirstOrDefaultAsync(_ => _.Number == "4536467567"
+                                                                       && _.ProductType == ProductType.Product))!;
+        var product2 = (await context.Products.FirstOrDefaultAsync(_ => _.Number == "4536384294"
+                                                                        && _.ProductType == ProductType.Product))!;
+
+        var technologicalProcesses = new List<TechnologicalProcess>
+        {
+            new TechnologicalProcess
+            {
+                Name = "Технологический процесс 1",
+                Products = new List<Product> { product },
+                Number = 1,
+                PdmSystemFileLink = "Ссылка",
+            },
+            new TechnologicalProcess
+            {
+                Name = "Технологический процесс 2",
+                Number = 2,
+                PdmSystemFileLink = "Ссылка",
+                Products = new List<Product> { product2 },
+            }
+        };
+
+        await context.TechnologicalProcesses.AddRangeAsync(technologicalProcesses);
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task AddTechnologicalInstruction(ApplicationContext context)
+    {
+        var seam = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1))!;
+        var seam2 = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2))!;
+
+        var technologicalInstructions = new List<TechnologicalInstruction>
+        {
+            new TechnologicalInstruction
+            {
+                Name = "Инструкция 1",
+                Number = 1,
+                Seams = new List<Seam> { seam },
+            },
+            new TechnologicalInstruction
+            {
+                Name = "Инструкция 2",
+                Number = 2,
+                Seams = new List<Seam> { seam2 },
+            }
+        };
+
+        context.TechnologicalInstructions.AddRange(technologicalInstructions);
         await context.SaveChangesAsync();
     }
 }

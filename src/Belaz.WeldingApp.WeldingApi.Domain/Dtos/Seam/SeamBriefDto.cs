@@ -9,5 +9,8 @@ public class SeamBriefDto : IMapFrom<Entities.ProductInfo.Seam>
     public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
-
+    
+    public bool IsControlSubject { get; set; }
+    
+    public int Length { get; set; }
 }

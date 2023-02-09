@@ -14,6 +14,8 @@ public class Seam : Entity
 {
     public int Number { get; set; }
 
+    public int Length { get; set; }
+
     public ProductStatus Status { get; set; } = ProductStatus.NotManufactured;
     
     /// <summary>
@@ -35,6 +37,9 @@ public class Seam : Entity
 
     public List<WeldPassage> WeldPassages { get; set; } = null!;
 
+    public Guid? TechnologicalInstructionId { get; set; }
+
+    [ForeignKey(nameof(TechnologicalInstructionId))] 
     public TechnologicalInstruction? TechnologicalInstruction { get; set; }
 
     public Guid? ProductionAreaId { get; set; }

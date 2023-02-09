@@ -14,7 +14,5 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo
         public string PdmSystemFileLink { get; set; } = null!;
 
         public List<Product> Products { get; set; } = null!;
-
-        public List<TechnologicalInstruction> TechnologicalInstructions { get; set; } = null!;
     }
 }

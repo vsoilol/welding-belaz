@@ -13,7 +13,7 @@ public class TechnologicalInstructionDto : IMapFrom<Entities.TechnologicalProces
 
     public string Name { get; set; } = null!;
 
-    public SeamDto Seam { get; set; } = null!;
+    public List<SeamDto> Seams { get; set; } = null!;
 
     public List<WeldPassageInstructionDto> WeldPassageInstructions { get; set; } = null!;
 }

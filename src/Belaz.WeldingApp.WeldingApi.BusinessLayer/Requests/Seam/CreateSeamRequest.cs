@@ -11,7 +11,11 @@ public class CreateSeamRequest : IMapTo<Domain.Entities.ProductInfo.Seam>
     /// </summary>
     public bool IsControlSubject { get; set; }
     
+    public int Length { get; set; }
+    
     public Guid ProductionAreaId { get; set; }
 
     public Guid? WorkplaceId { get; set; }
+    
+    public Guid? TechnologicalInstructionId { get; set; }
 }

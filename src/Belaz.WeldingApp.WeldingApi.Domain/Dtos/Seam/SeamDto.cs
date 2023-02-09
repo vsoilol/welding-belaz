@@ -13,10 +13,12 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
 {
     public Guid Id { get; set; }
-    
+
     public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
+    
+    public int Length { get; set; }
     
     public ProductStatus Status { get; set; }
 
@@ -33,6 +35,8 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     public TechnologicalInstructionBriefDto TechnologicalInstruction { get; set; } = null!;
     
     public bool IsAddManually { get; set; }
+    
+    public bool IsControlSubject { get; set; }
 
     public void Mapping(Profile profile)
     {
@@ -45,7 +49,7 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
                     .MapFrom(x => x.TechnologicalInstruction))
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
-                    .MapFrom(x => x.TechnologicalInstruction!.TechnologicalProcess))
+                    .MapFrom(x => x.Product!.TechnologicalProcess))
             .ForMember(dto => dto.ProductionArea,
                 opt => opt
                     .MapFrom(x => x.ProductionArea))
