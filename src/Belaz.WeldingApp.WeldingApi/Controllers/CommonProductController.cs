@@ -154,7 +154,7 @@ public abstract class CommonProductController : ControllerBase
         return result.ToOk();
     }
 
-    [HttpPut("assignWelder")]
+    [HttpPut("assignWelders")]
     public async Task<ActionResult<Unit>> AssignProductToWeldersAsync([FromBody] AssignProductToWeldersRequest request)
     {
         var result = await _productService.AssignProductToWeldersAsync(request);

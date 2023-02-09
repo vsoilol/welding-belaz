@@ -45,6 +45,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/detail/assignWelders",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/detail/assignWelders",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/detail/changeStatus",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -79,6 +93,20 @@
         "GET"
       ],
       "DownstreamPathTemplate": "/api/knot/byStatus/{status}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/knot/assignWelders",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/knot/assignWelders",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
@@ -165,6 +193,20 @@
         "PUT"
       ],
       "DownstreamPathTemplate": "/api/product/changeStatus",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/product/assignWelders",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/product/assignWelders",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
