@@ -38,9 +38,16 @@ const dateOptions = {
 
 
 export const ProductionArea = ({
-  area,
-  workplace,
   workshop,
+  area,
+  posts,
+  workplace,
+  product,
+  knot,
+  indPanel,
+  
+  detail,
+  seam, 
   value_panel,
   value_panel2,
   userRole,
@@ -72,7 +79,7 @@ export const ProductionArea = ({
     id: modalData?.id ?? "",
 
   };
-
+  console.log(indPanel)
   function SetValue(valueId, index) {
     ///workshop
     if (index === 0) {
@@ -101,8 +108,6 @@ export const ProductionArea = ({
     variables["productionAreaId"] = valuetPosts
     variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
  
- 
- 
 
 
     //Добавить Производственные участки
@@ -116,33 +121,263 @@ export const ProductionArea = ({
 
   }
 
-  const columns = [
-    {
-      title: "Наименование производственного участка ",
-      field: "name",
-    },
-    {
-      title: "Номер  производственного участка ",
-      field: "number",
-    },
-    {
-      title: "Перерейти к",
-      render: (rowData) => {
-
-        return (
-          <div>
-            <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-            <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
-          </div>
-        )
-
-        // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
+  const columns = {
+    workshops: [
+      {
+        title: "Наименование цеха",
+        field: "name",
       },
-    },
-  ]
+      {
+        title: "Номер  цеха",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
+        },
+      },
+    ],
+    production_sites: [
+      {
+        title: "Наименование производственного участка ",
+        field: "name",
+      },
+      {
+        title: "Номер  производственного участка ",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+            </div>
+          )
+
+          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
+        },
+      },
+    ],
+    posts: [
+      {
+        title: "Наименование поста ",
+        render: (rowData) => {
+          return <p>Пост {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  поста ",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
+        },
+      },
+    ],
+    jobs_place: [
+      {
+        title: "Наименование рабочего места ",
+        render: (rowData) => {
+          return <p>Рабочее место {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  рабочего места ",
+        field: "number",
+      },
+    ],
+
+    goods: [
+      {
+        title: "Наименование изделия ", field: "name"
+      },
+      {
+        title: "Номер  изделия ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id) }}>Узел </p>
+              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id) }}>Сварной шов</p>
+            </div>
+          )
+        },
+      },
+    ],
+    node: [
+      {
+        title: "Наименование узла ", field: "name"
+      },
+      {
+        title: "Номер  узла ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id) }}>Сварной шов</p>
+            </div>
+          )
+        },
+      },
+
+    ],
+    details: [
+      {
+        title: "Наименование детали ", field: "name"
+      },
+      {
+        title: "Номер  детали ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы") }}>Сварной шов</p>
+            </div>
+          )
+        },
+      },
+    ],
+    welding_seam: [
+      {
+        title: "Наименование сварного шва ",
+        render: (rowData) => {
+          return <p>{rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  сварного шва ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить задание",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+    ],
+  };
 
 
-  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns);
+  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.production_sites);
   const [value_goTo, setValuegoTo] = useState(0);
 
 
@@ -168,24 +403,145 @@ export const ProductionArea = ({
 
 
   ///Перейти к 
-  function GoTo(title, id) {
+  function GoTo(param, title, id) {
     setValuegoToTitle(title)
     setValuegoTo(1)
 
-
-    setValue(-1);
-    setValue2(-1);
-
-    setValuegoToHeadTable(columns)
-    //Вывод Рабочее место для производственного участка 
-    let workplaceNew = []
-    for (let index = 0; index < workplace.length; index++) {
-      if (workplace[index].productionArea?.id === id) {
-        workplaceNew.push(workplace[index])
+  
+    setValuegoToHeadTable(columns[Object.keys(columns)[param]])
+    //Вывод Производственный участок для цеха
+    if (param === 1) {
+      let areaNew = []
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].workshop.id === id) {
+          areaNew.push(area[index])
+        }
       }
+      setValuegoToBodyTable(areaNew)
     }
-    setValuegoToBodyTable(workplaceNew)
+    //Вывод постов для Производственных участоков
+    if (param === 2) {
+      let postsNew = []
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].productionArea.id === id) {
+          postsNew.push(posts[index])
+        }
+      } 
+      setValuegoToBodyTable(postsNew)
+    }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 3) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].productionArea?.id === id) {
+          workplaceNew.push(workplace[index])
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+    }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 9) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].post?.id != undefined) {
+          if (workplace[index].post.id === id) {
+            workplaceNew.push(workplace[index])
+          }
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+      setValuegoToHeadTable(columns[Object.keys(columns)[3]])
+    }
+    /////////////////
+    //Вывод деталей для изделий
+    if (param === 6) {
+      let detailNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
 
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+            if (product[index].insideProducts[index2].productType === 3) {
+              detailNew.push(product[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToBodyTable(detailNew)
+    }
+    //Вывод узлов для изделий
+    if (param === 5) {
+      let knotNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+            if (product[index].insideProducts[index2].productType === 2) {
+              knotNew.push(product[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToBodyTable(knotNew)
+    }
+    //Вывод швов для изделий
+    if (param === 7) {
+      let seamNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
+          seamNew = product[index].seams
+        }
+      }
+      setValuegoToBodyTable(seamNew)
+    }
+    /////////////////
+    //Вывод деталей для узла
+    if (param === 10) {
+      let detailNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+
+          for (let index2 = 0; index2 < knot[index].insideProducts.length; index2++) {
+            if (knot[index].insideProducts[index2].productType === 3) {
+              detailNew.push(knot[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[6]])
+      setValuegoToBodyTable(detailNew)
+    }
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+          seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+          seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
+    //Вывод швов для деталей
+    if (param === 12) {
+      let seamNew = []
+      for (let index = 0; index < detail.length; index++) {
+        if (detail[index].id === id) {
+          seamNew = detail[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
   }
 
   const TabPanel = (props_panel) => {
@@ -198,60 +554,67 @@ export const ProductionArea = ({
     <div className={styles.innerWrapper}>
 
       <div className={styles.tableWrapper}>
-        {/*Производственные участки*/}
-        <TabPanel
-          style={{ minWidth: "800px" }}
-        >
-          <Table
-            title="Производственные участки"
-            columns={columns}
-            data={area}
-            actions={
-              userRole === "Admin"
-                ? [
-                  {
-                    icon: "add",
-                    tooltip: "Добавить производственный участок",
-                    isFreeAction: true,
-                    onClick: () => {
-                      setIsModalOpen(true);
-                      setIsModalNumb(9)
-                      setValueProdArea("")
-                      setValuetTechProc("")
-                      setValuetPosts("")
-                      setValuetWorkPlace("")
-                    },
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать производственный участок",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                      setIsModalNumb(1)
-                      setValueProdArea(rowData.workshop.id)
-                    },
-                  },
-                ]
-                : []
-            }
-          />
-        </TabPanel>
+        
+ 
 
-
-        {/*Перейти к */}
-        <div className="TableToGo">
-          <TabPanel
-            value={value_goTo}
+        {value_goTo === 1
+          ? (
+            <div className="TableToGo">
+              <TabPanel
+                value={value_goTo}
+                indPanel={value_goTo}
+                style={{ minWidth: "800px" }}
+              >
+                <Table
+                  title={value_goToTitle}
+                  columns={value_goToHeadTable}
+                  data={value_goToBodyTable}
+                />
+              </TabPanel>
+            </div>
+          )
+          : (
+            <TabPanel
             style={{ minWidth: "800px" }}
           >
             <Table
-              title={value_goToTitle}
-              columns={value_goToHeadTable}
-              data={value_goToBodyTable}
+              title="Производственные участки"
+              columns={columns.production_sites}
+              data={area}
+              actions={
+                userRole === "Admin"
+                  ? [
+                    {
+                      icon: "add",
+                      tooltip: "Добавить производственный участок",
+                      isFreeAction: true,
+                      onClick: () => {
+                        setIsModalOpen(true);
+                        setIsModalNumb(9)
+                        setValueProdArea("")
+                        setValuetTechProc("")
+                        setValuetPosts("")
+                        setValuetWorkPlace("")
+                      },
+                    },
+                    {
+                      icon: "edit",
+                      tooltip: "Редактировать производственный участок",
+                      onClick: (event, rowData) => {
+                        setModalData(rowData);
+                        setIsModalOpen(true);
+                        setIsModalNumb(1)
+                        setValueProdArea(rowData.workshop.id)
+                      },
+                    },
+                  ]
+                  : []
+              }
             />
           </TabPanel>
-        </div>
+          )
+
+        }
 
 
         <ModalWindow

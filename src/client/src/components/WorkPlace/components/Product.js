@@ -38,13 +38,19 @@ const dateOptions = {
 
 
 export const Product = ({
-  product,
+  workshop,
   area,
   posts,
-  texprocwelding,
-  seam,
-
   workplace,
+  product,
+  knot,
+  detail,
+  seam,
+  texprocwelding,
+
+  masters,
+  techs,
+
   value_panel,
   value_panel2,
   userRole,
@@ -70,6 +76,15 @@ export const Product = ({
   const [, setValue2] = useState(value_panel2);
 
   const [valuetSeam, setValuetSeam] = useState([]);
+
+
+  const [valueWelder, setValueWelder] = useState(1);
+  const [valueWelderExe, setValueWelderExe] = useState(0);
+  const [valueWelderExeName, setValueWelderName] = useState("");
+
+
+  const [valueFixed, setValueFixed] = useState(0);
+
 
 
   const initialValues = {
@@ -126,57 +141,299 @@ export const Product = ({
 
   }
 
-  const columns = [
-    {
-      title: "Наименование изделия ", field: "name"
-    },
-    {
-      title: "Номер  изделия ", field: "number"
-    },
-
-    {
-      title: "Номер  цеха ", field: "workshop.number"
-    },
-    {
-      title: "Номер  производственного участка ", field: "productionArea.number"
-    },
-    {
-      title: "Номер  рабочего места  ", field: "workplace.number"
-    },
-    {
-      title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-    },
-    {
-      title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-    },
-    {
-      title: "Закрепить изделие",
-      render: (rowData) => {
-        return <p className={styles.Fix}>Закрепить</p>;
+  const columns = {
+    workshops: [
+      {
+        title: "Наименование цеха",
+        field: "name",
       },
-    },
-    // {
-    //   title: "Просмотреть закрепленные",
-    //   render: (rowData) => {
-    //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-    //   },
-    // },
-    {
-      title: "Перерейти к",
-      render: (rowData) => {
-        return (
-          <div>
-            <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id) }}>Деталь</p>
-            <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id) }}>Узел </p>
-            <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id) }}>Сварной шов</p>
-          </div>
-        )
+      {
+        title: "Номер  цеха",
+        field: "number",
       },
-    },
-  ]
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
+        },
+      },
+    ],
+    production_sites: [
+      {
+        title: "Наименование производственного участка ",
+        field: "name",
+      },
+      {
+        title: "Номер  производственного участка ",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+            </div>
+          )
+
+          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
+        },
+      },
+    ],
+    posts: [
+      {
+        title: "Наименование поста ",
+        render: (rowData) => {
+          return <p>Пост {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  поста ",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
+        },
+      },
+    ],
+    jobs_place: [
+      {
+        title: "Наименование рабочего места ",
+        render: (rowData) => {
+          return <p>Рабочее место {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  рабочего места ",
+        field: "number",
+      },
+    ],
+
+    goods: [
+      {
+        title: "Наименование изделия ", field: "name"
+      },
+      {
+        title: "Номер  изделия ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p className={styles.Fix} onClick={e=>{setValueFixed(1) ; setValuegoTo(2)}}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id) }}>Узел </p>
+              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id) }}>Сварной шов</p>
+            </div>
+          )
+        },
+      },
+    ],
+    node: [
+      {
+        title: "Наименование узла ", field: "name"
+      },
+      {
+        title: "Номер  узла ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id) }}>Сварной шов</p>
+            </div>
+          )
+        },
+      },
+
+    ],
+    details: [
+      {
+        title: "Наименование детали ", field: "name"
+      },
+      {
+        title: "Номер  детали ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы") }}>Сварной шов</p>
+            </div>
+          )
+        },
+      },
+    ],
+    welding_seam: [
+      {
+        title: "Наименование сварного шва ",
+        render: (rowData) => {
+          return <p>{rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  сварного шва ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить задание",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+    ],
+  };
+
+  const columnsFix = {
+
+    goods: [
+      {
+        title: "Закрепить изделие",
+        render: (rowData) => {
+          return <input type="checkbox"></input>
+        },
+      },
+      {
+        title: "Наименование изделия ", field: "name"
+      },
+      {
+        title: "Номер  изделия ", field: "number"
+      },
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+
+    ],
 
 
-  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns);
+  };
+
+  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.goods);
   const [value_goTo, setValuegoTo] = useState(0);
 
 
@@ -219,7 +476,7 @@ export const Product = ({
       value: item.id,
       label: item.name,
     };
-  }); 
+  });
   //select Сварочный шов  
   const SeamOptions = seam?.map((item) => {
     return {
@@ -227,26 +484,149 @@ export const Product = ({
       label: `Cварочный шов ${item.number}`,
     };
   });
-     
-  ///Перейти к 
-  function GoTo(title, id) {
+
+  ///Перейти к  
+  function GoTo(param, title, id) {
     setValuegoToTitle(title)
     setValuegoTo(1)
 
 
     setValue(-1);
     setValue2(-1);
-
-    setValuegoToHeadTable(columns)
-    //Вывод Рабочее место для производственного участка 
-    let workplaceNew = []
-    for (let index = 0; index < workplace.length; index++) {
-      if (workplace[index].productionArea?.id === id) {
-        workplaceNew.push(workplace[index])
+    setValuegoToHeadTable(columns[Object.keys(columns)[param]])
+    //Вывод Производственный участок для цеха
+    if (param === 1) {
+      let areaNew = []
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].workshop.id === id) {
+          areaNew.push(area[index])
+        }
       }
+      setValuegoToBodyTable(areaNew)
     }
-    setValuegoToBodyTable(workplaceNew)
+    //Вывод постов для Производственных участоков
+    if (param === 2) {
+      let postsNew = []
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].productionArea.id === id) {
+          postsNew.push(posts[index])
+        }
+      }
+      setValuegoToBodyTable(postsNew)
+    }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 3) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].productionArea?.id === id) {
+          workplaceNew.push(workplace[index])
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+    }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 9) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].post?.id != undefined) {
+          if (workplace[index].post.id === id) {
+            workplaceNew.push(workplace[index])
+          }
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+      setValuegoToHeadTable(columns[Object.keys(columns)[3]])
+    }
+    /////////////////
+    //Вывод деталей для изделий
+    if (param === 6) {
+      let detailNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
 
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+            if (product[index].insideProducts[index2].productType === 3) {
+              detailNew.push(product[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToBodyTable(detailNew)
+    }
+    //Вывод узлов для изделий
+    if (param === 5) {
+      let knotNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+            if (product[index].insideProducts[index2].productType === 2) {
+              knotNew.push(product[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToBodyTable(knotNew)
+    }
+    //Вывод швов для изделий
+    if (param === 7) {
+      let seamNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
+          seamNew = product[index].seams
+        }
+      }
+      setValuegoToBodyTable(seamNew)
+    }
+    /////////////////
+    //Вывод деталей для узла
+    if (param === 10) {
+      let detailNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+
+          for (let index2 = 0; index2 < knot[index].insideProducts.length; index2++) {
+            if (knot[index].insideProducts[index2].productType === 3) {
+              detailNew.push(knot[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[6]])
+      setValuegoToBodyTable(detailNew)
+    }
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+          seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+          seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
+    //Вывод швов для деталей
+    if (param === 12) {
+      let seamNew = []
+      for (let index = 0; index < detail.length; index++) {
+        if (detail[index].id === id) {
+          seamNew = detail[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
   }
 
   const TabPanel = (props_panel) => {
@@ -254,75 +634,212 @@ export const Product = ({
     return <div hidden={value !== indPanel}>{children}</div>;
   };
 
+
+
+  const formattedMasters = masters?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName}`,
+    };
+  });
+  const formattedTechs = techs?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName}`,
+    };
+  });
+
+
+  const exec = [
+    {
+      id: 1,
+      name: "Мастера"
+    },
+    {
+      id: 2,
+      name: "Контролеры УКК"
+    },
+  ]
+
+
+  //Select выбор сотрудника
+  const optExecutors = exec?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
 
       <div className={styles.tableWrapper}>
-        {/*Изделия*/}
-        <TabPanel
-          value={value_panel2}
-          indPanel={0}
-          style={{ minWidth: "800px" }}
-        >
-          <Table
-            title="Изделия"
-            columns={columns}
-            value={0}
-            data={product}
-            actions={
-              userRole === "Admin"
-                ? [
-                  {
-                    icon: "add",
-                    tooltip: "Добавить изделие",
-                    isFreeAction: true,
-                    onClick: () => {
-                      setIsModalOpen(true);
-                      setIsModalNumb(12)
-
-                      setValueProdArea("")
-                      setValuetTechProc("")
-                      setValuetPosts("")
-                      setValueWorkplace("")
-
-                    },
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать изделие",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                      setIsModalNumb(4)
-
-                      setValueProdArea(rowData.workshop?.id)
-                      setValuetTechProc(rowData.technologicalProcess?.id)
-                      setValuetPosts(rowData.productionArea?.id)
-                      setValueWorkplace(rowData.workplace?.id)
-                    },
-                  },
-                ]
-                : []
-            }
-          />
-        </TabPanel>
 
 
-        {/*Перейти к */}
-        <div className="TableToGo">
-          <TabPanel
-            value={value_goTo}
-            style={{ minWidth: "800px" }}
-          >
-            <Table
-              title={value_goToTitle}
-              columns={value_goToHeadTable}
-              data={value_goToBodyTable}
-            />
-          </TabPanel>
-        </div>
 
+
+
+
+        {value_goTo === 1
+          ? (
+            <div className="TableToGo">
+              <TabPanel
+                value={value_goTo}
+                indPanel={value_goTo}
+                style={{ minWidth: "800px" }}
+              >
+                <Table
+                  title={value_goToTitle}
+                  columns={value_goToHeadTable}
+                  data={value_goToBodyTable}
+                />
+              </TabPanel>
+            </div>
+          )
+          : (
+            <div></div>
+          )
+        }
+
+        {value_goTo === 0
+          ? (
+            <TabPanel
+              value={value_panel2}
+              indPanel={0}
+              style={{ minWidth: "800px" }}
+            >
+              <Table
+                title="Изделия"
+                columns={columns.goods}
+                value={0}
+                data={product}
+                actions={
+                  userRole === "Admin"
+                    ? [
+                      {
+                        icon: "add",
+                        tooltip: "Добавить изделие",
+                        isFreeAction: true,
+                        onClick: () => {
+                          setIsModalOpen(true);
+                          setIsModalNumb(12)
+
+                          setValueProdArea("")
+                          setValuetTechProc("")
+                          setValuetPosts("")
+                          setValueWorkplace("")
+
+                        },
+                      },
+                      {
+                        icon: "edit",
+                        tooltip: "Редактировать изделие",
+                        onClick: (event, rowData) => {
+                          setModalData(rowData);
+                          setIsModalOpen(true);
+                          setIsModalNumb(4)
+
+                          setValueProdArea(rowData.workshop?.id)
+                          setValuetTechProc(rowData.technologicalProcess?.id)
+                          setValuetPosts(rowData.productionArea?.id)
+                          setValueWorkplace(rowData.workplace?.id)
+                        },
+                      },
+                    ]
+                    : []
+                }
+              />
+            </TabPanel>
+          )
+          : (
+            <div></div>
+          )
+        }
+
+
+        {valueFixed === 1
+
+          ? (
+            <div className={styles.TableToFixed}>
+
+              <div className={styles.selects}>
+                <Select
+                  name="valueWelder"
+                  value={valueWelder}
+                  width="380px"
+                  placeholder="Сотрудники"
+                  onChange={(event) => {
+                    setValueWelder(event.value)
+                    setValueWelderName("")
+                  }}
+                  options={optExecutors}
+                />
+                {valueWelder === 1
+                  ? (
+                    <div className={styles.select}>
+                      <Select
+                        name="valueWelderExe"
+                        value={valueWelderExe}
+                        width="380px"
+                        placeholder="Мастера"
+                        onChange={(event) => {
+                          setValueWelderExe(event.value)
+                          setValueWelderName(event.label)
+                        }}
+                        options={formattedMasters}
+                      />
+                    </div>
+                  )
+                  : (
+                    <div className={styles.select} >
+                      <Select
+                        className={styles.select}
+                        name="valueWelderExe"
+                        value={valueWelderExe}
+                        width="380px"
+                        placeholder="Контролеры"
+                        onChange={(event) => {
+                          setValueWelderExe(event.value)
+                          setValueWelderName(event.label)
+                        }}
+                        options={formattedTechs}
+                      />
+                    </div>
+                  )
+
+                }
+              </div>
+
+              {valueWelder === 1
+                ? (<h2>Мастер: {valueWelderExeName}</h2>)
+                : (<h2>Контролер: {valueWelderExeName}</h2>)
+
+              }
+
+
+              <button className={styles.fixed}> Закрепить </button>
+
+              <TabPanel
+                value={value_panel2}
+                indPanel={0}
+                style={{ minWidth: "800px" }}
+              >
+                <Table
+                  title="Изделия"
+                  columns={columnsFix.goods}
+                  value={0}
+                  data={product}
+                />
+              </TabPanel>
+
+            </div>
+          )
+          : (
+            <div></div>
+          )
+
+        }
 
         <ModalWindow
           isOpen={isModalOpen}
@@ -421,13 +938,13 @@ export const Product = ({
                     options={SeamOptions}
                   />
                 </div>
- 
+
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == "" || valuetSeam.length==0
+                      values.number == "" || values.name == "" || valuetSeam.length == 0
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

@@ -38,12 +38,16 @@ const dateOptions = {
 
 
 export const Seam = ({ 
+  workshop,
   area,
   posts,
-  texprocwelding,
-  seam,
-
   workplace,
+  product,
+  knot,
+  detail,
+  seam, 
+  texprocwelding,  
+ 
   value_panel,
   value_panel2,
   userRole,
@@ -125,42 +129,51 @@ export const Seam = ({
 
   }
 
-  const columns = [
-    {
-      title: "Наименование сварного шва ",
-      render: (rowData) => {
-        return <p>{rowData.number}</p>;
+  const columns = {
+ 
+    welding_seam: [
+      {
+        title: "Наименование сварного шва ",
+        render: (rowData) => {
+          return <p>{rowData.number}</p>;
+        },
       },
-    },
-    {
-      title: "Номер  сварного шва ", field: "number"
-    },
-
-    {
-      title: "Номер  цеха ", field: "workshop.number"
-    },
-    {
-      title: "Номер  производственного участка ", field: "productionArea.number"
-    },
-    {
-      title: "Номер  рабочего места  ", field: "workplace.number"
-    },
-    {
-      title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-    },
-    {
-      title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-    },
-    {
-      title: "Закрепить задание",
-      render: (rowData) => {
-        return <p className={styles.Fix}>Закрепить</p>;
+      {
+        title: "Номер  сварного шва ", field: "number"
       },
-    },
-  ]
+
+      {
+        title: "Номер  цеха ", field: "workshop.number"
+      },
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      {
+        title: "Закрепить задание",
+        render: (rowData) => {
+          return <p className={styles.Fix}>Закрепить</p>;
+        },
+      },
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
+    ],
+  };
 
 
-  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns);
+  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.welding_seam);
   const [value_goTo, setValuegoTo] = useState(0);
 
 
@@ -212,27 +225,7 @@ export const Seam = ({
       label: `Cварочный шов ${item.number}`,
     };
   });
-     
-  ///Перейти к 
-  function GoTo(title, id) {
-    setValuegoToTitle(title)
-    setValuegoTo(1)
-
-
-    setValue(-1);
-    setValue2(-1);
-
-    setValuegoToHeadTable(columns)
-    //Вывод Рабочее место для производственного участка 
-    let workplaceNew = []
-    for (let index = 0; index < workplace.length; index++) {
-      if (workplace[index].productionArea?.id === id) {
-        workplaceNew.push(workplace[index])
-      }
-    }
-    setValuegoToBodyTable(workplaceNew)
-
-  }
+      
 
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
@@ -250,7 +243,7 @@ export const Seam = ({
         >
           <Table
             title="Сварные швы"
-            columns={columns} 
+            columns={columns.welding_seam} 
             data={seam} 
             actions={
               userRole === "Admin"

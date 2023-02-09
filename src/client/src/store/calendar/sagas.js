@@ -348,7 +348,7 @@ function* addShift({ payload }) {
       "year": 2023,
       "dayId": null
     }); 
-    // window.location.reload()
+    window.location.reload()
     yield put(addShiftSuccess(data)); 
   } catch (error) {
     yield put(addShiftFailure(error));
@@ -453,7 +453,7 @@ function* addDay({ payload }) {
           }
         ]
       });
-      // window.location.reload()
+      window.location.reload()
     }
     // yield put(addDaySuccess(data)); 
   } catch (error) {

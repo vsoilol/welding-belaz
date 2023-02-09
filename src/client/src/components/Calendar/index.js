@@ -101,7 +101,7 @@ export const Calendar = ({
     shiftNumb: modalData?.shiftNumb ?? "",
   };
 
-  
+
 
   const requiredKeys = [
     "object",
@@ -119,7 +119,7 @@ export const Calendar = ({
     loadExecutors();
     loadEquipment();
     (window.localStorage.getItem("executorId")) ? loadDayByWelder(window.localStorage.getItem("executorId")) : loadDayByEquipment(window.localStorage.getItem("equipmentId"))
-  }, [loadCalendaryear, loadExecutors, loadEquipment]); 
+  }, [loadCalendaryear, loadExecutors, loadEquipment]);
 
 
   const getDocument = (activeId) => {
@@ -279,15 +279,15 @@ export const Calendar = ({
   }
 
   function EdditWorkingShift() {
- 
-     document.querySelectorAll(".imgEdit").forEach((elem,index)=>{
-      elem.addEventListener("click",function () {
+
+    document.querySelectorAll(".imgEdit").forEach((elem, index) => {
+      elem.addEventListener("click", function () {
         let numbDay = Number(document.querySelectorAll(".imgEdit")[index].parentElement.querySelector("span").innerHTML)
-     
-         if (window.localStorage.getItem("executorId")) {
+
+        if (window.localStorage.getItem("executorId")) {
           for (let index = 0; index < calendar?.days[1]?.length; index++) {
-            let day = calendar?.days[1][index] 
-            if (numbDay===day.number) { 
+            let day = calendar?.days[1][index]
+            if (numbDay === day.number) {
               setIdEdditWorkingShift(calendar?.days[1][index].id)
             }
           }
@@ -295,18 +295,18 @@ export const Calendar = ({
         else {
           for (let index = 0; index < days?.length; index++) {
             if (days[index] != undefined) {
-              console.log(days[index].number) 
-              if (numbDay===days[index].number) {
+              console.log(days[index].number)
+              if (numbDay === days[index].number) {
                 console.log(days[index].id)
                 setIdEdditWorkingShift(days[index].id)
               }
             }
-  
+
           }
         }
-         setIsModalEditWorkDayOpen(true)
+        setIsModalEditWorkDayOpen(true)
       })
-     }) 
+    })
   }
 
 
@@ -478,133 +478,131 @@ export const Calendar = ({
   //Отображение иконок рабочих дней при наличии
   function DisplayWorkingShift() {
 
-    if (currYear === calendar?.year) {
- 
+    if (currYear === calendar?.year) { 
       if (window.localStorage.getItem("executorId")) {
-        if (calendar?.days[1]!=undefined || calendar?.days[1]!=null) {
-          for (let index = 0; index < calendar?.days[1]?.length; index++) {
-            let day = calendar?.days[1][index]
-            if (day != undefined) {
-              if (day.monthNumber === currMonth && day.isWorkingDay) {
-                document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
-                  if (Number(span.innerHTML) === day.number) {
-                    document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].classList.add("Smena")
-                  }
-  
-                })
-              }
-            }
-  
+        if (calendar?.days[1] != undefined || calendar?.days[1] != null) {  
+          for (let index = 0; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ").length; index++) {
+            let dayCell = document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ")[index]
+            dayCell.classList.add("Smena") 
+          } 
+          for (let index = 1; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) ").length; index++) {
+            let rowWeeks = document.querySelectorAll(".calendar-wrapper table tr:not(.days) ")[index]
+            rowWeeks.querySelectorAll("td")[6].classList.remove("Smena") 
+            rowWeeks.querySelectorAll("td")[5].classList.remove("Smena")
           }
-        }
-        
+          // for (let index = 0; index < calendar?.days[1]?.length; index++) {
+          //   let day = calendar?.days[1][index]
+          //   if (day != undefined) {
+          //     if (day.monthNumber === currMonth && day.isWorkingDay) {
+          //       document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
+          //         if (Number(span.innerHTML) === day.number) {
+          //           document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].classList.add("Smena")
+          //         } 
+          //       })
+          //     }
+          //   } 
+          // }
+        } 
       }
       else {
-        if (days!=undefined || days!=null) {
-          for (let index = 0; index < days?.length; index++) {
-            if (days[index] != undefined) {
-              if (days[index].monthNumber === currMonth && days[index].isWorkingDay) {
-                document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
-                  if (Number(span.innerHTML) === days[index].number) {
-                    document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].classList.add("Smena")
-                  }
-  
-                })
-              }
-            }
-  
+        if (days != undefined || days != null) {
+          for (let index = 0; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ").length; index++) {
+            let dayCell = document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ")[index]
+            dayCell.classList.add("Smena")
           }
-        }
-       
+          for (let index = 1; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) ").length; index++) {
+            let rowWeeks = document.querySelectorAll(".calendar-wrapper table tr:not(.days) ")[index]
+            rowWeeks.querySelectorAll("td")[6].classList.remove("Smena") 
+            rowWeeks.querySelectorAll("td")[5].classList.remove("Smena")
+          }
+          // for (let index = 0; index < days?.length; index++) {
+          //   if (days[index] != undefined) {
+          //     if (days[index].monthNumber === currMonth && days[index].isWorkingDay) {
+          //       document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
+          //         if (Number(span.innerHTML) === days[index].number) {
+          //           document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].classList.add("Smena")
+          //         } 
+          //       })
+          //     }
+          //   } 
+          // }
+        } 
       }
-      EdditWorkingShift()
-
-    }
-
+      EdditWorkingShift() 
+    } 
   }
   ///Отображать список смен в всплывашке 
   function DisplayWorkingShiftTable() {
-    if (currYear === calendar?.year) {
-
+    if (currYear === calendar?.year) { 
       if (window.localStorage.getItem("executorId")) {
-        if (calendar?.days[1]!=undefined || calendar?.days[1]!=null) {
+        if (calendar?.days[1] != undefined || calendar?.days[1] != null) {
           for (let index = 0; index < calendar?.days[1]?.length; index++) {
-            let day =  calendar?.days[1][index] 
+            let day = calendar?.days[1][index]
             if (day.monthNumber === currMonth && day.isWorkingDay) {
-             document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
-               if (Number(span.innerHTML) === day.number) {
-                 let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events");
-   
-                 if (dayCalend!=null) {
-                     dayCalend.innerHTML +=
-                     `
+              document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
+                let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events"); 
+                if (Number(span.innerHTML) === day.number) {
+                  let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events"); 
+                  if (dayCalend != null) {
+                    dayCalend.innerHTML +=
+                      `
                      <div class="row"> 
                        <p>Смена <abbr>${day.workingShifts[0].number}</abbr> <em>( ${day.workingShifts[0].shiftStart} - ${day.workingShifts[0].shiftEnd} )</em></p> 
                        <p>Перерыв  <em>( ${day.workingShifts[0].breakStart} - ${day.workingShifts[0].breakEnd} )</em></p>
                      </div> 
                      `
-                 }
+                  } 
+                } else if (dayCalend != null) {
+                  dayCalend.innerHTML =
+                  `
+                  <div class="row"> 
+                    <p>Смена <abbr>${day.workingShifts[0].number}</abbr> <em>( ${day.workingShifts[0].shiftStart} - ${day.workingShifts[0].shiftEnd} )</em></p> 
+                    <p>Перерыв  <em>( ${day.workingShifts[0].breakStart} - ${day.workingShifts[0].breakEnd} )</em></p>
+                  </div> 
+                  `
+                }
                 
-               }
-             })
-           }
-         } 
-        }
-        
-        
+               
+              })
+            }
+          }
+        } 
       }
       else {
-        if (days!=undefined || days!=null) {
+        if (days != undefined || days != null) {
           for (let index = 0; index < days?.length; index++) {
-        
+
             if (days[index].monthNumber === currMonth && days[index].isWorkingDay) {
               document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
                 if (Number(span.innerHTML) === days[index].number) {
                   let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events");
-    
-                  if (dayCalend!=null) {
-                      dayCalend.innerHTML +=
+                
+                  if (dayCalend != null) {
+                    dayCalend.innerHTML +=
                       `
                       <div class="row"> 
                         <p>Смена <abbr>${days[index].workingShifts[0].number}</abbr> <em>( ${days[index].workingShifts[0].shiftStart} - ${days[index].workingShifts[0].shiftEnd} )</em></p> 
                         <p>Перерыв  <em>( ${days[index].workingShifts[0].breakStart} - ${days[index].workingShifts[0].breakEnd} )</em></p>
                       </div> 
                       `
-                  }
-                 
+                  } 
+                }else if ( document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events") != null) {
+                  document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events").innerHTML =
+                  `
+                  <div class="row"> 
+                    <p>Смена <abbr>${days[index].workingShifts[0].number}</abbr> <em>( ${days[index].workingShifts[0].shiftStart} - ${days[index].workingShifts[0].shiftEnd} )</em></p> 
+                    <p>Перерыв  <em>( ${days[index].workingShifts[0].breakStart} - ${days[index].workingShifts[0].breakEnd} )</em></p>
+                  </div> 
+                  `
                 }
               })
             }
           }
-        } 
+        }
       }
 
     }
-    // if (currYear === calendar?.year) {
-    //   calendar?.days[1]?.forEach(day => {
-    //     if (day.monthNumber === currMonth && day.isWorkingDay) {
-    //       document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index) => {
-    //         if (Number(span.innerHTML) === day.number) {
-    //           let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index].querySelector(".events");
-    //           if (dayCalend != null) {
-    //             dayCalend.innerHTML +=
-    //               `
-    //               <div class="row"> 
-    //                 <p>Смена  <em>( ${day.workingShifts[0].shiftStart} - ${day.workingShifts[0].shiftEnd} )</em></p> 
-    //                 <p>Перерыв  <em>( ${day.workingShifts[0].breakStart} - ${day.workingShifts[0].breakEnd} )</em></p>
-    //               </div> 
-
-    //               `
-    //           }
-    //         }
-    //       })
-    //     }
-    //   });
-    // }
-    // <div class="row"> 
-    //   <p>Смена <abbr>1</abbr><em>11:30 - 11:30</em></p> 
-    //   <p>Перерыв <abbr>1</abbr><em>11:30 - 11:30</em></p>
-    // </div> 
+    
   }
   ////*****************//////////////////!!!!!  Calendar
 
@@ -612,9 +610,9 @@ export const Calendar = ({
 
   function EditWorkDaySend(variables) {
 
-    variables["daiID"]=valueIdEdditWorkingShift
-    variables["monthNumber"]=new Date(variables.workDay).getUTCMonth() + 1;
-    variables["number"]=new Date(variables.workDay).getUTCDate() ; 
+    variables["daiID"] = valueIdEdditWorkingShift
+    variables["monthNumber"] = new Date(variables.workDay).getUTCMonth() + 1;
+    variables["number"] = new Date(variables.workDay).getUTCDate();
     editDay(variables)
   }
 
@@ -746,56 +744,7 @@ export const Calendar = ({
                 }
 
 
-                {/* <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.shiftStart}
-                    name="shiftStart"
-                    placeholder="Начало работы"
-                    onBlur={handleBlur}
-                  />
 
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.shiftEnd}
-                    name="shiftEnd"
-                    placeholder="Конец работы"
-                    onBlur={handleBlur}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.breakStart}
-                    name="breakStart"
-                    placeholder="Начало перерыва"
-                    onBlur={handleBlur}
-                  />
-
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.breakEnd}
-                    name="breakEnd"
-                    placeholder="Конец перерыва"
-                    onBlur={handleBlur}
-                  />
-                </div> */}
                 <div className={styles.row}>
 
 
@@ -872,74 +821,11 @@ export const Calendar = ({
                     onBlur={handleBlur}
                   />
                 </div>
-                {/* <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.shiftStart}
-                    name="shiftStart"
-                    placeholder="Начало работы"
-                    onBlur={handleBlur}
-                  />
 
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.shiftEnd}
-                    name="shiftEnd"
-                    placeholder="Конец работы"
-                    onBlur={handleBlur}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.breakStart}
-                    name="breakStart"
-                    placeholder="Начало перерыва"
-                    onBlur={handleBlur}
-                  />
-
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.breakEnd}
-                    name="breakEnd"
-                    placeholder="Конец перерыва"
-                    onBlur={handleBlur}
-                  />
-                </div> */}
-                {/* <div className={styles.row}>
-
-
-                  <Select
-                    name="valueWorkingShift"
-                    value={valueWorkingShift}
-                    width="380px"
-                    placeholder="Смена"
-                    onChange={(event) => {
-                      setValueWorkingShift(event.value)
-                    }}
-                    options={WorkingShiftOptions}
-                  />
-                </div> */}
                 <div className={styles.row}>
                   <Button
                     disabled={
-                      values.workDay == ""  
+                      values.workDay == ""
                     }
                     type="submit"
                   >
@@ -1062,92 +948,7 @@ export const Calendar = ({
           </Formik>
         </ModalWindow>
 
-        {/* <ModalWindow
-          isOpen={isModalOpen}
-          headerText={modalData ? "Редактировать смену" : "Добавить смену"}
-          setIsOpen={(state) => {
-            setIsModalOpen(state);
-            setModalData(null);
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setIsModalOpen(false);
-              setModalData(null);
-              SendData(variables)
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <div className={styles.row}>
-                  <Select
-                    name="valueObj"
-                    value={valueObj}
-                    width="380px"
-                    placeholder="Оборудование / Сотрудник"
-                    onChange={(event) => {
-                      setValueObj(event.value)
-                    }}
-                    options={optObs}
-                  />
-                </div>
 
-                <DisplaySelect />
-
-
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                    value={values.sector}
-                    name="sector"
-                    placeholder="Смена"
-                    onBlur={handleBlur}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                    value={values.shiftDay}
-                    name="shiftDay"
-                    placeholder="День"
-                    type="text"
-                    onFocus={(e) => {
-                      e.currentTarget.type = "date";
-                    }}
-                    onBlur={handleBlur}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Button
-                    disabled={
-                      values.nameEquipment == "" || values.nameExecutors == "" || values.sector == "" || values.shiftDay == ""
-                      || values.valueEquipment == "" || values.valueExecutors == ""
-                    }
-                    type="submit"
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
-                  </Button>
-                </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow> */}
 
 
       </div>

@@ -77,8 +77,7 @@ const loadExecutorsSuccess = (state = INITIAL_STATE, { executors }) => {
   };
 };
 ///Equipment
-const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
-  console.log(equipment)
+const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => { 
   return {
     ...state,
     isRequesting: false,
@@ -116,8 +115,8 @@ const addDaySuccess = (state = INITIAL_STATE, { day }) => {
   return {
     ...state,
     isRequesting: false,
-    days: state.calendaryear.days.push(day)
-  };
+    days: state.calendaryear?.days?.push(day)
+  }; 
 };
 const loadDayByWelderSuccess = (state = INITIAL_STATE, { day }) => {
   return {
