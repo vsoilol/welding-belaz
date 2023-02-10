@@ -1942,6 +1942,7 @@ public class DataSeed
 
         var inspector = new Inspector
         {
+            IdFromSystem = "235565",
             UserInfo = new UserData
             {
                 ServiceNumber = "35565",
