@@ -362,6 +362,50 @@ public class DataSeed
                                 IdFromSystem = "1360"
                             }
                         }
+                    },
+                    new ProductionArea
+                    {
+                        Name = "Сборка, сварка рам к/с г/п 120-130 т.",
+                        Number = 6,
+                        IdFromSystem = "06",
+                        Workplaces = new List<Workplace>
+                        {
+                            new Workplace
+                            {
+                                Number = 3520,
+                                IdFromSystem = "3520"
+                            },
+                            new Workplace
+                            {
+                                Number = 3610,
+                                IdFromSystem = "3610"
+                            },
+                            new Workplace
+                            {
+                                Number = 3500,
+                                IdFromSystem = "3500"
+                            },
+                            new Workplace
+                            {
+                                Number = 3590,
+                                IdFromSystem = "3590"
+                            },
+                            new Workplace
+                            {
+                                Number = 3600,
+                                IdFromSystem = "3600"
+                            },
+                            new Workplace
+                            {
+                                Number = 3690,
+                                IdFromSystem = "3690"
+                            },
+                            new Workplace
+                            {
+                                Number = 3650,
+                                IdFromSystem = "3650"
+                            },
+                        }
                     }
                 }
             },
@@ -439,6 +483,50 @@ public class DataSeed
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка"
+            },
+            new WeldingEquipment
+            {
+                IdFromSystem = "508",
+                Name = "GLC556-C",
+                Marking = "GLC556-C",
+                FactoryNumber = "49225",
+                CommissioningDate = new DateTime(2008, 1, 1),
+                GroupNumber = "3.11",
+                ManufacturerName = "CLOOS",
+                WeldingProcess = "Полуавтоматическая сварка"
+            },
+            new WeldingEquipment
+            {
+                IdFromSystem = "535",
+                Name = "GLC556-C",
+                Marking = "GLC556-C",
+                FactoryNumber = "49286",
+                CommissioningDate = new DateTime(2010, 1, 1),
+                GroupNumber = "3.11",
+                ManufacturerName = "CLOOS",
+                WeldingProcess = "Полуавтоматическая сварка"
+            },
+            new WeldingEquipment
+            {
+                IdFromSystem = "511",
+                Name = "GLC556-C",
+                Marking = "GLC556-C",
+                FactoryNumber = "49232",
+                CommissioningDate = new DateTime(2008, 1, 1),
+                GroupNumber = "3.11",
+                ManufacturerName = "CLOOS",
+                WeldingProcess = "Полуавтоматическая сварка"
+            },
+            new WeldingEquipment
+            {
+                IdFromSystem = "499",
+                Name = "GLC556-C",
+                Marking = "GLC556-C",
+                FactoryNumber = "49283",
+                CommissioningDate = new DateTime(2008, 1, 1),
+                GroupNumber = "3.11",
+                ManufacturerName = "CLOOS",
+                WeldingProcess = "Полуавтоматическая сварка"
             }
         };
 
@@ -450,20 +538,21 @@ public class DataSeed
     {
         var techUserRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Inspector)))!;
         var productionArea = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "05");
+        var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06");
 
         var inspectors = new List<Inspector>
         {
             new Inspector
             {
-                IdFromSystem = "235565",
+                IdFromSystem = "249550",
                 UserInfo = new UserData
                 {
-                    ServiceNumber = "35565",
-                    MiddleName = "Долгая",
-                    FirstName = "Татьяна",
-                    LastName = "Стефановна",
+                    ServiceNumber = "49550",
+                    MiddleName = "Грук",
+                    FirstName = "Екатерина",
+                    LastName = "Сергеевна",
                     Position = "Контролер сварочных работ",
-                    ProductionArea = productionArea,
+                    ProductionArea = productionArea6,
                     UserRoles = new List<UserRole>
                     {
                         new UserRole
@@ -524,9 +613,50 @@ public class DataSeed
         var masterRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master)))!;
         var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
         var productionArea1 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01");
+        var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06");
 
         var masters = new List<Master>
         {
+            new Master
+            {
+                IdFromSystem = "614962",
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "14962",
+                    MiddleName = "Алёксов",
+                    FirstName = "Геннадий",
+                    LastName = "Александрович",
+                    Position = "Мастер производственного участка",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = masterRole
+                        }
+                    }
+                },
+            },
+            new Master
+            {
+                IdFromSystem = "610422",
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "10422",
+                    MiddleName = "Беляцкий",
+                    FirstName = "Сергей",
+                    LastName = "Николаевич",
+                    Position = "Мастер производственного участка",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = masterRole
+                        }
+                    }
+                },
+            },
             new Master
             {
                 IdFromSystem = "613668",
@@ -637,17 +767,210 @@ public class DataSeed
     {
         var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
         var productionArea1 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01");
+        var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06");
 
         var weldingEquipment =
             (await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "8008336102-130"))!;
         var weldingEquipment162 = (await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "162"))!;
         var weldingEquipment114 = (await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "114"))!;
         var weldingEquipment146 = (await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "146"))!;
+        var weldingEquipment508 = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.IdFromSystem == "508"))!;
+        var weldingEquipment535 = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.IdFromSystem == "535"))!;
+        var weldingEquipment511 = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.IdFromSystem == "511"))!;
+        var weldingEquipment499 = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.IdFromSystem == "499"))!;
+        
+        var workplace3520 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3520))!;
+        var workplace3610 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3610))!;
+        var workplace3500 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3500))!;
+        var workplace3590 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3590))!;
+        var workplace3600 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3600))!;
+        var workplace3690 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3690))!;
+        var workplace3650 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3650))!;
 
         var welderRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Welder)))!;
 
         var welders = new List<Welder>
         {
+            new Welder
+            {
+                IdFromSystem = "151299",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment499 },
+                Workplace = workplace3650,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "51299",
+                    MiddleName = "Михолап",
+                    FirstName = "Василий",
+                    LastName = "Васильевич",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "150882",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment499 },
+                Workplace = workplace3690,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "50882",
+                    MiddleName = "Буландо",
+                    FirstName = "Юрий",
+                    LastName = "Сергеевич",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "121267",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment511 },
+                Workplace = workplace3600,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "21267",
+                    MiddleName = "Казинец",
+                    FirstName = "Василий",
+                    LastName = "Владимирович",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "117390",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment511 },
+                Workplace = workplace3610,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "17390",
+                    MiddleName = "Казачёнок",
+                    FirstName = "Сергей",
+                    LastName = "Анатольевич",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "145092",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment535 },
+                Workplace = workplace3590,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "45092",
+                    MiddleName = "Козылев",
+                    FirstName = "Антон",
+                    LastName = "Павлович",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "132695",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment535 },
+                Workplace = workplace3500,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "32695",
+                    MiddleName = "Виторский",
+                    FirstName = "Владимир",
+                    LastName = "Францевич",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "146325",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment508 },
+                Workplace = workplace3610,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "46325",
+                    MiddleName = "Канапацкий",
+                    FirstName = "Олег",
+                    LastName = "Дмитриевич",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "120756",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment508 },
+                Workplace = workplace3520,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "20756",
+                    MiddleName = "Авхимович",
+                    FirstName = "Пётр",
+                    LastName = "Алексеевич",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
             new Welder
             {
                 IdFromSystem = "121537",
