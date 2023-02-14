@@ -72,10 +72,10 @@ public class DataSeed
             await AddTechnologicalProcesses(context);
         }
 
-        if (!context.TechnologicalInstructions.Any())
+        /*if (!context.TechnologicalInstructions.Any())
         {
             await AddTechnologicalInstruction(context);
-        }
+        }*/
     }
 
     private static async Task CreateRolesAsync(ApplicationContext context)
@@ -2113,7 +2113,7 @@ public class DataSeed
                 },
                 Seam = new Seam
                 {
-                    Number = 2,
+                    Number = 1,
                     Length = 100,
                     Status = ProductStatus.Accept,
                     IsControlSubject = true,
