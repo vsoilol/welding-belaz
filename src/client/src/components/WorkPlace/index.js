@@ -40,6 +40,9 @@ import { Knot } from "components/WorkPlace/components";
 import { Detail } from "components/WorkPlace/components";
 import { Seam } from "components/WorkPlace/components";
 
+import { Weldingtask } from "components/WorkPlace/components";
+
+
 
 
 
@@ -114,10 +117,15 @@ export const WorkPlace = ({
 
 
   detailbyinspector,
-  getDetailByInspector
+  getDetailByInspector,
+
+
+  loadWeldingTask,
+  weldingtask,
+
 }) => {
 
-
+ 
 
 
   const [workplaceValue, setValueWorkplaceValue] = useState(0);
@@ -129,7 +137,7 @@ export const WorkPlace = ({
 
 
 
-  let RefElem  =  React.createRef()
+  let RefElem = React.createRef()
 
   useEffect(() => {
     loadWorkshop();
@@ -143,6 +151,7 @@ export const WorkPlace = ({
     loadTexprocwelding();
     loadMasters();
     loadTechs();
+    loadWeldingTask()
     loadExecutors();
   }, [
     loadWorkshop,
@@ -155,6 +164,7 @@ export const WorkPlace = ({
     loadTexprocwelding,
     loadMasters,
     loadTechs,
+    loadWeldingTask,
     loadExecutors,
   ]);
 
@@ -180,31 +190,31 @@ export const WorkPlace = ({
 
     DisplayWorkPlace(workplaceValue, newValue)
   };
- 
+
 
   function DisplayWorkPlace(panel1, panel2) {
     let primaryPanel = workplaceValue
     let secondPanel = value_panel
     if (primaryPanel == 1) {
       secondPanel = value_panel2
-    } 
+    }
 
 
-  
 
-    if (primaryPanel === 0 && secondPanel === 0) { 
-       
+
+    if (primaryPanel === 0 && secondPanel === 0) {
+
       return (
         <Workshop
           indPanel={indPanel}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
@@ -215,21 +225,21 @@ export const WorkPlace = ({
     }
     else if (primaryPanel === 0 && secondPanel === 1) {
       return (
-        <ProductionArea  
+        <ProductionArea
           indPanel={indPanel}
           ref={RefElem}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-          
+
           addArea={addArea}
           editArea={editArea}
         />
@@ -237,20 +247,20 @@ export const WorkPlace = ({
     }
     else if (primaryPanel === 0 && secondPanel === 2) {
       return (
-        <Posts  
+        <Posts
           ref={RefElem}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-          
+
           addPosts={addPosts}
           editPosts={editPosts}
         />
@@ -258,20 +268,20 @@ export const WorkPlace = ({
     }
     else if (primaryPanel === 0 && secondPanel === 3) {
       return (
-        <Place  
+        <Place
           ref={RefElem}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-          
+
           addWorkplace={addWorkplace}
           editWorkplace={editWorkplace}
         />
@@ -281,16 +291,17 @@ export const WorkPlace = ({
 
     else if (primaryPanel === 1 && secondPanel === 0) {
       return (
-        <Product   
+        <Product
           ref={RefElem}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          posts={posts}
+          executors={executors}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           texprocwelding={texprocwelding}
           value_panel={value_panel}
           value_panel2={value_panel2}
@@ -298,7 +309,8 @@ export const WorkPlace = ({
 
           masters={masters}
           techs={techs}
-          
+
+
           addProduct={addProduct}
           editProduct={editProduct}
         />
@@ -309,13 +321,14 @@ export const WorkPlace = ({
         <Knot
           ref={RefElem}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          executors={executors}
+          posts={posts}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           texprocwelding={texprocwelding}
           value_panel={value_panel}
           value_panel2={value_panel2}
@@ -323,7 +336,7 @@ export const WorkPlace = ({
 
           masters={masters}
           techs={techs}
-          
+
           addKnot={addKnot}
           editKnot={editKnot}
         />
@@ -334,18 +347,19 @@ export const WorkPlace = ({
         <Detail
           ref={RefElem}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          posts={posts}
+          executors={executors}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           texprocwelding={texprocwelding}
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-          
+
           addDetail={addDetail}
           editDetail={editDetail}
         />
@@ -353,28 +367,38 @@ export const WorkPlace = ({
     }
     else if (primaryPanel === 1 && secondPanel === 3) {
       return (
-        <Seam 
+        <Seam
           ref={RefElem}
           workshop={workshop}
-          area={area}  
-          posts={posts}  
-          workplace={workplace}  
-          product={product}  
-          knot={knot}  
-          detail={detail}  
-          seam={seam}  
+          area={area}
+          posts={posts}
+          workplace={workplace}
+          product={product}
+          knot={knot}
+          detail={detail}
+          seam={seam}
           texprocwelding={texprocwelding}
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-          
+
           addSeam={addSeam}
           editSeam={editSeam}
         />
       )
     }
 
-    
+
+    else if (primaryPanel === 2  ) {
+      return (
+         <Weldingtask 
+         weldingtask={weldingtask}
+         executors={executors}
+         />
+      )
+    }
+
+
     else {
       return (
         <div></div>
@@ -401,13 +425,13 @@ export const WorkPlace = ({
       >
         <Tab label="Структура производства" />
         <Tab label="Структура продукции" />
+        <Tab label="Информация о продукции" />
 
       </Tabs>
 
 
       {workplaceValue === 0
         ? (
-
           <Tabs
             value={value_panel}
             onChange={ChangePanels}
@@ -421,7 +445,12 @@ export const WorkPlace = ({
             <Tab label="Рабочие места" />
           </Tabs>
         )
-        : (
+        :<div></div>
+         
+      }
+      {workplaceValue === 1
+        ? (
+
           <Tabs
             value={value_panel2}
             onChange={ChangePanels}
@@ -436,6 +465,11 @@ export const WorkPlace = ({
             <Tab label="Сварные швы" />
           </Tabs>
         )
+        :<div></div>
+      }
+       {workplaceValue === 2
+        ? <div></div>
+        : <div></div>
       }
 
 

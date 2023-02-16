@@ -52,10 +52,18 @@ const { Types, Creators } = createActions({
   editWorkplaceSuccess: ["workplace"],
   editWorkplaceFailure: ["error"],
 
+
+
+
+
+
+
+
   ///Изделия
   loadProductRequest: ["payload"],
   loadProductSuccess: ["product"],
   loadProductFailure: ["error"],
+ 
 
   addProductRequest: ["payload"],
   addProductSuccess: ["product"],
@@ -64,6 +72,7 @@ const { Types, Creators } = createActions({
   editProductRequest: ["payload"],
   editProductSuccess: ["product"],
   editProductFailure: ["error"],
+   
 
   ///Узлы
   loadKnotRequest: ["payload"],
@@ -77,6 +86,7 @@ const { Types, Creators } = createActions({
   editKnotRequest: ["payload"],
   editKnotSuccess: ["knot"],
   editKnotFailure: ["error"],
+
 
   ///Детали
   loadDetailRequest: ["payload"],
@@ -117,6 +127,14 @@ const { Types, Creators } = createActions({
   loadDetailbyinspectorRequest: ["payload"],
   loadDetailbyinspectorSuccess: ["detailbyinspector"],
   loadDetailbyinspectorFailure: ["error"],
+
+
+
+  ///////////
+  loadWeldingtaskRequest: ["payload"],
+  loadWeldingtaskSuccess: ["weldingtask"],
+  loadWeldingtaskFailure: ["error"],
+
 
 });
 

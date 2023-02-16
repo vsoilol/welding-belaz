@@ -144,7 +144,7 @@ const loadProductSuccess = (state = INITIAL_STATE, { product }) => {
     isRequesting: false,
     product,
   };
-};
+}; 
 const addProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
     ...state,
@@ -159,7 +159,8 @@ const editProductSuccess = (state = INITIAL_STATE, { product }) => {
     isRequesting: false,
     product: state.product.map((item, index) => item.id === product.id ? state.product[index] = product : item)
   };
-};
+}; 
+
 ///Узлы
 const loadKnotSuccess = (state = INITIAL_STATE, { knot }) => {
   return {
@@ -243,6 +244,16 @@ const loadDetailbyinspectorSuccess = (state = INITIAL_STATE, { detailbyinspector
   };
 };
 
+//////
+const loadWeldingtaskSuccess = (state = INITIAL_STATE, { weldingtask }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    weldingtask,
+  };
+};
+
+
 const failure = (state = INITIAL_STATE, { error }) => {
   console.log(error)
   return {
@@ -251,6 +262,7 @@ const failure = (state = INITIAL_STATE, { error }) => {
     error,
   };
 };
+
 
 
 export const HANDLERS = {
@@ -302,10 +314,18 @@ export const HANDLERS = {
   [Types.EDIT_WORKPLACE_REQUEST]: request,
   [Types.EDIT_WORKPLACE_SUCCESS]: editWorkplaceSuccess,
   [Types.EDIT_WORKPLACE_FAILURE]: failure,
+
+
+
+
+
+
   ///Изделия
   [Types.LOAD_PRODUCT_REQUEST]: request,
   [Types.LOAD_PRODUCT_SUCCESS]: loadProductSuccess,
   [Types.LOAD_PRODUCT_FAILURE]: failure,
+
+ 
 
   [Types.ADD_PRODUCT_REQUEST]: request,
   [Types.ADD_PRODUCT_SUCCESS]: addProductSuccess,
@@ -314,6 +334,7 @@ export const HANDLERS = {
   [Types.EDIT_PRODUCT_REQUEST]: request,
   [Types.EDIT_PRODUCT_SUCCESS]: editProductSuccess,
   [Types.EDIT_PRODUCT_FAILURE]: failure,
+ 
   ///Узлы
   [Types.LOAD_KNOT_REQUEST]: request,
   [Types.LOAD_KNOT_SUCCESS]: loadKnotSuccess,
@@ -360,6 +381,12 @@ export const HANDLERS = {
   [Types.LOAD_DETAILBYINSPECTOR_REQUEST]: request,
   [Types.LOAD_DETAILBYINSPECTOR_SUCCESS]: loadDetailbyinspectorSuccess,
   [Types.LOAD_DETAILBYINSPECTOR_FAILURE]: failure,
+
+
+  /////////
+  [Types.LOAD_WELDINGTASK_REQUEST]: request,
+  [Types.LOAD_WELDINGTASK_SUCCESS]: loadWeldingtaskSuccess,
+  [Types.LOAD_WELDINGTASK_FAILURE]: failure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

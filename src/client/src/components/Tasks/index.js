@@ -137,14 +137,24 @@ export const Tasks = ({
       title: "Исполнитель",
       field: "masterId",
       render: (rowData) => {
-        return (
-          <p>{`
-            ${rowData?.welder?.middleName} 
-            ${rowData?.welder?.firstName} 
-            ${rowData?.welder?.lastName}
-            `} 
-          </p>
-        );
+        console.log(rowData)
+        if (rowData?.welder!=null) {
+          return (
+            <p>{`
+              ${rowData?.welder?.middleName} 
+              ${rowData?.welder?.firstName} 
+              ${rowData?.welder?.lastName}
+              `} 
+            </p>
+          );
+        }
+        else{
+          return (
+            <p>{`  -   `} 
+            </p>
+          );
+        }
+        
       },
     },
     {
@@ -174,14 +184,22 @@ export const Tasks = ({
       title: "Контролер",
       field: "masterId",
       render: (rowData) => {
-        return (
-          <p>{`
-            ${rowData?.inspector?.middleName} 
-            ${rowData?.inspector?.firstName} 
-            ${rowData?.inspector?.lastName}
-            `} 
-          </p>
-        );
+        if (rowData?.inspector!=null) {
+          return (
+            <p>{`
+              ${rowData?.inspector?.middleName} 
+              ${rowData?.inspector?.firstName} 
+              ${rowData?.inspector?.lastName}
+              `} 
+            </p>
+          );
+        }
+        else{
+          return (
+            <p>{`  -   `} 
+            </p>
+          );
+        } 
       },
     }, 
     {

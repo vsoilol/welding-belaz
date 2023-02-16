@@ -50,12 +50,14 @@ export const Product = ({
 
   masters,
   techs,
+  executors,
 
   value_panel,
   value_panel2,
   userRole,
   addProduct,
   editProduct,
+
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -64,7 +66,7 @@ export const Product = ({
 
   const [valueProdArea, setValueProdArea] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
-  const [valuetPosts, setValuetPosts] = useState();
+  const [valuetPosts, setValuetPosts] = useState(area[0].id);
   const [valuetWorkPlace, setValuetWorkPlace] = useState();
 
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
@@ -84,8 +86,15 @@ export const Product = ({
 
 
   const [valueFixed, setValueFixed] = useState(0);
+  //Создание задания
+  const [createTask, setcreateTask] = useState(0);
 
-
+  //Выбранные сварщики
+  const [welderListChoise, setwelderListChoise] = useState([]);
+  //Выбранное изделие/деталь/узел
+  const [valueChoise, setvalueChoise] = useState("");
+  //Id выбранного изделие/деталь/узел
+  const [valueIdIzdelia, setIdIzdelia] = useState("");
 
   const initialValues = {
     name: modalData?.name ?? "",
@@ -132,6 +141,7 @@ export const Product = ({
 
     //Добавить Изделие
     if (isModalNumb == 12) {
+      variables["status"] = "add"
       addProduct(variables)
     }
     //Редактировать Изделие
@@ -140,6 +150,7 @@ export const Product = ({
     }
 
   }
+
 
   const columns = {
     workshops: [
@@ -237,17 +248,17 @@ export const Product = ({
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
       {
-        title: "Закрепить изделие",
+        title: "Создание задания",
         render: (rowData) => {
-          return <p className={styles.Fix} onClick={e=>{setValueFixed(1) ; setValuegoTo(2)}}>Закрепить</p>;
+          return <p className={styles.Fix} onClick={e => {
+            setcreateTask(1);
+            setValuegoTo(2);
+            setvalueChoise(rowData.name)
+            setIdIzdelia(rowData.id)
+          }}>Создать</p>;
         },
       },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
+
       {
         title: "Перерейти к",
         render: (rowData) => {
@@ -394,7 +405,11 @@ export const Product = ({
       //   },
       // },
     ],
+
+
   };
+
+
 
   const columnsFix = {
 
@@ -429,7 +444,42 @@ export const Product = ({
       },
 
     ],
-
+    welder: [
+      {
+        title: "Закрепить сварщика",
+        render: (rowData) => {
+          return <input type="checkbox" onClick={e => { ChioseWelder(rowData) }}></input>
+        },
+      },
+      {
+        title: "RFID-метка",
+        render: (rowData) => {
+          return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+        },
+      },
+      {
+        title: "Имя",
+        field: "firstName",
+      },
+      {
+        title: "Фамилия",
+        field: "middleName",
+      },
+      {
+        title: "Отчество",
+        field: "lastName",
+      },
+      {
+        title: "Цех",
+        render: (rowData) => {
+          return rowData?.workshop?.name;
+        },
+      },
+      {
+        title: "Производственный участок",
+        field: "productionArea.name",
+      },
+    ]
 
   };
 
@@ -447,7 +497,6 @@ export const Product = ({
       return "Добавить Изделие"
     }
   }
-
 
   //select Посты   
   const optPosts = area?.map((item) => {
@@ -670,6 +719,97 @@ export const Product = ({
     };
   });
 
+
+  const [welderList, setwelderList] = useState(welderGetList(area[0].id, 0));
+  function welderGetList(idArea, tools_numb) {
+
+    if (tools_numb != 0) {
+      let welderList = []
+      for (let index = 0; index < executors.length; index++) {
+        if (executors[index].productionArea.id === idArea) {
+          welderList.push(executors[index])
+        }
+      }
+      setwelderList(welderList)
+    }
+    else {
+      let welderList = []
+      for (let index = 0; index < executors.length; index++) {
+        if (executors[index].productionArea.id === idArea) {
+          welderList.push(executors[index])
+        }
+      }
+      return welderList
+    }
+  }
+
+  function ChioseWelder(welder) {
+    if (welder["active"] === undefined) {
+      welderListChoise.push(welder.id)
+      welder["active"] = 1
+      setwelderListChoise(welderListChoise)
+    }
+    else if (welder["active"] === 1) {
+      for (let index = 0; index < welderListChoise.length; index++) {
+        if (welderListChoise[index].id === welder.id) {
+          welderListChoise.splice(index, 1)
+        }
+      }
+      welder["active"] = 0
+    }
+    else if (welder["active"] === 0) {
+      welderListChoise.push(welder.id)
+      setwelderListChoise(welderListChoise)
+      welder["active"] = 1
+    }
+  }
+
+
+  function SendChoiseWelder() {
+    let dataToassignWelders = {
+      "productId": valueIdIzdelia,
+      "welderIds": welderListChoise,
+      status: "assign"
+    }
+    addProduct(dataToassignWelders)
+
+  }
+
+
+  ////Скрыть отобразить сварные швы изделия/узла/детали 
+  const [displaySeams, setdisplaySeams] = useState(0);
+  const [SeamsList, setSeamsList] = useState([]);
+
+  function SeamsDisplay() {
+    if (displaySeams === 0) {
+      GetSeams()
+      setdisplaySeams(1)
+    }
+    else {
+      setdisplaySeams(0)
+    }
+  }
+
+
+  function GetSeams() {
+
+    let SeamsArray = []
+    for (let index = 0; index < product.length; index++) {
+      if (product[index].id === valueIdIzdelia) {
+        for (let index2 = 0; index2 < seam.length; index2++) {
+
+          for (let index3 = 0; index3 < product[index].seams.length; index3++) {
+            if (seam[index2].id === product[index].seams[index3].id) {
+              SeamsArray.push(seam[index2])
+            }
+          }
+        }
+
+      }
+    }
+    setSeamsList(SeamsArray)
+  }
+
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -758,12 +898,12 @@ export const Product = ({
         }
 
 
-        {valueFixed === 1
+        {createTask === 1
 
           ? (
             <div className={styles.TableToFixed}>
 
-              <div className={styles.selects}>
+              {/* <div className={styles.selects}>
                 <Select
                   name="valueWelder"
                   value={valueWelder}
@@ -809,16 +949,61 @@ export const Product = ({
                   )
 
                 }
-              </div>
+              </div> */}
 
-              {valueWelder === 1
+              {/* {valueWelder === 1
                 ? (<h2>Мастер: {valueWelderExeName}</h2>)
                 : (<h2>Контролер: {valueWelderExeName}</h2>)
 
-              }
+              } */}
+              <h2>Формирование задания на сварку</h2>
+              <h3>Изделие: {valueChoise}</h3>
+
+              <div className={styles.Seams}>
+                {
+                  displaySeams === 0
+                    ? <span className={styles.refSeam} onClick={SeamsDisplay}>Просмотреть сварные швы для изделия</span>
+                    : <span className={styles.refSeam} onClick={SeamsDisplay}>Скрыть сварные швы для изделия</span>
+                }
+                {
+                  displaySeams === 1
+                    ? (
+                      <TabPanel
+                        style={{  minWidth: "800px", }}
+                      >
+                        <Table
+                          title="Сварные швы"
+                          columns={columns.welding_seam}
+                          data={SeamsList}
+                        />
+                      </TabPanel>
+                    )
+                    : <div></div>
+                }
+
+                
+
+              </div>
+
+              <div className={styles.selects}>
+                <div className={styles.roww}>
+                  <p>Производственные участки</p>
+                  <Select
+                    name="valuetPosts"
+                    width="380px"
+                    value={valuetPosts}
+                    placeholder="Производственные участки"
+                    onChange={(event) => {
+                      setValuetPosts(event.value)
+                      welderGetList(event.value, 1)
+                    }}
+                    options={optPosts}
+                  />
+                  <button className={styles.fixed} onClick={SendChoiseWelder}> Создать задание </button>
+                </div>
+              </div>
 
 
-              <button className={styles.fixed}> Закрепить </button>
 
               <TabPanel
                 value={value_panel2}
@@ -826,10 +1011,10 @@ export const Product = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title="Изделия"
-                  columns={columnsFix.goods}
+                  title="Сварщики"
+                  columns={columnsFix.welder}
                   value={0}
-                  data={product}
+                  data={welderList}
                 />
               </TabPanel>
 

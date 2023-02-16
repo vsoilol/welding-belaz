@@ -42,8 +42,8 @@ export const TexProcWelding = ({
   editInst,
 
 
-  equipment, 
-  deleteEquipment, 
+  equipment,
+  deleteEquipment,
   isRequesting,
   masters,
   userRole,
@@ -65,23 +65,23 @@ export const TexProcWelding = ({
   const [activeEquipment, setActiveEquipment] = useState("");
   const [open, setOpen] = useState(false);
 
-  const [valuetSeam, setValuetSeam] = useState(0); 
-  const [valuetVkladka, setValuetVkladka] = useState(0); 
+  const [valuetSeam, setValuetSeam] = useState(0);
+  const [valuetVkladka, setValuetVkladka] = useState(0);
 
   const initialValues = {
 
-    id:modalData?.weldPassageInstructions.id??"",
+    id: modalData?.weldPassageInstructions.id ?? "",
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
     weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
-    weldingCurrentMin:modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
-    weldingCurrentMax:modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
-    arcVoltageMin:modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
-    arcVoltageMax:modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
-    preheatingTemperatureMin:modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
-    preheatingTemperatureMax:modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
-    weldPassagesId:modalData?.weldPassageInstructions[0].id ?? "",
-  }; 
+    weldingCurrentMin: modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
+    weldingCurrentMax: modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
+    arcVoltageMin: modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
+    arcVoltageMax: modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
+    preheatingTemperatureMin: modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
+    preheatingTemperatureMax: modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
+    weldPassagesId: modalData?.weldPassageInstructions[0].id ?? "",
+  };
 
   const formattedMasters = masters?.map((item) => {
     return {
@@ -113,40 +113,46 @@ export const TexProcWelding = ({
       title: "Номер технологического процесса", field: "number",
     },
     {
-      title: "Ссылка на PDF-файл ", field: "pdmSystemFileLink",
-    },
-    {
-      title: "Изделие", field: "technologicalInstructions[0].seam.product.name",
-    },
-    {
-      title: "Сборочные узлы",
-      render: (rowData) => { 
-        return ( 
-          <span>Сборочный узел {rowData?.technologicalInstructions[0]?.seam?.number}</span>
-        );
-      } 
-    },
-    {
-      title: "Детали", field: "technologicalInstructions[0].seam.product.name",
-    },
-    {
-      title: "Швы", field: "technologicalInstructions[0].seam.product.productType",
-    },
-    {
-      title: "Диапазоны допустимых значений контролируемых параметров (сварочный ток, напряжение на дуге)",
+      title: "Ссылка на PDF-файл ",
       render: (rowData) => (
-        <span>
-          {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMin} 
-          - {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMax}
-          </span>
-      ),
+        <a href="#">
+          {rowData?.pdmSystemFileLink}  
+        </a>
+      ), 
     },
-    {
-      title: "Размеры шва", field: "technologicalInstructions[0].seam.product.productType",
-    },
-    {
-      title: "Количество проходов", field: "technologicalInstructions[0].seam.product.productType",
-    },
+    // {
+    //   title: "Изделие", field: "technologicalInstructions[0].seam.product.name",
+    // },
+    // {
+    //   title: "Сборочные узлы",
+    //   // render: (rowData) => { 
+    //   //   console.log(rowData)
+    //   //   return ( 
+    //   //     <span>Сборочный узел {rowData?.technologicalInstructions[0]?.seam?.number}</span>
+    //   //   );
+    //   // } 
+    // },
+    // {
+    //   title: "Детали", field: "technologicalInstructions[0].seam.product.name",
+    // },
+    // {
+    //   title: "Швы", field: "technologicalInstructions[0].seam.product.productType",
+    // },
+    // {
+    //   title: "Диапазоны допустимых значений контролируемых параметров (сварочный ток, напряжение на дуге)",
+    //   // render: (rowData) => (
+    //   //   <span>
+    //   //     {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMin} 
+    //   //     - {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMax}
+    //   //     </span>
+    //   // ),
+    // },
+    // {
+    //   title: "Размеры шва", field: "technologicalInstructions[0].seam.product.productType",
+    // },
+    // {
+    //   title: "Количество проходов", field: "technologicalInstructions[0].seam.product.productType",
+    // },
   ]
   const colinstructions = [
     {
@@ -166,8 +172,8 @@ export const TexProcWelding = ({
       }
     },
     {
-      title: "Наименование прохода", 
-      field: "weldPassageInstructions[0].name",   
+      title: "Наименование прохода",
+      field: "weldPassageInstructions[0].name",
     },
     {
       title: "Время сварки ",
@@ -201,7 +207,6 @@ export const TexProcWelding = ({
     }
   ]
   const renderRowChildren = (rowData) => {
-    console.log(rowData)
     return (
       rowData && (
         <TableContainer component={Paper}>
@@ -217,7 +222,7 @@ export const TexProcWelding = ({
                   № прохода
 
                 </TableCell>
-                
+
                 <TableCell
                   style={{
                     borderBottom: 0,
@@ -244,7 +249,7 @@ export const TexProcWelding = ({
                 >
                   Сварочный ток, А
                 </TableCell>
- 
+
                 <TableCell
                   style={{
                     borderBottom: 0,
@@ -252,7 +257,7 @@ export const TexProcWelding = ({
                   align="right"
                 >
                   Напряжение на дуге, В
-                </TableCell>  
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell />
@@ -260,11 +265,11 @@ export const TexProcWelding = ({
                 <TableCell align="center">min</TableCell>
                 <TableCell align="center">max</TableCell>
                 <TableCell align="center">min</TableCell>
-                <TableCell align="center">max</TableCell>  
+                <TableCell align="center">max</TableCell>
 
                 <TableCell align="center">min</TableCell>
                 <TableCell align="left">max</TableCell>
-                
+
 
                 {/* <TableCell align="center">Длина</TableCell>
                 <TableCell align="center">Высота</TableCell>
@@ -273,36 +278,145 @@ export const TexProcWelding = ({
             </TableHead>
             <TableBody>
               <TableRow>
-              <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.number?? "-"}
-                </TableCell>
-                
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.name?? "-"}
-                </TableCell> 
+                  {rowData?.weldPassageInstructions[0]?.number ?? "-"}
+                </TableCell>
 
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.name ?? "-"}
                 </TableCell>
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax?? "-"}
-                </TableCell> 
 
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMin?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin ?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMax?? "-"}
-                </TableCell> 
- 
+                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax ?? "-"}
+                </TableCell>
+
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.arcVoltageMin?? "-"}
+                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMin ?? "-"}
+                </TableCell>
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMax ?? "-"}
+                </TableCell>
+
+                <TableCell align="center" component="th" scope="row">
+                  {rowData?.weldPassageInstructions[0]?.arcVoltageMin ?? "-"}
                 </TableCell>
                 <TableCell align="left" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.arcVoltageMax?? "-"}
-                </TableCell> 
-               
+                  {rowData?.weldPassageInstructions[0]?.arcVoltageMax ?? "-"}
+                </TableCell>
 
+
+              </TableRow>
+            </TableBody>
+          </MaterialTable>
+        </TableContainer>
+      )
+    );
+  };
+
+  const renderRowChildrenTexProc = (rowData) => {
+    console.log(rowData)
+    return (
+      rowData && (
+        <TableContainer component={Paper}>
+          <MaterialTable aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Изделие
+                </TableCell>
+                
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Сборочные узлы
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                  colSpan={2}
+                >
+                  <p
+                   style={{
+                    textAlign: "center",
+                  }} 
+                  >Диапазоны допустимых значений контролируемых параметров </p>
+                  <p
+                   style={{
+                    textAlign: "center",
+                  }} 
+                  >(сварочный ток, напряжение на дуге) </p> 
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center" 
+                >
+                  Швы
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Детали
+                </TableCell>  
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Размеры шва
+                </TableCell>  
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Количество проходов
+                </TableCell>  
+              </TableRow>
+              <TableRow>
+                <TableCell />
+                <TableCell />
+                <TableCell align="center">min</TableCell>
+                <TableCell align="center">max</TableCell>
+                <TableCell />   
+                <TableCell />   
+                <TableCell />   
+                <TableCell />   
+                <TableCell />   
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell align="center" component="th" scope="row"> 
+                  {rowData?.technologicalInstructions?.seam?.product?.name ?? "-"} 
+                </TableCell>
+                <TableCell align="center" component="th" scope="row"> -   </TableCell>  
+                <TableCell align="center" component="th" scope="row"> -   </TableCell>  
+                <TableCell align="center" component="th" scope="row"> -   </TableCell>  
+                <TableCell align="center" component="th">    -   </TableCell>   
+                
+                <TableCell align="center" component="th">     -  </TableCell>  
+                <TableCell align="center" component="th">     -  </TableCell>  
+                <TableCell align="center" component="th">     -  </TableCell>  
               </TableRow>
             </TableBody>
           </MaterialTable>
@@ -325,38 +439,38 @@ export const TexProcWelding = ({
     setOpen(true);
   };
 
-   
 
 
-  const [value_panel, setValue] = useState(0); 
-  const ChangePanels = (event, newValue) => { 
+
+  const [value_panel, setValue] = useState(0);
+  const ChangePanels = (event, newValue) => {
     setValue(newValue);
   };
   const TabPanel = (props_panel) => {
-    const { children, value, indPanel } = props_panel;  
+    const { children, value, indPanel } = props_panel;
 
     return (
       <div hidden={value !== indPanel}  >
         {children}
       </div>
     );
-  };  
- 
-    //Запрос на редактирование или добавление
-    function SendData(variables) { 
-      variables["seamId"] = valuetSeam;
-      variables["technologicalProcessId"] = texprocwelding[0].id;
-      
- 
-      if (isModalOpenNumb===0) {  
-         addInst(variables)  
-      }
-      if (isModalOpenNumb===1) {  
-         variables["id"] = modalData.id;
-         variables["weldPassagesId"]=modalData?.weldPassageInstructions[0].id
-         editInst(variables) 
-      }    
+  };
+
+  //Запрос на редактирование или добавление
+  function SendData(variables) {
+    variables["seamId"] = valuetSeam;
+    variables["technologicalProcessId"] = texprocwelding[0].id;
+
+
+    if (isModalOpenNumb === 0) {
+      addInst(variables)
     }
+    if (isModalOpenNumb === 1) {
+      variables["id"] = modalData.id;
+      variables["weldPassagesId"] = modalData?.weldPassageInstructions[0].id
+      editInst(variables)
+    }
+  }
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -403,9 +517,9 @@ export const TexProcWelding = ({
             title="Технологические процессы сборки и сварки"
             columns={columns}
             value={0}
-            data={texprocwelding} 
+            data={texprocwelding}
             isLoading={isRequesting}
-            
+
             actions={
               userRole === "admin"
                 ? [
@@ -415,7 +529,7 @@ export const TexProcWelding = ({
                     isFreeAction: true,
                     onClick: () => {
                       setIsModalOpen(true);
-                      
+
                     },
                   },
                   {
@@ -423,13 +537,13 @@ export const TexProcWelding = ({
                     tooltip: "Редактировать ",
                     onClick: (event, rowData) => {
                       setModalData(rowData);
-                      setIsModalOpen(true); 
+                      setIsModalOpen(true);
                     },
                   },
                 ]
                 : []
             }
-       
+            renderRowChildren={renderRowChildrenTexProc}
             deleteAction={userRole === "admin" ? deleteEquipment : null}
           />
         </TabPanel>
@@ -445,7 +559,7 @@ export const TexProcWelding = ({
             title="Технологические инструкции"
             columns={colinstructions}
             value={0}
-            data={instructions} 
+            data={instructions}
             isLoading={isRequesting}
             actions={
               userRole === "Admin"
@@ -466,7 +580,7 @@ export const TexProcWelding = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalOpenNumb(1) 
+                      setIsModalOpenNumb(1)
                       setValuetSeam(rowData.seam.id)
                       setValuetVkladka(1)
                     },
@@ -511,8 +625,8 @@ export const TexProcWelding = ({
           initialValues={initialValues}
           enableReinitialize
           onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;  
-            SendData(variables,id) 
+            const { id, ...dataToSend } = variables;
+            SendData(variables, id)
             setIsModalOpen(false);
             setModalData(null);
           }}

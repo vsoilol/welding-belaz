@@ -78,8 +78,7 @@ export const ProductionArea = ({
     number: modalData?.number ?? "",
     id: modalData?.id ?? "",
 
-  };
-  console.log(indPanel)
+  }; 
   function SetValue(valueId, index) {
     ///workshop
     if (index === 0) {

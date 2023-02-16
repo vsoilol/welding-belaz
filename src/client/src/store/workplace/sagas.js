@@ -40,7 +40,10 @@ const {
     ///Технологические процессы 
     LOAD_TEXPROCWELDING_REQUEST,
   ///Закрепленные детали  за инспектором
-    LOAD_DETAILBYINSPECTOR_REQUEST
+    LOAD_DETAILBYINSPECTOR_REQUEST,
+
+    LOAD_WELDINGTASK_REQUEST,  
+ 
   },
   Creators: {
     ///Цеха 
@@ -121,7 +124,14 @@ const {
 
     ///Закрепленные детали  за инспектором
     loadDetailbyinspectorSuccess,
-    loadDetailbyinspectorFailure
+    loadDetailbyinspectorFailure,
+
+
+    loadWeldingtaskSuccess,
+    loadWeldingtaskFailure,
+ 
+
+ 
   },
 } = workplaceActions;
 
@@ -294,33 +304,53 @@ function* loadProduct() {
     yield put(setError(error.message));
   }
 }
+function* loadWeldingTask() {
+  try {
+    const { data } = yield call(api.get, `/WeldingTask`);
+    yield put(loadWeldingtaskSuccess(data));
+  } catch (error) {
+    yield put(loadWeldingtaskFailure(error));
+    yield put(setError(error.message));
+  }
+}
 function* addProduct(variables) {
   try {
-    if (variables.payload.valEx === 1) {
-      const { data } = yield call(api.put, `/product/assignMaster`, {
-        "productId": variables.payload.productId,
-        "masterId": variables.payload.masterId
-      });
-    }
-    if (variables.payload.valEx === 2) {
-      const { data } = yield call(api.put, `/product/assignInspector`, {
-        "productId": variables.payload.productId,
-        "inspectorId": variables.payload.inspectorId
-      });
+    
+    if (variables.payload.status==="add") {
+      if (variables.payload.valEx === 1) {
+        const { data } = yield call(api.put, `/product/assignMaster`, {
+          "productId": variables.payload.productId,
+          "masterId": variables.payload.masterId
+        });
+      }
+      if (variables.payload.valEx === 2) {
+        const { data } = yield call(api.put, `/product/assignInspector`, {
+          "productId": variables.payload.productId,
+          "inspectorId": variables.payload.inspectorId
+        });
+      }
+  
+      if (variables.payload.valEx === undefined) {
+        const { data } = yield call(api.post, `/product`, {
+          "name": variables.payload.name,
+          "number": variables.payload.number,
+          "isControlSubject": true,
+          "productionAreaId": variables.payload.productionAreaId,
+          "workplaceId": variables.payload.workplaceId,
+          "technologicalProcessId": variables.payload.technologicalProcessId,
+          "seams":variables.payload.seams,
+        });
+        yield put(addProductSuccess(data));
+      }
     }
 
-    if (variables.payload.valEx === undefined) {
-      const { data } = yield call(api.post, `/product`, {
-        "name": variables.payload.name,
-        "number": variables.payload.number,
-        "isControlSubject": true,
-        "productionAreaId": variables.payload.productionAreaId,
-        "workplaceId": variables.payload.workplaceId,
-        "technologicalProcessId": variables.payload.technologicalProcessId,
-        "seams":variables.payload.seams,
-      });
-      yield put(addProductSuccess(data));
+    if (variables.payload.status==="assign") {
+      const { data } = yield call(api.put, `/product/assignWelders`, {
+        "productId": variables.payload.productId,
+        "welderIds":variables.payload.welderIds
+      });  
     }
+    
   } catch (error) {
     yield put(addProductFailure(error));
     yield put(setError(error.message));
@@ -354,6 +384,7 @@ function* getDetailByInspector(variables) {
     yield put(setError(error.message));
   }
 }
+ 
 ///Узлы
 function* loadKnot() {
   try {
@@ -367,30 +398,40 @@ function* loadKnot() {
 function* addKnot(variables) {
 
   try {
-    if (variables.payload.valEx === 1) {
-      const { data } = yield call(api.put, `/knot/assignMaster`, {
-        "productId": variables.payload.productId,
-        "masterId": variables.payload.masterId
-      });
-    }
-    if (variables.payload.valEx === 2) {
-      const { data } = yield call(api.put, `/knot/assignInspector`, {
-        "productId": variables.payload.productId,
-        "inspectorId": variables.payload.inspectorId
-      });
-    }
+    if (variables.payload.status==="add") {
+      if (variables.payload.valEx === 1) {
+        const { data } = yield call(api.put, `/knot/assignMaster`, {
+          "productId": variables.payload.productId,
+          "masterId": variables.payload.masterId
+        });
+      }
+      if (variables.payload.valEx === 2) {
+        const { data } = yield call(api.put, `/knot/assignInspector`, {
+          "productId": variables.payload.productId,
+          "inspectorId": variables.payload.inspectorId
+        });
+      }
+  
+      if (variables.payload.valEx === undefined) {
+        const { data } = yield call(api.post, `/knot`, {
+          "name": variables.payload.name,
+          "number": variables.payload.number,
+          "isControlSubject": false,
+          "productionAreaId": variables.payload.productionAreaId,
+          "workplaceId": variables.payload.workplaceId,
+          "seams":variables.payload.seams,
+          "technologicalProcessId": variables.payload.technologicalProcessId,
+        });
+        yield put(addKnotSuccess(data));
+      }
+    } 
 
-    if (variables.payload.valEx === undefined) {
-      const { data } = yield call(api.post, `/knot`, {
-        "name": variables.payload.name,
-        "number": variables.payload.number,
-        "isControlSubject": false,
-        "productionAreaId": variables.payload.productionAreaId,
-        "workplaceId": variables.payload.workplaceId,
-        "seams":variables.payload.seams,
-        "technologicalProcessId": variables.payload.technologicalProcessId,
-      });
-      yield put(addKnotSuccess(data));
+
+    if (variables.payload.status==="assign") {
+      const { data } = yield call(api.put, `/knot/assignWelders`, {
+        "productId": variables.payload.productId,
+        "welderIds": variables.payload.welderIds
+      });  
     }
 
   } catch (error) {
@@ -427,32 +468,44 @@ function* loadDetail() {
   }
 }
 function* addDetail(variables) {
-  try {
-    if (variables.payload.valEx === 1) {
-      const { data } = yield call(api.put, `/detail/assignMaster`, {
-        "productId": variables.payload.productId,
-        "masterId": variables.payload.masterId
-      });
-    }
-    if (variables.payload.valEx === 2) {
-      const { data } = yield call(api.put, `/detail/assignInspector`, {
-        "productId": variables.payload.productId,
-        "inspectorId": variables.payload.inspectorId
-      });
-    }
+  
 
-    if (variables.payload.valEx === undefined) {
-     
-      const { data } = yield call(api.post, `/detail`, {
-        "name": variables.payload.name,
-        "number": variables.payload.number,
-        "isControlSubject": true,
-        "productionAreaId": variables.payload.productionAreaId,
-        "workplaceId": variables.payload.workplaceId,
-        "technologicalProcessId": variables.payload.technologicalProcessId,
-        "seams":variables.payload.seams,
-      });
-      yield put(addDetailSuccess(data));
+  try {
+    if (variables.payload.status==="add") {
+      if (variables.payload.valEx === 1) {
+        const { data } = yield call(api.put, `/detail/assignMaster`, {
+          "productId": variables.payload.productId,
+          "masterId": variables.payload.masterId
+        });
+      }
+      if (variables.payload.valEx === 2) {
+        const { data } = yield call(api.put, `/detail/assignInspector`, {
+          "productId": variables.payload.productId,
+          "inspectorId": variables.payload.inspectorId
+        });
+      }
+  
+      if (variables.payload.valEx === undefined) {
+       
+        const { data } = yield call(api.post, `/detail`, {
+          "name": variables.payload.name,
+          "number": variables.payload.number,
+          "isControlSubject": true,
+          "productionAreaId": variables.payload.productionAreaId,
+          "workplaceId": variables.payload.workplaceId,
+          "technologicalProcessId": variables.payload.technologicalProcessId,
+          "seams":variables.payload.seams,
+        });
+        yield put(addDetailSuccess(data));
+      }
+    } 
+
+    
+    if (variables.payload.status==="assign") {
+      const { data } = yield call(api.put, `/detail/assignWelders`, {
+        "productId": variables.payload.productId,
+        "welderIds": variables.payload.welderIds
+      });  
     }
 
   } catch (error) {
@@ -559,7 +612,7 @@ export function* workplaceSaga() {
   ///Изделия
   yield takeLatest(LOAD_PRODUCT_REQUEST, loadProduct);
   yield takeLatest(ADD_PRODUCT_REQUEST, addProduct);
-  yield takeLatest(EDIT_PRODUCT_REQUEST, editProduct)
+  yield takeLatest(EDIT_PRODUCT_REQUEST, editProduct) 
   ///Узлы
   yield takeLatest(LOAD_KNOT_REQUEST, loadKnot);
   yield takeLatest(ADD_KNOT_REQUEST, addKnot);
@@ -574,5 +627,9 @@ export function* workplaceSaga() {
   yield takeLatest(EDIT_SEAM_REQUEST, editSeam)
   ///Технологические процессы  
   yield takeLatest(LOAD_DETAILBYINSPECTOR_REQUEST, getDetailByInspector);
+
+
+   ///Технологические процессы  
+   yield takeLatest(LOAD_WELDINGTASK_REQUEST, loadWeldingTask);
 }
 

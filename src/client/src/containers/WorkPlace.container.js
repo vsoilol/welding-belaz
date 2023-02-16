@@ -34,6 +34,9 @@ const mapStateToProps = (state) => {
 
     detailbyinspector:state,
 
+
+    weldingtask:state.workplace.weldingtask,
+
   };
 };
 const mapDispatchToProps = {
@@ -67,7 +70,7 @@ const mapDispatchToProps = {
   ///Изделия
   loadProduct: Actions.Creators.loadProductRequest,
   addProduct:Actions.Creators.addProductRequest,
-  editProduct:Actions.Creators.editProductRequest,
+  editProduct:Actions.Creators.editProductRequest, 
   ///Узлы
   loadKnot: Actions.Creators.loadKnotRequest,
   addKnot:Actions.Creators.addKnotRequest,
@@ -82,6 +85,10 @@ const mapDispatchToProps = {
   editSeam:Actions.Creators.editSeamRequest,
   ///Технологические процессы 
   loadTexprocwelding: Actions.Creators.loadTexprocweldingRequest,
+
+
+  ////
+  loadWeldingTask: Actions.Creators.loadWeldingtaskRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkPlacePage);
