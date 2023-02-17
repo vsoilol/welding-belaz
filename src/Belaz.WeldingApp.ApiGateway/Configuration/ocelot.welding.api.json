@@ -754,7 +754,9 @@
       "UpstreamPathTemplate": "/api/WeldingEquipment/downtime",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/WeldingEquipment/downtime",
       "ServiceName": "welding",
@@ -782,7 +784,9 @@
       "UpstreamPathTemplate": "/api/WeldingTask",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/WeldingTask",
       "ServiceName": "welding",
@@ -1067,6 +1071,26 @@
         "AuthenticationProviderKey": "ApiGatewayKey",
         "AllowedScopes": []
       }
+    },
+    {
+      "UpstreamPathTemplate": "/api/time/now",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/time/now",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding"
+    },
+    {
+      "UpstreamPathTemplate": "/api/time/belarus",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/time/belarus",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding"
     }
   ]
 }
