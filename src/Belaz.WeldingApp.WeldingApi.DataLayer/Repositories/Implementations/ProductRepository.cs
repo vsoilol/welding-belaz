@@ -104,7 +104,6 @@ public class ProductRepository : IProductRepository
         updatedProduct.ProductType = entity.ProductType;
         updatedProduct.Number = entity.Number;
         updatedProduct.IsControlSubject = entity.IsControlSubject;
-        updatedProduct.WorkplaceId = entity.WorkplaceId;
         updatedProduct.ProductionAreaId = entity.ProductionAreaId;
         updatedProduct.TechnologicalProcessId = entity.TechnologicalProcessId;
 

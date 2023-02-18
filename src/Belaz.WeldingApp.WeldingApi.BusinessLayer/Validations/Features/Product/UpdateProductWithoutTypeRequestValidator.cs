@@ -30,13 +30,6 @@ public class UpdateProductWithoutTypeRequestValidator : AbstractValidator<Update
             .SetValidator(new SqlIdValidatorFor<UpdateProductWithoutTypeRequest,
                 Domain.Entities.Production.ProductionArea>(context));
 
-        RuleFor(model => model.WorkplaceId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateProductWithoutTypeRequest,
-                Domain.Entities.Production.Workplace>(context))
-            .When(_ => _.WorkplaceId is not null);
-
         RuleFor(model => model.TechnologicalProcessId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()

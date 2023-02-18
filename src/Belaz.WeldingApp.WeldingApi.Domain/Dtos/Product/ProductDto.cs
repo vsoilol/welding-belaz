@@ -18,8 +18,8 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
     public string? Name { get; set; }
 
     public string Number { get; set; } = null!;
-
-    public WorkplaceBriefDto? Workplace { get; set; }
+    
+    public bool IsControlSubject { get; set; }
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 
@@ -30,10 +30,6 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
     public List<ProductInsideDto> InsideProducts { get; set; } = null!;
 
     public List<SeamBriefDto> Seams { get; set; } = null!;
-    
-    public bool IsAddManually { get; set; }
-    
-    public ProductStatus Status { get; set; }
 
     public void Mapping(Profile profile)
     {
@@ -51,9 +47,6 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
             .ForMember(dto => dto.Workshop,
                 opt => opt
                     .MapFrom(x => x.ProductionArea!.Workshop))
-            .ForMember(dto => dto.Workplace,
-                opt => opt
-                    .MapFrom(x => x.Workplace))
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x =>

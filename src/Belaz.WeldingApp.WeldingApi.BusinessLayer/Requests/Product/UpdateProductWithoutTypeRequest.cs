@@ -18,8 +18,6 @@ public class UpdateProductWithoutTypeRequest : IMapTo<Domain.Entities.ProductInf
 
     public Guid ProductionAreaId { get; set; }
 
-    public Guid? WorkplaceId { get; set; }
-
     public Guid TechnologicalProcessId { get; set; }
 
     public IReadOnlyList<Guid>? Seams { get; set; }
