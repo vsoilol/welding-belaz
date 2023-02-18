@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using AutoMapper;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Requests;
@@ -25,12 +26,11 @@ public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
     [JsonPropertyName("Volt")]
     public double[] Voltages { get; set; } = null!;
     
-    /*
     public void Mapping(Profile profile)
     {
         profile.CreateMap<RecordWithoutTaskRequest, WeldingRecord>()
-            .ForMember(dto => dto.UserInfo,
+            .ForMember(dto => dto.WeldingEquipmentId,
                 opt => opt
-                    .MapFrom(x => x));
-    }*/
+                    .MapFrom(x => x.WeldingEquipmentId));
+    }
 }
