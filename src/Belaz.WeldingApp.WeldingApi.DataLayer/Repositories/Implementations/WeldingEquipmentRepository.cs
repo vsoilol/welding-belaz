@@ -112,4 +112,34 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
 
         return await GetConditionByIdAsync(entity.Id);
     }
+
+    public async Task AssignEquipmentToWeldersAsync(Guid weldingEquipmentId, List<Guid> welderIds)
+    {
+        var weldingEquipment = (await _context.WeldingEquipments
+            .Include(_ => _.Welders)
+            .FirstOrDefaultAsync(_ => _.Id == weldingEquipmentId))!;
+
+        var welders = await _context.Welders
+            .Where(_ => welderIds.Any(welderId => welderId == _.Id))
+            .ToListAsync();
+
+        weldingEquipment.Welders = welders;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AssignEquipmentToMastersAsync(Guid weldingEquipmentId, List<Guid> masterIds)
+    {
+        var weldingEquipment = (await _context.WeldingEquipments
+            .Include(_ => _.Welders)
+            .FirstOrDefaultAsync(_ => _.Id == weldingEquipmentId))!;
+
+        var masters = await _context.Masters
+            .Where(_ => masterIds.Any(welderId => welderId == _.Id))
+            .ToListAsync();
+
+        weldingEquipment.Masters = masters;
+
+        await _context.SaveChangesAsync();
+    }
 }

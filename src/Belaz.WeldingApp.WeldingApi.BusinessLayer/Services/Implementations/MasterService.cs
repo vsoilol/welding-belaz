@@ -36,7 +36,7 @@ public class MasterService : IMasterService
         {
             var master = _mapper.Map<Master>(request);
 
-            return _masterRepository.CreateAsync(master, request.WeldingEquipmentIds);
+            return _masterRepository.CreateAsync(master);
         });
     }
 
@@ -48,7 +48,7 @@ public class MasterService : IMasterService
         {
             var master = _mapper.Map<Master>(request);
 
-            return _masterRepository.UpdateAsync(master, request.WeldingEquipmentIds);
+            return _masterRepository.UpdateAsync(master);
         });
     }
 }

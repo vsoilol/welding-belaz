@@ -18,8 +18,6 @@ public class UpdateMasterRequest : IMapTo<Domain.Entities.Users.Master>
 
     public Guid ProductionAreaId { get; set; }
 
-    public IReadOnlyList<Guid>? WeldingEquipmentIds { get; set; }
-
     public void Mapping(Profile profile)
     {
         profile.CreateMap<UpdateMasterRequest, Domain.Entities.Users.Master>()

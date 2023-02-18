@@ -18,8 +18,6 @@ public class CreateWelderRequest : IMapTo<Domain.Entities.Users.Welder>
 
     public Guid? WorkplaceId { get; set; }
 
-    public IReadOnlyList<Guid>? WeldingEquipmentIds { get; set; }
-
     public void Mapping(Profile profile)
     {
         profile.CreateMap<CreateWelderRequest, Domain.Entities.Users.Welder>()

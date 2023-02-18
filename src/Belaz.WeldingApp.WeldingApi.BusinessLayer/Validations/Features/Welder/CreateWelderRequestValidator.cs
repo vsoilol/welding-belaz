@@ -37,10 +37,5 @@ public class CreateWelderRequestValidator : AbstractValidator<CreateWelderReques
             .SetValidator(new SqlIdValidatorFor<CreateWelderRequest,
                 Domain.Entities.Production.Workplace>(context))
             .When(_ => _.WorkplaceId is not null);
-
-        RuleForEach(model => model.WeldingEquipmentIds)
-            .Cascade(CascadeMode.Stop)
-            .SetValidator(new SqlIdValidatorFor<CreateWelderRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
     }
 }

@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -81,6 +82,30 @@ public class WeldingEquipmentService : IWeldingEquipmentService
             var weldingEquipmentConditionTime = _mapper.Map<WeldingEquipmentConditionTime>(request);
 
             return _weldingEquipmentRepository.UpdateWeldingEquipmentDowntimeAsync(weldingEquipmentConditionTime);
+        });
+    }
+
+    public async Task<Result<Unit>> AssignEquipmentToWeldersAsync(AssignEquipmentToWeldersRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _weldingEquipmentRepository
+                .AssignEquipmentToWeldersAsync(request.WeldingEquipmentId, request.WelderIds);
+            return Unit.Default;
+        });
+    }
+
+    public async Task<Result<Unit>> AssignEquipmentToMastersAsync(AssignEquipmentToMastersRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _weldingEquipmentRepository
+                .AssignEquipmentToMastersAsync(request.WeldingEquipmentId, request.MasterIds);
+            return Unit.Default;
         });
     }
 }

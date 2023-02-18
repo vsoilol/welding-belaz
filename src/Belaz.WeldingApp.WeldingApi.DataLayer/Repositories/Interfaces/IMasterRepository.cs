@@ -9,7 +9,7 @@ public interface IMasterRepository
     
     Task<MasterDto> GetByIdAsync(Guid id);
         
-    Task<MasterDto> CreateAsync(Master entity, IReadOnlyList<Guid>? weldingEquipmentIds);
+    Task<MasterDto> CreateAsync(Master entity);
     
-    Task<MasterDto> UpdateAsync(Master entity, IReadOnlyList<Guid>? weldingEquipmentIds);
+    Task<MasterDto> UpdateAsync(Master entity);
 }
