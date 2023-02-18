@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
@@ -35,4 +36,9 @@ public class Seam : Entity
 
     [ForeignKey(nameof(InspectorId))] 
     public Inspector? Inspector { get; set; }
+    
+    public Guid? ProductionAreaId { get; set; }
+
+    [ForeignKey(nameof(ProductionAreaId))] 
+    public ProductionArea? ProductionArea { get; set; }
 }
