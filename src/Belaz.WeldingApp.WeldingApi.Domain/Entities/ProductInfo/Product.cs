@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using WeldingApp.Common.Enums;
@@ -29,5 +28,22 @@ public class Product : Entity
 
     public ProductInside? ProductMain { get; set; }
 
-    public List<ManufacturedProduct> ManufacturedProducts { get; set; } = null!;
+    public List<ProductAccount> ProductAccounts { get; set; } = null!;
+
+    public Guid ProductionAreaId { get; set; }
+    
+    [ForeignKey(nameof(ProductionAreaId))]
+    public ProductionArea ProductionArea { get; set; } = null!;
+    
+    public Guid? MasterId { get; set; }
+
+    [ForeignKey(nameof(MasterId))] 
+    public Master? Master { get; set; }
+
+    public Guid? InspectorId { get; set; }
+
+    [ForeignKey(nameof(InspectorId))] 
+    public Inspector? Inspector { get; set; }
+
+    public List<Welder> Welders { get; set; } = null!;
 }

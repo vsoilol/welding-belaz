@@ -11,11 +11,16 @@ public class WeldingTask : Entity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Number { get; set; }
     
-    public ResultProductStatus Status { get; set; }
-
+    public SeamStatus Status { get; set; } = SeamStatus.Accept;
+    
     public string? Reason { get; set; }
 
     public string? DetectedDefects { get; set; }
+
+    /// <summary>
+    /// Добавлен ли вручную
+    /// </summary>
+    public bool IsAddManually { get; set; }
     
     /// <summary>
     /// Дата выполнения сварки
@@ -52,20 +57,30 @@ public class WeldingTask : Entity
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
 
-    public Guid ManufacturedSeamId { get; set; }
+    public Guid SeamId { get; set; }
 
-    [ForeignKey(nameof(ManufacturedSeamId))] 
-    public ManufacturedSeam ManufacturedSeam { get; set; } = null!;
+    [ForeignKey(nameof(SeamId))] 
+    public Seam Seam { get; set; } = null!;
 
     public Guid? WeldingEquipmentId { get; set; }
 
     [ForeignKey(nameof(WeldingEquipmentId))]
     public WeldingEquipment? WeldingEquipment { get; set; }
 
-    public Guid? WelderId { get; set; }
+    public Guid WelderId { get; set; }
 
     [ForeignKey(nameof(WelderId))] 
-    public Welder? Welder { get; set; }
+    public Welder Welder { get; set; } = null!;
     
+    public Guid MasterId { get; set; }
+
+    [ForeignKey(nameof(MasterId))] 
+    public Master Master { get; set; } = null!;
+
+    public Guid InspectorId { get; set; }
+
+    [ForeignKey(nameof(InspectorId))] 
+    public Inspector Inspector { get; set; } = null!;
+
     public List<WeldPassage> WeldPassages { get; set; } = null!;
 }

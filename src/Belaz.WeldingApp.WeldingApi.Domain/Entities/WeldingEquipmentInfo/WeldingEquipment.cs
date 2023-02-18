@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
@@ -100,15 +99,16 @@ public class WeldingEquipment : Entity
 
     public Guid? PostId { get; set; }
 
-    [ForeignKey(nameof(PostId))] public Post? Post { get; set; }
+    [ForeignKey(nameof(PostId))] 
+    public Post? Post { get; set; }
 
     public List<Calendar> Calendars { get; set; } = null!;
 
-    public Master? Master { get; set; }
+    public List<Master> Masters { get; set; } = null!;
 
     public List<Welder> Welders { get; set; } = null!;
 
-    public Chief? Chief { get; set; }
+    public List<Chief> Chiefs { get; set; } = null!;
 
     public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTime { get; set; } = null!;
 

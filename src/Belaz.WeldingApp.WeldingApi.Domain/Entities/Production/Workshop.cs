@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
-
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+﻿namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 
 /// <summary>
 /// Цех
@@ -13,6 +10,4 @@ public class Workshop : Entity
     public int Number { get; set; }
 
     public List<ProductionArea> ProductionAreas { get; set; } = null!;
-
-    public List<ManufacturedProduct> ManufacturedProducts { get; set; } = null!;
 }

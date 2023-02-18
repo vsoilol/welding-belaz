@@ -1307,15 +1307,14 @@ public class DataSeed
 
     private static async Task AddProducts(ApplicationContext context)
     {
-        var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
-        var productionArea1 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01");
+        var productionArea4 = (await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04"))!;
+        var productionArea1 = (await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01"))!;
 
         var product1 = new Product
         {
             IdFromSystem = "4536467567",
             Number = "75132-2401006-50",
             Name = "Картер заднего моста",
-            Status = ProductStatus.NotManufactured,
             ProductType = ProductType.Product,
             ProductionArea = productionArea1,
             TechnologicalProcess = new TechnologicalProcess
@@ -1334,7 +1333,6 @@ public class DataSeed
                         IdFromSystem = "4536467565",
                         Number = "75132-2401008-50",
                         Name = "Картер заднего моста",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1353,7 +1351,6 @@ public class DataSeed
                                     IdFromSystem = "4536276803",
                                     Number = "75211-2401122",
                                     Name = "Опора",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1372,7 +1369,6 @@ public class DataSeed
                                     IdFromSystem = "4536444153",
                                     Number = "75132-2401106",
                                     Name = "Пластина",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1394,7 +1390,6 @@ public class DataSeed
                         IdFromSystem = "4536273956",
                         Number = "7521-2401220",
                         Name = "Кронштейн",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1413,7 +1408,6 @@ public class DataSeed
                                     IdFromSystem = "4536274170",
                                     Number = "7521-2401224",
                                     Name = "Проушина",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1432,7 +1426,6 @@ public class DataSeed
                                     IdFromSystem = "4536273606",
                                     Number = "7521-3932688",
                                     Name = "Распорка",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1454,7 +1447,6 @@ public class DataSeed
                         IdFromSystem = "4536417730",
                         Number = "75132-2105522",
                         Name = "Панель",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Detail,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1473,7 +1465,6 @@ public class DataSeed
                         IdFromSystem = "4536461620",
                         Number = "75131-2113296-10",
                         Name = "Кронштейн",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Detail,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess

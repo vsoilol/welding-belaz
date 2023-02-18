@@ -25,8 +25,6 @@ public sealed class ApplicationContext : DbContext
 
     public DbSet<Workplace> Workplaces { get; set; } = null!;
 
-    public DbSet<StatusReason> StatusReasons { get; set; } = null!;
-
     public DbSet<DowntimeReason> DowntimeReasons { get; set; } = null!;
 
     public DbSet<Workshop> Workshops { get; set; } = null!;
@@ -66,6 +64,12 @@ public sealed class ApplicationContext : DbContext
     public DbSet<Seam> Seams { get; set; } = null!;
 
     public DbSet<WeldPassageInstruction> WeldPassageInstructions { get; set; } = null!;
+    
+    public DbSet<ProductAccount> ProductAccounts { get; set; } = null!;
+    
+    public DbSet<ProductResult> ProductResults { get; set; } = null!;
+    
+    public DbSet<WeldingRecord> WeldingRecords { get; set; } = null!;
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {

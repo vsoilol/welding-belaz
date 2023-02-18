@@ -22,4 +22,6 @@ public class ProductionArea : Entity
     public List<Workplace> Workplaces { get; set; } = null!;
 
     public List<UserData> Users { get; set; } = null!;
+
+    public List<Product> Products { get; set; } = null!;
 }

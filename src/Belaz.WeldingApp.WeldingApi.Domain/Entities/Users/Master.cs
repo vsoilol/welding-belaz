@@ -17,10 +17,9 @@ public class Master : Entity
     [ForeignKey(nameof(UserId))] 
     public UserData UserInfo { get; set; } = null!;
 
-    public Guid? WeldingEquipmentId { get; set; }
+    public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-    [ForeignKey(nameof(WeldingEquipmentId))]
-    public WeldingEquipment? WeldingEquipment { get; set; }
-
-    public List<ManufacturedProduct> ManufacturedProducts { get; set; } = null!;
+    public List<Product> Products { get; set; } = null!;
+    
+    public List<WeldingTask> WeldingTasks { get; set; } = null!;
 }

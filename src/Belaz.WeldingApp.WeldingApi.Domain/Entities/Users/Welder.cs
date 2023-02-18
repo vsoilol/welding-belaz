@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
@@ -16,7 +15,8 @@ public class Welder : Entity
 {
     public Guid UserId { get; set; }
 
-    [ForeignKey(nameof(UserId))] public UserData UserInfo { get; set; } = null!;
+    [ForeignKey(nameof(UserId))] 
+    public UserData UserInfo { get; set; } = null!;
 
     public Guid? WorkplaceId { get; set; }
 
@@ -27,7 +27,7 @@ public class Welder : Entity
 
     public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-    public List<ManufacturedProduct> ManufacturedProducts { get; set; } = null!;
+    public List<Product> Products { get; set; } = null!;
 
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
 }

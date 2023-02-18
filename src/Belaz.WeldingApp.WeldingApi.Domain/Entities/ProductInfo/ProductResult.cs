@@ -3,7 +3,7 @@ using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 
-public class ResultProduct : Entity
+public class ProductResult : Entity
 {
     public int Amount { get; set; }
     
@@ -13,8 +13,8 @@ public class ResultProduct : Entity
 
     public string? DetectedDefects { get; set; }
     
-    public Guid ManufacturedProductId { get; set; }
+    public Guid ProductAccountId { get; set; }
 
-    [ForeignKey(nameof(ManufacturedProductId))]
-    public ManufacturedProduct ManufacturedProduct { get; set; } = null!;
+    [ForeignKey(nameof(ProductAccountId))]
+    public ProductAccount ProductAccount { get; set; } = null!;
 }
