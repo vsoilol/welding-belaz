@@ -782,7 +782,7 @@ public class DataSeed
             .FirstOrDefaultAsync(_ => _.IdFromSystem == "511"))!;
         var weldingEquipment499 = (await context.WeldingEquipments
             .FirstOrDefaultAsync(_ => _.IdFromSystem == "499"))!;
-        
+
         var workplace3520 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3520))!;
         var workplace3610 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3610))!;
         var workplace3500 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3500))!;
@@ -1501,7 +1501,6 @@ public class DataSeed
             IdFromSystem = "4536384294",
             Number = "75580-2401006",
             Name = "Картер заднего моста",
-            Status = ProductStatus.NotManufactured,
             ProductType = ProductType.Product,
             ProductionArea = productionArea1,
             TechnologicalProcess = new TechnologicalProcess
@@ -1520,7 +1519,6 @@ public class DataSeed
                         IdFromSystem = "4536386240",
                         Number = "75580-2401010-01",
                         Name = "Труба картера заднего моста",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1539,7 +1537,6 @@ public class DataSeed
                                     IdFromSystem = "4536386265",
                                     Number = "75580-2401114-11",
                                     Name = "Фланец картера",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1558,7 +1555,6 @@ public class DataSeed
                                     IdFromSystem = "4536386250",
                                     Number = "75580-2401132-10",
                                     Name = "Труба картера",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1581,7 +1577,6 @@ public class DataSeed
                         IdFromSystem = "4536384295",
                         Number = "75580-2401008",
                         Name = "Картер заднего моста",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1600,7 +1595,6 @@ public class DataSeed
                                     IdFromSystem = "4536248270",
                                     Number = "75303-2128438",
                                     Name = "Втулка",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1619,7 +1613,6 @@ public class DataSeed
                                     IdFromSystem = "4536384312",
                                     Number = "75580-2401227",
                                     Name = "Кольцо",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea1,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1642,7 +1635,6 @@ public class DataSeed
                         IdFromSystem = "4536384399",
                         Number = "75580-2105522",
                         Name = "Панель",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Detail,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1662,7 +1654,6 @@ public class DataSeed
                         IdFromSystem = "4536384314",
                         Number = "75580-2113192",
                         Name = "Кронштейн",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Detail,
                         ProductionArea = productionArea1,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1682,7 +1673,6 @@ public class DataSeed
             IdFromSystem = "4536287819",
             Number = "75313-2800010-20",
             Name = "Рама",
-            Status = ProductStatus.NotManufactured,
             ProductType = ProductType.Product,
             ProductionArea = productionArea4,
             TechnologicalProcess = new TechnologicalProcess
@@ -1701,7 +1691,6 @@ public class DataSeed
                         IdFromSystem = "4536248707",
                         Number = "75304-1001251",
                         Name = "Кронштейн амортизатора левый",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea4,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1720,7 +1709,6 @@ public class DataSeed
                                     IdFromSystem = "4536248708",
                                     Number = "75304-1001253",
                                     Name = "Кронштейн",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea4,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1739,7 +1727,6 @@ public class DataSeed
                                     IdFromSystem = "4536247228",
                                     Number = "75303-1001293",
                                     Name = "Кронштейн",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea4,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1762,7 +1749,6 @@ public class DataSeed
                         IdFromSystem = "4536267493",
                         Number = "75310-1183100",
                         Name = "Кронштейн",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea4,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1781,7 +1767,6 @@ public class DataSeed
                                     IdFromSystem = "4536267484",
                                     Number = "75310-1183102",
                                     Name = "Кронштейн",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea4,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1800,7 +1785,6 @@ public class DataSeed
                                     IdFromSystem = "4536267485",
                                     Number = "75310-1183106",
                                     Name = "Кронштейн",
-                                    Status = ProductStatus.NotManufactured,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea4,
                                     TechnologicalProcess = new TechnologicalProcess
@@ -1823,7 +1807,6 @@ public class DataSeed
                         IdFromSystem = "4536270344",
                         Number = "75211-1018162",
                         Name = "Кронштейн",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Detail,
                         ProductionArea = productionArea4,
                         TechnologicalProcess = new TechnologicalProcess
@@ -1842,7 +1825,6 @@ public class DataSeed
                         IdFromSystem = "4536196288",
                         Number = "549Б-1015842",
                         Name = "Накладка",
-                        Status = ProductStatus.NotManufactured,
                         ProductType = ProductType.Detail,
                         ProductionArea = productionArea4,
                         TechnologicalProcess = new TechnologicalProcess
@@ -2091,6 +2073,42 @@ public class DataSeed
                 WeldingMaterialBatchNumber = "00252565",
                 ProtectiveGas = "Какой-то Защитный газ",
                 ProtectiveGasBatchNumber = "111111",
+                Status = SeamStatus.Accept,
+                Welder = welder,
+                WeldPassages = new List<WeldPassage>
+                {
+                    new()
+                    {
+                        Number = 1,
+                        Name = "Корневой",
+                        ShortTermDeviation = 0.11,
+                        LongTermDeviation = 0.68,
+                        WeldingRecord = new WeldingRecord
+                        {
+                            WeldingCurrentValues = currentValues1,
+                            ArcVoltageValues = voltageValues1,
+                            WeldingStartTime = weldingStartTime1,
+                            WeldingEndTime = weldingEndTime1,
+                            PreheatingTemperature = 82,
+                        }
+                    },
+                    new()
+                    {
+                        Number = 2,
+                        Name = "Заполняющий",
+                        ShortTermDeviation = 0.22,
+                        LongTermDeviation = 0.44,
+
+                        WeldingRecord = new WeldingRecord
+                        {
+                            WeldingStartTime = weldingStartTime2,
+                            WeldingEndTime = weldingEndTime2,
+                            PreheatingTemperature = 100,
+                            WeldingCurrentValues = currentValues2,
+                            ArcVoltageValues = voltageValues2,
+                        }
+                    }
+                },
                 WeldingEquipment = new WeldingEquipment
                 {
                     Name = "QINEO TRONIC",
@@ -2106,38 +2124,9 @@ public class DataSeed
                 {
                     Number = 1,
                     Length = 100,
-                    Status = ProductStatus.Accept,
                     IsControlSubject = true,
                     ProductionArea = productionArea4,
-                    Welders = new List<Welder> { welder },
                     Inspector = inspector,
-                    WeldPassages = new List<WeldPassage>
-                    {
-                        new()
-                        {
-                            Number = 1,
-                            Name = "Корневой",
-                            WeldingCurrentValues = currentValues1,
-                            ArcVoltageValues = voltageValues1,
-                            ShortTermDeviation = 0.11,
-                            LongTermDeviation = 0.68,
-                            WeldingStartTime = weldingStartTime1,
-                            WeldingEndTime = weldingEndTime1,
-                            PreheatingTemperature = 82,
-                        },
-                        new()
-                        {
-                            Number = 2,
-                            Name = "Заполняющий",
-                            WeldingCurrentValues = currentValues2,
-                            ArcVoltageValues = voltageValues2,
-                            ShortTermDeviation = 0.22,
-                            LongTermDeviation = 0.44,
-                            WeldingStartTime = weldingStartTime2,
-                            WeldingEndTime = weldingEndTime2,
-                            PreheatingTemperature = 100,
-                        }
-                    },
                     TechnologicalInstruction = new TechnologicalInstruction
                     {
                         Number = 1,
@@ -2180,6 +2169,41 @@ public class DataSeed
                 WeldingMaterialBatchNumber = "00252565",
                 ProtectiveGas = "Какой-то Защитный газ",
                 ProtectiveGasBatchNumber = "111111",
+                Status = SeamStatus.Accept,
+                Welder = welder,
+                WeldPassages = new List<WeldPassage>
+                {
+                    new()
+                    {
+                        Number = 1,
+                        Name = "Корневой",
+                        ShortTermDeviation = 0.11,
+                        LongTermDeviation = 0.68,
+                        WeldingRecord = new WeldingRecord
+                        {
+                            WeldingStartTime = weldingStartTime1,
+                            WeldingEndTime = weldingEndTime1,
+                            PreheatingTemperature = 82,
+                            WeldingCurrentValues = currentValues1,
+                            ArcVoltageValues = voltageValues1,
+                        }
+                    },
+                    new()
+                    {
+                        Number = 2,
+                        Name = "Заполняющий",
+                        ShortTermDeviation = 0.22,
+                        LongTermDeviation = 0.44,
+                        WeldingRecord = new WeldingRecord
+                        {
+                            WeldingStartTime = weldingStartTime2,
+                            WeldingEndTime = weldingEndTime2,
+                            PreheatingTemperature = 100,
+                            WeldingCurrentValues = currentValues2,
+                            ArcVoltageValues = voltageValues2,
+                        }
+                    }
+                },
                 WeldingEquipment = new WeldingEquipment
                 {
                     Name = "QINEO TRONIC",
@@ -2195,38 +2219,9 @@ public class DataSeed
                 {
                     Number = 2,
                     Length = 200,
-                    Status = ProductStatus.Accept,
                     IsControlSubject = true,
                     ProductionArea = productionArea4,
-                    Welders = new List<Welder> { welder },
                     Inspector = inspector,
-                    WeldPassages = new List<WeldPassage>
-                    {
-                        new()
-                        {
-                            Number = 1,
-                            Name = "Корневой",
-                            WeldingCurrentValues = currentValues1,
-                            ArcVoltageValues = voltageValues1,
-                            ShortTermDeviation = 0.11,
-                            LongTermDeviation = 0.68,
-                            WeldingStartTime = weldingStartTime1,
-                            WeldingEndTime = weldingEndTime1,
-                            PreheatingTemperature = 82,
-                        },
-                        new()
-                        {
-                            Number = 2,
-                            Name = "Заполняющий",
-                            WeldingCurrentValues = currentValues2,
-                            ArcVoltageValues = voltageValues2,
-                            ShortTermDeviation = 0.22,
-                            LongTermDeviation = 0.44,
-                            WeldingStartTime = weldingStartTime2,
-                            WeldingEndTime = weldingEndTime2,
-                            PreheatingTemperature = 100,
-                        }
-                    },
                     TechnologicalInstruction = new TechnologicalInstruction
                     {
                         Number = 1,
