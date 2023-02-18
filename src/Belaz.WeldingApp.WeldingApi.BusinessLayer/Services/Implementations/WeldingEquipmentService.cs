@@ -85,26 +85,26 @@ public class WeldingEquipmentService : IWeldingEquipmentService
         });
     }
 
-    public async Task<Result<Unit>> AssignEquipmentToWeldersAsync(AssignEquipmentToWeldersRequest request)
+    public async Task<Result<Unit>> AssignEquipmentsToWeldersAsync(AssignEquipmentsToWeldersRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(async () =>
         {
             await _weldingEquipmentRepository
-                .AssignEquipmentToWeldersAsync(request.WeldingEquipmentId, request.WelderIds);
+                .AssignEquipmentsToWeldersAsync(request.WeldingEquipmentIds, request.WelderIds);
             return Unit.Default;
         });
     }
 
-    public async Task<Result<Unit>> AssignEquipmentToMastersAsync(AssignEquipmentToMastersRequest request)
+    public async Task<Result<Unit>> AssignEquipmentsToMastersAsync(AssignEquipmentsToMastersRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(async () =>
         {
             await _weldingEquipmentRepository
-                .AssignEquipmentToMastersAsync(request.WeldingEquipmentId, request.MasterIds);
+                .AssignEquipmentsToMastersAsync(request.WeldingEquipmentIds, request.MasterIds);
             return Unit.Default;
         });
     }

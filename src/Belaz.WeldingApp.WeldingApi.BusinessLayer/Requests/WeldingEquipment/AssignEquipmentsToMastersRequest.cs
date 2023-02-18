@@ -1,8 +1,8 @@
 ﻿namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingEquipment;
 
-public class AssignEquipmentToMastersRequest
+public class AssignEquipmentsToMastersRequest
 {
-    public Guid WeldingEquipmentId { get; set; }
+    public List<Guid> WeldingEquipmentIds { get; set; } = null!;
 
     public List<Guid> MasterIds { get; set; } = null!;
 }

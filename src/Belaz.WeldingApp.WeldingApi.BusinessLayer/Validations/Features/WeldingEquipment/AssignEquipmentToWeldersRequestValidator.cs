@@ -5,20 +5,20 @@ using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.WeldingEquipment;
 
-public class AssignEquipmentToWeldersRequestValidator : AbstractValidator<AssignEquipmentToWeldersRequest>
+public class AssignEquipmentToWeldersRequestValidator : AbstractValidator<AssignEquipmentsToWeldersRequest>
 {
     public AssignEquipmentToWeldersRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.WeldingEquipmentId)
+        RuleForEach(model => model.WeldingEquipmentIds)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignEquipmentToWeldersRequest,
+            .SetValidator(new SqlIdValidatorFor<AssignEquipmentsToWeldersRequest,
                 Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
         
         RuleForEach(model => model.WelderIds)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignEquipmentToWeldersRequest,
+            .SetValidator(new SqlIdValidatorFor<AssignEquipmentsToWeldersRequest,
                 Domain.Entities.Users.Welder>(context));
     }
 }

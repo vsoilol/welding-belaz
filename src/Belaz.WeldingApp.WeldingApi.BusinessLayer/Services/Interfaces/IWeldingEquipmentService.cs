@@ -21,7 +21,7 @@ public interface IWeldingEquipmentService
     Task<Result<WeldingEquipmentDowntimeDto>> UpdateWeldingEquipmentDowntimeAsync(
         UpdateWeldingEquipmentDowntimeRequest request);
     
-    Task<Result<Unit>> AssignEquipmentToWeldersAsync(AssignEquipmentToWeldersRequest request);
+    Task<Result<Unit>> AssignEquipmentsToWeldersAsync(AssignEquipmentsToWeldersRequest request);
     
-    Task<Result<Unit>> AssignEquipmentToMastersAsync(AssignEquipmentToMastersRequest request);
+    Task<Result<Unit>> AssignEquipmentsToMastersAsync(AssignEquipmentsToMastersRequest request);
 }

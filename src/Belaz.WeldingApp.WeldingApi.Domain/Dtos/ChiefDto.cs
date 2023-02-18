@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
@@ -18,9 +19,7 @@ public class ChiefDto : IMapFrom<Chief>
 
     public string MiddleName { get; set; } = null!;
 
-    public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
-
-    public IReadOnlyList<WeldingEquipmentBriefDto>? WeldingEquipments { get; set; }
+    public WorkshopBriefDto Workshop { get; set; } = null!;
 
     public void Mapping(Profile profile)
     {
@@ -36,9 +35,6 @@ public class ChiefDto : IMapFrom<Chief>
                     .MapFrom(x => x.UserInfo.MiddleName))
             .ForMember(dto => dto.LastName,
                 opt => opt
-                    .MapFrom(x => x.UserInfo.LastName))
-            .ForMember(dto => dto.ProductionArea,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea));
+                    .MapFrom(x => x.UserInfo.LastName));
     }
 }

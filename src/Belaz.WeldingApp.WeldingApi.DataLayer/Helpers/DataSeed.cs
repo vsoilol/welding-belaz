@@ -1274,10 +1274,11 @@ public class DataSeed
     private static async Task AddChief(ApplicationContext context)
     {
         var chiefRole = (await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Chief)))!;
-        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync();
+        var workshop = (await context.Workshops.FirstOrDefaultAsync())!;
 
         var chief = new Chief
         {
+            Workshop = workshop,
             UserInfo = new UserData
             {
                 CertificateValidityPeriod = new DateTime(2025, 2, 2),
@@ -1290,7 +1291,6 @@ public class DataSeed
                 Position = "Должность 1",
                 ServiceNumber = "Табельный номер  1",
                 RfidTag = "RFID метка начальника цеха 1",
-                ProductionArea = productionArea,
                 UserRoles = new List<UserRole>
                 {
                     new UserRole
