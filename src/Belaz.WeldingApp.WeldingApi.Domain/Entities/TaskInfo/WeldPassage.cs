@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 
 /// <summary>
 /// Проход для сварного шва

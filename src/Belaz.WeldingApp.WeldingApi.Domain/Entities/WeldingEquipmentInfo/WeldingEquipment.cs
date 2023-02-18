@@ -114,5 +114,5 @@ public class WeldingEquipment : Entity
 
     public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTime { get; set; } = null!;
 
-    public List<WeldingTask> WeldingTasks { get; set; } = null!;
+    public List<WeldingRecord> WeldingRecords { get; set; } = null!;
 }

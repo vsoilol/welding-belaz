@@ -60,11 +60,6 @@ public class WeldingTask : Entity
     [ForeignKey(nameof(SeamId))] 
     public Seam Seam { get; set; } = null!;
 
-    public Guid? WeldingEquipmentId { get; set; }
-
-    [ForeignKey(nameof(WeldingEquipmentId))]
-    public WeldingEquipment? WeldingEquipment { get; set; }
-
     public Guid WelderId { get; set; }
 
     [ForeignKey(nameof(WelderId))] 

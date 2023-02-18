@@ -1,4 +1,7 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
+
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 
 public class WeldingRecord : Entity
 {
@@ -26,6 +29,11 @@ public class WeldingRecord : Entity
     /// Значения напряжения на дуге
     /// </summary>
     public double[] ArcVoltageValues { get; set; } = null!;
+    
+    public Guid WeldingEquipmentId { get; set; }
+
+    [ForeignKey(nameof(WeldingEquipmentId))]
+    public WeldingEquipment WeldingEquipment { get; set; } = null!;
     
     public WeldPassage? WeldPassage { get; set; }
 }
