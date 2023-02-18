@@ -13,7 +13,7 @@ public class WeldingEquipmentConditionTime : Entity
     public TimeSpan StartConditionTime { get; set; }
 
     /// <summary>
-    /// Сколько оборудование находиться в данном состоянии в минутах
+    /// Сколько оборудование находиться в данном состоянии в секундах
     /// </summary>
     public int Time { get; set; } = 0;
 

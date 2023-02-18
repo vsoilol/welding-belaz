@@ -25,6 +25,12 @@ public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
     [JsonPropertyName("Volt")]
     public double[] Voltages { get; set; } = null!;
     
+    /// <summary>
+    /// Температура предварительного нагрева
+    /// </summary>
+    [JsonPropertyName("preTemp")]
+    public int PreheatingTemperature { get; set; }
+    
     public void Mapping(Profile profile)
     {
         profile.CreateMap<RecordWithoutTaskRequest, WeldingRecord>()
@@ -36,6 +42,18 @@ public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
                     .MapFrom(x => x.WelderId))
             .ForMember(dto => dto.WeldingStartTime,
                 opt => opt
-                    .MapFrom(x => x.WelderId));
+                    .MapFrom(x => x.WelderId))
+            .ForMember(dto => dto.Date,
+                opt => opt
+                    .MapFrom(x => x.StartDateTime.Date))
+            .ForMember(dto => dto.WeldingStartTime,
+                opt => opt
+                    .MapFrom(x => x.StartDateTime.TimeOfDay))
+            .ForMember(dto => dto.WeldingCurrentValues,
+                opt => opt
+                    .MapFrom(x => x.Amperages))
+            .ForMember(dto => dto.ArcVoltageValues,
+                opt => opt
+                    .MapFrom(x => x.Voltages));
     }
 }

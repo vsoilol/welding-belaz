@@ -38,5 +38,10 @@ public class RecordWithoutTaskRequestValidator : AbstractValidator<RecordWithout
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .GreaterThanOrEqualTo(0);
+        
+        RuleFor(model => model.PreheatingTemperature)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .GreaterThanOrEqualTo(0);
     }
 }
