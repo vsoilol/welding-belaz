@@ -754,12 +754,12 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/weldingTask/assignMasters",
+      "UpstreamPathTemplate": "/api/weldingEquipment/assignMasters",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "PUT"
       ],
-      "DownstreamPathTemplate": "/api/weldingTask/assignMasters",
+      "DownstreamPathTemplate": "/api/weldingEquipment/assignMasters",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
@@ -768,12 +768,12 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/weldingTask/assignWelders",
+      "UpstreamPathTemplate": "/api/weldingEquipment/assignWelders",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "PUT"
       ],
-      "DownstreamPathTemplate": "/api/weldingTask/assignWelders",
+      "DownstreamPathTemplate": "/api/weldingEquipment/assignWelders",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
