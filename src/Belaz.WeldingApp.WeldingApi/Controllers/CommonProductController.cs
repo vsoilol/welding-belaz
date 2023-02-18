@@ -57,23 +57,6 @@ public abstract class CommonProductController : ControllerBase
         return result.ToOk();
     }
 
-    /// <summary>
-    /// Gets all products by status
-    /// </summary>
-    /// <param name="status">1 - Не изготовлен, 2 - Изготовлен, но не принят или не проверен, 3 - Принят, 4 - Забракован</param>
-    [HttpGet("byStatus/{status}")]
-    [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ProductDto>>> GetAllByStatusAsync([FromRoute] ProductStatus status)
-    {
-        var result = await _productService.GetAllByStatusAsync(
-            new GetAllByTaskStatusRequest
-            {
-                Status = status,
-                Type = _type
-            });
-        return result.ToOk();
-    }
-
     [HttpPost]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<ProductDto>> CreateAsync([FromBody] CreateProductWithoutTypeRequest request)
@@ -158,14 +141,6 @@ public abstract class CommonProductController : ControllerBase
     public async Task<ActionResult<Unit>> AssignProductToWeldersAsync([FromBody] AssignProductToWeldersRequest request)
     {
         var result = await _productService.AssignProductToWeldersAsync(request);
-        return result.ToOk();
-    }
-
-    [HttpPut("changeStatus")]
-    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProductDto>> ChangeStatusAsync([FromBody] ChangeProductStatusRequest request)
-    {
-        var result = await _productService.ChangeStatusAsync(request);
         return result.ToOk();
     }
 }

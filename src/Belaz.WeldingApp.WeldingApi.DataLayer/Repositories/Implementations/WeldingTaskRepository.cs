@@ -49,28 +49,17 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public async Task<WeldingTaskDto> CreateAsync(WeldingTask entity)
-    {
-        var newWeldingTask = _context.WeldingTasks.Add(entity).Entity;
-        await _context.SaveChangesAsync();
-
-        return await GetByIdAsync(newWeldingTask.Id);
-    }
-
     public async Task<WeldingTaskDto> UpdateAsync(WeldingTask entity)
     {
         var updatedWeldingTask = (await _context.WeldingTasks
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
-
-        updatedWeldingTask.Number = entity.Number;
-        updatedWeldingTask.WeldingDate = entity.WeldingDate;
+        
         updatedWeldingTask.BasicMaterial = entity.BasicMaterial;
         updatedWeldingTask.MainMaterialBatchNumber = entity.MainMaterialBatchNumber;
         updatedWeldingTask.WeldingMaterial = entity.WeldingMaterial;
         updatedWeldingTask.WeldingMaterialBatchNumber = entity.WeldingMaterialBatchNumber;
         updatedWeldingTask.ProtectiveGas = entity.ProtectiveGas;
         updatedWeldingTask.ProtectiveGasBatchNumber = entity.ProtectiveGasBatchNumber;
-        updatedWeldingTask.SeamId = entity.SeamId;
 
         await _context.SaveChangesAsync();
 

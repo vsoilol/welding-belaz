@@ -9,11 +9,6 @@ public class UpdateWeldingTaskRequest : IMapTo<Domain.Entities.TaskInfo.WeldingT
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Дата выполнения сварки
-    /// </summary>
-    public string WeldingDate { get; set; } = null!;
-
-    /// <summary>
     /// Основной материал
     /// </summary>
     public string BasicMaterial { get; set; } = null!;
@@ -42,14 +37,4 @@ public class UpdateWeldingTaskRequest : IMapTo<Domain.Entities.TaskInfo.WeldingT
     /// № сертификата (партии) на защитный газ 
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
-
-    public Guid SeamId { get; set; }
-
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<UpdateWeldingTaskRequest, Domain.Entities.TaskInfo.WeldingTask>()
-            .ForMember(dto => dto.WeldingDate,
-                opt => opt
-                    .MapFrom(x => x.WeldingDate.ToDateTime()));
-    }
 }

@@ -25,13 +25,6 @@ public class UpdateSeamRequestValidator : AbstractValidator<UpdateSeamRequest>
             .SetValidator(new SqlIdValidatorFor<UpdateSeamRequest,
                 Domain.Entities.Production.ProductionArea>(context));
 
-        RuleFor(model => model.WorkplaceId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateSeamRequest,
-                Domain.Entities.Production.Workplace>(context))
-            .When(_ => _.WorkplaceId is not null);
-        
         RuleFor(model => model.TechnologicalInstructionId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()

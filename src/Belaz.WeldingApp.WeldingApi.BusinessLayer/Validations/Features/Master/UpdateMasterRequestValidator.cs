@@ -1,7 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Master;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 

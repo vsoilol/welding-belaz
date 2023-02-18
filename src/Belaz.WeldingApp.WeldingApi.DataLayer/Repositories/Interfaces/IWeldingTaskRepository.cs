@@ -12,8 +12,6 @@ public interface IWeldingTaskRepository
     Task<List<WeldingTaskDto>> GetAllAsync();
     
     Task<WeldingTaskDto> GetByIdAsync(Guid id);
-    
-    Task<WeldingTaskDto> CreateAsync(WeldingTask entity);
-    
+
     Task<WeldingTaskDto> UpdateAsync(WeldingTask entity);
 }

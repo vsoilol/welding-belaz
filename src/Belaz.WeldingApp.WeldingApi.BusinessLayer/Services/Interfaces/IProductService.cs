@@ -9,8 +9,6 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 public interface IProductService
 {
     Task<Result<List<ProductDto>>> GetAllAsync(GetAllProductsRequest request);
-    
-    Task<Result<List<ProductDto>>> GetAllByStatusAsync(GetAllByTaskStatusRequest request);
 
     Task<Result<List<ProductDto>>> GetAllByControlSubjectAsync(GetAllByControlSubjectRequest request);
 
@@ -33,7 +31,4 @@ public interface IProductService
     Task<Result<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request);
     
     Task<Result<Unit>> AssignProductToWeldersAsync(AssignProductToWeldersRequest request);
-    
-    Task<Result<ProductDto>> ChangeStatusAsync(ChangeProductStatusRequest request);
-
 }

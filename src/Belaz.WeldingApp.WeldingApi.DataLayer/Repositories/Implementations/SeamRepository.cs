@@ -27,14 +27,6 @@ public class SeamRepository : ISeamRepository
             .ToListAsync();
     }
 
-    public Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status)
-    {
-        return _context.Seams
-            .Where(_ => _.Status == status)
-            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
     public Task<SeamDto> GetByIdAsync(Guid id)
     {
         return _context.Seams
@@ -147,18 +139,5 @@ public class SeamRepository : ISeamRepository
         await _context.SaveChangesAsync();
 
         return await GetDefectiveReasonByIdAsync(entity.Id);
-    }
-
-    public async Task<SeamDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually)
-    {
-        var updatedSeam = (await _context.Seams
-            .FirstOrDefaultAsync(_ => _.Id == id))!;
-
-        updatedSeam.Status = status;
-        updatedSeam.IsAddManually = isAddManually;
-
-        await _context.SaveChangesAsync();
-
-        return await GetByIdAsync(id);
     }
 }

@@ -39,18 +39,6 @@ public class WeldingTaskService : IWeldingTaskService
         return _weldingTaskRepository.GetAllAsync();
     }
 
-    public async Task<Result<WeldingTaskDto>> CreateAsync(CreateWeldingTaskRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
-        {
-            var weldingTask = _mapper.Map<WeldingTask>(request);
-
-            return _weldingTaskRepository.CreateAsync(weldingTask);
-        });
-    }
-
     public async Task<Result<WeldingTaskDto>> UpdateAsync(UpdateWeldingTaskRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);

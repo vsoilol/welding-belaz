@@ -11,8 +11,6 @@ public interface IWeldingTaskService
     Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync();
     
     Task<List<WeldingTaskDto>> GetAllAsync();
-    
-    Task<Result<WeldingTaskDto>> CreateAsync(CreateWeldingTaskRequest request);
-    
+
     Task<Result<WeldingTaskDto>> UpdateAsync(UpdateWeldingTaskRequest request);
 }

@@ -36,33 +36,12 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
-    public Task<List<ProductDto>> GetAllByStatusAsync(ProductStatus status, ProductType productType)
-    {
-        return _context.Products
-            .Where(_ => _.Status == status && _.ProductType == productType)
-            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
     public Task<ProductDto> GetByIdAsync(Guid id)
     {
         return _context.Products
             .Where(_ => _.Id == id)
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
-    }
-
-    public async Task<ProductDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually)
-    {
-        var updatedProduct = (await _context.Products
-            .FirstOrDefaultAsync(_ => _.Id == id))!;
-
-        updatedProduct.Status = status;
-        updatedProduct.IsAddManually = isAddManually;
-
-        await _context.SaveChangesAsync();
-
-        return await GetByIdAsync(id);
     }
 
     public Task<List<ProductDto>> GetAllByMasterIdAsync(Guid masterId, ProductType productType)
