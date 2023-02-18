@@ -85,7 +85,7 @@ services:
       - /home/bru/docker-data/welding-belaz/logs/registar-api-logs:/app/logs
       - ../sharedsettings.json:/app/sharedsettings.json
     depends_on:
-      - postgresql_database
+      - belaz-postgres
       - welding-api
         
   gateway-api:
