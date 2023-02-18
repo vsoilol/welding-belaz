@@ -107,6 +107,19 @@ public abstract class CommonProductController : ControllerBase
         return result.ToOk();
     }
 
+    [HttpGet("byWelder/{welderId}")]
+    [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
+    {
+        var result = await _productService.GetAllByWelderIdAsync(
+            new GetAllProductsByWelderIdRequest
+            {
+                WelderId = welderId,
+                Type = _type
+            });
+        return result.ToOk();
+    }
+
     /*[HttpPut("assignInspector")]
     public async Task<ActionResult<Unit>> AssignProductToInspectorAsync(
         [FromBody] AssignProductToInspectorRequest request)

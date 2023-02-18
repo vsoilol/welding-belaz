@@ -138,27 +138,26 @@ public class ProductRepository : IProductRepository
 
     public async Task AssignProductToWeldersAsync(Guid productId, List<Guid> welderIds)
     {
-        var seams = await _context.Seams
+        var product = (await _context.Products
             .Include(_ => _.Welders)
-            .Include(_ => _.WeldingTask)
-            .Where(_ => _.ProductId == productId)
-            .ToListAsync();
+            .FirstOrDefaultAsync(_ => _.Id == productId))!;
 
         var welders = await _context.Welders
             .Where(_ => welderIds.Any(welderId => welderId == _.Id))
             .ToListAsync();
 
-        seams.ForEach(_ => _.Welders = welders);
+        product.Welders = welders;
 
-        var weldingTasks = seams
-            .Where(_ => _.WeldingTask == null)
-            .Select(_ => new WeldingTask
-            {
-                Seam = _,
-            });
-
-        _context.WeldingTasks.AddRange(weldingTasks);
         await _context.SaveChangesAsync();
+    }
+
+    public Task<List<ProductDto>> GetAllByWelderId(Guid welderId, ProductType productType)
+    {
+        return _context.Products
+            .Where(_ => _.Welders.Any(welder => welder.Id == welderId)
+                        && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     /*public async Task AssignProductsToWelderAsync(List<Guid> productIds, Guid welderId)

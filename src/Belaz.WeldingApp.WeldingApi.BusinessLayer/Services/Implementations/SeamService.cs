@@ -78,14 +78,6 @@ public class SeamService : ISeamService
             _seamRepository.GetAllByInspectorIdAsync(request.InspectorId));
     }
 
-    public async Task<Result<List<SeamDto>>> GetAllByWelderIdAsync(GetAllByWelderIdRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
-            _seamRepository.GetAllByWelderIdAsync(request.WelderId));
-    }
-
     public async Task<Result<Unit>> AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);

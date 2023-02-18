@@ -75,14 +75,6 @@ public class SeamRepository : ISeamRepository
             .ToListAsync();
     }
 
-    public Task<List<SeamDto>> GetAllByWelderIdAsync(Guid welderId)
-    {
-        return _context.Seams
-            .Where(_ => _.Welders.Any(welder => welder.Id == welderId))
-            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
     public async Task AssignSeamToInspectorAsync(Guid seamId, Guid inspectorId)
     {
         var seam = (await _context.Seams.FirstOrDefaultAsync(_ => _.Id == seamId))!;

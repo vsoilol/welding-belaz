@@ -17,6 +17,8 @@ public interface IProductService
     Task<Result<List<ProductDto>>> GetAllByMasterIdAsync(GetAllByMasterIdRequest request);
 
     Task<Result<List<ProductDto>>> GetAllByInspectorIdAsync(GetAllByInspectorIdRequest request);
+    
+    Task<Result<List<ProductDto>>> GetAllByWelderIdAsync(GetAllProductsByWelderIdRequest request);
 
     Task<Result<ProductDto>> CreateAsync(CreateProductRequest request);
 

@@ -29,4 +29,6 @@ public interface IProductRepository
     Task AssignProductsToInspectorAsync(List<Guid> productIds, Guid inspectorId);
     
     Task AssignProductToWeldersAsync(Guid productId, List<Guid> welderIds);
+    
+    Task<List<ProductDto>> GetAllByWelderId(Guid welderId, ProductType productType);
 }

@@ -18,8 +18,6 @@ public interface ISeamRepository
     Task<SeamDto> UpdateAsync(Seam entity);
     
     Task<List<SeamDto>> GetAllByInspectorIdAsync(Guid inspectorId);
-    
-    Task<List<SeamDto>> GetAllByWelderIdAsync(Guid welderId);
 
     Task AssignSeamToInspectorAsync(Guid seamId, Guid inspectorId);
     

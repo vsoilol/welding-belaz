@@ -73,14 +73,6 @@ public class SeamController : ControllerBase
         return result.ToOk();
     }
 
-    [HttpGet("byWelder/{welderId}")]
-    [ProducesResponseType(typeof(List<SeamDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<SeamDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
-    {
-        var result = await _seamService.GetAllByWelderIdAsync(new GetAllByWelderIdRequest { WelderId = welderId });
-        return result.ToOk();
-    }
-
     /*
     [HttpPut("assignWelder")]
     public async Task<ActionResult<Unit>> AssignSeamToWelderAsync([FromBody] AssignSeamToWelderRequest request)

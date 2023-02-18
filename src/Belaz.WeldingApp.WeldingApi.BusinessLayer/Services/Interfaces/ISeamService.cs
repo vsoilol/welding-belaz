@@ -22,8 +22,6 @@ public interface ISeamService
 
     Task<Result<List<SeamDto>>> GetAllByInspectorIdAsync(GetAllByInspectorIdRequest request);
 
-    Task<Result<List<SeamDto>>> GetAllByWelderIdAsync(GetAllByWelderIdRequest request);
-
     Task<Result<Unit>> AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request);
 
     Task<Result<Unit>> AssignSeamsToInspectorAsync(AssignSeamsToInspectorRequest request);

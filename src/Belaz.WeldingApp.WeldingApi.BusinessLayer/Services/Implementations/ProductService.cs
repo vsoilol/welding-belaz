@@ -64,6 +64,14 @@ public class ProductService : IProductService
             _productRepository.GetAllByInspectorIdAsync(request.InspectorId, request.Type));
     }
 
+    public async Task<Result<List<ProductDto>>> GetAllByWelderIdAsync(GetAllProductsByWelderIdRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _productRepository.GetAllByInspectorIdAsync(request.WelderId, request.Type));
+    }
+
     public async Task<Result<ProductDto>> CreateAsync(CreateProductRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
