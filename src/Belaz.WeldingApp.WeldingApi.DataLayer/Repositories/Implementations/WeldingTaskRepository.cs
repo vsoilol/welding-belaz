@@ -26,13 +26,6 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .ToListAsync();
     }
 
-    public Task<List<WeldingTaskRegistrarInfoDto>> GetAllRegistrarInfoAsync()
-    {
-        return _context.WeldingTasks
-            .ProjectTo<WeldingTaskRegistrarInfoDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
     public Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
     {
         return _context.WeldingTasks
