@@ -50,17 +50,31 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .ToListAsync();
     }
 
-    public async Task<WeldingEquipmentDto> CreateAsync(WeldingEquipment entity)
+    public async Task<WeldingEquipmentDto> CreateAsync(WeldingEquipment entity, List<Guid> workplaceIds)
     {
+        var workplaces = await _context.Workplaces
+            .Where(_ => workplaceIds.Any(workplaceId => workplaceId == _.Id))
+            .ToListAsync();
+
+        entity.Workplaces = workplaces;
+
         var newWeldingEquipment = _context.WeldingEquipments.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(newWeldingEquipment.Id);
     }
 
-    public async Task<WeldingEquipmentDto> UpdateAsync(WeldingEquipment entity)
+    public async Task<WeldingEquipmentDto> UpdateAsync(WeldingEquipment entity, List<Guid> workplaceIds)
     {
-        var updatedWeldingEquipment = (await _context.WeldingEquipments.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedWeldingEquipment = (await _context.WeldingEquipments
+            .Include(_ => _.Workplaces)
+            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+
+        var workplaces = await _context.Workplaces
+            .Where(_ => workplaceIds.Any(workplaceId => workplaceId == _.Id))
+            .ToListAsync();
+
+        updatedWeldingEquipment.Workplaces = workplaces;
 
         updatedWeldingEquipment.PostId = entity.PostId;
         updatedWeldingEquipment.ArcVoltageMax = entity.ArcVoltageMax;

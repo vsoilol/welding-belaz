@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 using WeldingApp.Common.Enums;
@@ -97,6 +98,8 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
     public double? LoadDuration { get; set; }
 
     public PostBriefDto? Post { get; set; }
+
+    public List<WorkplaceBriefDto> Workplaces { get; set; } = null!;
 
     public void Mapping(Profile profile)
     {

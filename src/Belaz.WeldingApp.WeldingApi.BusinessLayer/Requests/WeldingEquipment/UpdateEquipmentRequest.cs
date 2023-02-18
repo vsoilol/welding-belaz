@@ -90,6 +90,8 @@ public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
 
     public Guid? PostId { get; set; }
 
+    public List<Guid> WorkplaceIds { get; set; } = null!;
+
     public void Mapping(Profile profile)
     {
         profile.CreateMap<UpdateEquipmentRequest, Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>()

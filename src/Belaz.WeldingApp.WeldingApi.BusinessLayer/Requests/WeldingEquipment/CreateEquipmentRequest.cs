@@ -89,6 +89,8 @@ public class CreateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
 
     public Guid? PostId { get; set; }
 
+    public List<Guid> WorkplaceIds { get; set; } = null!;
+
     public void Mapping(Profile profile)
     {
         profile.CreateMap<CreateEquipmentRequest, Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>()
