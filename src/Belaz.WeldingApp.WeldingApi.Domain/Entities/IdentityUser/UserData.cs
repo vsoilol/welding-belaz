@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser
 {
+    [Index(nameof(RfidTag), IsUnique = true)]
     public class UserData : Entity
     {
         public string FirstName { get; set; } = null!;

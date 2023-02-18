@@ -20,13 +20,14 @@ public class Welder : Entity
 
     public Guid? WorkplaceId { get; set; }
 
-    [ForeignKey(nameof(WorkplaceId))] public Workplace? Workplace { get; set; }
+    [ForeignKey(nameof(WorkplaceId))] 
+    public Workplace? Workplace { get; set; }
 
     public List<Calendar> Calendars { get; set; } = null!;
 
     public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-    public List<Seam> Seams { get; set; } = null!;
+    public List<ManufacturedProduct> ManufacturedProducts { get; set; } = null!;
 
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
 }

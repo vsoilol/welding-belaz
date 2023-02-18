@@ -16,8 +16,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.Users
         [ForeignKey(nameof(UserId))] 
         public UserData UserInfo { get; set; } = null!;
 
-        public List<Product> Products { get; set; } = null!;
+        public List<ManufacturedProduct> ManufacturedProducts { get; set; } = null!;
         
-        public List<Seam> Seams { get; set; } = null!;
+        public List<ManufacturedSeam> ManufacturedSeams { get; set; } = null!;
     }
 }
