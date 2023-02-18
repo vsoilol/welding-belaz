@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -47,7 +48,6 @@ public class MasterRepository : IMasterRepository
             .Include(_ => _.UserInfo)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
-        updatedMaster.WeldingEquipmentId = entity.WeldingEquipmentId;
         updatedMaster.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedMaster.UserInfo.FirstName = entity.UserInfo.FirstName;
         updatedMaster.UserInfo.MiddleName = entity.UserInfo.MiddleName;
@@ -57,5 +57,12 @@ public class MasterRepository : IMasterRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    private Task<List<WeldingEquipment>> GetWeldingEquipmentsByIds(IReadOnlyList<Guid> weldingEquipmentIds)
+    {
+        return _context.WeldingEquipments
+            .Where(_ => weldingEquipmentIds.Any(equipmentId => equipmentId == _.Id))
+            .ToListAsync();
     }
 }

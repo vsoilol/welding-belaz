@@ -1,6 +1,4 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Chief;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Chief;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
@@ -33,18 +31,10 @@ public class UpdateChiefRequestValidator : AbstractValidator<UpdateChiefRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty();
 
-        RuleFor(model => model.ProductionAreaId)
+        RuleFor(model => model.WorkshopId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<UpdateChiefRequest,
-                Domain.Entities.Production.ProductionArea>(context));
-
-        RuleFor(model => model.WeldingEquipmentId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateChiefRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context))
-            .SetAsyncValidator(new IsEquipmentAlreadyAssignValidatorForUpdateChief(context))
-            .When(_ => _.WeldingEquipmentId is not null);
+                Domain.Entities.Production.Workshop>(context));
     }
 }

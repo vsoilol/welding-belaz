@@ -17,8 +17,8 @@ public class ProductInsideDto: IMapFrom<Entities.ProductInfo.Product>
     public string? Name { get; set; }
 
     public string Number { get; set; } = null!;
-
-    public WorkplaceBriefDto? Workplace { get; set; }
+    
+    public bool IsControlSubject { get; set; }
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 
@@ -27,9 +27,7 @@ public class ProductInsideDto: IMapFrom<Entities.ProductInfo.Product>
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
     
     public ProductType ProductType { get; set; }
-    
-    public bool IsAddManually { get; set; }
-    
+
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Entities.ProductInfo.Product, ProductInsideDto>()
@@ -39,9 +37,6 @@ public class ProductInsideDto: IMapFrom<Entities.ProductInfo.Product>
             .ForMember(dto => dto.Workshop,
                 opt => opt
                     .MapFrom(x => x.ProductionArea!.Workshop))
-            .ForMember(dto => dto.Workplace,
-                opt => opt
-                    .MapFrom(x => x.Workplace))
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x =>

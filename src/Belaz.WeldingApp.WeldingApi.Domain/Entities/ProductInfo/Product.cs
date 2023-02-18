@@ -1,62 +1,54 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using WeldingApp.Common.Enums;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+
+/// <summary>
+/// Изделие
+/// </summary>
+public class Product : Entity
 {
+    public string Name { get; set; } = null!;
+
+    public string Number { get; set; } = null!;
+
     /// <summary>
-    /// Изделие
+    /// Подлежит ли контролю
     /// </summary>
-    public class Product : Entity
-    {
-        public string? Name { get; set; }
+    public bool IsControlSubject { get; set; } = true;
 
-        public string Number { get; set; } = null!;
+    public ProductType ProductType { get; set; }
 
-        public ProductStatus Status { get; set; } = ProductStatus.NotManufactured;
+    public Guid? TechnologicalProcessId { get; set; }
 
-        /// <summary>
-        /// Подлежит ли контролю
-        /// </summary>
-        public bool IsControlSubject { get; set; }
+    [ForeignKey(nameof(TechnologicalProcessId))]
+    public TechnologicalProcess? TechnologicalProcess { get; set; }
 
-        /// <summary>
-        /// Добавлен ли вручную
-        /// </summary>
-        public bool IsAddManually { get; set; }
+    public List<Seam> Seams { get; set; } = null!;
 
-        public ProductType ProductType { get; set; }
+    public List<ProductInside> ProductInsides { get; set; } = null!;
 
-        public Guid? TechnologicalProcessId { get; set; }
+    public ProductInside? ProductMain { get; set; }
 
-        [ForeignKey(nameof(TechnologicalProcessId))]
-        public TechnologicalProcess? TechnologicalProcess { get; set; }
+    public List<ProductAccount> ProductAccounts { get; set; } = null!;
 
-        public List<Seam> Seams { get; set; } = null!;
+    public Guid ProductionAreaId { get; set; }
+    
+    [ForeignKey(nameof(ProductionAreaId))]
+    public ProductionArea ProductionArea { get; set; } = null!;
+    
+    public Guid? MasterId { get; set; }
 
-        public List<ProductInside> ProductInsides { get; set; } = null!;
+    [ForeignKey(nameof(MasterId))] 
+    public Master? Master { get; set; }
 
-        public ProductInside? ProductMain { get; set; }
+    public Guid? InspectorId { get; set; }
 
-        public Guid? ProductionAreaId { get; set; }
+    [ForeignKey(nameof(InspectorId))] 
+    public Inspector? Inspector { get; set; }
 
-        [ForeignKey(nameof(ProductionAreaId))] public ProductionArea? ProductionArea { get; set; }
-
-        public Guid? WorkplaceId { get; set; }
-
-        [ForeignKey(nameof(WorkplaceId))] public Workplace? Workplace { get; set; }
-
-        public List<StatusReason> StatusReasons { get; set; } = null!;
-
-        public Guid? MasterId { get; set; }
-
-        [ForeignKey(nameof(MasterId))] public Master? Master { get; set; }
-
-        public Guid? InspectorId { get; set; }
-
-        [ForeignKey(nameof(InspectorId))] public Inspector? Inspector { get; set; }
-    }
+    public List<Welder> Welders { get; set; } = null!;
 }

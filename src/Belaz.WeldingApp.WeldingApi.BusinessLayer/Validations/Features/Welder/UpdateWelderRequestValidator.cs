@@ -43,10 +43,5 @@ public class UpdateWelderRequestValidator : AbstractValidator<UpdateWelderReques
             .SetValidator(new SqlIdValidatorFor<UpdateWelderRequest,
                 Domain.Entities.Production.Workplace>(context))
             .When(_ => _.WorkplaceId is not null);
-
-        RuleForEach(model => model.WeldingEquipmentIds)
-            .Cascade(CascadeMode.Stop)
-            .SetValidator(new SqlIdValidatorFor<UpdateWelderRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
     }
 }

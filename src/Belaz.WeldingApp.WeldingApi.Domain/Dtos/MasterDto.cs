@@ -27,7 +27,7 @@ public class MasterDto : IMapFrom<Master>
     /// </summary>
     public string? ServiceNumber { get; set; }
 
-    public WeldingEquipmentBriefDto? WeldingEquipment { get; set; }
+    public IReadOnlyList<WeldingEquipmentBriefDto>? WeldingEquipments { get; set; }
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 

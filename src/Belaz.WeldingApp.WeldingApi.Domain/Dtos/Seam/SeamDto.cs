@@ -20,11 +20,12 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     
     public int Length { get; set; }
     
-    public ProductStatus Status { get; set; }
+    /// <summary>
+    /// Поддлежит ли исполнению на регистраторе
+    /// </summary>
+    public bool IsPerformed { get; set; }
 
     public ProductBriefDto Product { get; set; } = null!;
-
-    public WorkplaceBriefDto? Workplace { get; set; }
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 
@@ -33,9 +34,7 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
 
     public TechnologicalInstructionBriefDto TechnologicalInstruction { get; set; } = null!;
-    
-    public bool IsAddManually { get; set; }
-    
+
     public bool IsControlSubject { get; set; }
 
     public List<WelderDto> Welders { get; set; } = null!;
@@ -52,14 +51,11 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
             .ForMember(dto => dto.TechnologicalProcess,
                 opt => opt
                     .MapFrom(x => x.Product!.TechnologicalProcess))
-            .ForMember(dto => dto.ProductionArea,
-                opt => opt
-                    .MapFrom(x => x.ProductionArea))
             .ForMember(dto => dto.Workshop,
                 opt => opt
                     .MapFrom(x => x.ProductionArea!.Workshop))
-            .ForMember(dto => dto.Workplace,
+            .ForMember(dto => dto.Welders,
                 opt => opt
-                    .MapFrom(x => x.Workplace));
+                    .MapFrom(x => x.Product.Welders));
     }
 }

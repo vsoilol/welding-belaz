@@ -25,7 +25,7 @@ public class ChiefController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ChiefDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ChiefDto>>> GetAllWeldersAsync()
+    public async Task<ActionResult<IEnumerable<ChiefDto>>> GetAllAsync()
     {
         return await _chiefService.GetAllAsync();
     }

@@ -29,11 +29,6 @@ public class WeldingTaskService : IWeldingTaskService
         return _weldingTaskRepository.GetAllWithFullNamesAsync();
     }
 
-    public Task<List<WeldingTaskRegistrarInfoDto>> GetAllRegistrarInfoAsync()
-    {
-        return _weldingTaskRepository.GetAllRegistrarInfoAsync();
-    }
-
     public Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
     {
         return _weldingTaskRepository.GetAllCompletedTaskAsync();
@@ -42,18 +37,6 @@ public class WeldingTaskService : IWeldingTaskService
     public Task<List<WeldingTaskDto>> GetAllAsync()
     {
         return _weldingTaskRepository.GetAllAsync();
-    }
-
-    public async Task<Result<WeldingTaskDto>> CreateAsync(CreateWeldingTaskRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
-        {
-            var weldingTask = _mapper.Map<WeldingTask>(request);
-
-            return _weldingTaskRepository.CreateAsync(weldingTask);
-        });
     }
 
     public async Task<Result<WeldingTaskDto>> UpdateAsync(UpdateWeldingTaskRequest request)

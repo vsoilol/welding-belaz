@@ -13,16 +13,6 @@ public class WeldPassage : Entity
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Значения сварочного тока
-    /// </summary>
-    public double[] WeldingCurrentValues { get; set; } = null!;
-
-    /// <summary>
-    /// Значения напряжения на дуге
-    /// </summary>
-    public double[] ArcVoltageValues { get; set; } = null!;
-
-    /// <summary>
     /// Отклонение кратковременные, до 1 секунды
     /// </summary>
     public double? ShortTermDeviation { get; set; }
@@ -32,28 +22,19 @@ public class WeldPassage : Entity
     /// </summary>
     public double? LongTermDeviation { get; set; }
 
-    /// <summary>
-    /// Время начала сварки
-    /// </summary>
-    public TimeSpan WeldingStartTime { get; set; }
+    public bool? IsEnsuringCurrentTolerance { get; set; }
+    
+    public bool? IsEnsuringVoltageTolerance { get; set; }
+    
+    public bool? IsEnsuringTemperatureTolerance { get; set; }
 
-    /// <summary>
-    /// Время окончания сварки
-    /// </summary>
-    public TimeSpan WeldingEndTime { get; set; }
+    public Guid WeldingRecordId { get; set; }
 
-    /// <summary>
-    /// Температура предварительного нагрева
-    /// </summary>
-    public int PreheatingTemperature { get; set; }
+    [ForeignKey(nameof(WeldingRecordId))] 
+    public WeldingRecord WeldingRecord { get; set; } = null!;
+    
+    public Guid WeldingTaskId { get; set; }
 
-    /// <summary>
-    /// Выполнен ли без нарушения требований технологической инструкции
-    /// </summary>
-    public bool IsDone { get; set; } = false;
-
-    public Guid SeamId { get; set; }
-
-    [ForeignKey(nameof(SeamId))] 
-    public Seam Seam { get; set; } = null!;
+    [ForeignKey(nameof(WeldingTaskId))] 
+    public WeldingTask WeldingTask { get; set; } = null!;
 }

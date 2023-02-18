@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;
 
@@ -22,14 +23,6 @@ public class SeamRepository : ISeamRepository
     public Task<List<SeamDto>> GetAllAsync()
     {
         return _context.Seams
-            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
-    public Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status)
-    {
-        return _context.Seams
-            .Where(_ => _.Status == status)
             .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
@@ -63,9 +56,11 @@ public class SeamRepository : ISeamRepository
         var updatedSeam = (await _context.Seams.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
         updatedSeam.Number = entity.Number;
+        updatedSeam.Length = entity.Length;
         updatedSeam.IsControlSubject = entity.IsControlSubject;
         updatedSeam.ProductionAreaId = entity.ProductionAreaId;
-        updatedSeam.WorkplaceId = entity.WorkplaceId;
+        updatedSeam.IsPerformed = entity.IsPerformed;
+        updatedSeam.TechnologicalInstructionId = entity.TechnologicalInstructionId;
 
         await _context.SaveChangesAsync();
 
@@ -76,14 +71,6 @@ public class SeamRepository : ISeamRepository
     {
         return _context.Seams
             .Where(_ => _.InspectorId == inspectorId)
-            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-    }
-
-    public Task<List<SeamDto>> GetAllByWelderIdAsync(Guid welderId)
-    {
-        return _context.Seams
-            .Where(_ => _.Welders.Any(welder => welder.Id == welderId))
             .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
@@ -111,51 +98,37 @@ public class SeamRepository : ISeamRepository
 
     public Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync()
     {
-        return _context.StatusReasons
-            .Where(_ => _.Status == ProductStatus.Defective && _.Seam != null)
+        return _context.DefectiveReasons
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
     public Task<DefectiveSeamDto> GetDefectiveReasonByIdAsync(Guid id)
     {
-        return _context.StatusReasons
+        return _context.DefectiveReasons
             .Where(_ => _.Id == id)
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
 
-    public async Task<DefectiveSeamDto> AddDefectiveReasonToSeamAsync(StatusReason entity)
+    public async Task<DefectiveSeamDto> AddDefectiveReasonToSeamAsync(DefectiveReason entity)
     {
-        var newStatusReason = _context.StatusReasons.Add(entity).Entity;
+        var newStatusReason = _context.DefectiveReasons.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
         return await GetDefectiveReasonByIdAsync(newStatusReason.Id);
     }
 
-    public async Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(StatusReason entity)
+    public async Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(DefectiveReason entity)
     {
-        var updatedStatusReason = (await _context.StatusReasons.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedStatusReason = (await _context.DefectiveReasons.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
-        updatedStatusReason.Date = entity.Date;
-        updatedStatusReason.SeamId = entity.SeamId;
+        updatedStatusReason.DetectedDefectiveDate = entity.DetectedDefectiveDate;
         updatedStatusReason.Reason = entity.Reason;
+        updatedStatusReason.DetectedDefects = entity.DetectedDefects;
 
         await _context.SaveChangesAsync();
 
         return await GetDefectiveReasonByIdAsync(entity.Id);
-    }
-
-    public async Task<SeamDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually)
-    {
-        var updatedSeam = (await _context.Seams
-            .FirstOrDefaultAsync(_ => _.Id == id))!;
-
-        updatedSeam.Status = status;
-        updatedSeam.IsAddManually = isAddManually;
-
-        await _context.SaveChangesAsync();
-
-        return await GetByIdAsync(id);
     }
 }

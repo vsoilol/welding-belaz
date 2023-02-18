@@ -2,72 +2,83 @@
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
+using WeldingApp.Common.Enums;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+
+public class WeldingTask : Entity
 {
-    public class WeldingTask : Entity
-    {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Number { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Number { get; set; }
+    
+    public SeamStatus Status { get; set; } = SeamStatus.Accept;
 
-        /// <summary>
-        /// Дата когда выполнена сварки
-        /// </summary>
-        public DateTime? WhenTaskIsDoneDate { get; set; }
-        
-        /// <summary>
-        /// Дата выполнения сварки
-        /// </summary>
-        public DateTime? WeldingDate { get; set; }
-        
-        /// <summary>
-        /// Дата когда нужно выполнить по плану
-        /// </summary>
-        public DateTime? WeldingPlanDate { get; set; }
+    public DefectiveReason? DefectiveReason { get; set; }
 
-        /// <summary>
-        /// Основной материал
-        /// </summary>
-        public string? BasicMaterial { get; set; }
+    /// <summary>
+    /// Добавлен ли вручную
+    /// </summary>
+    public bool IsAddManually { get; set; }
+    
+    /// <summary>
+    /// Дата выполнения сварки
+    /// </summary>
+    public DateTime? WeldingDate { get; set; }
 
-        /// <summary>
-        /// № сертификата (партии) основного материала
-        /// </summary>
-        public string? MainMaterialBatchNumber { get; set; }
+    /// <summary>
+    /// Основной материал
+    /// </summary>
+    public string? BasicMaterial { get; set; }
 
-        /// <summary>
-        /// Сварочные материалы
-        /// </summary>
-        public string? WeldingMaterial { get; set; }
+    /// <summary>
+    /// № сертификата (партии) основного материала
+    /// </summary>
+    public string? MainMaterialBatchNumber { get; set; }
 
-        /// <summary>
-        /// № сертификата (партии) св. материала
-        /// </summary>
-        public string? WeldingMaterialBatchNumber { get; set; }
+    /// <summary>
+    /// Сварочные материалы
+    /// </summary>
+    public string? WeldingMaterial { get; set; }
 
-        /// <summary>
-        /// Защитный газ 
-        /// </summary>
-        public string? ProtectiveGas { get; set; }
+    /// <summary>
+    /// № сертификата (партии) св. материала
+    /// </summary>
+    public string? WeldingMaterialBatchNumber { get; set; }
 
-        /// <summary>
-        /// № сертификата (партии) на защитный газ 
-        /// </summary>
-        public string? ProtectiveGasBatchNumber { get; set; }
+    /// <summary>
+    /// Защитный газ 
+    /// </summary>
+    public string? ProtectiveGas { get; set; }
 
-        public Guid SeamId { get; set; }
+    /// <summary>
+    /// № сертификата (партии) на защитный газ 
+    /// </summary>
+    public string? ProtectiveGasBatchNumber { get; set; }
 
-        [ForeignKey(nameof(SeamId))] 
-        public Seam Seam { get; set; } = null!;
+    public Guid SeamId { get; set; }
 
-        public Guid? WeldingEquipmentId { get; set; }
+    [ForeignKey(nameof(SeamId))] 
+    public Seam Seam { get; set; } = null!;
 
-        [ForeignKey(nameof(WeldingEquipmentId))]
-        public WeldingEquipment? WeldingEquipment { get; set; }
-        
-        public Guid? WelderId { get; set; }
+    public Guid? WeldingEquipmentId { get; set; }
 
-        [ForeignKey(nameof(WelderId))] 
-        public Welder? Welder { get; set; }
-    }
+    [ForeignKey(nameof(WeldingEquipmentId))]
+    public WeldingEquipment? WeldingEquipment { get; set; }
+
+    public Guid WelderId { get; set; }
+
+    [ForeignKey(nameof(WelderId))] 
+    public Welder Welder { get; set; } = null!;
+    
+    public Guid MasterId { get; set; }
+
+    [ForeignKey(nameof(MasterId))] 
+    public Master Master { get; set; } = null!;
+
+    public Guid InspectorId { get; set; }
+
+    [ForeignKey(nameof(InspectorId))] 
+    public Inspector Inspector { get; set; } = null!;
+
+    public List<WeldPassage> WeldPassages { get; set; } = null!;
 }

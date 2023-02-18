@@ -7,6 +7,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using LanguageExt;
 using LanguageExt.Common;
 using WeldingApp.Common.Enums;
@@ -30,11 +31,6 @@ public class SeamService : ISeamService
     public Task<List<SeamDto>> GetAllAsync()
     {
         return _seamRepository.GetAllAsync();
-    }
-
-    public Task<List<SeamDto>> GetAllByStatusAsync(ProductStatus status)
-    {
-        return _seamRepository.GetAllByStatusAsync(status);
     }
 
     public async Task<Result<SeamDto>> GetByIdAsync(GetSeamByIdRequest request)
@@ -82,14 +78,6 @@ public class SeamService : ISeamService
             _seamRepository.GetAllByInspectorIdAsync(request.InspectorId));
     }
 
-    public async Task<Result<List<SeamDto>>> GetAllByWelderIdAsync(GetAllByWelderIdRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
-            _seamRepository.GetAllByWelderIdAsync(request.WelderId));
-    }
-
     public async Task<Result<Unit>> AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
@@ -123,7 +111,7 @@ public class SeamService : ISeamService
 
         return await validationResult.ToDataResult(() =>
         {
-            var statusReason = _mapper.Map<StatusReason>(request);
+            var statusReason = _mapper.Map<DefectiveReason>(request);
 
             return _seamRepository.AddDefectiveReasonToSeamAsync(statusReason);
         });
@@ -136,17 +124,9 @@ public class SeamService : ISeamService
 
         return await validationResult.ToDataResult(() =>
         {
-            var statusReason = _mapper.Map<StatusReason>(request);
+            var statusReason = _mapper.Map<DefectiveReason>(request);
 
             return _seamRepository.UpdateDefectiveReasonSeamAsync(statusReason);
         });
-    }
-
-    public async Task<Result<SeamDto>> ChangeStatusAsync(ChangeSeamStatusRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
-            _seamRepository.ChangeStatusAsync(request.Id, request.Status, request.IsAddManually));
     }
 }

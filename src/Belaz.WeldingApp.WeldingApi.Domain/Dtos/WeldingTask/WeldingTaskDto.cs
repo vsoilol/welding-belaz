@@ -44,16 +44,13 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
 
-    public ProductStatus Status { get; set; }
+    public SeamStatus Status { get; set; }
 
     public SeamBriefDto Seam { get; set; } = null!;
     
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
-            .ForMember(dto => dto.Status,
-                opt => opt
-                    .MapFrom(x => x.Seam.Status))
             .ForMember(dto => dto.WeldingDate,
                 opt => opt
                     .MapFrom(x => x.WeldingDate.ToDayInfoString()));

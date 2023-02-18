@@ -2,9 +2,9 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 
-public class GetAllByTaskStatusRequest
+public class GetAllProductsByWelderIdRequest
 {
-    public ProductStatus Status { get; set; }
+    public Guid WelderId { get; set; }
     
     public ProductType Type { get; set; }
 }

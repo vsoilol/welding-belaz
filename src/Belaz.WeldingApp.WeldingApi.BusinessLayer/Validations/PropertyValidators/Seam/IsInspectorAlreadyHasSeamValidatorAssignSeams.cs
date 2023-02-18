@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Seam;
 
-public class IsInspectorAlreadyHasSeamValidatorAssignSeams: AsyncPropertyValidator<AssignSeamsToInspectorRequest, Guid>
+public class IsInspectorAlreadyHasSeamValidatorAssignSeams 
+    : AsyncPropertyValidator<AssignSeamsToInspectorRequest, Guid>
 {
     private readonly ApplicationContext _context;
 
@@ -26,7 +27,7 @@ public class IsInspectorAlreadyHasSeamValidatorAssignSeams: AsyncPropertyValidat
     }
 
     public override string Name => "IsWelderAlreadyHasSeamValidatorAssignSeams";
-    
+
     protected override string GetDefaultMessageTemplate(string errorCode)
         => "This seam is already assign to inspector";
 }

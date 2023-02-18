@@ -14,9 +14,7 @@ public class CreateChiefRequest : IMapTo<Domain.Entities.Users.Chief>
 
     public string MiddleName { get; set; } = null!;
 
-    public Guid ProductionAreaId { get; set; }
-
-    public Guid? WeldingEquipmentId { get; set; }
+    public Guid WorkshopId { get; set; }
 
     public void Mapping(Profile profile)
     {

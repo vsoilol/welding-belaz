@@ -34,29 +34,20 @@ public class WelderRepository : IWelderRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public async Task<WelderDto> CreateAsync(Welder entity, IReadOnlyList<Guid>? weldingEquipmentIds)
+    public async Task<WelderDto> CreateAsync(Welder entity)
     {
-        entity.WeldingEquipments = weldingEquipmentIds is not null
-            ? await GetWeldingEquipmentsByIds(weldingEquipmentIds)
-            : new List<WeldingEquipment>();
-
         var createdWelder = _context.Welders.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(createdWelder.Id);
     }
 
-    public async Task<WelderDto> UpdateAsync(Welder entity, IReadOnlyList<Guid>? weldingEquipmentIds)
+    public async Task<WelderDto> UpdateAsync(Welder entity)
     {
         var updatedWelder = (await _context.Welders
             .Include(_ => _.UserInfo)
-            .Include(_ => _.WeldingEquipments)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
-
-        updatedWelder.WeldingEquipments = weldingEquipmentIds is not null
-            ? await GetWeldingEquipmentsByIds(weldingEquipmentIds)
-            : new List<WeldingEquipment>();
-
+        
         updatedWelder.WorkplaceId = entity.WorkplaceId;
         updatedWelder.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedWelder.UserInfo.FirstName = entity.UserInfo.FirstName;

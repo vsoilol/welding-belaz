@@ -33,17 +33,6 @@ public class SeamController : ControllerBase
         return await _seamService.GetAllAsync();
     }
 
-    /// <summary>
-    /// Gets all seams by status
-    /// </summary>
-    /// <param name="status">1 - Не изготовлен, 2 - Изготовлен, но не принят или не проверен, 3 - Принят, 4 - Забракован</param>
-    [HttpGet("byStatus/{status}")]
-    [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByStatusAsync([FromRoute] ProductStatus status)
-    {
-        return await _seamService.GetAllByStatusAsync(status);
-    }
-
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<SeamDto>> GetByIdAsync([FromRoute] Guid id)
@@ -81,14 +70,6 @@ public class SeamController : ControllerBase
     {
         var result = await _seamService.GetAllByInspectorIdAsync(new GetAllByInspectorIdRequest
             { InspectorId = inspectorId });
-        return result.ToOk();
-    }
-
-    [HttpGet("byWelder/{welderId}")]
-    [ProducesResponseType(typeof(List<SeamDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<SeamDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
-    {
-        var result = await _seamService.GetAllByWelderIdAsync(new GetAllByWelderIdRequest { WelderId = welderId });
         return result.ToOk();
     }
 
@@ -136,14 +117,6 @@ public class SeamController : ControllerBase
         [FromBody] UpdateDefectiveReasonToSeamRequest request)
     {
         var result = await _seamService.UpdateDefectiveReasonSeamAsync(request);
-        return result.ToOk();
-    }
-
-    [HttpPut("changeStatus")]
-    [ProducesResponseType(typeof(SeamDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<SeamDto>> ChangeStatusAsync([FromBody] ChangeSeamStatusRequest request)
-    {
-        var result = await _seamService.ChangeStatusAsync(request);
         return result.ToOk();
     }
 }

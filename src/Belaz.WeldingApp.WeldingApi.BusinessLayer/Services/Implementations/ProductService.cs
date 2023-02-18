@@ -32,14 +32,6 @@ public class ProductService : IProductService
             _productRepository.GetAllAsync(request.Type));
     }
 
-    public async Task<Result<List<ProductDto>>> GetAllByStatusAsync(GetAllByTaskStatusRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
-            _productRepository.GetAllByStatusAsync(request.Status, request.Type));
-    }
-
     public async Task<Result<List<ProductDto>>> GetAllByControlSubjectAsync(GetAllByControlSubjectRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
@@ -70,6 +62,14 @@ public class ProductService : IProductService
 
         return await validationResult.ToDataResult(() =>
             _productRepository.GetAllByInspectorIdAsync(request.InspectorId, request.Type));
+    }
+
+    public async Task<Result<List<ProductDto>>> GetAllByWelderIdAsync(GetAllProductsByWelderIdRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+            _productRepository.GetAllByWelderId(request.WelderId, request.Type));
     }
 
     public async Task<Result<ProductDto>> CreateAsync(CreateProductRequest request)
@@ -155,13 +155,5 @@ public class ProductService : IProductService
             await _productRepository.AssignProductToWeldersAsync(request.ProductId, request.WelderIds);
             return Unit.Default;
         });
-    }
-
-    public async Task<Result<ProductDto>> ChangeStatusAsync(ChangeProductStatusRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
-            _productRepository.ChangeStatusAsync(request.Id, request.Status, request.IsAddManually));
     }
 }

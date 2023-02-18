@@ -20,4 +20,8 @@ public interface IWeldingEquipmentRepository
     Task<WeldingEquipmentDowntimeDto> AddWeldingEquipmentDowntimeAsync(WeldingEquipmentConditionTime entity);
 
     Task<WeldingEquipmentDowntimeDto> UpdateWeldingEquipmentDowntimeAsync(WeldingEquipmentConditionTime entity);
+    
+    Task AssignEquipmentsToWeldersAsync(List<Guid> weldingEquipmentIds, List<Guid> welderIds);
+    
+    Task AssignEquipmentsToMastersAsync(List<Guid> weldingEquipmentIds, List<Guid> masterIds);
 }

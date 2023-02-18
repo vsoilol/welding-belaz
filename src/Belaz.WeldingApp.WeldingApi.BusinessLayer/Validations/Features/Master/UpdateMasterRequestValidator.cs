@@ -1,7 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Master;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
@@ -38,13 +36,5 @@ public class UpdateMasterRequestValidator : AbstractValidator<UpdateMasterReques
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<UpdateMasterRequest,
                 Domain.Entities.Production.ProductionArea>(context));
-
-        RuleFor(model => model.WeldingEquipmentId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateMasterRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context))
-            .SetAsyncValidator(new IsEquipmentAlreadyAssignValidatorForUpdateMaster(context))
-            .When(_ => _.WeldingEquipmentId is not null);
     }
 }

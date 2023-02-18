@@ -9,7 +9,7 @@ public interface IWelderRepository
 
     Task<WelderDto> GetByIdAsync(Guid id);
 
-    Task<WelderDto> CreateAsync(Welder entity, IReadOnlyList<Guid>? weldingEquipmentIds);
+    Task<WelderDto> CreateAsync(Welder entity);
     
-    Task<WelderDto> UpdateAsync(Welder entity, IReadOnlyList<Guid>? weldingEquipmentIds);
+    Task<WelderDto> UpdateAsync(Welder entity);
 }

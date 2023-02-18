@@ -1,7 +1,9 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingEquipment;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -68,6 +70,22 @@ public class WeldingEquipmentController : ControllerBase
         [FromBody] UpdateWeldingEquipmentDowntimeRequest request)
     {
         var result = await _weldingEquipmentService.UpdateWeldingEquipmentDowntimeAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("assignMasters")]
+    public async Task<ActionResult<Unit>> AssignEquipmentsToMastersAsync(
+        [FromBody] AssignEquipmentsToMastersRequest request)
+    {
+        var result = await _weldingEquipmentService.AssignEquipmentsToMastersAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("assignWelders")]
+    public async Task<ActionResult<Unit>> AssignEquipmentToWeldersAsync(
+        [FromBody] AssignEquipmentsToWeldersRequest request)
+    {
+        var result = await _weldingEquipmentService.AssignEquipmentsToWeldersAsync(request);
         return result.ToOk();
     }
 }

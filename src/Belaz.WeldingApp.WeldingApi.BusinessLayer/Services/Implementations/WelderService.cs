@@ -36,7 +36,7 @@ public class WelderService : IWelderService
         {
             var welder = _mapper.Map<Welder>(request);
 
-            return _welderRepository.CreateAsync(welder, request.WeldingEquipmentIds);
+            return _welderRepository.CreateAsync(welder);
         });
     }
 
@@ -48,7 +48,7 @@ public class WelderService : IWelderService
         {
             var welder = _mapper.Map<Welder>(request);
 
-            return _welderRepository.UpdateAsync(welder, request.WeldingEquipmentIds);
+            return _welderRepository.UpdateAsync(welder);
         });
     }
 }

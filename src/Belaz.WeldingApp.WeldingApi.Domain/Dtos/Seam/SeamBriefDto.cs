@@ -13,4 +13,9 @@ public class SeamBriefDto : IMapFrom<Entities.ProductInfo.Seam>
     public bool IsControlSubject { get; set; }
     
     public int Length { get; set; }
+    
+    /// <summary>
+    /// Поддлежит ли исполнению на регистраторе
+    /// </summary>
+    public bool IsPerformed { get; set; }
 }

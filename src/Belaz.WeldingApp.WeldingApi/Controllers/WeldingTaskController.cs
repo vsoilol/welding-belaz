@@ -32,21 +32,6 @@ public class WeldingTaskController : ControllerBase
         return await _weldingTaskService.GetAllWithFullNamesAsync();
     }
 
-    [HttpGet("registrarInfo")]
-    [ProducesResponseType(typeof(IEnumerable<WeldingTaskRegistrarInfoDto>), StatusCodes.Status200OK)]
-    public Task<ActionResult<IEnumerable<WeldingTaskRegistrarInfoDto>>> GetAllRegistrarInfoAsync()
-    {
-        var badRequestResult = new BadRequestResult
-        {
-            Errors = "Method not implement",
-            StatusCode = (int)HttpStatusCode.NotImplemented,
-            Title = "Not implement Error"
-        };
-
-        return Task
-            .FromResult<ActionResult<IEnumerable<WeldingTaskRegistrarInfoDto>>>(BadRequest(badRequestResult));
-    }
-    
     [HttpGet("completed")]
     [ProducesResponseType(typeof(IEnumerable<WeldingTaskDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingTaskDto>>> GetAllCompletedTaskAsync()
@@ -59,14 +44,6 @@ public class WeldingTaskController : ControllerBase
     public async Task<ActionResult<IEnumerable<WeldingTaskDto>>> GetAllAsync()
     {
         return await _weldingTaskService.GetAllAsync();
-    }
-    
-    [HttpPost]
-    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WeldingTaskDto>> CreateAsync([FromBody] CreateWeldingTaskRequest request)
-    {
-        var result = await _weldingTaskService.CreateAsync(request);
-        return result.ToOk();
     }
 
     [HttpPut]

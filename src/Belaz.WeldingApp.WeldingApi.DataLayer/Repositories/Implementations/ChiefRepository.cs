@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -47,15 +48,21 @@ public class ChiefRepository : IChiefRepository
             .Include(_ => _.UserInfo)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
-        updatedChief.WeldingEquipmentId = entity.WeldingEquipmentId;
         updatedChief.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedChief.UserInfo.FirstName = entity.UserInfo.FirstName;
         updatedChief.UserInfo.MiddleName = entity.UserInfo.MiddleName;
         updatedChief.UserInfo.LastName = entity.UserInfo.LastName;
-        updatedChief.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
+        updatedChief.WorkshopId = entity.WorkshopId;
 
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+    
+    private Task<List<WeldingEquipment>> GetWeldingEquipmentsByIds(IReadOnlyList<Guid> weldingEquipmentIds)
+    {
+        return _context.WeldingEquipments
+            .Where(_ => weldingEquipmentIds.Any(equipmentId => equipmentId == _.Id))
+            .ToListAsync();
     }
 }

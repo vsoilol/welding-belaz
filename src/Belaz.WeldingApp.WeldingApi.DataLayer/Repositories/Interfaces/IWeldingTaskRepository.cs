@@ -7,15 +7,11 @@ public interface IWeldingTaskRepository
 {
     Task<List<WeldingTaskFullNamesDto>> GetAllWithFullNamesAsync();
 
-    Task<List<WeldingTaskRegistrarInfoDto>> GetAllRegistrarInfoAsync();
-    
     Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync();
     
     Task<List<WeldingTaskDto>> GetAllAsync();
     
     Task<WeldingTaskDto> GetByIdAsync(Guid id);
-    
-    Task<WeldingTaskDto> CreateAsync(WeldingTask entity);
-    
+
     Task<WeldingTaskDto> UpdateAsync(WeldingTask entity);
 }

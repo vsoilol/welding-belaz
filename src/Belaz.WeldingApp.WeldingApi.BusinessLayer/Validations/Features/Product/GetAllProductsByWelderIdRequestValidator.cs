@@ -5,18 +5,19 @@ using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Product;
 
-public class ChangeProductStatusRequestValidator : AbstractValidator<ChangeProductStatusRequest>
+public class GetAllProductsByWelderIdRequestValidator : AbstractValidator<GetAllProductsByWelderIdRequest>
 {
-    public ChangeProductStatusRequestValidator(ApplicationContext context)
+    public GetAllProductsByWelderIdRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Id)
+        RuleFor(model => model.WelderId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<ChangeProductStatusRequest,
-                Domain.Entities.ProductInfo.Product>(context));
+            .SetValidator(new SqlIdValidatorFor<GetAllProductsByWelderIdRequest,
+                Domain.Entities.Users.Welder>(context));
         
-        RuleFor(model => model.Status)
+        RuleFor(model => model.Type)
             .Cascade(CascadeMode.Stop)
+            .NotEmpty()
             .IsInEnum();
     }
 }

@@ -1,29 +1,27 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
 
-public class UpdateDefectiveReasonToSeamRequest : IMapTo<StatusReason>
+public class UpdateDefectiveReasonToSeamRequest : IMapTo<DefectiveReason>
 {
     public Guid Id { get; set; }
 
-    public Guid SeamId { get; set; }
-
-    public string Date { get; set; } = null!;
-
+    public string DetectedDefectiveDate { get; set; } = null!;
+    
     public string Reason { get; set; } = null!;
+
+    public string DetectedDefects { get; set; } = null!;
     
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<UpdateDefectiveReasonToSeamRequest, StatusReason>()
-            .ForMember(dto => dto.Date,
+        profile.CreateMap<UpdateDefectiveReasonToSeamRequest, DefectiveReason>()
+            .ForMember(dto => dto.DetectedDefectiveDate,
                 opt => opt
-                    .MapFrom(x => x.Date.ToDateTime()))
-            .ForMember(dto => dto.Status,
-                opt => opt
-                    .MapFrom(x => ProductStatus.Defective));
+                    .MapFrom(x => x.DetectedDefectiveDate.ToDateTime()));
     }
 }

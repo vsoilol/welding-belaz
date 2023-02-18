@@ -98,11 +98,6 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
 
     public PostBriefDto? Post { get; set; }
 
-    /// <summary>
-    /// Продолжительность включения (нагрузки), в минутах
-    /// </summary>
-    public int ActivationDuration { get; set; }
-
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment, WeldingEquipmentDto>()
@@ -114,11 +109,6 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
                     .MapFrom(x => x.NextAttestationDate.ToDayInfoString()))
             .ForMember(dto => dto.ResponsiblePersons,
                 opt => opt
-                    .MapFrom(x => x.Welders.Select(_ => _.UserInfo)))
-            .ForMember(dto => dto.ActivationDuration,
-                opt => opt
-                    .MapFrom(x => x.WeldingEquipmentConditionTime
-                        .Where(_ => _.Condition == Condition.AtWork)
-                        .Sum(_ => _.Time)));
+                    .MapFrom(x => x.Welders.Select(_ => _.UserInfo)));
     }
 }
