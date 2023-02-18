@@ -13,9 +13,9 @@ public interface IWeldingEquipmentRepository
 
     Task<List<WeldingEquipmentDowntimeDto>> GetAllWeldingEquipmentDowntimesAsync();
 
-    Task<WeldingEquipmentDto> CreateAsync(WeldingEquipment entity);
+    Task<WeldingEquipmentDto> CreateAsync(WeldingEquipment entity, List<Guid> workplaceIds);
 
-    Task<WeldingEquipmentDto> UpdateAsync(WeldingEquipment entity);
+    Task<WeldingEquipmentDto> UpdateAsync(WeldingEquipment entity, List<Guid> workplaceIds);
 
     Task<WeldingEquipmentDowntimeDto> AddWeldingEquipmentDowntimeAsync(WeldingEquipmentConditionTime entity);
 

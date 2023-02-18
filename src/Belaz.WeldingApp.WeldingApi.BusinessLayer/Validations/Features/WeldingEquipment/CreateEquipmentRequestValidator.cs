@@ -98,5 +98,11 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
             .SetValidator(new SqlIdValidatorFor<CreateEquipmentRequest,
                 Domain.Entities.Production.Post>(context))
             .When(_ => _.PostId is not null);
+
+        RuleForEach(model => model.WorkplaceIds)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetValidator(new SqlIdValidatorFor<CreateEquipmentRequest,
+                Domain.Entities.Production.Workplace>(context));
     }
 }

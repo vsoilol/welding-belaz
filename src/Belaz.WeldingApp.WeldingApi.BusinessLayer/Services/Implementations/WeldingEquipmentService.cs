@@ -43,7 +43,7 @@ public class WeldingEquipmentService : IWeldingEquipmentService
         {
             var weldingEquipment = _mapper.Map<WeldingEquipment>(request);
 
-            return _weldingEquipmentRepository.CreateAsync(weldingEquipment);
+            return _weldingEquipmentRepository.CreateAsync(weldingEquipment, request.WorkplaceIds);
         });
     }
 
@@ -55,7 +55,7 @@ public class WeldingEquipmentService : IWeldingEquipmentService
         {
             var weldingEquipment = _mapper.Map<WeldingEquipment>(request);
 
-            return _weldingEquipmentRepository.UpdateAsync(weldingEquipment);
+            return _weldingEquipmentRepository.UpdateAsync(weldingEquipment, request.WorkplaceIds);
         });
     }
 

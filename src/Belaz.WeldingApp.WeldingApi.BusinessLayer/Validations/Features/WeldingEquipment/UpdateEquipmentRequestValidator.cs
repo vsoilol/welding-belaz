@@ -104,5 +104,11 @@ public class UpdateEquipmentRequestValidator : AbstractValidator<UpdateEquipment
             .SetValidator(new SqlIdValidatorFor<UpdateEquipmentRequest,
                 Domain.Entities.Production.Post>(context))
             .When(_ => _.PostId is not null);
+        
+        RuleForEach(model => model.WorkplaceIds)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetValidator(new SqlIdValidatorFor<UpdateEquipmentRequest,
+                Domain.Entities.Production.Workplace>(context));
     }
 }
