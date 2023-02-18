@@ -18,9 +18,4 @@
       <ProjectReference Include="..\Belaz.WeldingApp.RegistarApi.Domain\Belaz.WeldingApp.RegistarApi.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Validations\Features" />
-      <Folder Include="Validations\PropertyValidators" />
-    </ItemGroup>
-
 </Project>

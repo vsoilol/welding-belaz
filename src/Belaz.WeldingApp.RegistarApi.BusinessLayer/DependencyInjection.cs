@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Implementations;
+using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Validations.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,8 @@ public static class DependencyInjection
 
         services.AddScoped<IValidationService, ValidationService>();
 
+        services.AddScoped<IRegistarService, RegistarService>();
+        
         return services;
     }
 }
