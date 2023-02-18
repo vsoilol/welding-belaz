@@ -2140,7 +2140,9 @@ public class DataSeed
                             WeldingStartTime = weldingStartTime1,
                             WeldingEndTime = weldingEndTime1,
                             PreheatingTemperature = 82,
-                            WeldingEquipment = weldingEquipment
+                            WeldingEquipment = weldingEquipment,
+                            Welder = welder,
+                            Master = master,
                         }
                     },
                     new()
@@ -2157,7 +2159,9 @@ public class DataSeed
                             PreheatingTemperature = 100,
                             WeldingCurrentValues = currentValues2,
                             ArcVoltageValues = voltageValues2,
-                            WeldingEquipment = weldingEquipment
+                            WeldingEquipment = weldingEquipment,
+                            Welder = welder,
+                            Master = master,
                         }
                     }
                 },
@@ -2229,7 +2233,9 @@ public class DataSeed
                             PreheatingTemperature = 82,
                             WeldingCurrentValues = currentValues1,
                             ArcVoltageValues = voltageValues1,
-                            WeldingEquipment = weldingEquipment
+                            WeldingEquipment = weldingEquipment,
+                            Master = master,
+                            Welder = welder,
                         }
                     },
                     new()
@@ -2245,7 +2251,9 @@ public class DataSeed
                             PreheatingTemperature = 100,
                             WeldingCurrentValues = currentValues2,
                             ArcVoltageValues = voltageValues2,
-                            WeldingEquipment = weldingEquipment
+                            WeldingEquipment = weldingEquipment,
+                            Master = master,
+                            Welder = welder,
                         }
                     }
                 },
