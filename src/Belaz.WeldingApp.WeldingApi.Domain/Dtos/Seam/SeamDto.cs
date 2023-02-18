@@ -19,6 +19,11 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     public int Number { get; set; }
     
     public int Length { get; set; }
+    
+    /// <summary>
+    /// Поддлежит ли исполнению на регистраторе
+    /// </summary>
+    public bool IsPerformed { get; set; }
 
     public ProductBriefDto Product { get; set; } = null!;
 

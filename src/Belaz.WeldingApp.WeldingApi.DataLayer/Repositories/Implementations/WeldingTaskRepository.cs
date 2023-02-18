@@ -29,7 +29,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
     public Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
     {
         return _context.WeldingTasks
-            .Where(_ => _.Seam.Status != ProductStatus.NotManufactured)
+            .Where(_ => _.Status != SeamStatus.Accept)
             .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

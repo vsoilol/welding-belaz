@@ -20,6 +20,11 @@ public class Seam : Entity
     /// </summary>
     public bool IsControlSubject { get; set; }
 
+    /// <summary>
+    /// Поддлежит ли исполнению на регистраторе
+    /// </summary>
+    public bool IsPerformed { get; set; } = false;
+
     public Guid ProductId { get; set; }
 
     [ForeignKey(nameof(ProductId))] 

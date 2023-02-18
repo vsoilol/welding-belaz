@@ -64,9 +64,11 @@ public class SeamRepository : ISeamRepository
         var updatedSeam = (await _context.Seams.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
         updatedSeam.Number = entity.Number;
+        updatedSeam.Length = entity.Length;
         updatedSeam.IsControlSubject = entity.IsControlSubject;
         updatedSeam.ProductionAreaId = entity.ProductionAreaId;
-        updatedSeam.WorkplaceId = entity.WorkplaceId;
+        updatedSeam.IsPerformed = entity.IsPerformed;
+        updatedSeam.TechnologicalInstructionId = entity.TechnologicalInstructionId;
 
         await _context.SaveChangesAsync();
 
