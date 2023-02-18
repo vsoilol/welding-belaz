@@ -7,6 +7,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using LanguageExt;
 using LanguageExt.Common;
 using WeldingApp.Common.Enums;
@@ -123,7 +124,7 @@ public class SeamService : ISeamService
 
         return await validationResult.ToDataResult(() =>
         {
-            var statusReason = _mapper.Map<StatusReason>(request);
+            var statusReason = _mapper.Map<DefectiveReason>(request);
 
             return _seamRepository.AddDefectiveReasonToSeamAsync(statusReason);
         });
@@ -136,7 +137,7 @@ public class SeamService : ISeamService
 
         return await validationResult.ToDataResult(() =>
         {
-            var statusReason = _mapper.Map<StatusReason>(request);
+            var statusReason = _mapper.Map<DefectiveReason>(request);
 
             return _seamRepository.UpdateDefectiveReasonSeamAsync(statusReason);
         });

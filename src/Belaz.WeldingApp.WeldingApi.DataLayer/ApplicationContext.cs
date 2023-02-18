@@ -70,6 +70,8 @@ public sealed class ApplicationContext : DbContext
     public DbSet<ProductResult> ProductResults { get; set; } = null!;
     
     public DbSet<WeldingRecord> WeldingRecords { get; set; } = null!;
+    
+    public DbSet<DefectiveReason> DefectiveReasons { get; set; } = null!;
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {

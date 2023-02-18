@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;
 
@@ -111,35 +112,35 @@ public class SeamRepository : ISeamRepository
 
     public Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync()
     {
-        return _context.StatusReasons
-            .Where(_ => _.Status == ProductStatus.Defective && _.Seam != null)
+        return _context.WeldingTasks
+            .Where(_ => _.Status == SeamStatus.Defective)
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
     public Task<DefectiveSeamDto> GetDefectiveReasonByIdAsync(Guid id)
     {
-        return _context.StatusReasons
+        return _context.WeldingTasks
             .Where(_ => _.Id == id)
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
 
-    public async Task<DefectiveSeamDto> AddDefectiveReasonToSeamAsync(StatusReason entity)
+    public async Task<DefectiveSeamDto> AddDefectiveReasonToSeamAsync(DefectiveReason entity)
     {
-        var newStatusReason = _context.StatusReasons.Add(entity).Entity;
+        var newStatusReason = _context.DefectiveReasons.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
         return await GetDefectiveReasonByIdAsync(newStatusReason.Id);
     }
 
-    public async Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(StatusReason entity)
+    public async Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(DefectiveReason entity)
     {
-        var updatedStatusReason = (await _context.StatusReasons.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedStatusReason = (await _context.DefectiveReasons.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
-        updatedStatusReason.Date = entity.Date;
-        updatedStatusReason.SeamId = entity.SeamId;
+        updatedStatusReason.DetectedDefectiveDate = entity.DetectedDefectiveDate;
         updatedStatusReason.Reason = entity.Reason;
+        updatedStatusReason.DetectedDefects = entity.DetectedDefects;
 
         await _context.SaveChangesAsync();
 

@@ -12,10 +12,8 @@ public class WeldingTask : Entity
     public int Number { get; set; }
     
     public SeamStatus Status { get; set; } = SeamStatus.Accept;
-    
-    public string? Reason { get; set; }
 
-    public string? DetectedDefects { get; set; }
+    public DefectiveReason? DefectiveReason { get; set; }
 
     /// <summary>
     /// Добавлен ли вручную

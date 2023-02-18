@@ -1,5 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
@@ -30,9 +31,9 @@ public interface ISeamRepository
     
     Task<DefectiveSeamDto> GetDefectiveReasonByIdAsync(Guid id);
     
-    Task<DefectiveSeamDto> AddDefectiveReasonToSeamAsync(StatusReason entity);
+    Task<DefectiveSeamDto> AddDefectiveReasonToSeamAsync(DefectiveReason entity);
     
-    Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(StatusReason entity);
+    Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(DefectiveReason entity);
     
     Task<SeamDto> ChangeStatusAsync(Guid id, ProductStatus status, bool isAddManually);
 }
