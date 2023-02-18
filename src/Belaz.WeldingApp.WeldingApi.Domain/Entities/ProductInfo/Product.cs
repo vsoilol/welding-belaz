@@ -14,11 +14,11 @@ public class Product : Entity
     public string Name { get; set; } = null!;
 
     public string Number { get; set; } = null!;
-    
+
     /// <summary>
     /// Подлежит ли контролю
     /// </summary>
-    public bool IsControlSubject { get; set; }
+    public bool IsControlSubject { get; set; } = true;
 
     public ProductType ProductType { get; set; }
 

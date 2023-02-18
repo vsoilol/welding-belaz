@@ -18,7 +18,7 @@ public class Seam : Entity
     /// <summary>
     /// Подлежит ли контролю
     /// </summary>
-    public bool IsControlSubject { get; set; }
+    public bool IsControlSubject { get; set; } = true;
 
     /// <summary>
     /// Поддлежит ли исполнению на регистраторе
