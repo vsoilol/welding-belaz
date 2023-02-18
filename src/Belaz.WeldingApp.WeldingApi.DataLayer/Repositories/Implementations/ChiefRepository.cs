@@ -34,34 +34,25 @@ public class ChiefRepository : IChiefRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public async Task<ChiefDto> CreateAsync(Chief entity, IReadOnlyList<Guid>? weldingEquipmentIds)
+    public async Task<ChiefDto> CreateAsync(Chief entity)
     {
-        entity.WeldingEquipments = weldingEquipmentIds is not null
-            ? await GetWeldingEquipmentsByIds(weldingEquipmentIds)
-            : new List<WeldingEquipment>();
-        
         var newChief = _context.Chiefs.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(newChief.Id);
     }
 
-    public async Task<ChiefDto> UpdateAsync(Chief entity, IReadOnlyList<Guid>? weldingEquipmentIds)
+    public async Task<ChiefDto> UpdateAsync(Chief entity)
     {
         var updatedChief = (await _context.Chiefs
             .Include(_ => _.UserInfo)
-            .Include(_ => _.WeldingEquipments)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
-        
-        updatedChief.WeldingEquipments = weldingEquipmentIds is not null
-            ? await GetWeldingEquipmentsByIds(weldingEquipmentIds)
-            : new List<WeldingEquipment>();
-        
+
         updatedChief.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedChief.UserInfo.FirstName = entity.UserInfo.FirstName;
         updatedChief.UserInfo.MiddleName = entity.UserInfo.MiddleName;
         updatedChief.UserInfo.LastName = entity.UserInfo.LastName;
-        updatedChief.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
+        updatedChief.WorkshopId = entity.WorkshopId;
 
         await _context.SaveChangesAsync();
 

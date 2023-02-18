@@ -38,7 +38,8 @@ public class UserData : Entity
 
     public Guid? ProductionAreaId { get; set; }
 
-    [ForeignKey(nameof(ProductionAreaId))] public ProductionArea? ProductionArea { get; set; }
+    [ForeignKey(nameof(ProductionAreaId))] 
+    public ProductionArea? ProductionArea { get; set; }
 
     public List<UserRole> UserRoles { get; set; } = null!;
 }

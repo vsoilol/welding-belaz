@@ -36,7 +36,7 @@ public class ChiefService : IChiefService
         {
             var chief = _mapper.Map<Chief>(request);
 
-            return _chiefRepository.CreateAsync(chief, request.WeldingEquipmentIds);
+            return _chiefRepository.CreateAsync(chief);
         });
     }
 
@@ -48,7 +48,7 @@ public class ChiefService : IChiefService
         {
             var chief = _mapper.Map<Chief>(request);
 
-            return _chiefRepository.UpdateAsync(chief, request.WeldingEquipmentIds);
+            return _chiefRepository.UpdateAsync(chief);
         });
     }
 }

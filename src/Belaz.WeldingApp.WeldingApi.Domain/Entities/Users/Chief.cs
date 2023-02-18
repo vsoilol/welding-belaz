@@ -1,5 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
 using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
@@ -11,7 +12,11 @@ public class Chief : Entity
 {
     public Guid UserId { get; set; }
 
-    [ForeignKey(nameof(UserId))] public UserData UserInfo { get; set; } = null!;
+    [ForeignKey(nameof(UserId))] 
+    public UserData UserInfo { get; set; } = null!;
+    
+    public Guid WorkshopId { get; set; }
 
-    public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
+    [ForeignKey(nameof(WorkshopId))] 
+    public Workshop Workshop { get; set; } = null!;
 }

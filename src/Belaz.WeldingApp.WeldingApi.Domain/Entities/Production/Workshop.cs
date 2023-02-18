@@ -1,4 +1,6 @@
-﻿namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+
+namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 
 /// <summary>
 /// Цех
@@ -10,4 +12,6 @@ public class Workshop : Entity
     public int Number { get; set; }
 
     public List<ProductionArea> ProductionAreas { get; set; } = null!;
+
+    public List<Chief> Chiefs { get; set; } = null!;
 }

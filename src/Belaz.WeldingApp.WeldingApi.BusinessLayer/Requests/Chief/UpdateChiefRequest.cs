@@ -16,9 +16,7 @@ public class UpdateChiefRequest : IMapTo<Domain.Entities.Users.Chief>
 
     public string MiddleName { get; set; } = null!;
 
-    public Guid ProductionAreaId { get; set; }
-    
-    public IReadOnlyList<Guid>? WeldingEquipmentIds { get; set; }
+    public Guid WorkshopId { get; set; }
 
     public void Mapping(Profile profile)
     {

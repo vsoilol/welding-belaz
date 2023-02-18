@@ -25,16 +25,10 @@ public class CreateChiefRequestValidator : AbstractValidator<CreateChiefRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty();
 
-        RuleFor(model => model.ProductionAreaId)
+        RuleFor(model => model.WorkshopId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<CreateChiefRequest,
-                Domain.Entities.Production.ProductionArea>(context));
-
-        RuleForEach(model => model.WeldingEquipmentIds)
-            .Cascade(CascadeMode.Stop)
-            .SetValidator(new SqlIdValidatorFor<CreateChiefRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context))
-            .When(_ => _.WeldingEquipmentIds is not null);
+                Domain.Entities.Production.Workshop>(context));
     }
 }
