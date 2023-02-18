@@ -15,9 +15,4 @@
       <ProjectReference Include="..\Belaz.WeldingApp.RegistarApi.Domain\Belaz.WeldingApp.RegistarApi.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Repositories\Implementations" />
-      <Folder Include="Repositories\Interfaces" />
-    </ItemGroup>
-
 </Project>

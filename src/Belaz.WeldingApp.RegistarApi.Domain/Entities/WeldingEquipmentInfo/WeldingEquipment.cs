@@ -102,6 +102,8 @@ public class WeldingEquipment : Entity
     [ForeignKey(nameof(PostId))] 
     public Post? Post { get; set; }
 
+    public List<Workplace> Workplaces { get; set; } = null!;
+
     public List<Calendar> Calendars { get; set; } = null!;
 
     public List<Master> Masters { get; set; } = null!;

@@ -436,6 +436,17 @@ public class DataSeed
         {
             new WeldingEquipment
             {
+                RfidTag = "11111",
+                Name = "QINEO TRONIC",
+                Marking = "ECO600CQWDM2",
+                FactoryNumber = "49506",
+                CommissioningDate = new DateTime(2013, 1, 1),
+                GroupNumber = "3.11",
+                ManufacturerName = "CLOOS",
+                WeldingProcess = "Полуавтоматическая сварка"
+            },
+            new WeldingEquipment
+            {
                 IdFromSystem = "8008336102-130",
                 Name = "QINEO TRONIC",
                 Marking = "ECO600CQWDM2",
@@ -782,6 +793,9 @@ public class DataSeed
             .FirstOrDefaultAsync(_ => _.IdFromSystem == "511"))!;
         var weldingEquipment499 = (await context.WeldingEquipments
             .FirstOrDefaultAsync(_ => _.IdFromSystem == "499"))!;
+        
+        var weldingEquipmentTest = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.RfidTag == "11111"))!;
 
         var workplace3520 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3520))!;
         var workplace3610 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3610))!;
@@ -795,6 +809,28 @@ public class DataSeed
 
         var welders = new List<Welder>
         {
+            new Welder
+            {
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipmentTest },
+                Workplace = workplace3590,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "45092",
+                    RfidTag = "22222",
+                    MiddleName = "Козылев",
+                    FirstName = "Антон",
+                    LastName = "Павлович",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
             new Welder
             {
                 IdFromSystem = "151299",

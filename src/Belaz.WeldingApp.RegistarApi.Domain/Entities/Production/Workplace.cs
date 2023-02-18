@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.Users;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.Production;
 
@@ -23,5 +24,7 @@ public class Workplace : Entity
 
     public List<Seam> Seams { get; set; } = null!;
 
+    public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
+    
     public List<Welder> Welders { get; set; } = null!;
 }
