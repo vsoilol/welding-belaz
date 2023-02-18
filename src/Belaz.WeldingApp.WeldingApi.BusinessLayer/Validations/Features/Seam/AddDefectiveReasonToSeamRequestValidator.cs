@@ -13,13 +13,13 @@ public class AddDefectiveReasonToSeamRequestValidator : AbstractValidator<AddDef
             .Cascade(CascadeMode.Stop)
             .NotEmpty();
 
-        RuleFor(model => model.SeamId)
+        RuleFor(model => model.WeldingTaskId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<AddDefectiveReasonToSeamRequest,
-                Domain.Entities.ProductInfo.Seam>(context));
+                Domain.Entities.TaskInfo.WeldingTask>(context));
 
-        RuleFor(model => model.Date)
+        RuleFor(model => model.DetectedDefectiveDate)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new DateValidatorFor<AddDefectiveReasonToSeamRequest>());
     }
