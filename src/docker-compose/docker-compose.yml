@@ -63,6 +63,23 @@ services:
     depends_on:
       - postgresql_database
       - welding-api
+        
+  registar-api:
+    image: welding-app/registar-api
+    restart: on-failure
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.RegistarApi/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+    ports:
+      - "5013:80"
+    volumes:
+      - ./docker-storage/registar-api-logs:/app/logs
+      - ../sharedsettings.json:/app/sharedsettings.json
+    depends_on:
+      - postgresql_database
+      - welding-api
       
   gateway-api:
     image: welding-app/gateway-api
