@@ -1940,9 +1940,6 @@ public class DataSeed
 
         await context.SaveChangesAsync();
 
-        /*var endedAt = startedAt.AddSeconds(0.1 * taskData.MachineData.Voltages.Count);
-        var time = TimeSpan.FromSeconds(endedAt.Subtract(startedAt).TotalSeconds).ToString(@"mm\:ss");*/
-
         var voltageValues1 = new[]
         {
             23.2, 25.3, 26.8, 23.8, 27.0, 24.9, 25.3, 25.0, 24.6, 24.9, 23.8, 25.0, 25.0, 22.4, 21.2, 21.4, 21.0, 20.9,
@@ -2075,6 +2072,8 @@ public class DataSeed
                 ProtectiveGasBatchNumber = "111111",
                 Status = SeamStatus.Accept,
                 Welder = welder,
+                Inspector = inspector,
+                Master = master,
                 WeldPassages = new List<WeldPassage>
                 {
                     new()
@@ -2171,6 +2170,8 @@ public class DataSeed
                 ProtectiveGasBatchNumber = "111111",
                 Status = SeamStatus.Accept,
                 Welder = welder,
+                Inspector = inspector,
+                Master = master,
                 WeldPassages = new List<WeldPassage>
                 {
                     new()
