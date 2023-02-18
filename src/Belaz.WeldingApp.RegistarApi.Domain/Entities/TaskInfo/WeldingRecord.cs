@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.Users;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 
 public class WeldingRecord : Entity
 {
+    public DateTime Date { get; set; }
+    
     /// <summary>
     /// Время начала сварки
     /// </summary>
@@ -34,6 +37,16 @@ public class WeldingRecord : Entity
 
     [ForeignKey(nameof(WeldingEquipmentId))]
     public WeldingEquipment WeldingEquipment { get; set; } = null!;
+    
+    public Guid WelderId { get; set; }
+
+    [ForeignKey(nameof(WelderId))]
+    public Welder Welder { get; set; } = null!;
+    
+    public Guid MasterId { get; set; }
+
+    [ForeignKey(nameof(MasterId))]
+    public Master Master { get; set; } = null!;
     
     public WeldPassage? WeldPassage { get; set; }
 }

@@ -2143,6 +2143,7 @@ public class DataSeed
                             WeldingEquipment = weldingEquipment,
                             Welder = welder,
                             Master = master,
+                            Date = DateTime.Now,
                         }
                     },
                     new()
@@ -2162,6 +2163,7 @@ public class DataSeed
                             WeldingEquipment = weldingEquipment,
                             Welder = welder,
                             Master = master,
+                            Date = DateTime.Now,
                         }
                     }
                 },
@@ -2236,6 +2238,7 @@ public class DataSeed
                             WeldingEquipment = weldingEquipment,
                             Master = master,
                             Welder = welder,
+                            Date = DateTime.Now,
                         }
                     },
                     new()
@@ -2254,6 +2257,7 @@ public class DataSeed
                             WeldingEquipment = weldingEquipment,
                             Master = master,
                             Welder = welder,
+                            Date = DateTime.Now,
                         }
                     }
                 },

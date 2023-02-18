@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using AutoMapper;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
@@ -31,6 +30,12 @@ public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
         profile.CreateMap<RecordWithoutTaskRequest, WeldingRecord>()
             .ForMember(dto => dto.WeldingEquipmentId,
                 opt => opt
-                    .MapFrom(x => x.WeldingEquipmentId));
+                    .MapFrom(x => x.WeldingEquipmentId))
+            .ForMember(dto => dto.WelderId,
+                opt => opt
+                    .MapFrom(x => x.WelderId))
+            .ForMember(dto => dto.WeldingStartTime,
+                opt => opt
+                    .MapFrom(x => x.WelderId));
     }
 }

@@ -6,6 +6,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 
 public class WeldingRecord : Entity
 {
+    public DateTime Date { get; set; }
+    
     /// <summary>
     /// Время начала сварки
     /// </summary>
