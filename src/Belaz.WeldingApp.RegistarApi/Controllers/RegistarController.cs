@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Responses;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.RegistarApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,13 @@ public class RegistarController : ControllerBase
         [FromBody] GetWelderWithEquipmentRequest request)
     {
         var result = await _registarService.GetWelderWithEquipmentAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPost("recordWithoutTask")]
+    public async Task<ActionResult<Unit>> CreateRecordWithoutTaskAsync([FromBody] RecordWithoutTaskRequest request)
+    {
+        var result = await _registarService.CreateRecordWithoutTaskAsync(request);
         return result.ToOk();
     }
 }

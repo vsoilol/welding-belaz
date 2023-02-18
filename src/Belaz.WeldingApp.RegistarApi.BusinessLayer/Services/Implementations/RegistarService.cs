@@ -5,6 +5,7 @@ using Belaz.WeldingApp.RegistarApi.BusinessLayer.Responses;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
 using LanguageExt;
 using LanguageExt.Common;
@@ -78,6 +79,11 @@ public class RegistarService : IRegistarService
 
     public Task<Result<Unit>> CreateRecordWithoutTaskAsync(RecordWithoutTaskRequest request)
     {
+        /*var weldingRecord = new WeldingRecord
+        {
+            
+        }*/
+
         throw new NotImplementedException();
     }
 }
