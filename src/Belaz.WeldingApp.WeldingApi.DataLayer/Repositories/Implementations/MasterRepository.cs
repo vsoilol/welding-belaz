@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -33,21 +34,29 @@ public class MasterRepository : IMasterRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public async Task<MasterDto> CreateAsync(Master entity)
+    public async Task<MasterDto> CreateAsync(Master entity, IReadOnlyList<Guid>? weldingEquipmentIds)
     {
+        entity.WeldingEquipments = weldingEquipmentIds is not null
+            ? await GetWeldingEquipmentsByIds(weldingEquipmentIds)
+            : new List<WeldingEquipment>();
+        
         var newMaster = _context.Masters.Add(entity).Entity;
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(newMaster.Id);
     }
 
-    public async Task<MasterDto> UpdateAsync(Master entity)
+    public async Task<MasterDto> UpdateAsync(Master entity, IReadOnlyList<Guid>? weldingEquipmentIds)
     {
         var updatedMaster = (await _context.Masters
             .Include(_ => _.UserInfo)
+            .Include(_ => _.WeldingEquipments)
             .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
-        updatedMaster.WeldingEquipmentId = entity.WeldingEquipmentId;
+        updatedMaster.WeldingEquipments = weldingEquipmentIds is not null
+            ? await GetWeldingEquipmentsByIds(weldingEquipmentIds)
+            : new List<WeldingEquipment>();
+        
         updatedMaster.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedMaster.UserInfo.FirstName = entity.UserInfo.FirstName;
         updatedMaster.UserInfo.MiddleName = entity.UserInfo.MiddleName;
@@ -57,5 +66,12 @@ public class MasterRepository : IMasterRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    private Task<List<WeldingEquipment>> GetWeldingEquipmentsByIds(IReadOnlyList<Guid> weldingEquipmentIds)
+    {
+        return _context.WeldingEquipments
+            .Where(_ => weldingEquipmentIds.Any(equipmentId => equipmentId == _.Id))
+            .ToListAsync();
     }
 }

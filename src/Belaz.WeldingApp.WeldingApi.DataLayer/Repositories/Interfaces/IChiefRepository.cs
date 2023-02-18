@@ -9,7 +9,7 @@ public interface IChiefRepository
     
     Task<ChiefDto> GetByIdAsync(Guid id);
         
-    Task<ChiefDto> CreateAsync(Chief entity);
+    Task<ChiefDto> CreateAsync(Chief entity, IReadOnlyList<Guid>? weldingEquipmentIds);
     
-    Task<ChiefDto> UpdateAsync(Chief entity);
+    Task<ChiefDto> UpdateAsync(Chief entity, IReadOnlyList<Guid>? weldingEquipmentIds);
 }

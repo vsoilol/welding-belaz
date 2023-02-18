@@ -18,7 +18,7 @@ public class UpdateMasterRequest : IMapTo<Domain.Entities.Users.Master>
 
     public Guid ProductionAreaId { get; set; }
 
-    public Guid? WeldingEquipmentId { get; set; }
+    public IReadOnlyList<Guid>? WeldingEquipmentIds { get; set; }
 
     public void Mapping(Profile profile)
     {

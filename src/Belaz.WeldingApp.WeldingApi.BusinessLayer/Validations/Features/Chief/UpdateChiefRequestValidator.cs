@@ -39,12 +39,10 @@ public class UpdateChiefRequestValidator : AbstractValidator<UpdateChiefRequest>
             .SetValidator(new SqlIdValidatorFor<UpdateChiefRequest,
                 Domain.Entities.Production.ProductionArea>(context));
 
-        RuleFor(model => model.WeldingEquipmentId)
+        RuleForEach(model => model.WeldingEquipmentIds)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<UpdateChiefRequest,
                 Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context))
-            .SetAsyncValidator(new IsEquipmentAlreadyAssignValidatorForUpdateChief(context))
-            .When(_ => _.WeldingEquipmentId is not null);
+            .When(_ => _.WeldingEquipmentIds is not null);
     }
 }

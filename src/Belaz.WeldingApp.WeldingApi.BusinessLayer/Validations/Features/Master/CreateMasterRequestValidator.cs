@@ -33,12 +33,10 @@ public class CreateMasterRequestValidator : AbstractValidator<CreateMasterReques
             .SetValidator(new SqlIdValidatorFor<CreateMasterRequest,
                 Domain.Entities.Production.ProductionArea>(context));
 
-        RuleFor(model => model.WeldingEquipmentId)
+        RuleForEach(model => model.WeldingEquipmentIds)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<CreateMasterRequest,
                 Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context))
-            .SetAsyncValidator(new IsEquipmentAlreadyAssignValidatorForCreateMaster(context))
-            .When(_ => _.WeldingEquipmentId is not null);
+            .When(_ => _.WeldingEquipmentIds is not null);
     }
 }
