@@ -432,7 +432,7 @@
       "UpstreamPathTemplate": "/api/seam/defective",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/seam/defective",
       "ServiceName": "welding",

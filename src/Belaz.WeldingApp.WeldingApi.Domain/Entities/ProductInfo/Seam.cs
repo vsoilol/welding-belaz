@@ -25,10 +25,10 @@ public class Seam : Entity
     /// </summary>
     public bool IsPerformed { get; set; } = false;
 
-    public Guid ProductId { get; set; }
+    public Guid? ProductId { get; set; }
 
     [ForeignKey(nameof(ProductId))] 
-    public Product Product { get; set; } = null!;
+    public Product? Product { get; set; } = null!;
 
     public Guid? TechnologicalInstructionId { get; set; }
 

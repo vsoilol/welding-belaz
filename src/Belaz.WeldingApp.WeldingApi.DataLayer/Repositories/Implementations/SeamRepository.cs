@@ -98,15 +98,14 @@ public class SeamRepository : ISeamRepository
 
     public Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync()
     {
-        return _context.WeldingTasks
-            .Where(_ => _.Status == SeamStatus.Defective)
+        return _context.DefectiveReasons
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
     public Task<DefectiveSeamDto> GetDefectiveReasonByIdAsync(Guid id)
     {
-        return _context.WeldingTasks
+        return _context.DefectiveReasons
             .Where(_ => _.Id == id)
             .ProjectTo<DefectiveSeamDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
