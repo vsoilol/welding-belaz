@@ -23,5 +23,5 @@ public interface IWeldingEquipmentRepository
     
     Task AssignEquipmentsToWeldersAsync(List<Guid> weldingEquipmentIds, List<Guid> welderIds);
     
-    Task AssignEquipmentsToMastersAsync(List<Guid> weldingEquipmentIds, List<Guid> masterIds);
+    Task AssignEquipmentsToMasterAsync(List<Guid> weldingEquipmentIds, Guid masterId);
 }

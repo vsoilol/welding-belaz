@@ -15,7 +15,7 @@ public class AssignEquipmentToMastersRequestValidator : AbstractValidator<Assign
             .SetValidator(new SqlIdValidatorFor<AssignEquipmentsToMastersRequest,
                 Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
         
-        RuleForEach(model => model.MasterIds)
+        RuleFor(model => model.MasterId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<AssignEquipmentsToMastersRequest,

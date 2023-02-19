@@ -104,7 +104,7 @@ public class WeldingEquipmentService : IWeldingEquipmentService
         return await validationResult.ToDataResult(async () =>
         {
             await _weldingEquipmentRepository
-                .AssignEquipmentsToMastersAsync(request.WeldingEquipmentIds, request.MasterIds);
+                .AssignEquipmentsToMasterAsync(request.WeldingEquipmentIds, request.MasterId);
             return Unit.Default;
         });
     }

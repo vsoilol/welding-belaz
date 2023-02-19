@@ -141,16 +141,17 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task AssignEquipmentsToMastersAsync(List<Guid> weldingEquipmentIds, List<Guid> masterIds)
+    public async Task AssignEquipmentsToMasterAsync(List<Guid> weldingEquipmentIds, Guid masterId)
     {
         var weldingEquipments = await _context.WeldingEquipments
             .Where(_ => weldingEquipmentIds.Any(weldingEquipmentId => weldingEquipmentId == _.Id))
             .ToListAsync();
 
-        await _context.Masters
+        var master = (await _context.Masters
             .Include(_ => _.WeldingEquipments)
-            .Where(_ => masterIds.Any(masterId => masterId == _.Id))
-            .ForEachAsync(_ => _.WeldingEquipments = weldingEquipments);
+            .FirstOrDefaultAsync(_ => _.Id == masterId))!;
+
+        master.WeldingEquipments = weldingEquipments;
 
         await _context.SaveChangesAsync();
     }
