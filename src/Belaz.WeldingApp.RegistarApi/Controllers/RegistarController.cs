@@ -10,7 +10,6 @@ namespace Belaz.WeldingApp.RegistarApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[AllowAnonymous]
 public class RegistarController : ControllerBase
 {
     private readonly IRegistarService _registarService;
