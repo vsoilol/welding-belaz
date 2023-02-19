@@ -12,17 +12,11 @@ public class MasterRepository : IMasterRepository
         _context = context;
     }
 
-    public async Task<Guid> GetMasterIdByWelderIdAsync(Guid welderId)
+    public async Task<Guid?> GetMasterIdByEquipmentIdAsync(Guid equipmentId)
     {
-        var productionArea = (await _context.Welders
-                .Include(_ => _.UserInfo)
-                .ThenInclude(_ => _.ProductionArea)
-                .FirstOrDefaultAsync(_ => _.Id == welderId))!
-            .UserInfo.ProductionArea!;
+        var weldingEquipment = (await _context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.Id == equipmentId))!;
 
-        var master = (await _context.Masters
-            .FirstOrDefaultAsync(_ => _.UserInfo.ProductionArea!.Id == productionArea.Id))!;
-
-        return master.Id;
+        return weldingEquipment.MasterId;
     }
 }

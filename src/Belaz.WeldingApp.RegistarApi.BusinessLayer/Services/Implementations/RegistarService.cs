@@ -92,7 +92,7 @@ public class RegistarService : IRegistarService
         {
             var weldingRecord = _mapper.Map<WeldingRecord>(request);
 
-            weldingRecord.MasterId = await _masterRepository.GetMasterIdByWelderIdAsync(request.WelderId);
+            weldingRecord.MasterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(request.WeldingEquipmentId);
             
             var seconds = (int)Math.Round(0.1 * request.Voltages.Length);
             var weldingEndTime = weldingRecord.WeldingStartTime.Add(TimeSpan.FromSeconds(seconds));

@@ -2,5 +2,5 @@
 
 public interface IMasterRepository
 {
-    Task<Guid> GetMasterIdByWelderIdAsync(Guid welderId);
+    Task<Guid?> GetMasterIdByEquipmentIdAsync(Guid equipmentId);
 }

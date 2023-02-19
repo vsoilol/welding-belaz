@@ -20,6 +20,8 @@ public class WeldingRecordRepository : IWeldingRecordRepository
     public Task<List<RecordDto>> GetAllAsync()
     {
         return _context.WeldingRecords
+            .OrderByDescending(_ => _.Date.Date)
+            .ThenBy(x => x.WeldingStartTime.Seconds)
             .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

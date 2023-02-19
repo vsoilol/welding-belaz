@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
@@ -33,9 +35,9 @@ public class RecordDto : IMapFrom<WeldingRecord>
     /// </summary>
     public double[] ArcVoltageValues { get; set; } = null!;
 
-    public WelderDto Welder { get; set; } = null!;
+    public WelderBriefDto Welder { get; set; } = null!;
     
-    public MasterDto Master { get; set; } = null!;
+    public MasterBriefDto Master { get; set; } = null!;
     
     public WeldingEquipmentBriefDto WeldingEquipment { get; set; } = null!;
 

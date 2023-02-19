@@ -625,9 +625,32 @@ public class DataSeed
         var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
         var productionArea1 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01");
         var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06");
+        
+        var weldingEquipmentTest = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.RfidTag == "11111"))!;
 
         var masters = new List<Master>
         {
+            new Master
+            {
+                WeldingEquipments = new List<WeldingEquipment>(){weldingEquipmentTest},
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "14962",
+                    MiddleName = "Алёксов",
+                    FirstName = "Геннадий",
+                    LastName = "Александрович",
+                    Position = "Мастер производственного участка",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = masterRole
+                        }
+                    }
+                },
+            },
             new Master
             {
                 IdFromSystem = "614962",

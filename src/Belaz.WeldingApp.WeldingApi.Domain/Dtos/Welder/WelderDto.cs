@@ -3,12 +3,11 @@ using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 
-public class WelderDto : IMapFrom<Welder>
+public class WelderDto : IMapFrom<Entities.Users.Welder>
 {
     public Guid Id { get; set; }
     
@@ -39,7 +38,7 @@ public class WelderDto : IMapFrom<Welder>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Welder, WelderDto>()
+        profile.CreateMap<Entities.Users.Welder, WelderDto>()
             .ForMember(dto => dto.RfidTag,
                 opt => opt
                     .MapFrom(x => x.UserInfo.RfidTag))

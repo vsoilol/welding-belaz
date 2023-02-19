@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 
-public class MasterDto : IMapFrom<Master>
+public class MasterBriefDto : IMapFrom<Entities.Users.Master>
 {
     public Guid Id { get; set; }
 
@@ -26,14 +23,10 @@ public class MasterDto : IMapFrom<Master>
     /// Табельный номер 
     /// </summary>
     public string? ServiceNumber { get; set; }
-
-    public IReadOnlyList<WeldingEquipmentBriefDto>? WeldingEquipments { get; set; }
-
-    public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
-
+    
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Master, MasterDto>()
+        profile.CreateMap<Entities.Users.Master, MasterBriefDto>()
             .ForMember(dto => dto.RfidTag,
                 opt => opt
                     .MapFrom(x => x.UserInfo.RfidTag))
@@ -49,9 +42,6 @@ public class MasterDto : IMapFrom<Master>
             .ForMember(dto => dto.LastName,
                 opt => opt
                     .MapFrom(x => x.UserInfo.LastName))
-            .ForMember(dto => dto.ProductionArea,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea))
             .ForMember(dto => dto.ServiceNumber,
                 opt => opt
                     .MapFrom(x => x.UserInfo.ServiceNumber));
