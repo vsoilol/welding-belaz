@@ -269,7 +269,7 @@ public class DataSeed
         {
             new Workshop
             {
-                Name = "Цех 50",
+                Name = "Сварочный цех",
                 IdFromSystem = "050",
                 Number = 50,
                 ProductionAreas = new List<ProductionArea>
@@ -432,19 +432,16 @@ public class DataSeed
 
     private static async Task AddWeldingEquipmentsAsync(ApplicationContext context)
     {
+        var workplace3520 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3520"))!;
+        var workplace3610 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3610"))!;
+        var workplace3500 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3500"))!;
+        var workplace3590 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3590"))!;
+        var workplace3600 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3600"))!;
+        var workplace3690 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3690"))!;
+        var workplace3650 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3650"))!;
+
         var weldingEquipments = new List<WeldingEquipment>
         {
-            new WeldingEquipment
-            {
-                RfidTag = "11111",
-                Name = "QINEO TRONIC",
-                Marking = "ECO600CQWDM2",
-                FactoryNumber = "49506",
-                CommissioningDate = new DateTime(2013, 1, 1),
-                GroupNumber = "3.11",
-                ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка"
-            },
             new WeldingEquipment
             {
                 IdFromSystem = "8008336102-130",
@@ -498,46 +495,78 @@ public class DataSeed
             new WeldingEquipment
             {
                 IdFromSystem = "508",
-                Name = "GLC556-C",
+                Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
                 FactoryNumber = "49225",
                 CommissioningDate = new DateTime(2008, 1, 1),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка"
+                WeldingProcess = "Полуавтоматическая сварка",
+                RfidTag = "93:57:D8:0B",
+                WeldingCurrentMin = 80,
+                WeldingCurrentMax = 550,
+                ArcVoltageMin = 18,
+                ArcVoltageMax = 41.5,
+                LoadDuration = 100,
+                IdleVoltage = 70,
+                Workplaces = new List<Workplace> { workplace3520, workplace3610 }
             },
             new WeldingEquipment
             {
                 IdFromSystem = "535",
-                Name = "GLC556-C",
+                Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
                 FactoryNumber = "49286",
                 CommissioningDate = new DateTime(2010, 1, 1),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка"
+                WeldingProcess = "Полуавтоматическая сварка",
+                RfidTag = "35:4E:AC:A5",
+                WeldingCurrentMin = 80,
+                WeldingCurrentMax = 550,
+                ArcVoltageMin = 18,
+                ArcVoltageMax = 41.5,
+                LoadDuration = 100,
+                IdleVoltage = 70,
+                Workplaces = new List<Workplace> { workplace3500, workplace3590 }
             },
             new WeldingEquipment
             {
                 IdFromSystem = "511",
-                Name = "GLC556-C",
+                Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
                 FactoryNumber = "49232",
                 CommissioningDate = new DateTime(2008, 1, 1),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка"
+                WeldingProcess = "Полуавтоматическая сварка",
+                RfidTag = "03:3D:93:0D",
+                WeldingCurrentMin = 80,
+                WeldingCurrentMax = 550,
+                ArcVoltageMin = 18,
+                ArcVoltageMax = 41.5,
+                LoadDuration = 100,
+                IdleVoltage = 70,
+                Workplaces = new List<Workplace> { workplace3610, workplace3600 }
             },
             new WeldingEquipment
             {
                 IdFromSystem = "499",
-                Name = "GLC556-C",
+                Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
                 FactoryNumber = "49283",
                 CommissioningDate = new DateTime(2008, 1, 1),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка"
+                WeldingProcess = "Полуавтоматическая сварка",
+                RfidTag = "A6:F1:CF:48",
+                WeldingCurrentMin = 80,
+                WeldingCurrentMax = 550,
+                ArcVoltageMin = 18,
+                ArcVoltageMax = 41.5,
+                LoadDuration = 100,
+                IdleVoltage = 70,
+                Workplaces = new List<Workplace> { workplace3690, workplace3650 }
             }
         };
 
@@ -625,32 +654,14 @@ public class DataSeed
         var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
         var productionArea1 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01");
         var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06");
-        
-        var weldingEquipmentTest = (await context.WeldingEquipments
-            .FirstOrDefaultAsync(_ => _.RfidTag == "11111"))!;
+
+        var weldingEquipments06 = await context.WeldingEquipments
+            .Where(_ => _.Workplaces
+                .Any(workplace => workplace.ProductionArea!.IdFromSystem == "06"))
+            .ToListAsync();
 
         var masters = new List<Master>
         {
-            new Master
-            {
-                WeldingEquipments = new List<WeldingEquipment>(){weldingEquipmentTest},
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "14962",
-                    MiddleName = "Алёксов",
-                    FirstName = "Геннадий",
-                    LastName = "Александрович",
-                    Position = "Мастер производственного участка",
-                    ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole>
-                    {
-                        new UserRole
-                        {
-                            Role = masterRole
-                        }
-                    }
-                },
-            },
             new Master
             {
                 IdFromSystem = "614962",
@@ -674,6 +685,7 @@ public class DataSeed
             new Master
             {
                 IdFromSystem = "610422",
+                WeldingEquipments = weldingEquipments06,
                 UserInfo = new UserData
                 {
                     ServiceNumber = "10422",
@@ -834,33 +846,12 @@ public class DataSeed
         {
             new Welder
             {
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipmentTest },
-                Workplace = workplace3590,
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "45092",
-                    RfidTag = "22222",
-                    MiddleName = "Козылев",
-                    FirstName = "Антон",
-                    LastName = "Павлович",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole>
-                    {
-                        new UserRole
-                        {
-                            Role = welderRole
-                        }
-                    }
-                }
-            },
-            new Welder
-            {
                 IdFromSystem = "151299",
                 WeldingEquipments = new List<WeldingEquipment> { weldingEquipment499 },
                 Workplace = workplace3650,
                 UserInfo = new UserData
                 {
+                    RfidTag = "97:17:60:B4",
                     ServiceNumber = "51299",
                     MiddleName = "Михолап",
                     FirstName = "Василий",
@@ -883,6 +874,7 @@ public class DataSeed
                 Workplace = workplace3690,
                 UserInfo = new UserData
                 {
+                    RfidTag = "B7:5A:79:B5",
                     ServiceNumber = "50882",
                     MiddleName = "Буландо",
                     FirstName = "Юрий",
@@ -905,6 +897,7 @@ public class DataSeed
                 Workplace = workplace3600,
                 UserInfo = new UserData
                 {
+                    RfidTag = "D7:95:55:B4",
                     ServiceNumber = "21267",
                     MiddleName = "Казинец",
                     FirstName = "Василий",
@@ -927,6 +920,7 @@ public class DataSeed
                 Workplace = workplace3610,
                 UserInfo = new UserData
                 {
+                    RfidTag = "67:CD:7E:5A",
                     ServiceNumber = "17390",
                     MiddleName = "Казачёнок",
                     FirstName = "Сергей",
@@ -949,6 +943,7 @@ public class DataSeed
                 Workplace = workplace3590,
                 UserInfo = new UserData
                 {
+                    RfidTag = "27:45:7E:B4",
                     ServiceNumber = "45092",
                     MiddleName = "Козылев",
                     FirstName = "Антон",
@@ -971,6 +966,7 @@ public class DataSeed
                 Workplace = workplace3500,
                 UserInfo = new UserData
                 {
+                    RfidTag = "17:CD:7F:5A",
                     ServiceNumber = "32695",
                     MiddleName = "Виторский",
                     FirstName = "Владимир",
@@ -993,6 +989,7 @@ public class DataSeed
                 Workplace = workplace3610,
                 UserInfo = new UserData
                 {
+                    RfidTag = "67:5A:70:B4",
                     ServiceNumber = "46325",
                     MiddleName = "Канапацкий",
                     FirstName = "Олег",
@@ -1016,6 +1013,7 @@ public class DataSeed
                 UserInfo = new UserData
                 {
                     ServiceNumber = "20756",
+                    RfidTag = "D7:F1:7D:5A",
                     MiddleName = "Авхимович",
                     FirstName = "Пётр",
                     LastName = "Алексеевич",
