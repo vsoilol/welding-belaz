@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<ITechnologicalProcessService, TechnologicalProcessService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ITechnologicalInstructionService, TechnologicalInstructionService>();
+        services.AddScoped<IWeldingRecordService, WeldingRecordService>();
 
         return services;
     }

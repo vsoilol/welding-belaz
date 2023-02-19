@@ -436,6 +436,17 @@ public class DataSeed
         {
             new WeldingEquipment
             {
+                RfidTag = "11111",
+                Name = "QINEO TRONIC",
+                Marking = "ECO600CQWDM2",
+                FactoryNumber = "49506",
+                CommissioningDate = new DateTime(2013, 1, 1),
+                GroupNumber = "3.11",
+                ManufacturerName = "CLOOS",
+                WeldingProcess = "Полуавтоматическая сварка"
+            },
+            new WeldingEquipment
+            {
                 IdFromSystem = "8008336102-130",
                 Name = "QINEO TRONIC",
                 Marking = "ECO600CQWDM2",
@@ -614,9 +625,32 @@ public class DataSeed
         var productionArea4 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04");
         var productionArea1 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01");
         var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06");
+        
+        var weldingEquipmentTest = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.RfidTag == "11111"))!;
 
         var masters = new List<Master>
         {
+            new Master
+            {
+                WeldingEquipments = new List<WeldingEquipment>(){weldingEquipmentTest},
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "14962",
+                    MiddleName = "Алёксов",
+                    FirstName = "Геннадий",
+                    LastName = "Александрович",
+                    Position = "Мастер производственного участка",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = masterRole
+                        }
+                    }
+                },
+            },
             new Master
             {
                 IdFromSystem = "614962",
@@ -783,6 +817,9 @@ public class DataSeed
         var weldingEquipment499 = (await context.WeldingEquipments
             .FirstOrDefaultAsync(_ => _.IdFromSystem == "499"))!;
 
+        var weldingEquipmentTest = (await context.WeldingEquipments
+            .FirstOrDefaultAsync(_ => _.RfidTag == "11111"))!;
+
         var workplace3520 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3520))!;
         var workplace3610 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3610))!;
         var workplace3500 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3500))!;
@@ -795,6 +832,28 @@ public class DataSeed
 
         var welders = new List<Welder>
         {
+            new Welder
+            {
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipmentTest },
+                Workplace = workplace3590,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "45092",
+                    RfidTag = "22222",
+                    MiddleName = "Козылев",
+                    FirstName = "Антон",
+                    LastName = "Павлович",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = welderRole
+                        }
+                    }
+                }
+            },
             new Welder
             {
                 IdFromSystem = "151299",
@@ -2059,6 +2118,21 @@ public class DataSeed
         var weldingStartTime2 = new TimeSpan(19, 43, 13);
         var weldingEndTime2 = weldingStartTime2.Add(TimeSpan.FromSeconds(roundSeconds2));
 
+        var weldingEquipment = context.WeldingEquipments.Add(
+            new WeldingEquipment
+            {
+                Name = "QINEO TRONIC",
+                Marking = "ECO600CQWDM2",
+                FactoryNumber = "49505",
+                CommissioningDate = new DateTime(2013, 1, 1),
+                NextAttestationDate = new DateTime(2023, 6, 25),
+                GroupNumber = "3.11",
+                ManufacturerName = "CLOOS",
+                WeldingProcess = "Полуавтоматическая сварка"
+            }).Entity;
+
+        await context.SaveChangesAsync();
+
         var tasks = new List<WeldingTask>
         {
             new WeldingTask
@@ -2082,13 +2156,17 @@ public class DataSeed
                         Name = "Корневой",
                         ShortTermDeviation = 0.11,
                         LongTermDeviation = 0.68,
+                        PreheatingTemperature = 82,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingCurrentValues = currentValues1,
                             ArcVoltageValues = voltageValues1,
                             WeldingStartTime = weldingStartTime1,
                             WeldingEndTime = weldingEndTime1,
-                            PreheatingTemperature = 82,
+                            WeldingEquipment = weldingEquipment,
+                            Welder = welder,
+                            Master = master,
+                            Date = DateTime.Now,
                         }
                     },
                     new()
@@ -2097,27 +2175,19 @@ public class DataSeed
                         Name = "Заполняющий",
                         ShortTermDeviation = 0.22,
                         LongTermDeviation = 0.44,
-
+                        PreheatingTemperature = 100,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingStartTime = weldingStartTime2,
                             WeldingEndTime = weldingEndTime2,
-                            PreheatingTemperature = 100,
                             WeldingCurrentValues = currentValues2,
                             ArcVoltageValues = voltageValues2,
+                            WeldingEquipment = weldingEquipment,
+                            Welder = welder,
+                            Master = master,
+                            Date = DateTime.Now,
                         }
                     }
-                },
-                WeldingEquipment = new WeldingEquipment
-                {
-                    Name = "QINEO TRONIC",
-                    Marking = "ECO600CQWDM2",
-                    FactoryNumber = "49505",
-                    CommissioningDate = new DateTime(2013, 1, 1),
-                    NextAttestationDate = new DateTime(2023, 6, 25),
-                    GroupNumber = "3.11",
-                    ManufacturerName = "CLOOS",
-                    WeldingProcess = "Полуавтоматическая сварка"
                 },
                 Seam = new Seam
                 {
@@ -2180,13 +2250,17 @@ public class DataSeed
                         Name = "Корневой",
                         ShortTermDeviation = 0.11,
                         LongTermDeviation = 0.68,
+                        PreheatingTemperature = 82,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingStartTime = weldingStartTime1,
                             WeldingEndTime = weldingEndTime1,
-                            PreheatingTemperature = 82,
                             WeldingCurrentValues = currentValues1,
                             ArcVoltageValues = voltageValues1,
+                            WeldingEquipment = weldingEquipment,
+                            Master = master,
+                            Welder = welder,
+                            Date = DateTime.Now,
                         }
                     },
                     new()
@@ -2195,26 +2269,19 @@ public class DataSeed
                         Name = "Заполняющий",
                         ShortTermDeviation = 0.22,
                         LongTermDeviation = 0.44,
+                        PreheatingTemperature = 100,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingStartTime = weldingStartTime2,
                             WeldingEndTime = weldingEndTime2,
-                            PreheatingTemperature = 100,
                             WeldingCurrentValues = currentValues2,
                             ArcVoltageValues = voltageValues2,
+                            WeldingEquipment = weldingEquipment,
+                            Master = master,
+                            Welder = welder,
+                            Date = DateTime.Now,
                         }
                     }
-                },
-                WeldingEquipment = new WeldingEquipment
-                {
-                    Name = "QINEO TRONIC",
-                    Marking = "ECO600CQWDM2",
-                    FactoryNumber = "49505",
-                    CommissioningDate = new DateTime(2013, 1, 1),
-                    NextAttestationDate = new DateTime(2023, 6, 25),
-                    GroupNumber = "3.11",
-                    ManufacturerName = "CLOOS",
-                    WeldingProcess = "Полуавтоматическая сварка"
                 },
                 Seam = new Seam
                 {

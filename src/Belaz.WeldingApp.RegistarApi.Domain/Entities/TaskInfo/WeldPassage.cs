@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
+namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 
 /// <summary>
 /// Проход для сварного шва
@@ -11,6 +11,11 @@ public class WeldPassage : Entity
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;
+    
+    /// <summary>
+    /// Температура предварительного нагрева
+    /// </summary>
+    public int? PreheatingTemperature { get; set; }
 
     /// <summary>
     /// Отклонение кратковременные, до 1 секунды

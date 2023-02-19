@@ -73,11 +73,11 @@ public class WeldingEquipmentController : ControllerBase
         return result.ToOk();
     }
 
-    [HttpPut("assignMasters")]
-    public async Task<ActionResult<Unit>> AssignEquipmentsToMastersAsync(
+    [HttpPut("assignMaster")]
+    public async Task<ActionResult<Unit>> AssignEquipmentsToMasterAsync(
         [FromBody] AssignEquipmentsToMastersRequest request)
     {
-        var result = await _weldingEquipmentService.AssignEquipmentsToMastersAsync(request);
+        var result = await _weldingEquipmentService.AssignEquipmentsToMasterAsync(request);
         return result.ToOk();
     }
 

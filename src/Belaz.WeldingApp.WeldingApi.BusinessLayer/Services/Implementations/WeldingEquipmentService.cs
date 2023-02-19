@@ -97,14 +97,14 @@ public class WeldingEquipmentService : IWeldingEquipmentService
         });
     }
 
-    public async Task<Result<Unit>> AssignEquipmentsToMastersAsync(AssignEquipmentsToMastersRequest request)
+    public async Task<Result<Unit>> AssignEquipmentsToMasterAsync(AssignEquipmentsToMastersRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(async () =>
         {
             await _weldingEquipmentRepository
-                .AssignEquipmentsToMastersAsync(request.WeldingEquipmentIds, request.MasterIds);
+                .AssignEquipmentsToMasterAsync(request.WeldingEquipmentIds, request.MasterId);
             return Unit.Default;
         });
     }

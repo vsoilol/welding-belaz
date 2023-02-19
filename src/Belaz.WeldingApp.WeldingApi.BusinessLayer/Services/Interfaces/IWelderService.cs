@@ -1,5 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;

@@ -1,6 +1,7 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

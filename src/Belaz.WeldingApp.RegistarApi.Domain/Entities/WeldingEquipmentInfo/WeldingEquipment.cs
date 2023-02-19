@@ -102,9 +102,14 @@ public class WeldingEquipment : Entity
     [ForeignKey(nameof(PostId))] 
     public Post? Post { get; set; }
 
+    public List<Workplace> Workplaces { get; set; } = null!;
+
     public List<Calendar> Calendars { get; set; } = null!;
 
-    public List<Master> Masters { get; set; } = null!;
+    public Guid? MasterId { get; set; }
+
+    [ForeignKey(nameof(MasterId))] 
+    public Master? Master { get; set; }
 
     public List<Welder> Welders { get; set; } = null!;
 
@@ -112,5 +117,5 @@ public class WeldingEquipment : Entity
 
     public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTime { get; set; } = null!;
 
-    public List<WeldingTask> WeldingTasks { get; set; } = null!;
+    public List<WeldingRecord> WeldingRecords { get; set; } = null!;
 }

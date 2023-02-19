@@ -23,5 +23,5 @@ public interface IWeldingEquipmentService
     
     Task<Result<Unit>> AssignEquipmentsToWeldersAsync(AssignEquipmentsToWeldersRequest request);
     
-    Task<Result<Unit>> AssignEquipmentsToMastersAsync(AssignEquipmentsToMastersRequest request);
+    Task<Result<Unit>> AssignEquipmentsToMasterAsync(AssignEquipmentsToMastersRequest request);
 }
