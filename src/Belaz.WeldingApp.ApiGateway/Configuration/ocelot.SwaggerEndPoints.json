@@ -38,6 +38,19 @@
           }
         }
       ]
+    },
+    {
+      "Key": "registar",
+      "Config": [
+        {
+          "Name": "Registar API",
+          "Version": "v1",
+          "Service": {
+            "Name": "registar",
+            "Path": "/api/swagger/v1/swagger.json"
+          }
+        }
+      ]
     }
   ]
 }

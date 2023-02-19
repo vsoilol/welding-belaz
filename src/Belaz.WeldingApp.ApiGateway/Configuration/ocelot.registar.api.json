@@ -1,0 +1,24 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/registar/identificate",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/registar/identificate",
+      "ServiceName": "registar",
+      "SwaggerKey": "registar"
+    },
+    {
+      "UpstreamPathTemplate": "/api/registar/recordWithoutTask",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/registar/recordWithoutTask",
+      "ServiceName": "registar",
+      "SwaggerKey": "registar"
+    }
+  ]
+}

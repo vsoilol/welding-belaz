@@ -754,12 +754,12 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/weldingEquipment/assignMasters",
+      "UpstreamPathTemplate": "/api/weldingEquipment/assignMaster",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "PUT"
       ],
-      "DownstreamPathTemplate": "/api/weldingEquipment/assignMasters",
+      "DownstreamPathTemplate": "/api/weldingEquipment/assignMaster",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
@@ -1048,6 +1048,20 @@
       "DownstreamPathTemplate": "/api/time/belarus",
       "ServiceName": "welding",
       "SwaggerKey": "welding"
+    },
+    {
+      "UpstreamPathTemplate": "/api/weldingRecord",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/weldingRecord",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
     }
   ]
 }
