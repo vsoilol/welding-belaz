@@ -17,12 +17,7 @@ public class WeldingRecord : Entity
     /// Время окончания сварки
     /// </summary>
     public TimeSpan WeldingEndTime { get; set; }
-    
-    /// <summary>
-    /// Температура предварительного нагрева
-    /// </summary>
-    public int PreheatingTemperature { get; set; }
-    
+
     /// <summary>
     /// Значения сварочного тока
     /// </summary>

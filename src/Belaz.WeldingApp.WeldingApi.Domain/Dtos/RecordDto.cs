@@ -19,12 +19,7 @@ public class RecordDto : IMapFrom<WeldingRecord>
     /// Продолжительность сварки в секундах
     /// </summary>
     public int WeldingDuration { get; set; }
-    
-    /// <summary>
-    /// Температура предварительного нагрева
-    /// </summary>
-    public int PreheatingTemperature { get; set; }
-    
+
     /// <summary>
     /// Значения сварочного тока
     /// </summary>

@@ -24,13 +24,7 @@ public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
     
     [JsonPropertyName("Volt")]
     public double[] Voltages { get; set; } = null!;
-    
-    /// <summary>
-    /// Температура предварительного нагрева
-    /// </summary>
-    [JsonPropertyName("preTemp")]
-    public int PreheatingTemperature { get; set; }
-    
+
     public void Mapping(Profile profile)
     {
         profile.CreateMap<RecordWithoutTaskRequest, WeldingRecord>()

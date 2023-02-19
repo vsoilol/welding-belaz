@@ -11,6 +11,11 @@ public class WeldPassage : Entity
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;
+    
+    /// <summary>
+    /// Температура предварительного нагрева
+    /// </summary>
+    public int? PreheatingTemperature { get; set; }
 
     /// <summary>
     /// Отклонение кратковременные, до 1 секунды

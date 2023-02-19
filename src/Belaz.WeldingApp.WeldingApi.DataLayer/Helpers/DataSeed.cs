@@ -2156,13 +2156,13 @@ public class DataSeed
                         Name = "Корневой",
                         ShortTermDeviation = 0.11,
                         LongTermDeviation = 0.68,
+                        PreheatingTemperature = 82,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingCurrentValues = currentValues1,
                             ArcVoltageValues = voltageValues1,
                             WeldingStartTime = weldingStartTime1,
                             WeldingEndTime = weldingEndTime1,
-                            PreheatingTemperature = 82,
                             WeldingEquipment = weldingEquipment,
                             Welder = welder,
                             Master = master,
@@ -2175,12 +2175,11 @@ public class DataSeed
                         Name = "Заполняющий",
                         ShortTermDeviation = 0.22,
                         LongTermDeviation = 0.44,
-
+                        PreheatingTemperature = 100,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingStartTime = weldingStartTime2,
                             WeldingEndTime = weldingEndTime2,
-                            PreheatingTemperature = 100,
                             WeldingCurrentValues = currentValues2,
                             ArcVoltageValues = voltageValues2,
                             WeldingEquipment = weldingEquipment,
@@ -2251,11 +2250,11 @@ public class DataSeed
                         Name = "Корневой",
                         ShortTermDeviation = 0.11,
                         LongTermDeviation = 0.68,
+                        PreheatingTemperature = 82,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingStartTime = weldingStartTime1,
                             WeldingEndTime = weldingEndTime1,
-                            PreheatingTemperature = 82,
                             WeldingCurrentValues = currentValues1,
                             ArcVoltageValues = voltageValues1,
                             WeldingEquipment = weldingEquipment,
@@ -2270,11 +2269,11 @@ public class DataSeed
                         Name = "Заполняющий",
                         ShortTermDeviation = 0.22,
                         LongTermDeviation = 0.44,
+                        PreheatingTemperature = 100,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingStartTime = weldingStartTime2,
                             WeldingEndTime = weldingEndTime2,
-                            PreheatingTemperature = 100,
                             WeldingCurrentValues = currentValues2,
                             ArcVoltageValues = voltageValues2,
                             WeldingEquipment = weldingEquipment,
