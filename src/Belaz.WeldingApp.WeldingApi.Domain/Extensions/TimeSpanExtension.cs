@@ -4,6 +4,8 @@ public static class TimeSpanExtension
 {
     public static string? ToHoursMinutesSecondsString(this TimeSpan? timeSpan) => timeSpan?.ToString(@"hh\:mm\:ss");
     
+    public static string ToHoursMinutesSecondsString(this TimeSpan timeSpan) => timeSpan.ToString(@"hh\:mm\:ss");
+    
     public static string? ToHoursMinutesString(this TimeSpan? timeSpan) => timeSpan?.ToString(@"hh\:mm");
     
     public static string ToHoursMinutesString(this TimeSpan timeSpan) => timeSpan.ToString(@"hh\:mm");
