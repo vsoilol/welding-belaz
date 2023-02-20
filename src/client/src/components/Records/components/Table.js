@@ -37,64 +37,56 @@ const StyleNewTable = {
 
 export const RecordsTable = ({ records, isRequesting }) => { 
   const columns = [
-    { title: "Наименование", field: "weldingConnectionName" },
-    { title: "Исполнитель", field: "executorName" },
+    { title: "Дата", field: "date" },
+    { title: "Время начала сварки", field: "weldingStart" }, 
     {
-      title: "Дата",
-      field: "startTime",
-      render: (rowData) => (
-        <span>
-          {new Date(rowData?.startTime).toLocaleDateString(
-            "ru-RU",
-            dateOptions
-          )}
-        </span>
-      ), 
-    },
-    { 
-      title: "Оборудование", 
-      field: "machineName",
-      render: (rowData) => {  
-        return (
-        <p>
-          {rowData.machineName} <br></br>
-          Маркировка : {rowData.mark}<br></br>
-          Инвентарный номер : {rowData.instruction.otkName}
-        </p>
-        )
+      title: "Номер задания", 
+      render: (rowData) => { 
+        if (rowData?.weldingTask?.number!=null) {
+          return (
+            <a href="/tasks" target="_blank">{rowData.weldingTask?.number??"-"}</a>
+          );
+        }
+        else{
+          return (
+            <p>{`  -   `} </p>
+          );
+        }
         
-      },
-     },
-    { title: "Руководитель сварочных работ", field: "masterName" },
-    {
-      title: "Инструкция",
-      field: "instruction",
-      render: (rowData) =>
-        rowData?.instruction?.otkName && (
-          <p>
-            <a
-              className={styles.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              href={rowData?.instruction?.otkUrl}
-              key={rowData?.instruction?.otkName}
-            >
-              {rowData?.instruction?.otkName + " "}
-            </a>
-          </p>
-        ),
+        
+      }
     },
+
     { 
-      title: "Регистратор (номер)", 
-      field: "masterName" ,
-      render: (rowData) =>{ 
-        return (
-        <p>
-           
-        </p>
-        )
-      },
-    }
+      title: "Сварщик",  render: (rowData) => ( 
+         <div>
+           <span> {rowData.welder?.middleName}  </span>
+           <span> {rowData.welder?.firstName}</span>
+           <span>  {rowData.welder?.lastName}  </span>
+         </div>
+      ), 
+    }, 
+
+    { 
+      title: "Оборудование",  render: (rowData) => ( 
+         <div>
+           <span> {rowData.weldingEquipment?.marking}  </span>
+           <span> {rowData.weldingEquipment?.factoryNumber}</span> 
+         </div>
+      ), 
+    }, 
+
+    { 
+      title: "Руководитель сварочных работ (мастер): ",  render: (rowData) => ( 
+         <div>
+           <span> {rowData.master?.middleName}  </span>
+           <span> {rowData.master?.firstName}</span>
+           <span>  {rowData.master?.lastName}  </span>
+         </div>
+      ), 
+    }, 
+
+ 
   ];
 
   const renderRowChildren = (rowData) => { 
@@ -113,108 +105,24 @@ export const RecordsTable = ({ records, isRequesting }) => {
       return Math.min.apply(null, this);
     };
 
-    let Arrayvoltages = []
+   let ArrayVoltageValues = []
+   let ArrayweldingCurrentValues = []
  
-    for (let index = 0; index < rowData.voltages.length; index++) {
-       Arrayvoltages.push(rowData.voltages[index].value)  
+    for (let index = 0; index < rowData.arcVoltageValues.length; index++) {  
+      ArrayVoltageValues.push({ id:0, value:rowData.arcVoltageValues[index]  })
     } 
-    /* rowData.startTime */
+    for (let index = 0; index < rowData.weldingCurrentValues.length; index++) { 
+      ArrayweldingCurrentValues.push({ id:0, value:rowData.weldingCurrentValues[index]  })
+    }   
     return (
-      <TableContainer component={Paper}>
-        <MaterialTable aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-              >
-                Объект
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-              >
-                Участок/цех
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-              >
-                Тех.надзор
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-              >
-                Материал
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-              >
-                Электрод
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-              >
-                Сварочная проволока
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-              >
-                Продолжительность, мин
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow key={rowData.id}>
-              <TableCell align="center" component="th" scope="row">
-                {rowData.object}
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                {rowData.sector}
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                {rowData.techControllerName}
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                {rowData.generalMaterial}
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                {rowData.weldingElectrodes}
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                {rowData.weldingWire}
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                {parseFloat(rowData.weldingDuringMin).toFixed(2)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </MaterialTable>
-        <p>Сварочный ток, А</p>
-
+      <TableContainer className={styles.border} component={Paper} > 
+      
+        <p>Сварочный ток, А</p> 
         <ResponsiveContainer width="100%" height={200}>
           <LineChart
             width={500}
             height={200}
-            data={rowData?.amperages}
+            data={ArrayVoltageValues }
             syncId="anyId"
             margin={{
               top: 10,
@@ -235,14 +143,14 @@ export const RecordsTable = ({ records, isRequesting }) => {
               dot={false}
             />
           </LineChart>
-        </ResponsiveContainer>
-        <p>Напряжение на дуге, В</p>
+        </ResponsiveContainer> 
 
+        <p>Напряжение на дуге, В</p> 
         <ResponsiveContainer width="100%" height={200}>
           <LineChart
             width={500}
             height={200}
-            data={rowData.voltages}
+            data={ArrayweldingCurrentValues}
             syncId="anyId"
             margin={{
               top: 10,
@@ -264,254 +172,7 @@ export const RecordsTable = ({ records, isRequesting }) => {
             />
             <Brush />
           </LineChart>
-        </ResponsiveContainer>
-        <p></p>
-
-
-        <p className="DeapTime">
-            <span>Диапазон времени: </span>&nbsp;
-            {dateObjectEnd.toLocaleDateString()}
-            &nbsp;
-            {dateObjectEnd.toLocaleTimeString()}
-            
-            &nbsp;
-            -
-            &nbsp;
-            {dateObject.toLocaleDateString()}
-            &nbsp;
-            {dateObject.toLocaleTimeString()}
-        </p>
-
-        <p className="DeapGranic">
-          <span>Границы допусков: </span>&nbsp;
-          {Arrayvoltages.min()}  
-          &nbsp;
-            -
-            &nbsp;
-          {Arrayvoltages.max()}  
-        </p>
-
-
-        {/*Новая Таблица 1  */}
-        <MaterialTable aria-label="simple table" style={StyleNewTable} >
-          <TableHead>
-            <TableRow>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="left"
-                rowspan="2"
-              >
-                 
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="center"
-                colspan="3"
-              >
-                <strong>Значения</strong>
-              </TableCell>
-              <TableCell
-                style={{
-                  borderBottom: 0,
-                }}
-                align="right"
-                rowspan="2"
-              >
-                <strong>Обеспечение допуска</strong>
-                
-              </TableCell>
-               
-            </TableRow>
-             
-          </TableHead>
-          <TableBody>
-              
-            <TableRow key={rowData.id}>
-                
-              
-                 <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="left"
-                  colspan="1"
-                >
-                   
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                  colspan="1"
-                >
-                  <strong>Минимальнове</strong>
-                  
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                  colspan="1"
-                >
-                  <strong>Максимальное</strong>
-                  
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom:0,
-                  }}
-                  align="center"
-                  colspan="1"
-                >
-                  <strong>Среднее</strong>
-                  
-                </TableCell> 
-            </TableRow>
-              
-            <TableRow key={rowData.id}>
-                
-              
-
-              <TableCell align="left" component="th" scope="row">
-                  Сварочный ток, А
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   {rowData.instruction.allowances[0].minAmp }
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   {rowData.instruction.allowances[0].maxAmp }
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   {
-                    ( rowData.instruction.allowances[0].maxAmp - rowData.instruction.allowances[0].minAmp )/2
-                   }
-              </TableCell> 
-              <TableCell align="right" component="th" scope="row">
-                   Да
-              </TableCell> 
-              
-            </TableRow>
-            <TableRow key={rowData.id}>
-              <TableCell align="left" component="th" scope="row">
-                 Напряжение на дуге, В
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   {rowData.instruction.allowances[0].minVolt }
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   {rowData.instruction.allowances[0].maxVolt }
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   {
-                    ( rowData.instruction.allowances[0].maxVolt - rowData.instruction.allowances[0].minVolt )/2
-                   }
-              </TableCell> 
-              <TableCell align="right" component="th" scope="row">
-                   Да
-              </TableCell> 
-              
-            </TableRow>
-            <TableRow key={rowData.id}>
-              <TableCell align="left" component="th" scope="row">
-                 Оценка
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                  
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   
-              </TableCell>
-              <TableCell align="center" component="th" scope="row">
-                   0
-              </TableCell> 
-              <TableCell align="right" component="th" scope="row">
-                 
-              </TableCell> 
-              
-            </TableRow>
-          </TableBody>
-        </MaterialTable>
-           
-
-           <br></br> 
-
-        {/*Новая Таблица 2  */}
-        <MaterialTable aria-label="simple table" style={StyleNewTable} > 
-          <TableBody>  
-            <TableRow key={rowData.id}> 
-              <TableCell align="left" component="th" scope="row"  >
-                  Температура окружающей среды ℃
-              </TableCell>
-              <TableCell align="right" component="th" scope="row"  >
-                    16.9
-              </TableCell> 
-            </TableRow>
-            <TableRow key={rowData.id}> 
-                <TableCell align="left" component="th" scope="row"  >
-                    Влажность %
-                </TableCell>
-                <TableCell align="right" component="th" scope="row"  >
-                      47.2
-                </TableCell> 
-              </TableRow>
-          </TableBody>
-        </MaterialTable>
-
-        <br></br> 
-
-        {/*Новая Таблица 3  */}
-        <MaterialTable aria-label="simple table" style={StyleNewTable}  >
-          <TableHead>
-            <TableRow>
-              <TableCell align="left" component="th" scope="row"  >
-                   
-              </TableCell>
-              <TableCell align="right" component="th" scope="row"  >
-                    <strong>Значение</strong>
-              </TableCell>
-              <TableCell align="right" component="th" scope="row"  >
-                    <strong> Обеспечение допуска</strong>  
-              </TableCell>
-               
-            </TableRow>
-             
-          </TableHead>
-          <TableBody> 
-              
-            <TableRow key={rowData.id}>
-                
-              
-
-              <TableCell align="left" component="th" scope="row"  >
-                    Межслойная температура, ℃
-              </TableCell>
-              <TableCell align="right" component="th" scope="row"  >
-                    0
-              </TableCell>
-              <TableCell align="right" component="th" scope="row"  >
-                    Да
-              </TableCell>
-              
-            </TableRow>
-            <TableRow key={rowData.id}> 
-              <TableCell align="left" component="th" scope="row"  >
-                    МТемпература предварителього подогрева, ℃
-              </TableCell>
-              <TableCell align="right" component="th" scope="row"  >
-                    -
-              </TableCell>
-              <TableCell align="right" component="th" scope="row"  >
-                   -
-              </TableCell>
-              </TableRow>
-          </TableBody>
-        </MaterialTable>
+        </ResponsiveContainer> 
 
       </TableContainer>
     );

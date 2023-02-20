@@ -100,3 +100,11 @@ input[type="file"] {
   }
 }
  
+
+.border{
+  padding: 30px 10px;
+  max-width: calc(100vw - 50px);
+}
+.border p{
+  margin: 15px 30px; 
+}

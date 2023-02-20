@@ -81,3 +81,29 @@ p {
     margin-top: 0;
   }
 }
+
+tr.background{
+  animation-name: Background;
+  animation-duration: 3s;
+}
+
+@keyframes Background {
+  0%{
+    background: white; 
+  }
+  20%{
+    background: whitesmoke; 
+  }
+  40%{
+    background: white; 
+  }
+  60%{
+    background: whitesmoke; 
+  }
+  80%{
+    background: white; 
+  }
+  100%{
+    background: whitesmoke; 
+  }
+}

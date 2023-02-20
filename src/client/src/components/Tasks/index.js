@@ -136,8 +136,7 @@ export const Tasks = ({
     {
       title: "Исполнитель",
       field: "masterId",
-      render: (rowData) => {
-        console.log(rowData)
+      render: (rowData) => { 
         if (rowData?.welder!=null) {
           return (
             <p>{`

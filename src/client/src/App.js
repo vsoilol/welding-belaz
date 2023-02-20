@@ -8,9 +8,9 @@ import {
   ExecutorsContainer,
   InstructionsContainer,
   LoginContainer,
-  TasksContainer
-} from "containers";
-import RecordsContainer from "containers/Records.container";
+  TasksContainer,
+  RecordsContainer
+} from "containers"; 
 import UploadContainer from "containers/Upload.container";
 import MobileContext from "context/MobileContext";
 import TabletContext from "context/TabletContext";
@@ -81,6 +81,15 @@ function App({ error, errorType, clearError }) {
                 component={TasksContainer}
                 redirectTo="/login"
               />
+
+              <PrivateRoute
+                allow={isAuth}
+                path="/records"
+                exact
+                component={RecordsContainer}
+                redirectTo="/login"
+              />
+
               <PrivateRoute
                 allow={isAuth}
                 path="/production"

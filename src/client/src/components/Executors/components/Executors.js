@@ -91,27 +91,100 @@ export const ExecutorsTable = ({
       },
     },
     {
+      title: "Фамилия",
+      field: "middleName",
+    },
+    {
       title: "Имя",
       field: "firstName",
+    }, 
+    {
+      title: "Отчество",
+      field: "lastName",
+    },
+    {
+      title: "Табельный номер",
+      field: "serviceNumber",
+    },
+    {
+      title: "Должность",
+      field: "position",
+    },
+    {
+      title: "Наименование цеха",
+      render: (rowData) => {
+        return (ReturnWorkshop(rowData.productionArea.id));
+      },
+    }, 
+    {
+      title: "Номер цеха",
+      render: (rowData) => {
+        return (ReturnWorkshopNumber(rowData.productionArea.id));
+      },
+    },
+    {
+      title: "Наименование производственного участка",
+      field: "productionArea.name",
+    },
+    {
+      title: "Номер производственного участка",
+      field: "productionArea.number",
+    },  
+    {
+      title: "Закреплённое оборудование ",
+      render: (rowData) => {
+        //  <a href="#">{rowData.}</a>
+      },
+    }, 
+  ];
+
+  const controllersColumns = [
+    {
+      title: "RFID-метка",
+      render: (rowData) => {
+        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+      },
     },
     {
       title: "Фамилия",
       field: "middleName",
     },
     {
+      title: "Имя",
+      field: "firstName",
+    }, 
+    {
       title: "Отчество",
       field: "lastName",
     },
     {
-      title: "Цех",
+      title: "Табельный номер",
+      field: "idFromSystem",
+    },
+    {
+      title: "Должность",
+      field: "position",
+    },
+    {
+      title: "Наименование цеха",
       render: (rowData) => {
         return (ReturnWorkshop(rowData.productionArea.id));
       },
+    }, 
+    {
+      title: "Номер цеха",
+      render: (rowData) => {
+        return (ReturnWorkshopNumber(rowData.productionArea.id));
+      },
     },
     {
-      title: "Производственный участок",
+      title: "Наименование производственного участка",
       field: "productionArea.name",
     },
+    {
+      title: "Номер производственного участка",
+      field: "productionArea.number",
+    },   
   ];
 
 
@@ -120,6 +193,17 @@ export const ExecutorsTable = ({
       for (let index = 0; index < area.length; index++) {
         if (area[index].id === Area) {
           return area[index].workshop.name
+        }
+      }
+    }
+
+  }
+
+  function ReturnWorkshopNumber(Area) {
+    if (area != undefined) {
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].id === Area) {
+          return area[index].workshop.number
         }
       }
     }
@@ -154,27 +238,51 @@ export const ExecutorsTable = ({
       },
     },
     {
-      title: "Имя",
-      field: "firstName",
-    },
-    {
       title: "Фамилия",
       field: "middleName",
     },
+    {
+      title: "Имя",
+      field: "firstName",
+    }, 
     {
       title: "Отчество",
       field: "lastName",
     },
     {
-      title: "Цех",
+      title: "Табельный номер",
+      field: "serviceNumber",
+    },
+    {
+      title: "Должность",
+      field: "position",
+    },
+    {
+      title: "Наименование цеха",
       render: (rowData) => {
         return (ReturnWorkshop(rowData.productionArea.id));
       },
+    }, 
+    {
+      title: "Номер цеха",
+      render: (rowData) => {
+        return (ReturnWorkshopNumber(rowData.productionArea.id));
+      },
     },
     {
-      title: "Производственный участок",
+      title: "Наименование производственного участка",
       field: "productionArea.name",
     },
+    {
+      title: "Номер производственного участка",
+      field: "productionArea.number",
+    },  
+    {
+      title: "Закреплённое оборудование ",
+      render: (rowData) => {
+        //  <a href="#">{rowData.}</a>
+      },
+    }, 
     {
       title: "Номер рабочего места",
       field: "workplaceNumber",
@@ -190,8 +298,7 @@ export const ExecutorsTable = ({
     }
   ];
 
-  const renderRowChildren = (rowData) => {
-    console.log(rowData)
+  const renderRowChildren = (rowData) => { 
     return (
       rowData?.weldingEquipment && (
         <TableContainer component={Paper}>

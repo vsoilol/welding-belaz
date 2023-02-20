@@ -135,6 +135,10 @@ export const Equipment = ({
     { title: "Наименование изготовителя", field: "manufacturerName" },
     { title: "Дата очередной аттестации", field: "nextAttestationDate" },
 
+    // { title: "Наименование цеха", field: "nextAttestationDate" },
+    // { title: "Номер цеха", field: "nextAttestationDate" },
+    // { title: "Наименование производственного участка", field: "nextAttestationDate" },
+    // { title: "Номер производственного участка", field: "nextAttestationDate" },
     // { title: "Процесс (способ) сварки", field: "weldingProcess" },
     // { title: "Напряжение холостого хода", field: "idleVoltage" },
     { title: "Номер поста", field: "post.number" },
