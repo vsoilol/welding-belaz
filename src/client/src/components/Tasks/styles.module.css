@@ -1,6 +1,6 @@
 .tableWrapper {
   margin-top: 80px;
-  width: 90%;
+
 }
 
 p {
@@ -71,13 +71,12 @@ p {
 
 @media (max-width: 1440px) {
   .tableWrapper {
-    margin-top: 40px;
-    width: 100%;
+    margin-top: 40px; 
   }
 }
 
 @media (max-width: 767px) {
-  .tableWrapper {
+  .tableWrapper { 
     margin-top: 0;
   }
 }
