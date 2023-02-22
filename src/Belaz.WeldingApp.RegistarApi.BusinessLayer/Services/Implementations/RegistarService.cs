@@ -1,5 +1,4 @@
-﻿using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Responses;
@@ -41,7 +40,7 @@ public class RegistarService : IRegistarService
         _masterRepository = masterRepository;
     }
 
-    public async Task<Result<WelderWithEquipmentResponseByte>> GetWelderWithEquipmentAsync(
+    public async Task<Result<WelderWithEquipmentResponse>> GetWelderWithEquipmentAsync(
         GetWelderWithEquipmentRequest request
     )
     {
@@ -68,34 +67,28 @@ public class RegistarService : IRegistarService
 
             var welder = await _welderRepository.GetByRfidTagAsync(request.WelderRfidTag);
 
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            return new WelderWithEquipmentResponseByte
+            return new WelderWithEquipmentResponse
             {
                 WelderId = welder.Id,
                 ServiceNumber = welder.ServiceNumber,
-                FirstName = Encoding.GetEncoding("windows-1251").GetBytes(welder.FirstName),
-                MiddleName = Encoding.GetEncoding("windows-1251").GetBytes(welder.MiddleName),
-                LastName = Encoding.GetEncoding("windows-1251").GetBytes(welder.LastName),
-                Position = Encoding.GetEncoding("windows-1251").GetBytes(welder.Position),
+                FirstName = welder.FirstName,
+                MiddleName = welder.MiddleName,
+                LastName = welder.LastName,
+                Position = welder.Position,
                 EquipmentId = weldingEquipment.Id,
-                EquipmentName = Encoding
-                    .GetEncoding("windows-1251")
-                    .GetBytes(weldingEquipment.Name),
+                EquipmentName = weldingEquipment.Name,
                 EquipmentMarking = weldingEquipment.Marking,
                 EquipmentFactoryNumber = weldingEquipment.FactoryNumber,
                 WorkshopId = welder.Workshop.Id,
-                WorkshopName = Encoding.GetEncoding("windows-1251").GetBytes(welder.Workshop.Name),
+                WorkshopName = welder.Workshop.Name,
                 WorkshopNumber = welder.Workshop.Number,
                 ProductionAreaId = welder.ProductionArea.Id,
-                ProductionAreaName = Encoding
-                    .GetEncoding("windows-1251")
-                    .GetBytes(welder.ProductionArea.Name),
+                ProductionAreaName = welder.ProductionArea.Name,
                 ProductionAreaNumber = welder.ProductionArea.Number,
                 PostId = welder.Post?.Id ?? null,
                 PostNumber = welder.Post?.Number ?? null,
                 WorkplaceId = welder.Workplace?.Id ?? null,
-                WorkplaceNumber = welder.Workplace?.Number ?? null,
+                WorkplaceNumber = welder.Workplace?.Number ?? null
             };
         });
     }
