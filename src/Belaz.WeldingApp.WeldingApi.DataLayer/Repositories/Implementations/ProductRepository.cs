@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
@@ -21,10 +20,7 @@ public class ProductRepository : IProductRepository
         _mapper = mapper;
     }
 
-    public Task<List<ProductDto>> GetAllByControlSubjectAsync(
-        bool isControlSubject,
-        ProductType productType
-    )
+    public Task<List<ProductDto>> GetAllByControlSubjectAsync(bool isControlSubject, ProductType productType)
     {
         return _context.Products
             .Where(_ => _.IsControlSubject == isControlSubject && _.ProductType == productType)
@@ -32,59 +28,40 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
-    public async Task<List<ProductDto>> GetAllAsync(ProductType productType)
+    public Task<List<ProductDto>> GetAllAsync(ProductType productType)
     {
-        var products = await FilterProducts(_ => _.ProductType == productType).ToListAsync();
-
-        var mapProducts = _mapper.Map<List<ProductDto>>(products);
-
-        return mapProducts;
-    }
-
-    public async Task<ProductDto> GetByIdAsync(Guid id)
-    {
-        var product = await FilterProducts(_ => _.Id == id).FirstOrDefaultAsync();
-
-        var mapProduct = _mapper.Map<ProductDto>(product);
-
-        return mapProduct;
-    }
-
-    public async Task<List<ProductDto>> GetAllByMasterIdAsync(
-        Guid masterId,
-        ProductType productType
-    )
-    {
-        var products = await FilterProducts(
-                _ => _.MasterId == masterId && _.ProductType == productType
-            )
+        return _context.Products
+            .Where(_ => _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
-
-        var mapProducts = _mapper.Map<List<ProductDto>>(products);
-
-        return mapProducts;
     }
 
-    public async Task<List<ProductDto>> GetAllByInspectorIdAsync(
-        Guid inspectorId,
-        ProductType productType
-    )
+    public Task<ProductDto> GetByIdAsync(Guid id)
     {
-        var products = await FilterProducts(
-                _ => _.InspectorId == inspectorId && _.ProductType == productType
-            )
-            .ToListAsync();
-
-        var mapProducts = _mapper.Map<List<ProductDto>>(products);
-
-        return mapProducts;
+        return _context.Products
+            .Where(_ => _.Id == id)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
     }
 
-    public async Task<ProductDto> CreateAsync(
-        Product entity,
-        IReadOnlyList<Guid>? seamIds,
-        IReadOnlyList<Guid>? insideProductIds
-    )
+    public Task<List<ProductDto>> GetAllByMasterIdAsync(Guid masterId, ProductType productType)
+    {
+        return _context.Products
+            .Where(_ => _.MasterId == masterId && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ProductDto>> GetAllByInspectorIdAsync(Guid inspectorId, ProductType productType)
+    {
+        return _context.Products
+            .Where(_ => _.InspectorId == inspectorId && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public async Task<ProductDto> CreateAsync(Product entity, IReadOnlyList<Guid>? seamIds,
+        IReadOnlyList<Guid>? insideProductIds)
     {
         entity.Seams = await GetSeamsByIdsAsync(seamIds);
         entity.ProductInsides = await GetInsideProductsByProductIdsAsync(insideProductIds);
@@ -95,17 +72,12 @@ public class ProductRepository : IProductRepository
         return await GetByIdAsync(newProduct.Id);
     }
 
-    public async Task<ProductDto> UpdateAsync(
-        Product entity,
-        IReadOnlyList<Guid>? seamIds,
-        IReadOnlyList<Guid>? insideProductIds
-    )
+    public async Task<ProductDto> UpdateAsync(Product entity, IReadOnlyList<Guid>? seamIds,
+        IReadOnlyList<Guid>? insideProductIds)
     {
-        var updatedProduct = (
-            await _context.Products
-                .Include(_ => _.ProductInsides)
-                .FirstOrDefaultAsync(_ => _.Id == entity.Id)
-        )!;
+        var updatedProduct = (await _context.Products
+            .Include(_ => _.ProductInsides)
+            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
         updatedProduct.Name = entity.Name;
         updatedProduct.ProductType = entity.ProductType;
@@ -156,9 +128,7 @@ public class ProductRepository : IProductRepository
     {
         var inspector = (await _context.Inspectors.FirstOrDefaultAsync(_ => _.Id == inspectorId))!;
         var products = await _context.Products
-            .Where(
-                _ => productIds.Any(productId => productId == _.Id) || _.InspectorId == inspector.Id
-            )
+            .Where(_ => productIds.Any(productId => productId == _.Id) || _.InspectorId == inspector.Id)
             .ToListAsync();
 
         inspector.Products = products;
@@ -168,11 +138,9 @@ public class ProductRepository : IProductRepository
 
     public async Task AssignProductToWeldersAsync(Guid productId, List<Guid> welderIds)
     {
-        var product = (
-            await _context.Products
-                .Include(_ => _.Welders)
-                .FirstOrDefaultAsync(_ => _.Id == productId)
-        )!;
+        var product = (await _context.Products
+            .Include(_ => _.Welders)
+            .FirstOrDefaultAsync(_ => _.Id == productId))!;
 
         var welders = await _context.Welders
             .Where(_ => welderIds.Any(welderId => welderId == _.Id))
@@ -183,52 +151,53 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<ProductDto>> GetAllByWelderId(Guid welderId, ProductType productType)
+    public Task<List<ProductDto>> GetAllByWelderId(Guid welderId, ProductType productType)
     {
-        var products = await FilterProducts(
-                _ => _.Welders.Any(welder => welder.Id == welderId) && _.ProductType == productType
-            )
+        return _context.Products
+            .Where(_ => _.Welders.Any(welder => welder.Id == welderId)
+                        && _.ProductType == productType)
+            .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    /*public async Task AssignProductsToWelderAsync(List<Guid> productIds, Guid welderId)
+    {
+        var welder = (await _context.Welders.FirstOrDefaultAsync(_ => _.Id == welderId))!;
+
+        var seams = await _context.Products
+            .Where(_ => productIds.Any(productId => productId == _.Id))
+            .SelectMany(_ => _.Seams)
             .ToListAsync();
 
-        var mapProducts = _mapper.Map<List<ProductDto>>(products);
+        var weldingTasks = seams.Select(_ => new WeldingTask
+        {
+            Seam = _,
+        });
+        
+        _context.WeldingTasks.AddRange(weldingTasks);
 
-        return mapProducts;
-    }
+        welder.Seams = seams;
+    }*/
 
     private async Task<List<Seam>> GetSeamsByIdsAsync(IReadOnlyList<Guid>? seamIds)
     {
         return seamIds is not null
-            ? await _context.Seams.Where(_ => seamIds.Any(seamId => seamId == _.Id)).ToListAsync()
+            ? await _context.Seams
+                .Where(_ => seamIds.Any(seamId => seamId == _.Id))
+                .ToListAsync()
             : new List<Seam>();
     }
 
-    private async Task<List<ProductInside>> GetInsideProductsByProductIdsAsync(
-        IReadOnlyList<Guid>? productIds
-    )
+    private async Task<List<ProductInside>> GetInsideProductsByProductIdsAsync(IReadOnlyList<Guid>? productIds)
     {
         return productIds is not null
             ? await _context.Products
                 .Where(_ => productIds.Any(productId => productId == _.Id))
-                .Select(_ => new ProductInside { InsideProduct = _ })
+                .Select(_ => new ProductInside
+                {
+                    InsideProduct = _
+                })
                 .ToListAsync()
             : new List<ProductInside>();
-    }
-
-    private IQueryable<Product> FilterProducts(Expression<Func<Product, bool>> filter)
-    {
-        var products = _context.Products
-            .Include(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .Include(_ => _.ProductInsides)
-            .ThenInclude(_ => _.InsideProduct)
-            .Include(_ => _.Seams)
-            .Include(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
-            .Include(_ => _.TechnologicalProcess)
-            .Where(filter);
-
-        return products;
     }
 }

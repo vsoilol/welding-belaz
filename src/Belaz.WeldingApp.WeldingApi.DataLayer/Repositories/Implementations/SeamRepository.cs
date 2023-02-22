@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
@@ -21,31 +20,27 @@ public class SeamRepository : ISeamRepository
         _mapper = mapper;
     }
 
-    public async Task<List<SeamDto>> GetAllAsync()
+    public Task<List<SeamDto>> GetAllAsync()
     {
-        var seams = await FilterSeams().ToListAsync();
-
-        var mapSeams = _mapper.Map<List<SeamDto>>(seams);
-
-        return mapSeams;
+        return _context.Seams
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
-    public async Task<SeamDto> GetByIdAsync(Guid id)
+    public Task<SeamDto> GetByIdAsync(Guid id)
     {
-        var seam = await FilterSeams(_ => _.Id == id).ToListAsync();
-
-        var mapSeam = _mapper.Map<SeamDto>(seam);
-
-        return mapSeam;
+        return _context.Seams
+            .Where(_ => _.Id == id)
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
     }
 
-    public async Task<List<SeamDto>> GetAllByControlSubjectAsync(bool isControlSubject)
+    public Task<List<SeamDto>> GetAllByControlSubjectAsync(bool isControlSubject)
     {
-        var seams = await FilterSeams(_ => _.IsControlSubject == isControlSubject).ToListAsync();
-
-        var mapSeams = _mapper.Map<List<SeamDto>>(seams);
-
-        return mapSeams;
+        return _context.Seams
+            .Where(_ => _.IsControlSubject == isControlSubject)
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<SeamDto> CreateAsync(Seam entity)
@@ -72,13 +67,12 @@ public class SeamRepository : ISeamRepository
         return await GetByIdAsync(entity.Id);
     }
 
-    public async Task<List<SeamDto>> GetAllByInspectorIdAsync(Guid inspectorId)
+    public Task<List<SeamDto>> GetAllByInspectorIdAsync(Guid inspectorId)
     {
-        var seams = await FilterSeams(_ => _.InspectorId == inspectorId).ToListAsync();
-
-        var mapSeams = _mapper.Map<List<SeamDto>>(seams);
-
-        return mapSeams;
+        return _context.Seams
+            .Where(_ => _.InspectorId == inspectorId)
+            .ProjectTo<SeamDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task AssignSeamToInspectorAsync(Guid seamId, Guid inspectorId)
@@ -98,7 +92,7 @@ public class SeamRepository : ISeamRepository
             .ToListAsync();
 
         inspector.Seams = seams;
-
+        
         await _context.SaveChangesAsync();
     }
 
@@ -127,9 +121,7 @@ public class SeamRepository : ISeamRepository
 
     public async Task<DefectiveSeamDto> UpdateDefectiveReasonSeamAsync(DefectiveReason entity)
     {
-        var updatedStatusReason = (
-            await _context.DefectiveReasons.FirstOrDefaultAsync(_ => _.Id == entity.Id)
-        )!;
+        var updatedStatusReason = (await _context.DefectiveReasons.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
 
         updatedStatusReason.DetectedDefectiveDate = entity.DetectedDefectiveDate;
         updatedStatusReason.Reason = entity.Reason;
@@ -138,48 +130,5 @@ public class SeamRepository : ISeamRepository
         await _context.SaveChangesAsync();
 
         return await GetDefectiveReasonByIdAsync(entity.Id);
-    }
-
-    private IQueryable<Seam> FilterSeams(Expression<Func<Seam, bool>> filter)
-    {
-        var products = _context.Seams
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .Include(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
-            .Include(_ => _.TechnologicalInstruction)
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.TechnologicalProcess)
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.Welders)
-            .Where(filter);
-
-        return products;
-    }
-
-    private IQueryable<Seam> FilterSeams()
-    {
-        var products = _context.Seams
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .Include(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
-            .Include(_ => _.TechnologicalInstruction)
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.TechnologicalProcess)
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.Welders);
-
-        return products;
     }
 }
