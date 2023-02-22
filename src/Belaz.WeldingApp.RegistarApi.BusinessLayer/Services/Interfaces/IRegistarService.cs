@@ -8,7 +8,7 @@ namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 
 public interface IRegistarService
 {
-    Task<Result<WelderWithEquipmentResponseByte>> GetWelderWithEquipmentAsync(
+    Task<Result<WelderWithEquipmentResponse>> GetWelderWithEquipmentAsync(
         GetWelderWithEquipmentRequest request
     );
 
