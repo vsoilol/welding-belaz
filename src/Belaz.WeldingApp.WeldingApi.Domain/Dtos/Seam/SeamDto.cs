@@ -18,15 +18,15 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     public string? IdFromSystem { get; set; }
 
     public int Number { get; set; }
-
+    
     public int Length { get; set; }
-
+    
     /// <summary>
     /// Поддлежит ли исполнению на регистраторе
     /// </summary>
     public bool IsPerformed { get; set; }
 
-    public MainProductDto Product { get; set; } = null!;
+    public ProductBriefDto Product { get; set; } = null!;
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 
@@ -42,13 +42,21 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
 
     public void Mapping(Profile profile)
     {
-        profile
-            .CreateMap<Entities.ProductInfo.Seam, SeamDto>()
-            .ForMember(
-                dto => dto.TechnologicalProcess,
-                opt => opt.MapFrom(x => x.Product!.TechnologicalProcess)
-            )
-            .ForMember(dto => dto.Workshop, opt => opt.MapFrom(x => x.ProductionArea!.Workshop))
-            .ForMember(dto => dto.Welders, opt => opt.MapFrom(x => x.Product!.Welders));
+        profile.CreateMap<Entities.ProductInfo.Seam, SeamDto>()
+            .ForMember(dto => dto.Product,
+                opt => opt
+                    .MapFrom(x => x.Product))
+            .ForMember(dto => dto.TechnologicalInstruction,
+                opt => opt
+                    .MapFrom(x => x.TechnologicalInstruction))
+            .ForMember(dto => dto.TechnologicalProcess,
+                opt => opt
+                    .MapFrom(x => x.Product!.TechnologicalProcess))
+            .ForMember(dto => dto.Workshop,
+                opt => opt
+                    .MapFrom(x => x.ProductionArea!.Workshop))
+            .ForMember(dto => dto.Welders,
+                opt => opt
+                    .MapFrom(x => x.Product.Welders));
     }
 }
