@@ -2,26 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "RegistarApi Dev",
-      "type": "coreclr",
-      "console": "externalTerminal",
-      "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/Belaz.WeldingApp.RegistarApi/bin/Debug/net6.0/Belaz.WeldingApp.RegistarApi.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/Belaz.WeldingApp.RegistarApi",
-      "stopAtEntry": false,
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "sourceFileMap": {
-        "/Views": "${workspaceFolder}/Views"
-      },
-      "logging": {
-        "moduleLoad": false
-      }
-    },
-    {
       "name": "IdentityApi Dev",
       "type": "coreclr",
       "console": "externalTerminal",
