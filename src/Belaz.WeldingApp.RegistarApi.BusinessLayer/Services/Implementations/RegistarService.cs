@@ -23,9 +23,14 @@ public class RegistarService : IRegistarService
     private readonly IMasterRepository _masterRepository;
     private readonly IRecordRepository _recordRepository;
 
-    public RegistarService(IValidationService validationService, IMapper mapper,
-        IWeldingEquipmentRepository weldingEquipmentRepository, IWelderRepository welderRepository,
-        IRecordRepository recordRepository, IMasterRepository masterRepository)
+    public RegistarService(
+        IValidationService validationService,
+        IMapper mapper,
+        IWeldingEquipmentRepository weldingEquipmentRepository,
+        IWelderRepository welderRepository,
+        IRecordRepository recordRepository,
+        IMasterRepository masterRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -36,13 +41,16 @@ public class RegistarService : IRegistarService
     }
 
     public async Task<Result<WelderWithEquipmentResponse>> GetWelderWithEquipmentAsync(
-        GetWelderWithEquipmentRequest request)
+        GetWelderWithEquipmentRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(async () =>
         {
-            var weldingEquipment = await _weldingEquipmentRepository.GetByRfidTagAsync(request.EquipmentRfidTag);
+            var weldingEquipment = await _weldingEquipmentRepository.GetByRfidTagAsync(
+                request.EquipmentRfidTag
+            );
 
             var weldingEquipmentConditionTime = new WeldingEquipmentConditionTime
             {
@@ -53,8 +61,9 @@ public class RegistarService : IRegistarService
                 WeldingEquipmentId = weldingEquipment.Id
             };
 
-            await _weldingEquipmentRepository
-                .AddWeldingEquipmentConditionTimeAsync(weldingEquipmentConditionTime);
+            await _weldingEquipmentRepository.AddWeldingEquipmentConditionTimeAsync(
+                weldingEquipmentConditionTime
+            );
 
             var welder = await _welderRepository.GetByRfidTagAsync(request.WelderRfidTag);
 
@@ -92,13 +101,15 @@ public class RegistarService : IRegistarService
         {
             var weldingRecord = _mapper.Map<WeldingRecord>(request);
 
-            weldingRecord.MasterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(request.WeldingEquipmentId);
-            
+            weldingRecord.MasterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(
+                request.WeldingEquipmentId
+            );
+
             var seconds = (int)Math.Round(0.1 * request.Voltages.Length);
             var weldingEndTime = weldingRecord.WeldingStartTime.Add(TimeSpan.FromSeconds(seconds));
 
             weldingRecord.WeldingEndTime = weldingEndTime;
-            
+
             var weldingEquipmentConditionTime = new WeldingEquipmentConditionTime
             {
                 Condition = Condition.AtWork,
@@ -107,12 +118,13 @@ public class RegistarService : IRegistarService
                 StartConditionTime = request.StartDateTime.TimeOfDay,
                 WeldingEquipmentId = request.WeldingEquipmentId
             };
-            
-            await _weldingEquipmentRepository
-                .AddWeldingEquipmentConditionTimeAsync(weldingEquipmentConditionTime);
+
+            await _weldingEquipmentRepository.AddWeldingEquipmentConditionTimeAsync(
+                weldingEquipmentConditionTime
+            );
 
             await _recordRepository.CreateRecordWithoutTaskAsync(weldingRecord);
-            
+
             return Unit.Default;
         });
     }
