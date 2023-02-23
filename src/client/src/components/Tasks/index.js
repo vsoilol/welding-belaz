@@ -525,7 +525,7 @@ export const Tasks = ({
         <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{ minWidth: "800px", }}
+          style={{ minWidth: "1200px", }}
         >
           <Table
             title="Сменные задания на сварку"
