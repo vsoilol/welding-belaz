@@ -182,7 +182,7 @@ export const Place = ({
       {
         title: "Наименование поста ",
         render: (rowData) => {
-          return <p>Пост {rowData.number}</p>;
+          return <p>Пост {rowData.number??"-"}</p>;
         },
       },
       {
@@ -200,7 +200,7 @@ export const Place = ({
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number}</p>;
+          return <p>Рабочее место {rowData.number??"-"}</p>;
         },
       },
       {
@@ -209,187 +209,7 @@ export const Place = ({
       },
     ],
 
-    goods: [
-      {
-        title: "Наименование изделия ", field: "name"
-      },
-      {
-        title: "Номер  изделия ", field: "number"
-      },
-
-      {
-        title: "Номер  цеха ", field: "workshop.number"
-      },
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      {
-        title: "Закрепить изделие",
-        render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
-        },
-      },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id) }}>Узел </p>
-              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id) }}>Сварной шов</p>
-            </div>
-          )
-        },
-      },
-    ],
-    node: [
-      {
-        title: "Наименование узла ", field: "name"
-      },
-      {
-        title: "Номер  узла ", field: "number"
-      },
-
-      {
-        title: "Номер  цеха ", field: "workshop.number"
-      },
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      {
-        title: "Закрепить изделие",
-        render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
-        },
-      },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id) }}>Сварной шов</p>
-            </div>
-          )
-        },
-      },
-
-    ],
-    details: [
-      {
-        title: "Наименование детали ", field: "name"
-      },
-      {
-        title: "Номер  детали ", field: "number"
-      },
-
-      {
-        title: "Номер  цеха ", field: "workshop.number"
-      },
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      {
-        title: "Закрепить изделие",
-        render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
-        },
-      },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы") }}>Сварной шов</p>
-            </div>
-          )
-        },
-      },
-    ],
-    welding_seam: [
-      {
-        title: "Наименование сварного шва ",
-        render: (rowData) => {
-          return <p>{rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  сварного шва ", field: "number"
-      },
-
-      {
-        title: "Номер  цеха ", field: "workshop.number"
-      },
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      {
-        title: "Закрепить задание",
-        render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
-        },
-      },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
-    ],
+     
   };
 
 

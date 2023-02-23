@@ -54,7 +54,8 @@ export const Equipment = ({
   editDowntime,
 
   reason,
-  loadDowntime
+  loadDowntime,
+  loadWorkshop
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -116,7 +117,8 @@ export const Equipment = ({
     loadMasters();
     loadPosts();
     loadDowntime();
-  }, [loadEquipment, loadMasters, loadPosts, loadDowntime]);
+    loadWorkshop();
+  }, [loadEquipment, loadMasters, loadPosts, loadDowntime,loadWorkshop]);
 
 
   const columns = [
@@ -135,14 +137,42 @@ export const Equipment = ({
     { title: "Наименование изготовителя", field: "manufacturerName" },
     { title: "Дата очередной аттестации", field: "nextAttestationDate" },
 
-    // { title: "Наименование цеха", field: "nextAttestationDate" },
-    // { title: "Номер цеха", field: "nextAttestationDate" },
-    // { title: "Наименование производственного участка", field: "nextAttestationDate" },
-    // { title: "Номер производственного участка", field: "nextAttestationDate" },
-    // { title: "Процесс (способ) сварки", field: "weldingProcess" },
-    // { title: "Напряжение холостого хода", field: "idleVoltage" },
-    { title: "Номер поста", field: "post.number" },
-    { title: "Наименование поста", field: "post.name" },
+    { 
+      title: "Наименование цеха", 
+      render: (rowData) => {
+        return <span>-</span>
+      },
+    },
+    { 
+      title: "Номер цеха", 
+      render: (rowData) => {
+        return <span>-</span>
+      },
+    },
+    { 
+      title: "Наименование производственного участка", 
+      render: (rowData) => {
+        return <span>{SetArea(rowData.post, "name")??"-"}</span>
+      },
+    },
+    { 
+      title: "Номер производственного участка", 
+      render: (rowData) => {
+        return <span>{SetArea(rowData.post, "name")??"-"}</span>
+      },
+    },  
+    {
+      title: "Наименование   поста ",
+      render: (rowData) => {
+        return <span>{DetArea(rowData.post, "name")??"-"}</span>
+      },
+    },
+    {
+      title: "Номер поста",
+      render: (rowData) => {
+        return <span>{DetArea(rowData.post, "numb")??"-"}</span>
+      },
+    },
     {
       title:"Просмотреть календарь",
       render: (rowData) => {
@@ -169,7 +199,44 @@ export const Equipment = ({
       field: "downtimeReason"
     },
   ]
+  function DetArea(params, field) { 
+    if (field === "name") { 
+      for (let index = 0; index < posts?.length; index++) {
+        if (posts[index]?.id === params) {
+          return posts[index].name
+        }
+      }
+    }
+    if (field === "numb") { 
+      for (let index = 0; index < posts?.length; index++) {
+        if (posts[index]?.id === params) {
+          return posts[index].number
+        }
+      }
+    }
+     
 
+  }
+
+
+  function SetArea(params, field) { 
+    if (field === "name") { 
+      for (let index = 0; index < posts?.length; index++) {
+        if (posts[index]?.id === params) {
+          return posts[index].productionArea.name
+        }
+      }
+    }
+    if (field === "numb") { 
+      for (let index = 0; index < posts?.length; index++) {
+        if (posts[index]?.id === params) {
+          return posts[index].productionArea.name
+        }
+      }
+    }
+     
+
+  }
   const requiredKeys = ["name", "nextInspectionDate"];
 
   const handleOpen = () => {

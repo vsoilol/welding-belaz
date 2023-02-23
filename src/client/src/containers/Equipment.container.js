@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { EquipmentPage } from "pages/Equipment";
 import Actions from "store/equipment/actions";
+import Actionsworkplace from "store/workplace/actions";
 import MasterActions from "store/executors/actions";
 
 const mapStateToProps = (state) => {
@@ -16,6 +17,8 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = {
+  ///Цеха 
+  loadWorkshop: Actionsworkplace.Creators.loadWorkshopRequest,
   loadEquipment: Actions.Creators.loadEquipmentRequest, 
   addEquipment: Actions.Creators.addEquipmentRequest,
   deleteEquipment: Actions.Creators.deleteEquipmentRequest,

@@ -158,11 +158,47 @@ export const Seam = ({
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
       {
-        title: "Закрепить задание",
+        title: "Наименование изделия ", 
         render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
+          return <span>{rowData?.product?.mainProduct?.name??"-"}</span>
         },
       },
+      {
+        title: "Номер  изделия ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.number??"-"}</span>
+        },
+      },
+      {
+        title: "Наименование узла ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  узла ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.number??"-"}</span>
+        },
+      },
+      {
+        title: "Наименование детали ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  детали ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number??"-"}</span>
+        },
+      },
+      // {
+      //   title: "Закрепить задание",
+      //   render: (rowData) => {
+      //     return <p className={styles.Fix}>Закрепить</p>;
+      //   },
+      // },
       // {
       //   title: "Просмотреть закрепленные",
       //   render: (rowData) => {

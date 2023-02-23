@@ -66,7 +66,7 @@ export const Product = ({
 
   const [valueProdArea, setValueProdArea] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
-  const [valuetPosts, setValuetPosts] = useState(area[0].id);
+  const [valuetPosts, setValuetPosts] = useState(area[0]?.id);
   const [valuetWorkPlace, setValuetWorkPlace] = useState();
 
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
@@ -248,14 +248,14 @@ export const Product = ({
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
       {
-        title: "Создание задания",
+        title: "Закрерить сварщика",
         render: (rowData) => {
           return <p className={styles.Fix} onClick={e => {
             setcreateTask(1);
             setValuegoTo(2);
             setvalueChoise(rowData.name)
             setIdIzdelia(rowData.id)
-          }}>Создать</p>;
+          }}>Закрерить</p>;
         },
       },
 
@@ -956,15 +956,15 @@ export const Product = ({
                 : (<h2>Контролер: {valueWelderExeName}</h2>)
 
               } */}
-              <h2>Формирование задания на сварку</h2>
+              <h2>Закрерить сварщика</h2>
               <h3>Изделие: {valueChoise}</h3>
 
               <div className={styles.Seams}>
-                {
+                {/* {
                   displaySeams === 0
                     ? <span className={styles.refSeam} onClick={SeamsDisplay}>Просмотреть сварные швы для изделия</span>
                     : <span className={styles.refSeam} onClick={SeamsDisplay}>Скрыть сварные швы для изделия</span>
-                }
+                } */}
                 {
                   displaySeams === 1
                     ? (
@@ -999,7 +999,7 @@ export const Product = ({
                     }}
                     options={optPosts}
                   />
-                  <button className={styles.fixed} onClick={SendChoiseWelder}> Создать задание </button>
+                  <button className={styles.fixed} onClick={SendChoiseWelder}> Закрерить </button>
                 </div>
               </div>
 

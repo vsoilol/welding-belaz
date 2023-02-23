@@ -424,8 +424,7 @@ export const WorkPlace = ({
         aria-label="full width tabs example"
       >
         <Tab label="Структура производства" />
-        <Tab label="Структура продукции" />
-        <Tab label="Информация о продукции" />
+        <Tab label="Структура продукции" /> 
 
       </Tabs>
 

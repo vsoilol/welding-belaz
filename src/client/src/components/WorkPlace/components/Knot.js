@@ -148,76 +148,7 @@ export const Knot = ({
   }
 
   const columns = {
-    workshops: [
-      {
-        title: "Наименование цеха",
-        field: "name",
-      },
-      {
-        title: "Номер  цеха",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
-        },
-      },
-    ],
-    production_sites: [
-      {
-        title: "Наименование производственного участка ",
-        field: "name",
-      },
-      {
-        title: "Номер  производственного участка ",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
-            </div>
-          )
-
-          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
-        },
-      },
-    ],
-    posts: [
-      {
-        title: "Наименование поста ",
-        render: (rowData) => {
-          return <p>Пост {rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  поста ",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
-        },
-      },
-    ],
-    jobs_place: [
-      {
-        title: "Наименование рабочего места ",
-        render: (rowData) => {
-          return <p>Рабочее место {rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  рабочего места ",
-        field: "number",
-      },
-    ],
+    
 
     goods: [
       {
@@ -291,14 +222,26 @@ export const Knot = ({
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
       {
-        title: "Создание задания",
+        title: "Наименование изделия ", 
+        render: (rowData) => {
+          return <span>{rowData?.mainProduct?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  изделия ", 
+        render: (rowData) => {
+          return <span>{rowData?.mainProduct?.number??"-"}</span>
+        },
+      },
+      {
+        title: "Закрепить сварщика",
         render: (rowData) => {
           return <p className={styles.Fix} onClick={e => { 
             setValueFixed(1); 
             setValuegoTo(2);
             setvalueChoise(rowData.name) 
             setIdIzdelia(rowData.id)
-          }}>Создать</p>;
+          }}>Закрепить</p>;
        
         },
       },
@@ -478,8 +421,7 @@ export const Knot = ({
         field: "productionArea.name",
       }, 
     ]
-  };
-
+  }; 
   const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.node);
   const [value_goTo, setValuegoTo] = useState(0);
 
@@ -942,14 +884,14 @@ export const Knot = ({
                   : (<h2>Контролер: {valueWelderExeName}</h2>)
 
                 } */}
-              <h2>Формирование задания на сварку</h2>
+              <h2>Закрепить сварщика</h2>
               <h3>Узел: {valueChoise}</h3>
               <div className={styles.Seams}>
-                {
+                {/* {
                   displaySeams === 0
                     ? <span className={styles.refSeam} onClick={SeamsDisplay}>Просмотреть сварные швы для узла</span>
                     : <span className={styles.refSeam} onClick={SeamsDisplay}>Скрыть сварные швы для узла</span>
-                }
+                } */}
                 {
                   displaySeams === 1
                     ? (
@@ -984,7 +926,7 @@ export const Knot = ({
                     }}
                     options={optPosts}
                   />
-                 <button className={styles.fixed} onClick={SendChoiseWelder}> Создать задание </button>
+                 <button className={styles.fixed} onClick={SendChoiseWelder}> Закрерить </button>
                 </div>
               </div>
 

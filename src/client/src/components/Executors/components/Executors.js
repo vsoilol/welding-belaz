@@ -97,7 +97,7 @@ export const ExecutorsTable = ({
     {
       title: "Имя",
       field: "firstName",
-    }, 
+    },
     {
       title: "Отчество",
       field: "lastName",
@@ -115,7 +115,7 @@ export const ExecutorsTable = ({
       render: (rowData) => {
         return (ReturnWorkshop(rowData.productionArea.id));
       },
-    }, 
+    },
     {
       title: "Номер цеха",
       render: (rowData) => {
@@ -129,13 +129,15 @@ export const ExecutorsTable = ({
     {
       title: "Номер производственного участка",
       field: "productionArea.number",
-    },  
+    },
     {
       title: "Закреплённое оборудование ",
       render: (rowData) => {
-        //  <a href="#">{rowData.}</a>
+        if (rowData?.weldingEquipments!=undefined) {
+            return  <a href="/equipment">{rowData?.weldingEquipments[0]?.factoryNumber??"-"}</a>
+        }  
       },
-    }, 
+    },
   ];
 
   const controllersColumns = [
@@ -152,7 +154,7 @@ export const ExecutorsTable = ({
     {
       title: "Имя",
       field: "firstName",
-    }, 
+    },
     {
       title: "Отчество",
       field: "lastName",
@@ -170,7 +172,7 @@ export const ExecutorsTable = ({
       render: (rowData) => {
         return (ReturnWorkshop(rowData.productionArea.id));
       },
-    }, 
+    },
     {
       title: "Номер цеха",
       render: (rowData) => {
@@ -184,7 +186,7 @@ export const ExecutorsTable = ({
     {
       title: "Номер производственного участка",
       field: "productionArea.number",
-    },   
+    },
   ];
 
 
@@ -244,7 +246,7 @@ export const ExecutorsTable = ({
     {
       title: "Имя",
       field: "firstName",
-    }, 
+    },
     {
       title: "Отчество",
       field: "lastName",
@@ -262,7 +264,7 @@ export const ExecutorsTable = ({
       render: (rowData) => {
         return (ReturnWorkshop(rowData.productionArea.id));
       },
-    }, 
+    },
     {
       title: "Номер цеха",
       render: (rowData) => {
@@ -276,13 +278,13 @@ export const ExecutorsTable = ({
     {
       title: "Номер производственного участка",
       field: "productionArea.number",
-    },  
+    },
     {
       title: "Закреплённое оборудование ",
       render: (rowData) => {
-        //  <a href="#">{rowData.}</a>
+        return  <a href="/equipment">{rowData?.weldingEquipments[0]?.factoryNumber}</a>
       },
-    }, 
+    },
     {
       title: "Номер рабочего места",
       field: "workplaceNumber",
@@ -299,90 +301,92 @@ export const ExecutorsTable = ({
   ];
 
   const renderRowChildren = (rowData) => { 
-    return (
-      rowData?.weldingEquipment && (
-        <TableContainer component={Paper}>
-          <MaterialTable aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  RFID-метка
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Наименование
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Маркировка
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Заводской номер
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Дата ввода в эксплуатацию
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Текущие состояние
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow key={rowData?.weldingEquipment?.id}>
-                <TableCell align="center">
-                  {rowData.weldingEquipment.rfidTag}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData.weldingEquipment.name}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData.weldingEquipment.marking}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData.weldingEquipment.factoryNumber}
-                </TableCell>
-                <TableCell align="center">
-                  {rowData.weldingEquipment.commissioningDate}
-                </TableCell>
-                <TableCell align="center">
-                  {renderConditionValue(
-                    rowData.weldingEquipment.currentCondition
-                  )}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </MaterialTable>
-        </TableContainer>
-      )
-    );
+    if (rowData?.weldingEquipments.length!=0) {
+      return (
+        rowData?.weldingEquipments && (
+          <TableContainer component={Paper}>
+            <MaterialTable aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    RFID-метка
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Наименование
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Маркировка
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Заводской номер
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Дата ввода в эксплуатацию
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Текущие состояние
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow key={rowData?.weldingEquipments?.id}>
+                  <TableCell align="center">
+                    {rowData?.weldingEquipments?.rfidTag}
+                  </TableCell>
+                  <TableCell align="center">
+                    {rowData?.weldingEquipments?.name}
+                  </TableCell>
+                  <TableCell align="center">
+                    {rowData?.weldingEquipments?.marking}
+                  </TableCell>
+                  <TableCell align="center">
+                    {rowData?.weldingEquipments?.factoryNumber}
+                  </TableCell>
+                  <TableCell align="center">
+                    {rowData?.weldingEquipments?.commissioningDate}
+                  </TableCell>
+                  <TableCell align="center">
+                    {renderConditionValue(
+                      rowData?.weldingEquipments?.currentCondition
+                    )}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </MaterialTable>
+          </TableContainer>
+        )
+      );
+    }
   };
 
   function OpenCalendar(rowData) {

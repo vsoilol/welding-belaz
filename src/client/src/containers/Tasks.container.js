@@ -4,6 +4,7 @@ import Actions from "store/tasks/actions";
 import ExecutorsActions from "store/executors/actions";
 import InstructionsActions from "store/instructions/actions";
 import EquipmentActions from "store/equipment/actions";
+import WorkplaceActions from "store/workplace/actions";
 
 const mapStateToProps = (state) => {
   return {
@@ -18,12 +19,25 @@ const mapStateToProps = (state) => {
       state?.instructions?.isRequesting ||
       state?.techs?.isRequesting,
     userRole: state.auth.user.role,
-    info:state.tasks.info, 
+    info: state.tasks.info,
     ///Сварные швы
     seam: state.workplace.seam,
+    ///Изделия
+    product: state.workplace.product,
+    ///Узлы
+    knot: state.workplace.knot,
+    ///Детали
+    detail: state.workplace.detail,
   };
 };
 const mapDispatchToProps = {
+
+  loadProduct: WorkplaceActions.Creators.loadProductRequest,
+  loadKnot: WorkplaceActions.Creators.loadKnotRequest,
+  loadDetail: WorkplaceActions.Creators.loadDetailRequest,
+
+
+
   loadTasks: Actions.Creators.loadTasksRequest,
   loadInfo: Actions.Creators.loadInfoRequest,
   addTask: Actions.Creators.addTaskRequest,

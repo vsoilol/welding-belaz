@@ -28,7 +28,7 @@ const dateOptions = {
 };
 
 export const Tasks = ({
-  loadTasks, 
+  loadTasks,
   loadInfo,
   info,
   tasks,
@@ -46,12 +46,27 @@ export const Tasks = ({
 
 
   loadSeam,
-  seam
-  
+  seam,
+
+
+  loadProduct,
+  loadKnot,
+  loadDetail,
+
+  product,
+  knot,
+  detail,
+
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const dispatch = useDispatch();
+
+
+  const [date, setDate] = useState("");
+  const [production, setProduction] = useState(1);
+
+
 
   const formattedMasters = masters?.map((item) => {
     return {
@@ -72,7 +87,7 @@ export const Tasks = ({
     instructionId: modalData?.instruction.id ?? "",
     id: modalData?.id ?? "",
   };
- 
+
 
 
   const requiredKeys = [
@@ -93,10 +108,16 @@ export const Tasks = ({
     // loadInstructions();
     // loadInfo();
     loadSeam();
+
+    loadProduct();
+    loadKnot();
+    loadDetail();
   }, [//loadInstructions,
-   loadMasters, loadTasks, loadTechs,
-     //loadInfo,
-   loadSeam]);
+    loadMasters, loadTasks, loadTechs, loadProduct,
+    loadKnot,
+    loadDetail,
+    //loadInfo,
+    loadSeam]);
 
   const formattedTechs = techs?.map((item) => {
     return {
@@ -136,71 +157,71 @@ export const Tasks = ({
     {
       title: "Исполнитель",
       field: "masterId",
-      render: (rowData) => { 
-        if (rowData?.welder!=null) {
+      render: (rowData) => {
+        if (rowData?.welder != null) {
           return (
             <p>{`
               ${rowData?.welder?.middleName} 
               ${rowData?.welder?.firstName} 
               ${rowData?.welder?.lastName}
-              `} 
+              `}
             </p>
           );
         }
-        else{
+        else {
           return (
-            <p>{`  -   `} 
+            <p>{`  -   `}
             </p>
           );
         }
-        
+
       },
     },
     {
       title: "Руководитель сварочных работ",
       field: "masterId",
-      render: (rowData) => { 
-        if (rowData?.master==null) {
+      render: (rowData) => {
+        if (rowData?.master == null) {
           return (
-            <p>{`-`} 
+            <p>{`-`}
             </p>
           );
         }
-        else{
+        else {
           return (
             <p>{`
               ${rowData?.master?.middleName} 
               ${rowData?.master?.firstName} 
               ${rowData?.master?.lastName}
-              `} 
+              `}
             </p>
           );
         }
-        
+
       },
     },
     {
       title: "Контролер",
       field: "masterId",
       render: (rowData) => {
-        if (rowData?.inspector!=null) {
+        if (rowData?.inspector != null) {
           return (
             <p>{`
               ${rowData?.inspector?.middleName} 
               ${rowData?.inspector?.firstName} 
               ${rowData?.inspector?.lastName}
-              `} 
+              `}
             </p>
           );
         }
-        else{
+        else {
           return (
-            <p>{`  -   `} 
+            <p>{`  -   `}
             </p>
           );
-        } 
+        }
       },
-    }, 
+    },
     {
       field: "url",
       title: "Скачать паспорт",
@@ -257,64 +278,145 @@ export const Tasks = ({
   };
 
 
+
+  const columnsWorkplace = {
+    goods: [
+      {
+        title: "Наименование изделия ", field: "name"
+      },
+      {
+        title: "Номер  изделия ", field: "number"
+      },
+      {
+        title: "Количество ", field: "number"
+      },
+      
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+
+    ],
+    node: [
+      {
+        title: "Наименование узла ", field: "name"
+      },
+      {
+        title: "Номер  узла ", field: "number"
+      },
+      {
+        title: "Количество ", field: "number"
+      },
+       
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+
+
+    ],
+    details: [
+      {
+        title: "Наименование детали ", field: "name"
+      },
+      {
+        title: "Номер  детали ", field: "number"
+      },
+      {
+        title: "Количество ", field: "number"
+      }, 
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      
+
+    ],
+
+  };
+
   ////////////////////////////////////////////////////////////////////
   const columns_data = {
 
     seam: [
       {
-        title: "Номер шва", 
-        field:"number"
+        title: "Номер шва",
+        field: "number"
       },
       {
-        title: "Номер детали", 
-        field:"product.number"
+        title: "Номер детали",
+        field: "product.number"
       },
       {
-        title: "Номер узла", 
-        field:"product.productType"
+        title: "Номер узла",
+        field: "product.productType"
       },
       {
-        title: "Номер изделие", 
-        field:"product.number"
+        title: "Номер изделие",
+        field: "product.number"
       },
       {
-        title: "Наименование   технологического процесса  ", 
-        field:"technologicalProcess.name"
+        title: "Наименование   технологического процесса  ",
+        field: "technologicalProcess.name"
       },
       {
-        title: "Номер  технологического процесса  ", 
-        field:"technologicalProcess.number"
+        title: "Номер  технологического процесса  ",
+        field: "technologicalProcess.number"
       },
     ],
 
     detals: [
       {
-        title: "Наименование", 
-        field:"product.name"
+        title: "Наименование",
+        field: "product.name"
       },
       {
-        title: "Номер шва", 
-        field:"number"
+        title: "Номер шва",
+        field: "number"
       },
       {
-        title: "Номер детали", 
-        field:"product.number"
+        title: "Номер детали",
+        field: "product.number"
       },
       {
-        title: "Номер узла", 
-        field:"product.productType"
+        title: "Номер узла",
+        field: "product.productType"
       },
       {
-        title: "Номер изделие", 
-        field:"product.number"
+        title: "Номер изделие",
+        field: "product.number"
       },
       {
-        title: "Наименование   технологического процесса  ", 
-        field:"technologicalProcess.name"
+        title: "Наименование   технологического процесса  ",
+        field: "technologicalProcess.name"
       },
       {
-        title: "Номер  технологического процесса  ", 
-        field:"technologicalProcess.number"
+        title: "Номер  технологического процесса  ",
+        field: "technologicalProcess.number"
       },
     ],
 
@@ -327,7 +429,7 @@ export const Tasks = ({
               {`${rowData.ambientTemperature}`}
             </p>
           );
-        }, 
+        },
       },
       {
         title: "Влажность воздуха (%)",
@@ -351,9 +453,9 @@ export const Tasks = ({
       },
     ]
 
-  } 
- 
- 
+  }
+
+
 
 
   const [value_panel, setValue] = useState(0);
@@ -369,8 +471,28 @@ export const Tasks = ({
     );
   };
 
-  ////////////////////////////////////////////////////////////////////
+  const ProdArray = [
+    {
+      id: 1,
+      name: "Изделия"
+    },
+    {
+      id: 2,
+      name: "Узлы"
+    },
+    {
+      id: 3,
+      name: "Детали"
+    },
+  ]
 
+  ////////////////////////////////////////////////////////////////////
+  const optProduction = ProdArray?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
 
   return (
     <div className={styles.innerWrapper}>
@@ -389,9 +511,12 @@ export const Tasks = ({
         aria-label="full width tabs example"
       >
         <Tab label="Сменные задания на сварку " />
-        <Tab label="Сварные швы деталей, узлов и изделий" />
-        <Tab label="Данные об изготовленных изделиях" />
-        <Tab label="Температура окружающей среды" />
+        {/* <Tab label="Сварные швы деталей, узлов и изделий" />
+        <Tab label="Данные об изготовленных изделиях" /> */}
+        {/* <Tab label="Импортированный план" /> */}
+        <Tab label="Ежедневный план" />
+
+        {/* <Tab label="Температура окружающей среды" /> */}
       </Tabs>
 
       <div className={styles.tableWrapper}>
@@ -400,13 +525,13 @@ export const Tasks = ({
         <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{ minWidth: "800px",}} 
+          style={{ minWidth: "800px", }}
         >
           <Table
             title="Сменные задания на сварку"
             columns={columns}
-            data={tasks} 
-            isLoading={isRequesting} 
+            data={tasks}
+            isLoading={isRequesting}
             deleteAction={
               userRole === "admin" || userRole === "master" ? deleteTask : null
             }
@@ -433,7 +558,7 @@ export const Tasks = ({
           />
         </TabPanel>
         {/*Сварные швы деталей, узлов и изделий*/}
-        <TabPanel
+        {/* <TabPanel
           value={value_panel}
           indPanel={1}
           style={{ minWidth: "800px", }}
@@ -467,10 +592,10 @@ export const Tasks = ({
                 : []
             }
           />
-        </TabPanel>
+        </TabPanel> */}
 
         {/*Данные об изготовленных изделиях*/}
-        <TabPanel
+        {/* <TabPanel
           value={value_panel}
           indPanel={2}
           style={{ minWidth: "800px", }}
@@ -504,13 +629,13 @@ export const Tasks = ({
                 : []
             }
           />
-        </TabPanel>
+        </TabPanel> */}
 
 
         {/*Температура окружающей среды*/}
-        <TabPanel
+        {/* <TabPanel
           value={value_panel}
-          indPanel={3}
+          indPanel={5}
           style={{ minWidth: "800px", }}
         >
           <Table
@@ -542,7 +667,174 @@ export const Tasks = ({
                 : []
             }
           />
-        </TabPanel>
+        </TabPanel> */}
+
+        {/*Импортированный план*/}
+        {value_panel === 3
+          ? (
+            <div className={styles.TablePlan}>
+              <h3>Импортированный план</h3>
+            </div>
+          )
+          : (
+            <div className={styles.TableToFixed}>
+
+            </div>
+          )
+        }
+        {/*Ежедневный план*/}
+        {value_panel === 1
+          ? (
+            <div className={styles.TablePlan}>
+              <h3>Ежедневный план</h3>
+
+              <div className={styles.tools}>
+                <Formik
+                  initialValues={initialValues}
+                  enableReinitialize
+                >
+                  {({
+                    handleSubmit,
+                    handleChange,
+                    values,
+                    handleBlur,
+                  }) => (
+                    <form onSubmit={handleSubmit}>  
+                      <p>Дата</p>
+                      <Input
+                        onChange={(e) => {
+                          handleChange(e);
+                          setDate(e.target.value)
+                        }}
+                        width="200"
+                        style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                        value={values.date}
+                        name="date"
+                        placeholder="Дата"
+                        type="text"
+                        onFocus={(e) => {
+                          e.currentTarget.type = "date";
+                        }}
+                        onBlur={handleBlur}
+                      /> 
+                      <br></br>     
+                      <p>Продукция</p>
+                      <Select
+                        name="production"
+                        value={production}
+                        width="380px"
+                        placeholder="Продукция"
+                        onChange={(event) => {
+                          setProduction(event.value);
+                        }}
+                        options={optProduction}
+                      /> 
+                      <button className={styles.create}  > Создать </button>
+                      <br></br>
+                      <br></br>
+                    </form>
+                  )}
+                </Formik>
+              </div>
+
+              {production === 1
+
+                ? (
+                  <TabPanel
+                    style={{ minWidth: "800px" }}
+                  >
+                    <Table
+                      title="Изделия"
+                      columns={columnsWorkplace.goods}
+                      value={0}
+                      data={product}
+                      actions={
+                        userRole === "Admin"
+                          ? [ 
+                            {
+                              icon: "edit",
+                              tooltip: "Редактировать ",
+                              onClick: (event, rowData) => {
+                                
+                              },
+                            },
+                          ]
+                          : []
+                      }
+                    />
+                  </TabPanel>
+                )
+                : <div  >  </div>
+              }
+
+              {production === 2
+
+                ? (
+                  <TabPanel
+                    style={{ minWidth: "800px" }}
+                  >
+                    <Table
+                      title="Узлы"
+                      columns={columnsWorkplace.node}
+                      value={0}
+                      data={knot}
+                      actions={
+                        userRole === "Admin"
+                          ? [ 
+                            {
+                              icon: "edit",
+                              tooltip: "Редактировать ",
+                              onClick: (event, rowData) => {
+                                
+                              },
+                            },
+                          ]
+                          : []
+                      }
+                    />
+                  </TabPanel>
+                )
+                : <div  >  </div>
+              }
+              {production === 3
+
+                ? (
+                  <TabPanel
+                    style={{ minWidth: "800px" }}
+                  >
+                    <Table
+                      title="Детали"
+                      columns={columnsWorkplace.details}
+                      value={0}
+                      data={detail}
+                      actions={
+                        userRole === "Admin"
+                          ? [ 
+                            {
+                              icon: "edit",
+                              tooltip: "Редактировать ",
+                              onClick: (event, rowData) => {
+                                
+                              },
+                            },
+                          ]
+                          : []
+                      }
+                    />
+                  </TabPanel>
+                )
+                : <div  >  </div>
+              }
+
+
+            </div>
+          )
+          : (
+            <div className={styles.TableToFixed}>
+
+            </div>
+          )
+        }
 
 
         <ModalWindow
