@@ -1,0 +1,154 @@
+.tableWrapper {
+  margin-top: 80px; 
+}
+
+p {
+  text-align: left;
+}
+
+.bold {
+  font-family: "Muller Extra Bold";
+}
+
+.innerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px;
+}
+
+.row:first-child {
+  margin-top: 30px;
+}
+
+.row:last-child {
+  margin-bottom: 30px;
+}
+
+.downloadButton {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+
+.downloadButton:hover {
+  opacity: 0.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}  
+.button {
+  cursor: pointer;
+  display: block;
+  font-family: "Muller Extra Bold";
+  margin: 16px 40px 0 auto;
+  height: 36px;
+  width: 240px;
+  background-color: transparent;
+  border: 2px solid gray;
+}
+
+.button:hover {
+  text-decoration: underline;
+}
+
+.column {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+@media (max-width: 1440px) {
+  .tableWrapper {
+    margin-top: 40px; 
+  }
+}
+
+@media (max-width: 767px) {
+  .tableWrapper { 
+    margin-top: 0;
+  }
+}
+
+tr.background{
+  animation-name: Background;
+  animation-duration: 3s;
+}
+
+@keyframes Background {
+  0%{
+    background: white; 
+  }
+  20%{
+    background: whitesmoke; 
+  }
+  40%{
+    background: white; 
+  }
+  60%{
+    background: whitesmoke; 
+  }
+  80%{
+    background: white; 
+  }
+  100%{
+    background: whitesmoke; 
+  }
+}
+
+
+
+
+
+/*TablePlan*/
+.TablePlan{
+  width: calc(100vw - 150px);
+  height: 100%;
+  background-color: white; 
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  margin-bottom: 50px;
+}
+
+.TablePlan h3{
+  padding-top: 30px;
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.0075em;
+  text-align: left;
+  padding-left: 20px;
+}
+.TablePlan .tools{
+  padding-left: 20px;
+}
+.TablePlan .tools p{
+  margin: 10px 15px;
+}
+
+.create{
+  margin: 0px 15px;
+  margin-bottom: 20px;
+  padding: 8px 25px;
+  background-color: transparent;
+  border: 1px solid #dadada;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  outline: none;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+  font-weight: 600;
+  margin-left: calc(100% - 140px);
+}
