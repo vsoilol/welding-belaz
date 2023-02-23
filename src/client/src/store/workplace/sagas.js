@@ -43,9 +43,6 @@ const {
     LOAD_DETAILBYINSPECTOR_REQUEST,
 
     LOAD_WELDINGTASK_REQUEST,  
-
-
-    DELETE_PRODUCT_REQUEST,
  
   },
   Creators: {
@@ -134,9 +131,6 @@ const {
     loadWeldingtaskFailure,
  
 
-    deleteProductSuccess,
-    deleteProductFailure,
-
  
   },
 } = workplaceActions;
@@ -160,7 +154,7 @@ function* addWorkshop(variables) {
       "name": variables.payload.name,
       "number": variables.payload.number
     });
-    yield call(loadWorkshop);
+    // window.location.reload() 
     yield put(addWorkshopSuccess(data));
   } catch (error) {
     yield put(addWorkshopFailure(error));
@@ -174,7 +168,7 @@ function* editWorkshop(variables) {
       "name": variables.payload.name,
       "number": variables.payload.number
     });
-    yield call(loadWorkshop);
+    // window.location.reload() 
     yield put(editWorkshopSuccess(variables.payload));
   } catch (error) {
     yield put(editWorkshopFailure(error));
@@ -198,7 +192,6 @@ function* addArea(variables) {
       "number": variables.payload.number,
       "workshopId": variables.payload.workshopId
     });
-    yield call(loadArea);
     yield put(addAreaSuccess(data));
   } catch (error) {
     yield put(addAreaFailure(error));
@@ -213,7 +206,6 @@ function* editArea(variables) {
       "number": variables.payload.number,
       "workshopId": variables.payload.workshopId
     });
-    yield call(loadArea);
     yield put(editAreaSuccess(variables.payload));
   } catch (error) {
     yield put(editAreaFailure(error));
@@ -239,7 +231,6 @@ function* addPosts(variables) {
         "productionAreaId": variables.payload.productionAreaId
       }
     );
-    yield call(loadPosts);
     yield put(addPostsSuccess(data));
   } catch (error) {
     yield put(addPostsFailure(error));
@@ -254,7 +245,6 @@ function* editPosts(variables) {
       "name": variables.payload.name,
       "productionAreaId": variables.payload.productionAreaId
     });
-    yield call(loadPosts);
     yield put(editPostsSuccess(data));
   } catch (error) {
     yield put(editPostsFailure(error));
@@ -280,7 +270,6 @@ function* addWorkplace(variables) {
         "productionAreaId": variables.payload.productionAreaId
       }
     );
-    yield call(loadWorkplace);
     yield put(addWorkplaceSuccess(data));
   } catch (error) {
     yield put(addWorkplaceFailure(error));
@@ -295,7 +284,6 @@ function* editWorkplace(variables) {
       "postId": variables.payload.postId,
       "productionAreaId": variables.payload.productionAreaId
     });
-    yield call(loadWorkplace);
     yield put(editWorkplaceSuccess(variables.payload));
   } catch (error) {
     yield put(editWorkplaceFailure(error));
@@ -346,7 +334,7 @@ function* addProduct(variables) {
       if (variables.payload.valEx === undefined) {
         const { data } = yield call(api.post, `/product`, {
           "name": variables.payload.name,
-          "number": `${variables.payload.number}`,
+          "number": variables.payload.number,
           "isControlSubject": true,
           "productionAreaId": variables.payload.productionAreaId,
           "workplaceId": variables.payload.workplaceId,
@@ -354,7 +342,6 @@ function* addProduct(variables) {
           "seams":variables.payload.seams,
         });
         yield put(addProductSuccess(data));
-        yield call(loadProduct);
       }
     }
 
@@ -375,14 +362,14 @@ function* editProduct(variables) {
     const { data } = yield call(api.put, `/product`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": `${variables.payload.number}`,
+      "number": variables.payload.number,
       "isControlSubject": true,
       "productionAreaId": variables.payload.productionAreaId,
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId,
       "seams":variables.payload.seams,
     });
-    yield call(loadProduct);
+    // window.location.reload()
     yield put(editProductSuccess(data));
   } catch (error) {
     yield put(editProductFailure(error));
@@ -428,16 +415,15 @@ function* addKnot(variables) {
       }
   
       if (variables.payload.valEx === undefined) {
-        const { data } = yield call(api.post, `/knot`, { 
-
+        const { data } = yield call(api.post, `/knot`, {
           "name": variables.payload.name,
-          "number": `${variables.payload.number}`,
+          "number": variables.payload.number,
           "isControlSubject": false,
-          "productionAreaId": variables.payload.productionAreaId,  
+          "productionAreaId": variables.payload.productionAreaId,
+          "workplaceId": variables.payload.workplaceId,
+          "seams":variables.payload.seams,
           "technologicalProcessId": variables.payload.technologicalProcessId,
-          "mainProductId": variables.payload.mainProductId
         });
-        yield call(loadKnot);
         yield put(addKnotSuccess(data));
       }
     } 
@@ -460,13 +446,13 @@ function* editKnot(variables) {
     const { data } = yield call(api.put, `/knot`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": `${variables.payload.number}`,
+      "number": variables.payload.number,
       "isControlSubject": false,
-      "productionAreaId": variables.payload.productionAreaId,  
+      "productionAreaId": variables.payload.productionAreaId,
       "technologicalProcessId": variables.payload.technologicalProcessId,
-      "mainProductId": variables.payload.mainProductId
+      "workplaceId": variables.payload.workplaceId,
+      "seams":variables.payload.seams,
     });
-    yield call(loadKnot);
     yield put(editKnotSuccess(data));
   } catch (error) {
     yield put(editKnotFailure(error));
@@ -506,13 +492,13 @@ function* addDetail(variables) {
        
         const { data } = yield call(api.post, `/detail`, {
           "name": variables.payload.name,
-          "number": `${variables.payload.number}`,
+          "number": variables.payload.number,
           "isControlSubject": true,
-          "productionAreaId": variables.payload.productionAreaId, 
-          "technologicalProcessId": variables.payload.technologicalProcessId,  
-          "mainProductId": variables.payload.mainProductId,  
+          "productionAreaId": variables.payload.productionAreaId,
+          "workplaceId": variables.payload.workplaceId,
+          "technologicalProcessId": variables.payload.technologicalProcessId,
+          "seams":variables.payload.seams,
         });
-        yield call(loadDetail);
         yield put(addDetailSuccess(data));
       }
     } 
@@ -535,15 +521,14 @@ function* editDetail(variables) {
     const { data } = yield call(api.put, `/detail`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": `${variables.payload.number}`, 
+      "number": variables.payload.number,
+      "seams":variables.payload.seams,
       "isControlSubject": true,
       "productionAreaId": variables.payload.productionAreaId,
       "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId, 
-      "mainProductId": variables.payload.mainProductId,  
+      "technologicalProcessId": variables.payload.technologicalProcessId,
     });
     yield put(editDetailSuccess(data));
-    yield call(loadDetail);
   } catch (error) {
     yield put(editDetailFailure(error));
     yield put(setError(error.message));
@@ -562,7 +547,8 @@ function* loadSeam() {
   }
 }
 function* addSeam(variables) {
-  try { 
+  try {
+    console.log(variables.payload)
     if (variables.payload.valEx === 1) {
       const { data } = yield call(api.put, `/seam/assignWelder`, {
         "seamId": variables.payload.seamId,
@@ -576,17 +562,13 @@ function* addSeam(variables) {
       });
     }
 
-    if (variables.payload.valEx === undefined) { 
+    if (variables.payload.valEx === undefined) {
       const { data } = yield call(api.post, `/seam`, {
         "number": variables.payload.number,
         "isControlSubject": true,
-        "isPerformed": true,
-        "length": 0,
         "productionAreaId": variables.payload.productionAreaId,
-        "technologicalInstructionId": variables.payload.technologicalProcessId,
-        "productId": variables.payload.productId, 
+        "workplaceId": variables.payload.workplaceId,
       });
-      yield call(loadSeam);
       yield put(addSeamSuccess(data));
     }
     
@@ -596,47 +578,21 @@ function* addSeam(variables) {
   }
 }
 function* editSeam(variables) {
-  try { 
-    const { data } = yield call(api.put, `/seam`, { 
+  try {
+    console.log(variables)
+    const { data } = yield call(api.put, `/seam`, {
       "id": variables.payload.id,
       "number": variables.payload.number,
       "isControlSubject": true,
-      "isPerformed": true,
-      "length": 0,
       "productionAreaId": variables.payload.productionAreaId,
-      "technologicalInstructionId": variables.payload.technologicalProcessId,
-      "productId": variables.payload.productId 
+      "workplaceId": variables.payload.workplaceId,
     });
     yield put(editSeamSuccess(data));
-    yield call(loadSeam);
   } catch (error) {
     yield put(editSeamFailure(error));
     yield put(setError(error.message));
   }
-}  
-
-const deleteEndpoints = {
-  0: { endpoint: '/Workshop', loadFunction: loadWorkshop },
-  1: { endpoint: '/ProductionArea', loadFunction: loadArea },
-  2: { endpoint: '/post', loadFunction: loadPosts },
-  3: { endpoint: '/Workplace', loadFunction: loadWorkplace },
-  4: { endpoint: '/product', loadFunction: loadProduct },
-  5: { endpoint: '/knot', loadFunction: loadKnot },
-  6: { endpoint: '/detail', loadFunction: loadDetail },
-  7: { endpoint: '/seam', loadFunction: loadSeam },
-};
-
-function* deleteProduct({ payload }) {
-  try {
-    const { endpoint, loadFunction } = deleteEndpoints[payload.index];
-    const { data } = yield call(api.remove, `${endpoint}/${payload.id}`);
-    yield put(deleteProductSuccess(data));
-    yield call(loadFunction);
-  } catch (error) {
-    yield put(deleteProductFailure(error));
-    yield put(setError(error.message));
-  }
-}
+} 
 
 
 export function* workplaceSaga() {
@@ -679,7 +635,5 @@ export function* workplaceSaga() {
 
    ///Технологические процессы  
    yield takeLatest(LOAD_WELDINGTASK_REQUEST, loadWeldingTask);
- 
-   yield takeLatest(DELETE_PRODUCT_REQUEST, deleteProduct);
 }
 

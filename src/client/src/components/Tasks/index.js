@@ -13,14 +13,9 @@ import styles from "./styles.module.css";
 import errorActions from "store/error/actions";
 import { useDispatch } from "react-redux";
 
-import { DailyPlan } from "./DailyPlan";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { array } from "yup";
-
-
-import deleteIcon from "assets/icons/delete.png";
 
 const {
   Creators: { setError },
@@ -41,14 +36,13 @@ export const Tasks = ({
   deleteTask,
   editTask,
   loadTechs,
-  // loadInstructions,
+  loadInstructions,
   techs,
   isRequesting,
   instructions,
   loadMasters,
   masters,
   userRole,
-  equipment,
 
 
   loadSeam,
@@ -58,17 +52,10 @@ export const Tasks = ({
   loadProduct,
   loadKnot,
   loadDetail,
-  loadExecutors,
 
   product,
   knot,
   detail,
-  executors,
-
-  user,
-
-  loadTasktools,
-  loadEquipment
 
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,16 +63,9 @@ export const Tasks = ({
   const dispatch = useDispatch();
 
 
-
+  const [date, setDate] = useState("");
   const [production, setProduction] = useState(1);
 
-  const [welderValue, setwelderValue] = useState("");
-
-
-  ////Массивы продукции
-  const [productArray, setproductArray] = useState([]);
-
-  const [valueAreaId, setvalueAreaId] = useState(null);
 
 
   const formattedMasters = masters?.map((item) => {
@@ -106,8 +86,8 @@ export const Tasks = ({
     masterId: modalData?.master?.masterId ?? "",
     instructionId: modalData?.instruction.id ?? "",
     id: modalData?.id ?? "",
-    date: modalData?.weldingDate ?? "",
   };
+
 
 
   const requiredKeys = [
@@ -121,32 +101,23 @@ export const Tasks = ({
     "instructionId",
   ];
 
-
   useEffect(() => {
     loadTasks();
     loadTechs();
-    loadExecutors();
     loadMasters();
-
+    // loadInstructions();
+    // loadInfo();
     loadSeam();
-    loadEquipment();
 
     loadProduct();
     loadKnot();
     loadDetail();
-  }, [
-    loadMasters,
-    loadTasks,
-    loadTechs,
-    loadProduct,
-    loadExecutors,
+  }, [//loadInstructions,
+    loadMasters, loadTasks, loadTechs, loadProduct,
     loadKnot,
     loadDetail,
-    loadEquipment,
+    //loadInfo,
     loadSeam]);
-
-
-
 
   const formattedTechs = techs?.map((item) => {
     return {
@@ -161,282 +132,102 @@ export const Tasks = ({
       label: item?.otkName,
     };
   });
-  const getDocument = (numberTask) => {
-    const number = combinedArray?.find(task => task.number === numberTask).id;
-    api.get(`/file/seamPassport/${number}`, {
-      responseType: "arraybuffer",
-      dataType: "blob",
-    })
+
+  const getDocument = (activeId) => {
+    api
+      .get(`/reports/passportReport/${activeId}`, {
+        responseType: "arraybuffer",
+        dataType: "blob",
+      })
       .then((response) => {
         const file = new Blob([response["data"]], {
           type: "application/pdf",
         });
+
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
       })
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
 
-
-  const combinedArray = tasks?.tasks?.concat(tasks.fullNames)
-    .sort((a, b) => new Date(a.weldingDate
-      .split('.')
-      .reverse()
-      .join('-')) - new Date(b.weldingDate.split('.').reverse().join('-'))).reverse();
-
-
-  function comparisonDate(weldingDate) {
-    const targetDate = new Date(weldingDate)
-    const now = new Date();
-
-    if (now <= targetDate) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   const columns = [
     {
-      title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true);
-          setidPlan(rowData?.id)
-        }}></img>
-      }
-    },
-    {
       title: "№ задания»", field: "number",
     },
     {
-      title: "Номер шва", field: "seam.number",
-    },
-    {
-      title: "Количество швов", field: "manufacturedAmount",
-    },
-    {
-      title: "Дата ", field: "weldingDate",
-    },
-    {
-      title: "Статус",
-      field: "status",
+      title: "Исполнитель",
+      field: "masterId",
       render: (rowData) => {
-        if (rowData?.status === 3) {
-          return <p className={styles.Done}>Завершено</p>;
-        } else {
-          return <p className={styles.InProcess}>В процессе</p>;
-        }
-      },
-      customFilterAndSearch: (term, rowData) => {
-        const statusString =
-          rowData?.status === 3 ? "Завершено" : "В процессе";
-        return statusString.toLowerCase().includes(term.toLowerCase());
-      },
-    },
-    {
-      title: "Наименование изделия",
-      field: "seam.product.name",
-      customFilterAndSearch: (term, rowData) => {
-        return rowData?.seam?.product?.name?.toLowerCase().includes(term.toLowerCase()) ||
-          rowData?.seam?.product?.number?.toLowerCase().includes(term.toLowerCase())
-      },
-      render: (rowData) => {
-        if (rowData?.seam?.product) {
-          return <p>{rowData.seam.product.name} {rowData.seam.product.number}</p>
-        } else {
-          return <p>-</p>
-        }
-      }
-    },
-    {
-      title: "Наименование узла",
-      field: "seam.knot.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.knot ?
-        <p>{`${rowData.seam.knot.name} ${rowData.seam.knot.number}`}</p> :
-        <p>-</p>
-    },
-    {
-      title: "Наименование детали",
-      field: "seam.detail.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.detail ?
-        <p>{`${rowData.seam.detail.name} ${rowData.seam.detail.number}`}</p> :
-        <p>-</p>
-    },
-    {
-      title: "Оборудование  ( инвентарный номер )",
-      field: "weldingEquipments.factoryNumber",
-      customFilterAndSearch: (term, rowData) => rowData?.weldingEquipments?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => {
-        if (rowData?.weldingEquipments) {
+        if (rowData?.welder != null) {
           return (
-            <ul>
-              {rowData.weldingEquipments.map(equipment => (
-                <li key={equipment.factoryNumber}>
-                  {`${equipment.name} ${equipment.factoryNumber}`}
-                </li>
-              ))}
-            </ul>
+            <p>{`
+              ${rowData?.welder?.middleName} 
+              ${rowData?.welder?.firstName} 
+              ${rowData?.welder?.lastName}
+              `}
+            </p>
           );
-        } else {
-          return <p>-</p>
         }
-      }
-    },
-    {
-      title: "Исполнитель",
-      field: "welder",
-      customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.welder?.middleName} ${rowData?.welder?.firstName} ${rowData?.welder?.lastName}`.toLowerCase();
-        return fullName.includes(term.toLowerCase());
+        else {
+          return (
+            <p>{`  -   `}
+            </p>
+          );
+        }
+
       },
-      render: (rowData) => rowData?.welder ?
-        <p>{`${rowData.welder.middleName} ${rowData.welder.firstName} ${rowData.welder.lastName}`}</p> :
-        <p>-</p>
     },
     {
       title: "Руководитель сварочных работ",
-      field: "master",
-      customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.master?.middleName} ${rowData?.master?.firstName} ${rowData?.master?.lastName}`.toLowerCase();
-        return fullName.includes(term.toLowerCase());
+      field: "masterId",
+      render: (rowData) => {
+        if (rowData?.master == null) {
+          return (
+            <p>{`-`}
+            </p>
+          );
+        }
+        else {
+          return (
+            <p>{`
+              ${rowData?.master?.middleName} 
+              ${rowData?.master?.firstName} 
+              ${rowData?.master?.lastName}
+              `}
+            </p>
+          );
+        }
+
       },
-      render: (rowData) => rowData?.master ?
-        <p>{`${rowData.master.middleName} ${rowData.master.firstName} ${rowData.master.lastName}`}</p> :
-        <p>-</p>
     },
     {
       title: "Контролер",
-      field: "inspector",
-      customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.inspector?.middleName} ${rowData?.inspector?.firstName} ${rowData?.inspector?.lastName}`.toLowerCase();
-        return fullName.includes(term.toLowerCase());
+      field: "masterId",
+      render: (rowData) => {
+        if (rowData?.inspector != null) {
+          return (
+            <p>{`
+              ${rowData?.inspector?.middleName} 
+              ${rowData?.inspector?.firstName} 
+              ${rowData?.inspector?.lastName}
+              `}
+            </p>
+          );
+        }
+        else {
+          return (
+            <p>{`  -   `}
+            </p>
+          );
+        }
       },
-      render: (rowData) => rowData?.inspector ?
-        <p>{`${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}`}</p> :
-        <p>-</p>
     },
     {
       field: "url",
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => getDocument(rowData?.number)}
-          className={styles.downloadButton}
-        >
-          <SaveIcon />
-        </div>
-      ),
-      width: 54,
-    },
-  ];
-  const columnsWelder = [
-    {
-      title: "№ задания»", field: "number",
-    },
-    {
-      title: "Номер шва", field: "seam.number",
-    },
-    {
-      title: "Количество швов", field: "manufacturedAmount",
-    },
-    {
-      title: "Дата ", field: "weldingDate",
-    },
-    {
-      title: "Статус",
-      field: "status",
-      render: (rowData) => {
-        if (rowData?.status === 3) {
-          return <p className={styles.Done}>Завершено</p>;
-        } else {
-          return <p className={styles.InProcess}>В процессе</p>;
-        }
-      },
-      customFilterAndSearch: (term, rowData) => {
-        const statusString =
-          rowData?.status === 3 ? "Завершено" : "В процессе";
-        return statusString.toLowerCase().includes(term.toLowerCase());
-      },
-    },
-    {
-      title: "Наименование изделия",
-      field: "seam.product.name",
-      customFilterAndSearch: (term, rowData) => {
-        return rowData?.seam?.product?.name?.toLowerCase().includes(term.toLowerCase()) ||
-          rowData?.seam?.product?.number?.toLowerCase().includes(term.toLowerCase())
-      },
-      render: (rowData) => {
-        if (rowData?.seam?.product) {
-          return <p>{rowData.seam.product.name} {rowData.seam.product.number}</p>
-        } else {
-          return <p>-</p>
-        }
-      }
-    },
-    {
-      title: "Наименование узла",
-      field: "seam.knot.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.knot ?
-        <p>{`${rowData.seam.knot.name} ${rowData.seam.knot.number}`}</p> :
-        <p>-</p>
-    },
-    {
-      title: "Наименование детали",
-      field: "seam.detail.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.detail ?
-        <p>{`${rowData.seam.detail.name} ${rowData.seam.detail.number}`}</p> :
-        <p>-</p>
-    },
-    {
-      title: "Оборудование  ( инвентарный номер )",
-      field: "weldingEquipment.factoryNumber",
-      customFilterAndSearch: (term, rowData) => rowData?.weldingEquipment?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.weldingEquipment?.factoryNumber ?? "-"
-    },
-    {
-      title: "Исполнитель",
-      field: "welder",
-      customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.welder?.middleName} ${rowData?.welder?.firstName} ${rowData?.welder?.lastName}`.toLowerCase();
-        return fullName.includes(term.toLowerCase());
-      },
-      render: (rowData) => rowData?.welder ?
-        <p>{`${rowData.welder.middleName} ${rowData.welder.firstName} ${rowData.welder.lastName}`}</p> :
-        <p>-</p>
-    },
-    {
-      title: "Руководитель сварочных работ",
-      field: "master",
-      customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.master?.middleName} ${rowData?.master?.firstName} ${rowData?.master?.lastName}`.toLowerCase();
-        return fullName.includes(term.toLowerCase());
-      },
-      render: (rowData) => rowData?.master ?
-        <p>{`${rowData.master.middleName} ${rowData.master.firstName} ${rowData.master.lastName}`}</p> :
-        <p>-</p>
-    },
-    {
-      title: "Контролер",
-      field: "inspector",
-      customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.inspector?.middleName} ${rowData?.inspector?.firstName} ${rowData?.inspector?.lastName}`.toLowerCase();
-        return fullName.includes(term.toLowerCase());
-      },
-      render: (rowData) => rowData?.inspector ?
-        <p>{`${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}`}</p> :
-        <p>-</p>
-    },
-    {
-      field: "url",
-      title: "Скачать паспорт",
-      render: (rowData) => (
-        <div
-          onClick={() => getDocument(rowData?.number)}
+          onClick={() => getDocument(rowData?.id)}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -446,6 +237,223 @@ export const Tasks = ({
     },
   ];
 
+  const renderRowChildren = (rowData) => {
+    return (
+      <div className={styles.column}>
+        <p className={styles.bold}>Общая информация</p>
+        <p>Номер задания: {rowData?.taskId}</p>
+        <p>
+          Операционная технологическая карта:{" "}
+          <a
+            // className={styles.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            href={rowData?.instruction?.link}
+          >
+            {rowData?.instruction?.name ?? "---"}
+          </a>
+        </p>
+        <p>
+          Технический надзор:{" "}
+          {rowData?.technicalController?.userData?.surname ?? "---"}
+        </p>
+        <div>
+          <p className={styles.bold}>Материалы</p>
+          <div>
+            <p>
+              Основной материал/номер партии:{" "}
+              {rowData?.generalMaterial ?? "---"}
+            </p>
+            <p>
+              Сварочные электроды/номер партии:{" "}
+              {rowData?.weldingElectrodes ?? "---"}
+            </p>
+            <p>
+              Сварочная проволока/номер партии: {rowData?.weldingWire ?? "---"}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+
+
+  const columnsWorkplace = {
+    goods: [
+      {
+        title: "Наименование изделия ", field: "name"
+      },
+      {
+        title: "Номер  изделия ", field: "number"
+      },
+      {
+        title: "Количество ", field: "number"
+      },
+      
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+
+    ],
+    node: [
+      {
+        title: "Наименование узла ", field: "name"
+      },
+      {
+        title: "Номер  узла ", field: "number"
+      },
+      {
+        title: "Количество ", field: "number"
+      },
+       
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+
+
+    ],
+    details: [
+      {
+        title: "Наименование детали ", field: "name"
+      },
+      {
+        title: "Номер  детали ", field: "number"
+      },
+      {
+        title: "Количество ", field: "number"
+      }, 
+      {
+        title: "Номер  производственного участка ", field: "productionArea.number"
+      },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      },
+      
+
+    ],
+
+  };
+
+  ////////////////////////////////////////////////////////////////////
+  const columns_data = {
+
+    seam: [
+      {
+        title: "Номер шва",
+        field: "number"
+      },
+      {
+        title: "Номер детали",
+        field: "product.number"
+      },
+      {
+        title: "Номер узла",
+        field: "product.productType"
+      },
+      {
+        title: "Номер изделие",
+        field: "product.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ",
+        field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ",
+        field: "technologicalProcess.number"
+      },
+    ],
+
+    detals: [
+      {
+        title: "Наименование",
+        field: "product.name"
+      },
+      {
+        title: "Номер шва",
+        field: "number"
+      },
+      {
+        title: "Номер детали",
+        field: "product.number"
+      },
+      {
+        title: "Номер узла",
+        field: "product.productType"
+      },
+      {
+        title: "Номер изделие",
+        field: "product.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ",
+        field: "technologicalProcess.name"
+      },
+      {
+        title: "Номер  технологического процесса  ",
+        field: "technologicalProcess.number"
+      },
+    ],
+
+    temperatura: [
+      {
+        title: "Температура окружающей среды (°C)",
+        render: (rowData) => {
+          return (
+            <p>
+              {`${rowData.ambientTemperature}`}
+            </p>
+          );
+        },
+      },
+      {
+        title: "Влажность воздуха (%)",
+        field: "airHumidity",
+      },
+      {
+        title: "Межслойная температура (°C)",
+        field: "interlayerTemperature",
+      },
+      {
+        title: "Номер текущего слоя",
+        field: "currentLayerNumber",
+      },
+      {
+        title: "Температура предварительного нагрева (°C)",
+        field: "preheatingTemperature",
+      },
+      {
+        title: "Усредненные значения сварочного тока и напряжения на дуге",
+        field: "arcVoltageValues[0]",
+      },
+    ]
+
+  }
 
 
 
@@ -462,88 +470,30 @@ export const Tasks = ({
       </div>
     );
   };
-  const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
-  const [AmountManufactured, setAmountManufactured] = useState(0);
-  const [idPlan, setidPlan] = useState("");
-  const [valChioseMaster, setvalChioseMaster] = useState(masters[0]?.id);
 
+  const ProdArray = [
+    {
+      id: 1,
+      name: "Изделия"
+    },
+    {
+      id: 2,
+      name: "Узлы"
+    },
+    {
+      id: 3,
+      name: "Детали"
+    },
+  ]
 
+  ////////////////////////////////////////////////////////////////////
+  const optProduction = ProdArray?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
 
-  function ChangeManufacturedDefective(AmountManufactured, variables) {
-    const promises = [];
-    // Редактирование даты задания
-    const datePromise = api.put(`/WeldingTask/changeDate`, {
-      "id": idPlan,
-      "date": new Date(variables.date).toLocaleDateString('ru-RU')
-    })
-      .then((response) => {
-        loadTasks();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    promises.push(datePromise);
-    // Редактирование количества швов 
-    const seamAmountPromise = api.put(`/WeldingTask/changeSeamAmount`, {
-      "id": idPlan,
-      "seamAmount": AmountManufactured
-    })
-      .then((response) => {
-        loadTasks();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    promises.push(seamAmountPromise);
-    // Редактирование статуса
-    const statusPromise = isChecked1
-      ? api.put(`/WeldingTask/changeStatus`, { "id": idPlan, "status": 3 })
-        .then((response) => {
-          loadTasks();
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-      : api.put(`/WeldingTask/changeStatus`, { "id": idPlan, "status": 1 })
-        .then((response) => {
-          loadTasks();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    promises.push(statusPromise);
-    Promise.all(promises)
-      .then(() => {
-        console.log('All requests have been completed.');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
-
-  const [isChecked1, setIsChecked1] = useState(false);
-  const [isChecked2, setIsChecked2] = useState(false);
-  const [dateTask, setdateTask] = useState("");
-
-  const handleCheckboxChange = (checkboxIndex) => {
-    if (checkboxIndex === 1) {
-      setIsChecked1(true);
-      setIsChecked2(false);
-    } else if (checkboxIndex === 2) {
-      setIsChecked1(false);
-      setIsChecked2(true);
-    }
-  };
-
-
-  const [deleteTaskModal, setdeleteTaskModal] = useState(false);
-
-  function deleteTaskAjax() {
-    api.remove(`/WeldingTask/${idPlan}`)
-      .then((response) => { loadTasks() })
-      .catch((error) => { });
-  }
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -551,6 +501,7 @@ export const Tasks = ({
         toolTipText="Здесь Вы можете назначить задания на сварку, посмотреть паспорт сварного стыка"
         src={tasksImage}
       />
+
 
       <Tabs
         value={value_panel}
@@ -560,7 +511,12 @@ export const Tasks = ({
         aria-label="full width tabs example"
       >
         <Tab label="Сменные задания на сварку " />
+        {/* <Tab label="Сварные швы деталей, узлов и изделий" />
+        <Tab label="Данные об изготовленных изделиях" /> */}
+        {/* <Tab label="Импортированный план" /> */}
         <Tab label="Ежедневный план" />
+
+        {/* <Tab label="Температура окружающей среды" /> */}
       </Tabs>
 
       <div className={styles.tableWrapper}>
@@ -569,32 +525,31 @@ export const Tasks = ({
         <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{ minWidth: "1200px", }}
+          style={{ minWidth: "800px", }}
         >
           <Table
             title="Сменные задания на сварку"
-            columns={userRole === "Admin" || userRole === "Master" ? columns : columnsWelder}
-            data={combinedArray}
+            columns={columns}
+            data={tasks}
             isLoading={isRequesting}
+            deleteAction={
+              userRole === "admin" || userRole === "master" ? deleteTask : null
+            }
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "admin" || userRole === "master"
                 ? [
                   {
+                    icon: "add",
+                    tooltip: "Создать задачу",
+                    isFreeAction: true,
+                    onClick: () => setIsModalOpen(true),
+                  },
+                  {
                     icon: "edit",
-                    tooltip: "Редактировать ",
+                    tooltip: "Редактировать задачу",
                     onClick: (event, rowData) => {
-                      setAmountManufactured(rowData?.manufacturedAmount)
-                      setidPlan(rowData?.id)
-                      setmodalchangeInfoproductAccount(true)
-                      if (rowData?.status === 3) {
-                        setIsChecked1(true)
-                        setIsChecked2(false)
-                      }
-                      else {
-                        setIsChecked1(false)
-                        setIsChecked2(true)
-                      }
-                      setdateTask(rowData?.weldingDate.split(".").reverse().join("-"))
+                      setModalData(rowData);
+                      setIsModalOpen(true);
                     },
                   },
                 ]
@@ -602,23 +557,277 @@ export const Tasks = ({
             }
           />
         </TabPanel>
+        {/*Сварные швы деталей, узлов и изделий*/}
+        {/* <TabPanel
+          value={value_panel}
+          indPanel={1}
+          style={{ minWidth: "800px", }}
+        >
+          <Table
+            title="Сварные швы деталей, узлов и изделий"
+            columns={columns_data.seam}
+            data={seam}
+            isLoading={isRequesting}
+            deleteAction={
+              userRole === "admin" || userRole === "master" ? deleteTask : null
+            }
+            actions={
+              userRole === "admin" || userRole === "master"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Создать задачу",
+                    isFreeAction: true,
+                    onClick: () => setIsModalOpen(true),
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать задачу",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                    },
+                  },
+                ]
+                : []
+            }
+          />
+        </TabPanel> */}
 
+        {/*Данные об изготовленных изделиях*/}
+        {/* <TabPanel
+          value={value_panel}
+          indPanel={2}
+          style={{ minWidth: "800px", }}
+        >
+          <Table
+            title="Данные об изготовленных изделиях"
+            columns={columns_data.detals} 
+            data={seam}
+            isLoading={isRequesting}
+            deleteAction={
+              userRole === "admin" || userRole === "master" ? deleteTask : null
+            }
+            actions={
+              userRole === "admin" || userRole === "master"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Создать задачу",
+                    isFreeAction: true,
+                    onClick: () => setIsModalOpen(true),
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать задачу",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                    },
+                  },
+                ]
+                : []
+            }
+          />
+        </TabPanel> */}
+
+
+        {/*Температура окружающей среды*/}
+        {/* <TabPanel
+          value={value_panel}
+          indPanel={5}
+          style={{ minWidth: "800px", }}
+        >
+          <Table
+            title="Температура окружающей среды"
+            columns={columns_data.temperatura}
+            data={info}
+            isLoading={isRequesting}
+            deleteAction={
+              userRole === "admin" || userRole === "master" ? deleteTask : null
+            }
+            actions={
+              userRole === "admin" || userRole === "master"
+                ? [
+                  {
+                    icon: "add",
+                    tooltip: "Создать задачу",
+                    isFreeAction: true,
+                    onClick: () => setIsModalOpen(true),
+                  },
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать задачу",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                    },
+                  },
+                ]
+                : []
+            }
+          />
+        </TabPanel> */}
+
+        {/*Импортированный план*/}
+        {value_panel === 3
+          ? (
+            <div className={styles.TablePlan}>
+              <h3>Импортированный план</h3>
+            </div>
+          )
+          : (
+            <div className={styles.TableToFixed}>
+
+            </div>
+          )
+        }
         {/*Ежедневный план*/}
         {value_panel === 1
           ? (
-            <DailyPlan
-              masters={masters}
-              product={product}
-              knot={knot}
-              detail={detail}
-              executors={executors}
-              initialValues={initialValues}
-              user={user}
-              equipment={equipment}
-              userRole={userRole}
-              techs={techs}
-              loadTasks={loadTasks}
-            />
+            <div className={styles.TablePlan}>
+              <h3>Ежедневный план</h3>
+
+              <div className={styles.tools}>
+                <Formik
+                  initialValues={initialValues}
+                  enableReinitialize
+                >
+                  {({
+                    handleSubmit,
+                    handleChange,
+                    values,
+                    handleBlur,
+                  }) => (
+                    <form onSubmit={handleSubmit}>  
+                      <p>Дата</p>
+                      <Input
+                        onChange={(e) => {
+                          handleChange(e);
+                          setDate(e.target.value)
+                        }}
+                        width="200"
+                        style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                        value={values.date}
+                        name="date"
+                        placeholder="Дата"
+                        type="text"
+                        onFocus={(e) => {
+                          e.currentTarget.type = "date";
+                        }}
+                        onBlur={handleBlur}
+                      /> 
+                      <br></br>     
+                      <p>Продукция</p>
+                      <Select
+                        name="production"
+                        value={production}
+                        width="380px"
+                        placeholder="Продукция"
+                        onChange={(event) => {
+                          setProduction(event.value);
+                        }}
+                        options={optProduction}
+                      /> 
+                      <button className={styles.create}  > Создать </button>
+                      <br></br>
+                      <br></br>
+                    </form>
+                  )}
+                </Formik>
+              </div>
+
+              {production === 1
+
+                ? (
+                  <TabPanel
+                    style={{ minWidth: "800px" }}
+                  >
+                    <Table
+                      title="Изделия"
+                      columns={columnsWorkplace.goods}
+                      value={0}
+                      data={product}
+                      actions={
+                        userRole === "Admin"
+                          ? [ 
+                            {
+                              icon: "edit",
+                              tooltip: "Редактировать ",
+                              onClick: (event, rowData) => {
+                                
+                              },
+                            },
+                          ]
+                          : []
+                      }
+                    />
+                  </TabPanel>
+                )
+                : <div  >  </div>
+              }
+
+              {production === 2
+
+                ? (
+                  <TabPanel
+                    style={{ minWidth: "800px" }}
+                  >
+                    <Table
+                      title="Узлы"
+                      columns={columnsWorkplace.node}
+                      value={0}
+                      data={knot}
+                      actions={
+                        userRole === "Admin"
+                          ? [ 
+                            {
+                              icon: "edit",
+                              tooltip: "Редактировать ",
+                              onClick: (event, rowData) => {
+                                
+                              },
+                            },
+                          ]
+                          : []
+                      }
+                    />
+                  </TabPanel>
+                )
+                : <div  >  </div>
+              }
+              {production === 3
+
+                ? (
+                  <TabPanel
+                    style={{ minWidth: "800px" }}
+                  >
+                    <Table
+                      title="Детали"
+                      columns={columnsWorkplace.details}
+                      value={0}
+                      data={detail}
+                      actions={
+                        userRole === "Admin"
+                          ? [ 
+                            {
+                              icon: "edit",
+                              tooltip: "Редактировать ",
+                              onClick: (event, rowData) => {
+                                
+                              },
+                            },
+                          ]
+                          : []
+                      }
+                    />
+                  </TabPanel>
+                )
+                : <div  >  </div>
+              }
+
+
+            </div>
           )
           : (
             <div className={styles.TableToFixed}>
@@ -627,12 +836,13 @@ export const Tasks = ({
           )
         }
 
-        {/*Ввод выработки и брака*/}
+
         <ModalWindow
-          isOpen={modalchangeInfoproductAccount}
-          headerText="Редактировать"
+          isOpen={isModalOpen}
+          headerText={modalData ? "Редактировать задание" : "Добавить задание"}
           setIsOpen={(state) => {
-            setmodalchangeInfoproductAccount(false)
+            setIsModalOpen(state);
+            setModalData(null);
           }}
           wrapperStyles={{ width: 420 }}
         >
@@ -641,8 +851,11 @@ export const Tasks = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              setmodalchangeInfoproductAccount(false)
-              ChangeManufacturedDefective(AmountManufactured, variables)
+              modalData
+                ? editTask({ ...variables })
+                : addTask({ ...dataToSend });
+              setIsModalOpen(false);
+              setModalData(null);
             }}
           >
             {({
@@ -653,121 +866,116 @@ export const Tasks = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-
-                <div>
-                  <p style={{ padding: "15px 20px 0 30px" }}>Изменение количества продукции из плана  </p>
-                  <div className={styles.row}>
-                    <Input
-                      onChange={(e) => {
-                        handleChange(e);
-                        setAmountManufactured(e.target.value)
-                      }}
-                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                      value={AmountManufactured}
-                      name="AmountManufactured"
-                      placeholder="количества продукции из плана"
-                      onBlur={handleBlur}
-                      autocomplete="off"
-                    />
-                  </div>
-
-                  <p style={{ padding: "15px 20px 0 30px" }}>Изменение даты задания </p>
-                  <div className={styles.row}>
-
-                    <Input
-                      onChange={(e) => {
-                        handleChange(e);
-                        setdateTask(e.target.value)
-                      }}
-                      width="200"
-                      style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                      value={dateTask}
-                      name="date"
-                      placeholder="Дата "
-                      type="text"
-                      onFocus={(e) => {
-                        e.currentTarget.type = "date";
-                      }}
-                      onBlur={handleBlur}
-                      autocomplete="off"
-                    />
-                  </div>
-
-                  <p style={{ padding: "15px 20px 0 30px" }}>Изменение статус задания </p>
-                  <div className={styles.rowCheck}>
-                    <div className={styles.row} onClick={() => handleCheckboxChange(1)}>
-                      <input
-                        type="checkbox"
-                        checked={isChecked1}
-                      />
-                      <span className={styles.Done}>Завершено</span>
-                    </div>
-                    <div className={styles.row} onClick={() => handleCheckboxChange(2)}>
-                      <input
-                        type="checkbox"
-                        checked={isChecked2}
-                      />
-                      <span className={styles.InProcess}>В процессе</span>
-                    </div>
-                  </div>
-
-
-                  <div className={styles.row}>
-                    <Button
-                      disabled={
-                        values.shiftNumb == ""
-                      }
-                      type="submit"
-                    >
-                      Изменить
-                    </Button>
-                  </div>
-
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    value={values.object}
+                    name="object"
+                    placeholder="Объект"
+                    onBlur={handleBlur}
+                  />
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    value={values.sector}
+                    name="sector"
+                    placeholder="Участок/цех"
+                    onBlur={handleBlur}
+                  />
                 </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                    value={values.weldingConnectionName}
+                    name="weldingConnectionName"
+                    placeholder="Наименовние соединения"
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Select
+                    name="instructionId"
+                    value={values.instructionId}
+                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    width="190px"
+                    placeholder="Инструкция"
+                    onChange={(e) => {
+                      setFieldValue("instructionId", e.value);
+                    }}
+                    options={formattedInstructions}
+                  />
+                  <Select
+                    name="masterId"
+                    value={values.masterId}
+                    width="186px"
+                    placeholder="Руководитель сварочных работ"
+                    onChange={(e) => {
+                      setFieldValue("masterId", e.value);
+                    }}
+                    options={formattedMasters}
+                  />
+                </div>
 
-
-        {/*Удаление задания*/}
-        <ModalWindow
-          isOpen={deleteTaskModal}
-          headerText="Удаление"
-          setIsOpen={(state) => {
-            setdeleteTaskModal(false)
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setdeleteTaskModal(false)
-              deleteTaskAjax()
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное задание ? </h4>
-
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    value={values.generalMaterial}
+                    name="generalMaterial"
+                    placeholder="Материал"
+                    onBlur={handleBlur}
+                  />
+                  <Select
+                    name="technicalControllerId"
+                    value={values.technicalControllerId}
+                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    width="190px"
+                    placeholder="Тех. надзор"
+                    onChange={(e) => {
+                      setFieldValue("technicalControllerId", e.value);
+                    }}
+                    options={formattedTechs}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    value={values.weldingElectrodes}
+                    name="weldingElectrodes"
+                    placeholder="Электроды"
+                    onBlur={handleBlur}
+                  />
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    value={values.weldingWire}
+                    name="weldingWire"
+                    placeholder="Проволока"
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Button
+                    disabled={requiredKeys.some((key) => !values[key])}
+                    type="submit"
+                  >
+                    {modalData ? "Сохранить" : "Создать"}
+                  </Button>
                 </div>
               </form>
             )}

@@ -57,8 +57,7 @@ export const Product = ({
   userRole,
   addProduct,
   editProduct,
-  deleteProduct,
-  deleteIcon
+
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -67,7 +66,7 @@ export const Product = ({
 
   const [valueProdArea, setValueProdArea] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
-  const [valuetPosts, setValuetPosts] = useState(area?.[0].id);
+  const [valuetPosts, setValuetPosts] = useState(area[0]?.id);
   const [valuetWorkPlace, setValuetWorkPlace] = useState();
 
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
@@ -96,17 +95,14 @@ export const Product = ({
   const [valueChoise, setvalueChoise] = useState("");
   //Id выбранного изделие/деталь/узел
   const [valueIdIzdelia, setIdIzdelia] = useState("");
-  ///дописываю для чего просматриваем закрепленные объекты
-  const [isDisplayFixed, setDisplayFixed] = useState("");
+
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
     id: modalData?.id ?? "",
 
   };
-  /////Удоление
-  const [deleteProdModal, setdeleteProdModal] = useState(false);
-  const [idProduct, setidProduct] = useState("");
+
   function SetValue(valueId, index) {
 
     ///area
@@ -169,7 +165,7 @@ export const Product = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
         },
       },
     ],
@@ -188,8 +184,8 @@ export const Product = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
             </div>
           )
 
@@ -211,7 +207,7 @@ export const Product = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
         },
       },
     ],
@@ -230,15 +226,6 @@ export const Product = ({
 
     goods: [
       {
-        title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
-      {
         title: "Наименование изделия ", field: "name"
       },
       {
@@ -251,36 +238,35 @@ export const Product = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
-
-      // {
-      //   title: "Закрерить сварщика",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix} onClick={e => {
-      //       setcreateTask(1);
-      //       setValuegoTo(2);
-      //       setvalueChoise(rowData.name)
-      //       setIdIzdelia(rowData.id)
-      //     }}>Закрерить</p>;
-      //   },
-      // },
+      {
+        title: "Закрерить сварщика",
+        render: (rowData) => {
+          return <p className={styles.Fix} onClick={e => {
+            setcreateTask(1);
+            setValuegoTo(2);
+            setvalueChoise(rowData.name)
+            setIdIzdelia(rowData.id)
+          }}>Закрерить</p>;
+        },
+      },
 
       {
         title: "Перерейти к",
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id); setDisplayFixed(rowData?.name) }}>Узел </p>
-              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id) }}>Узел </p>
+              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id) }}>Сварной шов</p>
             </div>
           )
         },
@@ -300,9 +286,9 @@ export const Product = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
@@ -326,8 +312,8 @@ export const Product = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id) }}>Сварной шов</p>
             </div>
           )
         },
@@ -348,9 +334,9 @@ export const Product = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
@@ -374,7 +360,7 @@ export const Product = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы"); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы") }}>Сварной шов</p>
             </div>
           )
         },
@@ -397,58 +383,21 @@ export const Product = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
-
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
       {
-        title: "Технологическая инструкция", field: "technologicalInstruction.name"
-      },
-      {
-        title: "Наименование изделия ",
+        title: "Закрепить задание",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.name ?? "-"}</span>
+          return <p className={styles.Fix}>Закрепить</p>;
         },
       },
-      {
-        title: "Номер  изделия ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      {
-        title: "Наименование узла ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  узла ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      {
-        title: "Наименование детали ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  детали ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      // {
-      //   title: "Закрепить задание",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix}>Закрепить</p>;
-      //   },
-      // },
       // {
       //   title: "Просмотреть закрепленные",
       //   render: (rowData) => {
@@ -484,9 +433,9 @@ export const Product = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
@@ -553,7 +502,7 @@ export const Product = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `№${item.number} ${item.name} `,
+      label: item.name,
     };
   });
   //select Рабочие места 
@@ -574,7 +523,7 @@ export const Product = ({
   const TechProc = texprocwelding?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} ${item.number}`,
+      label: item.name,
     };
   });
   //select Сварочный шов  
@@ -594,7 +543,49 @@ export const Product = ({
     setValue(-1);
     setValue2(-1);
     setValuegoToHeadTable(columns[Object.keys(columns)[param]])
-
+    //Вывод Производственный участок для цеха
+    if (param === 1) {
+      let areaNew = []
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].workshop.id === id) {
+          areaNew.push(area[index])
+        }
+      }
+      setValuegoToBodyTable(areaNew)
+    }
+    //Вывод постов для Производственных участоков
+    if (param === 2) {
+      let postsNew = []
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].productionArea.id === id) {
+          postsNew.push(posts[index])
+        }
+      }
+      setValuegoToBodyTable(postsNew)
+    }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 3) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].productionArea?.id === id) {
+          workplaceNew.push(workplace[index])
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+    }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 9) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].post?.id != undefined) {
+          if (workplace[index].post.id === id) {
+            workplaceNew.push(workplace[index])
+          }
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+      setValuegoToHeadTable(columns[Object.keys(columns)[3]])
+    }
     /////////////////
     //Вывод деталей для изделий
     if (param === 6) {
@@ -839,7 +830,7 @@ export const Product = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed + " - " + value_goToTitle}
+                  title={value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -864,7 +855,7 @@ export const Product = ({
                 value={0}
                 data={product}
                 actions={
-                  userRole === "Admin" || userRole === "Master"
+                  userRole === "Admin"
                     ? [
                       {
                         icon: "add",
@@ -878,9 +869,7 @@ export const Product = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValueWorkplace("")
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно добавления изделия"
-                          })
+
                         },
                       },
                       {
@@ -889,15 +878,12 @@ export const Product = ({
                         onClick: (event, rowData) => {
                           setModalData(rowData);
                           setIsModalOpen(true);
-                          setIsModalNumb(4) 
+                          setIsModalNumb(4)
 
                           setValueProdArea(rowData.workshop?.id)
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
                           setValueWorkplace(rowData.workplace?.id)
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно редактирования изделия"
-                          })
                         },
                       },
                     ]
@@ -917,7 +903,59 @@ export const Product = ({
           ? (
             <div className={styles.TableToFixed}>
 
+              {/* <div className={styles.selects}>
+                <Select
+                  name="valueWelder"
+                  value={valueWelder}
+                  width="380px"
+                  placeholder="Сотрудники"
+                  onChange={(event) => {
+                    setValueWelder(event.value)
+                    setValueWelderName("")
+                  }}
+                  options={optExecutors}
+                />
+                {valueWelder === 1
+                  ? (
+                    <div className={styles.select}>
+                      <Select
+                        name="valueWelderExe"
+                        value={valueWelderExe}
+                        width="380px"
+                        placeholder="Мастера"
+                        onChange={(event) => {
+                          setValueWelderExe(event.value)
+                          setValueWelderName(event.label)
+                        }}
+                        options={formattedMasters}
+                      />
+                    </div>
+                  )
+                  : (
+                    <div className={styles.select} >
+                      <Select
+                        className={styles.select}
+                        name="valueWelderExe"
+                        value={valueWelderExe}
+                        width="380px"
+                        placeholder="Контролеры"
+                        onChange={(event) => {
+                          setValueWelderExe(event.value)
+                          setValueWelderName(event.label)
+                        }}
+                        options={formattedTechs}
+                      />
+                    </div>
+                  )
 
+                }
+              </div> */}
+
+              {/* {valueWelder === 1
+                ? (<h2>Мастер: {valueWelderExeName}</h2>)
+                : (<h2>Контролер: {valueWelderExeName}</h2>)
+
+              } */}
               <h2>Закрерить сварщика</h2>
               <h3>Изделие: {valueChoise}</h3>
 
@@ -931,7 +969,7 @@ export const Product = ({
                   displaySeams === 1
                     ? (
                       <TabPanel
-                        style={{ minWidth: "800px", }}
+                        style={{  minWidth: "800px", }}
                       >
                         <Table
                           title="Сварные швы"
@@ -943,7 +981,7 @@ export const Product = ({
                     : <div></div>
                 }
 
-
+                
 
               </div>
 
@@ -1024,27 +1062,22 @@ export const Product = ({
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
-                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^[\dA-Z-]+$/.test(value)) {
-                        handleChange(e);
-                      }
+                      handleChange(e);
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autoComplete="off"
                   />
                 </div>
 
-                {/* <div className={styles.row}>
+                <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -1055,7 +1088,7 @@ export const Product = ({
                     }}
                     options={workplaceIdOptions}
                   />
-                </div> */}
+                </div>
 
                 <div className={styles.row}>
                   <Select
@@ -1080,7 +1113,7 @@ export const Product = ({
                   />
                 </div>
 
-                {/* <div className={styles.row}>
+                <div className={styles.row}>
                   <Select
                     name="valuetTechProc"
                     width="380px"
@@ -1089,14 +1122,14 @@ export const Product = ({
                     onChange={(event) => setValuetSeam(event.value)}
                     options={SeamOptions}
                   />
-                </div> */}
+                </div>
 
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == ""
+                      values.number == "" || values.name == "" || valuetSeam.length == 0
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}
@@ -1110,47 +1143,7 @@ export const Product = ({
         </ModalWindow>
 
 
-        {/*Удаление */}
-        <ModalWindow
-          isOpen={deleteProdModal}
-          headerText="Удаление"
-          setIsOpen={(state) => {
-            setdeleteProdModal(false)
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setdeleteProdModal(false)
-              deleteProduct({ id: idProduct, index: 4 })
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
 
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное изделие ? </h4>
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-                </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
       </div>
     </div>
   );

@@ -52,9 +52,6 @@ export const Place = ({
   value_panel2,
   addWorkplace,
   editWorkplace,
-
-  deleteProduct,
-  deleteIcon
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -73,14 +70,8 @@ export const Place = ({
 
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
-  ///дописываю для чего просматриваем закрепленные объекты
-  const [isDisplayFixed, setDisplayFixed] = useState("");
 
 
-
-  /////Удоление
-  const [deleteProdModal, setdeleteProdModal] = useState(false);
-  const [idProduct, setidProduct] = useState("");
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -159,7 +150,7 @@ export const Place = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
         },
       },
     ],
@@ -178,8 +169,8 @@ export const Place = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
             </div>
           )
 
@@ -191,7 +182,7 @@ export const Place = ({
       {
         title: "Наименование поста ",
         render: (rowData) => {
-          return <p>Пост {rowData.number ?? "-"}</p>;
+          return <p>Пост {rowData.number??"-"}</p>;
         },
       },
       {
@@ -201,72 +192,24 @@ export const Place = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
         },
       },
     ],
     jobs_place: [
       {
-        title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
-      {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number ?? "-"}</p>;
+          return <p>Рабочее место {rowData.number??"-"}</p>;
         },
       },
       {
         title: "Номер  рабочего места ",
         field: "number",
       },
-      {
-        title: "Наименование цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>
-        },
-      },
-
-      {
-        title: "Наименование производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.number ?? "-"}</span>
-        },
-      },
-
-
-      {
-        title: "Наименование поста",
-        render: (rowData) => {
-          return <span>{rowData?.post?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  поста",
-        render: (rowData) => {
-          return <span>{rowData?.post?.number ?? "-"}</span>
-        },
-      },
     ],
 
-
+     
   };
 
 
@@ -290,17 +233,16 @@ export const Place = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `№${item.number} ${item.name} `,
+      label: item.name,
     };
   });
   //select Рабочие места 
-  const WorkPlaceOpt =[
-    { value: null, label: "Не выбрано" },
-    ...(posts?.map((item) => ({
+  const WorkPlaceOpt = posts?.map((item) => {
+    return {
       value: item.id,
-      label: `${item.name} ${item.number}`,
-    })) || []),
-  ]
+      label: "Пост " + item.number,
+    };
+  });
 
   ///Перейти к 
   function GoTo(param, title, id) {
@@ -448,18 +390,7 @@ export const Place = ({
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
-  const optProdArea = workshop?.map((item) => {
-    return {
-      value: item.id,
-      label: item.name,
-    };
-  });
 
-
-  const [isPostSelected, setIsPostSelected] = useState(false);
-  const handleChangeRadio = (event) => {
-    setIsPostSelected(event.target.value === "post");
-  };
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -481,7 +412,7 @@ export const Place = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed + " - " + value_goToTitle}
+                  title={value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -500,7 +431,7 @@ export const Place = ({
                 className="workshops"
                 data={workplace}
                 actions={
-                  userRole === "Admin" || userRole === "Master"
+                  userRole === "Admin"
                     ? [
                       {
                         icon: "add",
@@ -514,9 +445,6 @@ export const Place = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValuetWorkPlace("")
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно добавления рабочего места "
-                          })
                         },
                       },
                       {
@@ -531,10 +459,6 @@ export const Place = ({
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
                           setValuetWorkPlace(rowData.workplace?.id)
-
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно редактирования рабочего места "
-                          })
                         },
                       },
                     ]
@@ -573,7 +497,7 @@ export const Place = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-                {/* <div className={styles.row}>
+                <div className={styles.row}>
                   <Input
                     onChange={(e) => {
                       handleChange(e);
@@ -583,34 +507,7 @@ export const Place = ({
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
-                    autocomplete="off"
                   />
-                </div> */}
-                <p>Пост /  Производственный участок</p>
-                <div className={styles.radioPost}>
-                  <div>
-                    <input
-                      type="radio"
-                      id="post"
-                      name="option"
-                      value="post" 
-                      checked={isPostSelected}
-                      onChange={handleChangeRadio}
-                    />
-                    <label htmlFor="post">Пост</label>
-                  </div>
-                  <div>
-                    <input
-                      type="radio"
-                      id="prodArea"
-                      name="option"
-                      value="prodArea" 
-                      checked={!isPostSelected}
-                      onChange={handleChangeRadio}
-                    />
-                    <label htmlFor="prodArea">Производственный участок</label>
-                  </div>
-                  
                 </div>
                 <div className={styles.row}>
                   <Input
@@ -620,54 +517,30 @@ export const Place = ({
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
-                    type="number"
-                    min="0"
-                    step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
                   />
                 </div>
-                
 
-                <div className={styles.row}>
-                  {isPostSelected ? (
-                     <div className={styles.row}>
-                        <Select
-                          name="valuetWorkPlace"
-                          width="380px"
-                          value={valuetWorkPlace}
-                          placeholder="Пост"
-                          onChange={(event) => setValuetWorkPlace(event.value)}
-                          options={WorkPlaceOpt}
-                        />
-                      </div>
-                  ) : (
-                    <div className={styles.row}>
-                      <Select
-                        name="valuetPosts"
-                        width="380px"
-                        value={valuetPosts}
-                        placeholder="Производственные участки"
-                        onChange={(event) => setValuetPosts(event.value)}
-                        options={optPosts}
-                      />
-                    </div>
-                  )}
-                </div>
-               
-
-                
                 <div className={styles.row}>
                   <Select
-                    name="valueProdArea"
-                    value={valueProdArea}
+                    name="valuetWorkPlace"
                     width="380px"
-                    placeholder="Цех"
-                    onChange={(event) => {
-                      setValueProdArea(event.value)
-                    }}
-                    options={optProdArea}
+                    value={valuetWorkPlace}
+                    placeholder="Пост"
+                    onChange={(event) => setValuetWorkPlace(event.value)}
+                    options={WorkPlaceOpt}
+                  />
+                </div>
+
+                <div className={styles.row}>
+                  <Select
+                    name="valuetPosts"
+                    width="380px"
+                    value={valuetPosts}
+                    placeholder="Производственные участки"
+                    onChange={(event) => setValuetPosts(event.value)}
+                    options={optPosts}
                   />
                 </div>
 
@@ -675,7 +548,7 @@ export const Place = ({
                   <Button
                     type="submit"
                     disabled={
-                      values.number == ""
+                      values.number == "" || values.name == ""
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}
@@ -686,55 +559,6 @@ export const Place = ({
             )}
           </Formik>
 
-        </ModalWindow>
-
-
-
-
-
-
-        {/*Удаление */}
-        <ModalWindow
-          isOpen={deleteProdModal}
-          headerText="Удаление"
-          setIsOpen={(state) => {
-            setdeleteProdModal(false)
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setdeleteProdModal(false)
-              deleteProduct({ id: idProduct, index: 3 })
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное рабочее место ? </h4>
-
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-
-                </div>
-              </form>
-            )}
-          </Formik>
         </ModalWindow>
 
 

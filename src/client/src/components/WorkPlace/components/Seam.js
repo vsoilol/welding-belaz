@@ -21,6 +21,7 @@ import React, { useEffect, useState } from "react";
 import styles from "components/WorkPlace/styles.module.css";
 
 
+
 import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -36,7 +37,7 @@ const dateOptions = {
 };
 
 
-export const Seam = ({
+export const Seam = ({ 
   workshop,
   area,
   posts,
@@ -44,54 +45,34 @@ export const Seam = ({
   product,
   knot,
   detail,
-  seam,
-  texprocwelding,
-
+  seam, 
+  texprocwelding,  
+ 
   value_panel,
   value_panel2,
   userRole,
   addSeam,
   editSeam,
-
-
-  valueProdArea,
-  valuetPosts,
-  valuetTechProc,
-  valuetSeam,
-  valuetWorkPlace,
-  setValuetPosts,
-  setValuetTechProc,
-  setvaluetProduct,
-  setvaluetKnots,
-  setvaluetDetail,
-
-  valuetProduct,
-  valuetKnots,
-  valuetDetail,
-
-
-  deleteProduct,
-  deleteIcon
 }) => {
 
   const [modalData, setModalData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalNumb, setIsModalNumb] = useState(0);
-  const [value_goTo, setValuegoTo] = useState(0);
   const [value_goToTitle, setValuegoToTitle] = useState("");
 
+  const [valueProdArea, setValueProdArea] = useState();
+  const [valuetTechProc, setValuetTechProc] = useState();
+  const [valuetPosts, setValuetPosts] = useState();
+  const [valuetWorkPlace, setValuetWorkPlace] = useState();
+
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [valueWorkplace, setValueWorkplace] = useState();
 
-  const [productionArea, setproductionArea] = useState();
-  const [productValue, setproductValue] = useState();
-  const [knotValue, setknotValue] = useState();
-  const [detailnot, setdetail] = useState();
-  const [technologicalProcess, settechnologicalProcess] = useState();
+  const [, setValue] = useState(value_panel);
+  const [, setValue2] = useState(value_panel2);
 
-  /////Удоление
-  const [deleteProdModal, setdeleteProdModal] = useState(false);
-  const [idProduct, setidProduct] = useState("");
+  const [valuetSeam, setValuetSeam] = useState([]);
 
 
   const initialValues = {
@@ -99,29 +80,58 @@ export const Seam = ({
     number: modalData?.number ?? "",
     id: modalData?.id ?? "",
 
-    productionArea: modalData?.productionArea?.id ?? "",
-    technologicalProcess: modalData?.technologicalProcess?.id ?? "",
-
-    product: modalData?.product?.id,
-    knot: modalData?.knot?.id,
-    detail: modalData?.detail?.id,
   };
 
+  function SetValue(valueId, index) {
+
+    ///area
+    if (index === 1) {
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].id === valueId) {
+          return area[index].number
+        }
+      }
+    }
+    ///post
+    if (index === 2) {
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].id === valueId) {
+          return posts[index].number
+        }
+      }
+    }
+  }
+  //Запрос на редактирование или добавление
+  function SendData(variables) {
+
+    variables["workshopId"] = valueProdArea
+    variables["workshopNumber"] = SetValue(valueProdArea, 0)
+
+    variables["productionAreaId"] = valuetPosts
+    variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
+
+    variables["technologicalProcessId"] = valuetTechProc
+
+    variables["seams"] = [valuetSeam]
+
+    variables["postId"] = valuetWorkPlace
+    variables["workplaceId"] = valueWorkplace
 
 
+     //Добавить Сварочный шов
+     if (isModalNumb == 15) {
+      addSeam(variables)
+    }
+    //Редактировать Сварочный шов
+    if (isModalNumb == 7) {
+      editSeam(variables)
+    }
+
+  }
 
   const columns = {
-
+ 
     welding_seam: [
-      {
-        title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
       {
         title: "Наименование сварного шва ",
         render: (rowData) => {
@@ -138,50 +148,49 @@ export const Seam = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
-
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
       {
-        title: "Технологическая инструкция", field: "technologicalInstruction.name"
-      },
-      {
-        title: "Наименование изделия ",
+        title: "Наименование изделия ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.name ?? "-"}</span>
+          return <span>{rowData?.product?.mainProduct?.name??"-"}</span>
         },
       },
       {
-        title: "Номер  изделия ",
+        title: "Номер  изделия ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.number ?? "-"}</span>
+          return <span>{rowData?.product?.mainProduct?.number??"-"}</span>
         },
       },
       {
-        title: "Наименование узла ",
+        title: "Наименование узла ", 
         render: (rowData) => {
-          return <span>{rowData?.knot?.name ?? "-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.name??"-"}</span>
         },
       },
       {
-        title: "Номер  узла ",
+        title: "Номер  узла ", 
         render: (rowData) => {
-          return <span>{rowData?.knot?.number ?? "-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.number??"-"}</span>
         },
       },
       {
-        title: "Наименование детали ",
+        title: "Наименование детали ", 
         render: (rowData) => {
-          return <span>{rowData?.detail?.name ?? "-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name??"-"}</span>
         },
       },
       {
-        title: "Номер  детали ",
+        title: "Номер  детали ", 
         render: (rowData) => {
-          return <span>{rowData?.detail?.number ?? "-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number??"-"}</span>
         },
       },
       // {
@@ -199,15 +208,29 @@ export const Seam = ({
     ],
   };
 
-  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.details);
 
+  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.welding_seam);
+  const [value_goTo, setValuegoTo] = useState(0);
+
+
+  ///Изменение заголовка модалки
+  function TitleTextModal(params) {
+    
+    if (params === 7) {
+      return "Редактировать Сварочный шов"
+    }
+
+    if (params === 15) {
+      return "Добавить Сварочный шов"
+    }
+  }
 
 
   //select Посты   
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `№${item.number} ${item.name} `,
+      label: item.name,
     };
   });
   //select Рабочие места 
@@ -228,9 +251,9 @@ export const Seam = ({
   const TechProc = texprocwelding?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} ${item.number}`,
+      label: item.name,
     };
-  });
+  }); 
   //select Сварочный шов  
   const SeamOptions = seam?.map((item) => {
     return {
@@ -238,111 +261,28 @@ export const Seam = ({
       label: `Cварочный шов ${item.number}`,
     };
   });
-
-
-
-  //select изделие
-  const productsOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(product?.map((item) => ({
-      value: item.id,
-      label: `${item.name} ${item.number}`,
-    })) || []),
-  ]
-  //select узел
-  const knotsOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(knot?.map((item) => ({
-      value: item.id,
-      label: `${item.name} ${item.number}`,
-    })) || []),
-  ];
-  //select деталь
-  const detailOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(detail?.map((item) => ({
-      value: item.id,
-      label: `${item.name} ${item.number}`,
-    })) || []),
-  ];
-
+      
 
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
-  ///Изменение заголовка модалки
-  function TitleTextModal(params) {
-    if (params === 7) {
-      return "Редактировать Сварочный шов"
-    }
 
-    if (params === 15) {
-      return "Добавить Сварочный шов"
-    }
-  }
-  //Запрос на редактирование или добавление
-  function SendData(variables) {
-
-
-    variables["workshopId"] = valueProdArea
-    variables["workshopNumber"] = SetValue(valueProdArea, 0)
-    variables["productionAreaId"] = productionArea
-    variables["productionAreaNumber"] = SetValue(productionArea, 1)
-
-    variables["technologicalProcessId"] = valuetTechProc
-
-    variables["seams"] = [valuetSeam]
-
-    variables["postId"] = valuetWorkPlace
-    variables["workplaceId"] = valueWorkplace
-    variables["productId"] = productValue
-
-
-    //Добавить Сварочный шов
-    if (isModalNumb == 15) {
-      addSeam(variables)
-    }
-    //Редактировать Сварочный шов
-    if (isModalNumb == 7) {
-      editSeam(variables)
-    }
-
-  }
-  function SetValue(valueId, index) {
-
-    ///area
-    if (index === 1) {
-      for (let index = 0; index < area.length; index++) {
-        if (area[index].id === valueId) {
-          return area[index].number
-        }
-      }
-    }
-    ///post
-    if (index === 2) {
-      for (let index = 0; index < posts.length; index++) {
-        if (posts[index].id === valueId) {
-          return posts[index].number
-        }
-      }
-    }
-  }
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
 
       <div className={styles.tableWrapper}>
-        {/*Сварные швы*/}
-        <TabPanel
+         {/*Сварные швы*/}
+         <TabPanel  
           style={{ minWidth: "800px" }}
         >
           <Table
             title="Сварные швы"
-            columns={columns.welding_seam}
-            data={seam}
+            columns={columns.welding_seam} 
+            data={seam} 
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "Admin"
                 ? [
                   {
                     icon: "add",
@@ -351,9 +291,10 @@ export const Seam = ({
                     onClick: () => {
                       setIsModalOpen(true);
                       setIsModalNumb(15);
-                      api.post(`/eventLog`,{
-                        "information": "Открыл модальное окно добавления шва"
-                      })
+                      setValueProdArea("")
+                      setValuetTechProc("")
+                      setValuetPosts("")
+                      setValuetWorkPlace("")
                     },
                   },
                   {
@@ -363,21 +304,15 @@ export const Seam = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(7)
-
-
-                      setproductionArea(rowData?.productionArea?.id)
-                      setproductValue(rowData?.product?.id)
-                      setknotValue(rowData?.knot?.id)
-                      setdetail(rowData?.detail?.id)
-                      settechnologicalProcess(rowData?.technologicalProcess?.id) 
-                      api.post(`/eventLog`,{
-                        "information": "Открыл модальное окно редактирования шва "
-                      })
+                      setValueProdArea(rowData.workshop?.id)
+                      setValuetTechProc(rowData.technologicalProcess?.id)
+                      setValuetPosts(rowData.productionArea?.id)
+                      setValuetWorkPlace(rowData.workplace?.id)
                     },
                   },
                 ]
                 : []
-            }
+            } 
           />
         </TabPanel>
 
@@ -395,6 +330,7 @@ export const Seam = ({
             />
           </TabPanel>
         </div>
+
 
         <ModalWindow
           isOpen={isModalOpen}
@@ -422,7 +358,7 @@ export const Seam = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-
+                 
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
@@ -431,16 +367,12 @@ export const Seam = ({
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
-                    type="number"
-                    min="0"
-                    step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
                   />
                 </div>
 
-                {/* <div className={styles.row}>
+                <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -451,86 +383,39 @@ export const Seam = ({
                     }}
                     options={workplaceIdOptions}
                   />
-                </div> */}
+                </div>
+
                 <div className={styles.row}>
                   <Select
-                    name="productionArea"
+                    name="valuetPosts"
                     width="380px"
-                    value={productionArea}
+                    value={valuetPosts}
                     placeholder="Производственные участки"
-                    onChange={(event) => {
-                      setproductionArea(event.value)
-                    }}
+                    onChange={(event) => setValuetPosts(event.value)}
                     options={optPosts}
                   />
                 </div>
 
 
-
-
-
                 <div className={styles.row}>
                   <Select
-                    name="technologicalProcess"
+                    name="valuetTechProc"
                     width="380px"
-                    value={technologicalProcess}
+                    value={valuetTechProc}
                     placeholder="Технологический процесс"
-                    onChange={(event) => {
-                      settechnologicalProcess(event.value)
-                    }}
+                    onChange={(event) => setValuetTechProc(event.value)}
                     options={TechProc}
                   />
                 </div>
-
-
-
-                <div className={styles.row}>
-                  <Select
-                    name="productValue"
-                    width="380px"
-                    value={productValue}
-                    placeholder="Изделие"
-                    onChange={(event) => {
-                      setproductValue(event.value)
-                    }}
-                    options={productsOptions}
-                  />
-                </div>
-
-
-                <div className={styles.row}>
-                  <Select
-                    name="knotValue"
-                    width="380px"
-                    value={knotValue}
-                    placeholder="Узел"
-                    onChange={(event) => {
-                      setknotValue(event.value)
-                    }}
-                    options={knotsOptions}
-                  />
-                </div>
-
-
-                <div className={styles.row}>
-                  <Select
-                    name="valuetDetail"
-                    width="380px"
-                    value={detailnot}
-                    placeholder="Деталь"
-                    onChange={(event) => {
-                      setdetail(event.value)
-                    }}
-                    options={detailOptions}
-                  />
-                </div>
-
-
-
+ 
+ 
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
+                    disabled={
+                      values.number == ""  
+                    }
                   >
                     {modalData ? "Сохранить" : "Создать"}
                   </Button>
@@ -543,47 +428,6 @@ export const Seam = ({
         </ModalWindow>
 
 
-        {/*Удаление */}
-        <ModalWindow
-          isOpen={deleteProdModal}
-          headerText="Удаление"
-          setIsOpen={(state) => {
-            setdeleteProdModal(false)
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setdeleteProdModal(false)
-              deleteProduct({ id: idProduct, index: 7 })
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данный шов ? </h4>
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-                </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
 
       </div>
     </div>

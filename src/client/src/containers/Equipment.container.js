@@ -1,24 +1,18 @@
 import { connect } from "react-redux";
 import { EquipmentPage } from "pages/Equipment";
-import Actions from "store/equipment/actions";  
+import Actions from "store/equipment/actions";
 import Actionsworkplace from "store/workplace/actions";
-import ActionsWelder from "store/executors/actions";
 import MasterActions from "store/executors/actions";
 
 const mapStateToProps = (state) => {
   return {
     equipment: state.equipment.equipment,
     masters: state.executors.masters,
-    welder: state.executors.executors,
     isRequesting:
       state?.equipment?.isRequesting || state?.masters?.isRequesting,
     userRole: state.auth.user.role,
     posts:state.workplace.posts, 
-    reason:state.equipment.reason,
-
-
-    workshop: state.workplace.workshop,
-    area: state.workplace.productionArea,
+    reason:state.equipment.reason
     
   };
 };
@@ -35,16 +29,6 @@ const mapDispatchToProps = {
   loadDowntime: Actions.Creators.loadReasonRequest,
   addDowntime: Actions.Creators.addDowntimeRequest,
   editDowntime: Actions.Creators.editDowntimeRequest,
-
-
-  loadWelder: ActionsWelder.Creators.loadExecutorsRequest,
-
-  assignWelders:Actions.Creators.assignWeldersRequest,
-  assignMaster:Actions.Creators.assignMasterRequest,
-
-
- 
-  loadArea: Actionsworkplace.Creators.loadAreaRequest,
 
 };
 

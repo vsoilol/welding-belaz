@@ -1,6 +1,5 @@
 .tableWrapper {
   margin-top: 80px; 
-  width: calc(100vw - 150px);
 }
 
 p {
@@ -16,12 +15,7 @@ p {
   flex-direction: column;
   align-items: center;
 }
-.RowSelects{
-  /* display: grid;
-  grid-template-columns: auto auto auto 1fr; */
-  grid-gap: 25px; 
-  margin-bottom: 30px;
-}
+
 .row {
   display: flex;
   justify-content: space-around;
@@ -41,7 +35,6 @@ p {
   color: black;
   display: flex;
   justify-content: center;
-  cursor: pointer;
 }
 
 .downloadButton:hover {
@@ -118,22 +111,6 @@ tr.background{
 
 
 /*TablePlan*/
-
-
-.result{
-  margin: 30px 0px 0px 0px;
-  padding: 15px 0px;
-  border-top:1px solid rgb(0 0 0 / 12%) ;
-  border-bottom:1px solid rgb(0 0 0 / 12%) ; 
-}
-.result h4{
-  margin-left: 15px;
-  font-size: 20px;
-}
-.result span{
-  font-weight: 600;
-  padding-left: 5px;
-}
 .TablePlan{
   width: calc(100vw - 150px);
   height: 100%;
@@ -152,27 +129,17 @@ tr.background{
   letter-spacing: 0.0075em;
   text-align: left;
   padding-left: 20px;
-} 
+}
+.TablePlan .tools{
+  padding-left: 20px;
+}
 .TablePlan .tools p{
   margin: 10px 15px;
 }
-.toolsHead{
-  padding-left: 15px;
-}
-.RowTools{
-  display: flex;
 
-}
-.Fix{
-  color: blue;
-  cursor: pointer;
-  width: -moz-fit-content;
-  width: fit-content;
-  border-bottom: 1px solid;
-}
 .create{
-  margin: 20px 0px;
-  margin-top: 40px;
+  margin: 0px 15px;
+  margin-bottom: 20px;
   padding: 8px 25px;
   background-color: transparent;
   border: 1px solid #dadada;
@@ -183,98 +150,5 @@ tr.background{
   border-radius: 8px;
   transition: 0.3s;
   font-weight: 600;
-  /* margin-left: calc(100% - 160px); */
-}
-
-.create:hover{
-  background-color: whitesmoke;
-}
-
-
-.p{ 
-      font-size: 13px;
-      line-height: 20px;
-      margin: 0 20px 0 20px;  
-}
-
-
-.equipments{
-  width: fit-content;
-  max-height: 200px;
-  overflow-y: scroll;
-  margin: 0 auto;
-  padding: 0px 20px 0 0px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-.equipments::-webkit-scrollbar {
-  width: 8px;               /* ширина scrollbar */
-}
-.equipments::-webkit-scrollbar-track {
-  background: white;        /* цвет дорожки */
-  border-radius: 50px;
-}
-.equipments::-webkit-scrollbar-thumb {
-  background-color: rgb(153, 150, 167);    /* цвет плашки */
-  border-radius: 20px;       /* закругления плашки */
-}
-.equipments span{
-  padding-left: 10px;
-  position: relative;
-  top: -3px; 
-}
-.equipments div{
-  padding: 5px 0px;
-}
-
-.Done{
-  color: rgb(1, 60,128);
-  font-weight: 600;
-  font-size: 12px;
-}
-.InProcess{
-  color: goldenrod;
-  font-weight: 600;
-  font-size: 12px;
-}
-
-
-.rowCheck div{
-  width: fit-content;
-  cursor: pointer;
-}
-
-.rowCheck div span{
-  padding-left: 20px;
-}
-
-
-.deleteIcon{
-  cursor: pointer;
-  width: 20px;
-  position: relative;
-  top: 5px;
-}
-h4{
-  text-align: center;
-  font-size: 20px;
-}
-
-h4 span{
-  color: red;
-}
-
-h3 span{
-  font-weight: 700;
-}
-
-.createTaskBtn{
-  background-color: #b5d8f2;
-}
-
-
-h3.ExistingPlan{
-  text-align: center;
-  font-weight: 700;
-  padding-left: 0;
+  margin-left: calc(100% - 140px);
 }

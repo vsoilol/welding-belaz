@@ -17,8 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import imgcalendar from "assets/icons/calendar.png";
-import deleteIcon from "assets/icons/delete.png";
-import api from "services/api";
+
 const useStyles = makeStyles(() => ({
   rowStyle: {
     padding: 10,
@@ -56,12 +55,10 @@ export const ExecutorsTable = ({
   const classes = useStyles();
   const initialValues = {
     id: modalData?.id ?? "",
-    rfidTag: modalData?.rfidTag ?? modalData?.idFromSystem ?? "",
+    rfidTag: modalData?.rfidTag ?? "",
     firstName: modalData?.firstName ?? "",
     lastName: modalData?.lastName ?? "",
     middleName: modalData?.middleName ?? "",
-    position: modalData?.position ?? "",
-    serviceNumber: modalData?.serviceNumber ?? "",
     weldingEquipment: modalData?.weldingEquipment ?? [
       {
         id: modalData?.weldingEquipment?.id ?? null,
@@ -74,8 +71,8 @@ export const ExecutorsTable = ({
       },
     ],
   };
-  const [deleteTaskModal, setdeleteTaskModal] = useState(false);
-  const [idExecutor, setidExecutor] = useState("");
+
+
   const requiredKeys = [
     "rfidTag",
     "firstName",
@@ -88,18 +85,9 @@ export const ExecutorsTable = ({
 
   const controllerColumns = [
     {
-      title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true); 
-          setidExecutor(rowData?.id)
-        }}></img>
-      }
-    },
-    {
       title: "RFID-метка",
       render: (rowData) => {
-        return <p>{rowData?.rfidTag ?? "-"}</p>;
+        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
       },
     },
     {
@@ -143,33 +131,20 @@ export const ExecutorsTable = ({
       field: "productionArea.number",
     },
     {
-      title: "Закреплённое оборудование ( ссылка )",
+      title: "Закреплённое оборудование ",
       render: (rowData) => {
-        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
-          return (
-            rowData.weldingEquipments?.map(equipments =>
-              <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
-            )
-          )
-        }
+        if (rowData?.weldingEquipments!=undefined) {
+            return  <a href="/equipment">{rowData?.weldingEquipments[0]?.factoryNumber??"-"}</a>
+        }  
       },
     },
   ];
 
   const controllersColumns = [
     {
-      title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true); 
-          setidExecutor(rowData?.id)
-        }}></img>
-      }
-    },
-    {
       title: "RFID-метка",
       render: (rowData) => {
-        return <p>{rowData?.rfidTag ?? "-"}</p>;
+        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
       },
     },
     {
@@ -213,7 +188,6 @@ export const ExecutorsTable = ({
       field: "productionArea.number",
     },
   ];
-
 
 
   function ReturnWorkshop(Area) {
@@ -260,18 +234,9 @@ export const ExecutorsTable = ({
 
   const extraUserColumns = [
     {
-      title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true);
-          setidExecutor(rowData?.id)
-        }}></img>
-      }
-    },
-    {
       title: "RFID-метка",
       render: (rowData) => {
-        return <p>{rowData?.rfidTag ?? "-"}</p>;
+        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
       },
     },
     {
@@ -315,15 +280,9 @@ export const ExecutorsTable = ({
       field: "productionArea.number",
     },
     {
-      title: "Закреплённое оборудование ( ссылка )",
+      title: "Закреплённое оборудование ",
       render: (rowData) => {
-        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
-          return (
-            rowData.weldingEquipments?.map(equipments =>
-              <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
-            )
-          )
-        }
+        return  <a href="/equipment">{rowData?.weldingEquipments[0]?.factoryNumber}</a>
       },
     },
     {
@@ -341,103 +300,99 @@ export const ExecutorsTable = ({
     }
   ];
 
-  const renderRowChildren = (rowData) => {
-
-    if (rowData.weldingEquipments.length > 0) {
+  const renderRowChildren = (rowData) => { 
+    if (rowData?.weldingEquipments.length!=0) {
       return (
-        <TableContainer component={Paper}>
-
-          <MaterialTable aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  RFID-метка
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Наименование
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Маркировка
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Заводской номер
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Дата ввода в эксплуатацию
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Текущие состояние
-                </TableCell>
-              </TableRow>
-            </TableHead>
-
-            {rowData?.weldingEquipments?.map(equipments =>
+        rowData?.weldingEquipments && (
+          <TableContainer component={Paper}>
+            <MaterialTable aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    RFID-метка
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Наименование
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Маркировка
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Заводской номер
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Дата ввода в эксплуатацию
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      borderBottom: 0,
+                    }}
+                    align="center"
+                  >
+                    Текущие состояние
+                  </TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
-                <TableRow key={equipments.id}>
+                <TableRow key={rowData?.weldingEquipments?.id}>
                   <TableCell align="center">
-                    {equipments.rfidTag}
+                    {rowData?.weldingEquipments?.rfidTag}
                   </TableCell>
                   <TableCell align="center">
-                    {equipments.name}
+                    {rowData?.weldingEquipments?.name}
                   </TableCell>
                   <TableCell align="center">
-                    {equipments.marking}
+                    {rowData?.weldingEquipments?.marking}
                   </TableCell>
                   <TableCell align="center">
-                    {equipments.factoryNumber}
+                    {rowData?.weldingEquipments?.factoryNumber}
                   </TableCell>
                   <TableCell align="center">
-                    {equipments.commissioningDate}
+                    {rowData?.weldingEquipments?.commissioningDate}
                   </TableCell>
                   <TableCell align="center">
                     {renderConditionValue(
-                      equipments.currentCondition
+                      rowData?.weldingEquipments?.currentCondition
                     )}
                   </TableCell>
                 </TableRow>
               </TableBody>
-            )}
-          </MaterialTable>
-
-
-        </TableContainer>
+            </MaterialTable>
+          </TableContainer>
+        )
       );
     }
   };
 
   function OpenCalendar(rowData) {
-    window.localStorage.setItem("executorId", rowData.id) 
-    window.localStorage.removeItem("equipment") 
+    window.localStorage.setItem("executorId", rowData.id)
+    window.localStorage.setItem("executor", `Сварщик: ${rowData.middleName} ${rowData.firstName} ${rowData.lastName}`)
+    window.localStorage.removeItem("equipmentId")
     setTimeout(() => {
       window.location.href = "/calendar"
     }, 500);
@@ -452,7 +407,7 @@ export const ExecutorsTable = ({
   const optArea = area?.map((item) => {
     return {
       value: item.id,
-      label: `№${item.number} ${item.name} `,
+      label: item.name,
     };
   });
   const optequipment = equipment?.map((item) => {
@@ -501,18 +456,6 @@ export const ExecutorsTable = ({
           </div>
           <div className={styles.row}>
             <Select
-              name="valueWorkshopa"
-              value={valueWorkshopa}
-              width="380px"
-              placeholder="Цех"
-              onChange={(event) => {
-                setValueWorkshop(event.value)
-              }}
-              options={optworkshop}
-            />
-          </div>
-          {/* <div className={styles.row}>
-            <Select
               name="valuetEquipment"
               width="380px"
               value={valuetEquipment}
@@ -520,7 +463,7 @@ export const ExecutorsTable = ({
               onChange={(event) => setValuetEquipment(event.value)}
               options={optequipment}
             />
-          </div> */}
+          </div>
         </div>
       )
     }
@@ -537,7 +480,7 @@ export const ExecutorsTable = ({
               options={optArea}
             />
           </div>
-          {/* <div className={styles.row}>
+          <div className={styles.row}>
             <Select
               name="valuetEquipment"
               width="380px"
@@ -546,7 +489,7 @@ export const ExecutorsTable = ({
               onChange={(event) => setValuetEquipment(event.value)}
               options={optequipment}
             />
-          </div> */}
+          </div>
           <div className={styles.row}>
             <Select
               name="valueWorkshopa"
@@ -575,18 +518,6 @@ export const ExecutorsTable = ({
               options={optArea}
             />
           </div>
-          <div className={styles.row}>
-            <Select
-              name="valueWorkshopa"
-              value={valueWorkshopa}
-              width="380px"
-              placeholder="Цех"
-              onChange={(event) => {
-                setValueWorkshop(event.value)
-              }}
-              options={optworkshop}
-            />
-          </div>
         </div>
       )
     }
@@ -598,19 +529,13 @@ export const ExecutorsTable = ({
           title="Сотрудники"
           isLoading={isRequesting}
           actions={
-            userRole === "Admin" || userRole === "Master"
+            userRole === "Admin"
               ? [
                 {
                   icon: "add",
                   tooltip: "Добавить пользователя",
                   isFreeAction: true,
-                  onClick: () => { 
-                    setIsModalOpen(true); 
-                    setValuetOpenModal(0);
-                    api.post(`/eventLog`,{
-                      "information": "Открыл модальное окно добавления пользователя "
-                    }) 
-                  },
+                  onClick: () => { setIsModalOpen(true); setValuetOpenModal(0) },
                 },
                 {
                   icon: "edit",
@@ -623,14 +548,12 @@ export const ExecutorsTable = ({
                     setValueWorkshop(rowData.workshop?.id)
                     setValuetArea(rowData.productionArea.id)
                     setValuetEquipment(rowData.weldingEquipment?.id)
-                    api.post(`/eventLog`,{
-                      "information": "Открыл модальное окно редактирования пользователя"
-                    }) 
                   },
                 },
               ]
               : []
-          } 
+          }
+          deleteAction={userRole === "admin" ? deleteExecutor : null}
           renderRowChildren={renderRowChildren}
           rowStyle={classes.rowStyle}
           columns={type === "executor" ? extraUserColumns : controllerColumns}
@@ -682,46 +605,37 @@ export const ExecutorsTable = ({
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
-                      handleChange(e);
-                    }
+                    handleChange(e);
                   }}
                   width="200"
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.middleName}
                   name="middleName"
                   placeholder="Фамилия"
-                  onBlur={handleBlur} 
-                  autocomplete="off"
+                  onBlur={handleBlur}
                 />
 
 
                 <Input
                   onChange={(e) => {
-                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
-                      handleChange(e);
-                    }
+                    handleChange(e);
                   }}
                   width="200"
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.firstName}
                   name="firstName"
                   placeholder="Имя"
-                  onBlur={handleBlur} 
-                  autocomplete="off"
+                  onBlur={handleBlur}
                 />
                 <Input
                   onChange={(e) => {
-                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
-                      handleChange(e);
-                    }
+                    handleChange(e);
                   }}
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.lastName}
                   name="lastName"
-                  placeholder="Отчество" 
+                  placeholder="Отчество"
                   onBlur={handleBlur}
-                  autocomplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -734,36 +648,6 @@ export const ExecutorsTable = ({
                   name="rfidTag"
                   placeholder="RFID метка "
                   onBlur={handleBlur}
-                  autocomplete="off"
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
-                      handleChange(e);
-                    }
-                  }}
-                  style={{ height: 40, width: 562 }}
-                  value={values.position}
-                  name="position"
-                  placeholder="Должность"
-                  onBlur={handleBlur}
-                  autoComplete="off" 
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={handleChange}
-                  style={{ height: 40, width: 562 }}
-                  value={values.serviceNumber}
-                  name="serviceNumber"
-                  placeholder="Табельный номер"
-                  type="number"
-                  min="0"
-                  step="1"
-                  onBlur={handleBlur}
-                  autoComplete="off"
                 />
               </div>
               <DisplaySelects select={type} />
@@ -778,50 +662,6 @@ export const ExecutorsTable = ({
                 >
                   {modalData ? "Сохранить" : "Создать"}
                 </Button>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
-
-      {/*Удаление сотрудника*/}
-      <ModalWindow
-        isOpen={deleteTaskModal}
-        headerText="Удаление"
-        setIsOpen={(state) => {
-          setdeleteTaskModal(false)
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setdeleteTaskModal(false) 
-            deleteExecutor(idExecutor)
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <form onSubmit={handleSubmit}>
-
-              <div>
-                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> сотрудника ? </h4>
-
-                <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Удалить
-                  </Button>
-                </div>
-
               </div>
             </form>
           )}

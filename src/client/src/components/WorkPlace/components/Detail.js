@@ -57,11 +57,7 @@ export const Detail = ({
 
   masters,
   techs,
-  executors,
-
-
-  deleteProduct,
-  deleteIcon
+  executors
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -91,25 +87,21 @@ export const Detail = ({
 
   const [valueFixed, setValueFixed] = useState(0);
 
-  //Создание задания
-  const [createTask, setcreateTask] = useState(0);
+
   //Выбранные сварщики
-  const [welderListChoise, setwelderListChoise] = useState([]);
+  const [welderListChoise, setwelderListChoise] = useState([]); 
   //Выбранное изделие/деталь/узел
-  const [valueChoise, setvalueChoise] = useState("");
+  const [valueChoise, setvalueChoise] = useState(""); 
   //Id выбранного изделие/деталь/узел
-  const [valueIdIzdelia, setIdIzdelia] = useState("");
-  ///дописываю для чего просматриваем закрепленные объекты
-  const [isDisplayFixed, setDisplayFixed] = useState("");
+  const [valueIdIzdelia, setIdIzdelia] = useState(""); 
+
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
     id: modalData?.id ?? "",
 
   };
-  /////Удоление
-  const [deleteProdModal, setdeleteProdModal] = useState(false);
-  const [idProduct, setidProduct] = useState("");
+
   function SetValue(valueId, index) {
 
     ///area
@@ -131,98 +123,35 @@ export const Detail = ({
   }
   //Запрос на редактирование или добавление
   function SendData(variables) {
-    variables.workshopId = valueProdArea;
-    variables.workshopNumber = SetValue(valueProdArea, 0);
-    variables.productionAreaId = valuetPosts;
-    variables.productionAreaNumber = SetValue(valuetPosts, 1);
-    variables.technologicalProcessId = valuetTechProc;
-    variables.seams = [valuetSeam];
-    variables.postId = valuetWorkPlace;
-    variables.workplaceId = valueWorkplace;
 
-    if (isModalNumb === 14) {
-      variables.status = 'add';
-      variables.mainProductId = valuetKnots ? valuetKnots : valuetProduct;
-      addDetail(variables);
+    variables["workshopId"] = valueProdArea
+    variables["workshopNumber"] = SetValue(valueProdArea, 0)
+
+    variables["productionAreaId"] = valuetPosts
+    variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
+
+    variables["technologicalProcessId"] = valuetTechProc
+
+    variables["seams"] = [valuetSeam]
+
+    variables["postId"] = valuetWorkPlace
+    variables["workplaceId"] = valueWorkplace
+
+
+    //Добавить Деталь
+    if (isModalNumb == 14) {
+      variables["status"] = "add"
+      addDetail(variables)
+    }
+    //Редактировать Деталь
+    if (isModalNumb == 6) {
+      editDetail(variables)
     }
 
-    if (isModalNumb === 6) {
-      variables.mainProductId = valuetKnots ? valuetKnots : valuetProduct;
-      editDetail(variables);
-    }
   }
 
   const columns = {
-    workshops: [
-      {
-        title: "Наименование цеха",
-        field: "name",
-      },
-      {
-        title: "Номер  цеха",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
-        },
-      },
-    ],
-    production_sites: [
-      {
-        title: "Наименование производственного участка ",
-        field: "name",
-      },
-      {
-        title: "Номер  производственного участка ",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
-            </div>
-          )
-
-          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
-        },
-      },
-    ],
-    posts: [
-      {
-        title: "Наименование поста ",
-        render: (rowData) => {
-          return <p>Пост {rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  поста ",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
-        },
-      },
-    ],
-    jobs_place: [
-      {
-        title: "Наименование рабочего места ",
-        render: (rowData) => {
-          return <p>Рабочее место {rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  рабочего места ",
-        field: "number",
-      },
-    ],
+     
 
     goods: [
       {
@@ -238,27 +167,27 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
-
       {
-        title: "Закрерить сварщика",
+        title: "Закрепить изделие",
         render: (rowData) => {
-          return <p className={styles.Fix} onClick={e => {
-            setValuegoTo(2);
-            setvalueChoise(rowData.name)
-            setIdIzdelia(rowData.id)
-          }}>Закрерить</p>;
+          return <p className={styles.Fix}>Закрепить</p>;
         },
       },
-
+      // {
+      //   title: "Просмотреть закрепленные",
+      //   render: (rowData) => {
+      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
+      //   },
+      // },
       {
         title: "Перерейти к",
         render: (rowData) => {
@@ -286,9 +215,9 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
@@ -322,15 +251,6 @@ export const Detail = ({
     ],
     details: [
       {
-        title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
-      {
         title: "Наименование детали ", field: "name"
       },
       {
@@ -343,26 +263,50 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
-      // {
-      //   title: "Закрерить сварщика",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix} onClick={e => {
-      //       setcreateTask(1);
-      //       setValuegoTo(2);
-      //       setvalueChoise(rowData.name)
-      //       setIdIzdelia(rowData.id)
-      //     }}>Закрерить</p>;
-      //   },
-      // },
+      {
+        title: "Наименование изделия ", 
+        render: (rowData) => {
+          return <span>{rowData?.mainProduct?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  изделия ", 
+        render: (rowData) => {
+          return <span>{rowData?.mainProduct?.number??"-"}</span>
+        },
+      },
+      {
+        title: "Наименование узла ", 
+        render: (rowData) => {
+          return <span>{rowData?.mainProduct?.mainProduct?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  узла ", 
+        render: (rowData) => {
+          return <span>{rowData?.mainProduct?.mainProduct?.number??"-"}</span>
+        },
+      },
+      {
+        title: "Закрепить сварщика",
+        render: (rowData) => {
+          return <p className={styles.Fix} onClick={e => { 
+            setValueFixed(1); 
+            setValuegoTo(2);
+            setvalueChoise(rowData.name);
+            setIdIzdelia(rowData.id)
+          }}>Закрепить</p>;
+        },
+      },
       // {
       //   title: "Просмотреть закрепленные",
       //   render: (rowData) => {
@@ -374,7 +318,7 @@ export const Detail = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы") }}>Сварной шов</p>
             </div>
           )
         },
@@ -397,58 +341,21 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
-
+      {
+        title: "Номер  рабочего места  ", field: "workplace.number"
+      },
+      {
+        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+      },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
       {
-        title: "Технологическая инструкция", field: "technologicalInstruction.name"
-      },
-      {
-        title: "Наименование изделия ",
+        title: "Закрепить задание",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.name ?? "-"}</span>
+          return <p className={styles.Fix}>Закрепить</p>;
         },
       },
-      {
-        title: "Номер  изделия ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      {
-        title: "Наименование узла ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  узла ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      {
-        title: "Наименование детали ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  детали ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      // {
-      //   title: "Закрепить задание",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix}>Закрепить</p>;
-      //   },
-      // },
       // {
       //   title: "Просмотреть закрепленные",
       //   render: (rowData) => {
@@ -489,11 +396,11 @@ export const Detail = ({
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
     ],
-    welder: [
+    welder:[
       {
         title: "Закрепить сварщика",
         render: (rowData) => {
-          return <input type="checkbox" onClick={e => { ChioseWelder(rowData) }}></input>
+          return <input type="checkbox" onClick={e=>{ChioseWelder(rowData)}}></input>
         },
       },
       {
@@ -516,14 +423,14 @@ export const Detail = ({
       },
       {
         title: "Цех",
-        render: (rowData) => {
+        render: (rowData) => { 
           return rowData?.workshop?.name;
         },
       },
       {
         title: "Производственный участок",
         field: "productionArea.name",
-      },
+      }, 
     ]
 
   };
@@ -548,7 +455,7 @@ export const Detail = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `№${item.number} ${item.name} `,
+      label: item.name,
     };
   });
   //select Рабочие места 
@@ -569,7 +476,7 @@ export const Detail = ({
   const TechProc = texprocwelding?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} ${item.number}`,
+      label: item.name,
     };
   });
   //select Сварочный шов  
@@ -584,53 +491,142 @@ export const Detail = ({
   function GoTo(param, title, id) {
     setValuegoToTitle(title)
     setValuegoTo(1)
-    setValue(-1)
-    setValue2(-1)
 
-    const handlers = {
-      5: handleKnots,
-      6: handleInsideProducts,
-      7: handleSeams,
-      10: handleInsideProductsForKnot,
-      11: handleSeamsForKnot,
-      12: handleSeamsForDetail,
+
+    setValue(-1);
+    setValue2(-1);
+    setValuegoToHeadTable(columns[Object.keys(columns)[param]])
+    //Вывод Производственный участок для цеха
+    if (param === 1) {
+      let areaNew = []
+      for (let index = 0; index < area.length; index++) {
+        if (area[index].workshop.id === id) {
+          areaNew.push(area[index])
+        }
+      }
+      setValuegoToBodyTable(areaNew)
     }
-
-    if (handlers[param]) {
-      handlers[param](id)
+    //Вывод постов для Производственных участоков
+    if (param === 2) {
+      let postsNew = []
+      for (let index = 0; index < posts.length; index++) {
+        if (posts[index].productionArea.id === id) {
+          postsNew.push(posts[index])
+        }
+      }
+      setValuegoToBodyTable(postsNew)
     }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 3) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].productionArea?.id === id) {
+          workplaceNew.push(workplace[index])
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+    }
+    //Вывод Рабочее место для производственного участка 
+    if (param === 9) {
+      let workplaceNew = []
+      for (let index = 0; index < workplace.length; index++) {
+        if (workplace[index].post?.id != undefined) {
+          if (workplace[index].post.id === id) {
+            workplaceNew.push(workplace[index])
+          }
+        }
+      }
+      setValuegoToBodyTable(workplaceNew)
+      setValuegoToHeadTable(columns[Object.keys(columns)[3]])
+    }
+    /////////////////
+    //Вывод деталей для изделий
+    if (param === 6) {
+      let detailNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
 
-    function handleKnots(id) {
-      const knotNew = product.find(p => p.id === id)?.insideProducts.filter(ip => ip.productType === 2) || []
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+            if (product[index].insideProducts[index2].productType === 3) {
+              detailNew.push(product[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToBodyTable(detailNew)
+    }
+    //Вывод узлов для изделий
+    if (param === 5) {
+      let knotNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
+          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
+            if (product[index].insideProducts[index2].productType === 2) {
+              knotNew.push(product[index].insideProducts[index2])
+            }
+          }
+        }
+      }
       setValuegoToBodyTable(knotNew)
     }
-
-    function handleInsideProducts(id) {
-      const detailNew = product.find(p => p.id === id)?.insideProducts.filter(ip => ip.productType === 3) || []
-      setValuegoToBodyTable(detailNew)
-    }
-
-    function handleSeams(id) {
-      const seamNew = product.find(p => p.id === id)?.seams || []
-      setValuegoToBodyTable(seamNew)
-      setValuegoToHeadTable(columns.seam)
-    }
-
-    function handleInsideProductsForKnot(id) {
-      const detailNew = knot.find(k => k.id === id)?.insideProducts.filter(ip => ip.productType === 3) || []
-      setValuegoToHeadTable(columns.insideProducts)
-      setValuegoToBodyTable(detailNew)
-    }
-
-    function handleSeamsForKnot(id) {
-      const seamNew = knot.find(k => k.id === id)?.seams || []
-      setValuegoToHeadTable(columns.seam)
+    //Вывод швов для изделий
+    if (param === 7) {
+      let seamNew = []
+      for (let index = 0; index < product.length; index++) {
+        if (product[index].id === id) {
+          seamNew = product[index].seams
+        }
+      }
       setValuegoToBodyTable(seamNew)
     }
+    /////////////////
+    //Вывод деталей для узла
+    if (param === 10) {
+      let detailNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
 
-    function handleSeamsForDetail(id) {
-      const seamNew = detail.find(d => d.id === id)?.seams || []
-      setValuegoToHeadTable(columns.seam)
+          for (let index2 = 0; index2 < knot[index].insideProducts.length; index2++) {
+            if (knot[index].insideProducts[index2].productType === 3) {
+              detailNew.push(knot[index].insideProducts[index2])
+            }
+          }
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[6]])
+      setValuegoToBodyTable(detailNew)
+    }
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+          seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
+    //Вывод швов для узла
+    if (param === 11) {
+      let seamNew = []
+      for (let index = 0; index < knot.length; index++) {
+        if (knot[index].id === id) {
+          seamNew = knot[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+      setValuegoToBodyTable(seamNew)
+    }
+    //Вывод швов для деталей
+    if (param === 12) {
+      let seamNew = []
+      for (let index = 0; index < detail.length; index++) {
+        if (detail[index].id === id) {
+          seamNew = detail[index].seams
+        }
+      }
+      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
       setValuegoToBodyTable(seamNew)
     }
   }
@@ -642,6 +638,20 @@ export const Detail = ({
 
 
 
+
+
+  const formattedMasters = masters?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName}`,
+    };
+  });
+  const formattedTechs = techs?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName}`,
+    };
+  });
 
 
   const exec = [
@@ -666,108 +676,92 @@ export const Detail = ({
 
 
 
-  const [welderList, setwelderList] = useState(welderGetList(area[0].id, 0));
+  const [welderList, setwelderList] = useState(welderGetList (area[0].id,0)); 
 
-  function welderGetList(idArea, tools_numb) {
-    if (tools_numb != 0) {
+  function welderGetList (idArea,tools_numb) { 
+    if (tools_numb!=0) {
       let welderList = []
       for (let index = 0; index < executors.length; index++) {
-        if (executors[index].productionArea.id === idArea) {
+        if (executors[index].productionArea.id===idArea) {
           welderList.push(executors[index])
-        }
+        } 
       }
-      setwelderList(welderList)
+      setwelderList(welderList) 
     }
-    else {
+    else{
       let welderList = []
       for (let index = 0; index < executors.length; index++) {
-        if (executors[index].productionArea.id === idArea) {
+        if (executors[index].productionArea.id===idArea) {
           welderList.push(executors[index])
-        }
+        } 
       }
       return welderList
-    }
-  }
+    } 
+  } 
 
-  function ChioseWelder(welder) {
-    if (welder["active"] === undefined) {
-      welderListChoise.push(welder.id)
-      welder["active"] = 1
-      setwelderListChoise(welderListChoise)
+  function ChioseWelder(welder) {  
+    if (welder["active"]===undefined) {
+       welderListChoise.push(welder.id)
+       welder["active"]=1
+       setwelderListChoise(welderListChoise)
     }
-    else if (welder["active"] === 1) {
+    else if (welder["active"]===1) {
       for (let index = 0; index < welderListChoise.length; index++) {
-        if (welderListChoise[index].id === welder.id) {
-          welderListChoise.splice(index, 1)
-        }
+        if (welderListChoise[index].id===welder.id) {
+          welderListChoise.splice(index,1)
+        }        
       }
-      welder["active"] = 0
+      welder["active"]=0
     }
-    else if (welder["active"] === 0) {
+    else if (welder["active"]===0) {
       welderListChoise.push(welder.id)
       setwelderListChoise(welderListChoise)
-      welder["active"] = 1
-    }
+      welder["active"]=1
+    } 
   }
   function SendChoiseWelder() {
     let dataToassignWelders = {
-      "productId": valueIdIzdelia,
-      "welderIds": welderListChoise,
-      status: "assign"
-    }
+     "productId": valueIdIzdelia,
+     "welderIds": welderListChoise,
+     status :"assign"
+    }  
     addDetail(dataToassignWelders)
+     
+ }
 
-  }
+ ////Скрыть отобразить сварные швы изделия/узла/детали 
+ const [displaySeams, setdisplaySeams] = useState(0);
+ const [SeamsList, setSeamsList] = useState([]);
 
-  ////Скрыть отобразить сварные швы изделия/узла/детали 
-  const [displaySeams, setdisplaySeams] = useState(0);
-  const [SeamsList, setSeamsList] = useState([]);
+ function SeamsDisplay() {
+   if (displaySeams === 0) {
+     GetSeams()
+     setdisplaySeams(1)
+   }
+   else {
+     setdisplaySeams(0)
+   }
+ }
 
-  function SeamsDisplay() {
-    if (displaySeams === 0) {
-      GetSeams()
-      setdisplaySeams(1)
-    }
-    else {
-      setdisplaySeams(0)
-    }
-  }
 
-  const [valuetProduct, setvaluetProduct] = useState("");
-  function GetSeams() {
+ function GetSeams() {
 
-    let SeamsArray = []
-    for (let index = 0; index < detail.length; index++) {
-      if (detail[index].id === valueIdIzdelia) {
-        for (let index2 = 0; index2 < seam.length; index2++) {
+   let SeamsArray = []
+   for (let index = 0; index < detail.length; index++) {
+     if (detail[index].id === valueIdIzdelia) {
+       for (let index2 = 0; index2 < seam.length; index2++) {
 
-          for (let index3 = 0; index3 < detail[index].seams.length; index3++) {
-            if (seam[index2].id === detail[index].seams[index3].id) {
-              SeamsArray.push(seam[index2])
-            }
-          }
-        }
+         for (let index3 = 0; index3 < detail[index].seams.length; index3++) {
+           if (seam[index2].id === detail[index].seams[index3].id) {
+             SeamsArray.push(seam[index2])
+           }
+         }
+       }
 
-      }
-    }
-    setSeamsList(SeamsArray)
-  }
-  const productsOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(product?.map((item) => ({
-      value: item.id,
-      label: `${item.name} ${item.number}`,
-    })) || []),
-  ];
-
-  const [valuetKnots, setvaluetKnots] = useState("");
-  const knotsOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(knot?.map((item) => ({
-      value: item.id,
-      label: `${item.name} ${item.number}`,
-    })) || []),
-  ];
+     }
+   }
+   setSeamsList(SeamsArray)
+ }
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -785,7 +779,7 @@ export const Detail = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed + " - " + value_goToTitle}
+                  title={value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -807,7 +801,7 @@ export const Detail = ({
                 columns={columns.details}
                 data={detail}
                 actions={
-                  userRole === "Admin" || userRole === "Master"
+                  userRole === "Admin"
                     ? [
                       {
                         icon: "add",
@@ -820,10 +814,6 @@ export const Detail = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValuetWorkPlace("")
-
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно добавления детали"
-                          })
                         },
                       },
                       {
@@ -837,9 +827,6 @@ export const Detail = ({
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
                           setValuetWorkPlace(rowData.workplace?.id)
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно редактирования детали"
-                          })
                         },
                       },
                     ]
@@ -854,15 +841,74 @@ export const Detail = ({
         }
 
 
-        {createTask === 1
+        {valueFixed === 1
 
           ? (
             <div className={styles.TableToFixed}>
 
+              {/* <div className={styles.selects}>
+                <Select
+                  name="valueWelder"
+                  value={valueWelder}
+                  width="380px"
+                  placeholder="Сотрудники"
+                  onChange={(event) => {
+                    setValueWelder(event.value)
+                    setValueWelderName("")
+                  }}
+                  options={optExecutors}
+                />
+                {valueWelder === 1
+                  ? (
+                    <div className={styles.select}>
+                      <Select
+                        name="valueWelderExe"
+                        value={valueWelderExe}
+                        width="380px"
+                        placeholder="Мастера"
+                        onChange={(event) => {
+                          setValueWelderExe(event.value)
+                          setValueWelderName(event.label)
+                        }}
+                        options={formattedMasters}
+                      />
+                    </div>
+                  )
+                  : (
+                    <div className={styles.select} >
+                      <Select
+                        className={styles.select}
+                        name="valueWelderExe"
+                        value={valueWelderExe}
+                        width="380px"
+                        placeholder="Контролеры"
+                        onChange={(event) => {
+                          setValueWelderExe(event.value)
+                          setValueWelderName(event.label)
+                        }}
+                        options={formattedTechs}
+                      />
+                    </div>
+                  )
+                }
+              </div>
+
+              {valueWelder === 1
+                ? (<h2>Мастер: {valueWelderExeName}</h2>)
+                : (<h2>Контролер: {valueWelderExeName}</h2>)
+
+              }
+
+
+              <button className={styles.fixed}> Закрепить </button> */}
               <h2>Закрепить сварщика</h2>
               <h3>Деталь: {valueChoise}</h3>
               <div className={styles.Seams}>
-
+                {/* {
+                  displaySeams === 0
+                    ? <span className={styles.refSeam} onClick={SeamsDisplay}>Просмотреть сварные швы для детали</span>
+                    : <span className={styles.refSeam} onClick={SeamsDisplay}>Скрыть сварные швы для детали</span>
+                } */}
                 {
                   displaySeams === 1
                     ? (
@@ -879,11 +925,11 @@ export const Detail = ({
                     : <div></div>
                 }
 
-
+                
 
               </div>
               <div className={styles.selects}>
-
+                
                 <div className={styles.roww}>
                   <p>Производственные участки</p>
                   <Select
@@ -893,7 +939,7 @@ export const Detail = ({
                     placeholder="Производственные участки"
                     onChange={(event) => {
                       setValuetPosts(event.value)
-                      welderGetList(event.value, 1)
+                      welderGetList(event.value,1)
                     }}
                     options={optPosts}
                   />
@@ -908,7 +954,7 @@ export const Detail = ({
                   columns={columnsFix.welder}
                   data={welderList}
                 />
-              </TabPanel>
+              </TabPanel> 
             </div>
           )
           : (
@@ -917,7 +963,7 @@ export const Detail = ({
 
         }
 
-
+ 
 
 
         <ModalWindow
@@ -956,27 +1002,22 @@ export const Detail = ({
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
-                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^[\dA-Z-]+$/.test(value)) {
-                        handleChange(e);
-                      }
+                      handleChange(e);
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autoComplete="off"
                   />
                 </div>
 
-                {/* <div className={styles.row}>
+                <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -987,27 +1028,8 @@ export const Detail = ({
                     }}
                     options={workplaceIdOptions}
                   />
-                </div> */}
-                <div className={styles.row}>
-                  <Select
-                    name="valuetProduct"
-                    width="380px"
-                    value={valuetProduct}
-                    placeholder="Изделие"
-                    onChange={(event) => setvaluetProduct(event.value)}
-                    options={productsOptions}
-                  />
                 </div>
-                <div className={styles.row}>
-                  <Select
-                    name="valuetKnots"
-                    width="380px"
-                    value={valuetKnots}
-                    placeholder="Узел"
-                    onChange={(event) => setvaluetKnots(event.value)}
-                    options={knotsOptions}
-                  />
-                </div>
+
                 <div className={styles.row}>
                   <Select
                     name="valuetPosts"
@@ -1031,7 +1053,7 @@ export const Detail = ({
                   />
                 </div>
 
-                {/* <div className={styles.row}>
+                <div className={styles.row}>
                   <Select
                     name="valuetTechProc"
                     width="380px"
@@ -1040,14 +1062,14 @@ export const Detail = ({
                     onChange={(event) => setValuetSeam(event.value)}
                     options={SeamOptions}
                   />
-                </div> */}
+                </div>
 
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
                     disabled={
-                      values.number == ""
+                      values.number == "" || values.name == "" || valuetSeam.length == 0
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}
@@ -1061,47 +1083,6 @@ export const Detail = ({
         </ModalWindow>
 
 
-        {/*Удаление */}
-        <ModalWindow
-          isOpen={deleteProdModal}
-          headerText="Удаление"
-          setIsOpen={(state) => {
-            setdeleteProdModal(false)
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setdeleteProdModal(false)
-              deleteProduct({ id: idProduct, index: 6 })
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данную деталь ? </h4>
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-                </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
 
       </div>
     </div>

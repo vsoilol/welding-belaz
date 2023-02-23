@@ -52,10 +52,7 @@ export const ProductionArea = ({
   value_panel2,
   userRole,
   addArea,
-  editArea,
-
-  deleteProduct,
-  deleteIcon
+  editArea
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -75,12 +72,6 @@ export const ProductionArea = ({
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
 
-  ///дописываю для чего просматриваем закрепленные объекты
-  const [isDisplayFixed, setDisplayFixed] = useState("");
-
-  /////Удоление
-  const [deleteProdModal, setdeleteProdModal] = useState(false);
-  const [idProduct, setidProduct] = useState("");
 
   const initialValues = {
     name: modalData?.name ?? "",
@@ -139,36 +130,14 @@ export const ProductionArea = ({
         title: "Номер  цеха",
         field: "number",
       },
-
-      {
-        title: "Наименование производственного участка ",
-        render: (rowData) => {
-          return <span>{DetArea(rowData.id, "name") ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  производственного участка ",
-        render: (rowData) => {
-          return <span>{DetArea(rowData.id, "numb") ?? "-"}</span>
-        },
-      },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
         },
       },
     ],
     production_sites: [
-      {
-        title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
       {
         title: "Наименование производственного участка ",
         field: "name",
@@ -176,17 +145,29 @@ export const ProductionArea = ({
       {
         title: "Номер  производственного участка ",
         field: "number",
-      },
+      }, 
       {
-        title: "Наименование цеха ",
+        title: "Наименование   поста ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>
+          return <span>{DetArea(rowData.id, "name", 1)??"-"}</span>
         },
       },
       {
-        title: "Номер  цеха ",
+        title: "Номер поста",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>
+          return <span>{DetArea(rowData.id, "numb", 1)??"-"}</span>
+        },
+      },
+      {
+        title: "Наименование рабочего места ",
+        render: (rowData) => {
+          return <span>{DetArea(rowData.id, "name", 2)??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  рабочего места ",
+        render: (rowData) => {
+          return <span>{DetArea(rowData.id, "numb", 2)??"-"}</span>
         },
       },
       {
@@ -195,8 +176,8 @@ export const ProductionArea = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
             </div>
           )
 
@@ -215,36 +196,10 @@ export const ProductionArea = ({
         title: "Номер  поста ",
         field: "number",
       },
-
-      {
-        title: "Наименование цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>
-        },
-      },
-
-      {
-        title: "Наименование производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.number ?? "-"}</span>
-        },
-      },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
         },
       },
     ],
@@ -252,51 +207,12 @@ export const ProductionArea = ({
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number ?? "-"}</p>;
+          return <p>Рабочее место {rowData.number}</p>;
         },
       },
       {
         title: "Номер  рабочего места ",
         field: "number",
-      },
-      {
-        title: "Наименование цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>
-        },
-      },
-
-      {
-        title: "Наименование производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.number ?? "-"}</span>
-        },
-      },
-
-
-      {
-        title: "Наименование поста",
-        render: (rowData) => {
-          return <span>{rowData?.post?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  поста",
-        render: (rowData) => {
-          return <span>{rowData?.post?.number ?? "-"}</span>
-        },
       },
     ],
 
@@ -346,15 +262,15 @@ export const ProductionArea = ({
     }
     if (numb === 2) {
       if (field === "name") {
-        for (let index = 0; index < workplace?.length; index++) {
-          if (workplace[index].productionArea?.id === params) {
+        for (let index = 0; index < workplace?.length; index++) { 
+          if (workplace[index].productionArea?.id === params) { 
             return `Рабочее место ${workplace[index].number}`
           }
         }
       }
       if (field === "numb") {
-        for (let index = 0; index < workplace?.length; index++) {
-          if (workplace[index].productionArea?.id === params) {
+        for (let index = 0; index < workplace?.length; index++) { 
+          if (workplace[index].productionArea?.id === params) { 
             return workplace[index].number
           }
         }
@@ -527,7 +443,7 @@ export const ProductionArea = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed + " - " + value_goToTitle}
+                  title={value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -543,7 +459,7 @@ export const ProductionArea = ({
                 columns={columns.production_sites}
                 data={area}
                 actions={
-                  userRole === "Admin" || userRole === "Master"
+                  userRole === "Admin"
                     ? [
                       {
                         icon: "add",
@@ -556,10 +472,6 @@ export const ProductionArea = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValuetWorkPlace("")
-
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно добавления производственого участка"
-                          })
                         },
                       },
                       {
@@ -570,10 +482,6 @@ export const ProductionArea = ({
                           setIsModalOpen(true);
                           setIsModalNumb(1)
                           setValueProdArea(rowData.workshop.id)
-
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно редактирования производственого участка"
-                          })
                         },
                       },
                     ]
@@ -622,7 +530,6 @@ export const ProductionArea = ({
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
-                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -633,12 +540,8 @@ export const ProductionArea = ({
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
-                    type="number"
-                    min="0"
-                    step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -671,49 +574,7 @@ export const ProductionArea = ({
 
         </ModalWindow>
 
-        {/*Удаление задания*/}
-        <ModalWindow
-          isOpen={deleteProdModal}
-          headerText="Удаление"
-          setIsOpen={(state) => {
-            setdeleteProdModal(false)
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setdeleteProdModal(false)
-              deleteProduct({ id: idProduct, index: 1 })
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
 
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данный производственный участок ? </h4>
-
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-
-                </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
 
       </div>
     </div>
