@@ -144,19 +144,19 @@ public class SeamRepository : ISeamRepository
     {
         var products = _context.Seams
             .Include(_ => _.Product)
+            .ThenInclude(_ => _!.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
             .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
+            .ThenInclude(_ => _!.MainProduct)
             .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
+            .ThenInclude(_ => _!.MainProduct)
             .Include(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
+            .ThenInclude(_ => _!.Workshop)
             .Include(_ => _.TechnologicalInstruction)
             .Include(_ => _.Product)
-            .ThenInclude(_ => _.TechnologicalProcess)
+            .ThenInclude(_ => _!.TechnologicalProcess)
             .Include(_ => _.Product)
-            .ThenInclude(_ => _.Welders)
+            .ThenInclude(_ => _!.Welders)
             .Where(filter);
 
         return products;
@@ -166,19 +166,19 @@ public class SeamRepository : ISeamRepository
     {
         var products = _context.Seams
             .Include(_ => _.Product)
+            .ThenInclude(_ => _!.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
             .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
+            .ThenInclude(_ => _!.MainProduct)
             .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
+            .ThenInclude(_ => _!.MainProduct)
             .Include(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
+            .ThenInclude(_ => _!.Workshop)
             .Include(_ => _.TechnologicalInstruction)
             .Include(_ => _.Product)
-            .ThenInclude(_ => _.TechnologicalProcess)
+            .ThenInclude(_ => _!.TechnologicalProcess)
             .Include(_ => _.Product)
-            .ThenInclude(_ => _.Welders);
+            .ThenInclude(_ => _!.Welders);
 
         return products;
     }

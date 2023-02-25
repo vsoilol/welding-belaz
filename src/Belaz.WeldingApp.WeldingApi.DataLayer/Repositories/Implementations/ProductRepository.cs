@@ -218,9 +218,9 @@ public class ProductRepository : IProductRepository
     {
         var products = _context.Products
             .Include(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
+            .ThenInclude(_ => _!.MainProduct)
             .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _.MainProduct)
+            .ThenInclude(_ => _!.MainProduct)
             .Include(_ => _.ProductInsides)
             .ThenInclude(_ => _.InsideProduct)
             .Include(_ => _.Seams)

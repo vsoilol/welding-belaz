@@ -27,9 +27,9 @@ public class TokenManager : ITokenManager
 
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
             new Claim("id", user.Id.ToString()),
         };
 
@@ -40,8 +40,10 @@ public class TokenManager : ITokenManager
             Subject = new ClaimsIdentity(claims),
             IssuedAt = DateTime.UtcNow,
             Expires = DateTime.UtcNow.Add(_authOptions.TokenLifetime),
-            SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature
+            ),
         };
 
         return new AuthSuccessResponse

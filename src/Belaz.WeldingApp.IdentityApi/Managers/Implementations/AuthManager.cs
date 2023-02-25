@@ -21,8 +21,13 @@ public class AuthManager : IAuthManager
 
     private HttpContext HttpContext { get; set; }
 
-    public AuthManager(IHttpContextAccessor httpContextAccessor, IOptions<AuthOptions> options,
-        IRepository<UserData> userRepository, IRoleRepository roleRepository, ITokenManager tokenManager)
+    public AuthManager(
+        IHttpContextAccessor httpContextAccessor,
+        IOptions<AuthOptions> options,
+        IRepository<UserData> userRepository,
+        IRoleRepository roleRepository,
+        ITokenManager tokenManager
+    )
     {
         _authOptions = options.Value;
         _userRepository = userRepository;
@@ -33,14 +38,19 @@ public class AuthManager : IAuthManager
 
     public async Task<AuthSuccessResponse> Login(LoginModelContract login)
     {
-        var userData = (await _userRepository.GetByFilterAsync(x => x.UserName == login.UserName)).FirstOrDefault();
+        var userData = (
+            await _userRepository.GetByFilterAsync(x => x.UserName == login.UserName)
+        ).FirstOrDefault();
 
         if (userData is null)
         {
             throw new LoginFailedException("User does not exist");
         }
 
-        var userHasValidPassword = SecurePasswordHasher.Verify(login.Password, userData.PasswordHash);
+        var userHasValidPassword = SecurePasswordHasher.Verify(
+            login.Password,
+            userData.PasswordHash!
+        );
 
         if (!userHasValidPassword)
         {
@@ -60,13 +70,23 @@ public class AuthManager : IAuthManager
 
     public async Task<AuthSuccessResponse> Register(RegisterModelContract registerContract)
     {
-        var userContains = (await _userRepository.AsQueryable()
-            .FirstOrDefaultAsync(x =>
-                x.UserName == registerContract.UserName || x.Email == registerContract.Email)) is not null;
+        var userContains =
+            (
+                await _userRepository
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(
+                        x =>
+                            x.UserName == registerContract.UserName
+                            || x.Email == registerContract.Email
+                    )
+            )
+                is not null;
 
         if (userContains)
         {
-            throw new RegisterFailedException($"User with email: {registerContract.Email} already exist!");
+            throw new RegisterFailedException(
+                $"User with email: {registerContract.Email} already exist!"
+            );
         }
 
         if (string.IsNullOrWhiteSpace(registerContract.Password))

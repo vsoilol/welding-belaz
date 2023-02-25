@@ -22,8 +22,11 @@ public class LoginModelContractValidatorTests
         // Assert
         result.ShouldHaveValidationErrorFor(person => person.UserName);
         Assert.That(
-            result.Errors.FirstOrDefault(_ => _.PropertyName == nameof(model.UserName)).ErrorMessage,
-            Is.EqualTo("The UserName field is not a valid e-mail address."));
+            result.Errors
+                .FirstOrDefault(_ => _.PropertyName == nameof(model.UserName))!
+                .ErrorMessage,
+            Is.EqualTo("The UserName field is not a valid e-mail address.")
+        );
     }
 
     [TestCase("val@ru.co")]

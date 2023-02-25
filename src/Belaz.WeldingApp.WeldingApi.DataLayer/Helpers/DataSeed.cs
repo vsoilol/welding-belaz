@@ -57,6 +57,11 @@ public class DataSeed
             await AddChief(context);
         }
 
+        if (!context.TechnologicalProcesses.Any())
+        {
+            await AddTechnologicalProcesses(context);
+        }
+
         if (!context.Products.Any())
         {
             await AddProducts(context);
@@ -65,11 +70,6 @@ public class DataSeed
         if (!context.WeldingTasks.Any())
         {
             await AddWeldingTasks(context);
-        }
-
-        if (!context.TechnologicalProcesses.Any())
-        {
-            await AddTechnologicalProcesses(context);
         }
 
         /*if (!context.TechnologicalInstructions.Any())
@@ -256,12 +256,26 @@ public class DataSeed
                         Workplaces = new List<Workplace>
                         {
                             new Workplace { Number = 3520, IdFromSystem = "3520" },
+                            new Workplace { Number = 3700, IdFromSystem = "3700" },
+                            new Workplace { Number = 3680, IdFromSystem = "3680" },
+                            new Workplace { Number = 3660, IdFromSystem = "3660" },
+                            new Workplace { Number = 3670, IdFromSystem = "3670" },
+                            new Workplace { Number = 3640, IdFromSystem = "3640" },
+                            new Workplace { Number = 3630, IdFromSystem = "3630" },
                             new Workplace { Number = 3610, IdFromSystem = "3610" },
                             new Workplace { Number = 3500, IdFromSystem = "3500" },
                             new Workplace { Number = 3590, IdFromSystem = "3590" },
                             new Workplace { Number = 3600, IdFromSystem = "3600" },
                             new Workplace { Number = 3690, IdFromSystem = "3690" },
                             new Workplace { Number = 3650, IdFromSystem = "3650" },
+                            new Workplace { Number = 3570, IdFromSystem = "3570" },
+                            new Workplace { Number = 3510, IdFromSystem = "3510" },
+                            new Workplace { Number = 3530, IdFromSystem = "3530" },
+                            new Workplace { Number = 3540, IdFromSystem = "3540" },
+                            new Workplace { Number = 3550, IdFromSystem = "3550" },
+                            new Workplace { Number = 3560, IdFromSystem = "3560" },
+                            new Workplace { Number = 3580, IdFromSystem = "3580" },
+                            new Workplace { Number = 3620, IdFromSystem = "3620" },
                         }
                     }
                 }
@@ -315,11 +329,11 @@ public class DataSeed
         {
             new WeldingEquipment
             {
-                IdFromSystem = "508",
+                IdFromSystem = "49141",
                 Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
-                FactoryNumber = "49225",
-                CommissioningDate = new DateTime(2008, 1, 1),
+                FactoryNumber = "49141",
+                CommissioningDate = new DateTime(2005, 1, 28),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка",
@@ -334,11 +348,11 @@ public class DataSeed
             },
             new WeldingEquipment
             {
-                IdFromSystem = "535",
+                IdFromSystem = "49286",
                 Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
                 FactoryNumber = "49286",
-                CommissioningDate = new DateTime(2010, 1, 1),
+                CommissioningDate = new DateTime(2010, 7, 29),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка",
@@ -353,11 +367,11 @@ public class DataSeed
             },
             new WeldingEquipment
             {
-                IdFromSystem = "511",
+                IdFromSystem = "49232",
                 Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
                 FactoryNumber = "49232",
-                CommissioningDate = new DateTime(2008, 1, 1),
+                CommissioningDate = new DateTime(2008, 10, 31),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка",
@@ -372,19 +386,19 @@ public class DataSeed
             },
             new WeldingEquipment
             {
-                IdFromSystem = "499",
+                IdFromSystem = "49283",
                 Name = "Полуавтомат сварочный",
                 Marking = "GLC556-C",
                 FactoryNumber = "49283",
-                CommissioningDate = new DateTime(2008, 1, 1),
+                CommissioningDate = new DateTime(2008, 10, 31),
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка",
                 RfidTag = "A6:F1:CF:48",
-                WeldingCurrentMin = 80,
-                WeldingCurrentMax = 550,
-                ArcVoltageMin = 18,
-                ArcVoltageMax = 41.5,
+                WeldingCurrentMin = 10,
+                WeldingCurrentMax = 500,
+                ArcVoltageMin = 14.5,
+                ArcVoltageMax = 39,
                 LoadDuration = 100,
                 IdleVoltage = 70,
                 Workplaces = new List<Workplace> { workplace3690, workplace3650 }
@@ -416,6 +430,20 @@ public class DataSeed
                     MiddleName = "Грук",
                     FirstName = "Екатерина",
                     LastName = "Сергеевна",
+                    Position = "Контролер сварочных работ",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole> { new UserRole { Role = techUserRole } }
+                }
+            },
+            new Inspector
+            {
+                IdFromSystem = "219379",
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "19379",
+                    MiddleName = "Шабалинская",
+                    FirstName = "Мария",
+                    LastName = "Николаевна",
                     Position = "Контролер сварочных работ",
                     ProductionArea = productionArea6,
                     UserRoles = new List<UserRole> { new UserRole { Role = techUserRole } }
@@ -486,35 +514,18 @@ public class DataSeed
             _ => _.IdFromSystem == "06"
         );
 
-        var weldingEquipment162 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "162")
+        var weldingEquipment49141 = (
+            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49141")
         )!;
-        var weldingEquipment114 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "114")
+        var weldingEquipment49283 = (
+            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49283")
         )!;
-        var weldingEquipment146 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "146")
+        var weldingEquipment49286 = (
+            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49286")
         )!;
-        var weldingEquipment508 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "508")
+        var weldingEquipment49232 = (
+            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49232")
         )!;
-        var weldingEquipment535 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "535")
-        )!;
-        var weldingEquipment511 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "511")
-        )!;
-        var weldingEquipment499 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "499")
-        )!;
-
-        var workplace3520 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3520))!;
-        var workplace3610 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3610))!;
-        var workplace3500 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3500))!;
-        var workplace3590 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3590))!;
-        var workplace3600 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3600))!;
-        var workplace3690 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3690))!;
-        var workplace3650 = (await context.Workplaces.FirstOrDefaultAsync(_ => _.Number == 3650))!;
 
         var welderRole = (
             await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Welder))
@@ -524,29 +535,15 @@ public class DataSeed
         {
             new Welder
             {
-                IdFromSystem = "151299",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment499 },
-                Workplace = workplace3650,
-                UserInfo = new UserData
-                {
-                    RfidTag = "97:17:60:B4",
-                    ServiceNumber = "51299",
-                    MiddleName = "Михолап",
-                    FirstName = "Василий",
-                    LastName = "Васильевич",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
-                }
-            },
-            new Welder
-            {
                 IdFromSystem = "150882",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment499 },
-                Workplace = workplace3690,
+                WeldingEquipments = new List<WeldingEquipment>
+                {
+                    weldingEquipment49141,
+                    weldingEquipment49283
+                },
                 UserInfo = new UserData
                 {
-                    RfidTag = "B7:5A:79:B5",
+                    RfidTag = "17:CD:7F:5A",
                     ServiceNumber = "50882",
                     MiddleName = "Буландо",
                     FirstName = "Юрий",
@@ -558,12 +555,31 @@ public class DataSeed
             },
             new Welder
             {
-                IdFromSystem = "121267",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment511 },
-                Workplace = workplace3600,
+                IdFromSystem = "146164",
+                WeldingEquipments = new List<WeldingEquipment>
+                {
+                    weldingEquipment49141,
+                    weldingEquipment49283
+                },
                 UserInfo = new UserData
                 {
-                    RfidTag = "D7:95:55:B4",
+                    RfidTag = "27:45:7E:B4",
+                    ServiceNumber = "46164",
+                    MiddleName = "Михейчик",
+                    FirstName = "Александр",
+                    LastName = "Васильевич",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "121267",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49232 },
+                UserInfo = new UserData
+                {
+                    RfidTag = "D7:F1:7D:5A",
                     ServiceNumber = "21267",
                     MiddleName = "Казинец",
                     FirstName = "Василий",
@@ -576,11 +592,10 @@ public class DataSeed
             new Welder
             {
                 IdFromSystem = "117390",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment511 },
-                Workplace = workplace3610,
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49232 },
                 UserInfo = new UserData
                 {
-                    RfidTag = "67:CD:7E:5A",
+                    RfidTag = "67:5A:70:B4",
                     ServiceNumber = "17390",
                     MiddleName = "Казачёнок",
                     FirstName = "Сергей",
@@ -592,29 +607,11 @@ public class DataSeed
             },
             new Welder
             {
-                IdFromSystem = "145092",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment535 },
-                Workplace = workplace3590,
-                UserInfo = new UserData
-                {
-                    RfidTag = "27:45:7E:B4",
-                    ServiceNumber = "45092",
-                    MiddleName = "Козылев",
-                    FirstName = "Антон",
-                    LastName = "Павлович",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
-                }
-            },
-            new Welder
-            {
                 IdFromSystem = "132695",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment535 },
-                Workplace = workplace3500,
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49286 },
                 UserInfo = new UserData
                 {
-                    RfidTag = "17:CD:7F:5A",
+                    RfidTag = "D7:95:55:B4",
                     ServiceNumber = "32695",
                     MiddleName = "Виторский",
                     FirstName = "Владимир",
@@ -626,16 +623,15 @@ public class DataSeed
             },
             new Welder
             {
-                IdFromSystem = "146325",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment508 },
-                Workplace = workplace3610,
+                IdFromSystem = "122575",
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49286 },
                 UserInfo = new UserData
                 {
-                    RfidTag = "67:5A:70:B4",
-                    ServiceNumber = "46325",
-                    MiddleName = "Канапацкий",
-                    FirstName = "Олег",
-                    LastName = "Дмитриевич",
+                    ServiceNumber = "22575",
+                    RfidTag = "67:CD:7E:5A",
+                    MiddleName = "Костюкевич",
+                    FirstName = "Максим",
+                    LastName = "Александрович",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
                     UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
@@ -643,16 +639,39 @@ public class DataSeed
             },
             new Welder
             {
-                IdFromSystem = "120756",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment508 },
-                Workplace = workplace3520,
+                IdFromSystem = "114729",
+                WeldingEquipments = new List<WeldingEquipment>
+                {
+                    weldingEquipment49141,
+                    weldingEquipment49283
+                },
                 UserInfo = new UserData
                 {
-                    ServiceNumber = "20756",
-                    RfidTag = "D7:F1:7D:5A",
-                    MiddleName = "Авхимович",
-                    FirstName = "Пётр",
-                    LastName = "Алексеевич",
+                    ServiceNumber = "14729",
+                    RfidTag = "B7:5A:79:B5",
+                    MiddleName = "Казинец",
+                    FirstName = "Виталий",
+                    LastName = "Владимирович",
+                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                }
+            },
+            new Welder
+            {
+                IdFromSystem = "150838",
+                WeldingEquipments = new List<WeldingEquipment>
+                {
+                    weldingEquipment49141,
+                    weldingEquipment49283
+                },
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "50838",
+                    RfidTag = "97:17:60:B4",
+                    MiddleName = "Зубковский",
+                    FirstName = "Валерий",
+                    LastName = "Сергеевич",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
                     UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
@@ -713,7 +732,7 @@ public class DataSeed
             TechnologicalProcess = new TechnologicalProcess
             {
                 IdFromSystem = "3090319",
-                Number = 3090319,
+                Number = "3090319",
                 Name = "Технологический процесс",
                 PdmSystemFileLink = "Ссылка"
             },
@@ -731,7 +750,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "3232836",
-                            Number = 3232836,
+                            Number = "3232836",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -749,7 +768,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "3211246",
-                                        Number = 3211246,
+                                        Number = "3211246",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -767,7 +786,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "1003048",
-                                        Number = 1003048,
+                                        Number = "1003048",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -788,7 +807,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "1362989",
-                            Number = 1362989,
+                            Number = "1362989",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -806,7 +825,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "1124147",
-                                        Number = 1124147,
+                                        Number = "1124147",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -824,7 +843,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "908693",
-                                        Number = 908693,
+                                        Number = "908693",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -845,7 +864,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "1053809",
-                            Number = 1053809,
+                            Number = "1053809",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -863,7 +882,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "526870",
-                            Number = 526870,
+                            Number = "526870",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -899,7 +918,7 @@ public class DataSeed
             TechnologicalProcess = new TechnologicalProcess
             {
                 IdFromSystem = "2433634",
-                Number = 2433634,
+                Number = "2433634",
                 Name = "Технологический процесс",
                 PdmSystemFileLink = "Ссылка"
             },
@@ -917,7 +936,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "2915477",
-                            Number = 2915477,
+                            Number = "2915477",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -935,7 +954,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "3338649",
-                                        Number = 3338649,
+                                        Number = "3338649",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -953,7 +972,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "2822569",
-                                        Number = 2822569,
+                                        Number = "2822569",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -974,7 +993,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "3232938",
-                            Number = 3232938,
+                            Number = "3232938",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -992,7 +1011,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "3011514",
-                                        Number = 3011514,
+                                        Number = "3011514",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -1010,7 +1029,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "1402616",
-                                        Number = 1402616,
+                                        Number = "1402616",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -1031,7 +1050,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "1405307",
-                            Number = 1405307,
+                            Number = "1405307",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -1049,7 +1068,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "1405914",
-                            Number = 1405914,
+                            Number = "1405914",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -1068,7 +1087,7 @@ public class DataSeed
             TechnologicalProcess = new TechnologicalProcess
             {
                 IdFromSystem = "3239598",
-                Number = 3239598,
+                Number = "3239598",
                 Name = "Технологический процесс",
                 PdmSystemFileLink = "Ссылка"
             },
@@ -1086,7 +1105,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "1334123",
-                            Number = 1334123,
+                            Number = "1334123",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -1104,7 +1123,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "1492964",
-                                        Number = 1492964,
+                                        Number = "1492964",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -1122,7 +1141,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "3049271",
-                                        Number = 3049271,
+                                        Number = "3049271",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -1143,7 +1162,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "1823031",
-                            Number = 1823031,
+                            Number = "1823031",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -1161,7 +1180,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "1104641",
-                                        Number = 1104641,
+                                        Number = "1104641",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -1179,7 +1198,7 @@ public class DataSeed
                                     TechnologicalProcess = new TechnologicalProcess
                                     {
                                         IdFromSystem = "1119363",
-                                        Number = 1119363,
+                                        Number = "1119363",
                                         Name = "Технологический процесс",
                                         PdmSystemFileLink = "Ссылка"
                                     },
@@ -1200,7 +1219,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "2841119",
-                            Number = 2841119,
+                            Number = "2841119",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -1218,7 +1237,7 @@ public class DataSeed
                         TechnologicalProcess = new TechnologicalProcess
                         {
                             IdFromSystem = "1426226",
-                            Number = 1426226,
+                            Number = "1426226",
                             Name = "Технологический процесс",
                             PdmSystemFileLink = "Ссылка"
                         },
@@ -1254,16 +1273,6 @@ public class DataSeed
             _ => _.IdFromSystem == "06"
         );
 
-        var welderRole = (
-            await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Welder))
-        )!;
-        var masterRole = (
-            await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master))
-        )!;
-        var inspectorRole = (
-            await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Inspector))
-        )!;
-
         var detail = (
             await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536276803")
         )!;
@@ -1271,7 +1280,7 @@ public class DataSeed
             await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536384399")
         )!;
 
-        var welder = (await context.Welders.FirstOrDefaultAsync(_ => _.IdFromSystem == "120756"))!;
+        var welder = (await context.Welders.FirstOrDefaultAsync(_ => _.IdFromSystem == "121267"))!;
 
         var master = (await context.Masters.FirstOrDefaultAsync(_ => _.IdFromSystem == "610422"))!;
 
@@ -2787,7 +2796,7 @@ public class DataSeed
         var weldingEndTime2 = weldingStartTime2.Add(TimeSpan.FromSeconds(roundSeconds2));
 
         var weldingEquipment = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "508")
+            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49283")
         )!;
 
         var tasks = new List<WeldingTask>
@@ -2988,32 +2997,25 @@ public class DataSeed
 
     private static async Task AddTechnologicalProcesses(ApplicationContext context)
     {
-        var product = (
-            await context.Products.FirstOrDefaultAsync(
-                _ => _.Number == "4536467567" && _.ProductType == ProductType.Product
-            )
-        )!;
-        var product2 = (
-            await context.Products.FirstOrDefaultAsync(
-                _ => _.Number == "4536384294" && _.ProductType == ProductType.Product
-            )
-        )!;
-
         var technologicalProcesses = new List<TechnologicalProcess>
         {
             new TechnologicalProcess
             {
-                Name = "Технологический процесс 1",
-                Products = new List<Product> { product },
-                Number = 1,
-                PdmSystemFileLink = "Ссылка",
+                IdFromSystem = "4536467565",
+                Name = "Поперечина рамы задняя",
+                Number = "75131-2801300-20"
             },
             new TechnologicalProcess
             {
-                Name = "Технологический процесс 2",
-                Number = 2,
-                PdmSystemFileLink = "Ссылка",
-                Products = new List<Product> { product2 },
+                IdFromSystem = "4536273956",
+                Name = "Рама",
+                Number = "7513D-2800010-20"
+            },
+            new TechnologicalProcess
+            {
+                IdFromSystem = "4536386240",
+                Name = "Рама",
+                Number = "75131-2800010-70"
             }
         };
 

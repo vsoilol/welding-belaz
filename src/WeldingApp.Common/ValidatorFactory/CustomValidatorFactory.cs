@@ -18,7 +18,8 @@ public class CustomValidatorFactory : ICustomValidatorFactory
         var specificValidatorType = genericValidatorType.MakeGenericType(type);
         using (var scope = _serviceProvider.CreateScope())
         {
-            var validatorInstance = (IValidator)scope.ServiceProvider.GetService(specificValidatorType);
+            var validatorInstance = (IValidator)
+                scope.ServiceProvider.GetService(specificValidatorType)!;
             return validatorInstance;
         }
     }
