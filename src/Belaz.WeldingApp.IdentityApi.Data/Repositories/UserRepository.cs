@@ -8,18 +8,17 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
 {
     public class UserRepository : EntityFrameworkRepository<UserData>
     {
-        public UserRepository(IdentityDbContext context, ILogger<EntityFrameworkRepository<UserData>> logger) : base(
-            context, logger)
-        {
-        }
+        public UserRepository(
+            IdentityDbContext context,
+            ILogger<EntityFrameworkRepository<UserData>> logger
+        )
+            : base(context, logger) { }
 
         protected new IdentityDbContext Context => base.Context;
 
         public override IQueryable<UserData> AsQueryable()
         {
-            return Context.Users.AsQueryable()
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role);
+            return Context.Users.AsQueryable().Include(x => x.UserRoles).ThenInclude(x => x.Role);
         }
 
         public override async Task<IEnumerable<UserData>> GetAllAsync()
@@ -30,12 +29,15 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
                 .ToListAsync();
         }
 
-        public override async Task<IEnumerable<UserData>> GetByFilterAsync(Expression<Func<UserData, bool>> filter)
+        public override async Task<IEnumerable<UserData>> GetByFilterAsync(
+            Expression<Func<UserData, bool>> filter
+        )
         {
             return await Context.Users
                 .Where(filter)
                 .Include(x => x.UserRoles)
                 .ThenInclude(x => x.Role)
+                .Include(_ => _.ProductionArea)
                 .ToListAsync();
         }
 

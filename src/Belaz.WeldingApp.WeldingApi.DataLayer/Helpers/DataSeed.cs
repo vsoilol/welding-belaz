@@ -72,10 +72,37 @@ public class DataSeed
             await AddWeldingTasks(context);
         }
 
+        if (!context.ProductAccounts.Any())
+        {
+            await AddProductAccounts(context);
+        }
+
         /*if (!context.TechnologicalInstructions.Any())
         {
             await AddTechnologicalInstruction(context);
         }*/
+    }
+
+    private static async Task AddProductAccounts(ApplicationContext context)
+    {
+        var products = await context.ProductionAreas
+            .Where(_ => _.Number == 1)
+            .SelectMany(_ => _.Products)
+            .ToListAsync();
+
+        var productAccounts = products.Select(
+            (_, index) =>
+                new ProductAccount
+                {
+                    Number = index + 1,
+                    AmountFromPlan = 20,
+                    DateFromPlan = DateTime.Now,
+                    Product = _
+                }
+        );
+
+        context.ProductAccounts.AddRange(productAccounts);
+        await context.SaveChangesAsync();
     }
 
     private static async Task CreateRolesAsync(ApplicationContext context)
@@ -491,6 +518,19 @@ public class DataSeed
             {
                 IdFromSystem = "610422",
                 WeldingEquipments = weldingEquipments06,
+                UserInfo = new UserData
+                {
+                    ServiceNumber = "10422",
+                    MiddleName = "Беляцкий",
+                    FirstName = "Сергей",
+                    LastName = "Николаевич",
+                    Position = "Мастер производственного участка",
+                    ProductionArea = productionArea6,
+                    UserRoles = new List<UserRole> { new UserRole { Role = masterRole } }
+                },
+            },
+            new Master
+            {
                 UserInfo = new UserData
                 {
                     ServiceNumber = "10422",

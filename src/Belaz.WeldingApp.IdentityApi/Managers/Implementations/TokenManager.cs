@@ -31,6 +31,7 @@ public class TokenManager : ITokenManager
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email!),
             new Claim("id", user.Id.ToString()),
+            new Claim("productionAreaId", user.ProductionAreaId.ToString() ?? ""),
         };
 
         claims.AddRange(user.UserRoles.Select(_ => new Claim(ClaimTypes.Role, _.Role.Name)));

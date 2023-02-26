@@ -7,10 +7,12 @@ namespace Belaz.WeldingApp.WeldingApi.DataLayer;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDataLayer(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddDataLayer(
+        this IServiceCollection services,
+        string connectionString
+    )
     {
-        services.AddDbContext<ApplicationContext>(options =>
-            options.UseNpgsql(connectionString));
+        services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
 
         services.AddScoped<ICalendarRepository, CalendarRepository>();
         services.AddScoped<IProductionAreaRepository, ProductionAreaRepository>();
@@ -30,8 +32,12 @@ public static class DependencyInjection
         services.AddScoped<ISeamRepository, SeamRepository>();
         services.AddScoped<ITechnologicalProcessRepository, TechnologicalProcessRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<ITechnologicalInstructionRepository, TechnologicalInstructionRepository>();
+        services.AddScoped<
+            ITechnologicalInstructionRepository,
+            TechnologicalInstructionRepository
+        >();
         services.AddScoped<IWeldingRecordRepository, WeldingRecordRepository>();
+        services.AddScoped<IProductAccountRepository, ProductAccountRepository>();
 
         return services;
     }

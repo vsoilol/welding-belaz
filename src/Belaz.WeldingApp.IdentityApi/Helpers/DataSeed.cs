@@ -1,26 +1,36 @@
-﻿using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+﻿using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
+using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Extensions;
+using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.IdentityApi.Helpers;
 
 public class DataSeed
 {
-    public static async Task SeedSampleDataAsync(IRepository<RoleData> roleRepository,
-        IRepository<UserData> userRepository)
+    public static async Task SeedSampleDataAsync(
+        IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository,
+        IdentityDbContext context
+    )
     {
         await CreateRolesAsync(roleRepository);
         await CreateAdminAsync(roleRepository, userRepository);
         await CreateWelderAsync(roleRepository, userRepository);
         await CreateInspectorAsync(roleRepository, userRepository);
         await CreateChiefAsync(roleRepository, userRepository);
-        await CreateMasterAsync(roleRepository, userRepository);
+        await CreateMasterAsync(roleRepository, userRepository, context);
     }
 
-    private static async Task CreateMasterAsync(IRepository<RoleData> roleRepository,
-        IRepository<UserData> userRepository)
+    private static async Task CreateMasterAsync(
+        IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository,
+        IdentityDbContext context
+    )
     {
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.Number == 1);
+
         var master = new UserData()
         {
             Email = "master@master.com",
@@ -29,6 +39,7 @@ public class DataSeed
             LastName = "Отчество начальника цеха",
             UserName = "master@master.com",
             PasswordHash = SecurePasswordHasher.Hash("master12345"),
+            ProductionArea = productionArea
         };
 
         var masterRole = await roleRepository.GetByFilterAsync(_ => _.Name == nameof(Role.Master));
@@ -41,8 +52,10 @@ public class DataSeed
         }
     }
 
-    private static async Task CreateChiefAsync(IRepository<RoleData> roleRepository,
-        IRepository<UserData> userRepository)
+    private static async Task CreateChiefAsync(
+        IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository
+    )
     {
         var chief = new UserData()
         {
@@ -64,8 +77,10 @@ public class DataSeed
         }
     }
 
-    private static async Task CreateInspectorAsync(IRepository<RoleData> roleRepository,
-        IRepository<UserData> userRepository)
+    private static async Task CreateInspectorAsync(
+        IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository
+    )
     {
         var inspector = new UserData()
         {
@@ -77,7 +92,9 @@ public class DataSeed
             PasswordHash = SecurePasswordHasher.Hash("inspector12345"),
         };
 
-        var inspectorRole = await roleRepository.GetByFilterAsync(_ => _.Name == nameof(Role.Inspector));
+        var inspectorRole = await roleRepository.GetByFilterAsync(
+            _ => _.Name == nameof(Role.Inspector)
+        );
         inspector.UserRoles = inspectorRole.Select(_ => new UserRole { Role = _ }).ToList();
 
         if (!(await userRepository.GetByFilterAsync(_ => _.UserName == inspector.UserName)).Any())
@@ -87,8 +104,10 @@ public class DataSeed
         }
     }
 
-    private static async Task CreateWelderAsync(IRepository<RoleData> roleRepository,
-        IRepository<UserData> userRepository)
+    private static async Task CreateWelderAsync(
+        IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository
+    )
     {
         var welder = new UserData()
         {
@@ -110,8 +129,10 @@ public class DataSeed
         }
     }
 
-    private static async Task CreateAdminAsync(IRepository<RoleData> roleRepository,
-        IRepository<UserData> userRepository)
+    private static async Task CreateAdminAsync(
+        IRepository<RoleData> roleRepository,
+        IRepository<UserData> userRepository
+    )
     {
         var admin = new UserData()
         {

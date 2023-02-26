@@ -36,18 +36,18 @@ public class Product : Entity
     public List<ProductAccount> ProductAccounts { get; set; } = null!;
 
     public Guid ProductionAreaId { get; set; }
-    
+
     [ForeignKey(nameof(ProductionAreaId))]
     public ProductionArea ProductionArea { get; set; } = null!;
-    
+
     public Guid? MasterId { get; set; }
 
-    [ForeignKey(nameof(MasterId))] 
+    [ForeignKey(nameof(MasterId))]
     public Master? Master { get; set; }
 
     public Guid? InspectorId { get; set; }
 
-    [ForeignKey(nameof(InspectorId))] 
+    [ForeignKey(nameof(InspectorId))]
     public Inspector? Inspector { get; set; }
 
     public List<Welder> Welders { get; set; } = null!;

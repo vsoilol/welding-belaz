@@ -21,26 +21,31 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog(ProjectLoggerConfiguration.GetLoggerConfiguration("identity-api"));
 
-builder.WebHost.ConfigureAppConfiguration((builderContext, config) =>
-{
-    var env = builderContext.HostingEnvironment;
+builder.WebHost.ConfigureAppConfiguration(
+    (builderContext, config) =>
+    {
+        var env = builderContext.HostingEnvironment;
 
-    // find the shared folder in the parent folder
-    var sharedFolder = env.EnvironmentName.Contains("Docker") ? "" : Path.Combine(env.ContentRootPath, "..");
+        // find the shared folder in the parent folder
+        var sharedFolder = env.EnvironmentName.Contains("Docker")
+            ? ""
+            : Path.Combine(env.ContentRootPath, "..");
 
-    //load the SharedSettings first, so that appsettings.json overrwrites it
-    config
-        .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
-        .AddJsonFile("appsettings.json", optional: true)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+        //load the SharedSettings first, so that appsettings.json overrwrites it
+        config
+            .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
+            .AddJsonFile("appsettings.json", optional: true)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-    config.AddEnvironmentVariables();
-});
+        config.AddEnvironmentVariables();
+    }
+);
 
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
 
 builder.Services.AddDbContext<IdentityDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityDb")));
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityDb"))
+);
 
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
@@ -51,43 +56,64 @@ builder.Services.RegisterDependency();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddControllers(
-        options => { options.Filters.Add<ApiValidationFilter>(); })
-    .AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+builder.Services
+    .AddControllers(options =>
+    {
+        options.Filters.Add<ApiValidationFilter>();
+    })
+    .AddNewtonsoftJson(
+        options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
+                .Json
+                .ReferenceLoopHandling
+                .Ignore
+    )
     .RegisterValidatorsInAssembly(typeof(Program).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.AddSecurityDefinition("oauth2",
+    options.AddSecurityDefinition(
+        "oauth2",
         new OpenApiSecurityScheme
         {
-            Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+            Description =
+                "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
             In = ParameterLocation.Header,
             Name = "Authorization",
             Type = SecuritySchemeType.ApiKey
-        });
+        }
+    );
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(builder.Configuration.GetSection("Auth:Secret").Value)),
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Auth:Secret").Value)
+            ),
             ValidateIssuer = false,
             ValidateAudience = false,
         };
     });
 
-builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
-    policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
+builder.Services.AddCors(
+    options =>
+        options.AddPolicy(
+            name: "NgOrigins",
+            policy =>
+            {
+                policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }
+        )
+);
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,7 +127,8 @@ using (var scope = app.Services.CreateScope())
     {
         var userRepository = services.GetRequiredService<IRepository<UserData>>();
         var roleRepository = services.GetRequiredService<IRepository<RoleData>>();
-        await DataSeed.SeedSampleDataAsync(roleRepository, userRepository);
+        var context = services.GetRequiredService<IdentityDbContext>();
+        await DataSeed.SeedSampleDataAsync(roleRepository, userRepository, context);
     }
     catch (Exception ex)
     {
@@ -115,7 +142,10 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentname}/swagger.json"; });
+app.UseSwagger(c =>
+{
+    c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
+});
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Welding Belaz Identity");
@@ -130,6 +160,9 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
