@@ -19,14 +19,12 @@ public class CreateProductWithoutTypeRequest : IMapTo<Domain.Entities.ProductInf
 
     public Guid TechnologicalProcessId { get; set; }
 
-    public IReadOnlyList<Guid>? Seams { get; set; }
-
-    public IReadOnlyList<Guid>? InsideProducts { get; set; }
+    public Guid MainProductId { get; set; }
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<CreateProductWithoutTypeRequest, Domain.Entities.ProductInfo.Product>()
-            .ForMember(dto => dto.Seams,
-                opt => opt.Ignore());
+        profile
+            .CreateMap<CreateProductWithoutTypeRequest, Domain.Entities.ProductInfo.Product>()
+            .ForMember(dto => dto.Seams, opt => opt.Ignore());
     }
 }

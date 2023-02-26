@@ -5,7 +5,8 @@ using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Product;
 
-public class CreateProductWithoutTypeRequestValidator : AbstractValidator<CreateProductWithoutTypeRequest>
+public class CreateProductWithoutTypeRequestValidator
+    : AbstractValidator<CreateProductWithoutTypeRequest>
 {
     public CreateProductWithoutTypeRequestValidator(ApplicationContext context)
     {
@@ -14,38 +15,36 @@ public class CreateProductWithoutTypeRequestValidator : AbstractValidator<Create
             .NotEmpty()
             .When(_ => _.Name is not null);
 
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateProductWithoutTypeRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateProductWithoutTypeRequest,
+                    Domain.Entities.Production.ProductionArea
+                >(context)
+            );
 
         RuleFor(model => model.TechnologicalProcessId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateProductWithoutTypeRequest,
-                Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateProductWithoutTypeRequest,
+                    Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess
+                >(context)
+            );
 
-        When(_ => _.InsideProducts is not null, () =>
-        {
-            RuleForEach(model => model.InsideProducts)
-                .Cascade(CascadeMode.Stop)
-                .NotEmpty()
-                .SetValidator(new SqlIdValidatorFor<CreateProductWithoutTypeRequest,
-                    Domain.Entities.ProductInfo.Product>(context));
-        });
-
-        When(_ => _.Seams is not null, () =>
-        {
-            RuleForEach(model => model.Seams)
-                .Cascade(CascadeMode.Stop)
-                .NotEmpty()
-                .SetValidator(new SqlIdValidatorFor<CreateProductWithoutTypeRequest,
-                    Domain.Entities.ProductInfo.Seam>(context));
-        });
+        RuleFor(model => model.MainProductId)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateProductWithoutTypeRequest,
+                    Domain.Entities.ProductInfo.Product
+                >(context)
+            );
     }
 }

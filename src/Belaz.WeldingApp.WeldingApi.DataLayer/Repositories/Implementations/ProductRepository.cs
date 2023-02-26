@@ -4,7 +4,6 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;
 
@@ -80,14 +79,14 @@ public class ProductRepository : IProductRepository
         return mapProducts;
     }
 
-    public async Task<ProductDto> CreateAsync(
-        Product entity,
-        IReadOnlyList<Guid>? seamIds,
-        IReadOnlyList<Guid>? insideProductIds
-    )
+    public async Task<ProductDto> CreateAsync(Product entity, Guid mainProductId)
     {
-        entity.Seams = await GetSeamsByIdsAsync(seamIds);
-        entity.ProductInsides = await GetInsideProductsByProductIdsAsync(insideProductIds);
+        var mainProduct = await _context.Products
+            .Where(_ => _.Id == mainProductId)
+            .Select(_ => new ProductInside { MainProduct = _ })
+            .FirstOrDefaultAsync();
+
+        entity.ProductMain = mainProduct;
 
         var newProduct = _context.Products.Add(entity).Entity;
         await _context.SaveChangesAsync();
@@ -95,17 +94,18 @@ public class ProductRepository : IProductRepository
         return await GetByIdAsync(newProduct.Id);
     }
 
-    public async Task<ProductDto> UpdateAsync(
-        Product entity,
-        IReadOnlyList<Guid>? seamIds,
-        IReadOnlyList<Guid>? insideProductIds
-    )
+    public async Task<ProductDto> UpdateAsync(Product entity, Guid mainProductId)
     {
         var updatedProduct = (
             await _context.Products
-                .Include(_ => _.ProductInsides)
+                .Include(_ => _.ProductMain)
                 .FirstOrDefaultAsync(_ => _.Id == entity.Id)
         )!;
+
+        var mainProduct = await _context.Products
+            .Where(_ => _.Id == mainProductId)
+            .Select(_ => new ProductInside { MainProduct = _ })
+            .FirstOrDefaultAsync();
 
         updatedProduct.Name = entity.Name;
         updatedProduct.ProductType = entity.ProductType;
@@ -114,8 +114,7 @@ public class ProductRepository : IProductRepository
         updatedProduct.ProductionAreaId = entity.ProductionAreaId;
         updatedProduct.TechnologicalProcessId = entity.TechnologicalProcessId;
 
-        updatedProduct.Seams = await GetSeamsByIdsAsync(seamIds);
-        updatedProduct.ProductInsides = await GetInsideProductsByProductIdsAsync(insideProductIds);
+        updatedProduct.ProductMain = mainProduct;
 
         await _context.SaveChangesAsync();
 
@@ -193,25 +192,6 @@ public class ProductRepository : IProductRepository
         var mapProducts = _mapper.Map<List<ProductDto>>(products);
 
         return mapProducts;
-    }
-
-    private async Task<List<Seam>> GetSeamsByIdsAsync(IReadOnlyList<Guid>? seamIds)
-    {
-        return seamIds is not null
-            ? await _context.Seams.Where(_ => seamIds.Any(seamId => seamId == _.Id)).ToListAsync()
-            : new List<Seam>();
-    }
-
-    private async Task<List<ProductInside>> GetInsideProductsByProductIdsAsync(
-        IReadOnlyList<Guid>? productIds
-    )
-    {
-        return productIds is not null
-            ? await _context.Products
-                .Where(_ => productIds.Any(productId => productId == _.Id))
-                .Select(_ => new ProductInside { InsideProduct = _ })
-                .ToListAsync()
-            : new List<ProductInside>();
     }
 
     private IQueryable<Product> FilterProducts(Expression<Func<Product, bool>> filter)

@@ -20,14 +20,12 @@ public class UpdateProductWithoutTypeRequest : IMapTo<Domain.Entities.ProductInf
 
     public Guid TechnologicalProcessId { get; set; }
 
-    public IReadOnlyList<Guid>? Seams { get; set; }
-
-    public IReadOnlyList<Guid>? InsideProducts { get; set; }
+    public Guid MainProductId { get; set; }
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<UpdateProductWithoutTypeRequest, Domain.Entities.ProductInfo.Product>()
-            .ForMember(dto => dto.Seams,
-                opt => opt.Ignore());
+        profile
+            .CreateMap<UpdateProductWithoutTypeRequest, Domain.Entities.ProductInfo.Product>()
+            .ForMember(dto => dto.Seams, opt => opt.Ignore());
     }
 }
