@@ -1,11 +1,24 @@
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
 
 public class ProductAccountRepository : IProductAccountRepository
 {
-    public Task<List<string>> GetAllDatesByProductionAreaAsync(Guid productionAreaId)
+    private readonly ApplicationContext _context;
+
+    public ProductAccountRepository(ApplicationContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+
+    public async Task<List<string>> GetAllDatesByProductionAreaAsync(Guid productionAreaId)
+    {
+        return (
+            await _context.ProductAccounts.Select(_ => _.DateFromPlan.Date).Distinct().ToListAsync()
+        )
+            .Select(_ => _.ToDayInfoString())
+            .ToList();
     }
 }
