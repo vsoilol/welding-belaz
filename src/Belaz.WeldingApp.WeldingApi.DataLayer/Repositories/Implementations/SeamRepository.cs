@@ -32,7 +32,7 @@ public class SeamRepository : ISeamRepository
 
     public async Task<SeamDto> GetByIdAsync(Guid id)
     {
-        var seam = await FilterSeams(_ => _.Id == id).ToListAsync();
+        var seam = await FilterSeams(_ => _.Id == id).FirstOrDefaultAsync();
 
         var mapSeam = _mapper.Map<SeamDto>(seam);
 
@@ -66,6 +66,7 @@ public class SeamRepository : ISeamRepository
         updatedSeam.ProductionAreaId = entity.ProductionAreaId;
         updatedSeam.IsPerformed = entity.IsPerformed;
         updatedSeam.TechnologicalInstructionId = entity.TechnologicalInstructionId;
+        updatedSeam.ProductId = entity.ProductId;
 
         await _context.SaveChangesAsync();
 

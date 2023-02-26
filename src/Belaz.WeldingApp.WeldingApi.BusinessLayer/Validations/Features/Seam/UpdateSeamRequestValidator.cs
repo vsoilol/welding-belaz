@@ -12,24 +12,39 @@ public class UpdateSeamRequestValidator : AbstractValidator<UpdateSeamRequest>
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateSeamRequest,
-                Domain.Entities.ProductInfo.Seam>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<UpdateSeamRequest, Domain.Entities.ProductInfo.Seam>(context)
+            );
 
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateSeamRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<UpdateSeamRequest, Domain.Entities.Production.ProductionArea>(
+                    context
+                )
+            );
 
         RuleFor(model => model.TechnologicalInstructionId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateSeamRequest,
-                Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateSeamRequest,
+                    Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction
+                >(context)
+            )
             .When(_ => _.TechnologicalInstructionId is not null);
+
+        RuleFor(model => model.ProductId)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetValidator(
+                new SqlIdValidatorFor<UpdateSeamRequest, Domain.Entities.ProductInfo.Product>(
+                    context
+                )
+            );
     }
 }

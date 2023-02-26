@@ -12,15 +12,17 @@ public class UpdateSeamRequest : IMapTo<Domain.Entities.ProductInfo.Seam>
     /// Подлежит ли контролю
     /// </summary>
     public bool IsControlSubject { get; set; }
-    
+
     /// <summary>
     /// Поддлежит ли исполнению на регистраторе
     /// </summary>
     public bool IsPerformed { get; set; } = false;
-    
+
     public int Length { get; set; }
 
     public Guid ProductionAreaId { get; set; }
 
     public Guid? TechnologicalInstructionId { get; set; }
+
+    public Guid ProductId { get; set; }
 }

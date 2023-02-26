@@ -2,9 +2,10 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalProcess;
 
-public class CreateTechnologicalProcessRequest : IMapTo<Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>
+public class CreateTechnologicalProcessRequest
+    : IMapTo<Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess>
 {
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 
