@@ -173,18 +173,44 @@ export const Posts = ({
         title: "Номер  поста ",
         field: "number",
       },
+
       {
-        title: "Наименование рабочего места ",
+        title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id, "name", 2)??"-"}</span>
+          return <span>{rowData?.workshop.name??"-"}</span>
         },
       },
       {
-        title: "Номер  рабочего места ",
+        title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id, "numb", 2)??"-"}</span>
+          return <span>{rowData?.workshop.number??"-"}</span>
         },
       },
+
+      {
+        title: "Наименование производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.number??"-"}</span>
+        },
+      },
+      // {
+      //   title: "Наименование рабочего места ",
+      //   render: (rowData) => {
+      //     return <span>{DetArea(rowData.id, "name", 2)??"-"}</span>
+      //   },
+      // },
+      // {
+      //   title: "Номер  рабочего места ",
+      //   render: (rowData) => {
+      //     return <span>{DetArea(rowData.id, "numb", 2)??"-"}</span>
+      //   },
+      // },
       {
         title: "Перерейти к",
         render: (rowData) => {

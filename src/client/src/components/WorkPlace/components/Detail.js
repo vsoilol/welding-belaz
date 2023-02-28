@@ -1053,7 +1053,7 @@ export const Detail = ({
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valuetTechProc"
                     width="380px"
@@ -1062,14 +1062,14 @@ export const Detail = ({
                     onChange={(event) => setValuetSeam(event.value)}
                     options={SeamOptions}
                   />
-                </div>
+                </div> */}
 
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == "" || valuetSeam.length == 0
+                      values.number == "" || values.name == "" /* || valuetSeam.length == 0 */
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

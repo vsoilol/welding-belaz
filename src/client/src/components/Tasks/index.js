@@ -36,7 +36,7 @@ export const Tasks = ({
   deleteTask,
   editTask,
   loadTechs,
-  loadInstructions,
+  // loadInstructions,
   techs,
   isRequesting,
   instructions,
