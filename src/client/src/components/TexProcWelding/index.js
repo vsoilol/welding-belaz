@@ -36,7 +36,7 @@ const dateOptions = {
 export const TexProcWelding = ({
   loadMasters,
   loadTexprocwelding,
-  loadInstructions,
+  // loadInstructions,
   loadSeam,
   addInst,
   editInst,
@@ -92,12 +92,12 @@ export const TexProcWelding = ({
 
   useEffect(() => {
     loadTexprocwelding();
-    loadInstructions();
+    // loadInstructions();
     loadSeam();
   }, [
     loadMasters,
     loadTexprocwelding,
-    loadInstructions,
+    // loadInstructions,
     loadSeam
   ]);
 

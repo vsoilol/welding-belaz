@@ -10,7 +10,7 @@ export const Instructions = ({
   instructions,
   wpsInstructions,
 
-  loadInstructions,
+  // loadInstructions,
   addInstruction,
   deleteInstruction,
   editInstruction,
@@ -26,9 +26,9 @@ export const Instructions = ({
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    loadInstructions();
+    // loadInstructions();
     loadWpsInstructions();
-  }, [loadInstructions, loadWpsInstructions]);
+  }, [/* loadInstructions */, loadWpsInstructions]);
 
   const wpsSelectInstructions = wpsInstructions.length
     ? wpsInstructions?.map(({ id, wpsName }) => ({
