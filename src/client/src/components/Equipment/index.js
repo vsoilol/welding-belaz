@@ -198,6 +198,14 @@ export const Equipment = ({
       title: "Причина простоя",
       field: "downtimeReason"
     },
+    {
+      title: "Наименование оборудования",
+      field: "weldingEquipment.name"
+    }, 
+    {
+      title: "Номер оборудования",
+      field: "weldingEquipment.factoryNumber"
+    },
   ]
   function DetArea(params, field) { 
     if (field === "name") { 
