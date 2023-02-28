@@ -207,6 +207,45 @@ export const Place = ({
         title: "Номер  рабочего места ",
         field: "number",
       },
+      {
+        title: "Наименование цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.number??"-"}</span>
+        },
+      },
+
+      {
+        title: "Наименование производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.number??"-"}</span>
+        },
+      },
+
+
+      {
+        title: "Наименование поста",
+        render: (rowData) => {
+          return <span>{rowData?.post?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  поста",
+        render: (rowData) => {
+          return <span>{rowData?.post?.number??"-"}</span>
+        },
+      },
     ],
 
      

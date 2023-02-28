@@ -147,29 +147,42 @@ export const ProductionArea = ({
         field: "number",
       }, 
       {
-        title: "Наименование   поста ",
+        title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id, "name", 1)??"-"}</span>
+          return <span>{rowData?.workshop.name??"-"}</span>
         },
       },
       {
-        title: "Номер поста",
+        title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id, "numb", 1)??"-"}</span>
+          return <span>{rowData?.workshop.number??"-"}</span>
         },
       },
-      {
-        title: "Наименование рабочего места ",
-        render: (rowData) => {
-          return <span>{DetArea(rowData.id, "name", 2)??"-"}</span>
-        },
-      },
-      {
-        title: "Номер  рабочего места ",
-        render: (rowData) => {
-          return <span>{DetArea(rowData.id, "numb", 2)??"-"}</span>
-        },
-      },
+      // {
+      //   title: "Наименование   поста ",
+      //   render: (rowData) => {
+      //     return <span>{DetArea(rowData.id, "name", 1)??"-"}</span>
+      //   },
+      // },
+      // {
+      //   title: "Номер поста",
+      //   render: (rowData) => {
+      //     return <span>{DetArea(rowData.id, "numb", 1)??"-"}</span>
+      //   },
+      // },
+      // {
+      //   title: "Наименование рабочего места ",
+      //   render: (rowData) => {
+      //     return <span>{DetArea(rowData.id, "name", 2)??"-"}</span>
+      //   },
+      // },
+      // {
+      //   title: "Номер  рабочего места ",
+      //   render: (rowData) => {
+      //     return <span>{DetArea(rowData.id, "numb", 2)??"-"}</span>
+      //   },
+      // },
+      
       {
         title: "Перерейти к",
         render: (rowData) => {

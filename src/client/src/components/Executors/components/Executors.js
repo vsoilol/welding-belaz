@@ -456,6 +456,18 @@ export const ExecutorsTable = ({
           </div>
           <div className={styles.row}>
             <Select
+              name="valueWorkshopa"
+              value={valueWorkshopa}
+              width="380px"
+              placeholder="Цех"
+              onChange={(event) => {
+                setValueWorkshop(event.value)
+              }}
+              options={optworkshop}
+            />
+          </div>
+          {/* <div className={styles.row}>
+            <Select
               name="valuetEquipment"
               width="380px"
               value={valuetEquipment}
@@ -463,7 +475,7 @@ export const ExecutorsTable = ({
               onChange={(event) => setValuetEquipment(event.value)}
               options={optequipment}
             />
-          </div>
+          </div> */}
         </div>
       )
     }
@@ -480,7 +492,7 @@ export const ExecutorsTable = ({
               options={optArea}
             />
           </div>
-          <div className={styles.row}>
+          {/* <div className={styles.row}>
             <Select
               name="valuetEquipment"
               width="380px"
@@ -489,7 +501,7 @@ export const ExecutorsTable = ({
               onChange={(event) => setValuetEquipment(event.value)}
               options={optequipment}
             />
-          </div>
+          </div> */}
           <div className={styles.row}>
             <Select
               name="valueWorkshopa"
