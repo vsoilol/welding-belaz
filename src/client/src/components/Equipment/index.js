@@ -48,10 +48,11 @@ export const Equipment = ({
 
   posts,
   value,
-
+  loadWelder,
 
   addDowntime,
   editDowntime,
+  welder,
 
   reason,
   loadDowntime,
@@ -71,6 +72,11 @@ export const Equipment = ({
   const [valueReason, setValueReaso] = useState();
   const [valuetEquipment, setValuetEquipment] = useState();
   const [valueDownti, setValueDownti] = useState();
+
+
+  const [valueMaster, setvalueMaster] = useState("");
+  const [valueWelder, setvalueWelder] = useState("");
+
 
 
   const initialValues = {
@@ -118,7 +124,8 @@ export const Equipment = ({
     loadPosts();
     loadDowntime();
     loadWorkshop();
-  }, [loadEquipment, loadMasters, loadPosts, loadDowntime,loadWorkshop]);
+    loadWelder();
+  }, [loadEquipment, loadMasters, loadPosts, loadDowntime,loadWorkshop,loadWelder]);
 
 
   const columns = [
@@ -434,9 +441,7 @@ export const Equipment = ({
     //Редактировать простоя
     if (isModalNumb == 3) {
       editDowntime(variables)
-    }
-
-    console.log(variables)
+    } 
   }
 
   function findReason(params) { 
@@ -448,6 +453,20 @@ export const Equipment = ({
     }
   }
 
+ 
+  const optionMasters = masters?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName} ${item.lastName}`,
+    };
+  });
+ 
+  const optionWelder = welder?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName} ${item.lastName}`,
+    };
+  });
   
   ////////////////////////////////////////////////////////////////////
   return (
@@ -607,6 +626,36 @@ export const Equipment = ({
                       options={optPosts}
                     />
 
+
+                  </div>
+             
+                  <div className={styles.row}>
+
+                    <div> 
+                       <Select
+                        name="valueMaster"
+                        value={valueMaster}
+                        width="180px"
+                        placeholder="Мастер"
+                        onChange={(event) => {
+                          setvalueMaster(event.value)
+                        }}
+                        options={optionMasters}
+                      /> 
+                    </div>
+                    <div> 
+                       <Select
+                        name="valueWelder"
+                        value={valueWelder}
+                        width="180px"
+                        placeholder="Сварщик"
+                        onChange={(event) => {
+                            setvalueWelder(event.value)
+                        }}
+                        options={optionWelder}
+                      /> 
+                    </div>
+                    
 
                   </div>
                   <div className={styles.row}>
