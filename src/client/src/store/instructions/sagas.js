@@ -40,7 +40,7 @@ const {
 
 function* loadInstructions() {
   try {
-    const { data } = yield call(api.get, `/instructions`);
+    const { data } = yield call(api.get, `/TechnologicalInstruction`);
     yield put(loadInstructionsSuccess(data));
   } catch (error) {
     yield put(loadInstructionsFailure(error));

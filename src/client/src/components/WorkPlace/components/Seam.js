@@ -75,6 +75,12 @@ export const Seam = ({
   const [valuetSeam, setValuetSeam] = useState([]);
 
 
+  const [valuetProduct, setvaluetProduct] = useState("");
+  const [valuetKnots, setvaluetKnots] = useState("");
+  const [valuetDetail, setvaluetDetail] = useState("");
+
+
+
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -261,6 +267,30 @@ export const Seam = ({
       label: `Cварочный шов ${item.number}`,
     };
   });
+
+
+
+  //select изделие
+  const productsOptions = product?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  //select узел
+  const knotsOptions = knot?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+   //select деталь
+   const detailOptions = detail?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
       
 
   const TabPanel = (props_panel) => {
@@ -407,6 +437,41 @@ export const Seam = ({
                     options={TechProc}
                   />
                 </div>
+
+                
+                 {/*изделие, узел и деталь */}
+                 <div className={styles.row}>
+                  <Select
+                    name="valuetProduct"
+                    width="380px"
+                    value={valuetProduct}
+                    placeholder="Изделие"
+                    onChange={(event) => setvaluetProduct(event.value)}
+                    options={productsOptions}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Select
+                    name="valuetKnots"
+                    width="380px"
+                    value={valuetKnots}
+                    placeholder="Узел"
+                    onChange={(event) => setvaluetKnots(event.value)}
+                    options={knotsOptions}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Select
+                    name="valuetDetail"
+                    width="380px"
+                    value={valuetDetail}
+                    placeholder="Деталь"
+                    onChange={(event) => setvaluetDetail(event.value)}
+                    options={detailOptions}
+                  />
+                </div>
+
+                 
  
  
 

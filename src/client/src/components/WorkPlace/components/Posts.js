@@ -177,26 +177,26 @@ export const Posts = ({
       {
         title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name??"-"}</span>
+          return <span>{rowData?.workshop.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number??"-"}</span>
+          return <span>{rowData?.workshop.number ?? "-"}</span>
         },
       },
 
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.name??"-"}</span>
+          return <span>{rowData?.productionArea.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.number??"-"}</span>
+          return <span>{rowData?.productionArea.number ?? "-"}</span>
         },
       },
       // {
@@ -217,7 +217,7 @@ export const Posts = ({
           return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
         },
       },
-      
+
     ],
     jobs_place: [
       {
@@ -231,22 +231,22 @@ export const Posts = ({
         field: "number",
       },
     ],
- 
+
   };
 
   function DetArea(params, field, numb) {
- 
+
     if (numb === 2) {
       if (field === "name") {
-        for (let index = 0; index < workplace?.length; index++) { 
-          if (workplace[index].post?.id === params) { 
+        for (let index = 0; index < workplace?.length; index++) {
+          if (workplace[index].post?.id === params) {
             return `Рабочее место ${workplace[index].number}`
           }
         }
       }
       if (field === "numb") {
-        for (let index = 0; index < workplace?.length; index++) { 
-          if (workplace[index].post?.id === params) { 
+        for (let index = 0; index < workplace?.length; index++) {
+          if (workplace[index].post?.id === params) {
             return workplace[index].number
           }
         }
@@ -427,13 +427,18 @@ export const Posts = ({
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
-
+  const optProdArea = workshop?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
 
       <div className={styles.tableWrapper}>
-        
+
 
 
         {value_goTo === 1
@@ -454,42 +459,42 @@ export const Posts = ({
           )
           : (
             <TabPanel
-                style={{ minWidth: "800px" }}
-              >
-                <Table
-                  title="Посты"
-                  columns={columns.posts}
-                  className="posts"
-                  data={posts}
-                  actions={
-                    userRole === "Admin"
-                      ? [
-                        {
-                          icon: "add",
-                          tooltip: "Добавить пост",
-                          isFreeAction: true,
-                          onClick: () => {
-                            setIsModalOpen(true); setIsModalNumb(10); setValueProdArea("")
-                            setValuetTechProc("")
-                            setValuetPosts("")
-                            setValuetWorkPlace("")
-                          },
+              style={{ minWidth: "800px" }}
+            >
+              <Table
+                title="Посты"
+                columns={columns.posts}
+                className="posts"
+                data={posts}
+                actions={
+                  userRole === "Admin"
+                    ? [
+                      {
+                        icon: "add",
+                        tooltip: "Добавить пост",
+                        isFreeAction: true,
+                        onClick: () => {
+                          setIsModalOpen(true); setIsModalNumb(10); setValueProdArea("")
+                          setValuetTechProc("")
+                          setValuetPosts("")
+                          setValuetWorkPlace("")
                         },
-                        {
-                          icon: "edit",
-                          tooltip: "Редактировать пост",
-                          onClick: (event, rowData) => {
-                            setModalData(rowData);
-                            setIsModalOpen(true);
-                            setIsModalNumb(2)
-                            setValuetPosts(rowData.productionArea.id)
-                          },
+                      },
+                      {
+                        icon: "edit",
+                        tooltip: "Редактировать пост",
+                        onClick: (event, rowData) => {
+                          setModalData(rowData);
+                          setIsModalOpen(true);
+                          setIsModalNumb(2)
+                          setValuetPosts(rowData.productionArea.id)
                         },
-                      ]
-                      : []
-                  }
-                />
-              </TabPanel>
+                      },
+                    ]
+                    : []
+                }
+              />
+            </TabPanel>
           )
 
         }
@@ -555,6 +560,18 @@ export const Posts = ({
                   />
                 </div>
 
+                <div className={styles.row}>
+                  <Select
+                    name="valueProdArea"
+                    value={valueProdArea}
+                    width="380px"
+                    placeholder="Цех"
+                    onChange={(event) => {
+                      setValueProdArea(event.value)
+                    }}
+                    options={optProdArea}
+                  />
+                </div>
                 <div className={styles.row}>
                   <Button
                     type="submit"
