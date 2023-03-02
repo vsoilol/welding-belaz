@@ -62,6 +62,11 @@ public class DataSeed
             await AddTechnologicalProcesses(context);
         }
 
+        if (!context.TechnologicalInstructions.Any())
+        {
+            await AddTechnologicalInstruction(context);
+        }
+
         if (!context.Products.Any())
         {
             await AddProducts(context);
@@ -77,10 +82,7 @@ public class DataSeed
             await AddProductAccounts(context);
         }
 
-        /*if (!context.TechnologicalInstructions.Any())
-        {
-            await AddTechnologicalInstruction(context);
-        }*/
+        /**/
     }
 
     private static async Task AddProductAccounts(ApplicationContext context)
@@ -755,44 +757,96 @@ public class DataSeed
 
     private static async Task AddProducts(ApplicationContext context)
     {
-        var productionArea4 = (
-            await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "04")
+        var productionArea6 = (
+            await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06")
         )!;
-        var productionArea1 = (
-            await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "01")
-        )!;
+
+        var technologicalProcess3330041 = await context.TechnologicalProcesses.FirstOrDefaultAsync(
+            _ => _.IdFromSystem == "3330041"
+        );
+
+        var technologicalProcess3291137 = await context.TechnologicalProcesses.FirstOrDefaultAsync(
+            _ => _.IdFromSystem == "3291137"
+        );
+
+        var technologicalInstruction18 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "18"
+            );
+        var technologicalInstruction39 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "39"
+            );
+        var technologicalInstruction52 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "52"
+            );
+        var technologicalInstruction54 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "54"
+            );
+        var technologicalInstruction55 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "55"
+            );
+        var technologicalInstruction56 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "56"
+            );
+        var technologicalInstruction57 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "57"
+            );
+        var technologicalInstruction58 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "58"
+            );
+        var technologicalInstruction1 = await context.TechnologicalInstructions.FirstOrDefaultAsync(
+            _ => _.IdFromSystem == "1"
+        );
+        var technologicalInstruction2 = await context.TechnologicalInstructions.FirstOrDefaultAsync(
+            _ => _.IdFromSystem == "2"
+        );
+        var technologicalInstruction48 =
+            await context.TechnologicalInstructions.FirstOrDefaultAsync(
+                _ => _.IdFromSystem == "48"
+            );
 
         var product1 = new Product
         {
-            IdFromSystem = "4536467567",
-            Number = "75132-2401006-50",
-            Name = "Картер заднего моста",
+            IdFromSystem = "4536492774",
+            Number = "7513D-2800010-20",
+            Name = "Рама",
             ProductType = ProductType.Product,
-            ProductionArea = productionArea1,
-            TechnologicalProcess = new TechnologicalProcess
-            {
-                IdFromSystem = "3090319",
-                Number = "3090319",
-                Name = "Технологический процесс",
-                PdmSystemFileLink = "Ссылка"
-            },
+            ProductionArea = productionArea6,
+            TechnologicalProcess = technologicalProcess3330041,
             ProductInsides = new List<ProductInside>
             {
                 new ProductInside
                 {
                     InsideProduct = new Product
                     {
-                        IdFromSystem = "4536467565",
-                        Number = "75132-2401008-50",
-                        Name = "Картер заднего моста",
+                        Number = "75131-2801014-41",
+                        Name = "Лонжерон рамы правый",
                         ProductType = ProductType.Knot,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
                         {
-                            IdFromSystem = "3232836",
-                            Number = "3232836",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
+                            new()
+                            {
+                                Number = 18,
+                                Length = 4000,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            },
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            }
                         },
                         ProductInsides = new List<ProductInside>
                         {
@@ -800,36 +854,591 @@ public class DataSeed
                             {
                                 InsideProduct = new Product
                                 {
-                                    IdFromSystem = "4536276803",
-                                    Number = "75211-2401122",
+                                    Number = "75131-2801188",
                                     Name = "Опора",
                                     ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
                                     {
-                                        IdFromSystem = "3211246",
-                                        Number = "3211246",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
+                                        new()
+                                        {
+                                            Number = 54,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction54,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 1520,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801015-41",
+                        Name = "Лонжерон рамы левый",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 18,
+                                Length = 4000,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            },
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            }
+                        },
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801189",
+                                    Name = "Опора",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 56,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction54,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 1520,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801016-70",
+                        Name = "Лонжерон рамы правый",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801088-70",
+                                    Name = "Накладка рамы поперечная передняя",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 39,
+                                            Length = 280,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction39,
+                                        }
+                                    }
                                 }
                             },
                             new ProductInside
                             {
                                 InsideProduct = new Product
                                 {
-                                    IdFromSystem = "4536444153",
-                                    Number = "75132-2401106",
-                                    Name = "Пластина",
+                                    Number = "75131-2801188",
+                                    Name = "Опора",
                                     ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
                                     {
-                                        IdFromSystem = "1003048",
-                                        Number = "1003048",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
+                                        new()
+                                        {
+                                            Number = 55,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction55,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801017-70",
+                        Name = "Лонжерон рамы левый",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801088-70",
+                                    Name = "Накладка рамы поперечная передняя",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            IdFromSystem = "39",
+                                            Number = 39,
+                                            Length = 280,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction39,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801189",
+                                    Name = "Опора",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 57,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction57,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75132-2801152",
+                        Name = "Поперечина №3 рамы с опорами",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 18,
+                                Length = 4000,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            }
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801300-20",
+                        Name = "Поперечина рамы задняя",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
+                            }
+                        },
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801325",
+                                    Name = "Поперечина",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 1,
+                                            Length = 1900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction1,
+                                        },
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801357-10",
+                                    Name = "Лист верхний",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 1,
+                                            Length = 1900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction1,
+                                        },
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-8521182-20",
+                                    Name = "Кронштейн задней опоры",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-8521183-20",
+                                    Name = "Кронштейн задней опоры",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801325",
+                        Name = "Поперечина",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 1,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction1,
+                            },
+                            new()
+                            {
+                                Number = 2,
+                                Length = 1880,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction2,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801357-10",
+                        Name = "Лист верхний",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 1,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction1,
+                            },
+                            new()
+                            {
+                                Number = 2,
+                                Length = 1880,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction2,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-8521182-20",
+                        Name = "Кронштейн задней опоры",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 2,
+                                Length = 1880,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction2,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801103-10",
+                        Name = "Поперечина",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                IdFromSystem = "52",
+                                Number = 52,
+                                Length = 1200,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction52,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801114-01",
+                        Name = "Усилитель",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 52,
+                                Length = 1200,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction52,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801115-01",
+                        Name = "Усилитель",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 52,
+                                Length = 1200,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction52,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801358-10",
+                        Name = "Лист нижний",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 48,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction48,
+                            }
+                        }
+                    }
+                },
+            },
+        };
+
+        var product2 = new Product
+        {
+            IdFromSystem = "4536479362",
+            Number = "75131-2800010-70",
+            Name = "Рама",
+            ProductType = ProductType.Product,
+            ProductionArea = productionArea6,
+            TechnologicalProcess = technologicalProcess3291137,
+            ProductInsides = new List<ProductInside>
+            {
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801014-41",
+                        Name = "Лонжерон рамы правый",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3291137,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 18,
+                                Length = 4000,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            },
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            }
+                        },
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801188",
+                                    Name = "Опора",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3291137,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 54,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction54,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 1520,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -839,17 +1448,27 @@ public class DataSeed
                 {
                     InsideProduct = new Product
                     {
-                        IdFromSystem = "4536273956",
-                        Number = "7521-2401220",
-                        Name = "Кронштейн",
+                        Number = "75131-2801015-41",
+                        Name = "Лонжерон рамы левый",
                         ProductType = ProductType.Knot,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3291137,
+                        Seams = new List<Seam>
                         {
-                            IdFromSystem = "1362989",
-                            Number = "1362989",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
+                            new()
+                            {
+                                Number = 18,
+                                Length = 4000,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            },
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            }
                         },
                         ProductInsides = new List<ProductInside>
                         {
@@ -857,37 +1476,326 @@ public class DataSeed
                             {
                                 InsideProduct = new Product
                                 {
-                                    IdFromSystem = "4536274170",
-                                    Number = "7521-2401224",
-                                    Name = "Проушина",
+                                    Number = "75131-2801189",
+                                    Name = "Опора",
                                     ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3291137,
+                                    Seams = new List<Seam>
                                     {
-                                        IdFromSystem = "1124147",
-                                        Number = "1124147",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
+                                        new()
+                                        {
+                                            Number = 56,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction54,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 1520,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801016-70",
+                        Name = "Лонжерон рамы правый",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801088-70",
+                                    Name = "Накладка рамы поперечная передняя",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 39,
+                                            Length = 280,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction39,
+                                        }
+                                    }
                                 }
                             },
                             new ProductInside
                             {
                                 InsideProduct = new Product
                                 {
-                                    IdFromSystem = "4536273606",
-                                    Number = "7521-3932688",
-                                    Name = "Распорка",
+                                    Number = "75131-2801188",
+                                    Name = "Опора",
                                     ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
                                     {
-                                        IdFromSystem = "908693",
-                                        Number = "908693",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
+                                        new()
+                                        {
+                                            Number = 55,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction55,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
                                 }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801017-70",
+                        Name = "Лонжерон рамы левый",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801088-70",
+                                    Name = "Накладка рамы поперечная передняя",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 39,
+                                            Length = 280,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction39,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801189",
+                                    Name = "Опора",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 57,
+                                            Length = 400,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction57,
+                                        },
+                                        new()
+                                        {
+                                            Number = 58,
+                                            Length = 900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction58,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75132-2801152",
+                        Name = "Поперечина №3 рамы с опорами",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 18,
+                                Length = 4000,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction18,
+                            }
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801300-20",
+                        Name = "Поперечина рамы задняя",
+                        ProductType = ProductType.Knot,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
+                            }
+                        },
+                        ProductInsides = new List<ProductInside>
+                        {
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801325",
+                                    Name = "Поперечина",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 1,
+                                            Length = 1900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction1,
+                                        },
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-2801357-10",
+                                    Name = "Лист верхний",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 1,
+                                            Length = 1900,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction1,
+                                        },
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-8521182-20",
+                                    Name = "Кронштейн задней опоры",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                            new ProductInside
+                            {
+                                InsideProduct = new Product
+                                {
+                                    Number = "75131-8521183-20",
+                                    Name = "Кронштейн задней опоры",
+                                    ProductType = ProductType.Detail,
+                                    ProductionArea = productionArea6,
+                                    TechnologicalProcess = technologicalProcess3330041,
+                                    Seams = new List<Seam>
+                                    {
+                                        new()
+                                        {
+                                            Number = 2,
+                                            Length = 1880,
+                                            ProductionArea = productionArea6,
+                                            TechnologicalInstruction = technologicalInstruction2,
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801325",
+                        Name = "Поперечина",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 1,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction1,
+                            },
+                            new()
+                            {
+                                Number = 2,
+                                Length = 1880,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction2,
                             }
                         }
                     }
@@ -896,414 +1804,139 @@ public class DataSeed
                 {
                     InsideProduct = new Product
                     {
-                        IdFromSystem = "4536417730",
-                        Number = "75132-2105522",
-                        Name = "Панель",
+                        Number = "75131-2801357-10",
+                        Name = "Лист верхний",
                         ProductType = ProductType.Detail,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
                         {
-                            IdFromSystem = "1053809",
-                            Number = "1053809",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
+                            new()
+                            {
+                                Number = 1,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction1,
+                            },
+                            new()
+                            {
+                                Number = 2,
+                                Length = 1880,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction2,
+                            }
+                        }
                     }
                 },
                 new ProductInside
                 {
                     InsideProduct = new Product
                     {
-                        IdFromSystem = "4536461620",
-                        Number = "75131-2113296-10",
-                        Name = "Кронштейн",
+                        Number = "75131-8521182-20",
+                        Name = "Кронштейн задней опоры",
                         ProductType = ProductType.Detail,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
                         {
-                            IdFromSystem = "526870",
-                            Number = "526870",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
+                            new()
+                            {
+                                Number = 2,
+                                Length = 1880,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction2,
+                            }
+                        }
                     }
-                }
-            },
-            Seams = new List<Seam>
-            {
-                new Seam
-                {
-                    Number = 1,
-                    Length = 111,
-                    IsControlSubject = true,
-                    ProductionArea = productionArea1,
                 },
-                new Seam
+                new ProductInside
                 {
-                    Number = 2,
-                    Length = 222,
-                    IsControlSubject = true,
-                    ProductionArea = productionArea1,
-                }
-            }
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801103-10",
+                        Name = "Поперечина",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 52,
+                                Length = 1200,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction52,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801114-01",
+                        Name = "Усилитель",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 52,
+                                Length = 1200,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction52,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801115-01",
+                        Name = "Усилитель",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 52,
+                                Length = 1200,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction52,
+                            }
+                        }
+                    }
+                },
+                new ProductInside
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801358-10",
+                        Name = "Лист нижний",
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        TechnologicalProcess = technologicalProcess3330041,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 48,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction48,
+                            }
+                        }
+                    }
+                },
+            },
         };
 
-        var product2 = new Product
-        {
-            IdFromSystem = "4536384294",
-            Number = "75580-2401006",
-            Name = "Картер заднего моста",
-            ProductType = ProductType.Product,
-            ProductionArea = productionArea1,
-            TechnologicalProcess = new TechnologicalProcess
-            {
-                IdFromSystem = "2433634",
-                Number = "2433634",
-                Name = "Технологический процесс",
-                PdmSystemFileLink = "Ссылка"
-            },
-            ProductInsides = new List<ProductInside>
-            {
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536386240",
-                        Number = "75580-2401010-01",
-                        Name = "Труба картера заднего моста",
-                        ProductType = ProductType.Knot,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "2915477",
-                            Number = "2915477",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                        ProductInsides = new List<ProductInside>
-                        {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536386265",
-                                    Number = "75580-2401114-11",
-                                    Name = "Фланец картера",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "3338649",
-                                        Number = "3338649",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            },
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536386250",
-                                    Number = "75580-2401132-10",
-                                    Name = "Труба картера",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "2822569",
-                                        Number = "2822569",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            }
-                        }
-                    }
-                },
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536384295",
-                        Number = "75580-2401008",
-                        Name = "Картер заднего моста",
-                        ProductType = ProductType.Knot,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "3232938",
-                            Number = "3232938",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                        ProductInsides = new List<ProductInside>
-                        {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536248270",
-                                    Number = "75303-2128438",
-                                    Name = "Втулка",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "3011514",
-                                        Number = "3011514",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            },
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536384312",
-                                    Number = "75580-2401227",
-                                    Name = "Кольцо",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea1,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "1402616",
-                                        Number = "1402616",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            }
-                        }
-                    }
-                },
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536384399",
-                        Number = "75580-2105522",
-                        Name = "Панель",
-                        ProductType = ProductType.Detail,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "1405307",
-                            Number = "1405307",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                    }
-                },
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536384314",
-                        Number = "75580-2113192",
-                        Name = "Кронштейн",
-                        ProductType = ProductType.Detail,
-                        ProductionArea = productionArea1,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "1405914",
-                            Number = "1405914",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                    }
-                }
-            }
-        };
-
-        var product3 = new Product
-        {
-            IdFromSystem = "4536287819",
-            Number = "75313-2800010-20",
-            Name = "Рама",
-            ProductType = ProductType.Product,
-            ProductionArea = productionArea4,
-            TechnologicalProcess = new TechnologicalProcess
-            {
-                IdFromSystem = "3239598",
-                Number = "3239598",
-                Name = "Технологический процесс",
-                PdmSystemFileLink = "Ссылка"
-            },
-            ProductInsides = new List<ProductInside>
-            {
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536248707",
-                        Number = "75304-1001251",
-                        Name = "Кронштейн амортизатора левый",
-                        ProductType = ProductType.Knot,
-                        ProductionArea = productionArea4,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "1334123",
-                            Number = "1334123",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                        ProductInsides = new List<ProductInside>
-                        {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536248708",
-                                    Number = "75304-1001253",
-                                    Name = "Кронштейн",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea4,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "1492964",
-                                        Number = "1492964",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            },
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536247228",
-                                    Number = "75303-1001293",
-                                    Name = "Кронштейн",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea4,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "3049271",
-                                        Number = "3049271",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            }
-                        }
-                    }
-                },
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536267493",
-                        Number = "75310-1183100",
-                        Name = "Кронштейн",
-                        ProductType = ProductType.Knot,
-                        ProductionArea = productionArea4,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "1823031",
-                            Number = "1823031",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                        ProductInsides = new List<ProductInside>
-                        {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536267484",
-                                    Number = "75310-1183102",
-                                    Name = "Кронштейн",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea4,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "1104641",
-                                        Number = "1104641",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            },
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    IdFromSystem = "4536267485",
-                                    Number = "75310-1183106",
-                                    Name = "Кронштейн",
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea4,
-                                    TechnologicalProcess = new TechnologicalProcess
-                                    {
-                                        IdFromSystem = "1119363",
-                                        Number = "1119363",
-                                        Name = "Технологический процесс",
-                                        PdmSystemFileLink = "Ссылка"
-                                    },
-                                }
-                            }
-                        }
-                    }
-                },
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536270344",
-                        Number = "75211-1018162",
-                        Name = "Кронштейн",
-                        ProductType = ProductType.Detail,
-                        ProductionArea = productionArea4,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "2841119",
-                            Number = "2841119",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                    }
-                },
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        IdFromSystem = "4536196288",
-                        Number = "549Б-1015842",
-                        Name = "Накладка",
-                        ProductType = ProductType.Detail,
-                        ProductionArea = productionArea4,
-                        TechnologicalProcess = new TechnologicalProcess
-                        {
-                            IdFromSystem = "1426226",
-                            Number = "1426226",
-                            Name = "Технологический процесс",
-                            PdmSystemFileLink = "Ссылка"
-                        },
-                    }
-                }
-            },
-            Seams = new List<Seam>
-            {
-                new Seam
-                {
-                    Number = 3,
-                    Length = 333,
-                    IsControlSubject = true,
-                    ProductionArea = productionArea1,
-                },
-                new Seam
-                {
-                    Number = 4,
-                    Length = 222,
-                    IsControlSubject = true,
-                    ProductionArea = productionArea1,
-                }
-            }
-        };
-
-        await context.Products.AddRangeAsync(product1, product2, product3);
+        await context.Products.AddRangeAsync(product1, product2);
         await context.SaveChangesAsync();
     }
 
@@ -1314,10 +1947,10 @@ public class DataSeed
         );
 
         var detail = (
-            await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536276803")
+            await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536463325")
         )!;
         var detailWithoutKnot = (
-            await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536384399")
+            await context.Products.FirstOrDefaultAsync(_ => _.IdFromSystem == "4536471752")
         )!;
 
         var welder = (await context.Welders.FirstOrDefaultAsync(_ => _.IdFromSystem == "121267"))!;
@@ -1328,8 +1961,26 @@ public class DataSeed
             await context.Inspectors.FirstOrDefaultAsync(_ => _.IdFromSystem == "249550")
         )!;
 
-        detail.Master = master;
-        detailWithoutKnot.Master = master;
+        var seam1 = (
+            await context.Seams
+                .Include(_ => _.Product)
+                .ThenInclude(_ => _.Master)
+                .FirstOrDefaultAsync(
+                    _ => _.Number == 48 && _.Product.ProductType == ProductType.Detail
+                )
+        )!;
+
+        var seam2 = (
+            await context.Seams
+                .Include(_ => _.Product)
+                .ThenInclude(_ => _.Master)
+                .FirstOrDefaultAsync(
+                    _ => _.Number == 18 && _.Product.ProductType == ProductType.Knot
+                )
+        )!;
+
+        seam1.Product.Master = master;
+        seam2.Product.Master = master;
 
         await context.SaveChangesAsync();
 
@@ -2895,45 +3546,7 @@ public class DataSeed
                         }
                     }
                 },
-                Seam = new Seam
-                {
-                    Number = 1,
-                    Length = 100,
-                    IsControlSubject = true,
-                    ProductionArea = productionArea6,
-                    Inspector = inspector,
-                    TechnologicalInstruction = new TechnologicalInstruction
-                    {
-                        Number = 1,
-                        Name = "ИТП",
-                        WeldPassageInstructions = new List<WeldPassageInstruction>
-                        {
-                            new()
-                            {
-                                Number = 1,
-                                Name = "Корневой",
-                                PreheatingTemperatureMin = 50,
-                                PreheatingTemperatureMax = 250,
-                                WeldingCurrentMin = 80,
-                                WeldingCurrentMax = 120,
-                                ArcVoltageMin = 22,
-                                ArcVoltageMax = 24,
-                            },
-                            new()
-                            {
-                                Number = 2,
-                                Name = "Заполняющий",
-                                PreheatingTemperatureMin = 50,
-                                PreheatingTemperatureMax = 250,
-                                WeldingCurrentMin = 80,
-                                WeldingCurrentMax = 120,
-                                ArcVoltageMin = 21,
-                                ArcVoltageMax = 25,
-                            }
-                        }
-                    },
-                    Product = detail
-                }
+                Seam = seam1,
             },
             new WeldingTask
             {
@@ -2989,45 +3602,7 @@ public class DataSeed
                         }
                     }
                 },
-                Seam = new Seam
-                {
-                    Number = 2,
-                    Length = 200,
-                    IsControlSubject = true,
-                    ProductionArea = productionArea6,
-                    Inspector = inspector,
-                    TechnologicalInstruction = new TechnologicalInstruction
-                    {
-                        Number = 1,
-                        Name = "ИТП",
-                        WeldPassageInstructions = new List<WeldPassageInstruction>
-                        {
-                            new()
-                            {
-                                Number = 1,
-                                Name = "Корневой",
-                                PreheatingTemperatureMin = 50,
-                                PreheatingTemperatureMax = 250,
-                                WeldingCurrentMin = 80,
-                                WeldingCurrentMax = 120,
-                                ArcVoltageMin = null,
-                                ArcVoltageMax = null,
-                            },
-                            new()
-                            {
-                                Number = 2,
-                                Name = "Заполняющий",
-                                PreheatingTemperatureMin = 50,
-                                PreheatingTemperatureMax = 250,
-                                WeldingCurrentMin = 80,
-                                WeldingCurrentMax = 120,
-                                ArcVoltageMin = 21,
-                                ArcVoltageMax = 25,
-                            }
-                        }
-                    },
-                    Product = detailWithoutKnot
-                }
+                Seam = seam2,
             }
         };
 
@@ -3041,19 +3616,19 @@ public class DataSeed
         {
             new TechnologicalProcess
             {
-                IdFromSystem = "4536467565",
+                IdFromSystem = "2868425",
                 Name = "Поперечина рамы задняя",
                 Number = "75131-2801300-20"
             },
             new TechnologicalProcess
             {
-                IdFromSystem = "4536273956",
+                IdFromSystem = "3330041",
                 Name = "Рама",
                 Number = "7513D-2800010-20"
             },
             new TechnologicalProcess
             {
-                IdFromSystem = "4536386240",
+                IdFromSystem = "3291137",
                 Name = "Рама",
                 Number = "75131-2800010-70"
             }
@@ -3065,23 +3640,206 @@ public class DataSeed
 
     private static async Task AddTechnologicalInstruction(ApplicationContext context)
     {
-        var seam = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 1))!;
-        var seam2 = (await context.Seams.FirstOrDefaultAsync(_ => _.Number == 2))!;
-
         var technologicalInstructions = new List<TechnologicalInstruction>
         {
             new TechnologicalInstruction
             {
-                Name = "Инструкция 1",
-                Number = 1,
-                Seams = new List<Seam> { seam },
+                IdFromSystem = "18",
+                Name = "Инструкция 18",
+                Number = 18,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
             },
             new TechnologicalInstruction
             {
+                IdFromSystem = "39",
+                Name = "Инструкция 39",
+                Number = 39,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "52",
+                Name = "Инструкция 52",
+                Number = 52,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "54",
+                Name = "Инструкция 54",
+                Number = 54,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "55",
+                Name = "Инструкция 55",
+                Number = 55,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "56",
+                Name = "Инструкция 56",
+                Number = 56,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "57",
+                Name = "Инструкция 57",
+                Number = 57,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "58",
+                Name = "Инструкция 58",
+                Number = 58,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "1",
+                Name = "Инструкция 1",
+                Number = 1,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "2",
                 Name = "Инструкция 2",
                 Number = 2,
-                Seams = new List<Seam> { seam2 },
-            }
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
+            new TechnologicalInstruction
+            {
+                IdFromSystem = "48",
+                Name = "Инструкция 48",
+                Number = 48,
+                WeldPassageInstructions = new List<WeldPassageInstruction>
+                {
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 1,
+                        WeldingCurrentMin = 230,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    }
+                }
+            },
         };
 
         context.TechnologicalInstructions.AddRange(technologicalInstructions);
