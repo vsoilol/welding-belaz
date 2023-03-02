@@ -429,7 +429,12 @@ export const Place = ({
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
-
+  const optProdArea = workshop?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -580,6 +585,18 @@ export const Place = ({
                     placeholder="Производственные участки"
                     onChange={(event) => setValuetPosts(event.value)}
                     options={optPosts}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Select
+                    name="valueProdArea"
+                    value={valueProdArea}
+                    width="380px"
+                    placeholder="Цех"
+                    onChange={(event) => {
+                      setValueProdArea(event.value)
+                    }}
+                    options={optProdArea}
                   />
                 </div>
 
