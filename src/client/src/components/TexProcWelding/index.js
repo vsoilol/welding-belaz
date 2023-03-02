@@ -36,7 +36,7 @@ const dateOptions = {
 export const TexProcWelding = ({
   loadMasters,
   loadTexprocwelding,
-  // loadInstructions,
+  loadInstructions,
   loadSeam,
   addInst,
   editInst,
@@ -92,12 +92,12 @@ export const TexProcWelding = ({
 
   useEffect(() => {
     loadTexprocwelding();
-    // loadInstructions();
+    loadInstructions();
     loadSeam();
   }, [
     loadMasters,
     loadTexprocwelding,
-    // loadInstructions,
+    loadInstructions,
     loadSeam
   ]);
 
@@ -316,8 +316,7 @@ export const TexProcWelding = ({
     );
   };
 
-  const renderRowChildrenTexProc = (rowData) => {
-    console.log(rowData)
+  const renderRowChildrenTexProc = (rowData) => { 
     return (
       rowData && (
         <TableContainer component={Paper}>
@@ -577,11 +576,11 @@ export const TexProcWelding = ({
                   {
                     icon: "edit",
                     tooltip: "Редактировать ",
-                    onClick: (event, rowData) => {
+                    onClick: (event, rowData) => { 
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalOpenNumb(1)
-                      setValuetSeam(rowData.seam.id)
+                      setValuetSeam(rowData?.seam?.id)
                       setValuetVkladka(1)
                     },
                   },
@@ -694,7 +693,7 @@ export const TexProcWelding = ({
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.weldingCurrentMin}
                   name="weldingCurrentMin"
-                  placeholder="Время сварки min"
+                  placeholder="Сварочный ток min"
                   onBlur={handleBlur}
                 />
 
@@ -706,7 +705,7 @@ export const TexProcWelding = ({
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.weldingCurrentMax}
                   name="weldingCurrentMax"
-                  placeholder="Время сварки max"
+                  placeholder="Сварочный ток max"
                   onBlur={handleBlur}
                 />
               </div>
