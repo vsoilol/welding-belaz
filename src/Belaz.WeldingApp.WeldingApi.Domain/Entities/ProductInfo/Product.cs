@@ -49,6 +49,4 @@ public class Product : Entity
 
     [ForeignKey(nameof(InspectorId))]
     public Inspector? Inspector { get; set; }
-
-    public List<Welder> Welders { get; set; } = null!;
 }

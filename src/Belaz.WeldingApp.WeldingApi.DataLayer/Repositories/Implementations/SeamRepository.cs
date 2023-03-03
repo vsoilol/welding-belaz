@@ -156,8 +156,6 @@ public class SeamRepository : ISeamRepository
             .Include(_ => _.TechnologicalInstruction)
             .Include(_ => _.Product)
             .ThenInclude(_ => _!.TechnologicalProcess)
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _!.Welders)
             .Where(filter);
 
         return products;
@@ -177,9 +175,7 @@ public class SeamRepository : ISeamRepository
             .ThenInclude(_ => _!.Workshop)
             .Include(_ => _.TechnologicalInstruction)
             .Include(_ => _.Product)
-            .ThenInclude(_ => _!.TechnologicalProcess)
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _!.Welders);
+            .ThenInclude(_ => _!.TechnologicalProcess);
 
         return products;
     }

@@ -3,11 +3,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 
@@ -38,8 +35,6 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
 
     public bool IsControlSubject { get; set; }
 
-    public List<WelderDto> Welders { get; set; } = null!;
-
     public void Mapping(Profile profile)
     {
         profile
@@ -48,7 +43,6 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
                 dto => dto.TechnologicalProcess,
                 opt => opt.MapFrom(x => x.Product!.TechnologicalProcess)
             )
-            .ForMember(dto => dto.Workshop, opt => opt.MapFrom(x => x.ProductionArea!.Workshop))
-            .ForMember(dto => dto.Welders, opt => opt.MapFrom(x => x.Product!.Welders));
+            .ForMember(dto => dto.Workshop, opt => opt.MapFrom(x => x.ProductionArea!.Workshop));
     }
 }

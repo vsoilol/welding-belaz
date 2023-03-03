@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Common;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WeldingApp.Common.Attributes;
 using WeldingApp.Common.Enums;
 
@@ -37,6 +33,39 @@ public class ProductAccountController : ControllerBase
         var result = await _productAccountService.GetAllDatesByProductionAreaAsync(
             new ProductionAreaIdRequest { ProductionAreaId = productionAreaId }
         );
+
+        return result.ToOk();
+    }
+
+    [HttpGet("byDate")]
+    [ProducesResponseType(typeof(List<ProductAccountDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductAccountDto>>> GetAllByDateAsync(
+        [FromQuery] GetAllProductAccountsByDateRequest request
+    )
+    {
+        var result = await _productAccountService.GetAllByDateAsync(request);
+
+        return result.ToOk();
+    }
+
+    [HttpPut("manufacturedAmount")]
+    [ProducesResponseType(typeof(ChangeProductAccountAmountRequest), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> ChangeManufacturedAmountAsync(
+        [FromBody] ChangeProductAccountAmountRequest request
+    )
+    {
+        var result = await _productAccountService.ChangeManufacturedAmountAsync(request);
+
+        return result.ToOk();
+    }
+
+    [HttpPut("amountFromPlan")]
+    [ProducesResponseType(typeof(ChangeProductAccountAmountRequest), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> ChangAmountFromPlanAsync(
+        [FromBody] ChangeProductAccountAmountRequest request
+    )
+    {
+        var result = await _productAccountService.ChangAmountFromPlanAsync(request);
 
         return result.ToOk();
     }

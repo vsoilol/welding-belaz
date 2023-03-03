@@ -1,5 +1,6 @@
 using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 using WeldingApp.Common.Enums;
 
@@ -7,6 +8,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
 
 public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAccount>
 {
+    public Guid Id { get; set; }
+
     public int Number { get; set; }
 
     public int AmountFromPlan { get; set; }
@@ -18,6 +21,8 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
     public int AmountAccept { get; set; }
 
     public int AmountDefective { get; set; }
+
+    public List<WelderBriefDto> Welders { get; set; } = null!;
 
     public void Mapping(Profile profile)
     {

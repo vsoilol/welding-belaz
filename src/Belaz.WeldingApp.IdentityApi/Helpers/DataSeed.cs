@@ -29,7 +29,7 @@ public class DataSeed
         IdentityDbContext context
     )
     {
-        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.Number == 1);
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.Number == 6);
 
         var master = new UserData()
         {

@@ -165,35 +165,6 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task AssignProductToWeldersAsync(Guid productId, List<Guid> welderIds)
-    {
-        var product = (
-            await _context.Products
-                .Include(_ => _.Welders)
-                .FirstOrDefaultAsync(_ => _.Id == productId)
-        )!;
-
-        var welders = await _context.Welders
-            .Where(_ => welderIds.Any(welderId => welderId == _.Id))
-            .ToListAsync();
-
-        product.Welders = welders;
-
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task<List<ProductDto>> GetAllByWelderId(Guid welderId, ProductType productType)
-    {
-        var products = await FilterProducts(
-                _ => _.Welders.Any(welder => welder.Id == welderId) && _.ProductType == productType
-            )
-            .ToListAsync();
-
-        var mapProducts = _mapper.Map<List<ProductDto>>(products);
-
-        return mapProducts;
-    }
-
     private IQueryable<Product> FilterProducts(Expression<Func<Product, bool>> filter)
     {
         var products = _context.Products

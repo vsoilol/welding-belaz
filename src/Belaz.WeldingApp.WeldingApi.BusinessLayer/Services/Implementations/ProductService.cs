@@ -83,17 +83,6 @@ public class ProductService : IProductService
         );
     }
 
-    public async Task<Result<List<ProductDto>>> GetAllByWelderIdAsync(
-        GetAllProductsByWelderIdRequest request
-    )
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(
-            () => _productRepository.GetAllByWelderId(request.WelderId, request.Type)
-        );
-    }
-
     public async Task<Result<ProductDto>> CreateAsync(CreateProductRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
@@ -177,22 +166,6 @@ public class ProductService : IProductService
             await _productRepository.AssignProductsToInspectorAsync(
                 request.ProductIds,
                 request.InspectorId
-            );
-            return Unit.Default;
-        });
-    }
-
-    public async Task<Result<Unit>> AssignProductToWeldersAsync(
-        AssignProductToWeldersRequest request
-    )
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(async () =>
-        {
-            await _productRepository.AssignProductToWeldersAsync(
-                request.ProductId,
-                request.WelderIds
             );
             return Unit.Default;
         });
