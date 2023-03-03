@@ -22,6 +22,11 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
 
     public int AmountDefective { get; set; }
 
+    /// <summary>
+    /// Есть ли отклонения
+    /// </summary>
+    public bool AreDeviations { get; set; } = false;
+
     public List<WelderBriefDto> Welders { get; set; } = null!;
 
     public void Mapping(Profile profile)
@@ -56,6 +61,32 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
                             x.ProductResults
                                 .Where(_ => _.Status == ResultProductStatus.Defective)
                                 .Sum(_ => _.Amount)
+                    )
+            )
+            .ForMember(
+                dto => dto.AreDeviations,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.Product.Seams
+                                .SelectMany(_ => _.WeldingTasks)
+                                .Where(_ => _.WeldingDate.Date.Equals(x.DateFromPlan.Date))
+                                .SelectMany(_ => _.WeldPassages)
+                                .Any(
+                                    _ =>
+                                        (
+                                            _.IsEnsuringCurrentTolerance != null
+                                            && !(bool)_.IsEnsuringCurrentTolerance
+                                        )
+                                        || (
+                                            _.IsEnsuringTemperatureTolerance != null
+                                            && !(bool)_.IsEnsuringTemperatureTolerance
+                                        )
+                                        || (
+                                            _.IsEnsuringVoltageTolerance != null
+                                            && !(bool)_.IsEnsuringVoltageTolerance
+                                        )
+                                )
                     )
             );
     }

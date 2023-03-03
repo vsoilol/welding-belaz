@@ -3392,7 +3392,8 @@ public class DataSeed
             }
         };
 
-        await context.WeldingTasks.AddRangeAsync(tasks);
+        context.WeldingTasks.AddRange(tasks);
+
         await context.SaveChangesAsync();
     }
 
