@@ -17,12 +17,12 @@ public class WeldingTask : Entity
     /// <summary>
     /// Добавлен ли вручную
     /// </summary>
-    public bool IsAddManually { get; set; }
+    public bool IsAddManually { get; set; } = false;
 
     /// <summary>
     /// Дата выполнения сварки
     /// </summary>
-    public DateTime? WeldingDate { get; set; }
+    public DateTime WeldingDate { get; set; }
 
     /// <summary>
     /// Основной материал
@@ -59,20 +59,20 @@ public class WeldingTask : Entity
     [ForeignKey(nameof(SeamId))]
     public Seam Seam { get; set; } = null!;
 
-    public Guid WelderId { get; set; }
+    public Guid? WelderId { get; set; }
 
     [ForeignKey(nameof(WelderId))]
-    public Welder Welder { get; set; } = null!;
+    public Welder? Welder { get; set; } = null!;
 
     public Guid MasterId { get; set; }
 
     [ForeignKey(nameof(MasterId))]
     public Master Master { get; set; } = null!;
 
-    public Guid InspectorId { get; set; }
+    public Guid? InspectorId { get; set; }
 
     [ForeignKey(nameof(InspectorId))]
-    public Inspector Inspector { get; set; } = null!;
+    public Inspector? Inspector { get; set; } = null!;
 
     public List<WeldPassage> WeldPassages { get; set; } = null!;
 }

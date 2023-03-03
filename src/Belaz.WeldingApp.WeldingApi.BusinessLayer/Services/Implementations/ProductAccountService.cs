@@ -65,6 +65,23 @@ public class ProductAccountService : IProductAccountService
         );
     }
 
+    public async Task<Result<Unit>> GenerateTasksAsync(GenerateTasksRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            var date = request.Date.ToDateTime();
+
+            await _productAccountRepository.GenerateTasksAsync(
+                date,
+                request.ProductionAreaId,
+                request.UserId
+            );
+            return Unit.Default;
+        });
+    }
+
     public async Task<Result<List<ProductAccountDto>>> GetAllByDateAsync(
         GetAllProductAccountsByDateRequest request
     )

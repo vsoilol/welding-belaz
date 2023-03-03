@@ -47,7 +47,12 @@ public class DataSeed
 
         if (!(await userRepository.GetByFilterAsync(_ => _.UserName == master.UserName)).Any())
         {
-            await userRepository.AddAsync(master);
+            var user = await userRepository.AddAsync(master);
+            await userRepository.SaveAsync();
+
+            var masterData = new Master { UserInfo = user };
+
+            context.Masters.Add(masterData);
             await userRepository.SaveAsync();
         }
     }

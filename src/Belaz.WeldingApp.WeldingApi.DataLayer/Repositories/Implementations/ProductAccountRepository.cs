@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
 using WeldingApp.Common.Enums;
@@ -66,6 +67,56 @@ public class ProductAccountRepository : IProductAccountRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(id);
+    }
+
+    public async Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId)
+    {
+        var oldWeldingTask = _context.WeldingTasks.Where(
+            _ =>
+                _.WeldingDate.Date.Equals(date.Date)
+                && _.Master.UserInfo.ProductionAreaId == productionAreaId
+        );
+
+        _context.RemoveRange(oldWeldingTask);
+        await _context.SaveChangesAsync();
+
+        var master = (await _context.Masters.FirstOrDefaultAsync(_ => _.UserId == userId))!;
+
+        var productAccounts = await _context.ProductAccounts
+            .Include(_ => _.Product)
+            .ThenInclude(_ => _.Seams)
+            .Include(_ => _.Product)
+            .ThenInclude(_ => _.Inspector)
+            .Where(
+                _ =>
+                    _.Product.ProductionAreaId == productionAreaId
+                    && _.DateFromPlan.Date.Equals(date.Date)
+            )
+            .ToListAsync();
+
+        var weldingTasks = new List<WeldingTask>();
+
+        foreach (var productAccount in productAccounts)
+        {
+            for (int i = 0; i < productAccount.AmountFromPlan; i++)
+            {
+                foreach (var seam in productAccount.Product.Seams)
+                {
+                    weldingTasks.Add(
+                        new WeldingTask
+                        {
+                            WeldingDate = date,
+                            Master = master,
+                            Inspector = seam.Inspector,
+                            Seam = seam
+                        }
+                    );
+                }
+            }
+        }
+
+        _context.WeldingTasks.AddRange(weldingTasks);
+        await _context.SaveChangesAsync();
     }
 
     public Task<List<ProductAccountDto>> GetAllByDateAsync(DateTime date, Guid productionAreaId)

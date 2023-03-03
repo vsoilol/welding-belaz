@@ -95,7 +95,7 @@ public class DataSeed
                 new ProductAccount
                 {
                     Number = index + 1,
-                    AmountFromPlan = 20,
+                    AmountFromPlan = 2,
                     DateFromPlan = DateTime.Now,
                     Product = _,
                     ProductResults = new List<ProductResult>
@@ -3280,7 +3280,7 @@ public class DataSeed
         {
             new WeldingTask
             {
-                WeldingDate = DateTime.Now,
+                WeldingDate = new DateTime(2000, 1, 1),
                 BasicMaterial = "Сталь 20",
                 MainMaterialBatchNumber = "454578",
                 WeldingMaterial = "Проволока 1,2 Св-08Г2С",
@@ -3336,7 +3336,7 @@ public class DataSeed
             },
             new WeldingTask
             {
-                WeldingDate = DateTime.Now,
+                WeldingDate = new DateTime(2000, 1, 1),
                 BasicMaterial = "Сталь 20",
                 MainMaterialBatchNumber = "454578",
                 WeldingMaterial = "Проволока 1,2 Св-08Г2С",

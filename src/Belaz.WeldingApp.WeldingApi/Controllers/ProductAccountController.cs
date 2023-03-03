@@ -80,4 +80,14 @@ public class ProductAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpPost("generateTasks")]
+    public async Task<ActionResult<Unit>> GenerateTasksAsync(
+        [FromBody] GenerateTasksRequest request
+    )
+    {
+        var result = await _productAccountService.GenerateTasksAsync(request);
+
+        return result.ToOk();
+    }
 }

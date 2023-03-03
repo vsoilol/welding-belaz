@@ -25,4 +25,6 @@ public interface IProductAccountService
     Task<Result<Unit>> AssignProductAccountToWeldersAsync(
         AssignProductAccountToWeldersRequest request
     );
+
+    Task<Result<Unit>> GenerateTasksAsync(GenerateTasksRequest request);
 }
