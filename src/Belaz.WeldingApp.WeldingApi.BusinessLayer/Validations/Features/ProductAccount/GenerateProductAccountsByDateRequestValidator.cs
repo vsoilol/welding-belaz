@@ -10,24 +10,28 @@ using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.ProductAccount;
 
-public class GetAllProductAccountsByDateRequestValidator
-    : AbstractValidator<GetAllProductAccountsByDateRequest>
+public class GenerateProductAccountsByDateRequestValidator
+    : AbstractValidator<GenerateProductAccountsByDateRequest>
 {
-    public GetAllProductAccountsByDateRequestValidator(ApplicationContext context)
+    public GenerateProductAccountsByDateRequestValidator(ApplicationContext context)
     {
         RuleFor(model => model.Date)
             .Cascade(CascadeMode.Stop)
-            .SetValidator(new DateValidatorFor<GetAllProductAccountsByDateRequest>())
+            .SetValidator(new DateValidatorFor<GenerateProductAccountsByDateRequest>())
             .SetAsyncValidator(
-                new ExistDateValidatorFor<GetAllProductAccountsByDateRequest>(context)
+                new ExistDateValidatorFor<GenerateProductAccountsByDateRequest>(context)
             );
+
+        RuleFor(model => model.NewDate)
+            .Cascade(CascadeMode.Stop)
+            .SetValidator(new DateValidatorFor<GenerateProductAccountsByDateRequest>());
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<
-                    GetAllProductAccountsByDateRequest,
+                    GenerateProductAccountsByDateRequest,
                     Domain.Entities.Production.ProductionArea
                 >(context)
             );

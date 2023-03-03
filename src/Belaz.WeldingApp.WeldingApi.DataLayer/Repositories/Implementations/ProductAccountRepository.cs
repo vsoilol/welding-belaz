@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -90,6 +91,54 @@ public class ProductAccountRepository : IProductAccountRepository
             firstProductAccount.DateFromPlan,
             firstProductAccount.Product.ProductionAreaId
         );
+    }
+
+    public async Task<List<ProductAccountDto>> GenerateByDateAsync(
+        DateTime date,
+        DateTime newDate,
+        Guid productionAreaId
+    )
+    {
+        var oldProductAccounts = _context.ProductAccounts.Where(
+            _ =>
+                _.Product.ProductionAreaId == productionAreaId
+                && _.DateFromPlan.Date.Equals(newDate.Date)
+        );
+
+        _context.ProductAccounts.RemoveRange(oldProductAccounts);
+        await _context.SaveChangesAsync();
+
+        var newProductAccounts = (
+            await _context.ProductAccounts
+                .Include(_ => _.Product)
+                .Include(_ => _.Welders)
+                .Where(
+                    _ =>
+                        _.Product.ProductionAreaId == productionAreaId
+                        && _.DateFromPlan.Date.Equals(date.Date)
+                )
+                .OrderBy(_ => _.Number)
+                .ToListAsync()
+        ).Select(
+            (_, index) =>
+                new ProductAccount
+                {
+                    Number = index + 1,
+                    AmountFromPlan = _.AmountFromPlan,
+                    DateFromPlan = newDate,
+                    Product = _.Product,
+                    ProductResults = new List<ProductResult>
+                    {
+                        new() { Amount = 0, Status = ResultProductStatus.Manufactured }
+                    },
+                    Welders = _.Welders
+                }
+        );
+
+        _context.ProductAccounts.AddRange(newProductAccounts);
+        await _context.SaveChangesAsync();
+
+        return await GetAllByDateAsync(newDate, productionAreaId);
     }
 
     public async Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId)

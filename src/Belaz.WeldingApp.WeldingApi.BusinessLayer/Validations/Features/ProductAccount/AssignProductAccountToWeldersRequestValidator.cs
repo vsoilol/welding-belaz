@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;

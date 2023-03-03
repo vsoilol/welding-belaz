@@ -101,4 +101,15 @@ public class ProductAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpPost("generateByDate")]
+    [ProducesResponseType(typeof(List<ProductAccountDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductAccountDto>>> GenerateByDateAsync(
+        [FromBody] GenerateProductAccountsByDateRequest request
+    )
+    {
+        var result = await _productAccountService.GenerateByDateAsync(request);
+
+        return result.ToOk();
+    }
 }

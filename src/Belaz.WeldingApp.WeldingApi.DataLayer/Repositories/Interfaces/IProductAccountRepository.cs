@@ -19,4 +19,10 @@ public interface IProductAccountRepository
     Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId);
 
     Task<List<ProductAccountDto>> ChangeOrderAsync(Guid idFirst, Guid idSecond);
+
+    Task<List<ProductAccountDto>> GenerateByDateAsync(
+        DateTime date,
+        DateTime newDate,
+        Guid productionAreaId
+    );
 }
