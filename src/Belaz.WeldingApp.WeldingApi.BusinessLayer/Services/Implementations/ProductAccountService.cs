@@ -93,6 +93,20 @@ public class ProductAccountService : IProductAccountService
         });
     }
 
+    public async Task<Result<List<ProductAccountDto>>> GenerateEmptyAsync(
+        GenerateProductAccountsEmptyRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+        {
+            var newDate = request.NewDate.ToDateTime();
+
+            return _productAccountRepository.GenerateEmptyAsync(newDate, request.ProductionAreaId);
+        });
+    }
+
     public async Task<Result<Unit>> GenerateTasksAsync(GenerateTasksRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);

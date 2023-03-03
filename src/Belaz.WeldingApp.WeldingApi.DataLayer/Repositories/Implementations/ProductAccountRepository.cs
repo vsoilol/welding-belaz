@@ -141,6 +141,45 @@ public class ProductAccountRepository : IProductAccountRepository
         return await GetAllByDateAsync(newDate, productionAreaId);
     }
 
+    public async Task<List<ProductAccountDto>> GenerateEmptyAsync(
+        DateTime newDate,
+        Guid productionAreaId
+    )
+    {
+        var oldProductAccounts = _context.ProductAccounts.Where(
+            _ =>
+                _.Product.ProductionAreaId == productionAreaId
+                && _.DateFromPlan.Date.Equals(newDate.Date)
+        );
+
+        _context.ProductAccounts.RemoveRange(oldProductAccounts);
+        await _context.SaveChangesAsync();
+
+        var products = await _context.Products
+            .Where(_ => _.ProductionAreaId == productionAreaId)
+            .ToListAsync();
+
+        var newProductAccounts = products.Select(
+            (_, index) =>
+                new ProductAccount
+                {
+                    Number = index + 1,
+                    AmountFromPlan = 0,
+                    DateFromPlan = newDate,
+                    Product = _,
+                    ProductResults = new List<ProductResult>
+                    {
+                        new() { Amount = 0, Status = ResultProductStatus.Manufactured }
+                    }
+                }
+        );
+
+        _context.ProductAccounts.AddRange(newProductAccounts);
+        await _context.SaveChangesAsync();
+
+        return await GetAllByDateAsync(newDate, productionAreaId);
+    }
+
     public async Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId)
     {
         var oldWeldingTask = _context.WeldingTasks.Where(

@@ -114,4 +114,15 @@ public class ProductAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpPost("generateEmpty")]
+    [ProducesResponseType(typeof(List<ProductAccountDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductAccountDto>>> GenerateEmptyAsync(
+        [FromBody] GenerateProductAccountsEmptyRequest request
+    )
+    {
+        var result = await _productAccountService.GenerateEmptyAsync(request);
+
+        return result.ToOk();
+    }
 }

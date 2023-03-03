@@ -33,4 +33,8 @@ public interface IProductAccountService
     Task<Result<List<ProductAccountDto>>> GenerateByDateAsync(
         GenerateProductAccountsByDateRequest request
     );
+
+    Task<Result<List<ProductAccountDto>>> GenerateEmptyAsync(
+        GenerateProductAccountsEmptyRequest request
+    );
 }

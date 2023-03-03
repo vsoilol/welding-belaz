@@ -28,4 +28,6 @@ public interface IProductAccountRepository
         DateTime newDate,
         Guid productionAreaId
     );
+
+    Task<List<ProductAccountDto>> GenerateEmptyAsync(DateTime newDate, Guid productionAreaId);
 }
