@@ -90,4 +90,15 @@ public class ProductAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpPut("changeOrder")]
+    [ProducesResponseType(typeof(List<ProductAccountDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductAccountDto>>> ChangeOrderAsync(
+        [FromBody] ChangeOrderRequest request
+    )
+    {
+        var result = await _productAccountService.ChangeOrderAsync(request);
+
+        return result.ToOk();
+    }
 }

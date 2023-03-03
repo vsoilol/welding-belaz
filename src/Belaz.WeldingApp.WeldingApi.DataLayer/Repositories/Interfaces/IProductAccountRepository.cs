@@ -17,4 +17,6 @@ public interface IProductAccountRepository
     Task AssignProductAccountToWeldersAsync(Guid productAccountId, List<Guid> welderIds);
 
     Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId);
+
+    Task<List<ProductAccountDto>> ChangeOrderAsync(Guid idFirst, Guid idSecond);
 }

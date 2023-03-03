@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
-using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 
-[Index(nameof(IdFromSystem), IsUnique = true)]
 public class ProductAccount : Entity
 {
     public int Number { get; set; }

@@ -1062,6 +1062,20 @@
         "AuthenticationProviderKey": "ApiGatewayKey",
         "AllowedScopes": []
       }
+    },
+    {
+      "UpstreamPathTemplate": "/api/productAccount/changeOrder",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/productAccount/changeOrder",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
     }
   ]
 }

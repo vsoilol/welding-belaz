@@ -65,6 +65,15 @@ public class ProductAccountService : IProductAccountService
         );
     }
 
+    public async Task<Result<List<ProductAccountDto>>> ChangeOrderAsync(ChangeOrderRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(
+            () => _productAccountRepository.ChangeOrderAsync(request.FirstId, request.SecondId)
+        );
+    }
+
     public async Task<Result<Unit>> GenerateTasksAsync(GenerateTasksRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);

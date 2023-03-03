@@ -69,6 +69,29 @@ public class ProductAccountRepository : IProductAccountRepository
         return await GetByIdAsync(id);
     }
 
+    public async Task<List<ProductAccountDto>> ChangeOrderAsync(Guid idFirst, Guid idSecond)
+    {
+        var firstProductAccount = (
+            await _context.ProductAccounts
+                .Include(_ => _.Product)
+                .FirstOrDefaultAsync(_ => _.Id == idFirst)
+        )!;
+        var secondProductAccount = (
+            await _context.ProductAccounts.FirstOrDefaultAsync(_ => _.Id == idSecond)
+        )!;
+
+        var temp = firstProductAccount.Number;
+        firstProductAccount.Number = secondProductAccount.Number;
+        secondProductAccount.Number = temp;
+
+        await _context.SaveChangesAsync();
+
+        return await GetAllByDateAsync(
+            firstProductAccount.DateFromPlan,
+            firstProductAccount.Product.ProductionAreaId
+        );
+    }
+
     public async Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId)
     {
         var oldWeldingTask = _context.WeldingTasks.Where(
@@ -125,6 +148,7 @@ public class ProductAccountRepository : IProductAccountRepository
             .Where(_ => _.ProductionAreaId == productionAreaId)
             .SelectMany(_ => _.ProductAccounts)
             .Where(_ => _.DateFromPlan.Date.Equals(date.Date))
+            .OrderBy(_ => _.Number)
             .ProjectTo<ProductAccountDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

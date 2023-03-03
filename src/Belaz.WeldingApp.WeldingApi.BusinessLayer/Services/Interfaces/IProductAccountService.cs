@@ -27,4 +27,6 @@ public interface IProductAccountService
     );
 
     Task<Result<Unit>> GenerateTasksAsync(GenerateTasksRequest request);
+
+    Task<Result<List<ProductAccountDto>>> ChangeOrderAsync(ChangeOrderRequest request);
 }
