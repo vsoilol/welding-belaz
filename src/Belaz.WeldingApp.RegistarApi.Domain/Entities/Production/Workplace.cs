@@ -14,17 +14,19 @@ public class Workplace : Entity
 
     public Guid? PostId { get; set; }
 
-    [ForeignKey(nameof(PostId))] public Post? Post { get; set; }
+    [ForeignKey(nameof(PostId))]
+    public Post? Post { get; set; }
 
     public Guid? ProductionAreaId { get; set; }
 
-    [ForeignKey(nameof(ProductionAreaId))] public ProductionArea? ProductionArea { get; set; }
+    [ForeignKey(nameof(ProductionAreaId))]
+    public ProductionArea? ProductionArea { get; set; }
 
     public List<Product> Products { get; set; } = null!;
 
     public List<Seam> Seams { get; set; } = null!;
 
     public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
-    
+
     public List<Welder> Welders { get; set; } = null!;
 }

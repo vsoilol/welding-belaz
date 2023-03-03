@@ -24,5 +24,6 @@ public class WeldingEquipmentConditionTime : Entity
 
     public Guid? DowntimeReasonId { get; set; }
 
-    [ForeignKey(nameof(DowntimeReasonId))] public DowntimeReason? DowntimeReason { get; set; }
+    [ForeignKey(nameof(DowntimeReasonId))]
+    public DowntimeReason? DowntimeReason { get; set; }
 }

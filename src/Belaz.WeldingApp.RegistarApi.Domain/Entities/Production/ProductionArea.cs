@@ -15,7 +15,8 @@ public class ProductionArea : Entity
 
     public Guid WorkshopId { get; set; }
 
-    [ForeignKey(nameof(WorkshopId))] public Workshop Workshop { get; set; } = null!;
+    [ForeignKey(nameof(WorkshopId))]
+    public Workshop Workshop { get; set; } = null!;
 
     public List<Post> Posts { get; set; } = null!;
 

@@ -5,13 +5,13 @@ namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 public class DefectiveReason : Entity
 {
     public DateTime DetectedDefectiveDate { get; set; }
-    
+
     public string Reason { get; set; } = null!;
 
     public string DetectedDefects { get; set; } = null!;
 
     public Guid WeldingTaskId { get; set; }
 
-    [ForeignKey(nameof(WeldingTaskId))] 
+    [ForeignKey(nameof(WeldingTaskId))]
     public WeldingTask WeldingTask { get; set; } = null!;
 }

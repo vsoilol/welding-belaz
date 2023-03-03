@@ -11,7 +11,7 @@ public class WeldPassage : Entity
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;
-    
+
     /// <summary>
     /// Температура предварительного нагрева
     /// </summary>
@@ -28,18 +28,18 @@ public class WeldPassage : Entity
     public double? LongTermDeviation { get; set; }
 
     public bool? IsEnsuringCurrentTolerance { get; set; }
-    
+
     public bool? IsEnsuringVoltageTolerance { get; set; }
-    
+
     public bool? IsEnsuringTemperatureTolerance { get; set; }
 
     public Guid WeldingRecordId { get; set; }
 
-    [ForeignKey(nameof(WeldingRecordId))] 
+    [ForeignKey(nameof(WeldingRecordId))]
     public WeldingRecord WeldingRecord { get; set; } = null!;
-    
+
     public Guid WeldingTaskId { get; set; }
 
-    [ForeignKey(nameof(WeldingTaskId))] 
+    [ForeignKey(nameof(WeldingTaskId))]
     public WeldingTask WeldingTask { get; set; } = null!;
 }

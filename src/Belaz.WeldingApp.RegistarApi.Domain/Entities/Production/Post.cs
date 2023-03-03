@@ -15,5 +15,6 @@ public class Post : Entity
 
     public Guid ProductionAreaId { get; set; }
 
-    [ForeignKey(nameof(ProductionAreaId))] public ProductionArea ProductionArea { get; set; } = null!;
+    [ForeignKey(nameof(ProductionAreaId))]
+    public ProductionArea ProductionArea { get; set; } = null!;
 }

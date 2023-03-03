@@ -25,10 +25,10 @@ public class Seam : Entity
     /// </summary>
     public bool IsPerformed { get; set; } = false;
 
-    public Guid? ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
-    [ForeignKey(nameof(ProductId))] 
-    public Product? Product { get; set; } = null!;
+    [ForeignKey(nameof(ProductId))]
+    public Product Product { get; set; } = null!;
 
     public Guid? TechnologicalInstructionId { get; set; }
 
@@ -36,14 +36,14 @@ public class Seam : Entity
     public TechnologicalInstruction? TechnologicalInstruction { get; set; }
 
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
-    
+
     public Guid? InspectorId { get; set; }
 
-    [ForeignKey(nameof(InspectorId))] 
+    [ForeignKey(nameof(InspectorId))]
     public Inspector? Inspector { get; set; }
-    
+
     public Guid? ProductionAreaId { get; set; }
 
-    [ForeignKey(nameof(ProductionAreaId))] 
+    [ForeignKey(nameof(ProductionAreaId))]
     public ProductionArea? ProductionArea { get; set; }
 }

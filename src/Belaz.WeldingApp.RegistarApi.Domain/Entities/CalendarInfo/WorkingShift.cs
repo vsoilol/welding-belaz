@@ -19,9 +19,11 @@ public class WorkingShift : Entity
 
     public Guid? DayId { get; set; }
 
-    [ForeignKey(nameof(DayId))] public Day? Day { get; set; }
+    [ForeignKey(nameof(DayId))]
+    public Day? Day { get; set; }
 
     public Guid? CalendarId { get; set; }
 
-    [ForeignKey(nameof(CalendarId))] public Calendar? Calendar { get; set; }
+    [ForeignKey(nameof(CalendarId))]
+    public Calendar? Calendar { get; set; }
 }

@@ -13,7 +13,8 @@ public class Day : Entity
 
     public Guid CalendarId { get; set; }
 
-    [ForeignKey(nameof(CalendarId))] public Calendar Calendar { get; set; } = null!;
+    [ForeignKey(nameof(CalendarId))]
+    public Calendar Calendar { get; set; } = null!;
 
     public List<WorkingShift>? WorkingShifts { get; set; }
 }
