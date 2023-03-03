@@ -29,23 +29,19 @@ public abstract class CommonProductController : ControllerBase
     [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<ProductDto>>> GetAllAsync()
     {
-        var result = await _productService.GetAllAsync(new GetAllProductsRequest
-        {
-            Type = _type
-        });
+        var result = await _productService.GetAllAsync(new GetAllProductsRequest { Type = _type });
         return result.ToOk();
     }
 
     [HttpGet("byControlSubject/{isControlSubject}")]
     [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ProductDto>>> GetAllByControlSubjectAsync([FromRoute] bool isControlSubject)
+    public async Task<ActionResult<List<ProductDto>>> GetAllByControlSubjectAsync(
+        [FromRoute] bool isControlSubject
+    )
     {
         var result = await _productService.GetAllByControlSubjectAsync(
-            new GetAllByControlSubjectRequest
-            {
-                IsControlSubject = isControlSubject,
-                Type = _type
-            });
+            new GetAllByControlSubjectRequest { IsControlSubject = isControlSubject, Type = _type }
+        );
         return result.ToOk();
     }
 
@@ -59,64 +55,49 @@ public abstract class CommonProductController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProductDto>> CreateAsync([FromBody] CreateProductWithoutTypeRequest request)
+    public async Task<ActionResult<ProductDto>> CreateAsync(
+        [FromBody] CreateProductWithoutTypeRequest request
+    )
     {
-        var result = await _productService.CreateAsync(new CreateProductRequest
-        {
-            Request = request,
-            Type = _type
-        });
+        var result = await _productService.CreateAsync(
+            new CreateProductRequest { Request = request, Type = _type }
+        );
         return result.ToOk();
     }
 
     [HttpPut]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProductDto>> UpdateAsync([FromBody] UpdateProductWithoutTypeRequest request)
+    public async Task<ActionResult<ProductDto>> UpdateAsync(
+        [FromBody] UpdateProductWithoutTypeRequest request
+    )
     {
-        var result = await _productService.UpdateAsync(new UpdateProductRequest
-        {
-            Request = request,
-            Type = _type
-        });
+        var result = await _productService.UpdateAsync(
+            new UpdateProductRequest { Request = request, Type = _type }
+        );
         return result.ToOk();
     }
 
     [HttpGet("byInspector/{inspectorId}")]
     [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ProductDto>>> GetAllByInspectorIdAsync([FromRoute] Guid inspectorId)
+    public async Task<ActionResult<List<ProductDto>>> GetAllByInspectorIdAsync(
+        [FromRoute] Guid inspectorId
+    )
     {
         var result = await _productService.GetAllByInspectorIdAsync(
-            new GetAllByInspectorIdRequest
-            {
-                InspectorId = inspectorId,
-                Type = _type
-            });
+            new GetAllByInspectorIdRequest { InspectorId = inspectorId, Type = _type }
+        );
         return result.ToOk();
     }
 
     [HttpGet("byMaster/{masterId}")]
     [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ProductDto>>> GetAllByMasterIdAsync([FromRoute] Guid masterId)
+    public async Task<ActionResult<List<ProductDto>>> GetAllByMasterIdAsync(
+        [FromRoute] Guid masterId
+    )
     {
         var result = await _productService.GetAllByMasterIdAsync(
-            new GetAllByMasterIdRequest
-            {
-                MasterId = masterId,
-                Type = _type
-            });
-        return result.ToOk();
-    }
-
-    [HttpGet("byWelder/{welderId}")]
-    [ProducesResponseType(typeof(List<ProductDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ProductDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
-    {
-        var result = await _productService.GetAllByWelderIdAsync(
-            new GetAllProductsByWelderIdRequest
-            {
-                WelderId = welderId,
-                Type = _type
-            });
+            new GetAllByMasterIdRequest { MasterId = masterId, Type = _type }
+        );
         return result.ToOk();
     }
 
@@ -137,23 +118,19 @@ public abstract class CommonProductController : ControllerBase
 
     [HttpPut("assignInspector")]
     public async Task<ActionResult<Unit>> AssignProductsToInspectorAsync(
-        [FromBody] AssignProductsToInspectorRequest request)
+        [FromBody] AssignProductsToInspectorRequest request
+    )
     {
         var result = await _productService.AssignProductsToInspectorAsync(request);
         return result.ToOk();
     }
 
     [HttpPut("assignMaster")]
-    public async Task<ActionResult<Unit>> AssignProductsToMasterAsync([FromBody] AssignProductsToMasterRequest request)
+    public async Task<ActionResult<Unit>> AssignProductsToMasterAsync(
+        [FromBody] AssignProductsToMasterRequest request
+    )
     {
         var result = await _productService.AssignProductsToMasterAsync(request);
-        return result.ToOk();
-    }
-
-    [HttpPut("assignWelders")]
-    public async Task<ActionResult<Unit>> AssignProductToWeldersAsync([FromBody] AssignProductToWeldersRequest request)
-    {
-        var result = await _productService.AssignProductToWeldersAsync(request);
         return result.ToOk();
     }
 }

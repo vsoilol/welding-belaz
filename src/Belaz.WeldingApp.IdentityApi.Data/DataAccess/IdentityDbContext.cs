@@ -18,6 +18,8 @@ namespace Belaz.WeldingApp.IdentityApi.Data.DataAccess
 
         public DbSet<ProductionArea> ProductionAreas { get; set; }
 
+        public DbSet<Master> Masters { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

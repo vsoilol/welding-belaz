@@ -10,15 +10,15 @@ public interface IProductService
 {
     Task<Result<List<ProductDto>>> GetAllAsync(GetAllProductsRequest request);
 
-    Task<Result<List<ProductDto>>> GetAllByControlSubjectAsync(GetAllByControlSubjectRequest request);
+    Task<Result<List<ProductDto>>> GetAllByControlSubjectAsync(
+        GetAllByControlSubjectRequest request
+    );
 
     Task<Result<ProductDto>> GetByIdAsync(GetProductByIdRequest request);
 
     Task<Result<List<ProductDto>>> GetAllByMasterIdAsync(GetAllByMasterIdRequest request);
 
     Task<Result<List<ProductDto>>> GetAllByInspectorIdAsync(GetAllByInspectorIdRequest request);
-    
-    Task<Result<List<ProductDto>>> GetAllByWelderIdAsync(GetAllProductsByWelderIdRequest request);
 
     Task<Result<ProductDto>> CreateAsync(CreateProductRequest request);
 
@@ -27,10 +27,8 @@ public interface IProductService
     Task<Result<Unit>> AssignProductToMasterAsync(AssignProductToMasterRequest request);
 
     Task<Result<Unit>> AssignProductToInspectorAsync(AssignProductToInspectorRequest request);
-    
+
     Task<Result<Unit>> AssignProductsToMasterAsync(AssignProductsToMasterRequest request);
 
     Task<Result<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request);
-    
-    Task<Result<Unit>> AssignProductToWeldersAsync(AssignProductToWeldersRequest request);
 }

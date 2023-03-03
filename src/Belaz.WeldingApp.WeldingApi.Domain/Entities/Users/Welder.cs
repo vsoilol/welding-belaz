@@ -27,8 +27,6 @@ public class Welder : Entity
 
     public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-    public List<Product> Products { get; set; } = null!;
-
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
 
     public List<WeldingRecord> WeldingRecords { get; set; } = null!;
