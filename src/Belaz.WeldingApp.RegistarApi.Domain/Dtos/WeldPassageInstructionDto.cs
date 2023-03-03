@@ -1,8 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.TechnologicalProcessInfo;
+using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
+namespace Belaz.WeldingApp.RegistarApi.Domain.Dtos;
 
-public class WeldPassageInstruction : Entity
+public class WeldPassageInstructionDto : IMapFrom<WeldPassageInstruction>
 {
     public int Number { get; set; }
 
@@ -37,9 +42,4 @@ public class WeldPassageInstruction : Entity
     /// Температура предварительного нагрева max
     /// </summary>
     public double? PreheatingTemperatureMax { get; set; }
-
-    public Guid TechnologicalInstructionId { get; set; }
-
-    [ForeignKey(nameof(TechnologicalInstructionId))]
-    public TechnologicalInstruction TechnologicalInstruction { get; set; } = null!;
 }

@@ -5,6 +5,7 @@ using Belaz.WeldingApp.RegistarApi.BusinessLayer.Responses;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
@@ -22,6 +23,7 @@ public class RegistarService : IRegistarService
     private readonly IWelderRepository _welderRepository;
     private readonly IMasterRepository _masterRepository;
     private readonly IRecordRepository _recordRepository;
+    private readonly IWeldingTaskRepository _weldingTaskRepository;
 
     public RegistarService(
         IValidationService validationService,
@@ -29,7 +31,8 @@ public class RegistarService : IRegistarService
         IWeldingEquipmentRepository weldingEquipmentRepository,
         IWelderRepository welderRepository,
         IRecordRepository recordRepository,
-        IMasterRepository masterRepository
+        IMasterRepository masterRepository,
+        IWeldingTaskRepository weldingTaskRepository
     )
     {
         _validationService = validationService;
@@ -38,6 +41,7 @@ public class RegistarService : IRegistarService
         _welderRepository = welderRepository;
         _recordRepository = recordRepository;
         _masterRepository = masterRepository;
+        _weldingTaskRepository = weldingTaskRepository;
     }
 
     public async Task<Result<WelderWithEquipmentResponse>> GetWelderWithEquipmentAsync(
@@ -126,6 +130,37 @@ public class RegistarService : IRegistarService
             await _recordRepository.CreateRecordWithoutTaskAsync(weldingRecord);
 
             return Unit.Default;
+        });
+    }
+
+    public async Task<Result<List<WeldingTaskResponse>>> GetAllTasksByDateAndEquipmentAsync(
+        GetAllTasksByDateAndEquipmentRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            var equipment = await _weldingEquipmentRepository.GetByRfidTagAsync(
+                request.EquipmentRfidTag
+            );
+
+            var welder = await _welderRepository.GetByRfidTagAsync(request.WelderRfidTag);
+
+            var tasks = await _weldingTaskRepository.GetAllTasksByDateAndEquipmentRfidTagAsync(
+                request.StartDateTime,
+                request.EquipmentRfidTag
+            );
+
+            var result = _mapper.Map<List<WeldingTaskResponse>>(tasks);
+
+            result.ForEach(_ =>
+            {
+                _.WelderId = welder.Id;
+                _.EquipmentId = equipment.Id;
+            });
+
+            return result;
         });
     }
 }

@@ -19,6 +19,16 @@
       "DownstreamPathTemplate": "/api/registar/recordWithoutTask",
       "ServiceName": "registar",
       "SwaggerKey": "registar"
+    },
+    {
+      "UpstreamPathTemplate": "/api/registar/tasks",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/registar/tasks",
+      "ServiceName": "registar",
+      "SwaggerKey": "registar"
     }
   ]
 }
