@@ -3,6 +3,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,16 @@ public class ProductAccountController : ControllerBase
     )
     {
         var result = await _productAccountService.ChangAmountFromPlanAsync(request);
+
+        return result.ToOk();
+    }
+
+    [HttpPut("assignWelders")]
+    public async Task<ActionResult<Unit>> AssignProductAccountToWeldersAsync(
+        [FromBody] AssignProductAccountToWeldersRequest request
+    )
+    {
+        var result = await _productAccountService.AssignProductAccountToWeldersAsync(request);
 
         return result.ToOk();
     }

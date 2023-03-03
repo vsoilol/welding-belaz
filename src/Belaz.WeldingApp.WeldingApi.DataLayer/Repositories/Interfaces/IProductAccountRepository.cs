@@ -13,4 +13,6 @@ public interface IProductAccountRepository
     Task<ProductAccountDto> ChangAmountFromPlanAsync(Guid id, int amountFromPlan);
 
     Task<ProductAccountDto> GetByIdAsync(Guid id);
+
+    Task AssignProductAccountToWeldersAsync(Guid productAccountId, List<Guid> welderIds);
 }

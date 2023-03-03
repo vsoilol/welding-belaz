@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -23,6 +24,22 @@ public class ProductAccountService : IProductAccountService
     {
         _validationService = validationService;
         _productAccountRepository = productAccountRepository;
+    }
+
+    public async Task<Result<Unit>> AssignProductAccountToWeldersAsync(
+        AssignProductAccountToWeldersRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _productAccountRepository.AssignProductAccountToWeldersAsync(
+                request.ProductAccountId,
+                request.WelderIds
+            );
+            return Unit.Default;
+        });
     }
 
     public async Task<Result<ProductAccountDto>> ChangAmountFromPlanAsync(

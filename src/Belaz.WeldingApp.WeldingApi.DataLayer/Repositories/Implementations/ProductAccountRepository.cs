@@ -19,6 +19,26 @@ public class ProductAccountRepository : IProductAccountRepository
         _mapper = mapper;
     }
 
+    public async Task AssignProductAccountToWeldersAsync(
+        Guid productAccountId,
+        List<Guid> welderIds
+    )
+    {
+        var productAccount = (
+            await _context.ProductAccounts
+                .Include(_ => _.Welders)
+                .FirstOrDefaultAsync(_ => _.Id == productAccountId)
+        )!;
+
+        var welders = await _context.Welders
+            .Where(_ => welderIds.Any(welderId => welderId == _.Id))
+            .ToListAsync();
+
+        productAccount.Welders = welders;
+
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<ProductAccountDto> ChangAmountFromPlanAsync(Guid id, int amountFromPlan)
     {
         var productAccount = (await _context.ProductAccounts.FirstOrDefaultAsync(_ => _.Id == id))!;
