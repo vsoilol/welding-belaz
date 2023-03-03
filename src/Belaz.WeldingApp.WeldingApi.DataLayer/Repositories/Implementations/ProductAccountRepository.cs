@@ -21,22 +21,22 @@ public class ProductAccountRepository : IProductAccountRepository
         _mapper = mapper;
     }
 
-    public async Task AssignProductAccountToWeldersAsync(
+    public async Task AssignProductAccountToWeldingEquipmentsAsync(
         Guid productAccountId,
-        List<Guid> welderIds
+        List<Guid> weldingEquipmentIds
     )
     {
         var productAccount = (
             await _context.ProductAccounts
-                .Include(_ => _.Welders)
+                .Include(_ => _.WeldingEquipments)
                 .FirstOrDefaultAsync(_ => _.Id == productAccountId)
         )!;
 
-        var welders = await _context.Welders
-            .Where(_ => welderIds.Any(welderId => welderId == _.Id))
+        var weldingEquipments = await _context.WeldingEquipments
+            .Where(_ => weldingEquipmentIds.Any(weldingEquipmentId => weldingEquipmentId == _.Id))
             .ToListAsync();
 
-        productAccount.Welders = welders;
+        productAccount.WeldingEquipments = weldingEquipments;
 
         await _context.SaveChangesAsync();
     }
@@ -111,7 +111,7 @@ public class ProductAccountRepository : IProductAccountRepository
         var newProductAccounts = (
             await _context.ProductAccounts
                 .Include(_ => _.Product)
-                .Include(_ => _.Welders)
+                .Include(_ => _.WeldingEquipments)
                 .Where(
                     _ =>
                         _.Product.ProductionAreaId == productionAreaId
@@ -131,7 +131,7 @@ public class ProductAccountRepository : IProductAccountRepository
                     {
                         new() { Amount = 0, Status = ResultProductStatus.Manufactured }
                     },
-                    Welders = _.Welders
+                    WeldingEquipments = _.WeldingEquipments
                 }
         );
 

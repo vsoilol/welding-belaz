@@ -1,8 +1,8 @@
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
 
-public class AssignProductAccountToWeldersRequest
+public class AssignProductAccountToWeldingEquipmentsRequest
 {
     public Guid ProductAccountId { get; set; }
 
-    public List<Guid> WelderIds { get; set; } = null!;
+    public List<Guid> WeldingEquipmentIds { get; set; } = null!;
 }

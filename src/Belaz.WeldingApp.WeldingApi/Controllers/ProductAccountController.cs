@@ -71,12 +71,14 @@ public class ProductAccountController : ControllerBase
         return result.ToOk();
     }
 
-    [HttpPut("assignWelders")]
-    public async Task<ActionResult<Unit>> AssignProductAccountToWeldersAsync(
-        [FromBody] AssignProductAccountToWeldersRequest request
+    [HttpPut("assignWeldingEquipments")]
+    public async Task<ActionResult<Unit>> AssignProductAccountToWeldingEquipmentsAsync(
+        [FromBody] AssignProductAccountToWeldingEquipmentsRequest request
     )
     {
-        var result = await _productAccountService.AssignProductAccountToWeldersAsync(request);
+        var result = await _productAccountService.AssignProductAccountToWeldingEquipmentsAsync(
+            request
+        );
 
         return result.ToOk();
     }

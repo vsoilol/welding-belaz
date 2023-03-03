@@ -6,7 +6,7 @@ using FluentValidation;
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.ProductAccount;
 
 public class AssignProductAccountToWeldersRequestValidator
-    : AbstractValidator<AssignProductAccountToWeldersRequest>
+    : AbstractValidator<AssignProductAccountToWeldingEquipmentsRequest>
 {
     public AssignProductAccountToWeldersRequestValidator(ApplicationContext context)
     {
@@ -15,18 +15,18 @@ public class AssignProductAccountToWeldersRequestValidator
             .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<
-                    AssignProductAccountToWeldersRequest,
+                    AssignProductAccountToWeldingEquipmentsRequest,
                     Domain.Entities.ProductInfo.ProductAccount
                 >(context)
             );
 
-        RuleForEach(model => model.WelderIds)
+        RuleForEach(model => model.WeldingEquipmentIds)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<
-                    AssignProductAccountToWeldersRequest,
-                    Domain.Entities.Users.Welder
+                    AssignProductAccountToWeldingEquipmentsRequest,
+                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
                 >(context)
             );
     }

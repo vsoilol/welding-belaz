@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 
@@ -18,5 +19,5 @@ public class ProductAccount : Entity
     [ForeignKey(nameof(ProductId))]
     public Product Product { get; set; } = null!;
 
-    public List<Welder> Welders { get; set; } = null!;
+    public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 }

@@ -26,17 +26,17 @@ public class ProductAccountService : IProductAccountService
         _productAccountRepository = productAccountRepository;
     }
 
-    public async Task<Result<Unit>> AssignProductAccountToWeldersAsync(
-        AssignProductAccountToWeldersRequest request
+    public async Task<Result<Unit>> AssignProductAccountToWeldingEquipmentsAsync(
+        AssignProductAccountToWeldingEquipmentsRequest request
     )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(async () =>
         {
-            await _productAccountRepository.AssignProductAccountToWeldersAsync(
+            await _productAccountRepository.AssignProductAccountToWeldingEquipmentsAsync(
                 request.ProductAccountId,
-                request.WelderIds
+                request.WeldingEquipmentIds
             );
             return Unit.Default;
         });

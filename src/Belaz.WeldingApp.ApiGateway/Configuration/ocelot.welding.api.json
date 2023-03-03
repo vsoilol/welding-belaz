@@ -1036,12 +1036,12 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/productAccount/assignWelders",
+      "UpstreamPathTemplate": "/api/productAccount/assignWeldingEquipments",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "PUT"
       ],
-      "DownstreamPathTemplate": "/api/productAccount/assignWelders",
+      "DownstreamPathTemplate": "/api/productAccount/assignWeldingEquipments",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {

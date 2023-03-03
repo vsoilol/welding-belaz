@@ -22,8 +22,8 @@ public interface IProductAccountService
         ChangeProductAccountAmountRequest request
     );
 
-    Task<Result<Unit>> AssignProductAccountToWeldersAsync(
-        AssignProductAccountToWeldersRequest request
+    Task<Result<Unit>> AssignProductAccountToWeldingEquipmentsAsync(
+        AssignProductAccountToWeldingEquipmentsRequest request
     );
 
     Task<Result<Unit>> GenerateTasksAsync(GenerateTasksRequest request);

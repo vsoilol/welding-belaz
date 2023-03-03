@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
@@ -99,7 +100,7 @@ public class WeldingEquipment : Entity
 
     public Guid? PostId { get; set; }
 
-    [ForeignKey(nameof(PostId))] 
+    [ForeignKey(nameof(PostId))]
     public Post? Post { get; set; }
 
     public List<Workplace> Workplaces { get; set; } = null!;
@@ -108,7 +109,7 @@ public class WeldingEquipment : Entity
 
     public Guid? MasterId { get; set; }
 
-    [ForeignKey(nameof(MasterId))] 
+    [ForeignKey(nameof(MasterId))]
     public Master? Master { get; set; }
 
     public List<Welder> Welders { get; set; } = null!;
@@ -118,4 +119,6 @@ public class WeldingEquipment : Entity
     public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTime { get; set; } = null!;
 
     public List<WeldingRecord> WeldingRecords { get; set; } = null!;
+
+    public List<ProductAccount> ProductAccounts { get; set; } = null!;
 }
