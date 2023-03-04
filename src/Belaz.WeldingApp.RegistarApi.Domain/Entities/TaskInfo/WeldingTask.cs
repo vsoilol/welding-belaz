@@ -12,6 +12,8 @@ public class WeldingTask : Entity
 
     public SeamStatus Status { get; set; } = SeamStatus.Accept;
 
+    public WeldingTaskStatus TaskStatus { get; set; } = WeldingTaskStatus.NotStarted;
+
     public DefectiveReason? DefectiveReason { get; set; }
 
     /// <summary>

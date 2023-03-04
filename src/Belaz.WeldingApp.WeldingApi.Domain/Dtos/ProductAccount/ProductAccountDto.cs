@@ -76,16 +76,16 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
                                 .Any(
                                     _ =>
                                         (
-                                            _.IsEnsuringCurrentTolerance != null
-                                            && !(bool)_.IsEnsuringCurrentTolerance
+                                            _.IsEnsuringCurrentAllowance != null
+                                            && !(bool)_.IsEnsuringCurrentAllowance
                                         )
                                         || (
-                                            _.IsEnsuringTemperatureTolerance != null
-                                            && !(bool)_.IsEnsuringTemperatureTolerance
+                                            _.IsEnsuringTemperatureAllowance != null
+                                            && !(bool)_.IsEnsuringTemperatureAllowance
                                         )
                                         || (
-                                            _.IsEnsuringVoltageTolerance != null
-                                            && !(bool)_.IsEnsuringVoltageTolerance
+                                            _.IsEnsuringVoltageAllowance != null
+                                            && !(bool)_.IsEnsuringVoltageAllowance
                                         )
                                 )
                     )

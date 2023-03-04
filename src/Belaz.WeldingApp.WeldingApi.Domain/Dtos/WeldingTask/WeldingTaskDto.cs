@@ -9,11 +9,11 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
 {
     public Guid Id { get; set; }
-    
+
     public int Number { get; set; }
 
     public string? WeldingDate { get; set; }
-    
+
     /// <summary>
     /// Основной материал
     /// </summary>
@@ -35,24 +35,26 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
     public string WeldingMaterialBatchNumber { get; set; } = null!;
 
     /// <summary>
-    /// Защитный газ 
+    /// Защитный газ
     /// </summary>
     public string? ProtectiveGas { get; set; }
 
     /// <summary>
-    /// № сертификата (партии) на защитный газ 
+    /// № сертификата (партии) на защитный газ
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
 
-    public SeamStatus Status { get; set; }
+    public WeldingTaskStatus Status { get; set; }
 
     public SeamBriefDto Seam { get; set; } = null!;
-    
+
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
-            .ForMember(dto => dto.WeldingDate,
-                opt => opt
-                    .MapFrom(x => x.WeldingDate.ToDayInfoString()));
+        profile
+            .CreateMap<Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
+            .ForMember(
+                dto => dto.WeldingDate,
+                opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
+            );
     }
 }

@@ -4,5 +4,5 @@ namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 
 public interface IRecordRepository
 {
-    Task CreateRecordWithoutTaskAsync(WeldingRecord record);
+    Task<WeldingRecord> CreateRecordWithoutTaskAsync(WeldingRecord record);
 }

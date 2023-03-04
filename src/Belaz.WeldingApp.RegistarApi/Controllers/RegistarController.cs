@@ -50,4 +50,22 @@ public class RegistarController : ControllerBase
         var result = await _registarService.GetAllTasksByDateAndEquipmentAsync(request);
         return result.ToOk();
     }
+
+    [HttpPost("chosenTask")]
+    public async Task<ActionResult<Unit>> SetWeldingTaskStatusToExecutionAcceptedAsync(
+        [FromBody] SetWeldingTaskStatusToExecutionAcceptedRequest request
+    )
+    {
+        var result = await _registarService.SetWeldingTaskStatusToExecutionAcceptedAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPost("recordWithTask")]
+    public async Task<ActionResult<Unit>> CreateRecordWithTaskAsync(
+        [FromBody] RecordWithTaskRequest request
+    )
+    {
+        var result = await _registarService.CreateRecordWithTaskAsync(request);
+        return result.ToOk();
+    }
 }

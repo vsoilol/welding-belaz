@@ -1,12 +1,21 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Requests;
 
-public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
+public class RecordWithTaskRequest : IMapTo<WeldingRecord>
 {
+    [JsonPropertyName("tID")]
+    public Guid TaskId { get; set; }
+
+    [JsonPropertyName("PasN")]
+    public int WeldPassageNumber { get; set; }
+
+    [JsonPropertyName("preTemp")]
+    public double PreheatingTemperature { get; set; }
+
     [JsonPropertyName("RegID")]
     public string RegistarId { get; set; } = null!;
 
@@ -28,7 +37,7 @@ public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<RecordWithoutTaskRequest, WeldingRecord>()
+            .CreateMap<RecordWithTaskRequest, WeldingRecord>()
             .ForMember(dto => dto.WeldingEquipmentId, opt => opt.MapFrom(x => x.WeldingEquipmentId))
             .ForMember(dto => dto.WelderId, opt => opt.MapFrom(x => x.WelderId))
             .ForMember(dto => dto.Date, opt => opt.MapFrom(x => x.StartDateTime.Date))

@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Implementations;
 
@@ -20,6 +18,15 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         _mapper = mapper;
     }
 
+    public async Task ChangeWeldingTaskStatusAsync(Guid id, WeldingTaskStatus status)
+    {
+        var weldingTask = (await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        weldingTask.TaskStatus = status;
+
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<List<WeldingTaskDto>> GetAllTasksByDateAndEquipmentRfidTagAsync(
         DateTime date,
         string equipmentRfidTag
@@ -30,6 +37,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .Where(_ => _.WeldingEquipments.Any(equipment => equipment.RfidTag == equipmentRfidTag))
             .SelectMany(_ => _.Product.Seams)
             .SelectMany(_ => _.WeldingTasks)
+            .Where(_ => _.TaskStatus == WeldingTaskStatus.NotStarted)
             .Include(_ => _.Seam)
             .ThenInclude(_ => _.Product)
             .ThenInclude(_ => _!.ProductMain)
@@ -49,16 +57,16 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .ThenInclude(_ => _!.TechnologicalProcess)
             .ToListAsync();
 
-        // var weldingTasks = await _context.WeldingTasks
-        //     .OrderBy(_ => _.Seam.Product.ProductAccounts[0].Number)
-        //     .Where(
-        //         _ =>
-        //             _.Seam.Product.ProductAccounts[0].WeldingEquipments.Any(
-        //                 equipment => equipment.RfidTag == equipmentRfidTag
-        //             ) && _.WeldingDate.Date.Equals(date.Date)
-        //     )
-        //     .ToListAsync();
-
         return _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
+    }
+
+    public async Task UpdateSomeInfoAsync(WeldingTask task)
+    {
+        var weldingTask = (await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == task.Id))!;
+
+        weldingTask.TaskStatus = WeldingTaskStatus.Completed;
+        weldingTask.WelderId = task.WelderId;
+
+        await _context.SaveChangesAsync();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 
@@ -15,7 +14,7 @@ public class WeldPassage : Entity
     /// <summary>
     /// Температура предварительного нагрева
     /// </summary>
-    public int? PreheatingTemperature { get; set; }
+    public double? PreheatingTemperature { get; set; }
 
     /// <summary>
     /// Отклонение кратковременные, до 1 секунды
@@ -27,11 +26,20 @@ public class WeldPassage : Entity
     /// </summary>
     public double? LongTermDeviation { get; set; }
 
-    public bool? IsEnsuringCurrentTolerance { get; set; }
+    /// <summary>
+    /// Обеспечивает ли допуск для тока. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringCurrentAllowance { get; set; }
 
-    public bool? IsEnsuringVoltageTolerance { get; set; }
+    /// <summary>
+    /// Обеспечивает ли допуск для напряжения. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringVoltageAllowance { get; set; }
 
-    public bool? IsEnsuringTemperatureTolerance { get; set; }
+    /// <summary>
+    /// Обеспечивает ли допуск для температуры. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringTemperatureAllowance { get; set; }
 
     public Guid WeldingRecordId { get; set; }
 
