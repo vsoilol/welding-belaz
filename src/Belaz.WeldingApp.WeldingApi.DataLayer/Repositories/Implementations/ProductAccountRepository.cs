@@ -41,6 +41,57 @@ public class ProductAccountRepository : IProductAccountRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<ProductAccountDto> ChangAcceptedAmountAsync(Guid id, int acceptedAmount)
+    {
+        var productAccount = (
+            await _context.ProductAccounts
+                .Include(_ => _.ProductResults)
+                .FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        var productResultAccept = productAccount.ProductResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Accept
+        )!;
+        var productResultDefective = productAccount.ProductResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Defective
+        )!;
+        var productResultManufactured = productAccount.ProductResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Manufactured
+        )!;
+
+        productResultAccept.Amount = acceptedAmount;
+        productResultDefective.Amount =
+            productResultManufactured.Amount > acceptedAmount
+                ? productResultManufactured.Amount - acceptedAmount
+                : 0;
+
+        var seamsAccount = await _context.SeamAccounts
+            .Include(_ => _.SeamResults)
+            .Where(
+                _ =>
+                    _.Seam.ProductId == productAccount.ProductId
+                    && _.DateFromPlan.Date.Equals(productAccount.DateFromPlan.Date)
+            )
+            .ToListAsync();
+
+        foreach (var seamAccount in seamsAccount)
+        {
+            var seamResultAccept = seamAccount.SeamResults.FirstOrDefault(
+                _ => _.Status == ResultProductStatus.Accept
+            )!;
+            var seamResultDefective = seamAccount.SeamResults.FirstOrDefault(
+                _ => _.Status == ResultProductStatus.Defective
+            )!;
+
+            seamResultAccept.Amount = acceptedAmount;
+            seamResultDefective.Amount = productResultDefective.Amount;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
+    }
+
     public async Task<ProductAccountDto> ChangAmountFromPlanAsync(Guid id, int amountFromPlan)
     {
         var productAccount = (await _context.ProductAccounts.FirstOrDefaultAsync(_ => _.Id == id))!;
@@ -105,12 +156,21 @@ public class ProductAccountRepository : IProductAccountRepository
                 && _.DateFromPlan.Date.Equals(newDate.Date)
         );
 
+        var oldSeamAccounts = _context.SeamAccounts.Where(
+            _ =>
+                _.Seam.Product.ProductionAreaId == productionAreaId
+                && _.DateFromPlan.Date.Equals(newDate.Date)
+        );
+
         _context.ProductAccounts.RemoveRange(oldProductAccounts);
+        _context.SeamAccounts.RemoveRange(oldSeamAccounts);
+
         await _context.SaveChangesAsync();
 
         var newProductAccounts = (
             await _context.ProductAccounts
                 .Include(_ => _.Product)
+                .ThenInclude(_ => _.Seams)
                 .Include(_ => _.WeldingEquipments)
                 .Where(
                     _ =>
@@ -129,13 +189,34 @@ public class ProductAccountRepository : IProductAccountRepository
                     Product = _.Product,
                     ProductResults = new List<ProductResult>
                     {
-                        new() { Amount = 0, Status = ResultProductStatus.Manufactured }
+                        new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                        new() { Amount = 0, Status = ResultProductStatus.Accept },
+                        new() { Amount = 0, Status = ResultProductStatus.Defective }
                     },
                     WeldingEquipments = _.WeldingEquipments
                 }
         );
 
+        var seamAccounts = newProductAccounts
+            .SelectMany(_ => _.Product.Seams)
+            .Select(
+                (_, index) =>
+                    new SeamAccount
+                    {
+                        DateFromPlan = DateTime.Now,
+                        Seam = _,
+                        SeamResults = new List<SeamResult>
+                        {
+                            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                            new() { Amount = 0, Status = ResultProductStatus.Accept },
+                            new() { Amount = 0, Status = ResultProductStatus.Defective }
+                        }
+                    }
+            );
+
         _context.ProductAccounts.AddRange(newProductAccounts);
+        _context.SeamAccounts.AddRange(seamAccounts);
+
         await _context.SaveChangesAsync();
 
         return await GetAllByDateAsync(newDate, productionAreaId);
@@ -152,10 +233,19 @@ public class ProductAccountRepository : IProductAccountRepository
                 && _.DateFromPlan.Date.Equals(newDate.Date)
         );
 
+        var oldSeamAccounts = _context.SeamAccounts.Where(
+            _ =>
+                _.Seam.Product.ProductionAreaId == productionAreaId
+                && _.DateFromPlan.Date.Equals(newDate.Date)
+        );
+
         _context.ProductAccounts.RemoveRange(oldProductAccounts);
+        _context.SeamAccounts.RemoveRange(oldSeamAccounts);
+
         await _context.SaveChangesAsync();
 
         var products = await _context.Products
+            .Include(_ => _.Seams)
             .Where(_ => _.ProductionAreaId == productionAreaId)
             .ToListAsync();
 
@@ -169,12 +259,33 @@ public class ProductAccountRepository : IProductAccountRepository
                     Product = _,
                     ProductResults = new List<ProductResult>
                     {
-                        new() { Amount = 0, Status = ResultProductStatus.Manufactured }
+                        new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                        new() { Amount = 0, Status = ResultProductStatus.Accept },
+                        new() { Amount = 0, Status = ResultProductStatus.Defective }
                     }
                 }
         );
 
+        var seamAccounts = products
+            .SelectMany(_ => _.Seams)
+            .Select(
+                (_, index) =>
+                    new SeamAccount
+                    {
+                        DateFromPlan = DateTime.Now,
+                        Seam = _,
+                        SeamResults = new List<SeamResult>
+                        {
+                            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                            new() { Amount = 0, Status = ResultProductStatus.Accept },
+                            new() { Amount = 0, Status = ResultProductStatus.Defective }
+                        }
+                    }
+            );
+
         _context.ProductAccounts.AddRange(newProductAccounts);
+        _context.SeamAccounts.AddRange(seamAccounts);
+
         await _context.SaveChangesAsync();
 
         return await GetAllByDateAsync(newDate, productionAreaId);
@@ -256,5 +367,22 @@ public class ProductAccountRepository : IProductAccountRepository
             .Where(_ => _.Id == id)
             .ProjectTo<ProductAccountDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
+    }
+
+    public async Task<ProductAccountDto> SetProductAccountDefectiveReasonAsync(
+        Guid productAccountId,
+        string defectiveReason
+    )
+    {
+        var productAccountDefectiveResult = (
+            await _context.ProductResults.FirstOrDefaultAsync(
+                _ => _.ProductAccountId == productAccountId
+            )
+        )!;
+
+        productAccountDefectiveResult.Reason = defectiveReason;
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(productAccountId);
     }
 }

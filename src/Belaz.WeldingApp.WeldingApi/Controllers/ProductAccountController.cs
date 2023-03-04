@@ -71,6 +71,17 @@ public class ProductAccountController : ControllerBase
         return result.ToOk();
     }
 
+    [HttpPut("acceptedAmount")]
+    [ProducesResponseType(typeof(ChangeProductAccountAmountRequest), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> ChangAcceptedAmountAsync(
+        [FromBody] ChangeProductAccountAmountRequest request
+    )
+    {
+        var result = await _productAccountService.ChangAcceptedAmountAsync(request);
+
+        return result.ToOk();
+    }
+
     [HttpPut("assignWeldingEquipments")]
     public async Task<ActionResult<Unit>> AssignProductAccountToWeldingEquipmentsAsync(
         [FromBody] AssignProductAccountToWeldingEquipmentsRequest request
@@ -122,6 +133,17 @@ public class ProductAccountController : ControllerBase
     )
     {
         var result = await _productAccountService.GenerateEmptyAsync(request);
+
+        return result.ToOk();
+    }
+
+    [HttpPut("reason")]
+    [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> SetProductAccountDefectiveReasonAsync(
+        [FromBody] SetProductAccountDefectiveReasonRequest request
+    )
+    {
+        var result = await _productAccountService.SetProductAccountDefectiveReasonAsync(request);
 
         return result.ToOk();
     }

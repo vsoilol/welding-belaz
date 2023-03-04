@@ -1,23 +1,16 @@
 using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 using WeldingApp.Common.Enums;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 
-public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAccount>
+public class SeamAccountDto : IMapFrom<SeamAccount>
 {
     public Guid Id { get; set; }
 
-    public int Number { get; set; }
-
-    public int AmountFromPlan { get; set; }
-
-    public ProductBriefDto Product { get; set; } = null!;
-
-    public int AmountManufactured { get; set; }
+    public SeamBriefDto Seam { get; set; } = null!;
 
     public int AmountAccept { get; set; }
 
@@ -30,38 +23,16 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
 
     public string? DefectiveReason { get; set; }
 
-    public List<WeldingEquipmentBriefDto> WeldingEquipments { get; set; } = null!;
-
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Domain.Entities.ProductInfo.ProductAccount, ProductAccountDto>()
-            .ForMember(
-                dto => dto.AmountManufactured,
-                opt =>
-                    opt.MapFrom(
-                        x =>
-                            x.ProductResults
-                                .Where(_ => _.Status == ResultProductStatus.Manufactured)
-                                .Sum(_ => _.Amount)
-                    )
-            )
-            .ForMember(
-                dto => dto.DefectiveReason,
-                opt =>
-                    opt.MapFrom(
-                        x =>
-                            x.ProductResults
-                                .FirstOrDefault(_ => _.Status == ResultProductStatus.Defective)!
-                                .Reason
-                    )
-            )
+            .CreateMap<SeamAccount, SeamAccountDto>()
             .ForMember(
                 dto => dto.AmountAccept,
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.ProductResults
+                            x.SeamResults
                                 .Where(_ => _.Status == ResultProductStatus.Accept)
                                 .Sum(_ => _.Amount)
                     )
@@ -71,9 +42,19 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.ProductResults
+                            x.SeamResults
                                 .Where(_ => _.Status == ResultProductStatus.Defective)
                                 .Sum(_ => _.Amount)
+                    )
+            )
+            .ForMember(
+                dto => dto.DefectiveReason,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.SeamResults
+                                .FirstOrDefault(_ => _.Status == ResultProductStatus.Defective)!
+                                .Reason
                     )
             )
             .ForMember(
@@ -81,8 +62,7 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.Product.Seams
-                                .SelectMany(_ => _.WeldingTasks)
+                            x.Seam.WeldingTasks
                                 .Where(_ => _.WeldingDate.Date.Equals(x.DateFromPlan.Date))
                                 .SelectMany(_ => _.WeldPassages)
                                 .Any(

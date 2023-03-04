@@ -18,6 +18,10 @@ public interface IProductAccountService
         ChangeProductAccountAmountRequest request
     );
 
+    Task<Result<ProductAccountDto>> ChangAcceptedAmountAsync(
+        ChangeProductAccountAmountRequest request
+    );
+
     Task<Result<ProductAccountDto>> ChangAmountFromPlanAsync(
         ChangeProductAccountAmountRequest request
     );
@@ -36,5 +40,9 @@ public interface IProductAccountService
 
     Task<Result<List<ProductAccountDto>>> GenerateEmptyAsync(
         GenerateProductAccountsEmptyRequest request
+    );
+
+    Task<Result<ProductAccountDto>> SetProductAccountDefectiveReasonAsync(
+        SetProductAccountDefectiveReasonRequest request
     );
 }

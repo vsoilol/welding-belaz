@@ -45,7 +45,8 @@ public sealed class ApplicationContext : DbContext
 
     public DbSet<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-    public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; } = null!;
+    public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; } =
+        null!;
 
     public DbSet<TechnologicalProcess> TechnologicalProcesses { get; set; } = null!;
 
@@ -64,16 +65,21 @@ public sealed class ApplicationContext : DbContext
     public DbSet<Seam> Seams { get; set; } = null!;
 
     public DbSet<WeldPassageInstruction> WeldPassageInstructions { get; set; } = null!;
-    
+
     public DbSet<ProductAccount> ProductAccounts { get; set; } = null!;
-    
+
     public DbSet<ProductResult> ProductResults { get; set; } = null!;
-    
+
     public DbSet<WeldingRecord> WeldingRecords { get; set; } = null!;
-    
+
     public DbSet<DefectiveReason> DefectiveReasons { get; set; } = null!;
 
-    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+    public DbSet<SeamAccount> SeamAccounts { get; set; } = null!;
+
+    public DbSet<SeamResult> SeamResults { get; set; } = null!;
+
+    public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        : base(options)
     {
         Database.EnsureCreated();
     }
@@ -82,16 +88,20 @@ public sealed class ApplicationContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<ProductInside>()
+        modelBuilder
+            .Entity<ProductInside>()
             .HasOne(e => e.MainProduct)
             .WithMany(e => e.ProductInsides);
 
-        modelBuilder.Entity<ProductInside>()
+        modelBuilder
+            .Entity<ProductInside>()
             .HasOne(e => e.InsideProduct)
             .WithOne(e => e.ProductMain)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<UserRole>().HasKey(t => new { t.RoleId, t.UserId });
-        modelBuilder.Entity<ProductInside>().HasKey(t => new { t.InsideProductId, t.MainProductId });
+        modelBuilder
+            .Entity<ProductInside>()
+            .HasKey(t => new { t.InsideProductId, t.MainProductId });
     }
 }

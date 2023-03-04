@@ -88,6 +88,7 @@ public class DataSeed
         var products = await context.ProductionAreas
             .Where(_ => _.Number == 6)
             .SelectMany(_ => _.Products)
+            .Include(_ => _.Seams)
             .ToListAsync();
 
         var productAccounts = products.Select(
@@ -100,12 +101,32 @@ public class DataSeed
                     Product = _,
                     ProductResults = new List<ProductResult>
                     {
-                        new() { Amount = 0, Status = ResultProductStatus.Manufactured }
+                        new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                        new() { Amount = 0, Status = ResultProductStatus.Accept },
+                        new() { Amount = 0, Status = ResultProductStatus.Defective }
                     }
                 }
         );
 
+        var seamAccounts = products
+            .SelectMany(_ => _.Seams)
+            .Select(
+                (_, index) =>
+                    new SeamAccount
+                    {
+                        DateFromPlan = DateTime.Now,
+                        Seam = _,
+                        SeamResults = new List<SeamResult>
+                        {
+                            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                            new() { Amount = 0, Status = ResultProductStatus.Accept },
+                            new() { Amount = 0, Status = ResultProductStatus.Defective }
+                        }
+                    }
+            );
+
         context.ProductAccounts.AddRange(productAccounts);
+        context.SeamAccounts.AddRange(seamAccounts);
         await context.SaveChangesAsync();
     }
 
