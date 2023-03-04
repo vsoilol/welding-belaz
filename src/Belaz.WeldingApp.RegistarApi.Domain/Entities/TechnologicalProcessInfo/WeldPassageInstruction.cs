@@ -31,15 +31,15 @@ public class WeldPassageInstruction : Entity
     /// <summary>
     /// Температура предварительного нагрева min
     /// </summary>
-    public double PreheatingTemperatureMin { get; set; }
+    public double? PreheatingTemperatureMin { get; set; }
 
     /// <summary>
     /// Температура предварительного нагрева max
     /// </summary>
-    public double PreheatingTemperatureMax { get; set; }
-    
+    public double? PreheatingTemperatureMax { get; set; }
+
     public Guid TechnologicalInstructionId { get; set; }
 
-    [ForeignKey(nameof(TechnologicalInstructionId))] 
+    [ForeignKey(nameof(TechnologicalInstructionId))]
     public TechnologicalInstruction TechnologicalInstruction { get; set; } = null!;
 }

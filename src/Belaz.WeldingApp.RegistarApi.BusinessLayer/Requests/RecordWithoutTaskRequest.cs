@@ -21,33 +21,22 @@ public class RecordWithoutTaskRequest : IMapTo<WeldingRecord>
 
     [JsonPropertyName("Amp")]
     public double[] Amperages { get; set; } = null!;
-    
+
     [JsonPropertyName("Volt")]
     public double[] Voltages { get; set; } = null!;
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<RecordWithoutTaskRequest, WeldingRecord>()
-            .ForMember(dto => dto.WeldingEquipmentId,
-                opt => opt
-                    .MapFrom(x => x.WeldingEquipmentId))
-            .ForMember(dto => dto.WelderId,
-                opt => opt
-                    .MapFrom(x => x.WelderId))
-            .ForMember(dto => dto.WeldingStartTime,
-                opt => opt
-                    .MapFrom(x => x.WelderId))
-            .ForMember(dto => dto.Date,
-                opt => opt
-                    .MapFrom(x => x.StartDateTime.Date))
-            .ForMember(dto => dto.WeldingStartTime,
-                opt => opt
-                    .MapFrom(x => x.StartDateTime.TimeOfDay))
-            .ForMember(dto => dto.WeldingCurrentValues,
-                opt => opt
-                    .MapFrom(x => x.Amperages))
-            .ForMember(dto => dto.ArcVoltageValues,
-                opt => opt
-                    .MapFrom(x => x.Voltages));
+        profile
+            .CreateMap<RecordWithoutTaskRequest, WeldingRecord>()
+            .ForMember(dto => dto.WeldingEquipmentId, opt => opt.MapFrom(x => x.WeldingEquipmentId))
+            .ForMember(dto => dto.WelderId, opt => opt.MapFrom(x => x.WelderId))
+            .ForMember(dto => dto.Date, opt => opt.MapFrom(x => x.StartDateTime.Date))
+            .ForMember(
+                dto => dto.WeldingStartTime,
+                opt => opt.MapFrom(x => x.StartDateTime.TimeOfDay)
+            )
+            .ForMember(dto => dto.WeldingCurrentValues, opt => opt.MapFrom(x => x.Amperages))
+            .ForMember(dto => dto.ArcVoltageValues, opt => opt.MapFrom(x => x.Voltages));
     }
 }

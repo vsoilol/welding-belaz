@@ -7,7 +7,7 @@ namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 public class WeldingRecord : Entity
 {
     public DateTime Date { get; set; }
-    
+
     /// <summary>
     /// Время начала сварки
     /// </summary>
@@ -27,21 +27,21 @@ public class WeldingRecord : Entity
     /// Значения напряжения на дуге
     /// </summary>
     public double[] ArcVoltageValues { get; set; } = null!;
-    
+
     public Guid WeldingEquipmentId { get; set; }
 
     [ForeignKey(nameof(WeldingEquipmentId))]
     public WeldingEquipment WeldingEquipment { get; set; } = null!;
-    
+
     public Guid WelderId { get; set; }
 
     [ForeignKey(nameof(WelderId))]
     public Welder Welder { get; set; } = null!;
-    
+
     public Guid? MasterId { get; set; }
 
     [ForeignKey(nameof(MasterId))]
     public Master? Master { get; set; }
-    
+
     public WeldPassage? WeldPassage { get; set; }
 }

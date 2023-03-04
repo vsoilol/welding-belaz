@@ -12,12 +12,12 @@ public class Inspector : Entity
 {
     public Guid UserId { get; set; }
 
-    [ForeignKey(nameof(UserId))] 
+    [ForeignKey(nameof(UserId))]
     public UserData UserInfo { get; set; } = null!;
 
     public List<Product> Products { get; set; } = null!;
 
     public List<Seam> Seams { get; set; } = null!;
-    
+
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
 }

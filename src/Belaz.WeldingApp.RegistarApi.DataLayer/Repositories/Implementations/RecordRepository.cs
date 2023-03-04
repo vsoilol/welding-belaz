@@ -12,9 +12,11 @@ public class RecordRepository : IRecordRepository
         _context = context;
     }
 
-    public async Task CreateRecordWithoutTaskAsync(WeldingRecord record)
+    public async Task<WeldingRecord> CreateRecordWithoutTaskAsync(WeldingRecord record)
     {
-        _context.WeldingRecords.Add(record);
+        var newRecord = _context.WeldingRecords.Add(record).Entity;
         await _context.SaveChangesAsync();
+
+        return newRecord;
     }
 }

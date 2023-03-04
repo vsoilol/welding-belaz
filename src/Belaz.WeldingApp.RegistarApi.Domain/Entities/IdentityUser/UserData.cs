@@ -22,12 +22,12 @@ public class UserData : Entity
     public string? Position { get; set; }
 
     /// <summary>
-    /// Табельный номер 
+    /// Табельный номер
     /// </summary>
     public string? ServiceNumber { get; set; }
 
     /// <summary>
-    /// Срок действия удостоверения 
+    /// Срок действия удостоверения
     /// </summary>
     public DateTime? CertificateValidityPeriod { get; set; }
 
@@ -38,7 +38,7 @@ public class UserData : Entity
 
     public Guid? ProductionAreaId { get; set; }
 
-    [ForeignKey(nameof(ProductionAreaId))] 
+    [ForeignKey(nameof(ProductionAreaId))]
     public ProductionArea? ProductionArea { get; set; }
 
     public List<UserRole> UserRoles { get; set; } = null!;
