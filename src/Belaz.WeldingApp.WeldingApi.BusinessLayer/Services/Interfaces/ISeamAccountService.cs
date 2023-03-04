@@ -17,4 +17,8 @@ public interface ISeamAccountService
     Task<Result<SeamAccountDto>> SetSeamAccountDefectiveReasonAsync(
         SetSeamAccountDefectiveReasonRequest request
     );
+
+    Task<Result<SeamAccountDto>> ChangeDefectiveAmountAsync(
+        ChangeSeamAccountDefectiveAmountRequest request
+    );
 }

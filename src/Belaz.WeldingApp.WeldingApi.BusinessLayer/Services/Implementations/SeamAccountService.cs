@@ -27,6 +27,21 @@ public class SeamAccountService : ISeamAccountService
         _seamAccountRepository = seamAccountRepository;
     }
 
+    public async Task<Result<SeamAccountDto>> ChangeDefectiveAmountAsync(
+        ChangeSeamAccountDefectiveAmountRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(
+            () =>
+                _seamAccountRepository.ChangeDefectiveAmountAsync(
+                    request.SeamAccountId,
+                    request.Amount
+                )
+        );
+    }
+
     public async Task<Result<List<SeamAccountDto>>> GetAllByProductAccountIdAsync(
         GetAllByProductAccountIdRequest request
     )
