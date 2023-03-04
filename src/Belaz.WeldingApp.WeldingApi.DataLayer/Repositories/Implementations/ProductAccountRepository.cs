@@ -61,8 +61,8 @@ public class ProductAccountRepository : IProductAccountRepository
 
         productResultAccept.Amount = acceptedAmount;
         productResultDefective.Amount =
-            acceptedAmount > productResultManufactured.Amount
-                ? acceptedAmount - productResultManufactured.Amount
+            productResultManufactured.Amount > acceptedAmount
+                ? productResultManufactured.Amount - acceptedAmount
                 : 0;
 
         var seamsAccount = await _context.SeamAccounts

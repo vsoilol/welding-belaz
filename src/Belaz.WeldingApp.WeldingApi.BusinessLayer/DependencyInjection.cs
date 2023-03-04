@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<ITechnologicalInstructionService, TechnologicalInstructionService>();
         services.AddScoped<IWeldingRecordService, WeldingRecordService>();
         services.AddScoped<IProductAccountService, ProductAccountService>();
+        services.AddScoped<ISeamAccountService, SeamAccountService>();
 
         return services;
     }
