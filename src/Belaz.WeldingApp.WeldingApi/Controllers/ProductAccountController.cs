@@ -71,6 +71,17 @@ public class ProductAccountController : ControllerBase
         return result.ToOk();
     }
 
+    [HttpPut("acceptedAmount")]
+    [ProducesResponseType(typeof(ChangeProductAccountAmountRequest), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> ChangAcceptedAmountAsync(
+        [FromBody] ChangeProductAccountAmountRequest request
+    )
+    {
+        var result = await _productAccountService.ChangAcceptedAmountAsync(request);
+
+        return result.ToOk();
+    }
+
     [HttpPut("assignWeldingEquipments")]
     public async Task<ActionResult<Unit>> AssignProductAccountToWeldingEquipmentsAsync(
         [FromBody] AssignProductAccountToWeldingEquipmentsRequest request

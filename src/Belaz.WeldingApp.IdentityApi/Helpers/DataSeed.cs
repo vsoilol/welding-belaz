@@ -18,7 +18,7 @@ public class DataSeed
         await CreateRolesAsync(roleRepository);
         await CreateAdminAsync(roleRepository, userRepository);
         await CreateWelderAsync(roleRepository, userRepository);
-        await CreateInspectorAsync(roleRepository, userRepository);
+        await CreateInspectorAsync(roleRepository, userRepository, context);
         await CreateChiefAsync(roleRepository, userRepository);
         await CreateMasterAsync(roleRepository, userRepository, context);
     }
@@ -84,9 +84,12 @@ public class DataSeed
 
     private static async Task CreateInspectorAsync(
         IRepository<RoleData> roleRepository,
-        IRepository<UserData> userRepository
+        IRepository<UserData> userRepository,
+        IdentityDbContext context
     )
     {
+        var productionArea = await context.ProductionAreas.FirstOrDefaultAsync(_ => _.Number == 6);
+
         var inspector = new UserData()
         {
             Email = "inspector@inspector.com",
@@ -95,6 +98,7 @@ public class DataSeed
             LastName = "Отчество контролера",
             UserName = "inspector@inspector.com",
             PasswordHash = SecurePasswordHasher.Hash("inspector12345"),
+            ProductionArea = productionArea
         };
 
         var inspectorRole = await roleRepository.GetByFilterAsync(
@@ -104,7 +108,12 @@ public class DataSeed
 
         if (!(await userRepository.GetByFilterAsync(_ => _.UserName == inspector.UserName)).Any())
         {
-            await userRepository.AddAsync(inspector);
+            var user = await userRepository.AddAsync(inspector);
+            await userRepository.SaveAsync();
+
+            var inspectorData = new Inspector { UserInfo = user };
+
+            context.Inspectors.Add(inspectorData);
             await userRepository.SaveAsync();
         }
     }

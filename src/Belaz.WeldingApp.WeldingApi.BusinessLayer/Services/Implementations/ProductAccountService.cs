@@ -42,6 +42,17 @@ public class ProductAccountService : IProductAccountService
         });
     }
 
+    public async Task<Result<ProductAccountDto>> ChangAcceptedAmountAsync(
+        ChangeProductAccountAmountRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(
+            () => _productAccountRepository.ChangAcceptedAmountAsync(request.Id, request.Amount)
+        );
+    }
+
     public async Task<Result<ProductAccountDto>> ChangAmountFromPlanAsync(
         ChangeProductAccountAmountRequest request
     )

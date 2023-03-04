@@ -20,6 +20,8 @@ namespace Belaz.WeldingApp.IdentityApi.Data.DataAccess
 
         public DbSet<Master> Masters { get; set; }
 
+        public DbSet<Inspector> Inspectors { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
