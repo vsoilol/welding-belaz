@@ -7,6 +7,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Microsoft.EntityFrameworkCore;
+using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
 
@@ -19,6 +20,36 @@ public class SeamAccountRepository : ISeamAccountRepository
     {
         _context = context;
         _mapper = mapper;
+    }
+
+    public async Task<SeamAccountDto> ChangeDefectiveAmountAsync(Guid seamAccountId, int amount)
+    {
+        var seamAccount = (
+            await _context.SeamAccounts
+                .Include(_ => _.SeamResults)
+                .FirstOrDefaultAsync(_ => _.Id == seamAccountId)
+        )!;
+
+        var seamResultDefective = seamAccount.SeamResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Defective
+        )!;
+
+        var seamResultAccept = seamAccount.SeamResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Accept
+        )!;
+
+        var newAcceptedAmount = seamResultAccept.Amount + seamResultDefective.Amount - amount;
+
+        seamResultAccept.Amount = newAcceptedAmount;
+        seamResultDefective.Amount = amount;
+
+        await _context.SaveChangesAsync();
+
+        return (
+            await _context.SeamAccounts
+                .ProjectTo<SeamAccountDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(_ => _.Id == seamAccountId)
+        )!;
     }
 
     public async Task<List<SeamAccountDto>> GetAllByProductAccountIdAsync(Guid productAccountId)

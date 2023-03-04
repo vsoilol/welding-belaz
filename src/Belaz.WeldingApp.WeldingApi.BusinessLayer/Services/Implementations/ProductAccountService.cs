@@ -43,7 +43,7 @@ public class ProductAccountService : IProductAccountService
     }
 
     public async Task<Result<ProductAccountDto>> ChangAcceptedAmountAsync(
-        ChangeProductAccountAmountRequest request
+        ChangeProductAccountAcceptedAmountRequest request
     )
     {
         var validationResult = await _validationService.ValidateAsync(request);

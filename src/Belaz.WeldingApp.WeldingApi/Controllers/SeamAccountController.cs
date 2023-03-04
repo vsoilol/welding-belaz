@@ -50,4 +50,15 @@ public class SeamAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpPut("defectiveAmount")]
+    [ProducesResponseType(typeof(SeamAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SeamAccountDto>> ChangeDefectiveAmountAsync(
+        [FromBody] ChangeSeamAccountDefectiveAmountRequest request
+    )
+    {
+        var result = await _seamAccountService.ChangeDefectiveAmountAsync(request);
+
+        return result.ToOk();
+    }
 }
