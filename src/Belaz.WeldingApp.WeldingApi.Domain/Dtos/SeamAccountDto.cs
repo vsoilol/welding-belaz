@@ -21,6 +21,8 @@ public class SeamAccountDto : IMapFrom<SeamAccount>
     /// </summary>
     public bool AreDeviations { get; set; } = false;
 
+    public string? DefectiveReason { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile
@@ -43,6 +45,16 @@ public class SeamAccountDto : IMapFrom<SeamAccount>
                             x.SeamResults
                                 .Where(_ => _.Status == ResultProductStatus.Defective)
                                 .Sum(_ => _.Amount)
+                    )
+            )
+            .ForMember(
+                dto => dto.DefectiveReason,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.SeamResults
+                                .FirstOrDefault(_ => _.Status == ResultProductStatus.Defective)!
+                                .Reason
                     )
             )
             .ForMember(

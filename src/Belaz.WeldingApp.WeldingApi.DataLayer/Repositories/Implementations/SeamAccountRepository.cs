@@ -37,4 +37,23 @@ public class SeamAccountRepository : ISeamAccountRepository
             .ProjectTo<SeamAccountDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
+
+    public async Task<SeamAccountDto> SetSeamAccountDefectiveReasonAsync(
+        Guid seamAccountId,
+        string defectiveReason
+    )
+    {
+        var productAccountDefectiveResult = (
+            await _context.SeamResults.FirstOrDefaultAsync(_ => _.SeamAccountId == seamAccountId)
+        )!;
+
+        productAccountDefectiveResult.Reason = defectiveReason;
+        await _context.SaveChangesAsync();
+
+        return (
+            await _context.SeamAccounts
+                .ProjectTo<SeamAccountDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(_ => _.Id == seamAccountId)
+        )!;
+    }
 }

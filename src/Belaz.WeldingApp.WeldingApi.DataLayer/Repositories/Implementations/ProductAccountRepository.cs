@@ -368,4 +368,21 @@ public class ProductAccountRepository : IProductAccountRepository
             .ProjectTo<ProductAccountDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
+
+    public async Task<ProductAccountDto> SetProductAccountDefectiveReasonAsync(
+        Guid productAccountId,
+        string defectiveReason
+    )
+    {
+        var productAccountDefectiveResult = (
+            await _context.ProductResults.FirstOrDefaultAsync(
+                _ => _.ProductAccountId == productAccountId
+            )
+        )!;
+
+        productAccountDefectiveResult.Reason = defectiveReason;
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(productAccountId);
+    }
 }

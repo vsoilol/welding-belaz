@@ -28,6 +28,8 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
     /// </summary>
     public bool AreDeviations { get; set; } = false;
 
+    public string? DefectiveReason { get; set; }
+
     public List<WeldingEquipmentBriefDto> WeldingEquipments { get; set; } = null!;
 
     public void Mapping(Profile profile)
@@ -42,6 +44,16 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
                             x.ProductResults
                                 .Where(_ => _.Status == ResultProductStatus.Manufactured)
                                 .Sum(_ => _.Amount)
+                    )
+            )
+            .ForMember(
+                dto => dto.DefectiveReason,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.ProductResults
+                                .FirstOrDefault(_ => _.Status == ResultProductStatus.Defective)!
+                                .Reason
                     )
             )
             .ForMember(

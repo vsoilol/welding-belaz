@@ -13,4 +13,8 @@ public interface ISeamAccountService
     Task<Result<List<SeamAccountDto>>> GetAllByProductAccountIdAsync(
         GetAllByProductAccountIdRequest request
     );
+
+    Task<Result<SeamAccountDto>> SetSeamAccountDefectiveReasonAsync(
+        SetSeamAccountDefectiveReasonRequest request
+    );
 }

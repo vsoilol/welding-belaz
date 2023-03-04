@@ -37,4 +37,19 @@ public class SeamAccountService : ISeamAccountService
             () => _seamAccountRepository.GetAllByProductAccountIdAsync(request.ProductAccountId)
         );
     }
+
+    public async Task<Result<SeamAccountDto>> SetSeamAccountDefectiveReasonAsync(
+        SetSeamAccountDefectiveReasonRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(
+            () =>
+                _seamAccountRepository.SetSeamAccountDefectiveReasonAsync(
+                    request.SeamAccountId,
+                    request.DefectiveReason
+                )
+        );
+    }
 }

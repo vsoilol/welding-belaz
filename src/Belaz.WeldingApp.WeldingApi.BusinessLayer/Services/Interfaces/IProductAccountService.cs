@@ -41,4 +41,8 @@ public interface IProductAccountService
     Task<Result<List<ProductAccountDto>>> GenerateEmptyAsync(
         GenerateProductAccountsEmptyRequest request
     );
+
+    Task<Result<ProductAccountDto>> SetProductAccountDefectiveReasonAsync(
+        SetProductAccountDefectiveReasonRequest request
+    );
 }

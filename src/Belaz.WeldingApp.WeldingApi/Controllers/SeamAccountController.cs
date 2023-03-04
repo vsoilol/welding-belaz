@@ -39,4 +39,15 @@ public class SeamAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpPut("reason")]
+    [ProducesResponseType(typeof(SeamAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SeamAccountDto>> SetSeamAccountDefectiveReasonAsync(
+        [FromBody] SetSeamAccountDefectiveReasonRequest request
+    )
+    {
+        var result = await _seamAccountService.SetSeamAccountDefectiveReasonAsync(request);
+
+        return result.ToOk();
+    }
 }

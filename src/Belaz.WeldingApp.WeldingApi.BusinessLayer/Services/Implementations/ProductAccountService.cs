@@ -160,4 +160,19 @@ public class ProductAccountService : IProductAccountService
                 _productAccountRepository.GetAllDatesByProductionAreaAsync(request.ProductionAreaId)
         );
     }
+
+    public async Task<Result<ProductAccountDto>> SetProductAccountDefectiveReasonAsync(
+        SetProductAccountDefectiveReasonRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(
+            () =>
+                _productAccountRepository.SetProductAccountDefectiveReasonAsync(
+                    request.ProductAccountId,
+                    request.DefectiveReason
+                )
+        );
+    }
 }

@@ -136,4 +136,15 @@ public class ProductAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpPut("reason")]
+    [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> SetProductAccountDefectiveReasonAsync(
+        [FromBody] SetProductAccountDefectiveReasonRequest request
+    )
+    {
+        var result = await _productAccountService.SetProductAccountDefectiveReasonAsync(request);
+
+        return result.ToOk();
+    }
 }

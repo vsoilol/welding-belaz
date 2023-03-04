@@ -76,6 +76,8 @@ public sealed class ApplicationContext : DbContext
 
     public DbSet<SeamAccount> SeamAccounts { get; set; } = null!;
 
+    public DbSet<SeamResult> SeamResults { get; set; } = null!;
+
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
     {

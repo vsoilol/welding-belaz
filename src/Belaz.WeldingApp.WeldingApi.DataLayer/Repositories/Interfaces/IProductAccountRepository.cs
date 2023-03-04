@@ -32,4 +32,9 @@ public interface IProductAccountRepository
     );
 
     Task<List<ProductAccountDto>> GenerateEmptyAsync(DateTime newDate, Guid productionAreaId);
+
+    Task<ProductAccountDto> SetProductAccountDefectiveReasonAsync(
+        Guid productAccountId,
+        string defectiveReason
+    );
 }
