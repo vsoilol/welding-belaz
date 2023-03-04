@@ -19,7 +19,7 @@ public interface IProductAccountService
     );
 
     Task<Result<ProductAccountDto>> ChangAcceptedAmountAsync(
-        ChangeProductAccountAmountRequest request
+        ChangeProductAccountAcceptedAmountRequest request
     );
 
     Task<Result<ProductAccountDto>> ChangAmountFromPlanAsync(

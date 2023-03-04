@@ -74,7 +74,7 @@ public class ProductAccountController : ControllerBase
     [HttpPut("acceptedAmount")]
     [ProducesResponseType(typeof(ChangeProductAccountAmountRequest), StatusCodes.Status200OK)]
     public async Task<ActionResult<ProductAccountDto>> ChangAcceptedAmountAsync(
-        [FromBody] ChangeProductAccountAmountRequest request
+        [FromBody] ChangeProductAccountAcceptedAmountRequest request
     )
     {
         var result = await _productAccountService.ChangAcceptedAmountAsync(request);
