@@ -27,7 +27,7 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
 
     public List<ProductInsideDto> InsideProducts { get; set; } = null!;
 
-    public List<SeamBriefDto> Seams { get; set; } = null!;
+    public List<SeamDto> Seams { get; set; } = null!;
 
     public MainProductDto MainProduct { get; set; } = null!;
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
@@ -19,19 +20,25 @@ public class TechnologicalProcessRepository : ITechnologicalProcessRepository
         _mapper = mapper;
     }
 
-    public Task<TechnologicalProcessDto> GetByIdAsync(Guid id)
+    public async Task<TechnologicalProcessDto> GetByIdAsync(Guid id)
     {
-        return _context.TechnologicalProcesses
-            .Where(_ => _.Id == id)
-            .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync()!;
+        var technologicalProcess = await FilterTechnologicalProcesses(_ => _.Id == id)
+            .FirstOrDefaultAsync();
+
+        var mapTechnologicalProcess = _mapper.Map<TechnologicalProcessDto>(technologicalProcess);
+
+        return mapTechnologicalProcess;
     }
 
-    public Task<List<TechnologicalProcessDto>> GetAllAsync()
+    public async Task<List<TechnologicalProcessDto>> GetAllAsync()
     {
-        return _context.TechnologicalProcesses
-            .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        var technologicalProcesses = await FilterTechnologicalProcesses().ToListAsync();
+
+        var mapTechnologicalProcesses = _mapper.Map<List<TechnologicalProcessDto>>(
+            technologicalProcesses
+        );
+
+        return mapTechnologicalProcesses;
     }
 
     public async Task<TechnologicalProcessDto> CreateAsync(TechnologicalProcess entity)
@@ -44,8 +51,9 @@ public class TechnologicalProcessRepository : ITechnologicalProcessRepository
 
     public async Task<TechnologicalProcessDto> UpdateAsync(TechnologicalProcess entity)
     {
-        var updatedTechnologicalProcess = (await _context.TechnologicalProcesses
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedTechnologicalProcess = (
+            await _context.TechnologicalProcesses.FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedTechnologicalProcess.Number = entity.Number;
         updatedTechnologicalProcess.Name = entity.Name;
@@ -54,5 +62,48 @@ public class TechnologicalProcessRepository : ITechnologicalProcessRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    private IQueryable<TechnologicalProcess> FilterTechnologicalProcesses(
+        Expression<Func<TechnologicalProcess, bool>> filter
+    )
+    {
+        var technologicalProcesses = _context.TechnologicalProcesses
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.ProductInsides)
+            .ThenInclude(_ => _.InsideProduct)
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.Seams)
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.ProductionArea)
+            .ThenInclude(_ => _.Workshop)
+            .Where(filter);
+
+        return technologicalProcesses;
+    }
+
+    private IQueryable<TechnologicalProcess> FilterTechnologicalProcesses()
+    {
+        var technologicalProcesses = _context.TechnologicalProcesses
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.ProductInsides)
+            .ThenInclude(_ => _.InsideProduct)
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.Seams)
+            .Include(_ => _.Products)
+            .ThenInclude(_ => _.ProductionArea)
+            .ThenInclude(_ => _.Workshop);
+
+        return technologicalProcesses;
     }
 }
