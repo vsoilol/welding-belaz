@@ -30,7 +30,7 @@ public class InspectorRepository : IInspectorRepository
         return _context.Inspectors
             .Where(_ => _.Id == id)
             .ProjectTo<InspectorDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync()!; 
+            .FirstOrDefaultAsync()!;
     }
 
     public async Task<InspectorDto> CreateAsync(Inspector entity)
@@ -43,15 +43,19 @@ public class InspectorRepository : IInspectorRepository
 
     public async Task<InspectorDto> UpdateAsync(Inspector entity)
     {
-        var updatedInspector = (await _context.Inspectors
-            .Include(_ => _.UserInfo)
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedInspector = (
+            await _context.Inspectors
+                .Include(_ => _.UserInfo)
+                .FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedInspector.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedInspector.UserInfo.FirstName = entity.UserInfo.FirstName;
         updatedInspector.UserInfo.MiddleName = entity.UserInfo.MiddleName;
         updatedInspector.UserInfo.LastName = entity.UserInfo.LastName;
         updatedInspector.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
+        updatedInspector.UserInfo.Position = entity.UserInfo.Position;
+        updatedInspector.UserInfo.ServiceNumber = entity.UserInfo.ServiceNumber;
 
         await _context.SaveChangesAsync();
 
