@@ -22,9 +22,7 @@ public class WelderRepository : IWelderRepository
 
     public Task<List<WelderDto>> GetAllAsync()
     {
-        return _context.Welders
-            .ProjectTo<WelderDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        return _context.Welders.ProjectTo<WelderDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
     public Task<WelderDto> GetByIdAsync(Guid id)
@@ -45,23 +43,29 @@ public class WelderRepository : IWelderRepository
 
     public async Task<WelderDto> UpdateAsync(Welder entity)
     {
-        var updatedWelder = (await _context.Welders
-            .Include(_ => _.UserInfo)
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
-        
+        var updatedWelder = (
+            await _context.Welders
+                .Include(_ => _.UserInfo)
+                .FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
+
         updatedWelder.WorkplaceId = entity.WorkplaceId;
         updatedWelder.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedWelder.UserInfo.FirstName = entity.UserInfo.FirstName;
         updatedWelder.UserInfo.MiddleName = entity.UserInfo.MiddleName;
         updatedWelder.UserInfo.LastName = entity.UserInfo.LastName;
         updatedWelder.UserInfo.ProductionAreaId = entity.UserInfo.ProductionAreaId;
+        updatedWelder.UserInfo.Position = entity.UserInfo.Position;
+        updatedWelder.UserInfo.ServiceNumber = entity.UserInfo.ServiceNumber;
 
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
     }
 
-    private Task<List<WeldingEquipment>> GetWeldingEquipmentsByIds(IReadOnlyList<Guid> weldingEquipmentIds)
+    private Task<List<WeldingEquipment>> GetWeldingEquipmentsByIds(
+        IReadOnlyList<Guid> weldingEquipmentIds
+    )
     {
         return _context.WeldingEquipments
             .Where(_ => weldingEquipmentIds.Any(equipmentId => equipmentId == _.Id))

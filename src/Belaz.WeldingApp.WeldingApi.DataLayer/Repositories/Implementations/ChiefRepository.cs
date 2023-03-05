@@ -21,9 +21,7 @@ public class ChiefRepository : IChiefRepository
 
     public Task<List<ChiefDto>> GetAllAsync()
     {
-        return _context.Chiefs
-            .ProjectTo<ChiefDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        return _context.Chiefs.ProjectTo<ChiefDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
     public Task<ChiefDto> GetByIdAsync(Guid id)
@@ -44,22 +42,28 @@ public class ChiefRepository : IChiefRepository
 
     public async Task<ChiefDto> UpdateAsync(Chief entity)
     {
-        var updatedChief = (await _context.Chiefs
-            .Include(_ => _.UserInfo)
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedChief = (
+            await _context.Chiefs
+                .Include(_ => _.UserInfo)
+                .FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedChief.UserInfo.RfidTag = entity.UserInfo.RfidTag;
         updatedChief.UserInfo.FirstName = entity.UserInfo.FirstName;
         updatedChief.UserInfo.MiddleName = entity.UserInfo.MiddleName;
         updatedChief.UserInfo.LastName = entity.UserInfo.LastName;
         updatedChief.WorkshopId = entity.WorkshopId;
+        updatedChief.UserInfo.Position = entity.UserInfo.Position;
+        updatedChief.UserInfo.ServiceNumber = entity.UserInfo.ServiceNumber;
 
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
     }
-    
-    private Task<List<WeldingEquipment>> GetWeldingEquipmentsByIds(IReadOnlyList<Guid> weldingEquipmentIds)
+
+    private Task<List<WeldingEquipment>> GetWeldingEquipmentsByIds(
+        IReadOnlyList<Guid> weldingEquipmentIds
+    )
     {
         return _context.WeldingEquipments
             .Where(_ => weldingEquipmentIds.Any(equipmentId => equipmentId == _.Id))

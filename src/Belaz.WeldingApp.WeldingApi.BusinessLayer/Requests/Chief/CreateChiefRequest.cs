@@ -16,13 +16,19 @@ public class CreateChiefRequest : IMapTo<Domain.Entities.Users.Chief>
 
     public Guid WorkshopId { get; set; }
 
+    public string Position { get; set; } = null!;
+
+    /// <summary>
+    /// Табельный номер
+    /// </summary>
+    public string ServiceNumber { get; set; } = null!;
+
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<CreateChiefRequest, Domain.Entities.Users.Chief>()
-            .ForMember(dto => dto.UserInfo,
-                opt => opt
-                    .MapFrom(x => x));
-        
+        profile
+            .CreateMap<CreateChiefRequest, Domain.Entities.Users.Chief>()
+            .ForMember(dto => dto.UserInfo, opt => opt.MapFrom(x => x));
+
         profile.CreateMap<CreateChiefRequest, UserData>();
     }
 }
