@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
@@ -15,4 +16,6 @@ public class TechnologicalProcessDto
     public string Name { get; set; } = null!;
 
     public string? PdmSystemFileLink { get; set; }
+
+    public List<ProductDto> Products { get; set; } = null!;
 }

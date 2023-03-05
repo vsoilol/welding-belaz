@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
@@ -20,23 +21,33 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         _mapper = mapper;
     }
 
-    public Task<List<TechnologicalInstructionDto>> GetAllAsync()
+    public async Task<List<TechnologicalInstructionDto>> GetAllAsync()
     {
-        return _context.TechnologicalInstructions
-            .ProjectTo<TechnologicalInstructionDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        var technologicalInstructions = await FilterTechnologicalInstructions().ToListAsync();
+
+        var mapTechnologicalInstructions = _mapper.Map<List<TechnologicalInstructionDto>>(
+            technologicalInstructions
+        );
+
+        return mapTechnologicalInstructions;
     }
 
-    public Task<TechnologicalInstructionDto> GetByIdAsync(Guid id)
+    public async Task<TechnologicalInstructionDto> GetByIdAsync(Guid id)
     {
-        return _context.TechnologicalInstructions
-            .Where(_ => _.Id == id)
-            .ProjectTo<TechnologicalInstructionDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync()!;
+        var technologicalInstruction = await FilterTechnologicalInstructions(_ => _.Id == id)
+            .FirstOrDefaultAsync();
+
+        var mapTechnologicalInstruction = _mapper.Map<TechnologicalInstructionDto>(
+            technologicalInstruction
+        );
+
+        return mapTechnologicalInstruction;
     }
 
-    public async Task<TechnologicalInstructionDto> CreateAsync(TechnologicalInstruction entity,
-        List<WeldPassageInstruction> weldPassages)
+    public async Task<TechnologicalInstructionDto> CreateAsync(
+        TechnologicalInstruction entity,
+        List<WeldPassageInstruction> weldPassages
+    )
     {
         entity.WeldPassageInstructions = weldPassages;
         var newTechnologicalInstruction = _context.TechnologicalInstructions.Add(entity).Entity;
@@ -46,12 +57,16 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         return await GetByIdAsync(newTechnologicalInstruction.Id);
     }
 
-    public async Task<TechnologicalInstructionDto> UpdateAsync(TechnologicalInstruction entity,
-        List<WeldPassageInstruction> weldPassages)
+    public async Task<TechnologicalInstructionDto> UpdateAsync(
+        TechnologicalInstruction entity,
+        List<WeldPassageInstruction> weldPassages
+    )
     {
-        var updatedTechnologicalInstruction = (await _context.TechnologicalInstructions
-            .Include(_ => _.WeldPassageInstructions)
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedTechnologicalInstruction = (
+            await _context.TechnologicalInstructions
+                .Include(_ => _.WeldPassageInstructions)
+                .FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedTechnologicalInstruction.Name = entity.Name;
         updatedTechnologicalInstruction.Number = entity.Number;
@@ -66,8 +81,10 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         return await GetByIdAsync(entity.Id);
     }
 
-    private void UpdateWeldPassages(List<WeldPassageInstruction> updatedWelderPassages,
-        List<WeldPassageInstruction> weldPassages)
+    private void UpdateWeldPassages(
+        List<WeldPassageInstruction> updatedWelderPassages,
+        List<WeldPassageInstruction> weldPassages
+    )
     {
         foreach (var weldPassage in updatedWelderPassages)
         {
@@ -88,7 +105,10 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         }
     }
 
-    private void CreateWeldPassages(List<WeldPassageInstruction> weldPassages, Guid technologicalInstructionId)
+    private void CreateWeldPassages(
+        List<WeldPassageInstruction> weldPassages,
+        Guid technologicalInstructionId
+    )
     {
         foreach (var weldPassage in weldPassages)
         {
@@ -96,5 +116,52 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         }
 
         _context.WeldPassageInstructions.AddRange(weldPassages);
+    }
+
+    private IQueryable<TechnologicalInstruction> FilterTechnologicalInstructions(
+        Expression<Func<TechnologicalInstruction, bool>> filter
+    )
+    {
+        var technologicalInstructions = _context.TechnologicalInstructions
+            .Include(_ => _.WeldPassageInstructions)
+            .Include(_ => _.Seams)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .Include(_ => _.Seams)
+            .ThenInclude(_ => _.ProductionArea)
+            .ThenInclude(_ => _!.Workshop)
+            .Include(_ => _.Seams)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.TechnologicalProcess)
+            .Where(filter);
+
+        return technologicalInstructions;
+    }
+
+    private IQueryable<TechnologicalInstruction> FilterTechnologicalInstructions()
+    {
+        var technologicalInstructions = _context.TechnologicalInstructions
+            .Include(_ => _.WeldPassageInstructions)
+            .Include(_ => _.Seams)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .Include(_ => _.Seams)
+            .ThenInclude(_ => _.ProductionArea)
+            .ThenInclude(_ => _!.Workshop)
+            .Include(_ => _.Seams)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.TechnologicalProcess);
+
+        return technologicalInstructions;
     }
 }
