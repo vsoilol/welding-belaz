@@ -591,7 +591,7 @@ public class DataSeed
                 WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49232 },
                 UserInfo = new UserData
                 {
-                    RfidTag = "D7:F1:7D:5A",
+                    RfidTag = "B7:5A:79:B5",
                     ServiceNumber = "21267",
                     MiddleName = "Казинец",
                     FirstName = "Василий",
@@ -660,7 +660,7 @@ public class DataSeed
                 UserInfo = new UserData
                 {
                     ServiceNumber = "14729",
-                    RfidTag = "B7:5A:79:B5",
+                    RfidTag = "D7:F1:7D:5A",
                     MiddleName = "Казинец",
                     FirstName = "Виталий",
                     LastName = "Владимирович",
