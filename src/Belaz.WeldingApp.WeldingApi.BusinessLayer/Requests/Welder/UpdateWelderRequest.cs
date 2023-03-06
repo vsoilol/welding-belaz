@@ -20,12 +20,18 @@ public class UpdateWelderRequest : IMapTo<Domain.Entities.Users.Welder>
 
     public Guid? WorkplaceId { get; set; }
 
+    public string Position { get; set; } = null!;
+
+    /// <summary>
+    /// Табельный номер
+    /// </summary>
+    public string ServiceNumber { get; set; } = null!;
+
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<UpdateWelderRequest, Domain.Entities.Users.Welder>()
-            .ForMember(dto => dto.UserInfo,
-                opt => opt
-                    .MapFrom(x => x));
+        profile
+            .CreateMap<UpdateWelderRequest, Domain.Entities.Users.Welder>()
+            .ForMember(dto => dto.UserInfo, opt => opt.MapFrom(x => x));
 
         profile.CreateMap<UpdateWelderRequest, UserData>();
     }

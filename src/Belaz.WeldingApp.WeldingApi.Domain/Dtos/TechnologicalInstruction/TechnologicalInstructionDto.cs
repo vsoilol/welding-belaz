@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 
-public class TechnologicalInstructionDto : IMapFrom<Entities.TechnologicalProcessInfo.TechnologicalInstruction>
+public class TechnologicalInstructionDto
+    : IMapFrom<Entities.TechnologicalProcessInfo.TechnologicalInstruction>
 {
     public Guid Id { get; set; }
 

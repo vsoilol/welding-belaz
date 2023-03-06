@@ -16,12 +16,18 @@ public class CreateMasterRequest : IMapTo<Domain.Entities.Users.Master>
 
     public Guid ProductionAreaId { get; set; }
 
+    public string Position { get; set; } = null!;
+
+    /// <summary>
+    /// Табельный номер
+    /// </summary>
+    public string ServiceNumber { get; set; } = null!;
+
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<CreateMasterRequest, Domain.Entities.Users.Master>()
-            .ForMember(dto => dto.UserInfo,
-                opt => opt
-                    .MapFrom(x => x));
+        profile
+            .CreateMap<CreateMasterRequest, Domain.Entities.Users.Master>()
+            .ForMember(dto => dto.UserInfo, opt => opt.MapFrom(x => x));
 
         profile.CreateMap<CreateMasterRequest, UserData>();
     }
