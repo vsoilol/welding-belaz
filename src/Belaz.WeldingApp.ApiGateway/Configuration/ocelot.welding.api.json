@@ -1053,7 +1053,7 @@
       "UpstreamPathTemplate": "/api/productAccount/generateTasks",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "PUT"
+        "POST"
       ],
       "DownstreamPathTemplate": "/api/productAccount/generateTasks",
       "ServiceName": "welding",
