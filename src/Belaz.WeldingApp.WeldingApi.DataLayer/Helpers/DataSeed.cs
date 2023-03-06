@@ -500,20 +500,7 @@ public class DataSeed
                     ProductionArea = productionArea6,
                     UserRoles = new List<UserRole> { new UserRole { Role = masterRole } }
                 },
-            },
-            new Master
-            {
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "10422",
-                    MiddleName = "Беляцкий",
-                    FirstName = "Сергей",
-                    LastName = "Николаевич",
-                    Position = "Мастер производственного участка",
-                    ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = masterRole } }
-                },
-            },
+            }
         };
 
         context.Masters.AddRange(masters);
