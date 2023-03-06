@@ -7,6 +7,4 @@ public class ParametersResult
     public double Max { get; set; }
 
     public double Average { get; set; }
-
-    public string EnsuringAccess { get; set; } = null!;
 }

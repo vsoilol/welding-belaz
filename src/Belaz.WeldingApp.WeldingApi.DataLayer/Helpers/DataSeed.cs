@@ -3308,31 +3308,15 @@ public class DataSeed
                         ShortTermDeviation = 0.11,
                         LongTermDeviation = 0.68,
                         PreheatingTemperature = 82,
+                        IsEnsuringVoltageAllowance = false,
+                        IsEnsuringCurrentAllowance = false,
+                        IsEnsuringTemperatureAllowance = true,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingCurrentValues = currentValues1,
                             ArcVoltageValues = voltageValues1,
                             WeldingStartTime = weldingStartTime1,
                             WeldingEndTime = weldingEndTime1,
-                            WeldingEquipment = weldingEquipment,
-                            Welder = welder,
-                            Master = master,
-                            Date = DateTime.Now,
-                        }
-                    },
-                    new()
-                    {
-                        Number = 2,
-                        Name = "Заполняющий",
-                        ShortTermDeviation = 0.22,
-                        LongTermDeviation = 0.44,
-                        PreheatingTemperature = 100,
-                        WeldingRecord = new WeldingRecord
-                        {
-                            WeldingStartTime = weldingStartTime2,
-                            WeldingEndTime = weldingEndTime2,
-                            WeldingCurrentValues = currentValues2,
-                            ArcVoltageValues = voltageValues2,
                             WeldingEquipment = weldingEquipment,
                             Welder = welder,
                             Master = master,
@@ -3364,31 +3348,15 @@ public class DataSeed
                         ShortTermDeviation = 0.11,
                         LongTermDeviation = 0.68,
                         PreheatingTemperature = 82,
+                        IsEnsuringVoltageAllowance = false,
+                        IsEnsuringCurrentAllowance = false,
+                        IsEnsuringTemperatureAllowance = true,
                         WeldingRecord = new WeldingRecord
                         {
                             WeldingStartTime = weldingStartTime1,
                             WeldingEndTime = weldingEndTime1,
                             WeldingCurrentValues = currentValues1,
                             ArcVoltageValues = voltageValues1,
-                            WeldingEquipment = weldingEquipment,
-                            Master = master,
-                            Welder = welder,
-                            Date = DateTime.Now,
-                        }
-                    },
-                    new()
-                    {
-                        Number = 2,
-                        Name = "Заполняющий",
-                        ShortTermDeviation = 0.22,
-                        LongTermDeviation = 0.44,
-                        PreheatingTemperature = 100,
-                        WeldingRecord = new WeldingRecord
-                        {
-                            WeldingStartTime = weldingStartTime2,
-                            WeldingEndTime = weldingEndTime2,
-                            WeldingCurrentValues = currentValues2,
-                            ArcVoltageValues = voltageValues2,
                             WeldingEquipment = weldingEquipment,
                             Master = master,
                             Welder = welder,

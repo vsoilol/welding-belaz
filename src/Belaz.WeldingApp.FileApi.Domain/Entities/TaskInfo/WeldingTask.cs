@@ -1,56 +1,80 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
-using Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.FileApi.Domain.Entities.Users;
+using WeldingApp.Common.Enums;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo
+namespace Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+
+public class WeldingTask : Entity
 {
-    public class WeldingTask : Entity
-    {
-        public int Number { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Number { get; set; }
 
-        /// <summary>
-        /// Дата выполнения сварки
-        /// </summary>
-        public DateTime? WeldingDate { get; set; }
+    public SeamStatus Status { get; set; } = SeamStatus.Accept;
 
-        /// <summary>
-        /// Основной материал
-        /// </summary>
-        public string BasicMaterial { get; set; } = null!;
+    public WeldingTaskStatus TaskStatus { get; set; } = WeldingTaskStatus.NotStarted;
 
-        /// <summary>
-        /// № сертификата (партии) основного материала
-        /// </summary>
-        public string MainMaterialBatchNumber { get; set; } = null!;
+    public DefectiveReason? DefectiveReason { get; set; }
 
-        /// <summary>
-        /// Сварочные материалы
-        /// </summary>
-        public string WeldingMaterial { get; set; } = null!;
+    /// <summary>
+    /// Добавлен ли вручную
+    /// </summary>
+    public bool IsAddManually { get; set; } = false;
 
-        /// <summary>
-        /// № сертификата (партии) св. материала
-        /// </summary>
-        public string WeldingMaterialBatchNumber { get; set; } = null!;
+    /// <summary>
+    /// Дата выполнения сварки
+    /// </summary>
+    public DateTime WeldingDate { get; set; }
 
-        /// <summary>
-        /// Защитный газ 
-        /// </summary>
-        public string? ProtectiveGas { get; set; }
+    /// <summary>
+    /// Основной материал
+    /// </summary>
+    public string? BasicMaterial { get; set; }
 
-        /// <summary>
-        /// № сертификата (партии) на защитный газ 
-        /// </summary>
-        public string? ProtectiveGasBatchNumber { get; set; }
+    /// <summary>
+    /// № сертификата (партии) основного материала
+    /// </summary>
+    public string? MainMaterialBatchNumber { get; set; }
 
-        public Guid SeamId { get; set; }
+    /// <summary>
+    /// Сварочные материалы
+    /// </summary>
+    public string? WeldingMaterial { get; set; }
 
-        [ForeignKey(nameof(SeamId))] 
-        public Seam Seam { get; set; } = null!;
+    /// <summary>
+    /// № сертификата (партии) св. материала
+    /// </summary>
+    public string? WeldingMaterialBatchNumber { get; set; }
 
-        public Guid? WeldingEquipmentId { get; set; }
-        
-        [ForeignKey(nameof(WeldingEquipmentId))] 
-        public WeldingEquipment? WeldingEquipment { get; set; }
-    }
+    /// <summary>
+    /// Защитный газ
+    /// </summary>
+    public string? ProtectiveGas { get; set; }
+
+    /// <summary>
+    /// № сертификата (партии) на защитный газ
+    /// </summary>
+    public string? ProtectiveGasBatchNumber { get; set; }
+
+    public Guid SeamId { get; set; }
+
+    [ForeignKey(nameof(SeamId))]
+    public Seam Seam { get; set; } = null!;
+
+    public Guid? WelderId { get; set; }
+
+    [ForeignKey(nameof(WelderId))]
+    public Welder? Welder { get; set; } = null!;
+
+    public Guid MasterId { get; set; }
+
+    [ForeignKey(nameof(MasterId))]
+    public Master Master { get; set; } = null!;
+
+    public Guid? InspectorId { get; set; }
+
+    [ForeignKey(nameof(InspectorId))]
+    public Inspector? Inspector { get; set; } = null!;
+
+    public List<WeldPassage> WeldPassages { get; set; } = null!;
 }
