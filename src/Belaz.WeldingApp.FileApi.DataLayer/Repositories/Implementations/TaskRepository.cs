@@ -21,38 +21,29 @@ public class TaskRepository : ITaskRepository
 
     public async Task<TaskDto> GetByIdAsync(Guid id)
     {
-        var task = (await _context.WeldingTasks
-            .Where(_ => _.Id == id)
-            .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync())!;
+        var task = (
+            await _context.WeldingTasks
+                .Where(_ => _.Id == id)
+                .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync()
+        )!;
 
         var seamProducts = (await GetSeamProductsAsync(id)).Where(_ => _ is not null);
         SetProductsToSeam(task.Seam, seamProducts!);
 
-        await CheckSeamDefectiveReason(task.Seam, id);
-
         return task;
-    }
-
-    private async Task CheckSeamDefectiveReason(SeamDto seam, Guid weldingTaskId)
-    {
-        var seamEntity = (await _context.Seams
-            .FirstOrDefaultAsync(_ => _.WeldingTask!.Id == weldingTaskId))!;
-
-        if (seamEntity.Status == ProductStatus.Defective)
-        {
-            var defectiveReason = (await _context.StatusReasons
-                .FirstOrDefaultAsync(_ => _.SeamId == seamEntity.Id && _.Status == ProductStatus.Defective))!;
-
-            seam.DefectiveReason = defectiveReason.Reason;
-            seam.DetectedDefects = defectiveReason.DetectedDefects;
-        }
     }
 
     private async Task<List<Product?>> GetSeamProductsAsync(Guid weldingTaskId)
     {
-        var seamProduct = (await _context.Products
-            .FirstOrDefaultAsync(_ => _.Seams.Any(seamEntity => seamEntity.WeldingTask!.Id == weldingTaskId)))!;
+        var seamProduct = (
+            await _context.WeldingTasks
+                .Include(_ => _.Seam)
+                .ThenInclude(_ => _.Product)
+                .FirstOrDefaultAsync(_ => _.Id == weldingTaskId)
+        )!
+            .Seam
+            .Product;
 
         var secondSeamProduct = await GetMainProductByChildAsync(seamProduct);
         var thirdSeamProduct = await GetMainProductByChildAsync(secondSeamProduct);
@@ -67,8 +58,9 @@ public class TaskRepository : ITaskRepository
             return null;
         }
 
-        return await _context.Products.FirstOrDefaultAsync(_ => _.ProductInsides
-            .Any(inside => inside.InsideProductId == childProduct.Id));
+        return await _context.Products.FirstOrDefaultAsync(
+            _ => _.ProductInsides.Any(inside => inside.InsideProductId == childProduct.Id)
+        );
     }
 
     private void SetProductsToSeam(SeamDto seam, IEnumerable<Product> products)

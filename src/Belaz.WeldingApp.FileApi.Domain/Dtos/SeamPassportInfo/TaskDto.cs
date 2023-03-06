@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
@@ -46,29 +45,31 @@ public class TaskDto : IMapFrom<WeldingTask>
     public string WeldingMaterialBatchNumber { get; set; } = null!;
 
     /// <summary>
-    /// Защитный газ 
+    /// Защитный газ
     /// </summary>
     public string? ProtectiveGas { get; set; }
 
     /// <summary>
-    /// № сертификата (партии) на защитный газ 
+    /// № сертификата (партии) на защитный газ
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
-    
+
+    public List<WeldPassageDto> WeldPassages { get; set; } = null!;
+
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<WeldingTask, TaskDto>()
-            .ForMember(dto => dto.WeldingDate,
-                opt => opt
-                    .MapFrom(x => x.WeldingDate.ToDayInfoString()))
-            .ForMember(dto => dto.Welder,
-                opt => opt
-                    .MapFrom(x => x.Seam.Welder!.UserInfo))
-            .ForMember(dto => dto.Inspector,
-                opt => opt
-                    .MapFrom(x => x.Seam.Inspector!.UserInfo))
-            .ForMember(dto => dto.Master,
-                opt => opt
-                    .MapFrom(x => x.Seam.Product!.Master!.UserInfo));
+        profile
+            .CreateMap<WeldingTask, TaskDto>()
+            .ForMember(
+                dto => dto.WeldingDate,
+                opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
+            )
+            .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
+            .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
+            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master!.UserInfo))
+            .ForMember(
+                dto => dto.WeldingEquipment,
+                opt => opt.MapFrom(x => x.WeldPassages.First().WeldingRecord.WeldingEquipment)
+            );
     }
 }

@@ -5,23 +5,23 @@ using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
 
-namespace Belaz.WeldingApp.FileApi.Domain.Entities.Users
+namespace Belaz.WeldingApp.FileApi.Domain.Entities.Users;
+
+/// <summary>
+/// Руководитель сварочных работ / Мастер
+/// </summary>
+public class Master : Entity
 {
-    /// <summary>
-    /// Руководитель сварочных работ / Мастер
-    /// </summary>
-    public class Master : Entity
-    {
-        public Guid UserId { get; set; }
+    public Guid UserId { get; set; }
 
-        [ForeignKey(nameof(UserId))] 
-        public UserData UserInfo { get; set; } = null!;
+    [ForeignKey(nameof(UserId))]
+    public UserData UserInfo { get; set; } = null!;
 
-        public Guid? WeldingEquipmentId { get; set; }
+    public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-        [ForeignKey(nameof(WeldingEquipmentId))]
-        public WeldingEquipment? WeldingEquipment { get; set; }
+    public List<Product> Products { get; set; } = null!;
 
-        public List<Product> Products { get; set; } = null!;
-    }
+    public List<WeldingTask> WeldingTasks { get; set; } = null!;
+
+    public List<WeldingRecord> WeldingRecords { get; set; } = null!;
 }

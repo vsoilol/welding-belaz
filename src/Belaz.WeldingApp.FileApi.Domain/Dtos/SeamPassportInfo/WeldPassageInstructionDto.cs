@@ -34,10 +34,10 @@ public class WeldPassageInstructionDto : IMapFrom<WeldPassageInstruction>
     /// <summary>
     /// Температура предварительного нагрева min
     /// </summary>
-    public double PreheatingTemperatureMin { get; set; }
+    public double? PreheatingTemperatureMin { get; set; }
 
     /// <summary>
     /// Температура предварительного нагрева max
     /// </summary>
-    public double PreheatingTemperatureMax { get; set; }
+    public double? PreheatingTemperatureMax { get; set; }
 }

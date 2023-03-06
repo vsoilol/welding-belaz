@@ -1,4 +1,6 @@
-﻿using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+﻿using AutoMapper;
+using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
@@ -42,5 +44,42 @@ public class WeldPassageDto : IMapFrom<WeldPassage>
     /// <summary>
     /// Температура предварительного нагрева
     /// </summary>
-    public int PreheatingTemperature { get; set; }
+    public double? PreheatingTemperature { get; set; }
+
+    /// <summary>
+    /// Обеспечивает ли допуск для тока. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringCurrentAllowance { get; set; }
+
+    /// <summary>
+    /// Обеспечивает ли допуск для напряжения. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringVoltageAllowance { get; set; }
+
+    /// <summary>
+    /// Обеспечивает ли допуск для температуры. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringTemperatureAllowance { get; set; }
+
+    public void Mapping(Profile profile)
+    {
+        profile
+            .CreateMap<WeldPassage, WeldPassageDto>()
+            .ForMember(
+                dto => dto.WeldingCurrentValues,
+                opt => opt.MapFrom(x => x.WeldingRecord.WeldingCurrentValues)
+            )
+            .ForMember(
+                dto => dto.ArcVoltageValues,
+                opt => opt.MapFrom(x => x.WeldingRecord.ArcVoltageValues)
+            )
+            .ForMember(
+                dto => dto.WeldingStartTime,
+                opt => opt.MapFrom(x => x.WeldingRecord.WeldingStartTime)
+            )
+            .ForMember(
+                dto => dto.WeldingEndTime,
+                opt => opt.MapFrom(x => x.WeldingRecord.WeldingEndTime)
+            );
+    }
 }
