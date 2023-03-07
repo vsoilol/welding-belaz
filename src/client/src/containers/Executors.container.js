@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
     executors: state.executors.executors,
     isRequesting: state.executors.isRequesting,
     userRole: state.auth.user.role,
+    user: state.auth.user,
 
     equipment:state.equipment.equipment[0],
     ///Цеха 

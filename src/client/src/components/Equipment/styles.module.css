@@ -12,6 +12,14 @@
   align-items: center;
 }
 
+.Fix{
+  color: blue;
+  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-bottom: 1px solid;
+}
+
 .text {
   /* font-family: "Muller Thin"; */
   font-size: 12px;

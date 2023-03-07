@@ -173,7 +173,12 @@ button.fixed:hover{
 }
 
  
-
+input[type="checkbox"]{
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
 
 .inputCount{
   width: calc(100% - 50px);

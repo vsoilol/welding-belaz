@@ -11,7 +11,9 @@ const {
     DELETE_TASK_REQUEST,
     LOAD_INFO_REQUEST,
 
-    LOAD_SEAM_REQUEST
+    LOAD_SEAM_REQUEST,
+
+    LOAD_TASKTOOLS_REQUEST
   },
   Creators: {
     loadTasksSuccess,
@@ -27,6 +29,10 @@ const {
     ///Сварные швы
     loadSeamSuccess,
     loadSeamFailure,
+
+    loadTasktoolsSuccess,
+    loadTasktoolsFailure,
+ 
   },
 } = tasksActions;
 
@@ -37,7 +43,13 @@ const {
 function* loadTasks() {
   try {
     const { data } = yield call(api.get, `/WeldingTask/fullNames`); 
-    yield put(loadTasksSuccess(data));
+    const tasks  = yield call(api.get, `/WeldingTask`);
+ 
+    let datas = {
+      fullNames:data,
+      tasks:tasks.data
+    } 
+    yield put(loadTasksSuccess(datas));
   } catch (error) {
     yield put(loadTasksFailure(error));
     yield put(setError(error.message));
@@ -84,16 +96,29 @@ function* deleteTask({ payload }) {
     yield put(setError(error.message));
   }
 }
-///Сварные швы
-// function* loadSeam() {
-//   try {
-//     const { data } = yield call(api.get, `/seam/byControlSubject/true`);
-//     yield put(loadSeamSuccess(data));
-//   } catch (error) {
-//     yield put(loadSeamFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
+ 
+
+
+
+function* loadTasktools(dataTools) {
+  try {
+
+    console.log(dataTools)
+    ///получение всех дат по Id производственного участка 
+    // if (numberTools===1) { 
+    //   const { data } = yield call(api.get, `/productAccount/dates/${productionAreaId}`);
+    //   console.log(data)
+    //   yield put(loadTasktoolsSuccess(data));
+    // }
+   
+  } catch (error) {
+    yield put(loadTasktoolsFailure(error));
+    yield put(setError(error.message));
+  }
+}
+ 
+
+
 
 export function* tasksSaga() {
   yield takeLatest(LOAD_TASKS_REQUEST, loadTasks);
@@ -104,4 +129,8 @@ export function* tasksSaga() {
   yield takeLatest(ADD_TASK_REQUEST, addTask);
   yield takeLatest(DELETE_TASK_REQUEST, deleteTask);
   yield takeLatest(EDIT_TASK_REQUEST, editTask);
+
+
+  yield takeLatest(LOAD_TASKTOOLS_REQUEST, loadTasktools);
+
 }

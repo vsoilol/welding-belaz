@@ -34,6 +34,16 @@ const { Types, Creators } = createActions({
   addDowntimeFailure: ["error"],
 
 
+  ////assignWelders 
+  assignWeldersRequest: ["payload"],
+  assignWeldersSuccess: ["assignwelders"],
+  assignWeldersFailure: ["error"],
+
+   ////assignMaster
+   assignMasterRequest: ["payload"],
+   assignMasterSuccess: ["assignmaster"],
+   assignMasterFailure: ["error"],
+
 
   //loaddowntime
   loadReasonRequest: ["payload"],

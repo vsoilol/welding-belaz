@@ -74,6 +74,16 @@ const loadSeamSuccess = (state = INITIAL_STATE, { seam }) => {
   };
 };
 
+
+const loadTasktoolsSuccess= (state = INITIAL_STATE, { tasktools }) => {
+  return {
+    ...state,
+    isRequesting: false,
+    tasktools,
+  };
+};
+
+
 export const HANDLERS = {
   [Types.LOAD_TASKS_REQUEST]: request,
   [Types.LOAD_TASKS_SUCCESS]: loadTasksSuccess,
@@ -103,6 +113,10 @@ export const HANDLERS = {
   [Types.LOAD_SEAM_REQUEST]: request,
   [Types.LOAD_SEAM_SUCCESS]: loadSeamSuccess,
   [Types.LOAD_SEAM_FAILURE]: failure,
+
+  [Types.LOAD_TASKTOOLS_REQUEST]: request,
+  [Types.LOAD_TASKTOOLS_SUCCESS]: loadTasktoolsSuccess,
+  [Types.LOAD_TASKTOOLS_FAILURE]: failure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

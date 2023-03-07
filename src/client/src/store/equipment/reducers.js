@@ -92,6 +92,22 @@ const loaddowntimeReasonRequest = (state = INITIAL_STATE, { reason }) => {
   };
 };
 
+const assignWeldersRequest = (state = INITIAL_STATE, { assignwelders }) => { 
+ 
+  return {
+    ...state,
+    isRequesting: false,  
+  };
+};
+const assignMasterRequest = (state = INITIAL_STATE, { assignmaster }) => { 
+ 
+  return {
+    ...state,
+    isRequesting: false,  
+  };
+};
+
+
 export const HANDLERS = {
   [Types.LOAD_EQUIPMENT_REQUEST]: request,
   [Types.LOAD_EQUIPMENT_SUCCESS]: loadEquipmentSuccess,
@@ -129,6 +145,18 @@ export const HANDLERS = {
   [Types.LOAD_REASON_REQUEST]: request,
   [Types.LOAD_REASON_SUCCESS]: loaddowntimeReasonRequest,
   [Types.LOAD_REASON_FAILURE]: failure,
+
+
+  ///assignwelders
+  [Types.ASSIGN_WELDERS_REQUEST]: request,
+  [Types.ASSIGN_WELDERS_SUCCESS]: assignWeldersRequest,
+  [Types.ASSIGN_WELDERS_FAILURE]: failure,
+
+
+  ///assignMaster
+  [Types.ASSIGN_MASTER_REQUEST]: request,
+  [Types.ASSIGN_MASTER_SUCCESS]: assignMasterRequest,
+  [Types.ASSIGN_MASTER_FAILURE]: failure,
 
 
 };

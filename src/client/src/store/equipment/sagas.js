@@ -8,15 +8,16 @@ const {
     LOAD_EQUIPMENT_REQUEST,
     DELETE_EQUIPMENT_REQUEST,
     ADD_EQUIPMENT_REQUEST,
-    EDIT_EQUIPMENT_REQUEST,
-    ///Посты
-    LOAD_POSTS_REQUEST, 
+    EDIT_EQUIPMENT_REQUEST, 
     ///Downtime
     EDIT_DOWNTIME_REQUEST,
     ADD_DOWNTIME_REQUEST,
 
 
-    LOAD_REASON_REQUEST
+    LOAD_REASON_REQUEST,
+
+    ASSIGN_WELDERS_REQUEST, 
+    ASSIGN_MASTER_REQUEST
   },
   Creators: {
     loadEquipmentSuccess,
@@ -30,10 +31,7 @@ const {
     editEquipmentFailure,
 
     deleteEquipmentSuccess,
-    deleteEquipmentFailure,
-    ///Посты
-    loadPostsSuccess,
-    loadPostsFailure,
+    deleteEquipmentFailure, 
     ///Downtime,
     editDowntimeSuccess,
     editDowntimeFailure,
@@ -42,7 +40,13 @@ const {
 
 
     loadReasonSuccess,
-    loadReasonFailure
+    loadReasonFailure,
+
+    addassignWeldersSuccess,
+    addassignWeldersFailure,
+
+    assignMasterSuccess,
+    assignMasterFailure,
 
   },
 } = equipmentActions;
@@ -61,19 +65,7 @@ function* loadEquipment() {
     yield put(loadEquipmentFailure(error));
     yield put(setError(error.message));
   }
-}
-///Посты
-// function* loadPosts() {
-//   try {
-//     const { data } = yield call(api.get, `/post`);
-//     yield put(loadPostsSuccess(data));
-//   } catch (error) {
-//     yield put(loadPostsFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
-
-
+} 
 
 
 
@@ -110,30 +102,7 @@ function* addEquipment({ payload }) {
 }
 
 function* editEquipment({ payload }) {
-  try {
-
-    console.log({
-      "id": payload.id, 
-      "rfidTag": payload.rfidTag,
-      "name": payload.name,
-      "marking": payload.marking,
-      "factoryNumber": payload.factoryNumber,
-      "commissioningDate": payload.commissioningDate,
-      "height": Number(payload.height),
-      "width": Number(payload.width),
-      "lenght": Number(payload.lenght),
-      "groupNumber": String(payload.groupNumber),
-      "manufacturerName": payload.manufacturerName,
-      "nextAttestationDate": payload.nextAttestationDate,
-      "weldingProcess": payload.weldingProcess,
-      "loadDuration": null,
-      "idleVoltage": Number(payload.idleVoltage),
-      "weldingCurrentMin": Number(payload.weldingCurrentMin),
-      "weldingCurrentMax": Number(payload.weldingCurrentMax),
-      "arcVoltageMin": Number(payload.arcVoltageMin),
-      "arcVoltageMax": Number(payload.arcVoltageMax),
-      "postId": payload.postId,
-    })
+  try { 
   
     const { data } = yield call(api.put, `/WeldingEquipment`, {
       "id": payload.id, 
@@ -197,15 +166,7 @@ function* addDowntime({ payload }) {
 }
 
 function* editDowntime({ payload }) {
-  try {   
-    console.log({
-      "id": payload.idDownti,
-      "weldingEquipmentId":  payload.weldingEquipmentId,
-      "downtimeReasonId": payload.downtimeReasonId,
-      "date":   payload.Date,
-      "startConditionTime":  payload.timeStates,
-      "time":  payload.time,
-    })
+  try {    
     const { data } = yield call(api.put, `/WeldingEquipment/downtime`, {
       "id": payload.idDownti,
       "weldingEquipmentId":  payload.weldingEquipmentId,
@@ -231,19 +192,54 @@ function* loadDowntime() {
   }
 }
 
+
+function* assignWelders({ payload }) {
+  try { 
+    const { data } = yield call(api.put, `/weldingEquipment/assignWelders`, {
+      "weldingEquipmentIds": [ payload.weldingEquipmentId],
+      "welderIds": [payload.welderIds]
+    });  
+    // yield put(addassignWeldersSuccess(data));  
+    window.location.reload()
+  } catch (error) {
+    yield put(addassignWeldersFailure(error));
+    yield put(setError(error.message));
+  }
+}
+
+function* assignMaster({ payload }) {
+  try { 
+    const { data } = yield call(api.put, `/weldingEquipment/assignMaster`, {
+      "weldingEquipmentIds": [ payload.weldingEquipmentIds],
+      "masterId": payload.masterId
+    });  
+    // yield put(addassignWeldersSuccess(data));  
+    window.location.reload()
+  } catch (error) {
+    yield put(addassignWeldersFailure(error));
+    yield put(setError(error.message));
+  }
+}
+
+
 export function* equipmentSaga() {
   yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
   yield takeLatest(ADD_EQUIPMENT_REQUEST, addEquipment);
   yield takeLatest(DELETE_EQUIPMENT_REQUEST, deleteEquipment);
-  yield takeLatest(EDIT_EQUIPMENT_REQUEST, editEquipment);
-  ///Посты
-  // yield takeLatest(LOAD_POSTS_REQUEST, loadPosts); 
+  yield takeLatest(EDIT_EQUIPMENT_REQUEST, editEquipment); 
+
+
   ///Downtime
   yield takeLatest(ADD_DOWNTIME_REQUEST, addDowntime); 
   yield takeLatest(EDIT_DOWNTIME_REQUEST, editDowntime);
 
 
   yield takeLatest(LOAD_REASON_REQUEST, loadDowntime); 
+
+
+
+  yield takeLatest(ASSIGN_WELDERS_REQUEST, assignWelders); 
+  yield takeLatest(ASSIGN_MASTER_REQUEST, assignMaster); 
 
   
   

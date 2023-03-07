@@ -84,7 +84,9 @@ function* addExecutor({ payload }) {
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId,
       "workplaceId": payload.workplaceId,
-      "weldingEquipmentId": payload.weldingEquipment[0].id
+      "weldingEquipmentId": payload.weldingEquipment[0].id,
+      "position":  payload.position, 
+      "serviceNumber":  payload.serviceNumber, 
     }); 
     yield put(addExecutorSuccess(data));
   } catch (error) {
@@ -103,7 +105,9 @@ function* editExecutor({ payload, userId }) {
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId,
       "workplaceId": payload.workplaceId,
-      "weldingEquipmentId": payload.weldingEquipmentId
+      "weldingEquipmentId": payload.weldingEquipmentId,
+      "position":  payload.position, 
+      "serviceNumber":  payload.serviceNumber, 
     }); 
     yield put(editExecutorSuccess(data));
   } catch (error) {
@@ -143,7 +147,9 @@ function* addMaster({ payload }) {
       "lastName": payload.lastName,
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId,
-      "weldingEquipmentId": payload.weldingEquipmentId
+      "weldingEquipmentId": payload.weldingEquipmentId, 
+      "position":  payload.position, 
+      "serviceNumber":  payload.serviceNumber, 
     }); 
     yield put(addMasterSuccess(data));
   } catch (error) {
@@ -161,7 +167,9 @@ function* editMaster({payload}) {
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId,
       "weldingEquipmentId": payload.weldingEquipmentId,
-      "id": payload.id
+      "id": payload.id,
+      "position":  payload.position, 
+      "serviceNumber":  payload.serviceNumber, 
     }); 
     yield put(editMasterSuccess(data));
   } catch (error) {
@@ -201,7 +209,9 @@ function* addTech({ payload }) {
       "firstName": payload.firstName,
       "lastName": payload.lastName,
       "middleName": payload.middleName,
-      "productionAreaId": payload.productionAreaId
+      "productionAreaId": payload.productionAreaId,
+      "position":  payload.position, 
+      "serviceNumber":  payload.serviceNumber, 
     }); 
     yield put(addTechSuccess(data));
   } catch (error) {
@@ -218,7 +228,9 @@ function* editTech({ payload, userId }) {
        "lastName": payload.lastName,
        "middleName": payload.middleName,
        "productionAreaId": payload.productionAreaId,
-       "id": payload.id
+       "id": payload.id,
+       "position":  payload.position, 
+       "serviceNumber":  payload.serviceNumber, 
     }); 
     yield put(editTechSuccess(data));
   } catch (error) {

@@ -88,6 +88,8 @@ input[type="file"] {
   margin-bottom: 30px;
 }
 
+
+ 
 @media (max-width: 1440px) {
   .tableWrapper {
     margin-top: 40px;
@@ -107,5 +109,21 @@ input[type="file"] {
   max-width: calc(100vw - 50px);
 }
 .border p{
-  margin: 15px 30px; 
+  margin: 20px 30px; 
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.AxisBlocks{
+  position: relative;
+}
+.AxisBlocks .Axis:first-child{
+   position: absolute;
+   left: 0;
+   transform: rotate(-90deg);
+}
+
+.Axis{
+  text-align: center;
+  display: block;
 }

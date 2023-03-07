@@ -27,6 +27,12 @@ const { Types, Creators } = createActions({
   loadSeamRequest: ["payload"],
   loadSeamSuccess: ["seam"],
   loadSeamFailure: ["error"],
+
+  loadTasktoolsRequest: ["payload"],
+  loadTasktoolsSuccess: ["tasktools"], 
+  loadTasktoolsFailure: ["error"],
+
+
 });
 
 const tasksActions = {
