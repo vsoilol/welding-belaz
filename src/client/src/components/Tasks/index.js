@@ -13,9 +13,12 @@ import styles from "./styles.module.css";
 import errorActions from "store/error/actions";
 import { useDispatch } from "react-redux";
 
+import { DailyPlan } from "./DailyPlan";
+import { EnteringMarriage } from "./DailyPlan/EnteringMarriage";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { array } from "yup";
 
 const {
   Creators: { setError },
@@ -43,6 +46,7 @@ export const Tasks = ({
   loadMasters,
   masters,
   userRole,
+  equipment,
 
 
   loadSeam,
@@ -52,10 +56,17 @@ export const Tasks = ({
   loadProduct,
   loadKnot,
   loadDetail,
+  loadExecutors,
 
   product,
   knot,
   detail,
+  executors, 
+
+  user,
+
+  loadTasktools,
+  loadEquipment
 
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,9 +74,16 @@ export const Tasks = ({
   const dispatch = useDispatch();
 
 
-  const [date, setDate] = useState("");
+  
   const [production, setProduction] = useState(1);
 
+  const [welderValue, setwelderValue] = useState("");
+
+
+  ////Массивы продукции
+  const [productArray, setproductArray] = useState([]);
+
+  const [valueAreaId, setvalueAreaId] = useState(null);
 
 
   const formattedMasters = masters?.map((item) => {
@@ -87,8 +105,7 @@ export const Tasks = ({
     instructionId: modalData?.instruction.id ?? "",
     id: modalData?.id ?? "",
   };
-
-
+ 
 
   const requiredKeys = [
     "object",
@@ -100,24 +117,34 @@ export const Tasks = ({
     "weldingWire",
     "instructionId",
   ];
+ 
 
-  useEffect(() => {
-    loadTasks();
-    loadTechs();
-    loadMasters();
-    // loadInstructions();
-    // loadInfo();
-    loadSeam();
+ 
+    useEffect(() => {
+      loadTasks();
+      loadTechs();
+      loadExecutors();
+      loadMasters(); 
 
-    loadProduct();
-    loadKnot();
-    loadDetail();
-  }, [//loadInstructions,
-    loadMasters, loadTasks, loadTechs, loadProduct,
-    loadKnot,
-    loadDetail,
-    //loadInfo,
-    loadSeam]);
+      loadSeam(); 
+      loadEquipment();
+      
+      loadProduct();
+      loadKnot();
+      loadDetail();
+    }, [ 
+      loadMasters, 
+      loadTasks, 
+      loadTechs,
+      loadProduct,
+      loadExecutors,
+      loadKnot,
+      loadDetail,  
+      loadEquipment, 
+      loadSeam]); 
+ 
+      
+     
 
   const formattedTechs = techs?.map((item) => {
     return {
@@ -131,11 +158,12 @@ export const Tasks = ({
       value: item?.id,
       label: item?.otkName,
     };
-  });
-
-  const getDocument = (activeId) => {
+  }); 
+  const getDocument = (numberTask) => { 
+    const number = tasks.tasks.find(task => task.number === numberTask);   
+    
     api
-      .get(`/reports/passportReport/${activeId}`, {
+      .get(`/file/seamPassport/${number.id}`, {
         responseType: "arraybuffer",
         dataType: "blob",
       })
@@ -149,6 +177,10 @@ export const Tasks = ({
       })
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
+ 
+
+  
+
 
   const columns = [
     {
@@ -227,7 +259,7 @@ export const Tasks = ({
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => getDocument(rowData?.id)}
+          onClick={() => getDocument(rowData?.number)}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -275,89 +307,8 @@ export const Tasks = ({
         </div>
       </div>
     );
-  };
-
-
-
-  const columnsWorkplace = {
-    goods: [
-      {
-        title: "Наименование изделия ", field: "name"
-      },
-      {
-        title: "Номер  изделия ", field: "number"
-      },
-      {
-        title: "Количество ", field: "number"
-      },
-      
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-
-    ],
-    node: [
-      {
-        title: "Наименование узла ", field: "name"
-      },
-      {
-        title: "Номер  узла ", field: "number"
-      },
-      {
-        title: "Количество ", field: "number"
-      },
-       
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-
-
-    ],
-    details: [
-      {
-        title: "Наименование детали ", field: "name"
-      },
-      {
-        title: "Номер  детали ", field: "number"
-      },
-      {
-        title: "Количество ", field: "number"
-      }, 
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      
-
-    ],
-
-  };
+  }; 
+  
 
   ////////////////////////////////////////////////////////////////////
   const columns_data = {
@@ -486,6 +437,8 @@ export const Tasks = ({
     },
   ]
 
+
+
   ////////////////////////////////////////////////////////////////////
   const optProduction = ProdArray?.map((item) => {
     return {
@@ -493,7 +446,16 @@ export const Tasks = ({
       label: item.name,
     };
   });
+  
 
+
+  const optionWelder = executors?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName} ${item.lastName}`,
+    };
+  });
+  
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -510,17 +472,18 @@ export const Tasks = ({
         textColor="primary"
         aria-label="full width tabs example"
       >
-        <Tab label="Сменные задания на сварку " />
-        {/* <Tab label="Сварные швы деталей, узлов и изделий" />
+        <Tab label="Сменные задания на сварку " /> 
+        {/*
+        <Tab label="Сварные швы деталей, узлов и изделий" />
         <Tab label="Данные об изготовленных изделиях" /> */}
         {/* <Tab label="Импортированный план" /> */}
         <Tab label="Ежедневный план" />
-
+        {/* <Tab label="Ввод выработки и брака" /> */}
         {/* <Tab label="Температура окружающей среды" /> */}
       </Tabs>
 
       <div className={styles.tableWrapper}>
-
+ 
         {/*Сменные задания на сварку*/}
         <TabPanel
           value={value_panel}
@@ -530,31 +493,9 @@ export const Tasks = ({
           <Table
             title="Сменные задания на сварку"
             columns={columns}
-            data={tasks}
+            data={tasks.fullNames}
             isLoading={isRequesting}
-            deleteAction={
-              userRole === "admin" || userRole === "master" ? deleteTask : null
-            }
-            actions={
-              userRole === "admin" || userRole === "master"
-                ? [
-                  {
-                    icon: "add",
-                    tooltip: "Создать задачу",
-                    isFreeAction: true,
-                    onClick: () => setIsModalOpen(true),
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать задачу",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                    },
-                  },
-                ]
-                : []
-            }
+            
           />
         </TabPanel>
         {/*Сварные швы деталей, узлов и изделий*/}
@@ -630,44 +571,7 @@ export const Tasks = ({
             }
           />
         </TabPanel> */}
-
-
-        {/*Температура окружающей среды*/}
-        {/* <TabPanel
-          value={value_panel}
-          indPanel={5}
-          style={{ minWidth: "800px", }}
-        >
-          <Table
-            title="Температура окружающей среды"
-            columns={columns_data.temperatura}
-            data={info}
-            isLoading={isRequesting}
-            deleteAction={
-              userRole === "admin" || userRole === "master" ? deleteTask : null
-            }
-            actions={
-              userRole === "admin" || userRole === "master"
-                ? [
-                  {
-                    icon: "add",
-                    tooltip: "Создать задачу",
-                    isFreeAction: true,
-                    onClick: () => setIsModalOpen(true),
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать задачу",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                    },
-                  },
-                ]
-                : []
-            }
-          />
-        </TabPanel> */}
+ 
 
         {/*Импортированный план*/}
         {value_panel === 3
@@ -685,149 +589,28 @@ export const Tasks = ({
         {/*Ежедневный план*/}
         {value_panel === 1
           ? (
-            <div className={styles.TablePlan}>
-              <h3>Ежедневный план</h3>
-
-              <div className={styles.tools}>
-                <Formik
-                  initialValues={initialValues}
-                  enableReinitialize
-                >
-                  {({
-                    handleSubmit,
-                    handleChange,
-                    values,
-                    handleBlur,
-                  }) => (
-                    <form onSubmit={handleSubmit}>  
-                      <p>Дата</p>
-                      <Input
-                        onChange={(e) => {
-                          handleChange(e);
-                          setDate(e.target.value)
-                        }}
-                        width="200"
-                        style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                        value={values.date}
-                        name="date"
-                        placeholder="Дата"
-                        type="text"
-                        onFocus={(e) => {
-                          e.currentTarget.type = "date";
-                        }}
-                        onBlur={handleBlur}
-                      /> 
-                      <br></br>     
-                      <p>Продукция</p>
-                      <Select
-                        name="production"
-                        value={production}
-                        width="380px"
-                        placeholder="Продукция"
-                        onChange={(event) => {
-                          setProduction(event.value);
-                        }}
-                        options={optProduction}
-                      /> 
-                      <button className={styles.create}  > Создать </button>
-                      <br></br>
-                      <br></br>
-                    </form>
-                  )}
-                </Formik>
-              </div>
-
-              {production === 1
-
-                ? (
-                  <TabPanel
-                    style={{ minWidth: "800px" }}
-                  >
-                    <Table
-                      title="Изделия"
-                      columns={columnsWorkplace.goods}
-                      value={0}
-                      data={product}
-                      actions={
-                        userRole === "Admin"
-                          ? [ 
-                            {
-                              icon: "edit",
-                              tooltip: "Редактировать ",
-                              onClick: (event, rowData) => {
-                                
-                              },
-                            },
-                          ]
-                          : []
-                      }
-                    />
-                  </TabPanel>
-                )
-                : <div  >  </div>
-              }
-
-              {production === 2
-
-                ? (
-                  <TabPanel
-                    style={{ minWidth: "800px" }}
-                  >
-                    <Table
-                      title="Узлы"
-                      columns={columnsWorkplace.node}
-                      value={0}
-                      data={knot}
-                      actions={
-                        userRole === "Admin"
-                          ? [ 
-                            {
-                              icon: "edit",
-                              tooltip: "Редактировать ",
-                              onClick: (event, rowData) => {
-                                
-                              },
-                            },
-                          ]
-                          : []
-                      }
-                    />
-                  </TabPanel>
-                )
-                : <div  >  </div>
-              }
-              {production === 3
-
-                ? (
-                  <TabPanel
-                    style={{ minWidth: "800px" }}
-                  >
-                    <Table
-                      title="Детали"
-                      columns={columnsWorkplace.details}
-                      value={0}
-                      data={detail}
-                      actions={
-                        userRole === "Admin"
-                          ? [ 
-                            {
-                              icon: "edit",
-                              tooltip: "Редактировать ",
-                              onClick: (event, rowData) => {
-                                
-                              },
-                            },
-                          ]
-                          : []
-                      }
-                    />
-                  </TabPanel>
-                )
-                : <div  >  </div>
-              }
-
+            <DailyPlan 
+              masters={masters}
+              product={product}
+              knot={knot}
+              detail={detail}
+              executors={executors}
+              initialValues={initialValues}
+              user={user}
+              equipment={equipment}
+            />
+          )
+          : (
+            <div className={styles.TableToFixed}>
 
             </div>
+          )
+        }
+
+
+        {value_panel === 2
+          ?(
+            <EnteringMarriage />
           )
           : (
             <div className={styles.TableToFixed}>

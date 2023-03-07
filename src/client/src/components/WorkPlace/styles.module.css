@@ -40,7 +40,7 @@
   margin-top: 10px;
 }
 .row:first-child {
- /*  margin-top: 30px; */
+  margin-top: 30px;
 }
 
 .hiddenTable{ 
@@ -50,7 +50,7 @@
 
 
 .row:last-child {
-  /* margin-bottom: 30px; */
+  margin-bottom: 30px;
 }
 
 .form {
@@ -189,35 +189,4 @@ input[type="checkbox"]{
   outline: none;
   font-size: 15px;
   max-width: 150px;
-}
-
-.radioPost{
-  display: grid;
-  grid-template-columns: 70px 1fr;
-  grid-column-gap: 10px;
-}
-.radioPost{
-  padding: 10px 22px;
-}
-.radioPost input{
-  margin-bottom: 10px;
-}
-.radioPost input[type="radio"]{
-  margin-right: 10px;
-}
-
-
-
-p{ 
-   font-size: 14px;
-   line-height: 20px;
-   margin: 20px 20px 10px; 
-}
-
-
-.deleteIcon{
-  cursor: pointer;
-  width: 20px;
-  position: relative;
-  top: 5px;
 }

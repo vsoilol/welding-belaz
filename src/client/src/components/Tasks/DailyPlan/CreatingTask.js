@@ -21,6 +21,11 @@ const {
     Creators: { setError },
 } = errorActions;
 
+const dateOptions = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+};
 
 export const CreatingTask = ({
     masters,
@@ -29,78 +34,53 @@ export const CreatingTask = ({
     knot,
     detail,
     executors,
-    user,
     initialValues,
-    equipment,
-    userRole,
-    techs,
-
-    loadTasks
+    user,
+    equipment
 
 }) => {
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalData, setModalData] = useState(null);
+    const dispatch = useDispatch();
 
 
-    const [valChioseMaster, setvalChioseMaster] = useState(masters[0].id);
-    const [valChioseInstruct, setvalChioseInstruct] = useState(techs[0].id);
+    const [production, setProduction] = useState(1);
+
+    const [welderValue, setwelderValue] = useState("");
+
+
+    ////Массивы продукции
+    const [productArray, setproductArray] = useState([]);
+
+    const formattedMasters = masters?.map((item) => {
+        return {
+            value: item.masterId,
+            label: `${item.surname} ${item.name}`,
+        };
+    });
+
+    ///Выберите план из существующих дат
+    const [valueChioseDate, setvalueChioseDate] = useState(0);
     const [valueDate, setvalueDate] = useState(0);
-    const [dateCratePlan, setdateCratePlan] = useState("");
-    const [toDay, settoDay] = useState(new Date().toLocaleDateString('ru-RU'));
 
 
-    const mastersOptions = masters?.map((item) => {
-        return {
-            value: item?.id,
-            label: `${item?.middleName} ${item?.firstName}`,
-        };
-    });
-
-    const techsOptions = techs?.map((item) => {
-        return {
-            value: item?.id,
-            label: `${item?.middleName} ${item?.firstName}`,
-        };
-    });
 
 
-    ////Работа со списком дат сущ.плана  
-    const [valueAllDate, setValueAllDate] = useState([]);
-    const [valueChioseDate, setvalueChioseDate] = useState(null);
-    useEffect(() => { 
-        fetchData();
+    useEffect(() => {
+        GetProductionbyDate();
     }, []);
-    async function fetchData() {
-        try {
-            const response = await api.get(`/productAccount/dates/${masters[0]?.productionArea.id}`);
-            setValueAllDate(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    /* useEffect(() => {
-        if (valueAllDate.length > 0) {
-            setvalueChioseDate(valueAllDate[0]);
-            GetProductionbyDate(valueAllDate[0])
-        }
-    }, [valueAllDate]); */
 
-    ////Получение информации о производимой продукции по дате
-    function GetProductionbyDate(date) {
-        const productionAreaId = userRole === "Admin"
-            ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id
-            : localStorage.getItem('USER_productionAreaId');
 
-        api.get(`/productAccount/byDate?Date=${date}&ProductionAreaId=${productionAreaId}`)
-            .then((response) => {
-                setvalue_products(response.data);
-            })
-            .catch((error) => { });
-    }
+    ////////////////////////////////////////////////////////////////////
 
 
 
 
+
+    const [value_panel, setValue] = useState(0);
+    const ChangePanels = (event, newValue) => {
+        setValue(newValue);
+    };
     const TabPanel = (props_panel) => {
         const { children, value, indPanel } = props_panel;
         return (
@@ -109,8 +89,142 @@ export const CreatingTask = ({
             </div>
         );
     };
-    const [value_products, setvalue_products] = useState([]);
+
+    const ProdArray = [
+        {
+            id: 1,
+            name: "Изделия"
+        },
+        {
+            id: 2,
+            name: "Узлы"
+        },
+        {
+            id: 3,
+            name: "Детали"
+        },
+    ]
+
+    const columnsWorkplace = {
+        goods: [
+            {
+                title: "Закрепить изделие",
+                render: (rowData) => {
+                    return <input type="checkbox"  ></input>
+                },
+            },
+            {
+                title: "Наименование изделия ", field: "name"
+            },
+            {
+                title: "Номер  изделия ", field: "number"
+            },
+
+            {
+                title: "Номер  цеха ", field: "workshop.number"
+            },
+            {
+                title: "Номер  производственного участка ", field: "productionArea.number"
+            },
+            {
+                title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+            },
+            {
+                title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+            },
+        ],
+        node: [
+            {
+                title: "Закрепить изделие",
+                render: (rowData) => {
+                    return <input type="checkbox"  ></input>
+                },
+            },
+            {
+                title: "Наименование узла ", field: "name"
+            },
+            {
+                title: "Номер  узла ", field: "number"
+            },
+
+            {
+                title: "Номер  цеха ", field: "workshop.number"
+            },
+            {
+                title: "Номер  производственного участка ", field: "productionArea.number"
+            },
+            {
+                title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+            },
+            {
+                title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+            },
+
+
+        ],
+        details: [
+            {
+                title: "Закрепить изделие",
+                render: (rowData) => {
+                    return <input type="checkbox"   ></input>
+                },
+            },
+            {
+                title: "Наименование детали ", field: "name"
+            },
+            {
+                title: "Номер  детали ", field: "number"
+            },
+
+            {
+                title: "Номер  цеха ", field: "workshop.number"
+            },
+            {
+                title: "Номер  производственного участка ", field: "productionArea.number"
+            },
+            {
+                title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
+            },
+            {
+                title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+            },
+
+        ],
+
+    };
+
+    ////////////////////////////////////////////////////////////////////
+    const optProduction = ProdArray?.map((item) => {
+        return {
+            value: item.id,
+            label: item.name,
+        };
+    });
+
+
+    const optionWelder = executors?.map((item) => {
+        return {
+            value: item.id,
+            label: `${item.middleName} ${item.firstName} ${item.lastName}`,
+        };
+    });
+
+    const optequipment = equipment[0]?.map((item) => {
+        return {
+            value: item.id,
+            label: item.name,
+        };
+    });
+
+
     const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
+    //weldingEquipmentId
+    const [weldingEquipmentId, setweldingEquipmentId] = useState(null);
+    const [valueWelder, setvalueWelder] = useState("");
+
+    const [ProductAccountId, setProductAccountId] = useState("");
+
+
     const columns = [
 
         {
@@ -121,12 +235,6 @@ export const CreatingTask = ({
         },
         {
             title: "Номер", field: "product.number"
-        },
-        {
-            title: "Наименование изделия", field: "product.product.name",
-        },
-        {
-            title: "Номер изделия", field: "product.product.number",
         },
         {
             title: "Количество из плана ", field: "amountFromPlan"
@@ -143,545 +251,429 @@ export const CreatingTask = ({
 
         {
             title: " Есть ли отклонения ",
-            render: rowData => rowData?.areDeviations ? 'есть' : 'нету',
-            customFilterAndSearch: (term, rowData) => {
-                const value = rowData.areDeviations ? 'есть' : 'нету';
-                return value.toLowerCase().includes(term.toLowerCase());
-            },
-            customSort: (a, b) => {
-                const valueA = a.areDeviations ? 'есть' : 'нету';
-                const valueB = b.areDeviations ? 'есть' : 'нету';
-                return valueA.localeCompare(valueB);
+            render: (rowData) => {
+                if (rowData?.areDeviations) {
+                    return <span>есть</span>
+                }
+                else {
+                    return <span>нету</span>
+                }
             },
         },
         {
-            field: 'weldingEquipments',
-            title: 'Оборудование (инвентарный номер)',
+            title: "Оборудование  ( инвентарный номер )",
             render: (rowData) => {
                 if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
                     return (
                         rowData.weldingEquipments?.map(equipments =>
-                            <p>{equipments.factoryNumber ?? '-'}</p>
+                            <span>{equipments.factoryNumber ?? "-"}</span>
                         )
                     )
-                } else {
+                }
+                else {
                     return <span>-</span>
                 }
             },
-            customFilterAndSearch: (term, rowData) => {
-                if (rowData.weldingEquipments) {
-                    return rowData.weldingEquipments.some(equipments => equipments.factoryNumber?.toLowerCase().includes(term.toLowerCase()))
-                }
-                return false
-            }
         },
         {
             title: "Закрерить оборудование",
             render: (rowData) => {
-                return <p className={styles.Fix} onClick={e => { 
-                    setvalueChoiseWelder(true); 
-                    setProductAccountId(rowData?.id) 
-                    api.post(`/eventLog`,{
-                        "information": "Открыл модальное окно закререпления оборудования"
-                    })
-                }}>Закрерить</p>;
+                return <p className={styles.Fix} onClick={e => { setvalueChoiseWelder(true); setProductAccountId(rowData?.id) }}>Закрерить</p>;
             },
         },
 
     ]
 
 
-    ////Редактирование данных плана
-    const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
-    const [editExistingPlanDateModal, setEditExistingPlanDateModal] = useState(false);
-    const [ProductAccountId, setProductAccountId] = useState("");
+    ////Получение всех дат по Id производственного участка 
 
+    const [valueAllDate, setvalueAllDate] = useState([]);
+    useEffect(() => {
+        GetAllDate()
+    }, []);
 
-    const [idPlan, setidPlan] = useState("");
+    function GetAllDate() {
+        api.get(`/productAccount/dates/${masters[0]?.productionArea.id}`)
+            .then(response => response)
+            .then(data => {
 
-
-
-    const [prodQuantities, setprodQuantities] = useState(0);
-    const [manufacProducts, setmanufacProducts] = useState(0);
-    const [acceptedProducts, setacceptedProducts] = useState(0);
-    const [productreason, setproductreason] = useState("");
-
-
-    ///Создание плана 
-    async function CreatePlan() {
-        const normalizedDate = dateCratePlan.replace(/^(\d{2}).(\d{2}).(\d{4})$/, '$3-$2-$1');
-        if (valueAllDate.includes(new Date(normalizedDate).toLocaleDateString('ru-RU'))) {
-            setEditExistingPlanDateModal(true);
-        } else {
-            const productionAreaId = userRole === "Admin"
-                ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id
-                : localStorage.getItem('USER_productionAreaId');
-            api.post(`/productAccount/generateEmpty`, {
-                "newDate": new Date(dateCratePlan).toLocaleDateString('ru-RU'),
-                "productionAreaId": productionAreaId,
+                const objectArray = data.data.map((dateString, index) => {
+                    return { date: dateString, id: index };
+                });
+                const opteAlldate = objectArray.map((item) => {
+                    return {
+                        value: item.id,
+                        label: item.date,
+                    };
+                });
+                setvalueAllDate(opteAlldate)
             })
-                .then(async (response) => { 
-                      fetchData();  
-                      console.log(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-                      setvalueChioseDate(new Date(normalizedDate).toLocaleDateString('ru-RU'));
-                      setvalueDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-                      GetProductionbyDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-
-                      api.post(`/eventLog`,{
-                        "information": `Создание плана на ${new Date(normalizedDate).toLocaleDateString('ru-RU')}`
-                      })
-                })
-                .catch((error) => { });
-        }
-      }
-      
-
-
-    //Изменение ввода выработки и брака
-    async function ChangeData() {
-        try {
-            if (idPlan && idPlan.length > 0) {
-
-                if (prodQuantities >= 0) {
-                    await api.put(`/productAccount/amountFromPlan`, {
-                        "id": idPlan,
-                        "amount": Number(prodQuantities)
-                    });
-                }
-
-                if (manufacProducts >= 0) {
-                    await api.put(`/productAccount/manufacturedAmount`, {
-                        "id": idPlan,
-                        "amount": manufacProducts
-                    });
-                }
-
-                if (userRole === "Admin") {
-                    if (acceptedProducts >= 0 && techs[0] && techs[0].id) {
-                        await api.put(`/productAccount/acceptedAmount`, {
-                            "id": idPlan,
-                            "amount": Number(acceptedProducts),
-                            "inspectorId": techs[0].id
-                        });
-                    }
-                    if (productreason && ProductAccountId) {
-                        await api.put(`/productAccount/reason`, {
-                            "productAccountId": ProductAccountId,
-                            "defectiveReason": productreason
-                        });
-                    }
-
-                } else {
-                    if (acceptedProducts >= 0 && techs[0] && techs[0].id) {
-                        await api.put(`/productAccount/acceptedAmount`, {
-                            "id": idPlan,
-                            "amount": Number(acceptedProducts),
-                            "inspectorId": techs[0].id
-                        });
-                    }
-                    if (productreason) {
-                        await api.put(`/productAccount/reason`, {
-                            "productAccountId": ProductAccountId,
-                            "defectiveReason": productreason
-                        });
-                    }
-                }
-
-                // Все запросы успешно выполнены
-                GetProductionbyDate(valueChioseDate);
-                loadTasks();
-            }
-        } catch (error) {
-            // Произошла ошибка при выполнении запросов
-            console.error(error);
-        }
-    }
-    const handleSelectChange = (event) => {
-        if (event.active === undefined) {
-            event.active = 1
-        }
-        else if (event.active === 0) {
-            event.active = 1
-        }
-        else if (event.active === 1) {
-            event.active = 0
-        }
-    };
-
-
-    ///Закрепление оборудования
-    const [valueWelder, setvalueWelder] = useState("");
-    async function FixoEquipment(valueWelder) {
-        try {
-            const filteredArray = equipment[0]?.filter(obj => obj.active === 1).map(obj => obj.id);
-            await api.put(`/productAccount/assignWeldingEquipments`, {
-                "productAccountId": ProductAccountId,
-                "weldingEquipmentIds": filteredArray
+            .catch(error => {
+                console.log(error);
             });
-            GetProductionbyDate(valueChioseDate);
-        } catch (error) {
-            console.error(error);
-        }
     }
 
+    //////
+    const [value_products, setvalue_products] = useState([]);
+
+    ////Получение информации о производимой продукции по текущей дате
+    function GetProductionbyDate() {
+        const date = new Date();
+        const formattedDate = date.toLocaleDateString('ru-RU');
+
+        api.get(`/productAccount/byDate?Date=${formattedDate}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
+            .then((response) => {
+                setvalue_products(response.data)
+            })
+            .catch((error) => { });
+    }
+
+    ////Получение информации о производимой продукции по выбранной дате
+    function GetProductionbyChoiseDate(date) { 
+        api.get(`/productAccount/byDate?Date=${date}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
+            .then((response) => {
+                setvalue_products(response.data)
+            })
+            .catch((error) => { });
+    }
+    const [dateCrateTask, setdateCrateTask] = useState("");
 
 
     ///Создать задание
     function CreateTask() {
-        const masterId = userRole === "Admin" ? valChioseMaster : masters[0].id;
-        const productionAreaId = userRole === "Admin" ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id : localStorage.getItem('USER_productionAreaId');
 
         api.post(`/productAccount/generateTasks`, {
-            "date": valueChioseDate,
-            "productionAreaId": productionAreaId,
-            "masterId": masterId,
+            "Date": new Date().toLocaleDateString('ru-RU'),
+            "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
+            "productionAreaId": localStorage.getItem('USER_productionAreaId'),
+            "UserId": localStorage.getItem('USERID')
         })
             .then((response) => {
-                api.post(`/eventLog`,{
-                    "information": `Нажал кнопку "Создать задание"`
-                })
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
+                console.log(response.data)
+                window.location.reload()
             })
             .catch((error) => { });
     }
+
+    ///ЗАкрепление оборудования
+    function FixoEquipment(valueWelder) {
+        api.put(`/productAccount/assignWeldingEquipments`, {
+            "productAccountId": ProductAccountId,
+            "weldingEquipmentIds": [valueWelder]
+        })
+            .then((response) => {
+                GetProductionbyChoiseDate(valueDate)
+            })
+            .catch((error) => { });
+    }
+
+    ///Создать плана
+    function CreatePlan() {
+
+        api.post(`/productAccount/generateEmpty`, {
+            // "date": new Date().toLocaleDateString('ru-RU'),
+            "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
+            "productionAreaId": localStorage.getItem('USER_productionAreaId'),
+            "UserId": localStorage.getItem('USERID')
+        })
+            .then((response) => {
+                GetProductionbyChoiseDate(valueChioseDate)
+                GetAllDate()
+            })
+            .catch((error) => { });
+    }
+
+
+    ////Редактирование данных плана
+    const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
+
+    const [AmountManufactured, setAmountManufactured] = useState(0);
+    const [AmountDefective, setAmountDefective] = useState(0);
+
+
+    const [acceptedAmount, setacceptedAmount] = useState(0);
+    const [productreason, setproductreason] = useState("");
+
+    const [idPlan, setidPlan] = useState("");
+
+    function ChangeManufacturedDefective(AmountManufactured, AmountDefective) {
+        api.put(`/productAccount/amountFromPlan`, {
+            "id": idPlan,
+            "amount": AmountManufactured
+        })
+            .then((response) => { GetProductionbyChoiseDate(valueDate) })
+            .catch((error) => { });
+
+
+        api.put(`/productAccount/manufacturedAmount`, {
+            "id": idPlan,
+            "amount": AmountDefective
+        })
+            .then((response) => { GetProductionbyChoiseDate(valueDate) })
+            .catch((error) => { });
+ 
+        api.put(`/productAccount/acceptedAmount`, {
+            "id": idPlan,
+            "amount": Number(acceptedAmount)
+        })
+            .then((response) => { GetProductionbyChoiseDate(valueDate) })
+            .catch((error) => { });
+
+
+            api.put(`/productAccount/reason`, {
+                "productAccountId": ProductAccountId,
+                "defectiveReason": productreason
+            })
+                .then((response) => { GetProductionbyChoiseDate(valueDate) })
+                .catch((error) => { });
+
+    }
+
     return (
         <div className={styles.TablePlan}>
             <h3>Ежедневный план</h3>
-            {/*  Панель администратора выбора мастера или контролера  */}
-            {userRole === "Admin"
-                ? (
+
+            <div className={styles.tools}>
+
+                <div>
                     <div className={styles.RowTools}>
                         <div className={styles.toolsHead}>
-                            <p>Выберите мастера</p>
+                            <p>Выберите план из существующих дат</p>
                             <Select
-                                name="valChioseMaster"
-                                value={valChioseMaster}
+                                name="valueChioseDate"
+                                value={valueChioseDate}
                                 width="380px"
-                                placeholder="Мастера"
+                                placeholder="Дата"
                                 onChange={(event) => {
-                                    setvalChioseMaster(event.value);
-                                    GetProductionbyDate(valueChioseDate, 2, valChioseMaster)
+                                    GetProductionbyChoiseDate(event.label)
+                                    setvalueChioseDate(event.value);
+                                    setvalueDate(event.label)
                                 }}
-                                options={mastersOptions}
+                                options={valueAllDate}
                             />
+                            {/* <button className={styles.create}> Создать </button> */}
                         </div>
 
                         <div className={styles.toolsHead}>
-                            <p>Выберите контролера</p>
-                            <Select
-                                name="valChioseInstruct"
-                                value={valChioseInstruct}
-                                width="380px"
-                                placeholder="Контролеры"
-                                onChange={(event) => {
-                                    setvalChioseInstruct(event.value);
-                                    GetProductionbyDate(valueChioseDate, 2, valChioseInstruct)
+                            <p>Выберите дату для создания плана</p>
+                            <Input
+                                onChange={(e) => {
+                                    // handleChange(e);
+                                    setdateCrateTask(e.target.value)
                                 }}
-                                options={techsOptions}
-                            />
+                                width="200"
+                                style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                                value={dateCrateTask}
+                                name="dateCrateTask"
+                                placeholder="Дата"
+                                type="text"
+                                onFocus={(e) => {
+                                    e.currentTarget.type = "date";
+                                }}
+                            /><br></br>
+
+                            <button className={styles.create} onClick={CreatePlan}> Создать плана</button>
                         </div>
-
                     </div>
-                )
-                : <div></div>
-            }
-            <div className={styles.RowTools}>
-                <div className={styles.toolsHead}>
-                    <p>Выберите план из существующих дат</p>
-                    <Select
-                        name="valueChioseDate"
-                        value={valueChioseDate}
-                        width="380px"
-                        placeholder="Дата"
-                        onChange={(event) => { 
-                            setvalueChioseDate(event.value);
-                            setvalueDate(event.label)
-                            GetProductionbyDate(event.label)
-                        }}
-                        options={valueAllDate.map((date) => ({
-                            label: date,
-                            value: date,
-                        }))}
-                    />
-                </div>
+                    <button className={styles.create} style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>
 
-                <div className={styles.toolsHead}>
-                    <p>Выберите дату для создания плана</p>
-                    <Input
-                        onChange={(e) => {
-                            setdateCratePlan(e.target.value)
-                            settoDay(new Date(e.target.value).toLocaleDateString('ru-RU'))
-                        }}
-                        width="200"
-                        style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                        value={dateCratePlan}
-                        name="dateCratePlan"
-                        placeholder="Дата"
-                        type="text"
-                        onFocus={(e) => {
-                            e.currentTarget.type = "date";
-                        }}
-                        autocomplete="off"
-                    /><br></br>
+                    <TabPanel
+                        style={{ minWidth: "1200px", }}
+                    >
+                        <Table
+                            title="Информация о производимой продукции"
+                            columns={columns}
+                            data={value_products}
+                            actions={
+                                [
+                                    {
+                                        icon: "edit",
+                                        tooltip: "Редактировать план",
+                                        onClick: (event, rowData) => {
+                                            setAmountManufactured(rowData?.amountFromPlan)
+                                            setAmountDefective(rowData?.amountManufactured)
+                                            setidPlan(rowData?.id)
+                                            setmodalchangeInfoproductAccount(true)
+                                            setProductAccountId(rowData?.id)
+                                            setacceptedAmount(rowData?.amountAccept)
+                                        },
+                                    },
+                                ]
+
+                            }
+                        />
+                    </TabPanel>
 
 
                 </div>
-
-
-            </div>
-            <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
-                dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
-                    ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
-                    : ''
-            }</button>
-            {userRole === "Master" || userRole === "Admin"
-                ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
-                : <div></div>
-            }
-            <h3>План на <span>{valueChioseDate}</span></h3>
-            {/* таблица плана  */}
-            <TabPanel
-                style={{ minWidth: "1200px", }}
-            >
-                <Table
-                    title="Информация о производимой продукции"
-                    columns={columns}
-                    data={value_products}
-                    actions={
-                        [
-                            {
-                                icon: "edit",
-                                tooltip: "Редактировать план",
-                                onClick: (event, rowData) => {
-                                    setmodalchangeInfoproductAccount(true)
-                                    setidPlan(rowData?.id)
-                                    setprodQuantities(rowData?.amountFromPlan)
-                                    setmanufacProducts(rowData?.amountManufactured)
-                                    setacceptedProducts(rowData?.amountAccept)
-
-                                    api.post(`/eventLog`,{
-                                        "information": "Открыл модальное окно редактирования плана"
-                                    })
-                                },
-                            },
-                        ]
-
-                    }
-                />
-            </TabPanel>
-            {/*Закрерить оборудования*/}
-            <ModalWindow
-                isOpen={valueChoiseWelder}
-                headerText="Закрерить оборудование"
-                setIsOpen={(state) => {
-                    setvalueChoiseWelder(false)
-                }}
-                wrapperStyles={{ width: 420 }}
-            >
-                <Formik
-                    initialValues={initialValues}
-                    enableReinitialize
-                    onSubmit={(variables) => {
-                        const { id, ...dataToSend } = variables;
-                        FixoEquipment(valueWelder)
+                {/*Закрерить оборудования*/}
+                <ModalWindow
+                    isOpen={valueChoiseWelder}
+                    headerText="Закрерить оборудование"
+                    setIsOpen={(state) => {
                         setvalueChoiseWelder(false)
                     }}
+                    wrapperStyles={{ width: 420 }}
                 >
-                    {({
-                        handleSubmit,
-                        handleChange,
-                        values,
-                        setFieldValue,
-                        handleBlur,
-                    }) => (
-                        <form onSubmit={handleSubmit}>
+                    <Formik
+                        initialValues={initialValues}
+                        enableReinitialize
+                        onSubmit={(variables) => {
+                            const { id, ...dataToSend } = variables;
+                            FixoEquipment(valueWelder)
+                            setvalueChoiseWelder(false)
+                        }}
+                    >
+                        {({
+                            handleSubmit,
+                            handleChange,
+                            values,
+                            setFieldValue,
+                            handleBlur,
+                        }) => (
+                            <form onSubmit={handleSubmit}>
 
-                            <div className={styles.equipments} >
-                                {equipment[0]?.map((option) => (
-                                    <div   >
-                                        <input
-                                            type="checkbox"
-                                            onChange={e => { handleSelectChange(option) }}
-                                        />
-                                        <span>{`${option.name} ${option.factoryNumber}`}</span>
-                                    </div>
-                                ))}
-                            </div>
+                                <div className={styles.row}>
+                                    <Select
+                                        name="valueWelder"
+                                        value={valueWelder}
+                                        width="380px"
+                                        placeholder="Оборудование"
+                                        onChange={(event) => {
+                                            setvalueWelder(event.value)
+                                        }}
+                                        options={optequipment}
+                                    />
+                                </div>
 
-                            <div className={styles.row}>
-                                <Button
-                                    disabled={
-                                        values.shiftNumb == ""
-                                    }
-                                    type="submit"
-                                >
-                                    Закрепить
-                                </Button>
-                            </div>
-                        </form>
-                    )}
-                </Formik>
-            </ModalWindow>
-            {/*Ввод выработки и брака*/}
-            <ModalWindow
-                isOpen={modalchangeInfoproductAccount}
-                headerText="Редактировать"
-                setIsOpen={(state) => {
-                    setmodalchangeInfoproductAccount(false)
-                }}
-                wrapperStyles={{ width: 420 }}
-            >
-                <Formik
-                    initialValues={initialValues}
-                    enableReinitialize
-                    onSubmit={(variables) => {
-                        const { id, ...dataToSend } = variables;
-                        setmodalchangeInfoproductAccount(false)
-                        ChangeData()
-                    }}
-                >
-                    {({
-                        handleSubmit,
-                        handleChange,
-                        values,
-                        setFieldValue,
-                        handleBlur,
-                    }) => (
-                        <form onSubmit={handleSubmit}>
-
-
-                            {userRole === "Master" || userRole === "Admin"
-                                ? (
-                                    <div>
-                                        <p>Изменение количества продукции из плана  </p>
-                                        <div className={styles.row}>
-                                            <Input
-                                                onChange={(e) => {
-                                                    handleChange(e);
-                                                    setprodQuantities(e.target.value)
-                                                }}
-                                                style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={prodQuantities}
-                                                name="prodQuantities"
-                                                placeholder="Количество забракованной продукции"
-                                                onBlur={handleBlur}
-                                                autocomplete="off"
-                                            />
-
-                                        </div>
-
-                                        <p>Количество изготовленной продукции (указывается мастером)</p>
-                                        <div className={styles.row}>
-                                            <Input
-                                                onChange={(e) => {
-                                                    handleChange(e);
-                                                    setmanufacProducts(e.target.value)
-
-                                                }}
-                                                style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={manufacProducts}
-                                                name="manufacProducts"
-                                                placeholder="Количество изготовленной продукции"
-                                                onBlur={handleBlur}
-                                                autocomplete="off"
-                                            />
-                                        </div>
-
-                                        {userRole != "Admin"
-                                            ? (
-                                                <div className={styles.row}>
-                                                    <Button
-                                                        disabled={
-                                                            values.shiftNumb == ""
-                                                        }
-                                                        type="submit"
-                                                    >
-                                                        Изменить
-                                                    </Button>
-                                                </div>
-                                            )
-                                            : <div></div>
+                                <div className={styles.row}>
+                                    <Button
+                                        disabled={
+                                            values.shiftNumb == ""
                                         }
-
-                                    </div>
-                                )
-                                : <div></div>
-                            }
-
-                            {userRole === "Inspector" || userRole === "Admin"
-                                ? (
-                                    <div>
-                                        <p>Изменение количества принятой продукции   (указывается контролёра)</p>
-                                        <div className={styles.row}>
-                                            <Input
-                                                onChange={(e) => {
-                                                    handleChange(e);
-                                                    setacceptedProducts(e.target.value)
-                                                }}
-                                                style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={acceptedProducts}
-                                                name="acceptedProducts"
-                                                placeholder="Количество принятой продукции"
-                                                onBlur={handleBlur}
-                                                autocomplete="off"
-                                            />
-
-                                        </div>
-                                        <p>Указания причин брака   </p>
-                                        <div className={styles.row}>
-                                            <Input
-                                                onChange={(e) => {
-                                                    handleChange(e);
-                                                    setproductreason(e.target.value)
-                                                }}
-                                                style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={productreason}
-                                                name="productreason"
-                                                placeholder="Причина брака"
-                                                onBlur={handleBlur}
-                                                autocomplete="off"
-                                            />
-
-                                        </div>
-
-                                        <div className={styles.row}>
-                                            <Button
-                                                disabled={
-                                                    values.shiftNumb == ""
-                                                }
-                                                type="submit"
-                                            >
-                                                Изменить
-                                            </Button>
-                                        </div>
-                                    </div>
-                                )
-                                : <div></div>
-                            }
+                                        type="submit"
+                                    >
+                                        Закрепить
+                                    </Button>
+                                </div>
+                            </form>
+                        )}
+                    </Formik>
+                </ModalWindow>
 
 
+                {/*Ввод выработки и брака*/}
+                <ModalWindow
+                    isOpen={modalchangeInfoproductAccount}
+                    headerText="Редактировать"
+                    setIsOpen={(state) => {
+                        setmodalchangeInfoproductAccount(false)
+                    }}
+                    wrapperStyles={{ width: 420 }}
+                >
+                    <Formik
+                        initialValues={initialValues}
+                        enableReinitialize
+                        onSubmit={(variables) => {
+                            const { id, ...dataToSend } = variables;
+                            FixoEquipment(valueWelder)
+                            setmodalchangeInfoproductAccount(false)
+                            ChangeManufacturedDefective(AmountManufactured, AmountDefective)
+                        }}
+                    >
+                        {({
+                            handleSubmit,
+                            handleChange,
+                            values,
+                            setFieldValue,
+                            handleBlur,
+                        }) => (
+                            <form onSubmit={handleSubmit}>
+
+                                <p>Изменение количества продукции из плана  </p>
+                                <div className={styles.row}>
+                                    <Input
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setAmountManufactured(e.target.value)
+                                        }}
+                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                        value={AmountManufactured}
+                                        name="AmountManufactured"
+                                        placeholder="Количество забракованной продукции"
+                                        onBlur={handleBlur}
+                                    />
+
+                                </div>
+
+                                <p>Количество изготовленной продукции (указывается мастером)</p>
+                                <div className={styles.row}>
+                                    <Input
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setAmountDefective(e.target.value)
+
+                                        }}
+                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                        value={AmountDefective}
+                                        name="AmountDefective"
+                                        placeholder="Количество изготовленной продукции"
+                                        onBlur={handleBlur}
+                                    />
+                                </div>
+
+                                <p>Изменение количества принятой продукции   (указывается контролёра)</p>
+                                <div className={styles.row}>
+                                    <Input
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setacceptedAmount(e.target.value)
+                                        }}
+                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                        value={acceptedAmount}
+                                        name="acceptedAmount"
+                                        placeholder="Количество принятой продукции"
+                                        onBlur={handleBlur}
+                                    />
+
+                                </div>
 
 
-                        </form>
-                    )}
-                </Formik>
-            </ModalWindow>
-            {/*Модалка если создать план на сущ.дату*/}
-            <ModalWindow
-                isOpen={editExistingPlanDateModal}
-                headerText="Дата уже существует"
-                setIsOpen={(state) => {
-                    setEditExistingPlanDateModal(false)
-                }}
-                wrapperStyles={{ width: 420 }}
-            >
-                <h3 className={styles.ExistingPlan}>План на эту дату уже существует</h3>
-            </ModalWindow>
+                                <p>Указания причин брака   </p>
+                                <div className={styles.row}>
+                                    <Input
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setproductreason(e.target.value)
+                                        }}
+                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                        value={productreason}
+                                        name="productreason"
+                                        placeholder="Причина брака"
+                                        onBlur={handleBlur}
+                                    />
+
+                                </div>
+
+                                <div className={styles.row}>
+                                    <Button
+                                        disabled={
+                                            values.shiftNumb == ""
+                                        }
+                                        type="submit"
+                                    >
+                                        Изменить
+                                    </Button>
+                                </div>
+                            </form>
+                        )}
+                    </Formik>
+                </ModalWindow>
+
+            </div>
+
 
 
         </div>
     );
 };
-

@@ -9,12 +9,10 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import api from "services/api";
-import styles from "./styles.module.css";
+import styles from "../styles.module.css";
 import errorActions from "store/error/actions";
 import { useDispatch } from "react-redux";
 
-
-import { CreatingTask } from "./DailyPlan/CreatingTask";
 
 
 
@@ -25,43 +23,20 @@ const {
     Creators: { setError },
 } = errorActions;
 
-const dateOptions = {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-};
 
-export const DailyPlan = ({
-    masters,
+export const EnteringMarriage = ({
 
-    product,
-    knot,
-    detail,
-    executors,
-    initialValues,
-    user,
-    equipment
 
 }) => {
-   
+
 
     return (
-        <div className={styles.innerWrapper}>
-
-            <CreatingTask 
-                masters={masters}
-                product={product}
-                knot={knot}
-                detail={detail}
-                executors={executors}
-                initialValues={initialValues}
-                user={user}
-                equipment={equipment}
-            />
+        <div className={styles.TablePlan}>
+            <h3>Ввод выработки и брака</h3>
+ 
+ 
 
 
-            
-            
         </div>
     );
 };

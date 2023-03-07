@@ -56,7 +56,10 @@ export const Equipment = ({
 
   reason,
   loadDowntime,
-  loadWorkshop
+  loadWorkshop,
+
+  assignWelders,
+  assignMaster
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -79,6 +82,14 @@ export const Equipment = ({
 
 
 
+  const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
+
+
+  //weldingEquipmentId
+  const [weldingEquipmentId, setweldingEquipmentId] = useState(null);
+
+
+  
   const initialValues = {
     rfidTag: modalData?.rfidTag ?? "",
     name: modalData?.name ?? "",
@@ -125,18 +136,18 @@ export const Equipment = ({
     loadDowntime();
     loadWorkshop();
     loadWelder();
-  }, [loadEquipment, loadMasters, loadPosts, loadDowntime,loadWorkshop,loadWelder]);
+  }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder]);
 
 
   const columns = [
     { title: "Наименование", field: "name" },
     { title: "Маркировка", field: "marking" },
-    { 
-      title: "RFID метка", 
+    {
+      title: "RFID метка",
       render: (rowData) => {
-        return <p>{rowData?.rfidTag ??rowData?.idFromSystem}</p>;
-      }, 
-  
+        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+      },
+
     },
     { title: "Заводской  (инвентарный) номер", field: "factoryNumber" },
     { title: "Дата ввода в эксплуатацию", field: "commissioningDate" },
@@ -144,46 +155,52 @@ export const Equipment = ({
     { title: "Наименование изготовителя", field: "manufacturerName" },
     { title: "Дата очередной аттестации", field: "nextAttestationDate" },
 
-    { 
-      title: "Наименование цеха", 
+    {
+      title: "Наименование цеха",
       render: (rowData) => {
         return <span>-</span>
       },
     },
-    { 
-      title: "Номер цеха", 
+    {
+      title: "Номер цеха",
       render: (rowData) => {
         return <span>-</span>
       },
     },
-    { 
-      title: "Наименование производственного участка", 
+    {
+      title: "Наименование производственного участка",
       render: (rowData) => {
-        return <span>{SetArea(rowData.post, "name")??"-"}</span>
+        return <span>{SetArea(rowData.post, "name") ?? "-"}</span>
       },
     },
-    { 
-      title: "Номер производственного участка", 
+    {
+      title: "Номер производственного участка",
       render: (rowData) => {
-        return <span>{SetArea(rowData.post, "name")??"-"}</span>
+        return <span>{SetArea(rowData.post, "name") ?? "-"}</span>
       },
-    },  
+    },
     {
       title: "Наименование   поста ",
       render: (rowData) => {
-        return <span>{DetArea(rowData.post, "name")??"-"}</span>
+        return <span>{DetArea(rowData.post, "name") ?? "-"}</span>
       },
     },
     {
       title: "Номер поста",
       render: (rowData) => {
-        return <span>{DetArea(rowData.post, "numb")??"-"}</span>
+        return <span>{DetArea(rowData.post, "numb") ?? "-"}</span>
       },
     },
     {
-      title:"Просмотреть календарь",
+      title: "Закрерить сотрудников",
       render: (rowData) => {
-        return <img onClick={e=>OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
+        return <p className={styles.Fix} onClick={e => {setvalueChoiseWelder(true);setweldingEquipmentId(rowData?.id)}}>Закрерить</p>;
+      },
+    },
+    {
+      title: "Просмотреть календарь",
+      render: (rowData) => {
+        return <img onClick={e => OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
       },
     }
   ];
@@ -200,7 +217,7 @@ export const Equipment = ({
     {
       title: "Длительность",
       field: "time"
-    }, 
+    },
     {
       title: "Причина простоя",
       field: "downtimeReason"
@@ -208,48 +225,48 @@ export const Equipment = ({
     {
       title: "Наименование оборудования",
       field: "weldingEquipment.name"
-    }, 
+    },
     {
       title: "Номер оборудования",
       field: "weldingEquipment.factoryNumber"
     },
   ]
-  function DetArea(params, field) { 
-    if (field === "name") { 
+  function DetArea(params, field) {
+    if (field === "name") {
       for (let index = 0; index < posts?.length; index++) {
         if (posts[index]?.id === params) {
           return posts[index].name
         }
       }
     }
-    if (field === "numb") { 
+    if (field === "numb") {
       for (let index = 0; index < posts?.length; index++) {
         if (posts[index]?.id === params) {
           return posts[index].number
         }
       }
     }
-     
+
 
   }
 
 
-  function SetArea(params, field) { 
-    if (field === "name") { 
+  function SetArea(params, field) {
+    if (field === "name") {
       for (let index = 0; index < posts?.length; index++) {
         if (posts[index]?.id === params) {
           return posts[index].productionArea.name
         }
       }
     }
-    if (field === "numb") { 
+    if (field === "numb") {
       for (let index = 0; index < posts?.length; index++) {
         if (posts[index]?.id === params) {
           return posts[index].productionArea.name
         }
       }
     }
-     
+
 
   }
   const requiredKeys = ["name", "nextInspectionDate"];
@@ -258,16 +275,16 @@ export const Equipment = ({
     setOpen(true);
   };
 
-  function OpenCalendar(rowData){
-    window.localStorage.removeItem("executorId")  
-    window.localStorage.setItem("equipment",`Оборудование: ${rowData.name}  `)  
-    window.localStorage.setItem("equipmentId",rowData.id)   
+  function OpenCalendar(rowData) {
+    window.localStorage.removeItem("executorId")
+    window.localStorage.setItem("equipment", `Оборудование: ${rowData.name}  `)
+    window.localStorage.setItem("equipmentId", rowData.id)
     setTimeout(() => {
-      window.location.href="/calendar"
-    }, 500); 
+      window.location.href = "/calendar"
+    }, 500);
   }
 
-  const renderRowChildren = (rowData) => { 
+  const renderRowChildren = (rowData) => {
     return (
       rowData && (
         <TableContainer component={Paper}>
@@ -282,7 +299,7 @@ export const Equipment = ({
                 >
                   Процесс сварки
                 </TableCell>
-                
+
                 <TableCell
                   style={{
                     borderBottom: 0,
@@ -316,7 +333,7 @@ export const Equipment = ({
                   align="center"
                 >
                   Продолжительность включения/нагрузки, %
-                </TableCell> 
+                </TableCell>
                 {/* <TableCell
                   style={{
                     borderBottom: 0,
@@ -441,10 +458,10 @@ export const Equipment = ({
     //Редактировать простоя
     if (isModalNumb == 3) {
       editDowntime(variables)
-    } 
+    }
   }
 
-  function findReason(params) { 
+  function findReason(params) {
     for (let index = 0; index < reason.length; index++) {
       if (reason[index].reason === params) {
         setValueReaso(reason[index].id)
@@ -453,21 +470,37 @@ export const Equipment = ({
     }
   }
 
- 
+
   const optionMasters = masters?.map((item) => {
     return {
       value: item.id,
       label: `${item.middleName} ${item.firstName} ${item.lastName}`,
     };
   });
- 
+
   const optionWelder = welder?.map((item) => {
     return {
       value: item.id,
       label: `${item.middleName} ${item.firstName} ${item.lastName}`,
     };
   });
-  
+
+
+
+  function assignWeldersFunction(idWelder,idMaster) { 
+    let dataWelders = {
+      weldingEquipmentId:weldingEquipmentId,
+      welderIds:idWelder,
+    } 
+    assignWelders(dataWelders)
+
+    let dataMaster = {
+      weldingEquipmentIds:weldingEquipmentId,
+      masterId:idMaster,
+    } 
+    assignMaster(dataMaster)
+  }
+
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -524,7 +557,7 @@ export const Equipment = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(1);  
+                      setIsModalNumb(1);
                       setEquipmentNumb(rowData.id)
                       setValuetPosts(rowData.post?.id)
                     },
@@ -562,8 +595,8 @@ export const Equipment = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(3);  
- 
+                      setIsModalNumb(3);
+
                       setValueDownti(rowData.id)
                       setValuetEquipment(rowData.weldingEquipment.id)
                       findReason(rowData.downtimeReason)
@@ -583,6 +616,76 @@ export const Equipment = ({
         isOpen={isResultsModalOpen}
         setIsOpen={setIsResultsModalOpen}
       />
+
+
+      {/*Закрерить сотрудников*/}
+      <ModalWindow
+        isOpen={valueChoiseWelder}
+        headerText="Закрерить сотрудников"
+        setIsOpen={(state) => { 
+          setvalueChoiseWelder(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+
+            assignWeldersFunction(valueWelder,valueMaster)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+               
+                <div className={styles.row}>
+                  <Select
+                    name="valueMaster"
+                    value={valueMaster}
+                    width="380px"
+                    placeholder="Мастер"
+                    onChange={(event) => {
+                      setvalueMaster(event.value)
+                    }}
+                    options={optionMasters}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Select
+                    name="valueWelder"
+                    value={valueWelder}
+                    width="380px"
+                    placeholder="Сварщик"
+                    onChange={(event) => {
+                      setvalueWelder(event.value)
+                    }}
+                    options={optionWelder}
+                  />
+                </div> 
+
+              <div className={styles.row}>
+                <Button
+                  disabled={
+                    values.shiftNumb == ""  
+                  }
+                  type="submit"
+                >
+                  Закрепить
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+
+
       <ModalWindow
         isOpen={isModalOpen}
         headerText={
@@ -621,16 +724,16 @@ export const Equipment = ({
                       width="380px"
                       placeholder="Номер поста"
                       onChange={(event) => {
-                        setValuetPosts(event.value); setValuetPostsNumber(event.label)
+                        setValuetPosts(event.value);
+                        setValuetPostsNumber(event.label)
                       }}
                       options={optPosts}
                     />
 
 
                   </div>
-             
-                  <div className={styles.row}>
 
+                  {/* <div className={styles.row}> 
                     <div> 
                        <Select
                         name="valueMaster"
@@ -654,10 +757,8 @@ export const Equipment = ({
                         }}
                         options={optionWelder}
                       /> 
-                    </div>
-                    
-
-                  </div>
+                    </div>  
+                  </div> */}
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
@@ -937,7 +1038,7 @@ export const Equipment = ({
                       disabled={
                         values.name == "" || valuetPosts == undefined || values.marking == "" || values.rfidTag == "" || values.factoryNumber == "" ||
                         values.nextAttestationDate == "" || values.commissioningDate == "" || values.weldingProcess == "" || values.idleVoltage == "" ||
-                        values.loadPercentage == "" || values.manufacturerName == "" || values.height == "" || values.width == "" || values.lenght == "" ||
+                        values.loadPercentage == "" || values.manufacturerName == "" || /* values.height == ""  || values.width == "" || values.lenght == "" ||*/
                         values.weldingCurrentMin == "" || values.weldingCurrentMax == "" || values.arcVoltageMin == "" || values.arcVoltageMax == ""
                       }
                       type="submit"

@@ -115,8 +115,8 @@ export const TexProcWelding = ({
     {
       title: "Ссылка на PDF-файл ",
       render: (rowData) => (
-        <a href="#">
-          {rowData?.pdmSystemFileLink}  
+        <a href={rowData?.pdmSystemFileLink}>
+          {rowData?.pdmSystemFileLink??"-"}  
         </a>
       ), 
     },

@@ -4,7 +4,7 @@ import actions from "./actions";
 const { Types } = actions;
 const INITIAL_STATE = {
   isRequesting: false,
-  tasks: [], 
+  tasks: [],
   error: null,
 };
 
@@ -58,7 +58,6 @@ const addTaskSuccess = (state = INITIAL_STATE, { task }) => {
 };
 
 const failure = (state = INITIAL_STATE, { error }) => {
-  console.log(error)
   return {
     ...state,
     isRequesting: false,
@@ -76,30 +75,11 @@ const loadSeamSuccess = (state = INITIAL_STATE, { seam }) => {
 };
 
 
-const loadTasktoolsSuccess = (state = INITIAL_STATE, { tasktools }) => {
+const loadTasktoolsSuccess= (state = INITIAL_STATE, { tasktools }) => {
   return {
     ...state,
     isRequesting: false,
     tasktools,
-  };
-};
-
-
-
-///Ежедневный план 
-const loadAlldatesSuccess = (state = INITIAL_STATE, { alldates }) => {    
-  state.alldates=alldates 
-  return {
-    ...state,
-    isRequesting: false, 
-  };
-};
-const addPlanSuccess = (state = INITIAL_STATE, { plan }) => {
- 
-  console.log(plan)
-  return {
-    ...state,
-    isRequesting: false, 
   };
 };
 
@@ -123,7 +103,7 @@ export const HANDLERS = {
   [Types.ADD_TASK_SUCCESS]: addTaskSuccess,
   [Types.ADD_TASK_FAILURE]: failure,
 
-
+  
   [Types.LOAD_INFO_REQUEST]: request,
   [Types.LOAD_INFO_SUCCESS]: loadInfoSuccess,
   [Types.LOAD_INFO_FAILURE]: failure,
@@ -137,16 +117,6 @@ export const HANDLERS = {
   [Types.LOAD_TASKTOOLS_REQUEST]: request,
   [Types.LOAD_TASKTOOLS_SUCCESS]: loadTasktoolsSuccess,
   [Types.LOAD_TASKTOOLS_FAILURE]: failure,
- 
-  ///Ежедневный план
-  [Types.LOAD_ALLDATES_REQUEST]: request,
-  [Types.LOAD_ALLDATES_SUCCESS]: loadAlldatesSuccess,
-  [Types.LOAD_ALLDATES_FAILURE]: failure,
-
-
-  [Types.ADD_PLAN_REQUEST]: request,
-  [Types.ADD_PLAN_SUCCESS]: addPlanSuccess,
-  [Types.ADD_PLAN_FAILURE]: failure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);
