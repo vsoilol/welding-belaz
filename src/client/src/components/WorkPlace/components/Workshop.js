@@ -64,6 +64,8 @@ export const Workshop = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   
 
+  ///дописываю для чего просматриваем закрепленные объекты
+  const [isDisplayFixed, setDisplayFixed] = useState("");
 
 
 
@@ -116,7 +118,7 @@ export const Workshop = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id);setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -128,6 +130,18 @@ export const Workshop = ({
       {
         title: "Номер  производственного участка ",
         field: "number",
+      }, 
+      {
+        title: "Наименование цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.number??"-"}</span>
+        },
       },
       {
         title: "Перерейти к",
@@ -135,8 +149,8 @@ export const Workshop = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id);setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
@@ -155,10 +169,36 @@ export const Workshop = ({
         title: "Номер  поста ",
         field: "number",
       },
+
+      {
+        title: "Наименование цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.name ?? "-"}</span>
+        },
+      },
+      {
+        title: "Номер  цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.number ?? "-"}</span>
+        },
+      },
+
+      {
+        title: "Наименование производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.name ?? "-"}</span>
+        },
+      },
+      {
+        title: "Номер  производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.number ?? "-"}</span>
+        },
+      },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -166,15 +206,53 @@ export const Workshop = ({
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number}</p>;
+          return <p>Рабочее место {rowData.number??"-"}</p>;
         },
       },
       {
         title: "Номер  рабочего места ",
         field: "number",
       },
-    ],
- 
+      {
+        title: "Наименование цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.number??"-"}</span>
+        },
+      },
+
+      {
+        title: "Наименование производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.number??"-"}</span>
+        },
+      },
+
+
+      {
+        title: "Наименование поста",
+        render: (rowData) => {
+          return <span>{rowData?.post?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  поста",
+        render: (rowData) => {
+          return <span>{rowData?.post?.number??"-"}</span>
+        },
+      },
+    ], 
   };
 
 
@@ -379,7 +457,7 @@ export const Workshop = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={value_goToTitle}
+                  title={isDisplayFixed+" - " +value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />

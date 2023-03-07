@@ -70,7 +70,8 @@ export const Place = ({
 
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
-
+///дописываю для чего просматриваем закрепленные объекты
+const [isDisplayFixed, setDisplayFixed] = useState("");
 
   const initialValues = {
     name: modalData?.name ?? "",
@@ -150,7 +151,7 @@ export const Place = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id);setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -169,8 +170,8 @@ export const Place = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id);setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
@@ -192,7 +193,7 @@ export const Place = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -456,7 +457,7 @@ export const Place = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={value_goToTitle}
+                  title={isDisplayFixed+" - " +value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />

@@ -35,6 +35,9 @@ const mapDispatchToProps = {
 
   loadWelder: ActionsWelder.Creators.loadExecutorsRequest,
 
+  assignWelders:Actions.Creators.assignWeldersRequest,
+  assignMaster:Actions.Creators.assignMasterRequest,
+
 
 };
 
