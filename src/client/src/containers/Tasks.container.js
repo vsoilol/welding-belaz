@@ -19,6 +19,8 @@ const mapStateToProps = (state) => {
       state?.instructions?.isRequesting ||
       state?.techs?.isRequesting,
     userRole: state.auth.user.role,
+    user: state.auth.user,
+
     info: state.tasks.info,
     ///Сварные швы
     seam: state.workplace.seam,
@@ -27,7 +29,7 @@ const mapStateToProps = (state) => {
     ///Узлы
     knot: state.workplace.knot,
     ///Детали
-    detail: state.workplace.detail,
+    detail: state.workplace.detail, 
   };
 };
 const mapDispatchToProps = {
@@ -50,6 +52,8 @@ const mapDispatchToProps = {
   loadEquipment: EquipmentActions.Creators.loadEquipmentRequest,
   ///Сварные швы
   loadSeam: Actions.Creators.loadSeamRequest,
+
+  loadTasktools:Actions.Creators.loadTasktoolsRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);

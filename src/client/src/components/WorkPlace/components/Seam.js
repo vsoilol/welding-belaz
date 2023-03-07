@@ -154,14 +154,15 @@ export const Seam = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
+      // {
+      //   title: "Номер  рабочего места  ", field: "workplace.number"
+      // },
+      
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      }, 
+      {
+        title: "Технологическая инструкция", field: "technologicalInstruction.name"
       },
       {
         title: "Наименование изделия ", 

@@ -16,7 +16,12 @@ p {
   flex-direction: column;
   align-items: center;
 }
-
+.RowSelects{
+  /* display: grid;
+  grid-template-columns: auto auto auto 1fr; */
+  grid-gap: 25px; 
+  margin-bottom: 30px;
+}
 .row {
   display: flex;
   justify-content: space-around;
@@ -36,6 +41,7 @@ p {
   color: black;
   display: flex;
   justify-content: center;
+  cursor: pointer;
 }
 
 .downloadButton:hover {
@@ -112,6 +118,22 @@ tr.background{
 
 
 /*TablePlan*/
+
+
+.result{
+  margin: 30px 0px 0px 0px;
+  padding: 15px 0px;
+  border-top:1px solid rgb(0 0 0 / 12%) ;
+  border-bottom:1px solid rgb(0 0 0 / 12%) ; 
+}
+.result h4{
+  margin-left: 15px;
+  font-size: 20px;
+}
+.result span{
+  font-weight: 600;
+  padding-left: 5px;
+}
 .TablePlan{
   width: calc(100vw - 150px);
   height: 100%;
@@ -130,17 +152,27 @@ tr.background{
   letter-spacing: 0.0075em;
   text-align: left;
   padding-left: 20px;
-}
-.TablePlan .tools{
-  padding-left: 20px;
-}
+} 
 .TablePlan .tools p{
   margin: 10px 15px;
 }
+.toolsHead{
+  padding-left: 15px;
+}
+.RowTools{
+  display: flex;
 
+}
+.Fix{
+  color: blue;
+  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-bottom: 1px solid;
+}
 .create{
-  margin: 0px 15px;
-  margin-bottom: 20px;
+  margin: 20px 0px;
+  margin-top: 40px;
   padding: 8px 25px;
   background-color: transparent;
   border: 1px solid #dadada;
@@ -151,5 +183,16 @@ tr.background{
   border-radius: 8px;
   transition: 0.3s;
   font-weight: 600;
-  margin-left: calc(100% - 140px);
+  /* margin-left: calc(100% - 160px); */
+}
+
+.create:hover{
+  background-color: whitesmoke;
+}
+
+
+.p{ 
+      font-size: 13px;
+      line-height: 20px;
+      margin: 0 20px 0 20px;  
 }

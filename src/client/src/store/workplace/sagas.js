@@ -564,10 +564,20 @@ function* addSeam(variables) {
 
     if (variables.payload.valEx === undefined) {
       const { data } = yield call(api.post, `/seam`, {
+        
+        "isControlSubject": true,
+        "isPerformed": true,
+        
+        // "workplaceId": variables.payload.workplaceId,
+
         "number": variables.payload.number,
         "isControlSubject": true,
+        "isPerformed": true,
+        "length": 0,
         "productionAreaId": variables.payload.productionAreaId,
-        "workplaceId": variables.payload.workplaceId,
+        "productId": null
+        // "technologicalInstructionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        // "productId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
       });
       yield put(addSeamSuccess(data));
     }

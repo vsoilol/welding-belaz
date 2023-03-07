@@ -72,6 +72,9 @@ export const ProductionArea = ({
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
 
+///дописываю для чего просматриваем закрепленные объекты
+const [isDisplayFixed, setDisplayFixed] = useState("");
+
 
   const initialValues = {
     name: modalData?.name ?? "",
@@ -130,10 +133,23 @@ export const ProductionArea = ({
         title: "Номер  цеха",
         field: "number",
       },
+      
+      {
+        title: "Наименование производственного участка ",
+        render: (rowData) => {
+          return <span>{DetArea(rowData.id,"name")??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  производственного участка ",
+        render: (rowData) => {
+          return <span>{DetArea(rowData.id,"numb")??"-"}</span>
+        },
+      },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id);setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -158,39 +174,14 @@ export const ProductionArea = ({
           return <span>{rowData?.workshop.number??"-"}</span>
         },
       },
-      // {
-      //   title: "Наименование   поста ",
-      //   render: (rowData) => {
-      //     return <span>{DetArea(rowData.id, "name", 1)??"-"}</span>
-      //   },
-      // },
-      // {
-      //   title: "Номер поста",
-      //   render: (rowData) => {
-      //     return <span>{DetArea(rowData.id, "numb", 1)??"-"}</span>
-      //   },
-      // },
-      // {
-      //   title: "Наименование рабочего места ",
-      //   render: (rowData) => {
-      //     return <span>{DetArea(rowData.id, "name", 2)??"-"}</span>
-      //   },
-      // },
-      // {
-      //   title: "Номер  рабочего места ",
-      //   render: (rowData) => {
-      //     return <span>{DetArea(rowData.id, "numb", 2)??"-"}</span>
-      //   },
-      // },
-      
       {
         title: "Перерейти к",
         render: (rowData) => {
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id);setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
@@ -209,10 +200,36 @@ export const ProductionArea = ({
         title: "Номер  поста ",
         field: "number",
       },
+
+      {
+        title: "Наименование цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.name ?? "-"}</span>
+        },
+      },
+      {
+        title: "Номер  цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.number ?? "-"}</span>
+        },
+      },
+
+      {
+        title: "Наименование производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.name ?? "-"}</span>
+        },
+      },
+      {
+        title: "Номер  производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.number ?? "-"}</span>
+        },
+      },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -220,14 +237,53 @@ export const ProductionArea = ({
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number}</p>;
+          return <p>Рабочее место {rowData.number??"-"}</p>;
         },
       },
       {
         title: "Номер  рабочего места ",
         field: "number",
       },
-    ],
+      {
+        title: "Наименование цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  цеха ",
+        render: (rowData) => {
+          return <span>{rowData?.workshop.number??"-"}</span>
+        },
+      },
+
+      {
+        title: "Наименование производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  производственного участка ",
+        render: (rowData) => {
+          return <span>{rowData?.productionArea.number??"-"}</span>
+        },
+      },
+
+
+      {
+        title: "Наименование поста",
+        render: (rowData) => {
+          return <span>{rowData?.post?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  поста",
+        render: (rowData) => {
+          return <span>{rowData?.post?.number??"-"}</span>
+        },
+      },
+    ], 
 
   };
 
@@ -456,7 +512,7 @@ export const ProductionArea = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={value_goToTitle}
+                  title={isDisplayFixed+" - " +value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />

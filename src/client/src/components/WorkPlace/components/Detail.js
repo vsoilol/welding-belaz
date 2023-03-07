@@ -87,14 +87,16 @@ export const Detail = ({
 
   const [valueFixed, setValueFixed] = useState(0);
 
-
+  //Создание задания
+  const [createTask, setcreateTask] = useState(0);
   //Выбранные сварщики
   const [welderListChoise, setwelderListChoise] = useState([]); 
   //Выбранное изделие/деталь/узел
   const [valueChoise, setvalueChoise] = useState(""); 
   //Id выбранного изделие/деталь/узел
   const [valueIdIzdelia, setIdIzdelia] = useState(""); 
-
+///дописываю для чего просматриваем закрепленные объекты
+const [isDisplayFixed, setDisplayFixed] = useState("");
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -150,8 +152,77 @@ export const Detail = ({
 
   }
 
-  const columns = {
-     
+  const columns = {  
+    workshops: [
+      {
+        title: "Наименование цеха",
+        field: "name",
+      },
+      {
+        title: "Номер  цеха",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
+        },
+      },
+    ],
+    production_sites: [
+      {
+        title: "Наименование производственного участка ",
+        field: "name",
+      },
+      {
+        title: "Номер  производственного участка ",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+
+          return (
+            <div>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+            </div>
+          )
+
+          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
+        },
+      },
+    ],
+    posts: [
+      {
+        title: "Наименование поста ",
+        render: (rowData) => {
+          return <p>Пост {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  поста ",
+        field: "number",
+      },
+      {
+        title: "Перерейти к",
+        render: (rowData) => {
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
+        },
+      },
+    ],
+    jobs_place: [
+      {
+        title: "Наименование рабочего места ",
+        render: (rowData) => {
+          return <p>Рабочее место {rowData.number}</p>;
+        },
+      },
+      {
+        title: "Номер  рабочего места ",
+        field: "number",
+      },
+    ],
 
     goods: [
       {
@@ -167,27 +238,27 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
+      // {
+      //   title: "Номер  рабочего места  ", field: "workplace.number"
+      // },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
+      
       {
-        title: "Закрепить изделие",
+        title: "Закрерить сварщика",
         render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
+          return <p className={styles.Fix} onClick={e => { 
+            setValuegoTo(2);
+            setvalueChoise(rowData.name)
+            setIdIzdelia(rowData.id)
+          }}>Закрерить</p>;
         },
       },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
+
       {
         title: "Перерейти к",
         render: (rowData) => {
@@ -215,9 +286,9 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
+      // {
+      //   title: "Номер  рабочего места  ", field: "workplace.number"
+      // },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
@@ -263,50 +334,26 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
+      // {
+      //   title: "Номер  рабочего места  ", field: "workplace.number"
+      // },
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
-      {
-        title: "Наименование изделия ", 
-        render: (rowData) => {
-          return <span>{rowData?.mainProduct?.name??"-"}</span>
-        },
-      },
-      {
-        title: "Номер  изделия ", 
-        render: (rowData) => {
-          return <span>{rowData?.mainProduct?.number??"-"}</span>
-        },
-      },
-      {
-        title: "Наименование узла ", 
-        render: (rowData) => {
-          return <span>{rowData?.mainProduct?.mainProduct?.name??"-"}</span>
-        },
-      },
-      {
-        title: "Номер  узла ", 
-        render: (rowData) => {
-          return <span>{rowData?.mainProduct?.mainProduct?.number??"-"}</span>
-        },
-      },
-      {
-        title: "Закрепить сварщика",
-        render: (rowData) => {
-          return <p className={styles.Fix} onClick={e => { 
-            setValueFixed(1); 
-            setValuegoTo(2);
-            setvalueChoise(rowData.name);
-            setIdIzdelia(rowData.id)
-          }}>Закрепить</p>;
-        },
-      },
+      // {
+      //   title: "Закрерить сварщика",
+      //   render: (rowData) => {
+      //     return <p className={styles.Fix} onClick={e => {
+      //       setcreateTask(1);
+      //       setValuegoTo(2);
+      //       setvalueChoise(rowData.name)
+      //       setIdIzdelia(rowData.id)
+      //     }}>Закрерить</p>;
+      //   },
+      // },
       // {
       //   title: "Просмотреть закрепленные",
       //   render: (rowData) => {
@@ -318,7 +365,7 @@ export const Detail = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы") }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы");setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -341,21 +388,58 @@ export const Detail = ({
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
       },
-      {
-        title: "Номер  рабочего места  ", field: "workplace.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
+      // {
+      //   title: "Номер  рабочего места  ", field: "workplace.number"
+      // },
+      
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
+      }, 
+      {
+        title: "Технологическая инструкция", field: "technologicalInstruction.name"
       },
       {
-        title: "Закрепить задание",
+        title: "Наименование изделия ", 
         render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
+          return <span>{rowData?.product?.mainProduct?.name??"-"}</span>
         },
       },
+      {
+        title: "Номер  изделия ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.number??"-"}</span>
+        },
+      },
+      {
+        title: "Наименование узла ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  узла ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.number??"-"}</span>
+        },
+      },
+      {
+        title: "Наименование детали ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name??"-"}</span>
+        },
+      },
+      {
+        title: "Номер  детали ", 
+        render: (rowData) => {
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number??"-"}</span>
+        },
+      },
+      // {
+      //   title: "Закрепить задание",
+      //   render: (rowData) => {
+      //     return <p className={styles.Fix}>Закрепить</p>;
+      //   },
+      // },
       // {
       //   title: "Просмотреть закрепленные",
       //   render: (rowData) => {
@@ -779,7 +863,7 @@ export const Detail = ({
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={value_goToTitle}
+                  title={isDisplayFixed+" - " +value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -841,74 +925,15 @@ export const Detail = ({
         }
 
 
-        {valueFixed === 1
+        {createTask === 1
 
           ? (
             <div className={styles.TableToFixed}>
-
-              {/* <div className={styles.selects}>
-                <Select
-                  name="valueWelder"
-                  value={valueWelder}
-                  width="380px"
-                  placeholder="Сотрудники"
-                  onChange={(event) => {
-                    setValueWelder(event.value)
-                    setValueWelderName("")
-                  }}
-                  options={optExecutors}
-                />
-                {valueWelder === 1
-                  ? (
-                    <div className={styles.select}>
-                      <Select
-                        name="valueWelderExe"
-                        value={valueWelderExe}
-                        width="380px"
-                        placeholder="Мастера"
-                        onChange={(event) => {
-                          setValueWelderExe(event.value)
-                          setValueWelderName(event.label)
-                        }}
-                        options={formattedMasters}
-                      />
-                    </div>
-                  )
-                  : (
-                    <div className={styles.select} >
-                      <Select
-                        className={styles.select}
-                        name="valueWelderExe"
-                        value={valueWelderExe}
-                        width="380px"
-                        placeholder="Контролеры"
-                        onChange={(event) => {
-                          setValueWelderExe(event.value)
-                          setValueWelderName(event.label)
-                        }}
-                        options={formattedTechs}
-                      />
-                    </div>
-                  )
-                }
-              </div>
-
-              {valueWelder === 1
-                ? (<h2>Мастер: {valueWelderExeName}</h2>)
-                : (<h2>Контролер: {valueWelderExeName}</h2>)
-
-              }
-
-
-              <button className={styles.fixed}> Закрепить </button> */}
+ 
               <h2>Закрепить сварщика</h2>
               <h3>Деталь: {valueChoise}</h3>
               <div className={styles.Seams}>
-                {/* {
-                  displaySeams === 0
-                    ? <span className={styles.refSeam} onClick={SeamsDisplay}>Просмотреть сварные швы для детали</span>
-                    : <span className={styles.refSeam} onClick={SeamsDisplay}>Скрыть сварные швы для детали</span>
-                } */}
+               
                 {
                   displaySeams === 1
                     ? (

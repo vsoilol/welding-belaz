@@ -16,8 +16,7 @@ import TableHead from "@material-ui/core/TableHead";
 import Paper from "@material-ui/core/Paper";
 import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import imgcalendar from "assets/icons/calendar.png";
-
+import imgcalendar from "assets/icons/calendar.png"; 
 const useStyles = makeStyles(() => ({
   rowStyle: {
     padding: 10,
@@ -59,6 +58,8 @@ export const ExecutorsTable = ({
     firstName: modalData?.firstName ?? "",
     lastName: modalData?.lastName ?? "",
     middleName: modalData?.middleName ?? "",
+    position: modalData?.position ?? "",
+    serviceNumber: modalData?.serviceNumber ?? "",
     weldingEquipment: modalData?.weldingEquipment ?? [
       {
         id: modalData?.weldingEquipment?.id ?? null,
@@ -131,11 +132,15 @@ export const ExecutorsTable = ({
       field: "productionArea.number",
     },
     {
-      title: "Закреплённое оборудование ",
+      title: "Закреплённое оборудование ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingEquipments!=undefined) {
-            return  <a href="/equipment">{rowData?.weldingEquipments[0]?.factoryNumber??"-"}</a>
-        }  
+        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length!=0) { 
+          return (
+            rowData.weldingEquipments?.map(equipments =>
+              <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
+            )
+          )
+        }
       },
     },
   ];
@@ -189,6 +194,7 @@ export const ExecutorsTable = ({
     },
   ];
 
+ 
 
   function ReturnWorkshop(Area) {
     if (area != undefined) {
@@ -280,9 +286,15 @@ export const ExecutorsTable = ({
       field: "productionArea.number",
     },
     {
-      title: "Закреплённое оборудование ",
+      title: "Закреплённое оборудование ( ссылка )",
       render: (rowData) => {
-        return  <a href="/equipment">{rowData?.weldingEquipments[0]?.factoryNumber}</a>
+        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length!=0) { 
+          return (
+            rowData.weldingEquipments?.map(equipments =>
+              <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
+            )
+          )
+        }
       },
     },
     {
@@ -300,91 +312,96 @@ export const ExecutorsTable = ({
     }
   ];
 
-  const renderRowChildren = (rowData) => { 
-    if (rowData?.weldingEquipments.length!=0) {
+  const renderRowChildren = (rowData) => {
+
+    if (rowData?.weldingEquipments?.length != 0) {
       return (
-        rowData?.weldingEquipments && (
-          <TableContainer component={Paper}>
-            <MaterialTable aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    style={{
-                      borderBottom: 0,
-                    }}
-                    align="center"
-                  >
-                    RFID-метка
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      borderBottom: 0,
-                    }}
-                    align="center"
-                  >
-                    Наименование
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      borderBottom: 0,
-                    }}
-                    align="center"
-                  >
-                    Маркировка
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      borderBottom: 0,
-                    }}
-                    align="center"
-                  >
-                    Заводской номер
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      borderBottom: 0,
-                    }}
-                    align="center"
-                  >
-                    Дата ввода в эксплуатацию
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      borderBottom: 0,
-                    }}
-                    align="center"
-                  >
-                    Текущие состояние
-                  </TableCell>
-                </TableRow>
-              </TableHead>
+        <TableContainer component={Paper}>
+
+          <MaterialTable aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  RFID-метка
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Наименование
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Маркировка
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Заводской номер
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Дата ввода в эксплуатацию
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Текущие состояние
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            {rowData?.weldingEquipments?.map(equipments =>
               <TableBody>
-                <TableRow key={rowData?.weldingEquipments?.id}>
+                <TableRow key={equipments.id}>
                   <TableCell align="center">
-                    {rowData?.weldingEquipments?.rfidTag}
+                    {equipments.rfidTag}
                   </TableCell>
                   <TableCell align="center">
-                    {rowData?.weldingEquipments?.name}
+                    {equipments.name}
                   </TableCell>
                   <TableCell align="center">
-                    {rowData?.weldingEquipments?.marking}
+                    {equipments.marking}
                   </TableCell>
                   <TableCell align="center">
-                    {rowData?.weldingEquipments?.factoryNumber}
+                    {equipments.factoryNumber}
                   </TableCell>
                   <TableCell align="center">
-                    {rowData?.weldingEquipments?.commissioningDate}
+                    {equipments.commissioningDate}
                   </TableCell>
                   <TableCell align="center">
                     {renderConditionValue(
-                      rowData?.weldingEquipments?.currentCondition
+                      equipments.currentCondition
                     )}
                   </TableCell>
                 </TableRow>
               </TableBody>
-            </MaterialTable>
-          </TableContainer>
-        )
+            )}
+          </MaterialTable>
+
+
+        </TableContainer>
       );
     }
   };
@@ -659,6 +676,30 @@ export const ExecutorsTable = ({
                   value={values.rfidTag}
                   name="rfidTag"
                   placeholder="RFID метка "
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{ height: 40, width: 562 }}
+                  value={values.position}
+                  name="position"
+                  placeholder="Должность"
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  style={{ height: 40, width: 562 }}
+                  value={values.serviceNumber}
+                  name="serviceNumber"
+                  placeholder="Табельный номер"
                   onBlur={handleBlur}
                 />
               </div>
