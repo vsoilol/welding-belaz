@@ -19,10 +19,20 @@ public class ChangeProductAccountAcceptedAmountRequestValidator
                     ChangeProductAccountAcceptedAmountRequest,
                     Domain.Entities.ProductInfo.ProductAccount
                 >(context)
-            );
+            )
+            .DependentRules(() =>
+            {
+                RuleFor(model => model.Amount)
+                    .Cascade(CascadeMode.Stop)
+                    .SetAsyncValidator(
+                        new IsAcceptedAmountCorrectValidatorForChangeAmount(context)
+                    );
+            });
 
-        RuleFor(model => model.Amount)
+        RuleFor(model => model.UserId)
             .Cascade(CascadeMode.Stop)
-            .SetAsyncValidator(new IsAcceptedAmountCorrectValidatorForChangeAmount(context));
+            .SetAsyncValidator(
+                new UserIsInspectorValidatorFor<ChangeProductAccountAcceptedAmountRequest>(context)
+            );
     }
 }

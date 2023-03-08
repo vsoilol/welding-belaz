@@ -49,7 +49,12 @@ public class ProductAccountService : IProductAccountService
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(
-            () => _productAccountRepository.ChangAcceptedAmountAsync(request.Id, request.Amount)
+            () =>
+                _productAccountRepository.ChangAcceptedAmountAsync(
+                    request.Id,
+                    request.UserId,
+                    request.Amount
+                )
         );
     }
 

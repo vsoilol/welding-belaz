@@ -70,7 +70,13 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
             .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master.UserInfo))
             .ForMember(
                 dto => dto.WeldingEquipment,
-                opt => opt.MapFrom(x => x.WeldPassages.First().WeldingRecord.WeldingEquipment)
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassages.Any()
+                                ? x.WeldPassages.First().WeldingRecord.WeldingEquipment
+                                : null
+                    )
             );
     }
 }

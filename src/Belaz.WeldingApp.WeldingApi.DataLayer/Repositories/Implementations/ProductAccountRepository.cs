@@ -41,13 +41,34 @@ public class ProductAccountRepository : IProductAccountRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<ProductAccountDto> ChangAcceptedAmountAsync(Guid id, int acceptedAmount)
+    public async Task<ProductAccountDto> ChangAcceptedAmountAsync(
+        Guid id,
+        Guid inspectorId,
+        int acceptedAmount
+    )
     {
+        var inspector = (
+            await _context.Inspectors.FirstOrDefaultAsync(_ => _.UserId == inspectorId)
+        )!;
+
         var productAccount = (
             await _context.ProductAccounts
                 .Include(_ => _.ProductResults)
                 .FirstOrDefaultAsync(_ => _.Id == id)
         )!;
+
+        var seams = _context.Seams.Where(_ => _.ProductId == productAccount.ProductId);
+
+        var weldingTasks = _context.WeldingTasks.Where(
+            _ =>
+                _.WeldingDate.Date.Equals(productAccount.DateFromPlan.Date)
+                && seams.Any(seam => seam.Id == _.SeamId)
+        );
+
+        await weldingTasks.ForEachAsync(_ =>
+        {
+            _.InspectorId = inspector.Id;
+        });
 
         var productResultAccept = productAccount.ProductResults.FirstOrDefault(
             _ => _.Status == ResultProductStatus.Accept
