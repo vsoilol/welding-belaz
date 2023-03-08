@@ -18,4 +18,6 @@ public interface IWeldingTaskRepository
     Task MarkWeldingTaskAsCompletedAsync(Guid id, Guid welderId);
 
     Task ChangeWeldingTaskStatusAsync(Guid id, WeldingTaskStatus status);
+
+    Task<WeldingTaskDto> GetTaskByIdAsync(Guid id);
 }

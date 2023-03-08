@@ -60,6 +60,31 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         return _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
     }
 
+    public async Task<WeldingTaskDto> GetTaskByIdAsync(Guid id)
+    {
+        var weldingTasks = await _context.WeldingTasks
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.ProductionArea)
+            .ThenInclude(_ => _!.Workshop)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.TechnologicalInstruction)
+            .ThenInclude(_ => _!.WeldPassageInstructions)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.TechnologicalProcess)
+            .FirstOrDefaultAsync(_ => _.Id == id);
+
+        return _mapper.Map<WeldingTaskDto>(weldingTasks);
+    }
+
     public async Task MarkWeldingTaskAsCompletedAsync(Guid id, Guid welderId)
     {
         var weldingTask = (await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == id))!;

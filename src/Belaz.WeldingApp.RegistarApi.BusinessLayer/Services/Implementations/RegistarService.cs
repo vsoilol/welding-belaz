@@ -123,7 +123,7 @@ public class RegistarService : IRegistarService
         });
     }
 
-    public async Task<Result<List<WeldingTaskResponse>>> GetAllTasksByDateAndEquipmentAsync(
+    public async Task<Result<List<WeldingTaskBriefResponse>>> GetAllTasksByDateAndEquipmentAsync(
         GetAllTasksByDateAndEquipmentRequest request
     )
     {
@@ -142,7 +142,7 @@ public class RegistarService : IRegistarService
                 request.EquipmentRfidTag
             );
 
-            var result = _mapper.Map<List<WeldingTaskResponse>>(tasks);
+            var result = _mapper.Map<List<WeldingTaskBriefResponse>>(tasks);
 
             result.ForEach(_ =>
             {
@@ -185,20 +185,31 @@ public class RegistarService : IRegistarService
         });
     }
 
-    public async Task<Result<Unit>> SetWeldingTaskStatusToExecutionAcceptedAsync(
-        SetWeldingTaskStatusToExecutionAcceptedRequest request
-    )
+    public async Task<Result<WeldingTaskResponse>> GetTaskByIdAsync(GetTaskByIdRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         return await validationResult.ToDataResult(async () =>
         {
             await _weldingTaskRepository.ChangeWeldingTaskStatusAsync(
-                request.WeldingTaskId,
+                request.TaskId,
                 WeldingTaskStatus.ExecutionAccepted
             );
 
-            return Unit.Default;
+            var weldingTask = await _weldingTaskRepository.GetTaskByIdAsync(request.TaskId);
+
+            var equipment = await _weldingEquipmentRepository.GetByRfidTagAsync(
+                request.EquipmentRfidTag
+            );
+
+            var welder = await _welderRepository.GetByRfidTagAsync(request.WelderRfidTag);
+
+            var result = _mapper.Map<WeldingTaskResponse>(weldingTask);
+
+            result.WelderId = welder.Id;
+            result.EquipmentId = equipment.Id;
+
+            return result;
         });
     }
 
