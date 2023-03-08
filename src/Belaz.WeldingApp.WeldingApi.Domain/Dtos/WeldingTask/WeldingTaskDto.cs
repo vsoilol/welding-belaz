@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 using WeldingApp.Common.Enums;
@@ -46,7 +47,15 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
 
     public WeldingTaskStatus Status { get; set; }
 
-    public SeamBriefDto Seam { get; set; } = null!;
+    public SeamDto Seam { get; set; } = null!;
+
+    public UserFullNameDto? Welder { get; set; }
+
+    public UserFullNameDto? Master { get; set; }
+
+    public UserFullNameDto? Inspector { get; set; }
+
+    public WeldingEquipmentDto? WeldingEquipment { get; set; }
 
     public void Mapping(Profile profile)
     {
@@ -55,6 +64,13 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
             .ForMember(
                 dto => dto.WeldingDate,
                 opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
+            )
+            .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
+            .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
+            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master.UserInfo))
+            .ForMember(
+                dto => dto.WeldingEquipment,
+                opt => opt.MapFrom(x => x.WeldPassages.First().WeldingRecord.WeldingEquipment)
             );
     }
 }
