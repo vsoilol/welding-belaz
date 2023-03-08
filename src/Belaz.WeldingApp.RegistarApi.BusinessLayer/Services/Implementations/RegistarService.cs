@@ -176,9 +176,9 @@ public class RegistarService : IRegistarService
                 request.PreheatingTemperature
             );
 
-            await _weldingTaskRepository.ChangeWeldingTaskStatusAsync(
+            await _weldingTaskRepository.MarkWeldingTaskAsCompletedAsync(
                 request.TaskId,
-                WeldingTaskStatus.Completed
+                request.WelderId
             );
 
             return Unit.Default;

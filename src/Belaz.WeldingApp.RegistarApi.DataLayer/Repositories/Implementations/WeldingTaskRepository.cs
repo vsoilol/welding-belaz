@@ -60,12 +60,12 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         return _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
     }
 
-    public async Task UpdateSomeInfoAsync(WeldingTask task)
+    public async Task MarkWeldingTaskAsCompletedAsync(Guid id, Guid welderId)
     {
-        var weldingTask = (await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == task.Id))!;
+        var weldingTask = (await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == id))!;
 
         weldingTask.TaskStatus = WeldingTaskStatus.Completed;
-        weldingTask.WelderId = task.WelderId;
+        weldingTask.WelderId = welderId;
 
         await _context.SaveChangesAsync();
     }
