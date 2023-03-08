@@ -3290,6 +3290,7 @@ public class DataSeed
             {
                 WeldingDate = new DateTime(2000, 1, 1),
                 BasicMaterial = "Сталь 20",
+                TaskStatus = WeldingTaskStatus.Completed,
                 MainMaterialBatchNumber = "454578",
                 WeldingMaterial = "Проволока 1,2 Св-08Г2С",
                 WeldingMaterialBatchNumber = "00252565",
@@ -3330,6 +3331,7 @@ public class DataSeed
             {
                 WeldingDate = new DateTime(2000, 1, 1),
                 BasicMaterial = "Сталь 20",
+                TaskStatus = WeldingTaskStatus.Completed,
                 MainMaterialBatchNumber = "454578",
                 WeldingMaterial = "Проволока 1,2 Св-08Г2С",
                 WeldingMaterialBatchNumber = "00252565",

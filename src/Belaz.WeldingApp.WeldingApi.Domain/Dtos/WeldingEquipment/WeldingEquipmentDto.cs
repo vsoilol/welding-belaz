@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 
@@ -40,7 +41,6 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
     public int? Width { get; set; }
 
     public int? Lenght { get; set; }
-
 
     /// <summary>
     /// Номер группы оборудования
@@ -99,19 +99,47 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
 
     public PostBriefDto? Post { get; set; }
 
+    public WorkshopBriefDto Workshop { get; set; } = null!;
+
+    public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
+
     public List<WorkplaceBriefDto> Workplaces { get; set; } = null!;
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment, WeldingEquipmentDto>()
-            .ForMember(dto => dto.CommissioningDate,
-                opt => opt
-                    .MapFrom(x => x.CommissioningDate.ToDayInfoString()))
-            .ForMember(dto => dto.NextAttestationDate,
-                opt => opt
-                    .MapFrom(x => x.NextAttestationDate.ToDayInfoString()))
-            .ForMember(dto => dto.ResponsiblePersons,
-                opt => opt
-                    .MapFrom(x => x.Welders.Select(_ => _.UserInfo)));
+        profile
+            .CreateMap<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment, WeldingEquipmentDto>()
+            .ForMember(
+                dto => dto.CommissioningDate,
+                opt => opt.MapFrom(x => x.CommissioningDate.ToDayInfoString())
+            )
+            .ForMember(
+                dto => dto.NextAttestationDate,
+                opt => opt.MapFrom(x => x.NextAttestationDate.ToDayInfoString())
+            )
+            .ForMember(
+                dto => dto.ResponsiblePersons,
+                opt => opt.MapFrom(x => x.Welders.Select(_ => _.UserInfo))
+            )
+            .ForMember(
+                dto => dto.ProductionArea,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.Post != null
+                                ? x.Post.ProductionArea
+                                : x.Workplaces.First().ProductionArea
+                    )
+            )
+            .ForMember(
+                dto => dto.Workshop,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.Post != null
+                                ? x.Post.ProductionArea.Workshop
+                                : x.Workplaces.First().ProductionArea!.Workshop
+                    )
+            );
     }
 }

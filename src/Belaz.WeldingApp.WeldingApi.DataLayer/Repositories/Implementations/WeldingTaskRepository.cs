@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
@@ -19,41 +20,54 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         _mapper = mapper;
     }
 
-    public Task<List<WeldingTaskFullNamesDto>> GetAllWithFullNamesAsync()
+    public async Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
     {
-        return _context.WeldingTasks
-            .ProjectTo<WeldingTaskFullNamesDto>(_mapper.ConfigurationProvider)
+        var weldingTasks = await FilterWeldingTasks(
+                _ => _.TaskStatus == WeldingTaskStatus.Completed
+            )
             .ToListAsync();
+
+        var mapWeldingTasks = _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
+
+        return mapWeldingTasks;
     }
 
-    public Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
+    public async Task<List<WeldingTaskDto>> GetAllAsync()
     {
-        return _context.WeldingTasks
-            .Where(_ => _.Status == SeamStatus.Accept)
-            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        var weldingTasks = await FilterWeldingTasks().ToListAsync();
+
+        var mapWeldingTasks = _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
+
+        return mapWeldingTasks;
     }
 
-    public Task<List<WeldingTaskDto>> GetAllAsync()
+    public async Task<WeldingTaskDto> GetByIdAsync(Guid id)
     {
-        return _context.WeldingTasks
-            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        var weldingTask = await FilterWeldingTasks(_ => _.Id == id).FirstOrDefaultAsync();
+
+        var mapWeldingTask = _mapper.Map<WeldingTaskDto>(weldingTask);
+
+        return mapWeldingTask;
     }
 
-    public Task<WeldingTaskDto> GetByIdAsync(Guid id)
+    public async Task<List<WeldingTaskDto>> GetAllUncompletedTaskAsync()
     {
-        return _context.WeldingTasks
-            .Where(_ => _.Id == id)
-            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync()!;
+        var weldingTasks = await FilterWeldingTasks(
+                _ => _.TaskStatus != WeldingTaskStatus.Completed
+            )
+            .ToListAsync();
+
+        var mapWeldingTasks = _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
+
+        return mapWeldingTasks;
     }
 
     public async Task<WeldingTaskDto> UpdateAsync(WeldingTask entity)
     {
-        var updatedWeldingTask = (await _context.WeldingTasks
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
-        
+        var updatedWeldingTask = (
+            await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
+
         updatedWeldingTask.BasicMaterial = entity.BasicMaterial;
         updatedWeldingTask.MainMaterialBatchNumber = entity.MainMaterialBatchNumber;
         updatedWeldingTask.WeldingMaterial = entity.WeldingMaterial;
@@ -64,5 +78,98 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    private IQueryable<WeldingTask> FilterWeldingTasks(Expression<Func<WeldingTask, bool>> filter)
+    {
+        var weldingTasks = _context.WeldingTasks
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.ProductionArea)
+            .ThenInclude(_ => _!.Workshop)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.TechnologicalProcess)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.TechnologicalInstruction)
+            .Include(_ => _.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord)
+            .ThenInclude(_ => _.WeldingEquipment)
+            .ThenInclude(_ => _.Welders)
+            .ThenInclude(_ => _.UserInfo)
+            .Include(_ => _.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord)
+            .ThenInclude(_ => _.WeldingEquipment)
+            .ThenInclude(_ => _.Post)
+            .ThenInclude(_ => _!.ProductionArea)
+            .ThenInclude(_ => _.Workshop)
+            .Include(_ => _.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord)
+            .ThenInclude(_ => _.WeldingEquipment)
+            .ThenInclude(_ => _.Workplaces)
+            .ThenInclude(_ => _!.ProductionArea)
+            .ThenInclude(_ => _!.Workshop)
+            .Include(_ => _.Inspector)
+            .ThenInclude(_ => _!.UserInfo)
+            .Include(_ => _.Master)
+            .ThenInclude(_ => _!.UserInfo)
+            .Include(_ => _.Welder)
+            .ThenInclude(_ => _!.UserInfo)
+            .Where(filter);
+
+        return weldingTasks;
+    }
+
+    private IQueryable<WeldingTask> FilterWeldingTasks()
+    {
+        var weldingTasks = _context.WeldingTasks
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain)
+            .ThenInclude(_ => _!.MainProduct)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.ProductionArea)
+            .ThenInclude(_ => _!.Workshop)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.Product)
+            .ThenInclude(_ => _!.TechnologicalProcess)
+            .Include(_ => _.Seam)
+            .ThenInclude(_ => _.TechnologicalInstruction)
+            .Include(_ => _.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord)
+            .ThenInclude(_ => _.WeldingEquipment)
+            .ThenInclude(_ => _.Welders)
+            .ThenInclude(_ => _.UserInfo)
+            .Include(_ => _.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord)
+            .ThenInclude(_ => _.WeldingEquipment)
+            .ThenInclude(_ => _.Post)
+            .ThenInclude(_ => _!.ProductionArea)
+            .ThenInclude(_ => _.Workshop)
+            .Include(_ => _.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord)
+            .ThenInclude(_ => _.WeldingEquipment)
+            .ThenInclude(_ => _.Workplaces)
+            .ThenInclude(_ => _!.ProductionArea)
+            .ThenInclude(_ => _!.Workshop)
+            .Include(_ => _.Inspector)
+            .ThenInclude(_ => _!.UserInfo)
+            .Include(_ => _.Master)
+            .ThenInclude(_ => _!.UserInfo)
+            .Include(_ => _.Welder)
+            .ThenInclude(_ => _!.UserInfo);
+
+        return weldingTasks;
     }
 }

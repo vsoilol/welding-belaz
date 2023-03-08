@@ -627,12 +627,12 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/WeldingTask/fullNames",
+      "UpstreamPathTemplate": "/api/WeldingTask/uncompleted",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "GET"
       ],
-      "DownstreamPathTemplate": "/api/WeldingTask/fullNames",
+      "DownstreamPathTemplate": "/api/WeldingTask/uncompleted",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {

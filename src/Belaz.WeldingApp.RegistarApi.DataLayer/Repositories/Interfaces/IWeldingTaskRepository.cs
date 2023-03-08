@@ -15,7 +15,7 @@ public interface IWeldingTaskRepository
         string equipmentRfidTag
     );
 
-    Task UpdateSomeInfoAsync(WeldingTask task);
+    Task MarkWeldingTaskAsCompletedAsync(Guid id, Guid welderId);
 
     Task ChangeWeldingTaskStatusAsync(Guid id, WeldingTaskStatus status);
 }

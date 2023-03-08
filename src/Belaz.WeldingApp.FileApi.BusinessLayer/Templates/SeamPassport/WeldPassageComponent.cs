@@ -206,13 +206,21 @@ public class WeldPassageComponent : IComponent
             table
                 .Cell()
                 .Element(BlockCenter)
-                .Text(DocumentExtensions.CheckValueForNull(WeldPassageInfo.ShortTermDeviation))
+                .Text(
+                    WeldPassageInfo.ShortTermDeviation is null
+                        ? "-"
+                        : ((double)WeldPassageInfo.ShortTermDeviation).ToString("#.##")
+                )
                 .Style(Typography.Italic);
 
             table
                 .Cell()
                 .Element(BlockCenter)
-                .Text(DocumentExtensions.CheckValueForNull(WeldPassageInfo.LongTermDeviation))
+                .Text(
+                    WeldPassageInfo.LongTermDeviation is null
+                        ? "-"
+                        : ((double)WeldPassageInfo.LongTermDeviation).ToString("#.##")
+                )
                 .Style(Typography.Italic);
 
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
