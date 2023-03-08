@@ -209,7 +209,7 @@ public class WeldPassageComponent : IComponent
                 .Text(
                     WeldPassageInfo.ShortTermDeviation is null
                         ? "-"
-                        : ((double)WeldPassageInfo.ShortTermDeviation).ToString("#.##")
+                        : String.Format("{0:0.##}", (double)WeldPassageInfo.ShortTermDeviation)
                 )
                 .Style(Typography.Italic);
 
@@ -219,7 +219,7 @@ public class WeldPassageComponent : IComponent
                 .Text(
                     WeldPassageInfo.LongTermDeviation is null
                         ? "-"
-                        : ((double)WeldPassageInfo.LongTermDeviation).ToString("#.##")
+                        : String.Format("{0:0.##}", (double)WeldPassageInfo.LongTermDeviation)
                 )
                 .Style(Typography.Italic);
 
@@ -510,10 +510,10 @@ public class WeldPassageComponent : IComponent
 
         var seconds = (int)Math.Round(endTime.Subtract(startTime).TotalSeconds);
 
-        var step = seconds / (double)28;
-
         var minValueTime = TimeSpanAxis.ToDouble(startTime);
         var maxValueTime = TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(1)));
+
+        var step = Math.Round((maxValueTime - minValueTime) / (double)28, 2);
 
         model.Axes.Add(
             new TimeSpanAxis()

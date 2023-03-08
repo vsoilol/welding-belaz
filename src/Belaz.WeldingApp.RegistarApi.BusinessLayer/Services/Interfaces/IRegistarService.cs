@@ -14,13 +14,11 @@ public interface IRegistarService
 
     Task<Result<Unit>> CreateRecordWithoutTaskAsync(RecordWithoutTaskRequest request);
 
-    Task<Result<List<WeldingTaskResponse>>> GetAllTasksByDateAndEquipmentAsync(
+    Task<Result<List<WeldingTaskBriefResponse>>> GetAllTasksByDateAndEquipmentAsync(
         GetAllTasksByDateAndEquipmentRequest request
     );
 
     Task<Result<Unit>> CreateRecordWithTaskAsync(RecordWithTaskRequest request);
 
-    Task<Result<Unit>> SetWeldingTaskStatusToExecutionAcceptedAsync(
-        SetWeldingTaskStatusToExecutionAcceptedRequest request
-    );
+    Task<Result<WeldingTaskResponse>> GetTaskByIdAsync(GetTaskByIdRequest request);
 }
