@@ -16,17 +16,15 @@ public class WeldingTaskService : IWeldingTaskService
     private readonly IValidationService _validationService;
     private readonly IMapper _mapper;
 
-    public WeldingTaskService(IWeldingTaskRepository weldingTaskRepository, IValidationService validationService,
-        IMapper mapper)
+    public WeldingTaskService(
+        IWeldingTaskRepository weldingTaskRepository,
+        IValidationService validationService,
+        IMapper mapper
+    )
     {
         _weldingTaskRepository = weldingTaskRepository;
         _validationService = validationService;
         _mapper = mapper;
-    }
-
-    public Task<List<WeldingTaskFullNamesDto>> GetAllWithFullNamesAsync()
-    {
-        return _weldingTaskRepository.GetAllWithFullNamesAsync();
     }
 
     public Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
@@ -49,5 +47,10 @@ public class WeldingTaskService : IWeldingTaskService
 
             return _weldingTaskRepository.UpdateAsync(weldingTask);
         });
+    }
+
+    public Task<List<WeldingTaskDto>> GetAllUncompletedTaskAsync()
+    {
+        return _weldingTaskRepository.GetAllUncompletedTaskAsync();
     }
 }

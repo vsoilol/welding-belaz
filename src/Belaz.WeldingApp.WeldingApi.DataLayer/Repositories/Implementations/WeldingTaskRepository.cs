@@ -20,18 +20,11 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         _mapper = mapper;
     }
 
-    public async Task<List<WeldingTaskFullNamesDto>> GetAllWithFullNamesAsync()
-    {
-        var weldingTasks = await FilterWeldingTasks().ToListAsync();
-
-        var mapWeldingTasks = _mapper.Map<List<WeldingTaskFullNamesDto>>(weldingTasks);
-
-        return mapWeldingTasks;
-    }
-
     public async Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
     {
-        var weldingTasks = await FilterWeldingTasks(_ => _.Status == SeamStatus.Accept)
+        var weldingTasks = await FilterWeldingTasks(
+                _ => _.TaskStatus == WeldingTaskStatus.Completed
+            )
             .ToListAsync();
 
         var mapWeldingTasks = _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
@@ -55,6 +48,18 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         var mapWeldingTask = _mapper.Map<WeldingTaskDto>(weldingTask);
 
         return mapWeldingTask;
+    }
+
+    public async Task<List<WeldingTaskDto>> GetAllUncompletedTaskAsync()
+    {
+        var weldingTasks = await FilterWeldingTasks(
+                _ => _.TaskStatus != WeldingTaskStatus.Completed
+            )
+            .ToListAsync();
+
+        var mapWeldingTasks = _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
+
+        return mapWeldingTasks;
     }
 
     public async Task<WeldingTaskDto> UpdateAsync(WeldingTask entity)

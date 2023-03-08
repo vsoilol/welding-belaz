@@ -25,11 +25,11 @@ public class WeldingTaskController : ControllerBase
         _weldingTaskService = weldingTaskService;
     }
 
-    [HttpGet("fullNames")]
-    [ProducesResponseType(typeof(IEnumerable<WeldingTaskFullNamesDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<WeldingTaskFullNamesDto>>> GetAllWithFullNamesAsync()
+    [HttpGet("uncompleted")]
+    [ProducesResponseType(typeof(IEnumerable<WeldingTaskDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<WeldingTaskDto>>> GetAllUncompletedTaskAsync()
     {
-        return await _weldingTaskService.GetAllWithFullNamesAsync();
+        return await _weldingTaskService.GetAllUncompletedTaskAsync();
     }
 
     [HttpGet("completed")]
@@ -38,7 +38,7 @@ public class WeldingTaskController : ControllerBase
     {
         return await _weldingTaskService.GetAllCompletedTaskAsync();
     }
-    
+
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<WeldingTaskDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WeldingTaskDto>>> GetAllAsync()
@@ -48,7 +48,9 @@ public class WeldingTaskController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WeldingTaskDto>> UpdateAsync([FromBody] UpdateWeldingTaskRequest request)
+    public async Task<ActionResult<WeldingTaskDto>> UpdateAsync(
+        [FromBody] UpdateWeldingTaskRequest request
+    )
     {
         var result = await _weldingTaskService.UpdateAsync(request);
         return result.ToOk();
