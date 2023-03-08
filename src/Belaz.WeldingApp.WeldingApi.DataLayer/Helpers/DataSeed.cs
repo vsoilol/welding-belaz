@@ -726,6 +726,10 @@ public class DataSeed
             _ => _.IdFromSystem == "3291137"
         );
 
+        var technologicalProcess2868425 = await context.TechnologicalProcesses.FirstOrDefaultAsync(
+            _ => _.IdFromSystem == "2868425"
+        );
+
         var technologicalInstruction18 =
             await context.TechnologicalInstructions.FirstOrDefaultAsync(
                 _ => _.IdFromSystem == "18"
@@ -1092,7 +1096,7 @@ public class DataSeed
                                 {
                                     Number = "75131-2801325",
                                     Name = "Поперечина",
-                                    TechnologicalProcess = technologicalProcess3330041,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
@@ -1120,7 +1124,7 @@ public class DataSeed
                                 {
                                     Number = "75131-2801357-10",
                                     Name = "Лист верхний",
-                                    TechnologicalProcess = technologicalProcess3330041,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
@@ -1148,7 +1152,7 @@ public class DataSeed
                                 {
                                     Number = "75131-8521182-20",
                                     Name = "Кронштейн задней опоры",
-                                    TechnologicalProcess = technologicalProcess3330041,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
@@ -1169,7 +1173,7 @@ public class DataSeed
                                 {
                                     Number = "75131-8521183-20",
                                     Name = "Кронштейн задней опоры",
-                                    TechnologicalProcess = technologicalProcess3330041,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
@@ -1576,7 +1580,7 @@ public class DataSeed
                                 {
                                     Number = "75131-2801325",
                                     Name = "Поперечина",
-                                    TechnologicalProcess = technologicalProcess3291137,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
@@ -1604,7 +1608,7 @@ public class DataSeed
                                 {
                                     Number = "75131-2801357-10",
                                     Name = "Лист верхний",
-                                    TechnologicalProcess = technologicalProcess3291137,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
@@ -1632,7 +1636,7 @@ public class DataSeed
                                 {
                                     Number = "75131-8521182-20",
                                     Name = "Кронштейн задней опоры",
-                                    TechnologicalProcess = technologicalProcess3291137,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
@@ -1653,7 +1657,7 @@ public class DataSeed
                                 {
                                     Number = "75131-8521183-20",
                                     Name = "Кронштейн задней опоры",
-                                    TechnologicalProcess = technologicalProcess3291137,
+                                    TechnologicalProcess = technologicalProcess2868425,
                                     ProductType = ProductType.Detail,
                                     ProductionArea = productionArea6,
                                     Seams = new List<Seam>
