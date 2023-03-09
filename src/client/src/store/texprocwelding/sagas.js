@@ -63,14 +63,14 @@ function* loadInstructions() {
 function* addInst(variables) {
   try {   
     const { data } = yield call(api.post, `/TechnologicalInstruction`, {
-      "number": Number(variables.payload.number),
+      "number": variables.payload.number,
       "name": variables.payload.name,
       "seamId": variables.payload.seamId,
       "technologicalProcessId": variables.payload.technologicalProcessId,
       "weldPassages": [
         {
           "name": variables.payload.weldPassagesName,
-          "number": Number(variables.payload.number),
+          "number": variables.payload.number,
           "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
           "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
           "arcVoltageMin": Number(variables.payload.arcVoltageMin),

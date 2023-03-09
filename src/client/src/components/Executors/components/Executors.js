@@ -558,7 +558,7 @@ export const ExecutorsTable = ({
           title="Сотрудники"
           isLoading={isRequesting}
           actions={
-            userRole === "Admin"
+            userRole === "Admin"||userRole === "Master"
               ? [
                 {
                   icon: "add",

@@ -519,7 +519,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 className="posts"
                 data={posts}
                 actions={
-                  userRole === "Admin"
+                  userRole === "Admin"||userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -587,6 +587,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -598,6 +599,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     value={values.number}
                     name="number"
                     placeholder="Номер"
+                    autocomplete="off"
                     onBlur={handleBlur}
                   />
                 </div>
