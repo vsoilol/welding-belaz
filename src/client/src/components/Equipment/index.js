@@ -89,7 +89,7 @@ export const Equipment = ({
   const [weldingEquipmentId, setweldingEquipmentId] = useState(null);
 
 
-  
+
   const initialValues = {
     rfidTag: modalData?.rfidTag ?? "",
     name: modalData?.name ?? "",
@@ -156,28 +156,16 @@ export const Equipment = ({
     { title: "Дата очередной аттестации", field: "nextAttestationDate" },
 
     {
-      title: "Наименование цеха",
-      render: (rowData) => {
-        return <span>-</span>
-      },
+      title: "Наименование цеха", field: "workshop.name"
     },
     {
-      title: "Номер цеха",
-      render: (rowData) => {
-        return <span>-</span>
-      },
+      title: "Номер цеха", field: "workshop.number"
     },
     {
-      title: "Наименование производственного участка",
-      render: (rowData) => {
-        return <span>{SetArea(rowData.post, "name") ?? "-"}</span>
-      },
+      title: "Наименование производственного участка", field: "productionArea.name"
     },
     {
-      title: "Номер производственного участка",
-      render: (rowData) => {
-        return <span>{SetArea(rowData.post, "name") ?? "-"}</span>
-      },
+      title: "Номер производственного участка", field: "productionArea.number"
     },
     {
       title: "Наименование   поста ",
@@ -194,7 +182,7 @@ export const Equipment = ({
     {
       title: "Закрерить сотрудников",
       render: (rowData) => {
-        return <p className={styles.Fix} onClick={e => {setvalueChoiseWelder(true);setweldingEquipmentId(rowData?.id)}}>Закрерить</p>;
+        return <p className={styles.Fix} onClick={e => { setvalueChoiseWelder(true); setweldingEquipmentId(rowData?.id) }}>Закрерить</p>;
       },
     },
     {
@@ -378,7 +366,7 @@ export const Equipment = ({
                   {rowData?.arcVoltageMax ?? "-"}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.activationDuration ?? "-"}
+                  {rowData?.loadDuration ?? "-"}
                 </TableCell>
                 {/* <TableCell align="center" component="th" scope="row">
                   {rowData?.lenght ?? "-"}
@@ -487,20 +475,32 @@ export const Equipment = ({
 
 
 
-  function assignWeldersFunction(idWelder,idMaster) { 
+  function assignWeldersFunction(idWelder, idMaster) {
+
+    const ArrayWelders = welder?.filter(obj => obj.active === 1).map(obj => obj.id); 
     let dataWelders = {
-      weldingEquipmentId:weldingEquipmentId,
-      welderIds:idWelder,
-    } 
+      weldingEquipmentId: weldingEquipmentId,
+      welderIds: ArrayWelders,
+    }
     assignWelders(dataWelders)
 
     let dataMaster = {
-      weldingEquipmentIds:weldingEquipmentId,
-      masterId:idMaster,
-    } 
+      weldingEquipmentIds: weldingEquipmentId,
+      masterId: idMaster,
+    }
     assignMaster(dataMaster)
   }
-
+  const handleSelectChange = (event) => {
+    if (event.active === undefined) {
+        event.active = 1
+    }
+    else if (event.active === 0) {
+        event.active = 1
+    }
+    else if (event.active === 1) {
+        event.active = 0
+    }
+};
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -543,7 +543,7 @@ export const Equipment = ({
             data={equipment[0]}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin"
+              userRole === "Admin" || userRole === "Master"
                 ? [
                   {
                     icon: "add",
@@ -622,7 +622,7 @@ export const Equipment = ({
       <ModalWindow
         isOpen={valueChoiseWelder}
         headerText="Закрерить сотрудников"
-        setIsOpen={(state) => { 
+        setIsOpen={(state) => {
           setvalueChoiseWelder(false)
         }}
         wrapperStyles={{ width: 420 }}
@@ -633,7 +633,7 @@ export const Equipment = ({
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
 
-            assignWeldersFunction(valueWelder,valueMaster)
+            assignWeldersFunction(valueWelder, valueMaster)
           }}
         >
           {({
@@ -644,20 +644,32 @@ export const Equipment = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-               
-                <div className={styles.row}>
-                  <Select
-                    name="valueMaster"
-                    value={valueMaster}
-                    width="380px"
-                    placeholder="Мастер"
-                    onChange={(event) => {
-                      setvalueMaster(event.value)
-                    }}
-                    options={optionMasters}
-                  />
-                </div>
-                <div className={styles.row}>
+
+              <div className={styles.row}>
+                <Select
+                  name="valueMaster"
+                  value={valueMaster}
+                  width="380px"
+                  placeholder="Мастер"
+                  onChange={(event) => {
+                    setvalueMaster(event.value)
+                  }}
+                  options={optionMasters}
+                />
+              </div>
+              <p className={styles.titleSelects}>Сварщики</p>
+              <div className={styles.equipments} > 
+                {welder?.map((option) => (
+                  <div   >
+                    <input
+                      type="checkbox"
+                      onChange={e => { handleSelectChange(option) }}
+                    />
+                    <span>{`${option.middleName} ${option.firstName} ${option.lastName}`}</span>
+                  </div>
+                ))}
+              </div>
+              {/* <div className={styles.row}>
                   <Select
                     name="valueWelder"
                     value={valueWelder}
@@ -668,12 +680,12 @@ export const Equipment = ({
                     }}
                     options={optionWelder}
                   />
-                </div> 
+                </div>  */}
 
               <div className={styles.row}>
                 <Button
                   disabled={
-                    values.shiftNumb == ""  
+                    values.shiftNumb == ""
                   }
                   type="submit"
                 >

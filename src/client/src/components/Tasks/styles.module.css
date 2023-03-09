@@ -196,3 +196,33 @@ tr.background{
       line-height: 20px;
       margin: 0 20px 0 20px;  
 }
+
+
+.equipments{
+  width: fit-content;
+  max-height: 200px;
+  overflow-y: scroll;
+  margin: 0 auto;
+  padding: 0px 20px 0 0px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.equipments::-webkit-scrollbar {
+  width: 8px;               /* ширина scrollbar */
+}
+.equipments::-webkit-scrollbar-track {
+  background: white;        /* цвет дорожки */
+  border-radius: 50px;
+}
+.equipments::-webkit-scrollbar-thumb {
+  background-color: rgb(153, 150, 167);    /* цвет плашки */
+  border-radius: 20px;       /* закругления плашки */
+}
+.equipments span{
+  padding-left: 10px;
+  position: relative;
+  top: -3px; 
+}
+.equipments div{
+  padding: 5px 0px;
+}

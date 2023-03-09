@@ -473,7 +473,7 @@ export const Workshop = ({
                 columns={columns.workshops}
                 data={workshop}
                 actions={
-                  userRole === "Admin"
+                  userRole === "Admin"||userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -544,6 +544,7 @@ export const Workshop = ({
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -556,6 +557,7 @@ export const Workshop = ({
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
 

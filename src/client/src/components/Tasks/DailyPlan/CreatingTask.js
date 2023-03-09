@@ -36,7 +36,8 @@ export const CreatingTask = ({
     executors,
     initialValues,
     user,
-    equipment
+    equipment,
+    userRole
 
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,8 +73,6 @@ export const CreatingTask = ({
 
 
     ////////////////////////////////////////////////////////////////////
-
-
 
 
 
@@ -194,27 +193,7 @@ export const CreatingTask = ({
     };
 
     ////////////////////////////////////////////////////////////////////
-    const optProduction = ProdArray?.map((item) => {
-        return {
-            value: item.id,
-            label: item.name,
-        };
-    });
 
-
-    const optionWelder = executors?.map((item) => {
-        return {
-            value: item.id,
-            label: `${item.middleName} ${item.firstName} ${item.lastName}`,
-        };
-    });
-
-    const optequipment = equipment[0]?.map((item) => {
-        return {
-            value: item.id,
-            label: item.name,
-        };
-    });
 
 
     const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
@@ -266,7 +245,7 @@ export const CreatingTask = ({
                 if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
                     return (
                         rowData.weldingEquipments?.map(equipments =>
-                            <span>{equipments.factoryNumber ?? "-"}</span>
+                            <p>{equipments.factoryNumber ?? "-"}</p>
                         )
                     )
                 }
@@ -307,6 +286,7 @@ export const CreatingTask = ({
                     };
                 });
                 setvalueAllDate(opteAlldate)
+                setvalueDate(opteAlldate[0].label)
             })
             .catch(error => {
                 console.log(error);
@@ -329,7 +309,7 @@ export const CreatingTask = ({
     }
 
     ////Получение информации о производимой продукции по выбранной дате
-    function GetProductionbyChoiseDate(date) { 
+    function GetProductionbyChoiseDate(date) {
         api.get(`/productAccount/byDate?Date=${date}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
             .then((response) => {
                 setvalue_products(response.data)
@@ -349,17 +329,18 @@ export const CreatingTask = ({
             "UserId": localStorage.getItem('USERID')
         })
             .then((response) => {
-                console.log(response.data)
                 window.location.reload()
             })
             .catch((error) => { });
     }
 
-    ///ЗАкрепление оборудования
+    ///Закрепление оборудования
     function FixoEquipment(valueWelder) {
+
+        const filteredArray = equipment[0]?.filter(obj => obj.active === 1).map(obj => obj.id);
         api.put(`/productAccount/assignWeldingEquipments`, {
             "productAccountId": ProductAccountId,
-            "weldingEquipmentIds": [valueWelder]
+            "weldingEquipmentIds": filteredArray
         })
             .then((response) => {
                 GetProductionbyChoiseDate(valueDate)
@@ -401,7 +382,7 @@ export const CreatingTask = ({
             "id": idPlan,
             "amount": AmountManufactured
         })
-            .then((response) => { GetProductionbyChoiseDate(valueDate) })
+            .then((response) => {GetProductionbyChoiseDate(valueDate) })
             .catch((error) => { });
 
 
@@ -411,24 +392,35 @@ export const CreatingTask = ({
         })
             .then((response) => { GetProductionbyChoiseDate(valueDate) })
             .catch((error) => { });
- 
+
         api.put(`/productAccount/acceptedAmount`, {
             "id": idPlan,
-            "amount": Number(acceptedAmount)
+            "amount": Number(acceptedAmount),
+            "userId": localStorage.getItem('USERID')
         })
             .then((response) => { GetProductionbyChoiseDate(valueDate) })
             .catch((error) => { });
 
 
-            api.put(`/productAccount/reason`, {
-                "productAccountId": ProductAccountId,
-                "defectiveReason": productreason
-            })
-                .then((response) => { GetProductionbyChoiseDate(valueDate) })
-                .catch((error) => { });
+        api.put(`/productAccount/reason`, {
+            "productAccountId": ProductAccountId,
+            "defectiveReason": productreason
+        })
+            .then((response) => { GetProductionbyChoiseDate(valueDate) })
+            .catch((error) => { });
 
     }
-
+    const handleSelectChange = (event) => {
+        if (event.active === undefined) {
+            event.active = 1
+        }
+        else if (event.active === 0) {
+            event.active = 1
+        }
+        else if (event.active === 1) {
+            event.active = 0
+        }
+    };
     return (
         <div className={styles.TablePlan}>
             <h3>Ежедневный план</h3>
@@ -472,10 +464,19 @@ export const CreatingTask = ({
                                 }}
                             /><br></br>
 
-                            <button className={styles.create} onClick={CreatePlan}> Создать плана</button>
+                            <button className={styles.create} onClick={CreatePlan}> Создать план</button>
                         </div>
                     </div>
-                    <button className={styles.create} style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>
+                    {userRole==="Master"
+                      ?(
+                        <button className={styles.create} style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>
+                      )
+                      :(
+                        <div></div>
+                      )
+
+                    }
+                    
 
                     <TabPanel
                         style={{ minWidth: "1200px", }}
@@ -533,17 +534,16 @@ export const CreatingTask = ({
                         }) => (
                             <form onSubmit={handleSubmit}>
 
-                                <div className={styles.row}>
-                                    <Select
-                                        name="valueWelder"
-                                        value={valueWelder}
-                                        width="380px"
-                                        placeholder="Оборудование"
-                                        onChange={(event) => {
-                                            setvalueWelder(event.value)
-                                        }}
-                                        options={optequipment}
-                                    />
+                                <div className={styles.equipments} >
+                                    {equipment[0]?.map((option) => (
+                                        <div   >
+                                            <input
+                                                type="checkbox"
+                                                onChange={e => { handleSelectChange(option) }}
+                                            />
+                                            <span>{`${option.name} ${option.factoryNumber}`}</span>
+                                        </div>
+                                    ))}
                                 </div>
 
                                 <div className={styles.row}>
@@ -576,7 +576,6 @@ export const CreatingTask = ({
                         enableReinitialize
                         onSubmit={(variables) => {
                             const { id, ...dataToSend } = variables;
-                            FixoEquipment(valueWelder)
                             setmodalchangeInfoproductAccount(false)
                             ChangeManufacturedDefective(AmountManufactured, AmountDefective)
                         }}
@@ -590,81 +589,104 @@ export const CreatingTask = ({
                         }) => (
                             <form onSubmit={handleSubmit}>
 
-                                <p>Изменение количества продукции из плана  </p>
-                                <div className={styles.row}>
-                                    <Input
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setAmountManufactured(e.target.value)
-                                        }}
-                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                        value={AmountManufactured}
-                                        name="AmountManufactured"
-                                        placeholder="Количество забракованной продукции"
-                                        onBlur={handleBlur}
-                                    />
 
-                                </div>
+                                {userRole === "Master"
+                                    ? (
+                                        <div>
+                                            <p>Изменение количества продукции из плана  </p>
+                                            <div className={styles.row}>
+                                                <Input
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setAmountManufactured(e.target.value)
+                                                    }}
+                                                    style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                                    value={AmountManufactured}
+                                                    name="AmountManufactured"
+                                                    placeholder="Количество забракованной продукции"
+                                                    onBlur={handleBlur}
+                                                />
 
-                                <p>Количество изготовленной продукции (указывается мастером)</p>
-                                <div className={styles.row}>
-                                    <Input
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setAmountDefective(e.target.value)
+                                            </div>
 
-                                        }}
-                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                        value={AmountDefective}
-                                        name="AmountDefective"
-                                        placeholder="Количество изготовленной продукции"
-                                        onBlur={handleBlur}
-                                    />
-                                </div>
+                                            <p>Количество изготовленной продукции (указывается мастером)</p>
+                                            <div className={styles.row}>
+                                                <Input
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setAmountDefective(e.target.value)
 
-                                <p>Изменение количества принятой продукции   (указывается контролёра)</p>
-                                <div className={styles.row}>
-                                    <Input
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setacceptedAmount(e.target.value)
-                                        }}
-                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                        value={acceptedAmount}
-                                        name="acceptedAmount"
-                                        placeholder="Количество принятой продукции"
-                                        onBlur={handleBlur}
-                                    />
+                                                    }}
+                                                    style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                                    value={AmountDefective}
+                                                    name="AmountDefective"
+                                                    placeholder="Количество изготовленной продукции"
+                                                    onBlur={handleBlur}
+                                                />
+                                            </div>
 
-                                </div>
+                                            <div className={styles.row}>
+                                                <Button
+                                                    disabled={
+                                                        values.shiftNumb == ""
+                                                    }
+                                                    type="submit"
+                                                >
+                                                    Изменить
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )
+                                    : (
+                                        <div>
+                                            <p>Изменение количества принятой продукции   (указывается контролёра)</p>
+                                            <div className={styles.row}>
+                                                <Input
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setacceptedAmount(e.target.value)
+                                                    }}
+                                                    style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                                    value={acceptedAmount}
+                                                    name="acceptedAmount"
+                                                    placeholder="Количество принятой продукции"
+                                                    onBlur={handleBlur}
+                                                />
+
+                                            </div>
+                                            <p>Указания причин брака   </p>
+                                            <div className={styles.row}>
+                                                <Input
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setproductreason(e.target.value)
+                                                    }}
+                                                    style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                                    value={productreason}
+                                                    name="productreason"
+                                                    placeholder="Причина брака"
+                                                    onBlur={handleBlur}
+                                                />
+
+                                            </div>
+
+                                            <div className={styles.row}>
+                                                <Button
+                                                    disabled={
+                                                        values.shiftNumb == ""
+                                                    }
+                                                    type="submit"
+                                                >
+                                                    Изменить
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )
+                                }
 
 
-                                <p>Указания причин брака   </p>
-                                <div className={styles.row}>
-                                    <Input
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setproductreason(e.target.value)
-                                        }}
-                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                        value={productreason}
-                                        name="productreason"
-                                        placeholder="Причина брака"
-                                        onBlur={handleBlur}
-                                    />
 
-                                </div>
 
-                                <div className={styles.row}>
-                                    <Button
-                                        disabled={
-                                            values.shiftNumb == ""
-                                        }
-                                        type="submit"
-                                    >
-                                        Изменить
-                                    </Button>
-                                </div>
                             </form>
                         )}
                     </Formik>

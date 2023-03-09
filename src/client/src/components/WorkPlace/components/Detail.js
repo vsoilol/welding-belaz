@@ -365,7 +365,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы");setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы", rowData.id);setDisplayFixed(rowData?.name)  }}>Сварной шов</p>
             </div>
           )
         },
@@ -580,49 +580,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
     setValue(-1);
     setValue2(-1);
     setValuegoToHeadTable(columns[Object.keys(columns)[param]])
-    //Вывод Производственный участок для цеха
-    if (param === 1) {
-      let areaNew = []
-      for (let index = 0; index < area.length; index++) {
-        if (area[index].workshop.id === id) {
-          areaNew.push(area[index])
-        }
-      }
-      setValuegoToBodyTable(areaNew)
-    }
-    //Вывод постов для Производственных участоков
-    if (param === 2) {
-      let postsNew = []
-      for (let index = 0; index < posts.length; index++) {
-        if (posts[index].productionArea.id === id) {
-          postsNew.push(posts[index])
-        }
-      }
-      setValuegoToBodyTable(postsNew)
-    }
-    //Вывод Рабочее место для производственного участка 
-    if (param === 3) {
-      let workplaceNew = []
-      for (let index = 0; index < workplace.length; index++) {
-        if (workplace[index].productionArea?.id === id) {
-          workplaceNew.push(workplace[index])
-        }
-      }
-      setValuegoToBodyTable(workplaceNew)
-    }
-    //Вывод Рабочее место для производственного участка 
-    if (param === 9) {
-      let workplaceNew = []
-      for (let index = 0; index < workplace.length; index++) {
-        if (workplace[index].post?.id != undefined) {
-          if (workplace[index].post.id === id) {
-            workplaceNew.push(workplace[index])
-          }
-        }
-      }
-      setValuegoToBodyTable(workplaceNew)
-      setValuegoToHeadTable(columns[Object.keys(columns)[3]])
-    }
+  
     /////////////////
     //Вывод деталей для изделий
     if (param === 6) {
@@ -704,12 +662,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
     }
     //Вывод швов для деталей
     if (param === 12) {
-      let seamNew = []
-      for (let index = 0; index < detail.length; index++) {
-        if (detail[index].id === id) {
-          seamNew = detail[index].seams
-        }
-      }
+     
+      let seamNew = detail.find(det=>det.id===id).seams  
       setValuegoToHeadTable(columns[Object.keys(columns)[7]])
       setValuegoToBodyTable(seamNew)
     }
@@ -885,7 +839,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 columns={columns.details}
                 data={detail}
                 actions={
-                  userRole === "Admin"
+                  userRole === "Admin"||userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -1027,6 +981,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -1039,6 +994,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
 

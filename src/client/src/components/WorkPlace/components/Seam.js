@@ -313,7 +313,7 @@ export const Seam = ({
             columns={columns.welding_seam} 
             data={seam} 
             actions={
-              userRole === "Admin"
+              userRole === "Admin"||userRole === "Master"
                 ? [
                   {
                     icon: "add",
@@ -338,7 +338,11 @@ export const Seam = ({
                       setValueProdArea(rowData.workshop?.id)
                       setValuetTechProc(rowData.technologicalProcess?.id)
                       setValuetPosts(rowData.productionArea?.id)
-                      setValuetWorkPlace(rowData.workplace?.id)
+                      setValuetWorkPlace(rowData.workplace?.id) 
+
+                      setvaluetProduct(rowData?.product?.mainProduct?.mainProduct?.id)
+                      setvaluetKnots(rowData?.product?.mainProduct?.id)
+                      setvaluetDetail(rowData?.product?.id)
                     },
                   },
                 ]
@@ -400,6 +404,7 @@ export const Seam = ({
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
 
