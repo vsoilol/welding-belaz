@@ -11,8 +11,8 @@ const {
     LOAD_INSTRUCTIONS_REQUEST,
     ADD_INST_REQUEST,
     EDIT_INST_REQUEST,
-    ///Сварные швы
-    LOAD_SEAM_REQUEST,
+     ///Сварные швы
+     LOAD_SEAM_REQUEST,
   },
   Creators: {
     ///Технологические процессы 
@@ -28,9 +28,9 @@ const {
     editInstSuccess,
     editInstFailure,
 
-    ///Сварные швы
-    loadSeamSuccess,
-    loadSeamFailure,
+     ///Сварные швы
+     loadSeamSuccess,
+     loadSeamFailure,
 
 
   },
@@ -52,7 +52,7 @@ function* loadTexprocwelding() {
 ///Технологические инструкции  
 function* loadInstructions() {
   try {
-    const { data } = yield call(api.get, `/TechnologicalInstruction`);
+    const { data } = yield call(api.get, `/TechnologicalInstruction`); 
     yield put(loadInstructionsSuccess(data));
   } catch (error) {
     yield put(loadInstructionsFailure(error));
@@ -61,20 +61,52 @@ function* loadInstructions() {
 }
 
 function* addInst(variables) {
-  try {
-    const { data } = yield call(api.post, `/TechnologicalInstruction`, variables.payload);
-    yield put(addInstSuccess(variables.payload));
-    yield call(loadInstructions); // выполнение функции loadInstructions
+  try {   
+    const { data } = yield call(api.post, `/TechnologicalInstruction`, {
+      "number": variables.payload.number,
+      "name": variables.payload.name,
+      "seamId": variables.payload.seamId,
+      "technologicalProcessId": variables.payload.technologicalProcessId,
+      "weldPassages": [
+        {
+          "name": variables.payload.weldPassagesName,
+          "number": variables.payload.number,
+          "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
+          "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
+          "arcVoltageMin": Number(variables.payload.arcVoltageMin),
+          "arcVoltageMax": Number(variables.payload.arcVoltageMax),
+          "preheatingTemperatureMin": Number(variables.payload.preheatingTemperatureMin),
+          "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
+        }
+      ]
+    });
+    window.location.reload();
+    // yield put(addInstSuccess(variables.payload));
   } catch (error) {
     yield put(addInstFailure(error));
     yield put(setError(error.message));
   }
 }
 function* editInst(variables) {
-  try { 
-    const { data } = yield call(api.put, `/TechnologicalInstruction`, variables.payload);
-    yield put(addInstSuccess(variables.payload));
-    yield call(loadInstructions); // выполнение функции loadInstructions
+  try {  
+    const { data } = yield call(api.put, `/TechnologicalInstruction`, {
+      "id": variables.payload.id,
+      "number": Number(variables.payload.number),
+      "name": variables.payload.name,  
+      "weldPassages": [
+        {
+          "id": variables.payload.weldPassagesId,
+          "number": Number(variables.payload.number),
+          "name": variables.payload.weldPassagesName,
+          "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
+          "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
+          "arcVoltageMin": Number(variables.payload.arcVoltageMin),
+          "arcVoltageMax": Number(variables.payload.arcVoltageMax),
+          "preheatingTemperatureMin": Number(variables.payload.preheatingTemperatureMin),
+          "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
+        }
+      ]
+    }); 
     yield put(editInstSuccess(data));
   } catch (error) {
     yield put(editInstFailure(error));
@@ -101,6 +133,6 @@ export function* texprocweldingSaga() {
   yield takeLatest(ADD_INST_REQUEST, addInst);
   yield takeLatest(EDIT_INST_REQUEST, editInst);
 
-  ///Сварные швы
-  yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
+   ///Сварные швы
+   yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
 }

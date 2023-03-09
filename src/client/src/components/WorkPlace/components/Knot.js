@@ -138,6 +138,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
     variables["workplaceId"] = valueWorkplace
 
 
+    variables["mainProductId"]=valuetProduct
+
     //Добавить Узел
     if (isModalNumb == 13) {
       variables["status"] = "add"
@@ -756,6 +758,16 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
   });
 
 
+  //наименование изделия 
+  const [valuetProduct, setvaluetProduct] = useState("");
+  const productsOptions = product?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+
+
 
   const [welderList, setwelderList] = useState(welderGetList (area[0].id,0)); 
   function welderGetList (idArea,tools_numb) {
@@ -883,7 +895,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 value={1}
                 data={knot}
                 actions={
-                  userRole === "Admin"
+                  userRole === "Admin"||userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -909,6 +921,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
                           setValuetWorkPlace(rowData.workplace?.id)
+
+                          setvaluetProduct(rowData?.mainProduct?.id)
                         },
                       },
                     ]
@@ -1027,6 +1041,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -1039,6 +1054,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
 
@@ -1066,7 +1082,16 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                   />
                 </div>
 
-
+                <div className={styles.row}>
+                  <Select
+                    name="valuetProduct"
+                    width="380px"
+                    value={valuetProduct}
+                    placeholder="Изделие"
+                    onChange={(event) => setvaluetProduct(event.value)}
+                    options={productsOptions}
+                  />
+                </div>
                 <div className={styles.row}>
                   <Select
                     name="valuetTechProc"

@@ -431,6 +431,13 @@ export const TexProcWelding = ({
     };
   });
 
+ //Номера технологического процесса   
+  const TexProcOptions = texprocwelding?.map((item) => {
+    return {
+      value: item.id,
+      label: item.number,
+    };
+  });
 
   const requiredKeys = ["name", "nextInspectionDate"];
 
@@ -441,7 +448,8 @@ export const TexProcWelding = ({
 
 
 
-  const [value_panel, setValue] = useState(0);
+  const [value_panel, setValue] = useState(0); 
+  const [valueTexProcOptions, setvalueTexProcOptions] = useState(0);
   const ChangePanels = (event, newValue) => {
     setValue(newValue);
   };
@@ -458,8 +466,8 @@ export const TexProcWelding = ({
   //Запрос на редактирование или добавление
   function SendData(variables) {
     variables["seamId"] = valuetSeam;
-    variables["technologicalProcessId"] = texprocwelding[0].id;
-
+    variables["technologicalProcessId"] = texprocwelding[0].id; 
+    variables["number"] = texprocwelding.find(task => task.id === valueTexProcOptions).number
 
     if (isModalOpenNumb === 0) {
       addInst(variables)
@@ -561,7 +569,7 @@ export const TexProcWelding = ({
             data={instructions}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin"
+              userRole === "Admin"||userRole === "Master"
                 ? [
                   {
                     icon: "add",
@@ -577,11 +585,11 @@ export const TexProcWelding = ({
                     icon: "edit",
                     tooltip: "Редактировать ",
                     onClick: (event, rowData) => { 
-                      setModalData(rowData);
+                      setModalData(rowData); 
                       setIsModalOpen(true);
                       setIsModalOpenNumb(1)
-                      setValuetSeam(rowData?.seam?.id)
-                      setValuetVkladka(1)
+                      setValuetSeam(rowData?.seams[0]?.id)
+                      setValuetVkladka(1) 
                     },
                   },
                 ]
@@ -646,20 +654,30 @@ export const TexProcWelding = ({
                   style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                   value={values.name}
                   name="name"
+                  autocomplete="off"
                   placeholder="Наименовние"
                   onBlur={handleBlur}
                 />
               </div>
               <div className={styles.row}>
-                <Input
+                {/* <Input
                   onChange={(e) => {
                     handleChange(e);
                   }}
                   style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                   value={values.number}
+                  autocomplete="off"
                   name="number"
                   placeholder="Номер технологического процесса"
                   onBlur={handleBlur}
+                /> */}
+                <Select
+                  name="valueTexProcOptions"
+                  width="380px"
+                  value={valueTexProcOptions}
+                  placeholder="Номер технологического процесса"
+                  onChange={(event) => {setvalueTexProcOptions(event.value)}}
+                  options={TexProcOptions}
                 />
               </div>
               <div className={styles.row}>
@@ -682,6 +700,7 @@ export const TexProcWelding = ({
                   name="weldPassagesName"
                   placeholder="Наименование прохода"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -695,6 +714,7 @@ export const TexProcWelding = ({
                   name="weldingCurrentMin"
                   placeholder="Сварочный ток min"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
 
                 <Input
@@ -707,6 +727,7 @@ export const TexProcWelding = ({
                   name="weldingCurrentMax"
                   placeholder="Сварочный ток max"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -720,6 +741,7 @@ export const TexProcWelding = ({
                   name="arcVoltageMin"
                   placeholder="Напряжение дуги min"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
 
                 <Input
@@ -732,6 +754,7 @@ export const TexProcWelding = ({
                   name="arcVoltageMax"
                   placeholder="Напряжение дуги max"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -745,6 +768,7 @@ export const TexProcWelding = ({
                   name="preheatingTemperatureMin"
                   placeholder="Температура предварительного нагрева min"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
 
                 <Input
@@ -757,6 +781,7 @@ export const TexProcWelding = ({
                   name="preheatingTemperatureMax"
                   placeholder="Температура предварительного нагрева max"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               {!modalData && (

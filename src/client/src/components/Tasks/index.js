@@ -20,6 +20,9 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { array } from "yup";
 
+
+
+
 const {
   Creators: { setError },
 } = errorActions;
@@ -117,8 +120,7 @@ export const Tasks = ({
     "weldingWire",
     "instructionId",
   ];
- 
-
+  
  
     useEffect(() => {
       loadTasks();
@@ -160,18 +162,15 @@ export const Tasks = ({
     };
   }); 
   const getDocument = (numberTask) => { 
-    const number = tasks.tasks.find(task => task.number === numberTask);   
-    
-    api
-      .get(`/file/seamPassport/${number.id}`, {
+    const number = combinedArray?.find(task => task.number === numberTask).id;    
+    api.get(`/file/seamPassport/${number}`, {
         responseType: "arraybuffer",
         dataType: "blob",
       })
       .then((response) => {
         const file = new Blob([response["data"]], {
           type: "application/pdf",
-        });
-
+        }); 
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
       })
@@ -179,13 +178,83 @@ export const Tasks = ({
   };
  
 
-  
+  const combinedArray = tasks?.tasks?.concat(tasks.fullNames); 
 
 
   const columns = [
     {
       title: "№ задания»", field: "number",
+    }, 
+    {
+      title: "Номер шва", field: "seam.number",
     },
+
+    {
+      title: "Наименование изделия",  
+      render: (rowData) => {
+        if (rowData?.seam?.product?.mainProduct?.mainProduct?.productType===1) {
+          return   <p>{rowData?.seam?.product?.mainProduct?.mainProduct?.name}</p>  
+        }
+        else if (rowData?.seam?.product?.mainProduct?.productType===1){
+          return  <p>{rowData?.seam?.product?.mainProduct?.name}</p> 
+        }
+        else if (rowData?.seam?.product?.productType===1){
+          return <p>{rowData?.seam?.product?.name}</p> 
+        }  else {
+          return  <p> - </p> 
+        }
+        
+
+      },
+    },
+    {
+      title: "Наименование узла", 
+      render: (rowData) => {
+        if (rowData?.seam?.product?.mainProduct?.mainProduct?.productType===2) {
+          return   <p>{rowData?.seam?.product?.mainProduct?.mainProduct?.name}</p>  
+        }
+        else if (rowData?.seam?.product?.mainProduct?.productType===2){
+          return  <p>{rowData?.seam?.product?.mainProduct?.name}</p> 
+        }
+        else if (rowData?.seam?.product?.productType===2){
+          return <p>{rowData?.seam?.product?.name}</p> 
+        }  else {
+          return  <p> - </p> 
+        }
+      },  
+    }, 
+    {
+      title: "Наименование детали", 
+      render: (rowData) => {
+        if (rowData?.seam?.product?.mainProduct?.mainProduct?.productType===3) {
+          return   <p>{rowData?.seam?.product?.mainProduct?.mainProduct?.name}</p>  
+        }
+        else if (rowData?.seam?.product?.mainProduct?.productType===3){
+          return  <p>{rowData?.seam?.product?.mainProduct?.name}</p> 
+        }
+        else if (rowData?.seam?.product?.productType===3){
+          return <p>{rowData?.seam?.product?.name}</p> 
+        }  else {
+          return  <p> - </p> 
+        }
+
+      }, 
+    },
+    
+    {
+      title: "Оборудование  ( инвентарный номер )",
+      render: (rowData) => {
+          if (rowData?.weldingEquipment && rowData?.weldingEquipment.length != 0) {
+              return (
+                <p>{rowData?.weldingEquipment?.factoryNumber ?? "-"}</p>
+              )
+          }
+          else {
+              return <span>-</span>
+          }
+      },
+    },
+
     {
       title: "Исполнитель",
       field: "masterId",
@@ -438,7 +507,7 @@ export const Tasks = ({
   ]
 
 
-
+  
   ////////////////////////////////////////////////////////////////////
   const optProduction = ProdArray?.map((item) => {
     return {
@@ -455,7 +524,7 @@ export const Tasks = ({
       label: `${item.middleName} ${item.firstName} ${item.lastName}`,
     };
   });
-  
+   
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -493,7 +562,7 @@ export const Tasks = ({
           <Table
             title="Сменные задания на сварку"
             columns={columns}
-            data={tasks.fullNames}
+            data={combinedArray}
             isLoading={isRequesting}
             
           />
@@ -598,6 +667,7 @@ export const Tasks = ({
               initialValues={initialValues}
               user={user}
               equipment={equipment}
+              userRole={userRole}
             />
           )
           : (
