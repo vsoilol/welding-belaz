@@ -197,7 +197,7 @@ function* assignWelders({ payload }) {
   try { 
     const { data } = yield call(api.put, `/weldingEquipment/assignWelders`, {
       "weldingEquipmentIds": [ payload.weldingEquipmentId],
-      "welderIds": [payload.welderIds]
+      "welderIds": payload.welderIds
     });  
     // yield put(addassignWeldersSuccess(data));  
     window.location.reload()

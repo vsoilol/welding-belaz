@@ -423,6 +423,7 @@ function* addKnot(variables) {
           "workplaceId": variables.payload.workplaceId,
           "seams":variables.payload.seams,
           "technologicalProcessId": variables.payload.technologicalProcessId,
+          "mainProductId": variables.payload.mainProductId
         });
         yield put(addKnotSuccess(data));
       }
@@ -547,8 +548,7 @@ function* loadSeam() {
   }
 }
 function* addSeam(variables) {
-  try {
-    console.log(variables.payload)
+  try { 
     if (variables.payload.valEx === 1) {
       const { data } = yield call(api.put, `/seam/assignWelder`, {
         "seamId": variables.payload.seamId,

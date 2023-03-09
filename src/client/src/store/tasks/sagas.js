@@ -42,8 +42,8 @@ const {
 
 function* loadTasks() {
   try {
-    const { data } = yield call(api.get, `/WeldingTask/fullNames`); 
-    const tasks  = yield call(api.get, `/WeldingTask`);
+    const { data } = yield call(api.get, `/WeldingTask/uncompleted`); 
+    const tasks  = yield call(api.get, `/WeldingTask/completed`);
  
     let datas = {
       fullNames:data,
