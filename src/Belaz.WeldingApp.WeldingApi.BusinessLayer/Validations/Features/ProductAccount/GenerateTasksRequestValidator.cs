@@ -23,9 +23,11 @@ public class GenerateTasksRequestValidator : AbstractValidator<GenerateTasksRequ
                 >(context)
             );
 
-        RuleFor(model => model.UserId)
+        RuleFor(model => model.MasterId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetAsyncValidator(new UserIsMasterValidatorFor<GenerateTasksRequest>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<GenerateTasksRequest, Domain.Entities.Users.Master>(context)
+            );
     }
 }

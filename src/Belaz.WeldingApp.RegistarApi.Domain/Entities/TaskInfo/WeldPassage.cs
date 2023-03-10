@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 

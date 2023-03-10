@@ -19,14 +19,14 @@ public class WeldPassageRepository : IWeldPassageRepository
 
     public async Task CreateAsync(WeldPassage weldPassage)
     {
-        var existWeldPassage = await _context.WeldPassages.FirstOrDefaultAsync(
-            _ => _.WeldingTaskId == weldPassage.WeldingTaskId && _.Number == weldPassage.Number
-        );
+        // var existWeldPassage = await _context.WeldPassages.FirstOrDefaultAsync(
+        //     _ => _.WeldingTaskId == weldPassage.WeldingTaskId && _.Number == weldPassage.Number
+        // );
 
-        if (existWeldPassage is not null)
-        {
-            _context.WeldPassages.Remove(existWeldPassage);
-        }
+        // if (existWeldPassage is not null)
+        // {
+        //     _context.WeldPassages.Remove(existWeldPassage);
+        // }
 
         _context.WeldPassages.Add(weldPassage);
         await _context.SaveChangesAsync();

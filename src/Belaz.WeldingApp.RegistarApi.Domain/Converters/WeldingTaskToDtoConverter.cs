@@ -25,68 +25,67 @@ public class WeldingTaskToDtoConverter : ITypeConverter<WeldingTask, WeldingTask
 
         destination.Id = source.Id;
         destination.Number = source.Number;
-        destination.Seam = GetSeamInfo(source);
-        destination.TechnologicalInstruction = _mapper.Map<TechnologicalInstructionDto>(
-            source.Seam.TechnologicalInstruction
-        );
-        destination.TechnologicalProcess = _mapper.Map<TechnologicalProcessDto>(
-            source.Seam.Product.TechnologicalProcess
-        );
-        destination.WeldPassageInstructions = _mapper.Map<List<WeldPassageInstructionDto>>(
-            source.Seam.TechnologicalInstruction!.WeldPassageInstructions
-        );
+
+        MapRelatedEntities(source, destination);
 
         return destination;
     }
 
-    private SeamDto GetSeamInfo(WeldingTask source)
+    private void MapRelatedEntities(WeldingTask source, WeldingTaskDto destination)
     {
-        var seam = _mapper.Map<SeamDto>(source.Seam);
+        destination.TechnologicalInstruction = _mapper.Map<TechnologicalInstructionDto>(
+            source.SeamAccount.Seam.TechnologicalInstruction
+        );
+        destination.TechnologicalProcess = _mapper.Map<TechnologicalProcessDto>(
+            source.SeamAccount.Seam.Product.TechnologicalProcess
+        );
+        destination.WeldPassageInstructions = _mapper.Map<List<WeldPassageInstructionDto>>(
+            source.SeamAccount.Seam.TechnologicalInstruction!.WeldPassageInstructions
+        );
 
-        var seamProducts = GetSeamProducts(source.Seam).Where(_ => _ is not null);
-        SetProductsToSeam(seam, seamProducts!);
+        var seamDto = _mapper.Map<SeamDto>(source.SeamAccount.Seam);
 
-        return seam;
+        MapProductsToSeam(source.SeamAccount.Seam, seamDto);
+
+        destination.Seam = seamDto;
     }
 
-    private List<Product?> GetSeamProducts(Seam seam)
+    private void MapProductsToSeam(Seam seam, SeamDto seamDto)
     {
-        var seamProduct = seam.Product;
+        var products = GetSeamProducts(seam);
 
-        var secondSeamProduct = GetMainProductByChild(seamProduct);
-        var thirdSeamProduct = GetMainProductByChild(secondSeamProduct);
-
-        return new List<Product?> { seamProduct, secondSeamProduct, thirdSeamProduct };
-    }
-
-    private Product? GetMainProductByChild(Product? childProduct)
-    {
-        if (childProduct is null || childProduct.ProductType == ProductType.Product)
+        if (products.Product != null)
         {
-            return null;
+            seamDto.Product = _mapper.Map<ProductDto>(products.Product);
         }
 
-        return childProduct.ProductMain!.MainProduct;
+        if (products.Knot != null)
+        {
+            seamDto.Knot = _mapper.Map<ProductDto>(products.Knot);
+        }
+
+        if (products.Detail != null)
+        {
+            seamDto.Detail = _mapper.Map<ProductDto>(products.Detail);
+        }
     }
 
-    private void SetProductsToSeam(SeamDto seam, IEnumerable<Product> products)
+    private (Product? Product, Product? Knot, Product? Detail) GetSeamProducts(Seam seam)
     {
-        foreach (var product in products)
+        var product = GetProductByTypeInHierarchy(seam.Product, ProductType.Product);
+        var knot = GetProductByTypeInHierarchy(seam.Product, ProductType.Knot);
+        var detail = GetProductByTypeInHierarchy(seam.Product, ProductType.Detail);
+
+        return (product, knot, detail);
+    }
+
+    private Product? GetProductByTypeInHierarchy(Product? product, ProductType type)
+    {
+        while (product?.ProductType != type && product?.ProductMain?.MainProduct != null)
         {
-            switch (product.ProductType)
-            {
-                case ProductType.Product:
-                    seam.Product = _mapper.Map<ProductDto>(product);
-                    break;
-
-                case ProductType.Knot:
-                    seam.Knot = _mapper.Map<ProductDto>(product);
-                    break;
-
-                case ProductType.Detail:
-                    seam.Detail = _mapper.Map<ProductDto>(product);
-                    break;
-            }
+            product = product.ProductMain.MainProduct;
         }
+
+        return product?.ProductType == type ? product : null;
     }
 }

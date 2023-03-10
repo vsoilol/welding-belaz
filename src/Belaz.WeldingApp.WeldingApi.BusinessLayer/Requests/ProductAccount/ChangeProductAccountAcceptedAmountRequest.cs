@@ -6,5 +6,5 @@ public class ChangeProductAccountAcceptedAmountRequest
 
     public int Amount { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid InspectorId { get; set; }
 }

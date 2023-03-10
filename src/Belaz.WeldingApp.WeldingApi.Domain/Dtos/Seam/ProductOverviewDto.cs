@@ -1,14 +1,14 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Belaz.WeldingApp.WeldingApi.Domain.Converters;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 
-public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
+public class ProductOverviewDto : IMapFrom<Entities.ProductInfo.Product>
 {
     public Guid Id { get; set; }
 
@@ -26,10 +26,6 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
 
     public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
 
-    public List<ProductInsideDto> InsideProducts { get; set; } = null!;
-
-    public List<SeamDto> Seams { get; set; } = null!;
-
     public ProductBriefDto? Product { get; set; }
 
     public ProductBriefDto? Knot { get; set; }
@@ -39,8 +35,7 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Entities.ProductInfo.Product, ProductDto>()
-            .ConvertUsing<ProductDtoConverter>();
-        ;
+            .CreateMap<Entities.ProductInfo.Product, ProductOverviewDto>()
+            .ConvertUsing<ProductOverviewDtoConverter>();
     }
 }

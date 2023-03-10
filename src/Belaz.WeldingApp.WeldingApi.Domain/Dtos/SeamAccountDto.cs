@@ -62,8 +62,7 @@ public class SeamAccountDto : IMapFrom<SeamAccount>
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.Seam.WeldingTasks
-                                .Where(_ => _.WeldingDate.Date.Equals(x.DateFromPlan.Date))
+                            x.WeldingTasks
                                 .SelectMany(_ => _.WeldPassages)
                                 .Any(
                                     _ =>

@@ -47,9 +47,7 @@ public class ProductAccountRepository : IProductAccountRepository
         int acceptedAmount
     )
     {
-        var inspector = (
-            await _context.Inspectors.FirstOrDefaultAsync(_ => _.UserId == inspectorId)
-        )!;
+        var inspector = (await _context.Inspectors.FirstOrDefaultAsync(_ => _.Id == inspectorId))!;
 
         var productAccount = (
             await _context.ProductAccounts
@@ -57,13 +55,7 @@ public class ProductAccountRepository : IProductAccountRepository
                 .FirstOrDefaultAsync(_ => _.Id == id)
         )!;
 
-        var seams = _context.Seams.Where(_ => _.ProductId == productAccount.ProductId);
-
-        var weldingTasks = _context.WeldingTasks.Where(
-            _ =>
-                _.WeldingDate.Date.Equals(productAccount.DateFromPlan.Date)
-                && seams.Any(seam => seam.Id == _.SeamId)
-        );
+        var weldingTasks = _context.WeldingTasks.Where(_ => _.SeamAccount.ProductAccountId == id);
 
         await weldingTasks.ForEachAsync(_ =>
         {
@@ -86,16 +78,12 @@ public class ProductAccountRepository : IProductAccountRepository
                 ? productResultManufactured.Amount - acceptedAmount
                 : 0;
 
-        var seamsAccount = await _context.SeamAccounts
+        var seamAccounts = await _context.SeamAccounts
             .Include(_ => _.SeamResults)
-            .Where(
-                _ =>
-                    _.Seam.ProductId == productAccount.ProductId
-                    && _.DateFromPlan.Date.Equals(productAccount.DateFromPlan.Date)
-            )
+            .Where(_ => _.ProductAccountId == id)
             .ToListAsync();
 
-        foreach (var seamAccount in seamsAccount)
+        foreach (var seamAccount in seamAccounts)
         {
             var seamResultAccept = seamAccount.SeamResults.FirstOrDefault(
                 _ => _.Status == ResultProductStatus.Accept
@@ -177,66 +165,67 @@ public class ProductAccountRepository : IProductAccountRepository
                 && _.DateFromPlan.Date.Equals(newDate.Date)
         );
 
-        var oldSeamAccounts = _context.SeamAccounts.Where(
-            _ =>
-                _.Seam.Product.ProductionAreaId == productionAreaId
-                && _.DateFromPlan.Date.Equals(newDate.Date)
-        );
-
         _context.ProductAccounts.RemoveRange(oldProductAccounts);
-        _context.SeamAccounts.RemoveRange(oldSeamAccounts);
 
         await _context.SaveChangesAsync();
 
-        var newProductAccounts = (
-            await _context.ProductAccounts
-                .Include(_ => _.Product)
-                .ThenInclude(_ => _.Seams)
-                .Include(_ => _.WeldingEquipments)
-                .Where(
-                    _ =>
-                        _.Product.ProductionAreaId == productionAreaId
-                        && _.DateFromPlan.Date.Equals(date.Date)
-                )
-                .OrderBy(_ => _.Number)
-                .ToListAsync()
-        ).Select(
-            (_, index) =>
-                new ProductAccount
-                {
-                    Number = index + 1,
-                    AmountFromPlan = _.AmountFromPlan,
-                    DateFromPlan = newDate,
-                    Product = _.Product,
-                    ProductResults = new List<ProductResult>
-                    {
-                        new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                        new() { Amount = 0, Status = ResultProductStatus.Accept },
-                        new() { Amount = 0, Status = ResultProductStatus.Defective }
-                    },
-                    WeldingEquipments = _.WeldingEquipments
-                }
-        );
+        var productAccounts = await _context.ProductAccounts
+            .Include(_ => _.Product)
+            .Include(_ => _.WeldingEquipments)
+            .Include(_ => _.SeamAccounts)
+            .ThenInclude(_ => _.Seam)
+            .Where(
+                _ =>
+                    _.Product.ProductionAreaId == productionAreaId
+                    && _.DateFromPlan.Date.Equals(date.Date)
+            )
+            .ToListAsync();
 
-        var seamAccounts = newProductAccounts
-            .SelectMany(_ => _.Product.Seams)
-            .Select(
-                (_, index) =>
-                    new SeamAccount
-                    {
-                        DateFromPlan = DateTime.Now,
-                        Seam = _,
-                        SeamResults = new List<SeamResult>
-                        {
-                            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                            new() { Amount = 0, Status = ResultProductStatus.Accept },
-                            new() { Amount = 0, Status = ResultProductStatus.Defective }
-                        }
-                    }
-            );
+        var newProductAccounts = new List<ProductAccount>();
+        for (int i = 0; i < productAccounts.Count; i++)
+        {
+            var productAccount = productAccounts[i];
+            var productResultStatus = new List<ProductResult>
+            {
+                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                new() { Amount = 0, Status = ResultProductStatus.Accept },
+                new() { Amount = 0, Status = ResultProductStatus.Defective }
+            };
+
+            var seamAccounts = new List<SeamAccount>();
+
+            foreach (var seamAccount in productAccount.SeamAccounts)
+            {
+                var seamResultStatus = new List<SeamResult>
+                {
+                    new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                    new() { Amount = 0, Status = ResultProductStatus.Accept },
+                    new() { Amount = 0, Status = ResultProductStatus.Defective }
+                };
+
+                var newSeamAccount = new SeamAccount
+                {
+                    DateFromPlan = newDate,
+                    SeamId = seamAccount.SeamId,
+                    SeamResults = seamResultStatus
+                };
+                seamAccounts.Add(newSeamAccount);
+            }
+
+            var newProductAccount = new ProductAccount
+            {
+                Number = productAccount.Number,
+                AmountFromPlan = productAccount.AmountFromPlan,
+                DateFromPlan = newDate,
+                ProductId = productAccount.ProductId,
+                ProductResults = productResultStatus,
+                SeamAccounts = seamAccounts,
+                WeldingEquipments = productAccount.WeldingEquipments
+            };
+            newProductAccounts.Add(newProductAccount);
+        }
 
         _context.ProductAccounts.AddRange(newProductAccounts);
-        _context.SeamAccounts.AddRange(seamAccounts);
 
         await _context.SaveChangesAsync();
 
@@ -265,54 +254,62 @@ public class ProductAccountRepository : IProductAccountRepository
 
         await _context.SaveChangesAsync();
 
-        var products = await _context.Products
+        var products = await _context.ProductionAreas
+            .Where(_ => _.Number == 6)
+            .SelectMany(_ => _.Products)
             .Include(_ => _.Seams)
-            .Where(_ => _.ProductionAreaId == productionAreaId)
             .ToListAsync();
 
-        var newProductAccounts = products.Select(
-            (_, index) =>
-                new ProductAccount
+        var productAccounts = new List<ProductAccount>();
+        for (int i = 0; i < products.Count; i++)
+        {
+            var product = products[i];
+            var productResultStatus = new List<ProductResult>
+            {
+                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                new() { Amount = 0, Status = ResultProductStatus.Accept },
+                new() { Amount = 0, Status = ResultProductStatus.Defective }
+            };
+
+            var seamAccounts = new List<SeamAccount>();
+
+            foreach (var seam in product.Seams)
+            {
+                var seamResultStatus = new List<SeamResult>
                 {
-                    Number = index + 1,
-                    AmountFromPlan = 0,
+                    new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                    new() { Amount = 0, Status = ResultProductStatus.Accept },
+                    new() { Amount = 0, Status = ResultProductStatus.Defective }
+                };
+
+                var seamAccount = new SeamAccount
+                {
                     DateFromPlan = newDate,
-                    Product = _,
-                    ProductResults = new List<ProductResult>
-                    {
-                        new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                        new() { Amount = 0, Status = ResultProductStatus.Accept },
-                        new() { Amount = 0, Status = ResultProductStatus.Defective }
-                    }
-                }
-        );
+                    Seam = seam,
+                    SeamResults = seamResultStatus
+                };
+                seamAccounts.Add(seamAccount);
+            }
 
-        var seamAccounts = products
-            .SelectMany(_ => _.Seams)
-            .Select(
-                (_, index) =>
-                    new SeamAccount
-                    {
-                        DateFromPlan = DateTime.Now,
-                        Seam = _,
-                        SeamResults = new List<SeamResult>
-                        {
-                            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                            new() { Amount = 0, Status = ResultProductStatus.Accept },
-                            new() { Amount = 0, Status = ResultProductStatus.Defective }
-                        }
-                    }
-            );
+            var productAccount = new ProductAccount
+            {
+                Number = i + 1,
+                AmountFromPlan = 0,
+                DateFromPlan = newDate,
+                Product = product,
+                ProductResults = productResultStatus,
+                SeamAccounts = seamAccounts
+            };
+            productAccounts.Add(productAccount);
+        }
 
-        _context.ProductAccounts.AddRange(newProductAccounts);
-        _context.SeamAccounts.AddRange(seamAccounts);
-
+        _context.ProductAccounts.AddRange(productAccounts);
         await _context.SaveChangesAsync();
 
         return await GetAllByDateAsync(newDate, productionAreaId);
     }
 
-    public async Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId)
+    public async Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid masterId)
     {
         var oldWeldingTask = _context.WeldingTasks.Where(
             _ =>
@@ -323,39 +320,31 @@ public class ProductAccountRepository : IProductAccountRepository
         _context.RemoveRange(oldWeldingTask);
         await _context.SaveChangesAsync();
 
-        var master = (await _context.Masters.FirstOrDefaultAsync(_ => _.UserId == userId))!;
+        var master = (await _context.Masters.FirstOrDefaultAsync(_ => _.Id == masterId))!;
 
-        var productAccounts = await _context.ProductAccounts
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.Seams)
-            .Include(_ => _.Product)
-            .ThenInclude(_ => _.Inspector)
+        var seamAccounts = await _context.SeamAccounts
+            .Include(_ => _.Seam.Inspector)
             .Where(
                 _ =>
-                    _.Product.ProductionAreaId == productionAreaId
-                    && _.DateFromPlan.Date.Equals(date.Date)
+                    _.DateFromPlan.Date.Equals(date.Date)
+                    && _.Seam.Product.ProductionAreaId == productionAreaId
+                    && _.ProductAccount.AmountFromPlan > 0
             )
             .ToListAsync();
 
         var weldingTasks = new List<WeldingTask>();
 
-        foreach (var productAccount in productAccounts)
+        foreach (var seamAccount in seamAccounts)
         {
-            for (int i = 0; i < productAccount.AmountFromPlan; i++)
-            {
-                foreach (var seam in productAccount.Product.Seams)
+            weldingTasks.Add(
+                new WeldingTask
                 {
-                    weldingTasks.Add(
-                        new WeldingTask
-                        {
-                            WeldingDate = date,
-                            Master = master,
-                            Inspector = seam.Inspector,
-                            Seam = seam
-                        }
-                    );
+                    WeldingDate = date,
+                    Master = master,
+                    Inspector = seamAccount.Seam.Inspector,
+                    SeamAccount = seamAccount
                 }
-            }
+            );
         }
 
         _context.WeldingTasks.AddRange(weldingTasks);

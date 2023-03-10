@@ -20,4 +20,6 @@ public class ProductAccount : Entity
     public Product Product { get; set; } = null!;
 
     public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
+
+    public List<SeamAccount> SeamAccounts { get; set; } = null!;
 }

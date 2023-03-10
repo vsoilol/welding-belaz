@@ -19,12 +19,12 @@ public class DefectiveSeamDto : IMapFrom<Entities.TaskInfo.DefectiveReason>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Entities.TaskInfo.DefectiveReason, DefectiveSeamDto>()
-            .ForMember(dto => dto.Seam,
-                opt => opt
-                    .MapFrom(x => x.WeldingTask.Seam))
-            .ForMember(dto => dto.DetectedDefectiveDate,
-                opt => opt
-                    .MapFrom(x => x.DetectedDefectiveDate.ToDayInfoString()));
+        profile
+            .CreateMap<Entities.TaskInfo.DefectiveReason, DefectiveSeamDto>()
+            .ForMember(dto => dto.Seam, opt => opt.MapFrom(x => x.WeldingTask.SeamAccount.Seam))
+            .ForMember(
+                dto => dto.DetectedDefectiveDate,
+                opt => opt.MapFrom(x => x.DetectedDefectiveDate.ToDayInfoString())
+            );
     }
 }

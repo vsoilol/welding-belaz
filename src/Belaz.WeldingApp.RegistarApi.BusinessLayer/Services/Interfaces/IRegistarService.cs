@@ -21,4 +21,6 @@ public interface IRegistarService
     Task<Result<Unit>> CreateRecordWithTaskAsync(RecordWithTaskRequest request);
 
     Task<Result<WeldingTaskResponse>> GetTaskByIdAsync(GetTaskByIdRequest request);
+
+    Task<Result<Unit>> MarkWeldingTaskAsCompletedAsync(MarkWeldingTaskAsCompletedRequest request);
 }

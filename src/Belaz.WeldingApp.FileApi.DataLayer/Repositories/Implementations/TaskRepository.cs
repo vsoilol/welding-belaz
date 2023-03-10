@@ -38,10 +38,10 @@ public class TaskRepository : ITaskRepository
     {
         var seamProduct = (
             await _context.WeldingTasks
-                .Include(_ => _.Seam)
-                .ThenInclude(_ => _.Product)
+                .Include(_ => _.SeamAccount.Seam.Product)
                 .FirstOrDefaultAsync(_ => _.Id == weldingTaskId)
         )!
+            .SeamAccount
             .Seam
             .Product;
 

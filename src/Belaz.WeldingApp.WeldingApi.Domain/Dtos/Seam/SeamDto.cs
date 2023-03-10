@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Domain.Converters;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
@@ -23,7 +24,11 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     /// </summary>
     public bool IsPerformed { get; set; }
 
-    public MainProductDto Product { get; set; } = null!;
+    public ProductOverviewDto Product { get; set; } = null!;
+
+    public ProductOverviewDto? Knot { get; set; }
+
+    public ProductOverviewDto? Detail { get; set; }
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 
@@ -37,12 +42,6 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
 
     public void Mapping(Profile profile)
     {
-        profile
-            .CreateMap<Entities.ProductInfo.Seam, SeamDto>()
-            .ForMember(
-                dto => dto.TechnologicalProcess,
-                opt => opt.MapFrom(x => x.Product!.TechnologicalProcess)
-            )
-            .ForMember(dto => dto.Workshop, opt => opt.MapFrom(x => x.ProductionArea!.Workshop));
+        profile.CreateMap<Entities.ProductInfo.Seam, SeamDto>().ConvertUsing<SeamDtoConverter>();
     }
 }
