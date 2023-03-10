@@ -29,10 +29,13 @@ public class ChangeProductAccountAcceptedAmountRequestValidator
                     );
             });
 
-        RuleFor(model => model.UserId)
+        RuleFor(model => model.InspectorId)
             .Cascade(CascadeMode.Stop)
-            .SetAsyncValidator(
-                new UserIsInspectorValidatorFor<ChangeProductAccountAcceptedAmountRequest>(context)
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    ChangeProductAccountAcceptedAmountRequest,
+                    Domain.Entities.Users.Inspector
+                >(context)
             );
     }
 }

@@ -52,7 +52,7 @@ public class ProductAccountService : IProductAccountService
             () =>
                 _productAccountRepository.ChangAcceptedAmountAsync(
                     request.Id,
-                    request.UserId,
+                    request.InspectorId,
                     request.Amount
                 )
         );

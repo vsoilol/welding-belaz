@@ -47,9 +47,7 @@ public class ProductAccountRepository : IProductAccountRepository
         int acceptedAmount
     )
     {
-        var inspector = (
-            await _context.Inspectors.FirstOrDefaultAsync(_ => _.UserId == inspectorId)
-        )!;
+        var inspector = (await _context.Inspectors.FirstOrDefaultAsync(_ => _.Id == inspectorId))!;
 
         var productAccount = (
             await _context.ProductAccounts
