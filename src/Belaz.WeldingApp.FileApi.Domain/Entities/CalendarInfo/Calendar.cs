@@ -16,7 +16,8 @@ public class Calendar : Entity
 
     public Guid? WelderId { get; set; }
 
-    [ForeignKey(nameof(WelderId))] public Welder? Welder { get; set; }
+    [ForeignKey(nameof(WelderId))]
+    public Welder? Welder { get; set; }
 
     public Guid? WeldingEquipmentId { get; set; }
 
