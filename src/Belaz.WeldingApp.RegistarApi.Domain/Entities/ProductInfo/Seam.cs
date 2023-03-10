@@ -35,8 +35,6 @@ public class Seam : Entity
     [ForeignKey(nameof(TechnologicalInstructionId))]
     public TechnologicalInstruction? TechnologicalInstruction { get; set; }
 
-    public List<WeldingTask> WeldingTasks { get; set; } = null!;
-
     public Guid? InspectorId { get; set; }
 
     [ForeignKey(nameof(InspectorId))]
@@ -46,4 +44,6 @@ public class Seam : Entity
 
     [ForeignKey(nameof(ProductionAreaId))]
     public ProductionArea? ProductionArea { get; set; }
+
+    public List<SeamAccount> SeamAccounts { get; set; } = null!;
 }

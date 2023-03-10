@@ -68,4 +68,13 @@ public class RegistarController : ControllerBase
         var result = await _registarService.CreateRecordWithTaskAsync(request);
         return result.ToOk();
     }
+
+    [HttpPost("completeTask")]
+    public async Task<ActionResult<Unit>> MarkWeldingTaskAsCompletedAsync(
+        [FromBody] MarkWeldingTaskAsCompletedRequest request
+    )
+    {
+        var result = await _registarService.MarkWeldingTaskAsCompletedAsync(request);
+        return result.ToOk();
+    }
 }

@@ -56,10 +56,10 @@ public class WeldingTask : Entity
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
 
-    public Guid SeamId { get; set; }
+    public Guid SeamAccountId { get; set; }
 
-    [ForeignKey(nameof(SeamId))]
-    public Seam Seam { get; set; } = null!;
+    [ForeignKey(nameof(SeamAccountId))]
+    public SeamAccount SeamAccount { get; set; } = null!;
 
     public Guid? WelderId { get; set; }
 

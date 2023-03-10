@@ -53,6 +53,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
                         .ProductMain!
                         .MainProduct
             )
+            .Include(_ => _.WeldPassage!.WeldingTask.SeamAccount.ProductAccount)
             .Include(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.ProductionArea!.Workshop)
             .Include(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.Product.TechnologicalProcess)
             .Include(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.TechnologicalInstruction)

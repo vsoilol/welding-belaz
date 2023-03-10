@@ -1,23 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 
 public interface IWeldingTaskRepository
 {
-    Task<List<WeldingTaskDto>> GetAllTasksByDateAndEquipmentRfidTagAsync(
+    Task<List<WeldingTaskDto>> GetAllTasksByDateEquipmentAndWelderRfidTagAsync(
         DateTime date,
-        string equipmentRfidTag
+        string equipmentRfid,
+        string welderRfid
     );
 
-    Task MarkWeldingTaskAsCompletedAsync(Guid id, Guid welderId);
+    Task MarkWeldingTaskAsCompletedAsync(Guid id);
 
-    Task ChangeWeldingTaskStatusAsync(Guid id, WeldingTaskStatus status);
+    Task UpdateWeldingTaskStatusAsync(Guid id, Guid welderId, WeldingTaskStatus status);
 
     Task<WeldingTaskDto> GetTaskByIdAsync(Guid id);
 }

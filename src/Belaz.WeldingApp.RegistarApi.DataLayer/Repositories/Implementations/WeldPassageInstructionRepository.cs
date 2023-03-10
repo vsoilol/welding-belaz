@@ -21,7 +21,7 @@ public class WeldPassageInstructionRepository : IWeldPassageInstructionRepositor
     {
         var weldPassages = _context.WeldingTasks
             .Where(_ => _.Id == taskId)
-            .SelectMany(_ => _.Seam.TechnologicalInstruction!.WeldPassageInstructions);
+            .SelectMany(_ => _.SeamAccount.Seam.TechnologicalInstruction!.WeldPassageInstructions);
 
         return (
             await weldPassages
