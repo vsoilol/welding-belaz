@@ -10,11 +10,11 @@ using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Converters;
 
-public class SeamToDtoConverter : ITypeConverter<Seam, SeamDto>
+public class SeamDtoConverter : ITypeConverter<Seam, SeamDto>
 {
     private readonly IMapper _mapper;
 
-    public SeamToDtoConverter(IMapper mapper)
+    public SeamDtoConverter(IMapper mapper)
     {
         _mapper = mapper;
     }
@@ -30,6 +30,13 @@ public class SeamToDtoConverter : ITypeConverter<Seam, SeamDto>
         destination.IsPerformed = source.IsPerformed;
         destination.IsControlSubject = source.IsControlSubject;
 
+        MapRelatedEntities(source, destination);
+
+        return destination;
+    }
+
+    private void MapRelatedEntities(Seam source, SeamDto destination)
+    {
         destination.TechnologicalInstruction = _mapper.Map<TechnologicalInstructionBriefDto>(
             source.TechnologicalInstruction
         );
@@ -39,51 +46,45 @@ public class SeamToDtoConverter : ITypeConverter<Seam, SeamDto>
         destination.Workshop = _mapper.Map<WorkshopBriefDto>(source.ProductionArea!.Workshop);
         destination.ProductionArea = _mapper.Map<ProductionAreaBriefDto>(source.ProductionArea);
 
-        SetProductsToSeam(source, destination);
-
-        return destination;
+        MapProductsToSeam(source, destination);
     }
 
-    private void SetProductsToSeam(Seam seam, SeamDto seamDto)
+    private void MapProductsToSeam(Seam seam, SeamDto seamDto)
     {
-        var seamProducts = GetSeamProducts(seam).Where(_ => _ is not null);
+        var products = GetSeamProducts(seam);
 
-        foreach (var product in seamProducts)
+        if (products.Product != null)
         {
-            switch (product!.ProductType)
-            {
-                case ProductType.Product:
-                    seamDto.Product = _mapper.Map<MainProductDto>(product);
-                    break;
+            seamDto.Product = _mapper.Map<MainProductDto>(products.Product);
+        }
 
-                case ProductType.Knot:
-                    seamDto.Knot = _mapper.Map<MainProductDto>(product);
-                    break;
+        if (products.Knot != null)
+        {
+            seamDto.Knot = _mapper.Map<MainProductDto>(products.Knot);
+        }
 
-                case ProductType.Detail:
-                    seamDto.Detail = _mapper.Map<MainProductDto>(product);
-                    break;
-            }
+        if (products.Detail != null)
+        {
+            seamDto.Detail = _mapper.Map<MainProductDto>(products.Detail);
         }
     }
 
-    private List<Product?> GetSeamProducts(Seam seam)
+    private (Product? Product, Product? Knot, Product? Detail) GetSeamProducts(Seam seam)
     {
-        var seamProduct = seam.Product;
+        var product = GetProductByTypeInHierarchy(seam.Product, ProductType.Product);
+        var knot = GetProductByTypeInHierarchy(seam.Product, ProductType.Knot);
+        var detail = GetProductByTypeInHierarchy(seam.Product, ProductType.Detail);
 
-        var secondSeamProduct = GetMainProductByChild(seamProduct);
-        var thirdSeamProduct = GetMainProductByChild(secondSeamProduct);
-
-        return new List<Product?> { seamProduct, secondSeamProduct, thirdSeamProduct };
+        return (product, knot, detail);
     }
 
-    private Product? GetMainProductByChild(Product? childProduct)
+    private Product? GetProductByTypeInHierarchy(Product? product, ProductType type)
     {
-        if (childProduct is null || childProduct.ProductType == ProductType.Product)
+        while (product?.ProductType != type && product?.ProductMain?.MainProduct != null)
         {
-            return null;
+            product = product.ProductMain.MainProduct;
         }
 
-        return childProduct.ProductMain!.MainProduct;
+        return product?.ProductType == type ? product : null;
     }
 }

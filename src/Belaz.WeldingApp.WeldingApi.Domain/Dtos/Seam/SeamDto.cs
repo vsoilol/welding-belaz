@@ -42,6 +42,6 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Entities.ProductInfo.Seam, SeamDto>().ConvertUsing<SeamToDtoConverter>();
+        profile.CreateMap<Entities.ProductInfo.Seam, SeamDto>().ConvertUsing<SeamDtoConverter>();
     }
 }
