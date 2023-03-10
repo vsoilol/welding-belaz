@@ -23,7 +23,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
     {
         var weldingRecords = await GetWeldingRecordsWithIncludesByFilter()
             .OrderByDescending(_ => _.Date.Date)
-            .ThenBy(x => x.WeldingStartTime.Seconds)
+            .ThenByDescending(x => x.WeldingStartTime.TotalSeconds)
             .ToListAsync();
 
         var mapWeldingRecords = _mapper.Map<List<RecordDto>>(weldingRecords);
