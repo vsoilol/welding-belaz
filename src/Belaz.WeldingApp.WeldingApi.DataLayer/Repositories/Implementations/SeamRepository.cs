@@ -146,7 +146,7 @@ public class SeamRepository : ISeamRepository
         Expression<Func<Seam, bool>>? filter = null
     )
     {
-        IQueryable<Seam> products = _context.Seams
+        IQueryable<Seam> seams = _context.Seams
             .Include(
                 s =>
                     s.Product
@@ -163,9 +163,9 @@ public class SeamRepository : ISeamRepository
 
         if (filter != null)
         {
-            products = products.Where(filter);
+            seams = seams.Where(filter);
         }
 
-        return products;
+        return seams;
     }
 }

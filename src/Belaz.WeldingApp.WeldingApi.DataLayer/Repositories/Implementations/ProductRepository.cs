@@ -33,7 +33,8 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<ProductDto>> GetAllAsync(ProductType productType)
     {
-        var products = await FilterProducts(_ => _.ProductType == productType).ToListAsync();
+        var products = await GetProductsWithIncludesByFilter(_ => _.ProductType == productType)
+            .ToListAsync();
 
         var mapProducts = _mapper.Map<List<ProductDto>>(products);
 
@@ -42,7 +43,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<ProductDto> GetByIdAsync(Guid id)
     {
-        var product = await FilterProducts(_ => _.Id == id).FirstOrDefaultAsync();
+        var product = await GetProductsWithIncludesByFilter(_ => _.Id == id).FirstOrDefaultAsync();
 
         var mapProduct = _mapper.Map<ProductDto>(product);
 
@@ -54,7 +55,7 @@ public class ProductRepository : IProductRepository
         ProductType productType
     )
     {
-        var products = await FilterProducts(
+        var products = await GetProductsWithIncludesByFilter(
                 _ => _.MasterId == masterId && _.ProductType == productType
             )
             .ToListAsync();
@@ -69,7 +70,7 @@ public class ProductRepository : IProductRepository
         ProductType productType
     )
     {
-        var products = await FilterProducts(
+        var products = await GetProductsWithIncludesByFilter(
                 _ => _.InspectorId == inspectorId && _.ProductType == productType
             )
             .ToListAsync();
@@ -165,20 +166,22 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync();
     }
 
-    private IQueryable<Product> FilterProducts(Expression<Func<Product, bool>> filter)
+    private IQueryable<Product> GetProductsWithIncludesByFilter(
+        Expression<Func<Product, bool>>? filter = null
+    )
     {
-        var products = _context.Products
-            .Include(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .Include(_ => _.ProductInsides)
-            .ThenInclude(_ => _.InsideProduct)
-            .Include(_ => _.Seams)
-            .Include(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
-            .Include(_ => _.TechnologicalProcess)
-            .Where(filter);
+        IQueryable<Product> products = _context.Products
+            .Include(s => s.ProductMain!.MainProduct.ProductMain!.MainProduct)
+            .Include(p => p.ProductInsides)
+            .ThenInclude(pi => pi.InsideProduct)
+            .Include(s => s.Seams)
+            .Include(s => s.ProductionArea.Workshop)
+            .Include(s => s.TechnologicalProcess);
+
+        if (filter != null)
+        {
+            products = products.Where(filter);
+        }
 
         return products;
     }

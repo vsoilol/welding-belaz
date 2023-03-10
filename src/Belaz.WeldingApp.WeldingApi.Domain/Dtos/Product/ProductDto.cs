@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.WeldingApi.Domain.Converters;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
@@ -29,23 +30,17 @@ public class ProductDto : IMapFrom<Entities.ProductInfo.Product>
 
     public List<SeamDto> Seams { get; set; } = null!;
 
-    public MainProductDto MainProduct { get; set; } = null!;
+    public ProductBriefDto? Product { get; set; }
+
+    public ProductBriefDto? Knot { get; set; }
+
+    public ProductBriefDto? Detail { get; set; }
 
     public void Mapping(Profile profile)
     {
         profile
             .CreateMap<Entities.ProductInfo.Product, ProductDto>()
-            .ForMember(
-                dto => dto.InsideProducts,
-                opt => opt.MapFrom(x => x.ProductInsides.Select(_ => _.InsideProduct))
-            )
-            .ForMember(dto => dto.Seams, opt => opt.MapFrom(x => x.Seams))
-            .ForMember(dto => dto.ProductionArea, opt => opt.MapFrom(x => x.ProductionArea))
-            .ForMember(dto => dto.Workshop, opt => opt.MapFrom(x => x.ProductionArea!.Workshop))
-            .ForMember(
-                dto => dto.TechnologicalProcess,
-                opt => opt.MapFrom(x => x.TechnologicalProcess)
-            )
-            .ForMember(dto => dto.MainProduct, opt => opt.MapFrom(x => x.ProductMain!.MainProduct));
+            .ConvertUsing<ProductDtoConverter>();
+        ;
     }
 }
