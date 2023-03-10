@@ -21,7 +21,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
 
     public async Task<List<RecordDto>> GetAllAsync()
     {
-        var weldingRecords = await FilterWeldingRecords()
+        var weldingRecords = await GetWeldingRecordsWithIncludesByFilter()
             .OrderByDescending(_ => _.Date.Date)
             .ThenBy(x => x.WeldingStartTime.Seconds)
             .ToListAsync();
@@ -31,143 +31,47 @@ public class WeldingRecordRepository : IWeldingRecordRepository
         return mapWeldingRecords;
     }
 
-    private IQueryable<WeldingRecord> FilterWeldingRecords(
-        Expression<Func<WeldingRecord, bool>> filter
+    private IQueryable<WeldingRecord> GetWeldingRecordsWithIncludesByFilter(
+        Expression<Func<WeldingRecord, bool>>? filter = null
     )
     {
-        var weldingRecords = _context.WeldingRecords
-            .Include(_ => _.Welder)
-            .Include(_ => _.Master)
+        IQueryable<WeldingRecord> weldingRecords = _context.WeldingRecords
+            .Include(_ => _.Welder.UserInfo)
+            .Include(_ => _.Master!.UserInfo)
             .Include(_ => _.WeldingEquipment)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.Product)
-            .ThenInclude(_ => _!.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.ProductionArea)
-            .ThenInclude(_ => _!.Workshop)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.Product)
-            .ThenInclude(_ => _!.TechnologicalProcess)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.TechnologicalInstruction)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.WeldPassages)
-            .ThenInclude(_ => _.WeldingRecord)
-            .ThenInclude(_ => _.WeldingEquipment)
-            .ThenInclude(_ => _.Welders)
+            .Include(
+                _ =>
+                    _.WeldPassage!
+                        .WeldingTask
+                        .SeamAccount
+                        .Seam
+                        .Product
+                        .ProductMain!
+                        .MainProduct
+                        .ProductMain!
+                        .MainProduct
+                        .ProductMain!
+                        .MainProduct
+            )
+            .Include(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.ProductionArea!.Workshop)
+            .Include(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.Product.TechnologicalProcess)
+            .Include(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.TechnologicalInstruction)
+            .Include(_ => _.WeldPassage!.WeldingTask.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord.WeldingEquipment.Welders)
             .ThenInclude(_ => _.UserInfo)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.WeldPassages)
-            .ThenInclude(_ => _.WeldingRecord)
-            .ThenInclude(_ => _.WeldingEquipment)
-            .ThenInclude(_ => _.Post)
-            .ThenInclude(_ => _!.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.WeldPassages)
-            .ThenInclude(_ => _.WeldingRecord)
-            .ThenInclude(_ => _.WeldingEquipment)
-            .ThenInclude(_ => _.Workplaces)
-            .ThenInclude(_ => _!.ProductionArea)
-            .ThenInclude(_ => _!.Workshop)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Inspector)
-            .ThenInclude(_ => _!.UserInfo)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Master)
-            .ThenInclude(_ => _!.UserInfo)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Welder)
-            .ThenInclude(_ => _!.UserInfo)
-            .Where(filter);
+            .Include(_ => _.WeldPassage!.WeldingTask.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord.WeldingEquipment.Post!.ProductionArea.Workshop)
+            .Include(_ => _.WeldPassage!.WeldingTask.WeldPassages)
+            .ThenInclude(_ => _.WeldingRecord.WeldingEquipment.Workplaces)
+            .ThenInclude(_ => _!.ProductionArea!.Workshop)
+            .Include(_ => _.WeldPassage!.WeldingTask.Inspector!.UserInfo)
+            .Include(_ => _.WeldPassage!.WeldingTask.Master.UserInfo)
+            .Include(_ => _.WeldPassage!.WeldingTask.Welder!.UserInfo);
 
-        return weldingRecords;
-    }
-
-    private IQueryable<WeldingRecord> FilterWeldingRecords()
-    {
-        var weldingRecords = _context.WeldingRecords
-            .Include(_ => _.Welder)
-            .Include(_ => _.Master)
-            .Include(_ => _.WeldingEquipment)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.Product)
-            .ThenInclude(_ => _!.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.ProductionArea)
-            .ThenInclude(_ => _!.Workshop)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.Product)
-            .ThenInclude(_ => _!.TechnologicalProcess)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Seam)
-            .ThenInclude(_ => _.TechnologicalInstruction)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.WeldPassages)
-            .ThenInclude(_ => _.WeldingRecord)
-            .ThenInclude(_ => _.WeldingEquipment)
-            .ThenInclude(_ => _.Welders)
-            .ThenInclude(_ => _.UserInfo)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.WeldPassages)
-            .ThenInclude(_ => _.WeldingRecord)
-            .ThenInclude(_ => _.WeldingEquipment)
-            .ThenInclude(_ => _.Post)
-            .ThenInclude(_ => _!.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.WeldPassages)
-            .ThenInclude(_ => _.WeldingRecord)
-            .ThenInclude(_ => _.WeldingEquipment)
-            .ThenInclude(_ => _.Workplaces)
-            .ThenInclude(_ => _!.ProductionArea)
-            .ThenInclude(_ => _!.Workshop)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Inspector)
-            .ThenInclude(_ => _!.UserInfo)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Master)
-            .ThenInclude(_ => _!.UserInfo)
-            .Include(_ => _.WeldPassage)
-            .ThenInclude(_ => _!.WeldingTask)
-            .ThenInclude(_ => _.Welder)
-            .ThenInclude(_ => _!.UserInfo);
+        if (filter != null)
+        {
+            weldingRecords = weldingRecords.Where(filter);
+        }
 
         return weldingRecords;
     }

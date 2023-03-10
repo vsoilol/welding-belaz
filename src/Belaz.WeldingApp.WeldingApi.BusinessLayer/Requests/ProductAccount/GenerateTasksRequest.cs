@@ -6,5 +6,5 @@ public class GenerateTasksRequest
 
     public Guid ProductionAreaId { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid MasterId { get; set; }
 }

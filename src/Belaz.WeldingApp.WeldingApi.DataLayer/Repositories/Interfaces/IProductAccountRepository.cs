@@ -21,7 +21,7 @@ public interface IProductAccountRepository
         List<Guid> weldingEquipmentIds
     );
 
-    Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid userId);
+    Task GenerateTasksAsync(DateTime date, Guid productionAreaId, Guid masterId);
 
     Task<List<ProductAccountDto>> ChangeOrderAsync(Guid idFirst, Guid idSecond);
 

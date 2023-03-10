@@ -81,9 +81,8 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.Product.Seams
+                            x.SeamAccounts
                                 .SelectMany(_ => _.WeldingTasks)
-                                .Where(_ => _.WeldingDate.Date.Equals(x.DateFromPlan.Date))
                                 .SelectMany(_ => _.WeldPassages)
                                 .Any(
                                     _ =>

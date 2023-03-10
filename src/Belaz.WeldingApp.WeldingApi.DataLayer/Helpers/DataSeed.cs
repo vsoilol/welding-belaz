@@ -72,14 +72,14 @@ public class DataSeed
             await AddProducts(context);
         }
 
-        if (!context.WeldingTasks.Any())
-        {
-            await AddWeldingTasks(context);
-        }
-
         if (!context.ProductAccounts.Any())
         {
             await AddProductAccounts(context);
+        }
+
+        if (!context.WeldingTasks.Any())
+        {
+            await AddWeldingTasks(context);
         }
     }
 
@@ -91,42 +91,50 @@ public class DataSeed
             .Include(_ => _.Seams)
             .ToListAsync();
 
-        var productAccounts = products.Select(
-            (_, index) =>
-                new ProductAccount
-                {
-                    Number = index + 1,
-                    AmountFromPlan = 2,
-                    DateFromPlan = DateTime.Now,
-                    Product = _,
-                    ProductResults = new List<ProductResult>
-                    {
-                        new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                        new() { Amount = 0, Status = ResultProductStatus.Accept },
-                        new() { Amount = 0, Status = ResultProductStatus.Defective }
-                    }
-                }
-        );
+        var productAccounts = new List<ProductAccount>();
+        for (int i = 0; i < products.Count; i++)
+        {
+            var product = products[i];
+            var productResultStatus = new List<ProductResult>
+            {
+                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                new() { Amount = 0, Status = ResultProductStatus.Accept },
+                new() { Amount = 0, Status = ResultProductStatus.Defective }
+            };
 
-        var seamAccounts = products
-            .SelectMany(_ => _.Seams)
-            .Select(
-                (_, index) =>
-                    new SeamAccount
-                    {
-                        DateFromPlan = DateTime.Now,
-                        Seam = _,
-                        SeamResults = new List<SeamResult>
-                        {
-                            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                            new() { Amount = 0, Status = ResultProductStatus.Accept },
-                            new() { Amount = 0, Status = ResultProductStatus.Defective }
-                        }
-                    }
-            );
+            var seamAccounts = new List<SeamAccount>();
+
+            foreach (var seam in product.Seams)
+            {
+                var seamResultStatus = new List<SeamResult>
+                {
+                    new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                    new() { Amount = 0, Status = ResultProductStatus.Accept },
+                    new() { Amount = 0, Status = ResultProductStatus.Defective }
+                };
+
+                var seamAccount = new SeamAccount
+                {
+                    DateFromPlan = DateTime.Now,
+                    Seam = seam,
+                    SeamResults = seamResultStatus
+                };
+                seamAccounts.Add(seamAccount);
+            }
+
+            var productAccount = new ProductAccount
+            {
+                Number = i + 1,
+                AmountFromPlan = 2,
+                DateFromPlan = DateTime.Now,
+                Product = product,
+                ProductResults = productResultStatus,
+                SeamAccounts = seamAccounts
+            };
+            productAccounts.Add(productAccount);
+        }
 
         context.ProductAccounts.AddRange(productAccounts);
-        context.SeamAccounts.AddRange(seamAccounts);
         await context.SaveChangesAsync();
     }
 
@@ -1761,8 +1769,8 @@ public class DataSeed
 
         var seam1 = (
             await context.Seams
-                .Include(_ => _.Product)
-                .ThenInclude(_ => _.Master)
+                .Include(_ => _.Product.Master)
+                .Include(_ => _.SeamAccounts)
                 .FirstOrDefaultAsync(
                     _ => _.Number == 48 && _.Product.ProductType == ProductType.Detail
                 )
@@ -1770,8 +1778,8 @@ public class DataSeed
 
         var seam2 = (
             await context.Seams
-                .Include(_ => _.Product)
-                .ThenInclude(_ => _.Master)
+                .Include(_ => _.Product.Master)
+                .Include(_ => _.SeamAccounts)
                 .FirstOrDefaultAsync(
                     _ => _.Number == 18 && _.Product.ProductType == ProductType.Knot
                 )
@@ -3329,7 +3337,7 @@ public class DataSeed
                         }
                     }
                 },
-                Seam = seam1,
+                SeamAccount = seam1.SeamAccounts.First(),
             },
             new WeldingTask
             {
@@ -3370,7 +3378,7 @@ public class DataSeed
                         }
                     }
                 },
-                Seam = seam2,
+                SeamAccount = seam2.SeamAccounts.First(),
             }
         };
 

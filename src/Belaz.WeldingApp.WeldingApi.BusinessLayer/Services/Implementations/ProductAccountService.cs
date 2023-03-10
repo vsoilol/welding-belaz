@@ -134,7 +134,7 @@ public class ProductAccountService : IProductAccountService
             await _productAccountRepository.GenerateTasksAsync(
                 date,
                 request.ProductionAreaId,
-                request.UserId
+                request.MasterId
             );
             return Unit.Default;
         });

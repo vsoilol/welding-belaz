@@ -24,11 +24,11 @@ public class SeamDto : IMapFrom<Entities.ProductInfo.Seam>
     /// </summary>
     public bool IsPerformed { get; set; }
 
-    public MainProductDto Product { get; set; } = null!;
+    public ProductOverviewDto Product { get; set; } = null!;
 
-    public MainProductDto? Knot { get; set; }
+    public ProductOverviewDto? Knot { get; set; }
 
-    public MainProductDto? Detail { get; set; }
+    public ProductOverviewDto? Detail { get; set; }
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 

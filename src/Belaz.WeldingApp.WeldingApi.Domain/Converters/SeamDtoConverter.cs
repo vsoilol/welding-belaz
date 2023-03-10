@@ -55,17 +55,17 @@ public class SeamDtoConverter : ITypeConverter<Seam, SeamDto>
 
         if (products.Product != null)
         {
-            seamDto.Product = _mapper.Map<MainProductDto>(products.Product);
+            seamDto.Product = _mapper.Map<ProductOverviewDto>(products.Product);
         }
 
         if (products.Knot != null)
         {
-            seamDto.Knot = _mapper.Map<MainProductDto>(products.Knot);
+            seamDto.Knot = _mapper.Map<ProductOverviewDto>(products.Knot);
         }
 
         if (products.Detail != null)
         {
-            seamDto.Detail = _mapper.Map<MainProductDto>(products.Detail);
+            seamDto.Detail = _mapper.Map<ProductOverviewDto>(products.Detail);
         }
     }
 
