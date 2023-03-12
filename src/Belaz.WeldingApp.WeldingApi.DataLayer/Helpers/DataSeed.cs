@@ -800,37 +800,6 @@ public class DataSeed
                         TechnologicalProcess = technologicalProcess3330041,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,
-                        ProductInsides = new List<ProductInside>
-                        {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3330041,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 54,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction54,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         Seams = new List<Seam>
                         {
                             new()
@@ -846,6 +815,20 @@ public class DataSeed
                                 Length = 4000,
                                 ProductionArea = productionArea6,
                                 TechnologicalInstruction = technologicalInstruction18,
+                            },
+                            new()
+                            {
+                                Number = 54,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction54,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
                         }
                     }
@@ -874,39 +857,22 @@ public class DataSeed
                                 Length = 4000,
                                 ProductionArea = productionArea6,
                                 TechnologicalInstruction = technologicalInstruction18,
-                            }
-                        },
-                        ProductInsides = new List<ProductInside>
-                        {
+                            },
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3330041,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 56,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction56,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
+                                Number = 56,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction56,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
-                        },
+                        }
                     }
                 },
                 new()
@@ -918,56 +884,28 @@ public class DataSeed
                         TechnologicalProcess = technologicalProcess3330041,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,
-                        ProductInsides = new List<ProductInside>
+                        Seams = new List<Seam>
                         {
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3330041,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 55,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction55,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
                             },
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801088-70",
-                                    Name = "Накладка рамы поперечная передняя",
-                                    TechnologicalProcess = technologicalProcess3330041,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 39,
-                                            Length = 280,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction39,
-                                        }
-                                    }
-                                }
+                                Number = 55,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction55,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
                         }
                     }
@@ -981,56 +919,28 @@ public class DataSeed
                         TechnologicalProcess = technologicalProcess3330041,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,
-                        ProductInsides = new List<ProductInside>
+                        Seams = new List<Seam>
                         {
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3330041,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 57,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction57,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
                             },
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801088-70",
-                                    Name = "Накладка рамы поперечная передняя",
-                                    TechnologicalProcess = technologicalProcess3330041,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 39,
-                                            Length = 280,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction39,
-                                        }
-                                    }
-                                }
+                                Number = 57,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction57,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
                         }
                     }
@@ -1073,31 +983,17 @@ public class DataSeed
                                 Length = 280,
                                 ProductionArea = productionArea6,
                                 TechnologicalInstruction = technologicalInstruction39,
+                            },
+                            new()
+                            {
+                                Number = 48,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction48,
                             }
                         },
                         ProductInsides = new List<ProductInside>
                         {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801358-10",
-                                    Name = "Лист нижний",
-                                    TechnologicalProcess = technologicalProcess3330041,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 48,
-                                            Length = 1900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction48,
-                                        }
-                                    }
-                                }
-                            },
                             new()
                             {
                                 InsideProduct = new Product
@@ -1203,6 +1099,27 @@ public class DataSeed
                 {
                     InsideProduct = new Product
                     {
+                        Number = "75131-2801088-70",
+                        Name = "Накладка рамы поперечная передняя",
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
+                            }
+                        }
+                    }
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
                         Number = "75131-2801103-10",
                         Name = "Поперечина",
                         TechnologicalProcess = technologicalProcess3330041,
@@ -1261,7 +1178,98 @@ public class DataSeed
                             }
                         }
                     }
-                }
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801188",
+                        Name = "Опора",
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 54,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction54,
+                            },
+                            new()
+                            {
+                                Number = 55,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction55,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
+                            }
+                        }
+                    }
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801189",
+                        Name = "Опора",
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 56,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction56,
+                            },
+                            new()
+                            {
+                                Number = 57,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction57,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
+                            }
+                        }
+                    }
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801358-10",
+                        Name = "Лист нижний",
+                        TechnologicalProcess = technologicalProcess3330041,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 48,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction48,
+                            }
+                        }
+                    }
+                },
             },
         };
 
@@ -1281,40 +1289,9 @@ public class DataSeed
                     {
                         Number = "75131-2801014-41",
                         Name = "Лонжерон рамы правый",
-                        TechnologicalProcess = technologicalProcess3291137,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,
-                        ProductInsides = new List<ProductInside>
-                        {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3291137,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 54,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction54,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
-                            }
-                        },
+                        TechnologicalProcess = technologicalProcess3291137,
                         Seams = new List<Seam>
                         {
                             new()
@@ -1330,6 +1307,20 @@ public class DataSeed
                                 Length = 4000,
                                 ProductionArea = productionArea6,
                                 TechnologicalInstruction = technologicalInstruction18,
+                            },
+                            new()
+                            {
+                                Number = 54,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction54,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
                         }
                     }
@@ -1358,39 +1349,22 @@ public class DataSeed
                                 Length = 4000,
                                 ProductionArea = productionArea6,
                                 TechnologicalInstruction = technologicalInstruction18,
-                            }
-                        },
-                        ProductInsides = new List<ProductInside>
-                        {
+                            },
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3291137,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 56,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction56,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
+                                Number = 56,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction56,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
-                        },
+                        }
                     }
                 },
                 new()
@@ -1402,56 +1376,28 @@ public class DataSeed
                         TechnologicalProcess = technologicalProcess3291137,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,
-                        ProductInsides = new List<ProductInside>
+                        Seams = new List<Seam>
                         {
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3291137,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 55,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction55,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
                             },
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801088-70",
-                                    Name = "Накладка рамы поперечная передняя",
-                                    TechnologicalProcess = technologicalProcess3291137,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 39,
-                                            Length = 280,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction39,
-                                        }
-                                    }
-                                }
+                                Number = 55,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction55,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
                         }
                     }
@@ -1465,56 +1411,28 @@ public class DataSeed
                         TechnologicalProcess = technologicalProcess3291137,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,
-                        ProductInsides = new List<ProductInside>
+                        Seams = new List<Seam>
                         {
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801188",
-                                    Name = "Опора",
-                                    TechnologicalProcess = technologicalProcess3291137,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 57,
-                                            Length = 400,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction57,
-                                        },
-                                        new()
-                                        {
-                                            Number = 58,
-                                            Length = 900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction58,
-                                        }
-                                    }
-                                }
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
                             },
                             new()
                             {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801088-70",
-                                    Name = "Накладка рамы поперечная передняя",
-                                    TechnologicalProcess = technologicalProcess3291137,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 39,
-                                            Length = 280,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction39,
-                                        }
-                                    }
-                                }
+                                Number = 57,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction57,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
                             }
                         }
                     }
@@ -1557,31 +1475,17 @@ public class DataSeed
                                 Length = 280,
                                 ProductionArea = productionArea6,
                                 TechnologicalInstruction = technologicalInstruction39,
+                            },
+                            new()
+                            {
+                                Number = 48,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction48,
                             }
                         },
                         ProductInsides = new List<ProductInside>
                         {
-                            new()
-                            {
-                                InsideProduct = new Product
-                                {
-                                    Number = "75131-2801358-10",
-                                    Name = "Лист нижний",
-                                    TechnologicalProcess = technologicalProcess3291137,
-                                    ProductType = ProductType.Detail,
-                                    ProductionArea = productionArea6,
-                                    Seams = new List<Seam>
-                                    {
-                                        new()
-                                        {
-                                            Number = 48,
-                                            Length = 1900,
-                                            ProductionArea = productionArea6,
-                                            TechnologicalInstruction = technologicalInstruction48,
-                                        }
-                                    }
-                                }
-                            },
                             new()
                             {
                                 InsideProduct = new Product
@@ -1687,6 +1591,27 @@ public class DataSeed
                 {
                     InsideProduct = new Product
                     {
+                        Number = "75131-2801088-70",
+                        Name = "Накладка рамы поперечная передняя",
+                        TechnologicalProcess = technologicalProcess3291137,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 39,
+                                Length = 280,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction39,
+                            }
+                        }
+                    }
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
                         Number = "75131-2801103-10",
                         Name = "Поперечина",
                         TechnologicalProcess = technologicalProcess3291137,
@@ -1745,8 +1670,99 @@ public class DataSeed
                             }
                         }
                     }
-                }
-            },
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801188",
+                        Name = "Опора",
+                        TechnologicalProcess = technologicalProcess3291137,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 54,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction54,
+                            },
+                            new()
+                            {
+                                Number = 55,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction55,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
+                            }
+                        }
+                    }
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801189",
+                        Name = "Опора",
+                        TechnologicalProcess = technologicalProcess3291137,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 56,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction56,
+                            },
+                            new()
+                            {
+                                Number = 57,
+                                Length = 400,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction57,
+                            },
+                            new()
+                            {
+                                Number = 58,
+                                Length = 900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction58,
+                            }
+                        }
+                    }
+                },
+                new()
+                {
+                    InsideProduct = new Product
+                    {
+                        Number = "75131-2801358-10",
+                        Name = "Лист нижний",
+                        TechnologicalProcess = technologicalProcess3291137,
+                        ProductType = ProductType.Detail,
+                        ProductionArea = productionArea6,
+                        Seams = new List<Seam>
+                        {
+                            new()
+                            {
+                                Number = 48,
+                                Length = 1900,
+                                ProductionArea = productionArea6,
+                                TechnologicalInstruction = technologicalInstruction48,
+                            }
+                        }
+                    }
+                },
+            }
         };
 
         await context.Products.AddRangeAsync(product1, product2);
