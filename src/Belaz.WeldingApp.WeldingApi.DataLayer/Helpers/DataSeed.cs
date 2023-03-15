@@ -80,7 +80,45 @@ public class DataSeed
         if (!context.WeldingTasks.Any())
         {
             await AddWeldingTasks(context);
+            await GenerateTaskByProductAccounts(context);
         }
+    }
+
+    private static async Task GenerateTaskByProductAccounts(ApplicationContext context)
+    {
+        var date = new DateTime(2023, 3, 12);
+
+        var master = (
+            await context.Masters.FirstOrDefaultAsync(_ => _.UserInfo.ServiceNumber == "10422")
+        )!;
+
+        var seamAccounts = await context.SeamAccounts
+            .Include(_ => _.Seam.Inspector)
+            .Where(
+                _ =>
+                    _.DateFromPlan.Date.Equals(date.Date)
+                    && _.Seam.Product.ProductionArea.Number == 6
+                    && _.ProductAccount.AmountFromPlan > 0
+            )
+            .ToListAsync();
+
+        var weldingTasks = new List<WeldingTask>();
+
+        foreach (var seamAccount in seamAccounts)
+        {
+            weldingTasks.Add(
+                new WeldingTask
+                {
+                    WeldingDate = date,
+                    Master = master,
+                    Inspector = seamAccount.Seam.Inspector,
+                    SeamAccount = seamAccount
+                }
+            );
+        }
+
+        context.WeldingTasks.AddRange(weldingTasks);
+        await context.SaveChangesAsync();
     }
 
     private static async Task AddProductAccounts(ApplicationContext context)
@@ -90,6 +128,12 @@ public class DataSeed
             .SelectMany(_ => _.Products)
             .Include(_ => _.Seams)
             .ToListAsync();
+
+        var weldingEquipment = (
+            await context.WeldingEquipments
+                .Where(_ => _.RfidTag == "03:3D:93:0D")
+                .FirstOrDefaultAsync()
+        )!;
 
         var productAccounts = new List<ProductAccount>();
         for (int i = 0; i < products.Count; i++)
@@ -115,7 +159,7 @@ public class DataSeed
 
                 var seamAccount = new SeamAccount
                 {
-                    DateFromPlan = DateTime.Now,
+                    DateFromPlan = new DateTime(2023, 3, 12),
                     Seam = seam,
                     SeamResults = seamResultStatus
                 };
@@ -126,10 +170,11 @@ public class DataSeed
             {
                 Number = i + 1,
                 AmountFromPlan = 2,
-                DateFromPlan = DateTime.Now,
+                DateFromPlan = new DateTime(2023, 3, 12),
                 Product = product,
                 ProductResults = productResultStatus,
-                SeamAccounts = seamAccounts
+                SeamAccounts = seamAccounts,
+                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment }
             };
             productAccounts.Add(productAccount);
         }
