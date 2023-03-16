@@ -18,7 +18,7 @@ const request = (state = INITIAL_STATE) => {
   };
 };
 const logInSuccess = (state = INITIAL_STATE, { data }) => { 
- 
+  
   return {
     ...state,
     user: { ...auth.decodeToken(data.token) },

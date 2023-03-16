@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { EquipmentPage } from "pages/Equipment";
-import Actions from "store/equipment/actions";
+import Actions from "store/equipment/actions";  
 import Actionsworkplace from "store/workplace/actions";
 import ActionsWelder from "store/executors/actions";
 import MasterActions from "store/executors/actions";
@@ -14,7 +14,11 @@ const mapStateToProps = (state) => {
       state?.equipment?.isRequesting || state?.masters?.isRequesting,
     userRole: state.auth.user.role,
     posts:state.workplace.posts, 
-    reason:state.equipment.reason
+    reason:state.equipment.reason,
+
+
+    workshop: state.workplace.workshop,
+    area: state.workplace.productionArea,
     
   };
 };
@@ -38,6 +42,9 @@ const mapDispatchToProps = {
   assignWelders:Actions.Creators.assignWeldersRequest,
   assignMaster:Actions.Creators.assignMasterRequest,
 
+
+ 
+  loadArea: Actionsworkplace.Creators.loadAreaRequest,
 
 };
 

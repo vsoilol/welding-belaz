@@ -37,49 +37,23 @@ export const CreatingTask = ({
     initialValues,
     user,
     equipment,
-    userRole
+    userRole,
+    techs
 
 }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalData, setModalData] = useState(null);
-    const dispatch = useDispatch();
 
 
-    const [production, setProduction] = useState(1);
 
-    const [welderValue, setwelderValue] = useState("");
-
-
-    ////Массивы продукции
-    const [productArray, setproductArray] = useState([]);
-
-    const formattedMasters = masters?.map((item) => {
-        return {
-            value: item.masterId,
-            label: `${item.surname} ${item.name}`,
-        };
-    });
 
     ///Выберите план из существующих дат
     const [valueChioseDate, setvalueChioseDate] = useState(0);
     const [valueDate, setvalueDate] = useState(0);
 
 
-
-
-    useEffect(() => {
-        GetProductionbyDate();
-    }, []);
-
-
     ////////////////////////////////////////////////////////////////////
 
 
 
-    const [value_panel, setValue] = useState(0);
-    const ChangePanels = (event, newValue) => {
-        setValue(newValue);
-    };
     const TabPanel = (props_panel) => {
         const { children, value, indPanel } = props_panel;
         return (
@@ -89,119 +63,34 @@ export const CreatingTask = ({
         );
     };
 
-    const ProdArray = [
-        {
-            id: 1,
-            name: "Изделия"
-        },
-        {
-            id: 2,
-            name: "Узлы"
-        },
-        {
-            id: 3,
-            name: "Детали"
-        },
-    ]
-
-    const columnsWorkplace = {
-        goods: [
-            {
-                title: "Закрепить изделие",
-                render: (rowData) => {
-                    return <input type="checkbox"  ></input>
-                },
-            },
-            {
-                title: "Наименование изделия ", field: "name"
-            },
-            {
-                title: "Номер  изделия ", field: "number"
-            },
-
-            {
-                title: "Номер  цеха ", field: "workshop.number"
-            },
-            {
-                title: "Номер  производственного участка ", field: "productionArea.number"
-            },
-            {
-                title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-            },
-            {
-                title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-            },
-        ],
-        node: [
-            {
-                title: "Закрепить изделие",
-                render: (rowData) => {
-                    return <input type="checkbox"  ></input>
-                },
-            },
-            {
-                title: "Наименование узла ", field: "name"
-            },
-            {
-                title: "Номер  узла ", field: "number"
-            },
-
-            {
-                title: "Номер  цеха ", field: "workshop.number"
-            },
-            {
-                title: "Номер  производственного участка ", field: "productionArea.number"
-            },
-            {
-                title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-            },
-            {
-                title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-            },
-
-
-        ],
-        details: [
-            {
-                title: "Закрепить изделие",
-                render: (rowData) => {
-                    return <input type="checkbox"   ></input>
-                },
-            },
-            {
-                title: "Наименование детали ", field: "name"
-            },
-            {
-                title: "Номер  детали ", field: "number"
-            },
-
-            {
-                title: "Номер  цеха ", field: "workshop.number"
-            },
-            {
-                title: "Номер  производственного участка ", field: "productionArea.number"
-            },
-            {
-                title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-            },
-            {
-                title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-            },
-
-        ],
-
-    };
 
     ////////////////////////////////////////////////////////////////////
 
+    const mastersOptions = masters?.map((item) => {
+        return {
+            value: item?.id,
+            label: `${item?.middleName} ${item?.firstName}`,
+        };
+    });
 
+
+    const techsOptions = techs?.map((item) => {
+        return {
+            value: item?.id,
+            label: `${item?.middleName} ${item?.firstName}`,
+        };
+    });
 
     const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
-    //weldingEquipmentId
-    const [weldingEquipmentId, setweldingEquipmentId] = useState(null);
+    //weldingEquipmentId 
     const [valueWelder, setvalueWelder] = useState("");
 
     const [ProductAccountId, setProductAccountId] = useState("");
+
+
+
+    const [valChioseMaster, setvalChioseMaster] = useState(masters[0].id);
+    const [valChioseInstruct, setvalChioseInstruct] = useState(techs[0].id);
 
 
     const columns = [
@@ -263,7 +152,6 @@ export const CreatingTask = ({
 
     ]
 
-
     ////Получение всех дат по Id производственного участка 
 
     const [valueAllDate, setvalueAllDate] = useState([]);
@@ -272,66 +160,145 @@ export const CreatingTask = ({
     }, []);
 
     function GetAllDate() {
-        api.get(`/productAccount/dates/${masters[0]?.productionArea.id}`)
-            .then(response => response)
-            .then(data => {
 
-                const objectArray = data.data.map((dateString, index) => {
-                    return { date: dateString, id: index };
+        if (userRole === "Admin") {
+            api.get(`/productAccount/dates/${masters[0]?.productionArea.id}`)
+                .then(response => response)
+                .then(data => {
+                    const objectArray = data.data.map((dateString, index) => {
+                        return { date: dateString, id: index };
+                    });
+                    const opteAlldate = objectArray.map((item) => {
+                        return {
+                            value: item.id,
+                            label: item.date,
+                        };
+                    });
+                    setvalueAllDate(opteAlldate)
+                    setvalueDate(opteAlldate[0].label)
+                    GetProductionbyDate(opteAlldate, 1)
+                })
+                .catch(error => {
+                    console.log(error);
                 });
-                const opteAlldate = objectArray.map((item) => {
-                    return {
-                        value: item.id,
-                        label: item.date,
-                    };
+        }
+        else {
+            api.get(`/productAccount/dates/${localStorage.getItem('USER_productionAreaId')}`)
+                .then(response => response)
+                .then(data => {
+                    const objectArray = data.data.map((dateString, index) => {
+                        return { date: dateString, id: index };
+                    });
+                    const opteAlldate = objectArray.map((item) => {
+                        return {
+                            value: item.id,
+                            label: item.date,
+                        };
+                    });
+                    setvalueAllDate(opteAlldate)
+                    setvalueDate(opteAlldate[0].label)
+                    GetProductionbyDate(opteAlldate, 1)
+                })
+                .catch(error => {
+                    console.log(error);
                 });
-                setvalueAllDate(opteAlldate)
-                setvalueDate(opteAlldate[0].label)
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        }
     }
 
     //////
     const [value_products, setvalue_products] = useState([]);
 
     ////Получение информации о производимой продукции по текущей дате
-    function GetProductionbyDate() {
+    function GetProductionbyDate(opteAlldate, numb) {
         const date = new Date();
         const formattedDate = date.toLocaleDateString('ru-RU');
 
-        api.get(`/productAccount/byDate?Date=${formattedDate}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
-            .then((response) => {
-                setvalue_products(response.data)
-            })
-            .catch((error) => { });
+        if (numb === 1) {
+            if (userRole === "Admin") {
+                api.get(`/productAccount/byDate?Date=${opteAlldate[0].label}&ProductionAreaId=${masters[0]?.productionArea.id}`)
+                    .then((response) => {
+                        setvalue_products(response.data)
+                    })
+                    .catch((error) => { });
+            }
+            else {
+                api.get(`/productAccount/byDate?Date=${opteAlldate[0].label}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
+                    .then((response) => {
+                        setvalue_products(response.data)
+                    })
+                    .catch((error) => { });
+            }
+        }
+        else {
+            if (userRole === "Admin") {
+
+                let IdProd = masters.find(obj => obj.id === valChioseMaster)?.productionArea.id
+                api.get(`/productAccount/byDate?Date=${opteAlldate}&ProductionAreaId=${IdProd}`)
+                    .then((response) => {
+                        setvalue_products(response.data)
+                    })
+                    .catch((error) => { });
+            }
+            else {
+                api.get(`/productAccount/byDate?Date=${opteAlldate}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
+                    .then((response) => {
+                        setvalue_products(response.data)
+                    })
+                    .catch((error) => { });
+            }
+        }
+
+
     }
 
     ////Получение информации о производимой продукции по выбранной дате
     function GetProductionbyChoiseDate(date) {
-        api.get(`/productAccount/byDate?Date=${date}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
-            .then((response) => {
-                setvalue_products(response.data)
-            })
-            .catch((error) => { });
+
+        if (userRole === "Admin") {
+            let IdProd = masters.find(obj => obj.id === valChioseMaster)?.productionArea.id
+            api.get(`/productAccount/byDate?Date=${date}&ProductionAreaId=${IdProd}`)
+                .then((response) => {
+                    setvalue_products(response.data)
+                })
+                .catch((error) => { });
+        }
+        else {
+            api.get(`/productAccount/byDate?Date=${date}&ProductionAreaId=${localStorage.getItem('USER_productionAreaId')}`)
+                .then((response) => {
+                    setvalue_products(response.data)
+                })
+                .catch((error) => { });
+        }
+
     }
     const [dateCrateTask, setdateCrateTask] = useState("");
 
 
     ///Создать задание
     function CreateTask() {
-
-        api.post(`/productAccount/generateTasks`, {
-            "Date": new Date().toLocaleDateString('ru-RU'),
-            "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
-            "productionAreaId": localStorage.getItem('USER_productionAreaId'),
-            "UserId": localStorage.getItem('USERID')
-        })
-            .then((response) => {
-                window.location.reload()
+        if (userRole === "Admin") {
+            api.post(`/productAccount/generateTasks`, {  
+                "date": new Date().toLocaleDateString('ru-RU'),
+                "productionAreaId": masters.find(obj => obj.id === valChioseMaster)?.productionArea.id,
+                "masterId": masters.find(obj => obj.id === valChioseMaster)?.id,
             })
-            .catch((error) => { });
+                .then((response) => {
+                    window.location.reload()
+                })
+                .catch((error) => { });
+        }
+        else {
+            api.post(`/productAccount/generateTasks`, {
+                "date": new Date().toLocaleDateString('ru-RU'),
+                "productionAreaId": localStorage.getItem('USER_productionAreaId'),
+                "masterId":masters[0].id
+            })
+                .then((response) => {
+                    window.location.reload()
+                })
+                .catch((error) => { });
+        }
+       
     }
 
     ///Закрепление оборудования
@@ -350,18 +317,29 @@ export const CreatingTask = ({
 
     ///Создать плана
     function CreatePlan() {
-
-        api.post(`/productAccount/generateEmpty`, {
-            // "date": new Date().toLocaleDateString('ru-RU'),
-            "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
-            "productionAreaId": localStorage.getItem('USER_productionAreaId'),
-            "UserId": localStorage.getItem('USERID')
-        })
-            .then((response) => {
-                GetProductionbyChoiseDate(valueChioseDate)
-                GetAllDate()
+        if (userRole === "Admin") {
+            api.post(`/productAccount/generateEmpty`, { 
+                "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
+                "productionAreaId": masters.find(obj => obj.id === valChioseMaster)?.productionArea.id,
             })
-            .catch((error) => { });
+                .then((response) => {
+                    GetProductionbyChoiseDate(valueChioseDate)
+                    GetAllDate()
+                })
+                .catch((error) => { }); 
+        }
+        else {
+            api.post(`/productAccount/generateEmpty`, { 
+                "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
+                "productionAreaId": localStorage.getItem('USER_productionAreaId'), 
+            })
+                .then((response) => {
+                    GetProductionbyChoiseDate(valueChioseDate)
+                    GetAllDate()
+                })
+                .catch((error) => { });
+        }
+        
     }
 
 
@@ -382,7 +360,7 @@ export const CreatingTask = ({
             "id": idPlan,
             "amount": AmountManufactured
         })
-            .then((response) => {GetProductionbyChoiseDate(valueDate) })
+            .then((response) => { GetProductionbyChoiseDate(valueDate) })
             .catch((error) => { });
 
 
@@ -393,21 +371,55 @@ export const CreatingTask = ({
             .then((response) => { GetProductionbyChoiseDate(valueDate) })
             .catch((error) => { });
 
-        api.put(`/productAccount/acceptedAmount`, {
-            "id": idPlan,
-            "amount": Number(acceptedAmount),
-            "userId": localStorage.getItem('USERID')
-        })
-            .then((response) => { GetProductionbyChoiseDate(valueDate) })
-            .catch((error) => { });
+        if (userRole === "Admin") {
+            api.put(`/productAccount/acceptedAmount`, {
+                "id": idPlan,
+                "amount": Number(acceptedAmount),
+                "masterId": valChioseInstruct
+            })
+                .then((response) => { GetProductionbyChoiseDate(valueDate) })
+                .catch((error) => { });
+
+            api.put(`/productAccount/reason`, {
+                "productAccountId": ProductAccountId,
+                "defectiveReason": productreason
+            })
+                .then((response) => { GetProductionbyChoiseDate(valueDate) })
+                .catch((error) => { });
+            api.put(`/productAccount/acceptedAmount`, {
+                "id": idPlan,
+                "amount": Number(acceptedAmount),
+                "inspectorId": valChioseInstruct
+            })
+                .then((response) => { GetProductionbyChoiseDate(valueDate) })
+                .catch((error) => { });
 
 
-        api.put(`/productAccount/reason`, {
-            "productAccountId": ProductAccountId,
-            "defectiveReason": productreason
-        })
-            .then((response) => { GetProductionbyChoiseDate(valueDate) })
-            .catch((error) => { });
+            api.put(`/productAccount/reason`, {
+                "productAccountId": ProductAccountId,
+                "defectiveReason": productreason
+            })
+                .then((response) => { GetProductionbyChoiseDate(valueDate) })
+                .catch((error) => { });
+        }
+        else {
+            api.put(`/productAccount/acceptedAmount`, {
+                "id": idPlan,
+                "amount": Number(acceptedAmount),
+                "inspectorId": techs[0].id
+            })
+                .then((response) => { GetProductionbyChoiseDate(valueDate) })
+                .catch((error) => { });
+
+
+            api.put(`/productAccount/reason`, {
+                "productAccountId": ProductAccountId,
+                "defectiveReason": productreason
+            })
+                .then((response) => { GetProductionbyChoiseDate(valueDate) })
+                .catch((error) => { });
+        }
+
 
     }
     const handleSelectChange = (event) => {
@@ -421,6 +433,9 @@ export const CreatingTask = ({
             event.active = 0
         }
     };
+
+
+
     return (
         <div className={styles.TablePlan}>
             <h3>Ежедневный план</h3>
@@ -428,6 +443,46 @@ export const CreatingTask = ({
             <div className={styles.tools}>
 
                 <div>
+                    {userRole === "Admin"
+                        ? (
+                            <div>
+                                <div className={styles.RowTools}>
+                                    <div className={styles.toolsHead}>
+                                        <p>Выберите мастера</p>
+                                        <Select
+                                            name="valChioseMaster"
+                                            value={valChioseMaster}
+                                            width="380px"
+                                            placeholder="Мастера"
+                                            onChange={(event) => {
+                                                setvalChioseMaster(event.value);
+                                                GetProductionbyDate(valueDate, 2, valChioseMaster)
+                                            }}
+                                            options={mastersOptions}
+                                        />
+                                    </div>
+
+                                    <div className={styles.toolsHead}>
+                                        <p>Выберите контролера</p>
+                                        <Select
+                                            name="valChioseInstruct"
+                                            value={valChioseInstruct}
+                                            width="380px"
+                                            placeholder="Контролеры"
+                                            onChange={(event) => {
+                                                setvalChioseInstruct(event.value);
+                                                GetProductionbyDate(valueDate, 2, valChioseInstruct)
+                                            }}
+                                            options={techsOptions}
+                                        />
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        )
+                        : <div></div>
+                    }
                     <div className={styles.RowTools}>
                         <div className={styles.toolsHead}>
                             <p>Выберите план из существующих дат</p>
@@ -462,21 +517,22 @@ export const CreatingTask = ({
                                 onFocus={(e) => {
                                     e.currentTarget.type = "date";
                                 }}
+                                autocomplete="off"
                             /><br></br>
 
                             <button className={styles.create} onClick={CreatePlan}> Создать план</button>
                         </div>
                     </div>
-                    {userRole==="Master"
-                      ?(
-                        <button className={styles.create} style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>
-                      )
-                      :(
-                        <div></div>
-                      )
+                    {userRole === "Master" || userRole === "Admin"
+                        ? (
+                            <button className={styles.create} style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>
+                        )
+                        : (
+                            <div></div>
+                        )
 
                     }
-                    
+
 
                     <TabPanel
                         style={{ minWidth: "1200px", }}
@@ -590,7 +646,7 @@ export const CreatingTask = ({
                             <form onSubmit={handleSubmit}>
 
 
-                                {userRole === "Master"
+                                {userRole === "Master" || userRole === "Admin"
                                     ? (
                                         <div>
                                             <p>Изменение количества продукции из плана  </p>
@@ -605,6 +661,7 @@ export const CreatingTask = ({
                                                     name="AmountManufactured"
                                                     placeholder="Количество забракованной продукции"
                                                     onBlur={handleBlur}
+                                                    autocomplete="off"
                                                 />
 
                                             </div>
@@ -622,22 +679,33 @@ export const CreatingTask = ({
                                                     name="AmountDefective"
                                                     placeholder="Количество изготовленной продукции"
                                                     onBlur={handleBlur}
+                                                    autocomplete="off"
                                                 />
                                             </div>
 
-                                            <div className={styles.row}>
-                                                <Button
-                                                    disabled={
-                                                        values.shiftNumb == ""
-                                                    }
-                                                    type="submit"
-                                                >
-                                                    Изменить
-                                                </Button>
-                                            </div>
+                                            {userRole != "Admin"
+                                               ?(
+                                                <div className={styles.row}>
+                                                    <Button
+                                                        disabled={
+                                                            values.shiftNumb == ""
+                                                        }
+                                                        type="submit"
+                                                    >
+                                                        Изменить
+                                                    </Button>
+                                                </div>
+                                               )
+                                               :<div></div>
+                                            }
+                                           
                                         </div>
                                     )
-                                    : (
+                                    : <div></div>
+                                }
+
+                                {userRole === "Inspector" || userRole === "Admin"
+                                    ? (
                                         <div>
                                             <p>Изменение количества принятой продукции   (указывается контролёра)</p>
                                             <div className={styles.row}>
@@ -651,6 +719,7 @@ export const CreatingTask = ({
                                                     name="acceptedAmount"
                                                     placeholder="Количество принятой продукции"
                                                     onBlur={handleBlur}
+                                                    autocomplete="off"
                                                 />
 
                                             </div>
@@ -666,6 +735,7 @@ export const CreatingTask = ({
                                                     name="productreason"
                                                     placeholder="Причина брака"
                                                     onBlur={handleBlur}
+                                                    autocomplete="off"
                                                 />
 
                                             </div>
@@ -682,6 +752,7 @@ export const CreatingTask = ({
                                             </div>
                                         </div>
                                     )
+                                    : <div></div>
                                 }
 
 
