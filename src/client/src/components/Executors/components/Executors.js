@@ -54,7 +54,7 @@ export const ExecutorsTable = ({
   const classes = useStyles();
   const initialValues = {
     id: modalData?.id ?? "",
-    rfidTag: modalData?.rfidTag ?? "",
+    rfidTag: modalData?.rfidTag  ?? modalData?.idFromSystem ?? "",
     firstName: modalData?.firstName ?? "",
     lastName: modalData?.lastName ?? "",
     middleName: modalData?.middleName ?? "",
@@ -642,6 +642,7 @@ export const ExecutorsTable = ({
                   name="middleName"
                   placeholder="Фамилия"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
 
 
@@ -655,6 +656,7 @@ export const ExecutorsTable = ({
                   name="firstName"
                   placeholder="Имя"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
                 <Input
                   onChange={(e) => {
@@ -665,6 +667,7 @@ export const ExecutorsTable = ({
                   name="lastName"
                   placeholder="Отчество"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -677,6 +680,7 @@ export const ExecutorsTable = ({
                   name="rfidTag"
                   placeholder="RFID метка "
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -689,6 +693,7 @@ export const ExecutorsTable = ({
                   name="position"
                   placeholder="Должность"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -701,6 +706,7 @@ export const ExecutorsTable = ({
                   name="serviceNumber"
                   placeholder="Табельный номер"
                   onBlur={handleBlur}
+                  autocomplete="off"
                 />
               </div>
               <DisplaySelects select={type} />

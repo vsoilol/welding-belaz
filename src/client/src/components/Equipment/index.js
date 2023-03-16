@@ -59,7 +59,11 @@ export const Equipment = ({
   loadWorkshop,
 
   assignWelders,
-  assignMaster
+  assignMaster,
+
+  loadArea,
+  workshop,
+  area,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -136,7 +140,10 @@ export const Equipment = ({
     loadDowntime();
     loadWorkshop();
     loadWelder();
-  }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder]);
+
+    loadWorkshop();
+    loadArea();
+  }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder,loadWorkshop, loadArea]);
 
 
   const columns = [
@@ -386,6 +393,20 @@ export const Equipment = ({
   };
 
 
+  const [valueWorkshop, setvalueWorkshop] = useState(null);
+  const [valueoptArea, setvalueoptArea] = useState(null);
+  const optworkshop = workshop?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  const optArea = area?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
 
 
   const [value_panel, setValue] = useState(0);
@@ -477,7 +498,7 @@ export const Equipment = ({
 
   function assignWeldersFunction(idWelder, idMaster) {
 
-    const ArrayWelders = welder?.filter(obj => obj.active === 1).map(obj => obj.id); 
+    const ArrayWelders = welder?.filter(obj => obj.active === 1).map(obj => obj.id);
     let dataWelders = {
       weldingEquipmentId: weldingEquipmentId,
       welderIds: ArrayWelders,
@@ -492,15 +513,15 @@ export const Equipment = ({
   }
   const handleSelectChange = (event) => {
     if (event.active === undefined) {
-        event.active = 1
+      event.active = 1
     }
     else if (event.active === 0) {
-        event.active = 1
+      event.active = 1
     }
     else if (event.active === 1) {
-        event.active = 0
+      event.active = 0
     }
-};
+  };
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -658,7 +679,7 @@ export const Equipment = ({
                 />
               </div>
               <p className={styles.titleSelects}>Сварщики</p>
-              <div className={styles.equipments} > 
+              <div className={styles.equipments} >
                 {welder?.map((option) => (
                   <div   >
                     <input
@@ -745,32 +766,33 @@ export const Equipment = ({
 
                   </div>
 
-                  {/* <div className={styles.row}> 
-                    <div> 
-                       <Select
-                        name="valueMaster"
-                        value={valueMaster}
-                        width="180px"
-                        placeholder="Мастер"
-                        onChange={(event) => {
-                          setvalueMaster(event.value)
-                        }}
-                        options={optionMasters}
-                      /> 
-                    </div>
-                    <div> 
-                       <Select
-                        name="valueWelder"
-                        value={valueWelder}
-                        width="180px"
-                        placeholder="Сварщик"
-                        onChange={(event) => {
-                            setvalueWelder(event.value)
-                        }}
-                        options={optionWelder}
-                      /> 
-                    </div>  
-                  </div> */}
+                  <div className={styles.row}>
+                    <Select
+                      name="valueWorkshop"
+                      value={valueWorkshop}
+                      width="380px" 
+                      placeholder="Цех"
+                      onChange={(event) => {
+                        setvalueWorkshop(event.value)
+                      }}
+                      options={optworkshop}
+                    />
+                  </div>
+
+                  <div className={styles.row}>
+                    <Select
+                      name="valueoptArea"
+                      value={valueoptArea}
+                      width="380px" 
+                      placeholder="Поизводственный участок"
+                      onChange={(event) => {
+                        setvalueoptArea(event.value)
+                      }}
+                      options={optArea}
+                    />
+                  </div>
+
+
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
@@ -782,6 +804,7 @@ export const Equipment = ({
                       name="name"
                       placeholder="Наименовние"
                       onBlur={handleBlur}
+                      autocomplete="off"
                     />
 
                     <Input
@@ -794,6 +817,7 @@ export const Equipment = ({
                       name="marking"
                       placeholder="Маркировка"
                       onBlur={handleBlur}
+                      autocomplete="off"
                     />
                   </div>
                   <div className={styles.row}>
@@ -808,6 +832,7 @@ export const Equipment = ({
                       value={values.rfidTag}
                       name={`rfidTag`}
                       placeholder="RFID метка"
+                      autocomplete="off"
                     />
                   </div>
 
@@ -826,6 +851,7 @@ export const Equipment = ({
                       value={values.factoryNumber}
                       name={`factoryNumber`}
                       placeholder="Заводской  (инвентарный) номер"
+                      autocomplete="off"
                     />
                   </div>
 
@@ -845,6 +871,7 @@ export const Equipment = ({
                         e.currentTarget.type = "date";
                       }}
                       onBlur={handleBlur}
+                      autocomplete="off"
                     />
 
 
@@ -862,6 +889,7 @@ export const Equipment = ({
                         e.currentTarget.type = "date";
                       }}
                       onBlur={handleBlur}
+                      autocomplete="off"
                     />
                   </div>
                   <div className={styles.row}>
@@ -877,6 +905,7 @@ export const Equipment = ({
                       value={values.weldingProcess}
                       name={`weldingProcess`}
                       placeholder="Процесс сварки"
+                      autocomplete="off"
                     />
                     <Input
                       onChange={(e) => {
@@ -890,6 +919,7 @@ export const Equipment = ({
                       value={values.idleVoltage}
                       name={`idleVoltage`}
                       placeholder="Напряжение холостого хода"
+                      autocomplete="off"
                     />
                   </div>
                   <div className={styles.row}>
@@ -919,6 +949,7 @@ export const Equipment = ({
                       value={values.manufacturerName}
                       name={`manufacturerName`}
                       placeholder="Наименование изготовителя"
+                      autocomplete="off"
                     />
                   </div>
                   <p className={styles.text} >Габариты</p>
@@ -934,6 +965,7 @@ export const Equipment = ({
                       }}
                       value={values.height}
                       name={`height`}
+                      autocomplete="off"
                       placeholder="Высота"
                     />
                     <Input
@@ -948,6 +980,7 @@ export const Equipment = ({
                       value={values.width}
                       name={`width`}
                       placeholder="Ширина"
+                      autocomplete="off"
                     />
                     <Input
                       onChange={(e) => {
@@ -961,6 +994,7 @@ export const Equipment = ({
                       value={values.lenght}
                       name={`lenght`}
                       placeholder="Длина"
+                      autocomplete="off"
                     />
 
                   </div>
@@ -974,6 +1008,7 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      autocomplete="off"
                       value={values.groupNumber}
                       name={`groupNumber`}
                       placeholder="Номер группы оборудования"
@@ -998,6 +1033,7 @@ export const Equipment = ({
                       name={`weldingCurrentMin`}
                       placeholder="min"
                       onBlur={handleBlur}
+                      autocomplete="off"
                     />
                     <Input
                       onChange={(e) => {
@@ -1011,6 +1047,7 @@ export const Equipment = ({
                       value={values.weldingCurrentMax}
                       name={`weldingCurrentMax`}
                       placeholder="max"
+                      autocomplete="off"
 
                     />
                   </div>
@@ -1028,6 +1065,7 @@ export const Equipment = ({
                       value={values.arcVoltageMin}
                       name={`arcVoltageMin`}
                       placeholder="min"
+                      autocomplete="off"
                     />
                     <Input
                       onChange={(e) => {
@@ -1041,6 +1079,7 @@ export const Equipment = ({
                       value={values.arcVoltageMax}
                       name={`arcVoltageMax`}
                       placeholder="max"
+                      autocomplete="off"
                     />
                   </div>
 

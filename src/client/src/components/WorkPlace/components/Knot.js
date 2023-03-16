@@ -835,7 +835,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
      setdisplaySeams(0)
    }
  }
-
+ const [valuetKnots, setvaluetKnots] = useState("");
 
  function GetSeams() {
 
@@ -1081,8 +1081,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     options={optPosts}
                   />
                 </div>
-
-                <div className={styles.row}>
+ 
+                 <div className={styles.row}>
                   <Select
                     name="valuetProduct"
                     width="380px"
@@ -1091,7 +1091,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     onChange={(event) => setvaluetProduct(event.value)}
                     options={productsOptions}
                   />
-                </div>
+                </div> 
                 <div className={styles.row}>
                   <Select
                     name="valuetTechProc"

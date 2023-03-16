@@ -176,7 +176,7 @@ export const TexProcWelding = ({
       field: "weldPassageInstructions[0].name",
     },
     {
-      title: "Время сварки ",
+      title: "Сварочный ток",
       render: (rowData) => {
         return (
           <p>
