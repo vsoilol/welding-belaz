@@ -542,7 +542,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Input
                     onChange={(e) => {
                       handleChange(e);
@@ -554,7 +554,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     onBlur={handleBlur}
                     autocomplete="off"
                   />
-                </div>
+                </div> */}
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {

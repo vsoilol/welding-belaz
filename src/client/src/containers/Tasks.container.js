@@ -30,6 +30,11 @@ const mapStateToProps = (state) => {
     knot: state.workplace.knot,
     ///Детали
     detail: state.workplace.detail, 
+
+
+    ///Ежедневный план
+    alldates:state.tasks.alldates,
+    plan:state.tasks.plan,
   };
 };
 const mapDispatchToProps = {
@@ -54,6 +59,13 @@ const mapDispatchToProps = {
   loadSeam: Actions.Creators.loadSeamRequest,
 
   loadTasktools:Actions.Creators.loadTasktoolsRequest,
+
+
+
+  ///Ежедневный план
+  loadAlldates:Actions.Creators.loadAlldatesRequest,
+  addPlan:Actions.Creators.addPlanRequest,
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);

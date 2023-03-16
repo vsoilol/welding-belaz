@@ -337,6 +337,7 @@ export const InstructionsTable = ({
                     name="otkName"
                     placeholder="Наименование"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                   <Input
                     onChange={(e) => {
@@ -347,6 +348,7 @@ export const InstructionsTable = ({
                     name="otkUrl"
                     placeholder="Ссылка"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 {values.wpsIds?.map((wps, index) => (
@@ -454,6 +456,7 @@ export const InstructionsTable = ({
                                 name={`allowances.${index}.layerName`}
                                 placeholder="Наименование слоя"
                                 onBlur={handleBlur}
+                                autocomplete="off"
                               />
                             </div>
                             <p className={styles.text}>
@@ -473,6 +476,7 @@ export const InstructionsTable = ({
                                 name={`allowances.${index}.minPreTemp`}
                                 placeholder="min"
                                 onBlur={handleBlur}
+                                autocomplete="off"
                               />
                               <Input
                                 onChange={(e) => {
@@ -486,6 +490,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].maxPreTemp}
                                 name={`allowances.${index}.maxPreTemp`}
                                 placeholder="max"
+                                autocomplete="off"
                               />
                             </div>
                             <p className={styles.text}>
@@ -504,6 +509,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].minLayerTemp}
                                 name={`allowances.${index}.minLayerTemp`}
                                 placeholder="min"
+                                autocomplete="off"
                               />
                               <Input
                                 onChange={(e) => {
@@ -517,6 +523,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].maxLayerTemp}
                                 name={`allowances.${index}.maxLayerTemp`}
                                 placeholder="max"
+                                autocomplete="off"
                               />
                             </div>
                             <p className={styles.text}>Сила тока:</p>
@@ -533,6 +540,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].minAmp}
                                 name={`allowances.${index}.minAmp`}
                                 placeholder="min"
+                                autocomplete="off"
                               />
                               <Input
                                 onChange={(e) => {
@@ -546,6 +554,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].maxAmp}
                                 name={`allowances.${index}.maxAmp`}
                                 placeholder="max"
+                                autocomplete="off"
                               />
                             </div>
                             <p className={styles.text}>Напряжение на дуге:</p>
@@ -562,6 +571,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].minVolt}
                                 name={`allowances.${index}.minVolt`}
                                 placeholder="min"
+                                autocomplete="off"
                               />
                               <Input
                                 onChange={(e) => {
@@ -575,6 +585,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].maxVolt}
                                 name={`allowances.${index}.maxVolt`}
                                 placeholder="max"
+                                autocomplete="off"
                               />
                             </div>
                             <p className={styles.text}>Скорость сварки м\ч:</p>
@@ -591,6 +602,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].minSpeed}
                                 name={`allowances.${index}.minSpeed`}
                                 placeholder="min"
+                                autocomplete="off"
                               />
                               <Input
                                 onChange={(e) => {
@@ -604,6 +616,7 @@ export const InstructionsTable = ({
                                 value={values.allowances[index].maxSpeed}
                                 name={`allowances.${index}.maxSpeed`}
                                 placeholder="max"
+                                autocomplete="off"
                               />
                             </div>
                           </div>
@@ -654,6 +667,7 @@ export const InstructionsTable = ({
                     name="wpsName"
                     placeholder="Наименование"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                   <Input
                     onChange={(e) => {
@@ -663,6 +677,7 @@ export const InstructionsTable = ({
                     value={values.wpsUrl}
                     name="wpsUrl"
                     placeholder="Ссылка"
+                    autocomplete="off"
                     onBlur={handleBlur}
                   />
                 </div>

@@ -29,9 +29,22 @@ const { Types, Creators } = createActions({
   loadSeamFailure: ["error"],
 
   loadTasktoolsRequest: ["payload"],
-  loadTasktoolsSuccess: ["tasktools"], 
+  loadTasktoolsSuccess: ["tasktools"],
   loadTasktoolsFailure: ["error"],
 
+
+
+
+  ///Ежедневный план
+  loadAlldatesRequest: ["payload"],
+  loadAlldatesSuccess: ["alldates"],
+  loadAlldatesFailure: ["error"],
+
+
+  addPlanRequest: ["payload"],
+  addPlanSuccess: ["plan"],
+  addPlanFailure: ["error"],
+ 
 
 });
 

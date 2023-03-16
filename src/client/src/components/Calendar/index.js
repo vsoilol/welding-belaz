@@ -693,6 +693,7 @@ export const Calendar = ({
                     onFocus={(e) => {
                       e.currentTarget.type = "date";
                     }}
+                    autocomplete="off"
                     onBlur={handleBlur}
                   />
                 </div>
@@ -818,6 +819,7 @@ export const Calendar = ({
                     onFocus={(e) => {
                       e.currentTarget.type = "date";
                     }}
+                    autocomplete="off"
                     onBlur={handleBlur}
                   />
                 </div>
@@ -876,6 +878,7 @@ export const Calendar = ({
                     name="shiftNumb"
                     placeholder="Номер смены"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
 
                 </div>
@@ -890,6 +893,7 @@ export const Calendar = ({
                     name="shiftStart"
                     placeholder="Начало работы"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
 
                   <Input
@@ -902,6 +906,7 @@ export const Calendar = ({
                     name="shiftEnd"
                     placeholder="Конец работы"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -915,6 +920,7 @@ export const Calendar = ({
                     name="breakStart"
                     placeholder="Начало перерыва"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
 
                   <Input
@@ -927,6 +933,7 @@ export const Calendar = ({
                     name="breakEnd"
                     placeholder="Конец перерыва"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>

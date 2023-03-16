@@ -167,37 +167,37 @@ export const Seam = ({
       {
         title: "Наименование изделия ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.name??"-"}</span>
         },
       },
       {
         title: "Номер  изделия ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.number??"-"}</span>
         },
       },
       {
         title: "Наименование узла ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.knot?.name??"-"}</span>
         },
       },
       {
         title: "Номер  узла ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.knot?.number??"-"}</span>
         },
       },
       {
         title: "Наименование детали ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.detail?.name??"-"}</span>
         },
       },
       {
         title: "Номер  детали ", 
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.detail?.number??"-"}</span>
         },
       },
       // {

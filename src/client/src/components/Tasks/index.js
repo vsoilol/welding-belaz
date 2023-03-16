@@ -14,7 +14,6 @@ import errorActions from "store/error/actions";
 import { useDispatch } from "react-redux";
 
 import { DailyPlan } from "./DailyPlan";
-import { EnteringMarriage } from "./DailyPlan/EnteringMarriage";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -64,7 +63,7 @@ export const Tasks = ({
   product,
   knot,
   detail,
-  executors, 
+  executors,
 
   user,
 
@@ -77,7 +76,7 @@ export const Tasks = ({
   const dispatch = useDispatch();
 
 
-  
+
   const [production, setProduction] = useState(1);
 
   const [welderValue, setwelderValue] = useState("");
@@ -108,7 +107,7 @@ export const Tasks = ({
     instructionId: modalData?.instruction.id ?? "",
     id: modalData?.id ?? "",
   };
- 
+
 
   const requiredKeys = [
     "object",
@@ -120,33 +119,33 @@ export const Tasks = ({
     "weldingWire",
     "instructionId",
   ];
-  
- 
-    useEffect(() => {
-      loadTasks();
-      loadTechs();
-      loadExecutors();
-      loadMasters(); 
 
-      loadSeam(); 
-      loadEquipment();
-      
-      loadProduct();
-      loadKnot();
-      loadDetail();
-    }, [ 
-      loadMasters, 
-      loadTasks, 
-      loadTechs,
-      loadProduct,
-      loadExecutors,
-      loadKnot,
-      loadDetail,  
-      loadEquipment, 
-      loadSeam]); 
- 
-      
-     
+
+  useEffect(() => {
+    loadTasks();
+    loadTechs();
+    loadExecutors();
+    loadMasters();
+
+    loadSeam();
+    loadEquipment();
+
+    loadProduct();
+    loadKnot();
+    loadDetail();
+  }, [
+    loadMasters,
+    loadTasks,
+    loadTechs,
+    loadProduct,
+    loadExecutors,
+    loadKnot,
+    loadDetail,
+    loadEquipment,
+    loadSeam]);
+
+
+
 
   const formattedTechs = techs?.map((item) => {
     return {
@@ -160,98 +159,93 @@ export const Tasks = ({
       value: item?.id,
       label: item?.otkName,
     };
-  }); 
-  const getDocument = (numberTask) => { 
-    const number = combinedArray?.find(task => task.number === numberTask).id;    
+  });
+  const getDocument = (numberTask) => {
+    const number = combinedArray?.find(task => task.number === numberTask).id;
     api.get(`/file/seamPassport/${number}`, {
-        responseType: "arraybuffer",
-        dataType: "blob",
-      })
+      responseType: "arraybuffer",
+      dataType: "blob",
+    })
       .then((response) => {
         const file = new Blob([response["data"]], {
           type: "application/pdf",
-        }); 
+        });
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
       })
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
- 
 
-  const combinedArray = tasks?.tasks?.concat(tasks.fullNames); 
 
+  const combinedArray = tasks?.tasks?.concat(tasks.fullNames);
+
+
+  function comparisonDate(weldingDate) {
+    const targetDate = new Date(weldingDate)
+    const now = new Date();
+
+    if (now <= targetDate) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   const columns = [
     {
       title: "№ задания»", field: "number",
-    }, 
+    },
     {
       title: "Номер шва", field: "seam.number",
     },
-
     {
-      title: "Наименование изделия",  
+      title: "Количество швов", field: "amountFromPlan",
+    },
+    {
+      title: "Дата ", field: "weldingDate",
+    },
+    {
+      title: "Статус ",
       render: (rowData) => {
-        if (rowData?.seam?.product?.mainProduct?.mainProduct?.productType===1) {
-          return   <p>{rowData?.seam?.product?.mainProduct?.mainProduct?.name}</p>  
+        if (comparisonDate(rowData?.weldingDate)) {
+          return <p className={styles.Done}>Завершено</p>
         }
-        else if (rowData?.seam?.product?.mainProduct?.productType===1){
-          return  <p>{rowData?.seam?.product?.mainProduct?.name}</p> 
+        else {
+          return <p className={styles.InProcess}>В процессе</p>
         }
-        else if (rowData?.seam?.product?.productType===1){
-          return <p>{rowData?.seam?.product?.name}</p> 
-        }  else {
-          return  <p> - </p> 
-        }
-        
-
       },
     },
     {
-      title: "Наименование узла", 
+      title: "Наименование изделия",
       render: (rowData) => {
-        if (rowData?.seam?.product?.mainProduct?.mainProduct?.productType===2) {
-          return   <p>{rowData?.seam?.product?.mainProduct?.mainProduct?.name}</p>  
-        }
-        else if (rowData?.seam?.product?.mainProduct?.productType===2){
-          return  <p>{rowData?.seam?.product?.mainProduct?.name}</p> 
-        }
-        else if (rowData?.seam?.product?.productType===2){
-          return <p>{rowData?.seam?.product?.name}</p> 
-        }  else {
-          return  <p> - </p> 
-        }
-      },  
-    }, 
-    {
-      title: "Наименование детали", 
-      render: (rowData) => {
-        if (rowData?.seam?.product?.mainProduct?.mainProduct?.productType===3) {
-          return   <p>{rowData?.seam?.product?.mainProduct?.mainProduct?.name}</p>  
-        }
-        else if (rowData?.seam?.product?.mainProduct?.productType===3){
-          return  <p>{rowData?.seam?.product?.mainProduct?.name}</p> 
-        }
-        else if (rowData?.seam?.product?.productType===3){
-          return <p>{rowData?.seam?.product?.name}</p> 
-        }  else {
-          return  <p> - </p> 
-        }
-
-      }, 
+        if (rowData?.seam?.product)  return <p>{rowData?.seam?.product?.name} {rowData?.seam?.product?.number}</p>
+        else return <p> - </p> 
+      },
     },
-    
+    {
+      title: "Наименование узла",
+      render: (rowData) => {
+        if (rowData?.seam?.knot)  return <p>{rowData?.seam?.knot?.name} {rowData?.seam?.knot?.number}</p>
+        else return <p> - </p>  
+      },
+    },
+    {
+      title: "Наименование детали",
+      render: (rowData) => {
+        if (rowData?.seam?.detail)  return <p>{rowData?.seam?.detail?.name} {rowData?.seam?.detail?.number}</p>
+        else return <p> - </p>   
+      },
+    },
+
     {
       title: "Оборудование  ( инвентарный номер )",
       render: (rowData) => {
-          if (rowData?.weldingEquipment && rowData?.weldingEquipment.length != 0) {
-              return (
-                <p>{rowData?.weldingEquipment?.factoryNumber ?? "-"}</p>
-              )
-          }
-          else {
-              return <span>-</span>
-          }
+        if (rowData?.weldingEquipment && rowData?.weldingEquipment.length != 0) {
+          return  <p>{rowData?.weldingEquipment?.factoryNumber ?? "-"}</p>
+        }
+        else {
+          return <span>-</span>
+        }
       },
     },
 
@@ -270,10 +264,7 @@ export const Tasks = ({
           );
         }
         else {
-          return (
-            <p>{`  -   `}
-            </p>
-          );
+            return  <p>{`  -   `}  </p>
         }
 
       },
@@ -338,142 +329,7 @@ export const Tasks = ({
     },
   ];
 
-  const renderRowChildren = (rowData) => {
-    return (
-      <div className={styles.column}>
-        <p className={styles.bold}>Общая информация</p>
-        <p>Номер задания: {rowData?.taskId}</p>
-        <p>
-          Операционная технологическая карта:{" "}
-          <a
-            // className={styles.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            href={rowData?.instruction?.link}
-          >
-            {rowData?.instruction?.name ?? "---"}
-          </a>
-        </p>
-        <p>
-          Технический надзор:{" "}
-          {rowData?.technicalController?.userData?.surname ?? "---"}
-        </p>
-        <div>
-          <p className={styles.bold}>Материалы</p>
-          <div>
-            <p>
-              Основной материал/номер партии:{" "}
-              {rowData?.generalMaterial ?? "---"}
-            </p>
-            <p>
-              Сварочные электроды/номер партии:{" "}
-              {rowData?.weldingElectrodes ?? "---"}
-            </p>
-            <p>
-              Сварочная проволока/номер партии: {rowData?.weldingWire ?? "---"}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }; 
-  
 
-  ////////////////////////////////////////////////////////////////////
-  const columns_data = {
-
-    seam: [
-      {
-        title: "Номер шва",
-        field: "number"
-      },
-      {
-        title: "Номер детали",
-        field: "product.number"
-      },
-      {
-        title: "Номер узла",
-        field: "product.productType"
-      },
-      {
-        title: "Номер изделие",
-        field: "product.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ",
-        field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ",
-        field: "technologicalProcess.number"
-      },
-    ],
-
-    detals: [
-      {
-        title: "Наименование",
-        field: "product.name"
-      },
-      {
-        title: "Номер шва",
-        field: "number"
-      },
-      {
-        title: "Номер детали",
-        field: "product.number"
-      },
-      {
-        title: "Номер узла",
-        field: "product.productType"
-      },
-      {
-        title: "Номер изделие",
-        field: "product.number"
-      },
-      {
-        title: "Наименование   технологического процесса  ",
-        field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ",
-        field: "technologicalProcess.number"
-      },
-    ],
-
-    temperatura: [
-      {
-        title: "Температура окружающей среды (°C)",
-        render: (rowData) => {
-          return (
-            <p>
-              {`${rowData.ambientTemperature}`}
-            </p>
-          );
-        },
-      },
-      {
-        title: "Влажность воздуха (%)",
-        field: "airHumidity",
-      },
-      {
-        title: "Межслойная температура (°C)",
-        field: "interlayerTemperature",
-      },
-      {
-        title: "Номер текущего слоя",
-        field: "currentLayerNumber",
-      },
-      {
-        title: "Температура предварительного нагрева (°C)",
-        field: "preheatingTemperature",
-      },
-      {
-        title: "Усредненные значения сварочного тока и напряжения на дуге",
-        field: "arcVoltageValues[0]",
-      },
-    ]
-
-  }
 
 
 
@@ -491,40 +347,9 @@ export const Tasks = ({
     );
   };
 
-  const ProdArray = [
-    {
-      id: 1,
-      name: "Изделия"
-    },
-    {
-      id: 2,
-      name: "Узлы"
-    },
-    {
-      id: 3,
-      name: "Детали"
-    },
-  ]
+  console.log(techs)
+ 
 
-
-  
-  ////////////////////////////////////////////////////////////////////
-  const optProduction = ProdArray?.map((item) => {
-    return {
-      value: item.id,
-      label: item.name,
-    };
-  });
-  
-
-
-  const optionWelder = executors?.map((item) => {
-    return {
-      value: item.id,
-      label: `${item.middleName} ${item.firstName} ${item.lastName}`,
-    };
-  });
-   
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -533,7 +358,6 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-
       <Tabs
         value={value_panel}
         onChange={ChangePanels}
@@ -541,18 +365,12 @@ export const Tasks = ({
         textColor="primary"
         aria-label="full width tabs example"
       >
-        <Tab label="Сменные задания на сварку " /> 
-        {/*
-        <Tab label="Сварные швы деталей, узлов и изделий" />
-        <Tab label="Данные об изготовленных изделиях" /> */}
-        {/* <Tab label="Импортированный план" /> */}
+        <Tab label="Сменные задания на сварку " />
         <Tab label="Ежедневный план" />
-        {/* <Tab label="Ввод выработки и брака" /> */}
-        {/* <Tab label="Температура окружающей среды" /> */}
       </Tabs>
 
       <div className={styles.tableWrapper}>
- 
+
         {/*Сменные задания на сварку*/}
         <TabPanel
           value={value_panel}
@@ -564,101 +382,14 @@ export const Tasks = ({
             columns={columns}
             data={combinedArray}
             isLoading={isRequesting}
-            
+
           />
         </TabPanel>
-        {/*Сварные швы деталей, узлов и изделий*/}
-        {/* <TabPanel
-          value={value_panel}
-          indPanel={1}
-          style={{ minWidth: "800px", }}
-        >
-          <Table
-            title="Сварные швы деталей, узлов и изделий"
-            columns={columns_data.seam}
-            data={seam}
-            isLoading={isRequesting}
-            deleteAction={
-              userRole === "admin" || userRole === "master" ? deleteTask : null
-            }
-            actions={
-              userRole === "admin" || userRole === "master"
-                ? [
-                  {
-                    icon: "add",
-                    tooltip: "Создать задачу",
-                    isFreeAction: true,
-                    onClick: () => setIsModalOpen(true),
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать задачу",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                    },
-                  },
-                ]
-                : []
-            }
-          />
-        </TabPanel> */}
 
-        {/*Данные об изготовленных изделиях*/}
-        {/* <TabPanel
-          value={value_panel}
-          indPanel={2}
-          style={{ minWidth: "800px", }}
-        >
-          <Table
-            title="Данные об изготовленных изделиях"
-            columns={columns_data.detals} 
-            data={seam}
-            isLoading={isRequesting}
-            deleteAction={
-              userRole === "admin" || userRole === "master" ? deleteTask : null
-            }
-            actions={
-              userRole === "admin" || userRole === "master"
-                ? [
-                  {
-                    icon: "add",
-                    tooltip: "Создать задачу",
-                    isFreeAction: true,
-                    onClick: () => setIsModalOpen(true),
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать задачу",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                    },
-                  },
-                ]
-                : []
-            }
-          />
-        </TabPanel> */}
- 
-
-        {/*Импортированный план*/}
-        {value_panel === 3
-          ? (
-            <div className={styles.TablePlan}>
-              <h3>Импортированный план</h3>
-            </div>
-          )
-          : (
-            <div className={styles.TableToFixed}>
-
-            </div>
-          )
-        }
         {/*Ежедневный план*/}
         {value_panel === 1
           ? (
-            <DailyPlan 
+            <DailyPlan
               masters={masters}
               product={product}
               knot={knot}
@@ -667,7 +398,8 @@ export const Tasks = ({
               initialValues={initialValues}
               user={user}
               equipment={equipment}
-              userRole={userRole}
+              userRole={userRole}  
+              techs={techs}
             />
           )
           : (
@@ -678,16 +410,6 @@ export const Tasks = ({
         }
 
 
-        {value_panel === 2
-          ?(
-            <EnteringMarriage />
-          )
-          : (
-            <div className={styles.TableToFixed}>
-
-            </div>
-          )
-        }
 
 
         <ModalWindow
@@ -729,6 +451,7 @@ export const Tasks = ({
                     name="object"
                     placeholder="Объект"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                   <Input
                     onChange={(e) => {
@@ -739,6 +462,7 @@ export const Tasks = ({
                     name="sector"
                     placeholder="Участок/цех"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -751,6 +475,7 @@ export const Tasks = ({
                     name="weldingConnectionName"
                     placeholder="Наименовние соединения"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -787,6 +512,7 @@ export const Tasks = ({
                     name="generalMaterial"
                     placeholder="Материал"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                   <Select
                     name="technicalControllerId"
@@ -810,6 +536,7 @@ export const Tasks = ({
                     name="weldingElectrodes"
                     placeholder="Электроды"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                   <Input
                     onChange={(e) => {
@@ -820,6 +547,7 @@ export const Tasks = ({
                     name="weldingWire"
                     placeholder="Проволока"
                     onBlur={handleBlur}
+                    autocomplete="off"
                   />
                 </div>
                 <div className={styles.row}>
