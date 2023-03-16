@@ -226,3 +226,14 @@ tr.background{
 .equipments div{
   padding: 5px 0px;
 }
+
+.Done{
+  color: rgb(1, 60,128);
+  font-weight: 600;
+  font-size: 12px;
+}
+.InProcess{
+  color: goldenrod;
+  font-weight: 600;
+  font-size: 12px;
+}

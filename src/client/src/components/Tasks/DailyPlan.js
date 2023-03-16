@@ -41,7 +41,8 @@ export const DailyPlan = ({
     initialValues,
     user,
     equipment,
-    userRole 
+    userRole,
+    techs
 
 }) => {
    
@@ -59,6 +60,7 @@ export const DailyPlan = ({
                 user={user}
                 equipment={equipment}
                 userRole={userRole}
+                techs={techs}
             />
 
 

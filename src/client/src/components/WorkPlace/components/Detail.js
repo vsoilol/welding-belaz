@@ -781,7 +781,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
    }
  }
 
-
+ const [valuetProduct, setvaluetProduct] = useState("");
  function GetSeams() {
 
    let SeamsArray = []
@@ -800,6 +800,19 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
    }
    setSeamsList(SeamsArray)
  }
+ const productsOptions = product?.map((item) => {
+  return {
+    value: item.id,
+    label: item.name,
+  };
+});
+const [valuetKnots, setvaluetKnots] = useState("");
+const knotsOptions = knot?.map((item) => {
+  return {
+    value: item.id,
+    label: item.name,
+  };
+});
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -1010,7 +1023,26 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     options={workplaceIdOptions}
                   />
                 </div>
-
+                <div className={styles.row}>
+                  <Select
+                    name="valuetProduct"
+                    width="380px"
+                    value={valuetProduct}
+                    placeholder="Изделие"
+                    onChange={(event) => setvaluetProduct(event.value)}
+                    options={productsOptions}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Select
+                    name="valuetKnots"
+                    width="380px"
+                    value={valuetKnots}
+                    placeholder="Узел"
+                    onChange={(event) => setvaluetKnots(event.value)}
+                    options={knotsOptions}
+                  />
+                </div>
                 <div className={styles.row}>
                   <Select
                     name="valuetPosts"
