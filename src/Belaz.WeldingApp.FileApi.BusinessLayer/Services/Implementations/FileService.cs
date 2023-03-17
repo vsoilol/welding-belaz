@@ -45,6 +45,35 @@ public class FileService : IFileService
         _weldPassageRepository = weldPassageRepository;
     }
 
+    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
+        GenerateExcelDeviationReportByProductionAreaRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            var dateStart = request.StartDate.ToDateTime();
+            var dateEnd = request.EndDate.ToDateTime();
+
+            var deviations =
+                await _weldPassageRepository.GetAllDeviationsByProductionAreaAndDatePeriodAsync(
+                    request.ProductionAreaId,
+                    request.ProductId,
+                    request.SeamId,
+                    dateStart,
+                    dateEnd
+                );
+
+            if (!deviations.Any())
+            {
+                throw new ListIsEmptyException();
+            }
+
+            return await _excelDeviationReportService.GenerateReportAsync(deviations);
+        });
+    }
+
     public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkshopAsync(
         GenerateExcelDeviationReportByWorkshopRequest request
     )

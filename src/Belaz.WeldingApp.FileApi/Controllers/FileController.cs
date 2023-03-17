@@ -35,4 +35,13 @@ public class FileController : ControllerBase
         var result = await _fileService.GenerateExcelDeviationReportByWorkshopAsync(request);
         return result.ToFile();
     }
+
+    [HttpGet("deviationReport/byProductionArea")]
+    public async Task<IActionResult> GetExcelDeviationReportByProductionAreaAsync(
+        [FromQuery] GenerateExcelDeviationReportByProductionAreaRequest request
+    )
+    {
+        var result = await _fileService.GenerateExcelDeviationReportByProductionAreaAsync(request);
+        return result.ToFile();
+    }
 }
