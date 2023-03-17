@@ -24,23 +24,35 @@ public class WeldPassageRepository : IWeldPassageRepository
 
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWorkshopAndDatePeriodAsync(
         Guid workshopId,
+        Guid productId,
+        Guid? seamId,
         DateTime startDate,
         DateTime endDate
     )
     {
-        var weldPassages = _context.WeldPassages.Where(
-            _ =>
-                _.WeldingRecord.WeldingEquipment.Workplaces.First().PostId == null
-                    ? _.WeldingRecord.WeldingEquipment.Workplaces.First().ProductionArea!.WorkshopId
-                        == workshopId
-                    : _.WeldingRecord.WeldingEquipment.Workplaces
-                        .First()
-                        .Post!.ProductionArea.WorkshopId == workshopId
-                        && _.WeldingRecord.Date.Date <= endDate.Date
-                        && _.WeldingRecord.Date.Date >= startDate.Date
+        var query = _context.WeldPassages.Where(
+            wp =>
+                wp.WeldingRecord.WeldingEquipment.Workplaces.Any(
+                    wp =>
+                        wp.PostId == null
+                            ? wp.ProductionArea!.WorkshopId == workshopId
+                            : wp.Post!.ProductionArea.WorkshopId == workshopId
+                )
         );
 
-        return weldPassages
+        query = query.Where(
+            _ =>
+                _.WeldingRecord.Date.Date <= endDate.Date
+                && _.WeldingRecord.Date.Date >= startDate.Date
+        );
+        query = query.Where(_ => _.WeldingTask.SeamAccount.Seam.ProductId == productId);
+
+        if (seamId is not null)
+        {
+            query = query.Where(_ => _.WeldingTask.SeamAccount.SeamId == seamId);
+        }
+
+        return query
             .ProjectTo<WeldPassageDeviationsDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

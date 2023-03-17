@@ -56,6 +56,8 @@ public class FileService : IFileService
             var deviations =
                 await _weldPassageRepository.GetAllDeviationsByWorkshopAndDatePeriodAsync(
                     request.WorkshopId,
+                    request.ProductId,
+                    request.SeamId,
                     dateStart,
                     dateEnd
                 );

@@ -11,6 +11,8 @@ public interface IWeldPassageRepository
 {
     Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWorkshopAndDatePeriodAsync(
         Guid workshopId,
+        Guid productId,
+        Guid? seamId,
         DateTime startDate,
         DateTime endDate
     );
