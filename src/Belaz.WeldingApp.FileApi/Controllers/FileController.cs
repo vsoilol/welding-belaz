@@ -26,10 +26,12 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
-    [HttpGet("excelChart")]
-    public async Task<IActionResult> GetExcelChartAsync()
+    [HttpGet("deviationReport/byWorkshop")]
+    public async Task<IActionResult> GetExcelDeviationReportByWorkshopAsync(
+        [FromQuery] GenerateExcelDeviationReportByWorkshopRequest request
+    )
     {
-        var result = await _fileService.GenerateExcelChartAsync();
+        var result = await _fileService.GenerateExcelDeviationReportByWorkshopAsync(request);
         return result.ToFile();
     }
 }

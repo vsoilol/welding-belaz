@@ -167,13 +167,13 @@ public class WeldPassageComponent : IComponent
                 .Text(WeldPassageInfo.WeldingStartTime.ToHoursMinutesSecondsString())
                 .Style(Typography.Italic);
 
-            var weldTimeString = TimeSpan
-                .FromSeconds(
-                    WeldPassageInfo.WeldingEndTime
-                        .Subtract(WeldPassageInfo.WeldingStartTime)
-                        .TotalSeconds
-                )
-                .ToMinutesSecondsString();
+            var weldingTimeSeconds = TimeSpan.FromSeconds(
+                WeldPassageInfo.WeldingEndTime
+                    .Subtract(WeldPassageInfo.WeldingStartTime)
+                    .TotalSeconds
+            );
+
+            var weldTimeString = String.Format("{0:0.##}", weldingTimeSeconds.TotalMinutes);
 
             table.Cell().Element(BlockLeft).Text("Время сварки, мин").Style(Typography.Normal);
 
@@ -209,7 +209,7 @@ public class WeldPassageComponent : IComponent
                 .Text(
                     WeldPassageInfo.ShortTermDeviation is null
                         ? "-"
-                        : String.Format("{0:0.##}", (double)WeldPassageInfo.ShortTermDeviation)
+                        : String.Format("{0:0.##}", (double)WeldPassageInfo.ShortTermDeviation / 60)
                 )
                 .Style(Typography.Italic);
 
@@ -219,7 +219,7 @@ public class WeldPassageComponent : IComponent
                 .Text(
                     WeldPassageInfo.LongTermDeviation is null
                         ? "-"
-                        : String.Format("{0:0.##}", (double)WeldPassageInfo.LongTermDeviation)
+                        : String.Format("{0:0.##}", (double)WeldPassageInfo.LongTermDeviation / 60)
                 )
                 .Style(Typography.Italic);
 
