@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -9,7 +10,9 @@ using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;
+using Belaz.WeldingApp.FileApi.Domain.Exceptions;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
+using LanguageExt;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Hosting;
 using QuestPDF.Fluent;
@@ -61,6 +64,11 @@ public class FileService : IFileService
                     dateStart,
                     dateEnd
                 );
+
+            if (!deviations.Any())
+            {
+                throw new ListIsEmptyException();
+            }
 
             return await _excelDeviationReportService.GenerateReportAsync(deviations);
         });

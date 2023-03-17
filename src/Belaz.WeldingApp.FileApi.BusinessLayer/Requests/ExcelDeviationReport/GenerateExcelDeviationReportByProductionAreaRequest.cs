@@ -1,6 +1,11 @@
-namespace Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class GenerateExcelDeviationReportByWorkshopRequest
+namespace Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
+
+public class GenerateExcelDeviationReportByProductionAreaRequest
 {
     /// <summary>
     /// Id узла, детали или изделия

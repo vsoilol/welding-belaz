@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 using Belaz.WeldingApp.FileApi.DataLayer;
 using FluentValidation;
 using FluentValidation.Validators;
@@ -10,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.PropertyValidators;
 
-public class SeamBelongsToProductValidator
-    : AsyncPropertyValidator<GenerateExcelDeviationReportByWorkshopRequest, Guid>
+public class SeamBelongsToProductValidator<T> : AsyncPropertyValidator<T, Guid>
+    where T : GenerateExcelDeviationReportRequest
 {
     private readonly ApplicationContext _context;
 
@@ -21,7 +17,7 @@ public class SeamBelongsToProductValidator
     }
 
     public override async Task<bool> IsValidAsync(
-        ValidationContext<GenerateExcelDeviationReportByWorkshopRequest> context,
+        ValidationContext<T> context,
         Guid value,
         CancellationToken cancellation
     )
@@ -34,7 +30,7 @@ public class SeamBelongsToProductValidator
         return isSeamBelongsToProduct;
     }
 
-    public override string Name => nameof(SeamBelongsToProductValidator);
+    public override string Name => "SeamBelongsToProductValidator";
 
     protected override string GetDefaultMessageTemplate(string errorCode) =>
         "This seam does not belong to the product";

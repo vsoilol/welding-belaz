@@ -16,4 +16,12 @@ public interface IWeldPassageRepository
         DateTime startDate,
         DateTime endDate
     );
+
+    Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByProductionAreaAndDatePeriodAsync(
+        Guid productionAreaId,
+        Guid productId,
+        Guid? seamId,
+        DateTime startDate,
+        DateTime endDate
+    );
 }
