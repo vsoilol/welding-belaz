@@ -45,92 +45,99 @@ public class FileService : IFileService
         _weldPassageRepository = weldPassageRepository;
     }
 
-    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
-        GenerateExcelDeviationReportByProductionAreaRequest request
-    )
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(async () =>
-        {
-            var dateStart = request.StartDate.ToDateTime();
-            var dateEnd = request.EndDate.ToDateTime();
-
-            var deviations =
-                await _weldPassageRepository.GetAllDeviationsByProductionAreaAndDatePeriodAsync(
-                    request.ProductionAreaId,
-                    request.ProductId,
-                    request.SeamId,
-                    dateStart,
-                    dateEnd
-                );
-
-            if (!deviations.Any())
-            {
-                throw new ListIsEmptyException();
-            }
-
-            return await _excelDeviationReportService.GenerateReportAsync(deviations);
-        });
-    }
-
-    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkshopAsync(
-        GenerateExcelDeviationReportByWorkshopRequest request
-    )
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(async () =>
-        {
-            var dateStart = request.StartDate.ToDateTime();
-            var dateEnd = request.EndDate.ToDateTime();
-
-            var deviations =
-                await _weldPassageRepository.GetAllDeviationsByWorkshopAndDatePeriodAsync(
-                    request.WorkshopId,
-                    request.ProductId,
-                    request.SeamId,
-                    dateStart,
-                    dateEnd
-                );
-
-            if (!deviations.Any())
-            {
-                throw new ListIsEmptyException();
-            }
-
-            return await _excelDeviationReportService.GenerateReportAsync(deviations);
-        });
-    }
-
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
         GenerateSeamPassportByTaskIdRequest request
     )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            var task = await _taskRepository.GetByIdAsync(request.TaskId);
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
 
-            var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
-            var document = new SeamPassportDocument(task, fontsPath, _markEstimateService);
+        var task = await _taskRepository.GetByIdAsync(request.TaskId);
 
-            byte[] bytes;
-            using (var stream = new MemoryStream())
-            {
-                document.GeneratePdf(stream);
-                bytes = stream.ToArray();
-            }
+        var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
+        var document = new SeamPassportDocument(task, fontsPath, _markEstimateService);
 
-            var result = new DocumentDto
-            {
-                FileName = $"Паспорт Шва №{task.Seam.Number}.pdf",
-                FileType = FileTypes.PdfType,
-                Bytes = bytes
-            };
+        byte[] bytes;
+        using (var stream = new MemoryStream())
+        {
+            document.GeneratePdf(stream);
+            bytes = stream.ToArray();
+        }
 
-            return result;
-        });
+        var result = new DocumentDto
+        {
+            FileName = $"Паспорт Шва №{task.Seam.Number}.pdf",
+            FileType = FileTypes.PdfType,
+            Bytes = bytes
+        };
+
+        return result;
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkshopAsync(
+        GenerateExcelDeviationReportByWorkshopRequest request
+    )
+    {
+        return await GenerateExcelDeviationReportAsync(
+            request,
+            request.WorkshopId,
+            _weldPassageRepository.GetAllDeviationsByWorkshopAndDatePeriodAsync
+        );
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
+        GenerateExcelDeviationReportByProductionAreaRequest request
+    )
+    {
+        return await GenerateExcelDeviationReportAsync(
+            request,
+            request.ProductionAreaId,
+            _weldPassageRepository.GetAllDeviationsByProductionAreaAndDatePeriodAsync
+        );
+    }
+
+    private async Task<Result<DocumentDto>> GenerateExcelDeviationReportAsync<T>(
+        T request,
+        Guid additionalId,
+        Func<
+            Guid,
+            Guid,
+            Guid?,
+            DateTime,
+            DateTime,
+            Task<List<WeldPassageDeviationsDto>>
+        > getAllDeviationsFunc
+    )
+        where T : GenerateExcelDeviationReportRequest
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var dateStart = request.StartDate.ToDateTime();
+        var dateEnd = request.EndDate.ToDateTime();
+
+        var deviations = await getAllDeviationsFunc(
+            additionalId,
+            request.ProductId,
+            request.SeamId,
+            dateStart,
+            dateEnd
+        );
+
+        if (!deviations.Any())
+        {
+            var exception = new ListIsEmptyException();
+            return new Result<DocumentDto>(exception);
+        }
+
+        return await _excelDeviationReportService.GenerateReportAsync(deviations);
     }
 }

@@ -5,6 +5,7 @@ using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Validations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;
 using FluentValidation;

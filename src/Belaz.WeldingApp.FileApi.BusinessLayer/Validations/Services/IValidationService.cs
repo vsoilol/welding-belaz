@@ -1,9 +1,10 @@
-﻿using LanguageExt;
+﻿using Belaz.WeldingApp.FileApi.Domain.Models;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 
 public interface IValidationService
 {
-    Task<Result<Unit>> ValidateAsync<T>(T entity);
+    Task<ValidationResult> ValidateAsync<T>(T entity);
 }

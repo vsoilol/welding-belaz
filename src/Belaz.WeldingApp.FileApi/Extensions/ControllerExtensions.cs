@@ -9,53 +9,46 @@ namespace Belaz.WeldingApp.FileApi.Extensions;
 
 public static class ControllerExtensions
 {
-    public static ActionResult<TResult> ToOk<TResult>(
-        this Result<TResult> result)
+    public static IActionResult ToFile(this Result<DocumentDto> result)
     {
-        return result.Match<ActionResult<TResult>>(obj => new OkObjectResult(obj), exception =>
-        {
-            if (exception is ValidationException validationException)
-            {
-                var errors = validationException.Errors.ToDictionary(x => x.PropertyName, x => x.ErrorMessage);
-
-                var badRequestResult = new BadRequestResult
-                {
-                    Errors = errors,
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Title = "Validation Error"
-                };
-
-                return new BadRequestObjectResult(badRequestResult);
-            }
-
-            return new StatusCodeResult(500);
-        });
+        return result.Match<IActionResult>(
+            obj => CreateFileContentResult(obj),
+            exception => CreateErrorResult(exception)
+        );
     }
 
-    public static IActionResult ToFile(
-        this Result<DocumentDto> result)
+    private static FileContentResult CreateFileContentResult(DocumentDto document)
     {
-        return result.Match<IActionResult>(obj => new FileContentResult(obj.Bytes, obj.FileType)
+        return new FileContentResult(document.Bytes, document.FileType)
         {
-            FileDownloadName = obj.FileName
-        },
-            exception =>
+            FileDownloadName = document.FileName
+        };
+    }
+
+    private static IActionResult CreateErrorResult(Exception exception)
+    {
+        if (exception is ValidationException validationException)
+        {
+            var errors = validationException.Errors.ToDictionary(
+                x => x.PropertyName,
+                x => x.ErrorMessage
+            );
+
+            var badRequestResult = new BadRequestResult
             {
-                if (exception is ValidationException validationException)
-                {
-                    var errors = validationException.Errors.ToDictionary(x => x.PropertyName, x => x.ErrorMessage);
+                Errors = errors,
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Title = "Validation Error"
+            };
 
-                    var badRequestResult = new BadRequestResult
-                    {
-                        Errors = errors,
-                        StatusCode = (int)HttpStatusCode.BadRequest,
-                        Title = "Validation Error"
-                    };
+            return new BadRequestObjectResult(badRequestResult);
+        }
 
-                    return new BadRequestObjectResult(badRequestResult);
-                }
+        if (exception is ListIsEmptyException)
+        {
+            return new NoContentResult();
+        }
 
-                return new StatusCodeResult(500);
-            });
+        return new StatusCodeResult(500);
     }
 }
