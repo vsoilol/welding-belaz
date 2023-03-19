@@ -3,6 +3,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +64,16 @@ public class WeldingTaskController : ControllerBase
     )
     {
         var result = await _weldingTaskService.ChangeWeldingTaskStatusAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _weldingTaskService.DeleteAsync(
+            new DeleteWeldingTaskRequest { Id = id }
+        );
         return result.ToOk();
     }
 }
