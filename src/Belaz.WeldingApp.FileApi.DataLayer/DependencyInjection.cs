@@ -7,12 +7,15 @@ namespace Belaz.WeldingApp.FileApi.DataLayer;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDataLayer(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddDataLayer(
+        this IServiceCollection services,
+        string connectionString
+    )
     {
-        services.AddDbContext<ApplicationContext>(options =>
-            options.UseNpgsql(connectionString));
-        
+        services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
+
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<IWeldPassageRepository, WeldPassageRepository>();
 
         return services;
     }

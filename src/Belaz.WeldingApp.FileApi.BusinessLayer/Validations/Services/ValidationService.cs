@@ -16,7 +16,7 @@ public class ValidationService : IValidationService
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<Result<Unit>> ValidateAsync<T>(T entity)
+    public async Task<ValidationResult> ValidateAsync<T>(T entity)
     {
         Type genericType = typeof(IValidator<>).MakeGenericType(typeof(T));
 
@@ -29,14 +29,14 @@ public class ValidationService : IValidationService
 
         if (validationResult.IsValid)
         {
-            return Unit.Default;
+            return new ValidationResult { IsValid = true };
         }
 
-        var errors = validationResult
-            .Errors
-            .Select(_ => new ValidationError(_.PropertyName, _.ErrorMessage));
+        var errors = validationResult.Errors.Select(
+            _ => new ValidationError(_.PropertyName, _.ErrorMessage)
+        );
 
         var validationException = new ValidationException(errors);
-        return new Result<Unit>(validationException);
+        return new ValidationResult { IsValid = false, Exception = validationException };
     }
 }

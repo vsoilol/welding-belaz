@@ -1,4 +1,5 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +27,21 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
-    [HttpGet("excelChart")]
-    public async Task<IActionResult> GetExcelChartAsync()
+    [HttpGet("deviationReport/byWorkshop")]
+    public async Task<IActionResult> GetExcelDeviationReportByWorkshopAsync(
+        [FromQuery] GenerateExcelDeviationReportByWorkshopRequest request
+    )
     {
-        var result = await _fileService.GenerateExcelChartAsync();
+        var result = await _fileService.GenerateExcelDeviationReportByWorkshopAsync(request);
+        return result.ToFile();
+    }
+
+    [HttpGet("deviationReport/byProductionArea")]
+    public async Task<IActionResult> GetExcelDeviationReportByProductionAreaAsync(
+        [FromQuery] GenerateExcelDeviationReportByProductionAreaRequest request
+    )
+    {
+        var result = await _fileService.GenerateExcelDeviationReportByProductionAreaAsync(request);
         return result.ToFile();
     }
 }

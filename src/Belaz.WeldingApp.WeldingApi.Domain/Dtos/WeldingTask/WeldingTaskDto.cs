@@ -59,6 +59,11 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
 
     public WeldingEquipmentDto? WeldingEquipment { get; set; }
 
+    /// <summary>
+    /// Есть ли отклонения
+    /// </summary>
+    public bool AreDeviations { get; set; } = false;
+
     public void Mapping(Profile profile)
     {
         profile
@@ -67,6 +72,7 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
                 dto => dto.WeldingDate,
                 opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
             )
+            .ForMember(dto => dto.Status, opt => opt.MapFrom(x => x.TaskStatus))
             .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
             .ForMember(dto => dto.Seam, opt => opt.MapFrom(x => x.SeamAccount.Seam))
             .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
@@ -84,6 +90,29 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
                                 ? x.WeldPassages.First().WeldingRecord.WeldingEquipment
                                 : null
                     )
+            )
+            .ForMember(
+                dto => dto.AreDeviations,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassages.Any(
+                                _ =>
+                                    (
+                                        _.IsEnsuringCurrentAllowance != null
+                                        && !(bool)_.IsEnsuringCurrentAllowance
+                                    )
+                                    || (
+                                        _.IsEnsuringTemperatureAllowance != null
+                                        && !(bool)_.IsEnsuringTemperatureAllowance
+                                    )
+                                    || (
+                                        _.IsEnsuringVoltageAllowance != null
+                                        && !(bool)_.IsEnsuringVoltageAllowance
+                                    )
+                            )
+                    )
             );
+        ;
     }
 }

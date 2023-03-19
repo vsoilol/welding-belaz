@@ -3379,8 +3379,8 @@ public class DataSeed
                     {
                         Number = 1,
                         Name = "Корневой",
-                        ShortTermDeviation = 0.11,
-                        LongTermDeviation = 0.68,
+                        ShortTermDeviation = 11,
+                        LongTermDeviation = 12,
                         PreheatingTemperature = 82,
                         IsEnsuringVoltageAllowance = false,
                         IsEnsuringCurrentAllowance = false,
@@ -3420,8 +3420,8 @@ public class DataSeed
                     {
                         Number = 1,
                         Name = "Корневой",
-                        ShortTermDeviation = 0.11,
-                        LongTermDeviation = 0.68,
+                        ShortTermDeviation = 11,
+                        LongTermDeviation = 12,
                         PreheatingTemperature = 82,
                         IsEnsuringVoltageAllowance = false,
                         IsEnsuringCurrentAllowance = false,

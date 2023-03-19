@@ -641,6 +641,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/WeldingTask/changeStatus",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/WeldingTask/changeStatus",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/WeldingTask",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
