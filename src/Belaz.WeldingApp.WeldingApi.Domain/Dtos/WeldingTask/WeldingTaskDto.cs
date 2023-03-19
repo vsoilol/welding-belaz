@@ -59,6 +59,11 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
 
     public WeldingEquipmentDto? WeldingEquipment { get; set; }
 
+    /// <summary>
+    /// Есть ли отклонения
+    /// </summary>
+    public bool AreDeviations { get; set; } = false;
+
     public void Mapping(Profile profile)
     {
         profile
@@ -84,6 +89,29 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
                                 ? x.WeldPassages.First().WeldingRecord.WeldingEquipment
                                 : null
                     )
+            )
+            .ForMember(
+                dto => dto.AreDeviations,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassages.Any(
+                                _ =>
+                                    (
+                                        _.IsEnsuringCurrentAllowance != null
+                                        && !(bool)_.IsEnsuringCurrentAllowance
+                                    )
+                                    || (
+                                        _.IsEnsuringTemperatureAllowance != null
+                                        && !(bool)_.IsEnsuringTemperatureAllowance
+                                    )
+                                    || (
+                                        _.IsEnsuringVoltageAllowance != null
+                                        && !(bool)_.IsEnsuringVoltageAllowance
+                                    )
+                            )
+                    )
             );
+        ;
     }
 }
