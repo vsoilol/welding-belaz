@@ -51,12 +51,12 @@ export const Table = ({
       data={data}
       detailPanel={
         renderRowChildren ? (rowData) => renderRowChildren(rowData) : null
-      } 
+      }
+      
       options={{
         // rowStyle: { backgroundColor: 'green'},
         rowStyle:rowStyle,
-        search: true,
-        pageSize: 10
+        search: true
       }}
       actions={actions}
       editable={{

@@ -140,9 +140,6 @@ export const SeamForm = ({
                                 style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                                 value={values.number}
                                 name="number"
-                                type="number"
-                                min="0"
-                                step="1"
                                 placeholder="Номер"
                                 onBlur={handleBlur}
                                 autocomplete="off"
@@ -187,7 +184,7 @@ export const SeamForm = ({
 
 
                         {/*изделие, узел и деталь */}
-                        {/* <div className={styles.row}>
+                        <div className={styles.row}>
                             <Select
                                 name="valuetProduct"
                                 width="380px"
@@ -216,7 +213,7 @@ export const SeamForm = ({
                                 onChange={(event) => setvaluetDetail(event.value)}
                                 options={detailOptions}
                             />
-                        </div> */}
+                        </div>
 
 
 
