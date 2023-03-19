@@ -21,11 +21,6 @@ const {
     Creators: { setError },
 } = errorActions;
 
-const dateOptions = {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-};
 
 export const CreatingTask = ({
     masters,
@@ -119,29 +114,37 @@ export const CreatingTask = ({
 
         {
             title: " Есть ли отклонения ",
-            render: (rowData) => {
-                if (rowData?.areDeviations) {
-                    return <span>есть</span>
-                }
-                else {
-                    return <span>нету</span>
-                }
+            render: rowData => rowData?.areDeviations ? 'есть' : 'нету',
+            customFilterAndSearch: (term, rowData) => {
+                const value = rowData.areDeviations ? 'есть' : 'нету';
+                return value.toLowerCase().includes(term.toLowerCase());
+            },
+            customSort: (a, b) => {
+                const valueA = a.areDeviations ? 'есть' : 'нету';
+                const valueB = b.areDeviations ? 'есть' : 'нету';
+                return valueA.localeCompare(valueB);
             },
         },
         {
-            title: "Оборудование  ( инвентарный номер )",
+            field: 'weldingEquipments',
+            title: 'Оборудование (инвентарный номер)',
             render: (rowData) => {
                 if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
                     return (
                         rowData.weldingEquipments?.map(equipments =>
-                            <p>{equipments.factoryNumber ?? "-"}</p>
+                            <p>{equipments.factoryNumber ?? '-'}</p>
                         )
                     )
-                }
-                else {
+                } else {
                     return <span>-</span>
                 }
             },
+            customFilterAndSearch: (term, rowData) => {
+                if (rowData.weldingEquipments) {
+                    return rowData.weldingEquipments.some(equipments => equipments.factoryNumber?.toLowerCase().includes(term.toLowerCase()))
+                }
+                return false
+            }
         },
         {
             title: "Закрерить оборудование",
@@ -277,7 +280,7 @@ export const CreatingTask = ({
     ///Создать задание
     function CreateTask() {
         if (userRole === "Admin") {
-            api.post(`/productAccount/generateTasks`, {  
+            api.post(`/productAccount/generateTasks`, {
                 "date": new Date().toLocaleDateString('ru-RU'),
                 "productionAreaId": masters.find(obj => obj.id === valChioseMaster)?.productionArea.id,
                 "masterId": masters.find(obj => obj.id === valChioseMaster)?.id,
@@ -291,14 +294,14 @@ export const CreatingTask = ({
             api.post(`/productAccount/generateTasks`, {
                 "date": new Date().toLocaleDateString('ru-RU'),
                 "productionAreaId": localStorage.getItem('USER_productionAreaId'),
-                "masterId":masters[0].id
+                "masterId": masters[0].id
             })
                 .then((response) => {
                     window.location.reload()
                 })
                 .catch((error) => { });
         }
-       
+
     }
 
     ///Закрепление оборудования
@@ -318,7 +321,7 @@ export const CreatingTask = ({
     ///Создать плана
     function CreatePlan() {
         if (userRole === "Admin") {
-            api.post(`/productAccount/generateEmpty`, { 
+            api.post(`/productAccount/generateEmpty`, {
                 "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
                 "productionAreaId": masters.find(obj => obj.id === valChioseMaster)?.productionArea.id,
             })
@@ -326,12 +329,12 @@ export const CreatingTask = ({
                     GetProductionbyChoiseDate(valueChioseDate)
                     GetAllDate()
                 })
-                .catch((error) => { }); 
+                .catch((error) => { });
         }
         else {
-            api.post(`/productAccount/generateEmpty`, { 
+            api.post(`/productAccount/generateEmpty`, {
                 "newDate": new Date(dateCrateTask).toLocaleDateString('ru-RU'),
-                "productionAreaId": localStorage.getItem('USER_productionAreaId'), 
+                "productionAreaId": localStorage.getItem('USER_productionAreaId'),
             })
                 .then((response) => {
                     GetProductionbyChoiseDate(valueChioseDate)
@@ -339,7 +342,7 @@ export const CreatingTask = ({
                 })
                 .catch((error) => { });
         }
-        
+
     }
 
 
@@ -684,21 +687,21 @@ export const CreatingTask = ({
                                             </div>
 
                                             {userRole != "Admin"
-                                               ?(
-                                                <div className={styles.row}>
-                                                    <Button
-                                                        disabled={
-                                                            values.shiftNumb == ""
-                                                        }
-                                                        type="submit"
-                                                    >
-                                                        Изменить
-                                                    </Button>
-                                                </div>
-                                               )
-                                               :<div></div>
+                                                ? (
+                                                    <div className={styles.row}>
+                                                        <Button
+                                                            disabled={
+                                                                values.shiftNumb == ""
+                                                            }
+                                                            type="submit"
+                                                        >
+                                                            Изменить
+                                                        </Button>
+                                                    </div>
+                                                )
+                                                : <div></div>
                                             }
-                                           
+
                                         </div>
                                     )
                                     : <div></div>

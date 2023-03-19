@@ -205,114 +205,90 @@ export const Tasks = ({
       title: "Дата ", field: "weldingDate",
     },
     {
-      title: "Статус ",
+      title: "Статус",
+      field: "status",
       render: (rowData) => {
-        if (comparisonDate(rowData?.weldingDate)) {
-          return <p className={styles.Done}>Завершено</p>
+        if (rowData?.status === 3) {
+          return <p className={styles.Done}>Завершено</p>;
+        } else {
+          return <p className={styles.InProcess}>В процессе</p>;
         }
-        else {
-          return <p className={styles.InProcess}>В процессе</p>
-        }
+      },
+      customFilterAndSearch: (term, rowData) => {
+        const statusString =
+          rowData?.status === 3 ? "Завершено" : "В процессе";
+        return statusString.toLowerCase().includes(term.toLowerCase());
       },
     },
     {
       title: "Наименование изделия",
-      render: (rowData) => {
-        if (rowData?.seam?.product)  return <p>{rowData?.seam?.product?.name} {rowData?.seam?.product?.number}</p>
-        else return <p> - </p> 
+      field: "seam.product.name",
+      customFilterAndSearch: (term, rowData) => {
+        return rowData?.seam?.product?.name?.toLowerCase().includes(term.toLowerCase()) ||
+               rowData?.seam?.product?.number?.toLowerCase().includes(term.toLowerCase())
       },
+      render: (rowData) => {
+        if (rowData?.seam?.product) {
+          return <p>{rowData.seam.product.name} {rowData.seam.product.number}</p>
+        } else {
+          return <p>-</p>
+        }
+      }
     },
     {
       title: "Наименование узла",
-      render: (rowData) => {
-        if (rowData?.seam?.knot)  return <p>{rowData?.seam?.knot?.name} {rowData?.seam?.knot?.number}</p>
-        else return <p> - </p>  
-      },
+      field: "seam.knot.name",
+      customFilterAndSearch: (term, rowData) => rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) => rowData?.seam?.knot ?
+        <p>{`${rowData.seam.knot.name} ${rowData.seam.knot.number}`}</p> :
+        <p>-</p>
     },
     {
       title: "Наименование детали",
-      render: (rowData) => {
-        if (rowData?.seam?.detail)  return <p>{rowData?.seam?.detail?.name} {rowData?.seam?.detail?.number}</p>
-        else return <p> - </p>   
-      },
+      field: "seam.detail.name",
+      customFilterAndSearch: (term, rowData) => rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) => rowData?.seam?.detail ?
+        <p>{`${rowData.seam.detail.name} ${rowData.seam.detail.number}`}</p> :
+        <p>-</p>
     },
-
     {
       title: "Оборудование  ( инвентарный номер )",
-      render: (rowData) => {
-        if (rowData?.weldingEquipment && rowData?.weldingEquipment.length != 0) {
-          return  <p>{rowData?.weldingEquipment?.factoryNumber ?? "-"}</p>
-        }
-        else {
-          return <span>-</span>
-        }
-      },
+      field: "weldingEquipment.factoryNumber",
+      customFilterAndSearch: (term, rowData) => rowData?.weldingEquipment?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) => rowData?.weldingEquipment?.factoryNumber ?? "-"
     },
-
     {
       title: "Исполнитель",
-      field: "masterId",
-      render: (rowData) => {
-        if (rowData?.welder != null) {
-          return (
-            <p>{`
-              ${rowData?.welder?.middleName} 
-              ${rowData?.welder?.firstName} 
-              ${rowData?.welder?.lastName}
-              `}
-            </p>
-          );
-        }
-        else {
-            return  <p>{`  -   `}  </p>
-        }
-
+      field: "welder",
+      customFilterAndSearch: (term, rowData) => {
+        const fullName = `${rowData?.welder?.middleName} ${rowData?.welder?.firstName} ${rowData?.welder?.lastName}`.toLowerCase();
+        return fullName.includes(term.toLowerCase());
       },
+      render: (rowData) => rowData?.welder ?
+        <p>{`${rowData.welder.middleName} ${rowData.welder.firstName} ${rowData.welder.lastName}`}</p> :
+        <p>-</p>
     },
     {
       title: "Руководитель сварочных работ",
-      field: "masterId",
-      render: (rowData) => {
-        if (rowData?.master == null) {
-          return (
-            <p>{`-`}
-            </p>
-          );
-        }
-        else {
-          return (
-            <p>{`
-              ${rowData?.master?.middleName} 
-              ${rowData?.master?.firstName} 
-              ${rowData?.master?.lastName}
-              `}
-            </p>
-          );
-        }
-
+      field: "master",
+      customFilterAndSearch: (term, rowData) => {
+        const fullName = `${rowData?.master?.middleName} ${rowData?.master?.firstName} ${rowData?.master?.lastName}`.toLowerCase();
+        return fullName.includes(term.toLowerCase());
       },
+      render: (rowData) => rowData?.master ?
+        <p>{`${rowData.master.middleName} ${rowData.master.firstName} ${rowData.master.lastName}`}</p> :
+        <p>-</p>
     },
     {
       title: "Контролер",
-      field: "masterId",
-      render: (rowData) => {
-        if (rowData?.inspector != null) {
-          return (
-            <p>{`
-              ${rowData?.inspector?.middleName} 
-              ${rowData?.inspector?.firstName} 
-              ${rowData?.inspector?.lastName}
-              `}
-            </p>
-          );
-        }
-        else {
-          return (
-            <p>{`  -   `}
-            </p>
-          );
-        }
+      field: "inspector",
+      customFilterAndSearch: (term, rowData) => {
+        const fullName = `${rowData?.inspector?.middleName} ${rowData?.inspector?.firstName} ${rowData?.inspector?.lastName}`.toLowerCase();
+        return fullName.includes(term.toLowerCase());
       },
+      render: (rowData) => rowData?.inspector ?
+        <p>{`${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}`}</p> :
+        <p>-</p>
     },
     {
       field: "url",
@@ -346,10 +322,65 @@ export const Tasks = ({
       </div>
     );
   };
+  const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
+  const [AmountManufactured, setAmountManufactured] = useState(0);
+  const [idPlan, setidPlan] = useState("");
+  const [valChioseMaster, setvalChioseMaster] = useState(masters[0]?.id);
+  function ChangeManufacturedDefective(AmountManufactured) {
 
-  console.log(techs)
- 
+    console.log({
+      "id": idPlan,
+      "amount": AmountManufactured
+    })
 
+
+    if (userRole === "Admin") {
+      ////поменять количество продукции (изделие, детали или узла) 
+      api.put(`/productAccount/amountFromPlan`, {
+        "id": idPlan,
+        "amount": AmountManufactured
+      })
+        .then((response) => {
+          // пересоздать задания и количество швов
+          api.post(`/productAccount/generateTasks`, {
+            "date": new Date().toLocaleDateString('ru-RU'),
+            "productionAreaId": masters.find(obj => obj.id === valChioseMaster)?.productionArea.id,
+            "masterId": masters.find(obj => obj.id === valChioseMaster)?.id,
+          })
+            .then((response) => {
+              window.location.reload()
+            })
+            .catch((error) => { });
+        })
+        .catch((error) => { });
+
+    }
+    else {
+
+
+      ////поменять количество продукции (изделие, детали или узла) 
+      api.put(`/productAccount/amountFromPlan`, {
+        "id": idPlan,
+        "amount": AmountManufactured
+      })
+        .then((response) => {
+          // пересоздать задания и количество швов
+          api.post(`/productAccount/generateTasks`, {
+            "date": new Date().toLocaleDateString('ru-RU'),
+            "productionAreaId": localStorage.getItem('USER_productionAreaId'),
+            "masterId": masters[0].id
+          })
+            .then((response) => {
+              window.location.reload()
+            })
+            .catch((error) => { });
+        })
+        .catch((error) => { });
+
+
+    }
+
+  }
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -381,8 +412,7 @@ export const Tasks = ({
             title="Сменные задания на сварку"
             columns={columns}
             data={combinedArray}
-            isLoading={isRequesting}
-
+            isLoading={isRequesting} 
           />
         </TabPanel>
 
@@ -398,7 +428,7 @@ export const Tasks = ({
               initialValues={initialValues}
               user={user}
               equipment={equipment}
-              userRole={userRole}  
+              userRole={userRole}
               techs={techs}
             />
           )
@@ -409,15 +439,12 @@ export const Tasks = ({
           )
         }
 
-
-
-
+        {/*Ввод выработки и брака*/}
         <ModalWindow
-          isOpen={isModalOpen}
-          headerText={modalData ? "Редактировать задание" : "Добавить задание"}
+          isOpen={modalchangeInfoproductAccount}
+          headerText="Редактировать"
           setIsOpen={(state) => {
-            setIsModalOpen(state);
-            setModalData(null);
+            setmodalchangeInfoproductAccount(false)
           }}
           wrapperStyles={{ width: 420 }}
         >
@@ -426,11 +453,8 @@ export const Tasks = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              modalData
-                ? editTask({ ...variables })
-                : addTask({ ...dataToSend });
-              setIsModalOpen(false);
-              setModalData(null);
+              setmodalchangeInfoproductAccount(false)
+              ChangeManufacturedDefective(AmountManufactured)
             }}
           >
             {({
@@ -441,122 +465,36 @@ export const Tasks = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.object}
-                    name="object"
-                    placeholder="Объект"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.sector}
-                    name="sector"
-                    placeholder="Участок/цех"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                    value={values.weldingConnectionName}
-                    name="weldingConnectionName"
-                    placeholder="Наименовние соединения"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Select
-                    name="instructionId"
-                    value={values.instructionId}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    width="190px"
-                    placeholder="Инструкция"
-                    onChange={(e) => {
-                      setFieldValue("instructionId", e.value);
-                    }}
-                    options={formattedInstructions}
-                  />
-                  <Select
-                    name="masterId"
-                    value={values.masterId}
-                    width="186px"
-                    placeholder="Руководитель сварочных работ"
-                    onChange={(e) => {
-                      setFieldValue("masterId", e.value);
-                    }}
-                    options={formattedMasters}
-                  />
-                </div>
 
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.generalMaterial}
-                    name="generalMaterial"
-                    placeholder="Материал"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                  <Select
-                    name="technicalControllerId"
-                    value={values.technicalControllerId}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    width="190px"
-                    placeholder="Тех. надзор"
-                    onChange={(e) => {
-                      setFieldValue("technicalControllerId", e.value);
-                    }}
-                    options={formattedTechs}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.weldingElectrodes}
-                    name="weldingElectrodes"
-                    placeholder="Электроды"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.weldingWire}
-                    name="weldingWire"
-                    placeholder="Проволока"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Button
-                    disabled={requiredKeys.some((key) => !values[key])}
-                    type="submit"
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
-                  </Button>
+                <div>
+                  <p style={{ padding: "15px 20px 0 30px" }}>Изменение количества продукции из плана  </p>
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                        setAmountManufactured(e.target.value)
+                      }}
+                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      value={AmountManufactured}
+                      name="AmountManufactured"
+                      placeholder="Количество забракованной продукции"
+                      onBlur={handleBlur}
+                      autocomplete="off"
+                    />
+
+                  </div>
+
+                  <div className={styles.row}>
+                    <Button
+                      disabled={
+                        values.shiftNumb == ""
+                      }
+                      type="submit"
+                    >
+                      Изменить
+                    </Button>
+                  </div>
+
                 </div>
               </form>
             )}
