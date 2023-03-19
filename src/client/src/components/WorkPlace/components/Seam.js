@@ -20,6 +20,7 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "components/WorkPlace/styles.module.css";
 
+import { SeamForm } from "./SeamForm";
 
 
 import axios from "axios";
@@ -37,7 +38,7 @@ const dateOptions = {
 };
 
 
-export const Seam = ({ 
+export const Seam = ({
   workshop,
   area,
   posts,
@@ -45,9 +46,9 @@ export const Seam = ({
   product,
   knot,
   detail,
-  seam, 
-  texprocwelding,  
- 
+  seam,
+  texprocwelding,
+
   value_panel,
   value_panel2,
   userRole,
@@ -88,55 +89,11 @@ export const Seam = ({
 
   };
 
-  function SetValue(valueId, index) {
+  
 
-    ///area
-    if (index === 1) {
-      for (let index = 0; index < area.length; index++) {
-        if (area[index].id === valueId) {
-          return area[index].number
-        }
-      }
-    }
-    ///post
-    if (index === 2) {
-      for (let index = 0; index < posts.length; index++) {
-        if (posts[index].id === valueId) {
-          return posts[index].number
-        }
-      }
-    }
-  }
-  //Запрос на редактирование или добавление
-  function SendData(variables) {
-
-    variables["workshopId"] = valueProdArea
-    variables["workshopNumber"] = SetValue(valueProdArea, 0)
-
-    variables["productionAreaId"] = valuetPosts
-    variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
-
-    variables["technologicalProcessId"] = valuetTechProc
-
-    variables["seams"] = [valuetSeam]
-
-    variables["postId"] = valuetWorkPlace
-    variables["workplaceId"] = valueWorkplace
-
-
-     //Добавить Сварочный шов
-     if (isModalNumb == 15) {
-      addSeam(variables)
-    }
-    //Редактировать Сварочный шов
-    if (isModalNumb == 7) {
-      editSeam(variables)
-    }
-
-  }
 
   const columns = {
- 
+
     welding_seam: [
       {
         title: "Наименование сварного шва ",
@@ -157,47 +114,47 @@ export const Seam = ({
       // {
       //   title: "Номер  рабочего места  ", field: "workplace.number"
       // },
-      
+
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      }, 
+      },
       {
         title: "Технологическая инструкция", field: "technologicalInstruction.name"
       },
       {
-        title: "Наименование изделия ", 
+        title: "Наименование изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.name??"-"}</span>
+          return <span>{rowData?.product?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  изделия ", 
+        title: "Номер  изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.number??"-"}</span>
+          return <span>{rowData?.product?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование узла ", 
+        title: "Наименование узла ",
         render: (rowData) => {
-          return <span>{rowData?.knot?.name??"-"}</span>
+          return <span>{rowData?.knot?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  узла ", 
+        title: "Номер  узла ",
         render: (rowData) => {
-          return <span>{rowData?.knot?.number??"-"}</span>
+          return <span>{rowData?.knot?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование детали ", 
+        title: "Наименование детали ",
         render: (rowData) => {
-          return <span>{rowData?.detail?.name??"-"}</span>
+          return <span>{rowData?.detail?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  детали ", 
+        title: "Номер  детали ",
         render: (rowData) => {
-          return <span>{rowData?.detail?.number??"-"}</span>
+          return <span>{rowData?.detail?.number ?? "-"}</span>
         },
       },
       // {
@@ -220,17 +177,6 @@ export const Seam = ({
   const [value_goTo, setValuegoTo] = useState(0);
 
 
-  ///Изменение заголовка модалки
-  function TitleTextModal(params) {
-    
-    if (params === 7) {
-      return "Редактировать Сварочный шов"
-    }
-
-    if (params === 15) {
-      return "Добавить Сварочный шов"
-    }
-  }
 
 
   //select Посты   
@@ -260,7 +206,7 @@ export const Seam = ({
       value: item.id,
       label: item.name,
     };
-  }); 
+  });
   //select Сварочный шов  
   const SeamOptions = seam?.map((item) => {
     return {
@@ -285,14 +231,14 @@ export const Seam = ({
       label: item.name,
     };
   });
-   //select деталь
-   const detailOptions = detail?.map((item) => {
+  //select деталь
+  const detailOptions = detail?.map((item) => {
     return {
       value: item.id,
       label: item.name,
     };
   });
-      
+
 
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
@@ -304,16 +250,16 @@ export const Seam = ({
     <div className={styles.innerWrapper}>
 
       <div className={styles.tableWrapper}>
-         {/*Сварные швы*/}
-         <TabPanel  
+        {/*Сварные швы*/}
+        <TabPanel
           style={{ minWidth: "800px" }}
         >
           <Table
             title="Сварные швы"
-            columns={columns.welding_seam} 
-            data={seam} 
+            columns={columns.welding_seam}
+            data={seam}
             actions={
-              userRole === "Admin"||userRole === "Master"
+              userRole === "Admin" || userRole === "Master"
                 ? [
                   {
                     icon: "add",
@@ -338,7 +284,7 @@ export const Seam = ({
                       setValueProdArea(rowData.workshop?.id)
                       setValuetTechProc(rowData.technologicalProcess?.id)
                       setValuetPosts(rowData.productionArea?.id)
-                      setValuetWorkPlace(rowData.workplace?.id) 
+                      setValuetWorkPlace(rowData.workplace?.id)
 
                       setvaluetProduct(rowData?.product?.mainProduct?.mainProduct?.id)
                       setvaluetKnots(rowData?.product?.mainProduct?.id)
@@ -347,7 +293,7 @@ export const Seam = ({
                   },
                 ]
                 : []
-            } 
+            }
           />
         </TabPanel>
 
@@ -367,136 +313,44 @@ export const Seam = ({
         </div>
 
 
-        <ModalWindow
-          isOpen={isModalOpen}
-          headerText={TitleTextModal(isModalNumb)}
-          setIsOpen={(state) => {
-            setIsModalOpen(state);
-            setModalData(null);
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setIsModalOpen(false);
-              SendData(variables)
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                 
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                    value={values.number}
-                    name="number"
-                    placeholder="Номер"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-
-                <div className={styles.row}>
-                  <Select
-                    name="valueWorkplace"
-                    value={valueWorkplace}
-                    width="380px"
-                    placeholder="Рабочее место"
-                    onChange={(event) => {
-                      setValueWorkplace(event.value)
-                    }}
-                    options={workplaceIdOptions}
-                  />
-                </div>
-
-                <div className={styles.row}>
-                  <Select
-                    name="valuetPosts"
-                    width="380px"
-                    value={valuetPosts}
-                    placeholder="Производственные участки"
-                    onChange={(event) => setValuetPosts(event.value)}
-                    options={optPosts}
-                  />
-                </div>
 
 
-                <div className={styles.row}>
-                  <Select
-                    name="valuetTechProc"
-                    width="380px"
-                    value={valuetTechProc}
-                    placeholder="Технологический процесс"
-                    onChange={(event) => setValuetTechProc(event.value)}
-                    options={TechProc}
-                  />
-                </div>
+        <SeamForm 
+          valueProdArea={valueProdArea} 
+          valuetPosts={valuetPosts}
+          valuetTechProc={valuetTechProc}
+          valuetSeam={valuetSeam}
+          valuetWorkPlace={valuetWorkPlace}
+          valueWorkplace={valueWorkplace}
+          isModalNumb={isModalNumb}
+          addSeam={addSeam}
+          editSeam={editSeam}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          setValueWorkplace={setValueWorkplace}
+          setModalData={setModalData}
+          initialValues={initialValues}
+          workplaceIdOptions={workplaceIdOptions} 
+          setValuetPosts={setValuetPosts}
+          setValuetTechProc={setValuetTechProc}
+          setvaluetProduct={setvaluetProduct}
+          setvaluetKnots={setvaluetKnots}
+          setvaluetDetail={setvaluetDetail}
 
-                
-                 {/*изделие, узел и деталь */}
-                 <div className={styles.row}>
-                  <Select
-                    name="valuetProduct"
-                    width="380px"
-                    value={valuetProduct}
-                    placeholder="Изделие"
-                    onChange={(event) => setvaluetProduct(event.value)}
-                    options={productsOptions}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Select
-                    name="valuetKnots"
-                    width="380px"
-                    value={valuetKnots}
-                    placeholder="Узел"
-                    onChange={(event) => setvaluetKnots(event.value)}
-                    options={knotsOptions}
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Select
-                    name="valuetDetail"
-                    width="380px"
-                    value={valuetDetail}
-                    placeholder="Деталь"
-                    onChange={(event) => setvaluetDetail(event.value)}
-                    options={detailOptions}
-                  />
-                </div>
+          area={area}
+          posts={posts}
+          optPosts={optPosts}
+          TechProc={TechProc}
+          valuetProduct={valuetProduct}
+          productsOptions={productsOptions}
+          valuetKnots={valuetKnots}
+          knotsOptions={knotsOptions}
+          detailOptions={detailOptions}
 
-                 
- 
- 
+          valuetDetail={valuetDetail}
+  
+        />
 
-                <div className={styles.row}>
-                  <Button
-                    type="submit"
-                    disabled={
-                      values.number == ""  
-                    }
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
-                  </Button>
-                </div>
-              </form>
-
-            )}
-          </Formik>
-
-        </ModalWindow>
 
 
 

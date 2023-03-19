@@ -14,7 +14,9 @@ export const Table = ({
   isLoading,
 }) => {
   const isMobile = useContext(MobileContext);
-
+  const rowStyle = rowData => ({ 
+    backgroundColor: rowData?.areDeviations ? "rgb(249 81 81)" : "white", 
+  });
   return (
     <MaterialTable
       localization={{
@@ -42,7 +44,7 @@ export const Table = ({
           searchTooltip: "Поиск",
           searchPlaceholder: "Поиск...",
         },
-      }}
+      }} 
       isLoading={isLoading}
       title={!isMobile && title}
       columns={columns}
@@ -50,23 +52,11 @@ export const Table = ({
       detailPanel={
         renderRowChildren ? (rowData) => renderRowChildren(rowData) : null
       }
+      
       options={{
         // rowStyle: { backgroundColor: 'green'},
-        rowStyle: (rowData) => {
-          if (new Date(rowData?.badgeExpirationDate) < new Date()) {
-            return { backgroundColor: "#ea8e8e" };
-          } else if (
-            new Date(rowData?.badgeExpirationDate).getFullYear() ===
-              new Date().getFullYear() &&
-            new Date(rowData?.badgeExpirationDate).getMonth() ===
-              new Date().getMonth() &&
-            new Date(rowData?.badgeExpirationDate).getDate() >=
-              new Date().getDate()
-          ) {
-            return { backgroundColor: "#f8f8ba" };
-          }
-          return {};
-        },
+        rowStyle:rowStyle,
+        search: true
       }}
       actions={actions}
       editable={{
