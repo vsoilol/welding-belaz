@@ -97,6 +97,16 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         return await GetByIdAsync(id);
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedWeldingTask = (
+            await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        _context.WeldingTasks.Remove(deletedWeldingTask);
+        await _context.SaveChangesAsync();
+    }
+
     private IQueryable<WeldingTask> GetWeldingTasksWithIncludesByFilter(
         Expression<Func<WeldingTask, bool>>? filter = null
     )

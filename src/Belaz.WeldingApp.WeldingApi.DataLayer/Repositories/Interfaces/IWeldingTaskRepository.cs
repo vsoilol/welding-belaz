@@ -17,4 +17,6 @@ public interface IWeldingTaskRepository
     Task<WeldingTaskDto> UpdateAsync(WeldingTask entity);
 
     Task<WeldingTaskDto> ChangeWeldingTaskStatusAsync(Guid id, WeldingTaskStatus status);
+
+    Task DeleteAsync(Guid id);
 }

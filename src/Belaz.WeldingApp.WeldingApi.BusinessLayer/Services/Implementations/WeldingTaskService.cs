@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -63,5 +64,16 @@ public class WeldingTaskService : IWeldingTaskService
         return await validationResult.ToDataResult(
             () => _weldingTaskRepository.ChangeWeldingTaskStatusAsync(request.Id, request.Status)
         );
+    }
+
+    public async Task<Result<Unit>> DeleteAsync(DeleteWeldingTaskRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _weldingTaskRepository.DeleteAsync(request.Id);
+            return Unit.Default;
+        });
     }
 }
