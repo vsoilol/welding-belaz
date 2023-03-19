@@ -81,6 +81,22 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         return await GetByIdAsync(entity.Id);
     }
 
+    public async Task<WeldingTaskDto> ChangeWeldingTaskStatusAsync(
+        Guid id,
+        WeldingTaskStatus status
+    )
+    {
+        var updatedWeldingTask = (
+            await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        updatedWeldingTask.TaskStatus = status;
+
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
+    }
+
     private IQueryable<WeldingTask> GetWeldingTasksWithIncludesByFilter(
         Expression<Func<WeldingTask, bool>>? filter = null
     )

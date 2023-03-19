@@ -53,4 +53,15 @@ public class WeldingTaskService : IWeldingTaskService
     {
         return _weldingTaskRepository.GetAllUncompletedTaskAsync();
     }
+
+    public async Task<Result<WeldingTaskDto>> ChangeWeldingTaskStatusAsync(
+        ChangeWeldingTaskStatusRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(
+            () => _weldingTaskRepository.ChangeWeldingTaskStatusAsync(request.Id, request.Status)
+        );
+    }
 }

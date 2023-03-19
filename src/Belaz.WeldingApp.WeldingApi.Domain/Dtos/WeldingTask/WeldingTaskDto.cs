@@ -72,6 +72,7 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
                 dto => dto.WeldingDate,
                 opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
             )
+            .ForMember(dto => dto.Status, opt => opt.MapFrom(x => x.TaskStatus))
             .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
             .ForMember(dto => dto.Seam, opt => opt.MapFrom(x => x.SeamAccount.Seam))
             .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))

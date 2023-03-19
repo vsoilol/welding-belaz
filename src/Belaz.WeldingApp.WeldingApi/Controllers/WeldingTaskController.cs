@@ -55,4 +55,14 @@ public class WeldingTaskController : ControllerBase
         var result = await _weldingTaskService.UpdateAsync(request);
         return result.ToOk();
     }
+
+    [HttpPut("changeStatus")]
+    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingTaskDto>> ChangeWeldingTaskStatusAsync(
+        [FromBody] ChangeWeldingTaskStatusRequest request
+    )
+    {
+        var result = await _weldingTaskService.ChangeWeldingTaskStatusAsync(request);
+        return result.ToOk();
+    }
 }
