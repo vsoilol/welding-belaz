@@ -184,7 +184,7 @@ export const SeamForm = ({
 
 
                         {/*изделие, узел и деталь */}
-                        <div className={styles.row}>
+                        {/* <div className={styles.row}>
                             <Select
                                 name="valuetProduct"
                                 width="380px"
@@ -213,7 +213,7 @@ export const SeamForm = ({
                                 onChange={(event) => setvaluetDetail(event.value)}
                                 options={detailOptions}
                             />
-                        </div>
+                        </div> */}
 
 
 
