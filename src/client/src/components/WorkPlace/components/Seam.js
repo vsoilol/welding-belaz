@@ -19,9 +19,7 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "components/WorkPlace/styles.module.css";
-
-import { SeamForm } from "./SeamForm";
-
+ 
 
 import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
@@ -56,30 +54,13 @@ export const Seam = ({
   editSeam,
 }) => {
 
-  const [modalData, setModalData] = useState(null);
-  const [isModalNumb, setIsModalNumb] = useState(0);
-  const [value_goToTitle, setValuegoToTitle] = useState("");
-
-  const [valueProdArea, setValueProdArea] = useState();
-  const [valuetTechProc, setValuetTechProc] = useState();
-  const [valuetPosts, setValuetPosts] = useState();
-  const [valuetWorkPlace, setValuetWorkPlace] = useState();
-
-  const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
-
+  const [modalData, setModalData] = useState(null); 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [valueWorkplace, setValueWorkplace] = useState();
-
-  const [, setValue] = useState(value_panel);
-  const [, setValue2] = useState(value_panel2);
-
-  const [valuetSeam, setValuetSeam] = useState([]);
-
-
-  const [valuetProduct, setvaluetProduct] = useState("");
-  const [valuetKnots, setvaluetKnots] = useState("");
-  const [valuetDetail, setvaluetDetail] = useState("");
-
+  const [isModalNumb, setIsModalNumb] = useState(0);
+  const [value_goTo, setValuegoTo] = useState(0);
+  const [value_goToTitle, setValuegoToTitle] = useState("");
+ 
+  const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
 
 
   const initialValues = {
@@ -172,10 +153,7 @@ export const Seam = ({
     ],
   };
 
-
-  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.welding_seam);
-  const [value_goTo, setValuegoTo] = useState(0);
-
+  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.details);
 
 
 
@@ -258,28 +236,27 @@ export const Seam = ({
   function SendData(variables) {
 
 
-    variables["workshopId"] = valueProdArea
-    variables["workshopNumber"] = SetValue(valueProdArea, 0)
-    variables["productionAreaId"] = valuetPosts
-    variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
+    // variables["workshopId"] = valueProdArea
+    // variables["workshopNumber"] = SetValue(valueProdArea, 0)
+    // variables["productionAreaId"] = valuetPosts
+    // variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
 
-    variables["technologicalProcessId"] = valuetTechProc
+    // variables["technologicalProcessId"] = valuetTechProc
 
-    variables["seams"] = [valuetSeam]
+    // variables["seams"] = [valuetSeam]
 
-    variables["postId"] = valuetWorkPlace
-    variables["workplaceId"] = valueWorkplace
+    // variables["postId"] = valuetWorkPlace
+    // variables["workplaceId"] = valueWorkplace
 
-
-    console.log("variables")
-    //Добавить Сварочный шов
-    if (isModalNumb == 15) {
-      addSeam(variables)
-    }
-    //Редактировать Сварочный шов
-    if (isModalNumb == 7) {
-      editSeam(variables)
-    }
+ 
+    // //Добавить Сварочный шов
+    // if (isModalNumb == 15) {
+    //   addSeam(variables)
+    // }
+    // //Редактировать Сварочный шов
+    // if (isModalNumb == 7) {
+    //   editSeam(variables)
+    // }
 
   }
   function SetValue(valueId, index) {
@@ -322,12 +299,8 @@ export const Seam = ({
                     tooltip: "Добавить шов",
                     isFreeAction: true,
                     onClick: () => {
-                      // setIsModalOpen(true);
-                      setIsModalNumb(15);
-                      setValueProdArea("")
-                      setValuetTechProc("")
-                      setValuetPosts("")
-                      setValuetWorkPlace("")
+                      setIsModalOpen(true);
+                      setIsModalNumb(15); 
                       console.log("Добавить шоваааа")
 
                     },
@@ -337,16 +310,8 @@ export const Seam = ({
                     tooltip: "Редактировать шва",
                     onClick: (event, rowData) => {
                       setModalData(rowData);
-                      // setIsModalOpen(true);
-                      setIsModalNumb(7)
-                      setValueProdArea(rowData.workshop?.id)
-                      setValuetTechProc(rowData.technologicalProcess?.id)
-                      setValuetPosts(rowData.productionArea?.id)
-                      setValuetWorkPlace(rowData.workplace?.id)
-
-                      setvaluetProduct(rowData?.product?.mainProduct?.mainProduct?.id)
-                      setvaluetKnots(rowData?.product?.mainProduct?.id)
-                      setvaluetDetail(rowData?.product?.id)
+                      setIsModalOpen(true);
+                      setIsModalNumb(7) 
 
                       console.log("Редактировать шваааа")
                     },
@@ -370,46 +335,7 @@ export const Seam = ({
               data={value_goToBodyTable}
             />
           </TabPanel>
-        </div>
-
-
-
-
-        {/* <SeamForm 
-          valueProdArea={valueProdArea} 
-          valuetPosts={valuetPosts}
-          valuetTechProc={valuetTechProc}
-          valuetSeam={valuetSeam}
-          valuetWorkPlace={valuetWorkPlace}
-          valueWorkplace={valueWorkplace}
-          isModalNumb={isModalNumb}
-          addSeam={addSeam}
-          editSeam={editSeam}
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          setValueWorkplace={setValueWorkplace}
-          setModalData={setModalData}
-          initialValues={initialValues}
-          workplaceIdOptions={workplaceIdOptions} 
-          setValuetPosts={setValuetPosts}
-          setValuetTechProc={setValuetTechProc}
-          setvaluetProduct={setvaluetProduct}
-          setvaluetKnots={setvaluetKnots}
-          setvaluetDetail={setvaluetDetail}
-
-          area={area}
-          posts={posts}
-          optPosts={optPosts}
-          TechProc={TechProc}
-          valuetProduct={valuetProduct}
-          productsOptions={productsOptions}
-          valuetKnots={valuetKnots}
-          knotsOptions={knotsOptions}
-          detailOptions={detailOptions}
-
-          valuetDetail={valuetDetail}
-  
-        /> */}
+        </div> 
 
         <ModalWindow
           isOpen={isModalOpen}
@@ -452,7 +378,7 @@ export const Seam = ({
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -488,8 +414,7 @@ export const Seam = ({
                   />
                 </div>
 
-
-                {/*изделие, узел и деталь */}
+ 
                 <div className={styles.row}>
                   <Select
                     name="valuetProduct"
@@ -519,7 +444,7 @@ export const Seam = ({
                     onChange={(event) => setvaluetDetail(event.value)}
                     options={detailOptions}
                   />
-                </div>
+                </div> */}
 
 
 

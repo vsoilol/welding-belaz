@@ -675,21 +675,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
   };
 
 
-
-
-
-  const formattedMasters = masters?.map((item) => {
-    return {
-      value: item.id,
-      label: `${item.middleName} ${item.firstName}`,
-    };
-  });
-  const formattedTechs = techs?.map((item) => {
-    return {
-      value: item.id,
-      label: `${item.middleName} ${item.firstName}`,
-    };
-  });
+ 
 
 
   const exec = [
