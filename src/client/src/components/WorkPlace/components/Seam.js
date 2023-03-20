@@ -20,7 +20,7 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "components/WorkPlace/styles.module.css";
 
-import { SeamForm } from "./SeamForm";
+// import { SeamForm } from "./SeamForm";
 
 
 import axios from "axios";
@@ -272,6 +272,8 @@ export const Seam = ({
                       setValuetTechProc("")
                       setValuetPosts("")
                       setValuetWorkPlace("")
+                      console.log("Добавить шов")
+
                     },
                   },
                   {
@@ -289,6 +291,8 @@ export const Seam = ({
                       setvaluetProduct(rowData?.product?.mainProduct?.mainProduct?.id)
                       setvaluetKnots(rowData?.product?.mainProduct?.id)
                       setvaluetDetail(rowData?.product?.id)
+
+                      console.log("Редактировать шва")
                     },
                   },
                 ]
@@ -315,7 +319,7 @@ export const Seam = ({
 
 
 
-        <SeamForm 
+        {/* <SeamForm 
           valueProdArea={valueProdArea} 
           valuetPosts={valuetPosts}
           valuetTechProc={valuetTechProc}
@@ -349,7 +353,7 @@ export const Seam = ({
 
           valuetDetail={valuetDetail}
   
-        />
+        /> */}
 
 
 
