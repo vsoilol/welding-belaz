@@ -266,12 +266,12 @@ export const Seam = ({
                     tooltip: "Добавить шов",
                     isFreeAction: true,
                     onClick: () => {
-                      setIsModalOpen(true);
-                      setIsModalNumb(15);
-                      setValueProdArea("")
-                      setValuetTechProc("")
-                      setValuetPosts("")
-                      setValuetWorkPlace("")
+                      // setIsModalOpen(true);
+                      // setIsModalNumb(15);
+                      // setValueProdArea("")
+                      // setValuetTechProc("")
+                      // setValuetPosts("")
+                      // setValuetWorkPlace("")
                       console.log("Добавить шов")
 
                     },
@@ -280,17 +280,17 @@ export const Seam = ({
                     icon: "edit",
                     tooltip: "Редактировать шва",
                     onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                      setIsModalNumb(7)
-                      setValueProdArea(rowData.workshop?.id)
-                      setValuetTechProc(rowData.technologicalProcess?.id)
-                      setValuetPosts(rowData.productionArea?.id)
-                      setValuetWorkPlace(rowData.workplace?.id)
+                      // setModalData(rowData);
+                      // setIsModalOpen(true);
+                      // setIsModalNumb(7)
+                      // setValueProdArea(rowData.workshop?.id)
+                      // setValuetTechProc(rowData.technologicalProcess?.id)
+                      // setValuetPosts(rowData.productionArea?.id)
+                      // setValuetWorkPlace(rowData.workplace?.id)
 
-                      setvaluetProduct(rowData?.product?.mainProduct?.mainProduct?.id)
-                      setvaluetKnots(rowData?.product?.mainProduct?.id)
-                      setvaluetDetail(rowData?.product?.id)
+                      // setvaluetProduct(rowData?.product?.mainProduct?.mainProduct?.id)
+                      // setvaluetKnots(rowData?.product?.mainProduct?.id)
+                      // setvaluetDetail(rowData?.product?.id)
 
                       console.log("Редактировать шва")
                     },
