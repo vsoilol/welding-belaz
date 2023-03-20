@@ -18,4 +18,8 @@ public interface IFileService
     Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
         GenerateExcelDeviationReportByProductionAreaRequest request
     );
+
+    Task<Result<DocumentDto>> GenerateExcelDeviationReportByWelderAsync(
+        GenerateExcelDeviationReportByWelderRequest request
+    );
 }
