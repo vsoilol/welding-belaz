@@ -88,13 +88,13 @@ export const Knot = ({
   //Создание задания
   const [createTask, setcreateTask] = useState(0);
   //Выбранные сварщики
-  const [welderListChoise, setwelderListChoise] = useState([]); 
- //Выбранное изделие/деталь/узел
- const [valueChoise, setvalueChoise] = useState(""); 
+  const [welderListChoise, setwelderListChoise] = useState([]);
+  //Выбранное изделие/деталь/узел
+  const [valueChoise, setvalueChoise] = useState("");
   //Id выбранного изделие/деталь/узел
-  const [valueIdIzdelia, setIdIzdelia] = useState(""); 
-///дописываю для чего просматриваем закрепленные объекты
-const [isDisplayFixed, setDisplayFixed] = useState("");
+  const [valueIdIzdelia, setIdIzdelia] = useState("");
+  ///дописываю для чего просматриваем закрепленные объекты
+  const [isDisplayFixed, setDisplayFixed] = useState("");
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -138,7 +138,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
     variables["workplaceId"] = valueWorkplace
 
 
-    variables["mainProductId"]=valuetProduct
+    variables["mainProductId"] = valuetProduct
 
     //Добавить Узел
     if (isModalNumb == 13) {
@@ -247,7 +247,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
-      
+
       // {
       //   title: "Закрерить сварщика",
       //   render: (rowData) => {
@@ -265,9 +265,9 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id);setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id);setDisplayFixed(rowData?.name) }}>Узел </p>
-              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id);setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id); setDisplayFixed(rowData?.name) }}>Узел </p>
+              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -318,8 +318,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id);setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id);setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -366,7 +366,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы");setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы"); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -392,47 +392,47 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       // {
       //   title: "Номер  рабочего места  ", field: "workplace.number"
       // },
-      
+
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      }, 
+      },
       {
         title: "Технологическая инструкция", field: "technologicalInstruction.name"
       },
       {
-        title: "Наименование изделия ", 
+        title: "Наименование изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  изделия ", 
+        title: "Номер  изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование узла ", 
+        title: "Наименование узла ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  узла ", 
+        title: "Номер  узла ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование детали ", 
+        title: "Наименование детали ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  детали ", 
+        title: "Номер  детали ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number ?? "-"}</span>
         },
       },
       // {
@@ -484,11 +484,11 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
 
     ],
 
-    welder:[
+    welder: [
       {
         title: "Закрепить сварщика",
         render: (rowData) => {
-          return <input type="checkbox" onClick={e=>{ChioseWelder(rowData)}}></input>
+          return <input type="checkbox" onClick={e => { ChioseWelder(rowData) }}></input>
         },
       },
       {
@@ -511,16 +511,16 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       },
       {
         title: "Цех",
-        render: (rowData) => { 
+        render: (rowData) => {
           return rowData?.workshop?.name;
         },
       },
       {
         title: "Производственный участок",
         field: "productionArea.name",
-      }, 
+      },
     ]
-  }; 
+  };
   const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.node);
   const [value_goTo, setValuegoTo] = useState(0);
 
@@ -769,92 +769,92 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
 
 
 
-  const [welderList, setwelderList] = useState(welderGetList (area[0].id,0)); 
-  function welderGetList (idArea,tools_numb) {
+  const [welderList, setwelderList] = useState(welderGetList(area[0].id, 0));
+  function welderGetList(idArea, tools_numb) {
 
-    if (tools_numb!=0) {
+    if (tools_numb != 0) {
       let welderList = []
       for (let index = 0; index < executors.length; index++) {
-        if (executors[index].productionArea.id===idArea) {
+        if (executors[index].productionArea.id === idArea) {
           welderList.push(executors[index])
-        } 
+        }
       }
-      setwelderList(welderList) 
+      setwelderList(welderList)
     }
-    else{
+    else {
       let welderList = []
       for (let index = 0; index < executors.length; index++) {
-        if (executors[index].productionArea.id===idArea) {
+        if (executors[index].productionArea.id === idArea) {
           welderList.push(executors[index])
-        } 
+        }
       }
       return welderList
-    } 
-  } 
-  function ChioseWelder(welder) {  
-    if (welder["active"]===undefined) {
-       welderListChoise.push(welder.id)
-       welder["active"]=1
-       setwelderListChoise(welderListChoise)
     }
-    else if (welder["active"]===1) {
+  }
+  function ChioseWelder(welder) {
+    if (welder["active"] === undefined) {
+      welderListChoise.push(welder.id)
+      welder["active"] = 1
+      setwelderListChoise(welderListChoise)
+    }
+    else if (welder["active"] === 1) {
       for (let index = 0; index < welderListChoise.length; index++) {
-        if (welderListChoise[index].id===welder.id) {
-          welderListChoise.splice(index,1)
-        }        
+        if (welderListChoise[index].id === welder.id) {
+          welderListChoise.splice(index, 1)
+        }
       }
-      welder["active"]=0
+      welder["active"] = 0
     }
-    else if (welder["active"]===0) {
+    else if (welder["active"] === 0) {
       welderListChoise.push(welder.id)
       setwelderListChoise(welderListChoise)
-      welder["active"]=1
-    } 
+      welder["active"] = 1
+    }
   }
   function SendChoiseWelder() {
     let dataToassignWelders = {
-     "productId": valueIdIzdelia,
-     "welderIds": welderListChoise,
-     status :"assign"
-    }  
+      "productId": valueIdIzdelia,
+      "welderIds": welderListChoise,
+      status: "assign"
+    }
     addKnot(dataToassignWelders)
-    
- }
+
+  }
 
 
- ////Скрыть отобразить сварные швы изделия/узла/детали 
- const [displaySeams, setdisplaySeams] = useState(0);
- const [SeamsList, setSeamsList] = useState([]);
+  ////Скрыть отобразить сварные швы изделия/узла/детали 
+  const [displaySeams, setdisplaySeams] = useState(0);
+  const [SeamsList, setSeamsList] = useState([]);
 
- function SeamsDisplay() {
-   if (displaySeams === 0) {
-     GetSeams()
-     setdisplaySeams(1)
-   }
-   else {
-     setdisplaySeams(0)
-   }
- }
- const [valuetKnots, setvaluetKnots] = useState("");
+  function SeamsDisplay() {
+    if (displaySeams === 0) {
+      GetSeams()
+      setdisplaySeams(1)
+    }
+    else {
+      setdisplaySeams(0)
+    }
+  }
+  const [valuetKnots, setvaluetKnots] = useState("");
 
- function GetSeams() {
+  function GetSeams() {
 
-   let SeamsArray = []
-   for (let index = 0; index < knot.length; index++) {
-     if (knot[index].id === valueIdIzdelia) {
-       for (let index2 = 0; index2 < seam.length; index2++) {
+    let SeamsArray = []
+    for (let index = 0; index < knot.length; index++) {
+      if (knot[index].id === valueIdIzdelia) {
+        for (let index2 = 0; index2 < seam.length; index2++) {
 
-         for (let index3 = 0; index3 < knot[index].seams.length; index3++) {
-           if (seam[index2].id === knot[index].seams[index3].id) { 
-             SeamsArray.push(seam[index2])
-           }
-         }
-       }
+          for (let index3 = 0; index3 < knot[index].seams.length; index3++) {
+            if (seam[index2].id === knot[index].seams[index3].id) {
+              SeamsArray.push(seam[index2])
+            }
+          }
+        }
 
-     }
-   }
-   setSeamsList(SeamsArray)
- }
+      }
+    }
+    setSeamsList(SeamsArray)
+  }
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -870,7 +870,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                 title={isDisplayFixed+" - " +value_goToTitle}
+                  title={isDisplayFixed + " - " + value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -895,7 +895,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 value={1}
                 data={knot}
                 actions={
-                  userRole === "Admin"||userRole === "Master"
+                  userRole === "Admin" || userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -942,11 +942,11 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
           ? (
             <div className={styles.TableToFixed}>
 
-              
+
               <h2>Закрепить сварщика</h2>
               <h3>Узел: {valueChoise}</h3>
               <div className={styles.Seams}>
-              
+
                 {
                   displaySeams === 1
                     ? (
@@ -963,11 +963,11 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     : <div></div>
                 }
 
-               
+
 
               </div>
               <div className={styles.selects}>
-                
+
                 <div className={styles.roww}>
                   <p>Производственные участки</p>
                   <Select
@@ -977,23 +977,23 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     placeholder="Производственные участки"
                     onChange={(event) => {
                       setValuetPosts(event.value)
-                      welderGetList(event.value,1)
+                      welderGetList(event.value, 1)
                     }}
                     options={optPosts}
                   />
-                 <button className={styles.fixed} onClick={SendChoiseWelder}> Закрерить </button>
+                  <button className={styles.fixed} onClick={SendChoiseWelder}> Закрерить </button>
                 </div>
               </div>
 
- 
 
-              <TabPanel 
+
+              <TabPanel
                 style={{ minWidth: "800px" }}
               >
                 <Table
                   title="Сварщики"
-                  columns={columnsFix.welder} 
-                  data={welderList}  
+                  columns={columnsFix.welder}
+                  data={welderList}
                 />
               </TabPanel>
 
@@ -1081,8 +1081,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     options={optPosts}
                   />
                 </div>
- 
-                 <div className={styles.row}>
+
+                <div className={styles.row}>
                   <Select
                     name="valuetProduct"
                     width="380px"
@@ -1091,7 +1091,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     onChange={(event) => setvaluetProduct(event.value)}
                     options={productsOptions}
                   />
-                </div> 
+                </div>
                 <div className={styles.row}>
                   <Select
                     name="valuetTechProc"
