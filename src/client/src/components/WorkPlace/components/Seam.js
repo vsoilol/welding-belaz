@@ -63,6 +63,15 @@ export const Seam = ({
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
   const [valueWorkplace, setValueWorkplace] = useState();
 
+  const [productionArea, setproductionArea] = useState();
+  const [productValue, setproductValue] = useState();
+  const [knotValue, setknotValue] = useState();
+  const [detailnot, setdetail] = useState();
+  const [technologicalProcess, settechnologicalProcess] = useState();
+
+  
+
+  
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -401,32 +410,43 @@ export const Seam = ({
                   <Select
                     name="productionArea"
                     width="380px"
-                    value={values.productionArea}
+                    value={productionArea}
                     placeholder="Производственные участки"
-                    onChange={(event) => {values.productionArea=event.value}}
+                    onChange={(event) => {
+                      setproductionArea(event.value)
+                    }}
                     options={optPosts}
                   />
                 </div>
+                
+                
+
+
 
                 <div className={styles.row}>
                   <Select
                     name="technologicalProcess"
                     width="380px"
-                    value={values.technologicalProcess}
+                    value={technologicalProcess}
                     placeholder="Технологический процесс"
-                    onChange={(event) => {values.technologicalProcess=event.value}}
+                    onChange={(event) => {
+                       settechnologicalProcess(event.value)
+                    }}
                     options={TechProc}
                   />
                 </div>
 
+                
 
                 <div className={styles.row}>
                   <Select
-                    name="product"
+                    name="productValue"
                     width="380px"
-                    value={values.product}
+                    value={productValue}
                     placeholder="Изделие"
-                    onChange={(event) => {values.product=event.value}}
+                    onChange={(event) => {
+                      setproductValue(event.value)
+                    }}
                     options={productsOptions}
                   />
                 </div>
@@ -434,11 +454,13 @@ export const Seam = ({
 
                 <div className={styles.row}>
                   <Select
-                    name="knot"
+                    name="knotValue"
                     width="380px"
-                    value={values.knot}
+                    value={knotValue}
                     placeholder="Узел"
-                    onChange={(event) => {values.knot=event.value}}
+                    onChange={(event) => {
+                      setknotValue(event.value)
+                    }}
                     options={knotsOptions}
                   />
                 </div> 
@@ -448,9 +470,11 @@ export const Seam = ({
                   <Select
                     name="valuetDetail"
                     width="380px"
-                    value={values.detail}
+                    value={detailnot}
                     placeholder="Деталь"
-                    onChange={(event) => {values.detail=event.value}}
+                    onChange={(event) => {
+                      setdetail(event.value)
+                    }}
                     options={detailOptions}
                   />
                 </div> 
