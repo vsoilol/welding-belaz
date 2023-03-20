@@ -70,6 +70,10 @@ export const Seam = ({
 
     productionArea:modalData?.productionArea?.id?? "",  
     technologicalProcess:modalData?.technologicalProcess?.id?? "",
+
+    product:modalData?.product?.id,
+    knot:modalData?.knot?.id,
+    detail:modalData?.detail?.id,
   };
 
 
@@ -414,45 +418,42 @@ export const Seam = ({
                     options={TechProc}
                   />
                 </div>
-                {/* 
-
-                
 
 
-                
-
- 
                 <div className={styles.row}>
                   <Select
-                    name="valuetProduct"
+                    name="product"
                     width="380px"
-                    value={valuetProduct}
+                    value={values.product}
                     placeholder="Изделие"
-                    onChange={(event) => setvaluetProduct(event.value)}
+                    onChange={(event) => {values.product=event.value}}
                     options={productsOptions}
                   />
                 </div>
+
+
                 <div className={styles.row}>
                   <Select
-                    name="valuetKnots"
+                    name="knot"
                     width="380px"
-                    value={valuetKnots}
+                    value={values.knot}
                     placeholder="Узел"
-                    onChange={(event) => setvaluetKnots(event.value)}
+                    onChange={(event) => {values.knot=event.value}}
                     options={knotsOptions}
                   />
-                </div>
+                </div> 
+
+
                 <div className={styles.row}>
                   <Select
                     name="valuetDetail"
                     width="380px"
-                    value={valuetDetail}
+                    value={values.detail}
                     placeholder="Деталь"
-                    onChange={(event) => setvaluetDetail(event.value)}
+                    onChange={(event) => {values.detail=event.value}}
                     options={detailOptions}
                   />
-                </div> */}
-
+                </div> 
 
 
 
