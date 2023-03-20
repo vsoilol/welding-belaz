@@ -61,13 +61,15 @@ export const Seam = ({
   const [value_goToTitle, setValuegoToTitle] = useState("");
  
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
-
+  const [valueWorkplace, setValueWorkplace] = useState();
 
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
-    id: modalData?.id ?? "",
+    id: modalData?.id ?? "",  
 
+    productionArea:modalData?.productionArea?.id?? "",  
+    technologicalProcess:modalData?.technologicalProcess?.id?? "",
   };
 
 
@@ -313,6 +315,7 @@ export const Seam = ({
                       setIsModalOpen(true);
                       setIsModalNumb(7) 
 
+                      console.log(rowData)
                       console.log("Редактировать шваааа")
                     },
                   },
@@ -378,7 +381,7 @@ export const Seam = ({
                   />
                 </div>
 
-                {/* <div className={styles.row}>
+                <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -390,29 +393,33 @@ export const Seam = ({
                     options={workplaceIdOptions}
                   />
                 </div>
-
                 <div className={styles.row}>
                   <Select
-                    name="valuetPosts"
+                    name="productionArea"
                     width="380px"
-                    value={valuetPosts}
+                    value={values.productionArea}
                     placeholder="Производственные участки"
-                    onChange={(event) => setValuetPosts(event.value)}
+                    onChange={(event) => {values.productionArea=event.value}}
                     options={optPosts}
                   />
                 </div>
 
-
                 <div className={styles.row}>
                   <Select
-                    name="valuetTechProc"
+                    name="technologicalProcess"
                     width="380px"
-                    value={valuetTechProc}
+                    value={values.technologicalProcess}
                     placeholder="Технологический процесс"
-                    onChange={(event) => setValuetTechProc(event.value)}
+                    onChange={(event) => {values.technologicalProcess=event.value}}
                     options={TechProc}
                   />
                 </div>
+                {/* 
+
+                
+
+
+                
 
  
                 <div className={styles.row}>
