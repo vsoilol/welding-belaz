@@ -20,7 +20,7 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "components/WorkPlace/styles.module.css";
 
-// import { SeamForm } from "./SeamForm";
+import { SeamForm } from "./SeamForm";
 
 
 import axios from "axios";
@@ -266,7 +266,7 @@ export const Seam = ({
                     tooltip: "Добавить шов",
                     isFreeAction: true,
                     onClick: () => {
-                      // setIsModalOpen(true);
+                      setIsModalOpen(true);
                       // setIsModalNumb(15);
                       // setValueProdArea("")
                       // setValuetTechProc("")
@@ -281,7 +281,7 @@ export const Seam = ({
                     tooltip: "Редактировать шва",
                     onClick: (event, rowData) => {
                       // setModalData(rowData);
-                      // setIsModalOpen(true);
+                      setIsModalOpen(true);
                       // setIsModalNumb(7)
                       // setValueProdArea(rowData.workshop?.id)
                       // setValuetTechProc(rowData.technologicalProcess?.id)
@@ -319,7 +319,7 @@ export const Seam = ({
 
 
 
-        {/* <SeamForm 
+        <SeamForm 
           valueProdArea={valueProdArea} 
           valuetPosts={valuetPosts}
           valuetTechProc={valuetTechProc}
@@ -353,7 +353,7 @@ export const Seam = ({
 
           valuetDetail={valuetDetail}
   
-        /> */}
+        />
 
 
 
