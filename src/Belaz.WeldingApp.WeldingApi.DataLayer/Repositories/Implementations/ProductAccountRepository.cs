@@ -323,6 +323,8 @@ public class ProductAccountRepository : IProductAccountRepository
         var master = (await _context.Masters.FirstOrDefaultAsync(_ => _.Id == masterId))!;
 
         var seamAccounts = await _context.SeamAccounts
+            .Include(_ => _.SeamResults)
+            .Include(_ => _.ProductAccount)
             .Include(_ => _.Seam.Inspector)
             .Where(
                 _ =>
@@ -336,6 +338,12 @@ public class ProductAccountRepository : IProductAccountRepository
 
         foreach (var seamAccount in seamAccounts)
         {
+            var seamManufacturedAmount = seamAccount.SeamResults.FirstOrDefault(
+                _ => _.Status == ResultProductStatus.Manufactured
+            )!;
+
+            seamManufacturedAmount.Amount = seamAccount.ProductAccount.AmountFromPlan;
+
             weldingTasks.Add(
                 new WeldingTask
                 {

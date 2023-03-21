@@ -76,4 +76,24 @@ public class WeldingTaskController : ControllerBase
         );
         return result.ToOk();
     }
+
+    [HttpPut("changeDate")]
+    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingTaskDto>> ChangeWeldingTaskDateAsync(
+        [FromBody] ChangeWeldingTaskDateRequest request
+    )
+    {
+        var result = await _weldingTaskService.ChangeWeldingTaskDateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("changeSeamAmount")]
+    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingTaskDto>> ChangeWeldingTaskSeamAmountAsync(
+        [FromBody] ChangeWeldingSeamAmountRequest request
+    )
+    {
+        var result = await _weldingTaskService.ChangeWeldingTaskSeamAmountAsync(request);
+        return result.ToOk();
+    }
 }
