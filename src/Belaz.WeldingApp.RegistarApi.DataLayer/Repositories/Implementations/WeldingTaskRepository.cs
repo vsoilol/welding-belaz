@@ -35,19 +35,22 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         string welderRfid
     )
     {
-        var tasks = await GetWeldingTasksWithIncludesByFilter(
-                task =>
-                    task.SeamAccount.ProductAccount.WeldingEquipments.Any(
-                        eq => eq.RfidTag == equipmentRfid
+        var tasksQuery = GetWeldingTasksWithIncludesByFilter(
+            task =>
+                task.SeamAccount.ProductAccount.WeldingEquipments.Any(
+                    eq => eq.RfidTag == equipmentRfid
+                )
+                && (
+                    task.TaskStatus == WeldingTaskStatus.NotStarted
+                    || (
+                        task.Welder!.UserInfo.RfidTag == welderRfid
+                        && task.TaskStatus != WeldingTaskStatus.Completed
                     )
-                    && (
-                        task.TaskStatus == WeldingTaskStatus.NotStarted
-                        || (
-                            task.Welder!.UserInfo.RfidTag == welderRfid
-                            && task.TaskStatus != WeldingTaskStatus.Completed
-                        )
-                    )
-            )
+                )
+                && task.WeldingDate.Date.Equals(date.Date)
+        );
+
+        var tasks = await tasksQuery
             .OrderBy(task => task.SeamAccount.ProductAccount.Number)
             .ToListAsync();
 
