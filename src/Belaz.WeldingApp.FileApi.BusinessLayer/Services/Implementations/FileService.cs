@@ -27,6 +27,7 @@ public class FileService : IFileService
     private readonly IValidationService _validationService;
     private readonly IExcelFileService<List<WeldPassageDeviationsDto>> _excelDeviationReportService;
     private readonly IWeldPassageRepository _weldPassageRepository;
+    private readonly IExcelFileService<SeamAmountDto> _excelSeamAmountReportService;
 
     public FileService(
         ITaskRepository taskRepository,
@@ -34,7 +35,8 @@ public class FileService : IFileService
         IMarkEstimateService markEstimateService,
         IValidationService validationService,
         IExcelFileService<List<WeldPassageDeviationsDto>> excelDeviationReportService,
-        IWeldPassageRepository weldPassageRepository
+        IWeldPassageRepository weldPassageRepository,
+        IExcelFileService<SeamAmountDto> excelSeamAmountReportService
     )
     {
         _taskRepository = taskRepository;
@@ -43,6 +45,7 @@ public class FileService : IFileService
         _validationService = validationService;
         _excelDeviationReportService = excelDeviationReportService;
         _weldPassageRepository = weldPassageRepository;
+        _excelSeamAmountReportService = excelSeamAmountReportService;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -150,5 +153,19 @@ public class FileService : IFileService
         }
 
         return await _excelDeviationReportService.GenerateReportAsync(deviations);
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync()
+    {
+        var seamAmount = new SeamAmountDto
+        {
+            NumControlledRegistrar = 500,
+            NumAddedManually = 2000,
+            NumDeviantWelding = 10,
+            NumRejectedRegistrar = 10,
+            NumRejectedManually = 150
+        };
+
+        return await _excelSeamAmountReportService.GenerateReportAsync(seamAmount);
     }
 }

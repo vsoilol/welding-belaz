@@ -53,4 +53,11 @@ public class FileController : ControllerBase
         var result = await _fileService.GenerateExcelDeviationReportByWelderAsync(request);
         return result.ToFile();
     }
+
+    [HttpGet("seamAmountReport")]
+    public async Task<IActionResult> GenerateExcelSeamAmountReportAsync()
+    {
+        var result = await _fileService.GenerateExcelSeamAmountReportAsync();
+        return result.ToFile();
+    }
 }

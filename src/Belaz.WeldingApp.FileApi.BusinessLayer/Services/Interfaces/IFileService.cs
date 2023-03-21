@@ -22,4 +22,6 @@ public interface IFileService
     Task<Result<DocumentDto>> GenerateExcelDeviationReportByWelderAsync(
         GenerateExcelDeviationReportByWelderRequest request
     );
+
+    Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync();
 }
