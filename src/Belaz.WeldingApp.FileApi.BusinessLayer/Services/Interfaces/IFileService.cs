@@ -24,4 +24,6 @@ public interface IFileService
     );
 
     Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync();
+
+    Task<Result<DocumentDto>> GenerateExcelEquipmentOperationTimeReportAsync();
 }

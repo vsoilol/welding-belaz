@@ -28,6 +28,7 @@ public class FileService : IFileService
     private readonly IExcelFileService<List<WeldPassageDeviationsDto>> _excelDeviationReportService;
     private readonly IWeldPassageRepository _weldPassageRepository;
     private readonly IExcelFileService<SeamAmountDto> _excelSeamAmountReportService;
+    private readonly IExcelFileService<EquipmentOperationTimeDto> _excelEquipmentOperationTimeReportService;
 
     public FileService(
         ITaskRepository taskRepository,
@@ -36,7 +37,8 @@ public class FileService : IFileService
         IValidationService validationService,
         IExcelFileService<List<WeldPassageDeviationsDto>> excelDeviationReportService,
         IWeldPassageRepository weldPassageRepository,
-        IExcelFileService<SeamAmountDto> excelSeamAmountReportService
+        IExcelFileService<SeamAmountDto> excelSeamAmountReportService,
+        IExcelFileService<EquipmentOperationTimeDto> excelEquipmentOperationTimeReportService
     )
     {
         _taskRepository = taskRepository;
@@ -46,6 +48,7 @@ public class FileService : IFileService
         _excelDeviationReportService = excelDeviationReportService;
         _weldPassageRepository = weldPassageRepository;
         _excelSeamAmountReportService = excelSeamAmountReportService;
+        _excelEquipmentOperationTimeReportService = excelEquipmentOperationTimeReportService;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -167,5 +170,20 @@ public class FileService : IFileService
         };
 
         return await _excelSeamAmountReportService.GenerateReportAsync(seamAmount);
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelEquipmentOperationTimeReportAsync()
+    {
+        var equipmentOperationTime = new EquipmentOperationTimeDto
+        {
+            OffTimeMinutes = 300,
+            OnTimeMinutes = 60,
+            WorkTimeMinutes = 250,
+            DowntimeMinutes = 110
+        };
+
+        return await _excelEquipmentOperationTimeReportService.GenerateReportAsync(
+            equipmentOperationTime
+        );
     }
 }

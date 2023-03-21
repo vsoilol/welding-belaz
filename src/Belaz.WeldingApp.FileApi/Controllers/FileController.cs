@@ -60,4 +60,11 @@ public class FileController : ControllerBase
         var result = await _fileService.GenerateExcelSeamAmountReportAsync();
         return result.ToFile();
     }
+
+    [HttpGet("equipmentOperationTime")]
+    public async Task<IActionResult> GenerateExcelEquipmentOperationTimeReportAsync()
+    {
+        var result = await _fileService.GenerateExcelEquipmentOperationTimeReportAsync();
+        return result.ToFile();
+    }
 }
