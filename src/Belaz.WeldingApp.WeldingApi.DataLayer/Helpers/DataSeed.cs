@@ -93,6 +93,8 @@ public class DataSeed
         )!;
 
         var seamAccounts = await context.SeamAccounts
+            .Include(_ => _.SeamResults)
+            .Include(_ => _.ProductAccount)
             .Include(_ => _.Seam.Inspector)
             .Where(
                 _ =>
@@ -106,6 +108,12 @@ public class DataSeed
 
         foreach (var seamAccount in seamAccounts)
         {
+            var seamManufacturedAmount = seamAccount.SeamResults.FirstOrDefault(
+                _ => _.Status == ResultProductStatus.Manufactured
+            )!;
+
+            seamManufacturedAmount.Amount = seamAccount.ProductAccount.AmountFromPlan;
+
             weldingTasks.Add(
                 new WeldingTask
                 {

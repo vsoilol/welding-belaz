@@ -24,4 +24,12 @@ public interface IWeldPassageRepository
         DateTime startDate,
         DateTime endDate
     );
+
+    Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWelderAndDatePeriodAsync(
+        Guid welderId,
+        Guid productId,
+        Guid? seamId,
+        DateTime startDate,
+        DateTime endDate
+    );
 }

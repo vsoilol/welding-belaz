@@ -20,4 +20,10 @@ public interface IWeldingTaskService
     );
 
     Task<Result<Unit>> DeleteAsync(DeleteWeldingTaskRequest request);
+
+    Task<Result<WeldingTaskDto>> ChangeWeldingTaskDateAsync(ChangeWeldingTaskDateRequest request);
+
+    Task<Result<WeldingTaskDto>> ChangeWeldingTaskSeamAmountAsync(
+        ChangeWeldingSeamAmountRequest request
+    );
 }

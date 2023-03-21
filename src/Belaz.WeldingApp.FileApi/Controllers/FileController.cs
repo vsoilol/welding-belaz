@@ -44,4 +44,13 @@ public class FileController : ControllerBase
         var result = await _fileService.GenerateExcelDeviationReportByProductionAreaAsync(request);
         return result.ToFile();
     }
+
+    [HttpGet("deviationReport/byWelder")]
+    public async Task<IActionResult> GenerateExcelDeviationReportByWelderAsync(
+        [FromQuery] GenerateExcelDeviationReportByWelderRequest request
+    )
+    {
+        var result = await _fileService.GenerateExcelDeviationReportByWelderAsync(request);
+        return result.ToFile();
+    }
 }

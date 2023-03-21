@@ -107,6 +107,42 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<WeldingTaskDto> ChangeWeldingTaskDateAsync(Guid id, DateTime date)
+    {
+        var updatedWeldingTask = (
+            await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        updatedWeldingTask.WeldingDate = date;
+
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
+    }
+
+    public async Task<WeldingTaskDto> ChangeWeldingTaskSeamAmountAsync(Guid id, int seamAmount)
+    {
+        var updatedWeldingTask = (
+            await _context.WeldingTasks.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        var seamAccount = (
+            await _context.SeamAccounts
+                .Include(_ => _.SeamResults)
+                .FirstOrDefaultAsync(_ => _.WeldingTasks.Any(task => task.Id == id))
+        )!;
+
+        var seamManufacteredAmount = seamAccount.SeamResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Manufactured
+        )!;
+
+        seamManufacteredAmount.Amount = seamAmount;
+
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(id);
+    }
+
     private IQueryable<WeldingTask> GetWeldingTasksWithIncludesByFilter(
         Expression<Func<WeldingTask, bool>>? filter = null
     )
@@ -126,6 +162,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             )
             .Include(_ => _.SeamAccount.Seam.ProductionArea!.Workshop)
             .Include(_ => _.SeamAccount.ProductAccount)
+            .Include(_ => _.SeamAccount.SeamResults)
             .Include(_ => _.SeamAccount.Seam.Product.TechnologicalProcess)
             .Include(_ => _.SeamAccount.Seam.TechnologicalInstruction)
             .Include(_ => _.WeldPassages)

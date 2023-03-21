@@ -78,25 +78,36 @@ public class FileService : IFileService
         return result;
     }
 
-    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkshopAsync(
+    public Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkshopAsync(
         GenerateExcelDeviationReportByWorkshopRequest request
     )
     {
-        return await GenerateExcelDeviationReportAsync(
+        return GenerateExcelDeviationReportAsync(
             request,
             request.WorkshopId,
             _weldPassageRepository.GetAllDeviationsByWorkshopAndDatePeriodAsync
         );
     }
 
-    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
+    public Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
         GenerateExcelDeviationReportByProductionAreaRequest request
     )
     {
-        return await GenerateExcelDeviationReportAsync(
+        return GenerateExcelDeviationReportAsync(
             request,
             request.ProductionAreaId,
             _weldPassageRepository.GetAllDeviationsByProductionAreaAndDatePeriodAsync
+        );
+    }
+
+    public Task<Result<DocumentDto>> GenerateExcelDeviationReportByWelderAsync(
+        GenerateExcelDeviationReportByWelderRequest request
+    )
+    {
+        return GenerateExcelDeviationReportAsync(
+            request,
+            request.WelderId,
+            _weldPassageRepository.GetAllDeviationsByWelderAndDatePeriodAsync
         );
     }
 

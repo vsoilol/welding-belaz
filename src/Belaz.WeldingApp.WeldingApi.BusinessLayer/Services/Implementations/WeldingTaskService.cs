@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using LanguageExt;
 using LanguageExt.Common;
 
@@ -75,5 +76,34 @@ public class WeldingTaskService : IWeldingTaskService
             await _weldingTaskRepository.DeleteAsync(request.Id);
             return Unit.Default;
         });
+    }
+
+    public async Task<Result<WeldingTaskDto>> ChangeWeldingTaskDateAsync(
+        ChangeWeldingTaskDateRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(() =>
+        {
+            var date = request.Date.ToDateTime();
+
+            return _weldingTaskRepository.ChangeWeldingTaskDateAsync(request.Id, date);
+        });
+    }
+
+    public async Task<Result<WeldingTaskDto>> ChangeWeldingTaskSeamAmountAsync(
+        ChangeWeldingSeamAmountRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(
+            () =>
+                _weldingTaskRepository.ChangeWeldingTaskSeamAmountAsync(
+                    request.Id,
+                    request.SeamAmount
+                )
+        );
     }
 }

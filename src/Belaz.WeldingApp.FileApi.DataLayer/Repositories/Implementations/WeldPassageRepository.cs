@@ -43,6 +43,23 @@ public class WeldPassageRepository : IWeldPassageRepository
             .ToListAsync();
     }
 
+    public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWelderAndDatePeriodAsync(
+        Guid welderId,
+        Guid productId,
+        Guid? seamId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var query = QueryWeldPassagesWithFilters(productId, seamId, startDate, endDate);
+
+        query = query.Where(wp => wp.WeldingTask.WelderId == welderId);
+
+        return query
+            .ProjectTo<WeldPassageDeviationsDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWorkshopAndDatePeriodAsync(
         Guid workshopId,
         Guid productId,

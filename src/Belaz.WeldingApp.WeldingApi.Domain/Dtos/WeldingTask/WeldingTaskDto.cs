@@ -15,7 +15,7 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
 
     public string? WeldingDate { get; set; }
 
-    public int AmountFromPlan { get; set; }
+    public int ManufacturedAmount { get; set; }
 
     /// <summary>
     /// Основной материал
@@ -78,8 +78,14 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
             .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
             .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master.UserInfo))
             .ForMember(
-                dto => dto.AmountFromPlan,
-                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.AmountFromPlan)
+                dto => dto.ManufacturedAmount,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.SeamAccount.SeamResults
+                                .FirstOrDefault(_ => _.Status == ResultProductStatus.Manufactured)!
+                                .Amount
+                    )
             )
             .ForMember(
                 dto => dto.WeldingEquipment,

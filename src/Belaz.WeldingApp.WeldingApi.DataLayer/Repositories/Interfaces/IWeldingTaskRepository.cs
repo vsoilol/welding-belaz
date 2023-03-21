@@ -19,4 +19,8 @@ public interface IWeldingTaskRepository
     Task<WeldingTaskDto> ChangeWeldingTaskStatusAsync(Guid id, WeldingTaskStatus status);
 
     Task DeleteAsync(Guid id);
+
+    Task<WeldingTaskDto> ChangeWeldingTaskDateAsync(Guid id, DateTime date);
+
+    Task<WeldingTaskDto> ChangeWeldingTaskSeamAmountAsync(Guid id, int seamAmount);
 }
