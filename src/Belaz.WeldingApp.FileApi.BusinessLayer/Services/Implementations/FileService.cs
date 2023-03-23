@@ -29,6 +29,9 @@ public class FileService : IFileService
     private readonly IWeldPassageRepository _weldPassageRepository;
     private readonly IExcelFileService<SeamAmountDto> _excelSeamAmountReportService;
     private readonly IExcelFileService<EquipmentOperationTimeDto> _excelEquipmentOperationTimeReportService;
+    private readonly IExcelFileService<
+        List<EquipmentDowntimeDto>
+    > _excelEquipmentDowntimeReportService;
 
     public FileService(
         ITaskRepository taskRepository,
@@ -38,7 +41,8 @@ public class FileService : IFileService
         IExcelFileService<List<WeldPassageDeviationsDto>> excelDeviationReportService,
         IWeldPassageRepository weldPassageRepository,
         IExcelFileService<SeamAmountDto> excelSeamAmountReportService,
-        IExcelFileService<EquipmentOperationTimeDto> excelEquipmentOperationTimeReportService
+        IExcelFileService<EquipmentOperationTimeDto> excelEquipmentOperationTimeReportService,
+        IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService
     )
     {
         _taskRepository = taskRepository;
@@ -49,6 +53,7 @@ public class FileService : IFileService
         _weldPassageRepository = weldPassageRepository;
         _excelSeamAmountReportService = excelSeamAmountReportService;
         _excelEquipmentOperationTimeReportService = excelEquipmentOperationTimeReportService;
+        _excelEquipmentDowntimeReportService = excelEquipmentDowntimeReportService;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -184,6 +189,37 @@ public class FileService : IFileService
 
         return await _excelEquipmentOperationTimeReportService.GenerateReportAsync(
             equipmentOperationTime
+        );
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelEquipmentDowntimeReportAsync()
+    {
+        var equipmentDowntimeDtos = new List<EquipmentDowntimeDto>
+        {
+            new() { Reason = "Плановый ремонт", Time = 300 },
+            new() { Reason = "Аварийный ремонт", Time = 0 },
+            new() { Reason = "Отсутствие заданий", Time = 250 },
+            new() { Reason = "Отсутствие материала, заготовок, деталей", Time = 410 },
+            new()
+            {
+                Reason = "Отсутствие инструмента, оснастки, вспомогательного оборудования",
+                Time = 520
+            },
+            new() { Reason = "Отсутствие крана, транспорта", Time = 430 },
+            new() { Reason = "Отсутствие сварщика в связи с необеспеченностью", Time = 0 },
+            new() { Reason = "Неявка сварщика (б/лист, отпуск и др.)", Time = 32 },
+            new() { Reason = "Отсутствие энергоносителей", Time = 15 },
+            new() { Reason = "Отсутствие сотрудника ОТК", Time = 0 },
+            new()
+            {
+                Reason = "Отсутствие конструктора, технолога или ожидание его решения",
+                Time = 160
+            },
+            new() { Reason = "Естественные надобности", Time = 323 }
+        };
+
+        return await _excelEquipmentDowntimeReportService.GenerateReportAsync(
+            equipmentDowntimeDtos
         );
     }
 }
