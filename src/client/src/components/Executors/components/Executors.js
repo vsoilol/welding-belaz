@@ -547,6 +547,18 @@ export const ExecutorsTable = ({
               options={optArea}
             />
           </div>
+          <div className={styles.row}>
+            <Select
+              name="valueWorkshopa"
+              value={valueWorkshopa}
+              width="380px"
+              placeholder="Цех"
+              onChange={(event) => {
+                setValueWorkshop(event.value)
+              }}
+              options={optworkshop}
+            />
+          </div>
         </div>
       )
     }
