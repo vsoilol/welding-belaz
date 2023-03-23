@@ -30,4 +30,6 @@ public interface IFileService
     Task<Result<DocumentDto>> GenerateExcelEquipmentDowntimeReportAsync();
 
     Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportAsync();
+
+    Task<Result<DocumentDto>> GenerateExcelWelderOperationReportAsync();
 }

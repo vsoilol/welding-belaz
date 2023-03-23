@@ -35,6 +35,7 @@ public class FileService : IFileService
     private readonly IExcelFileService<
         List<EquipmentOperationTimeWithShiftDto>
     > _excelEquipmentOperationAnalysisReportService;
+    private readonly IExcelFileService<WelderOperationTimeDto> _excelWelderOperationReportService;
 
     public FileService(
         ITaskRepository taskRepository,
@@ -48,7 +49,8 @@ public class FileService : IFileService
         IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService,
         IExcelFileService<
             List<EquipmentOperationTimeWithShiftDto>
-        > excelEquipmentOperationAnalysisReportService
+        > excelEquipmentOperationAnalysisReportService,
+        IExcelFileService<WelderOperationTimeDto> excelWelderOperationReportService
     )
     {
         _taskRepository = taskRepository;
@@ -62,6 +64,7 @@ public class FileService : IFileService
         _excelEquipmentDowntimeReportService = excelEquipmentDowntimeReportService;
         _excelEquipmentOperationAnalysisReportService =
             excelEquipmentOperationAnalysisReportService;
+        _excelWelderOperationReportService = excelWelderOperationReportService;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -264,5 +267,18 @@ public class FileService : IFileService
         return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(
             equipmentOperationTimeWithShiftDtos
         );
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelWelderOperationReportAsync()
+    {
+        var welderOperationTimeDto = new WelderOperationTimeDto
+        {
+            WeldingPreparationTimeMinutes = 300,
+            WorkTimeMinutes = 250,
+            DowntimeMinutes = 170,
+            AverageEstimation = 7.5
+        };
+
+        return await _excelWelderOperationReportService.GenerateReportAsync(welderOperationTimeDto);
     }
 }
