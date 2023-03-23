@@ -74,4 +74,11 @@ public class FileController : ControllerBase
         var result = await _fileService.GenerateExcelEquipmentDowntimeReportAsync();
         return result.ToFile();
     }
+
+    [HttpGet("equipmentOperationAnalysis")]
+    public async Task<IActionResult> GenerateExcelEquipmentOperationAnalysisReportAsync()
+    {
+        var result = await _fileService.GenerateExcelEquipmentOperationAnalysisReportAsync();
+        return result.ToFile();
+    }
 }

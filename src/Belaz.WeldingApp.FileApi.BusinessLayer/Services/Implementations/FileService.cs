@@ -32,6 +32,9 @@ public class FileService : IFileService
     private readonly IExcelFileService<
         List<EquipmentDowntimeDto>
     > _excelEquipmentDowntimeReportService;
+    private readonly IExcelFileService<
+        List<EquipmentOperationTimeWithShiftDto>
+    > _excelEquipmentOperationAnalysisReportService;
 
     public FileService(
         ITaskRepository taskRepository,
@@ -42,7 +45,10 @@ public class FileService : IFileService
         IWeldPassageRepository weldPassageRepository,
         IExcelFileService<SeamAmountDto> excelSeamAmountReportService,
         IExcelFileService<EquipmentOperationTimeDto> excelEquipmentOperationTimeReportService,
-        IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService
+        IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService,
+        IExcelFileService<
+            List<EquipmentOperationTimeWithShiftDto>
+        > excelEquipmentOperationAnalysisReportService
     )
     {
         _taskRepository = taskRepository;
@@ -54,6 +60,8 @@ public class FileService : IFileService
         _excelSeamAmountReportService = excelSeamAmountReportService;
         _excelEquipmentOperationTimeReportService = excelEquipmentOperationTimeReportService;
         _excelEquipmentDowntimeReportService = excelEquipmentDowntimeReportService;
+        _excelEquipmentOperationAnalysisReportService =
+            excelEquipmentOperationAnalysisReportService;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -220,6 +228,41 @@ public class FileService : IFileService
 
         return await _excelEquipmentDowntimeReportService.GenerateReportAsync(
             equipmentDowntimeDtos
+        );
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportAsync()
+    {
+        var equipmentOperationTimeWithShiftDtos = new List<EquipmentOperationTimeWithShiftDto>
+        {
+            new()
+            {
+                WorkingShifNumber = 1,
+                OffTimeMinutes = 120,
+                OnTimeMinutes = 80,
+                WorkTimeMinutes = 132,
+                DowntimeMinutes = 118
+            },
+            new()
+            {
+                WorkingShifNumber = 2,
+                OffTimeMinutes = 133,
+                OnTimeMinutes = 92,
+                WorkTimeMinutes = 140,
+                DowntimeMinutes = 105
+            },
+            new()
+            {
+                WorkingShifNumber = 3,
+                OffTimeMinutes = 145,
+                OnTimeMinutes = 98,
+                WorkTimeMinutes = 125,
+                DowntimeMinutes = 82
+            }
+        };
+
+        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(
+            equipmentOperationTimeWithShiftDtos
         );
     }
 }

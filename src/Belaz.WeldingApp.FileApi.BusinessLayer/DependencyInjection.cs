@@ -38,6 +38,10 @@ public static class DependencyInjection
             IExcelFileService<List<EquipmentDowntimeDto>>,
             EquipmentDowntimeReportService
         >();
+        services.AddScoped<
+            IExcelFileService<List<EquipmentOperationTimeWithShiftDto>>,
+            EquipmentOperationAnalysisReportService
+        >();
 
         return services;
     }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelReportModels;
 using OfficeOpenXml;
@@ -11,6 +7,34 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementatio
 
 public class ExcelExtensions : IExcelExtensions
 {
+    public void AutoFitMergedColumns(
+        ExcelWorksheet worksheet,
+        string text,
+        int row,
+        int columnStart,
+        int columnEnd
+    )
+    {
+        worksheet.Cells[row, columnStart].Value = text;
+
+        var startColumn = worksheet.Column(columnStart);
+
+        startColumn.AutoFit();
+
+        var startColumnWidth = startColumn.Width;
+
+        var columnCount = columnEnd - columnStart + 1;
+
+        worksheet.Cells[row, columnStart, row, columnEnd].Merge = true;
+
+        var newColumnWidth = startColumnWidth / columnCount;
+
+        for (int i = columnStart; i <= columnEnd; i++)
+        {
+            worksheet.Column(i).Width = newColumnWidth;
+        }
+    }
+
     public void CreatePie3DExcelChart(
         ExcelWorksheet worksheet,
         List<TableReportModel> tableReportModels,

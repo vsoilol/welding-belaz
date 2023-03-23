@@ -18,4 +18,12 @@ public interface IExcelExtensions
         ExcelRange series,
         ExcelRange xSeries
     );
+
+    void AutoFitMergedColumns(
+        ExcelWorksheet worksheet,
+        string text,
+        int row,
+        int columnStart,
+        int columnEnd
+    );
 }
