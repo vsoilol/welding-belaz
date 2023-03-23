@@ -10,6 +10,29 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementatio
 public class EquipmentOperationAnalysisReportService
     : IExcelFileService<List<EquipmentOperationTimeWithShiftDto>>
 {
+    private const int ColumnWidth = 20;
+    private const int HeaderStartRow = 1;
+    private const int HeaderEndRow = 2;
+    private const int DataStartRow = 3;
+    private const int StateColumn = 1;
+    private const int OffTimeMinutesColumn = 2;
+    private const int OffTimePercentageColumn = 3;
+    private const int OnTimeMinutesColumn = 4;
+    private const int OnTimePercentageColumn = 5;
+    private const int WorkTimeMinutesColumn = 6;
+    private const int WorkTimePercentageColumn = 7;
+    private const int DowntimeMinutesColumn = 8;
+    private const int DowntimePercentageColumn = 9;
+    private const int TotalMinutesColumn = 10;
+    private const string OffStateName = "Св. аппарат ВЫКЛЮЧЕН";
+    private const string OnStateName = "Св. аппарат ВКЛЮЧЕН";
+    private const string WeldingStateName = "СВАРКА";
+    private const string DowntimeStateName = "Вынужденный простой";
+    private const string TotalTimeColumnName = "Общий фонд рабочего времени";
+    private const string MinutesColumnName = "Минут";
+    private const string PercentageColumnName = "%";
+    private const string ShiftLabelFormat = "Смена {0}";
+
     private readonly IExcelExtensions _excelExtensions;
 
     public EquipmentOperationAnalysisReportService(IExcelExtensions excelExtensions)
@@ -55,118 +78,123 @@ public class EquipmentOperationAnalysisReportService
         List<EquipmentOperationTimeWithShiftDto> data
     )
     {
-        using (var rangeHeaders = worksheet.Cells[3, 1, data.Count + 2, 10])
+        int row = DataStartRow;
+        foreach (var stateData in data)
         {
-            rangeHeaders.Style.WrapText = true;
-
-            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-
-            rangeHeaders.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-            rangeHeaders.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-            rangeHeaders.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-            rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-        }
-
-        for (int i = 0; i < data.Count; i++)
-        {
-            var item = data[i];
-            var columnNumber = i + 3;
             var allMinutes =
-                item.OffTimeMinutes
-                + item.OnTimeMinutes
-                + item.WorkTimeMinutes
-                + item.DowntimeMinutes;
+                stateData.OffTimeMinutes
+                + stateData.OnTimeMinutes
+                + stateData.WorkTimeMinutes
+                + stateData.DowntimeMinutes;
 
-            worksheet.Cells[columnNumber, 1].Value = $"Смена {item.WorkingShifNumber}";
+            AddShiftLabel(worksheet, row, stateData.WorkingShifNumber);
 
-            worksheet.Cells[columnNumber, 2].Value = item.OffTimeMinutes;
-            worksheet.Cells[columnNumber, 3].Value = MathExtension.CalculatePercentage(
+            worksheet.Cells[row, OffTimeMinutesColumn].Value = stateData.OffTimeMinutes;
+            worksheet.Cells[row, OffTimePercentageColumn].Value = MathExtension.CalculatePercentage(
                 allMinutes,
-                item.OffTimeMinutes
+                stateData.OffTimeMinutes
             );
 
-            worksheet.Cells[columnNumber, 4].Value = item.OnTimeMinutes;
-            worksheet.Cells[columnNumber, 5].Value = MathExtension.CalculatePercentage(
+            worksheet.Cells[row, OnTimeMinutesColumn].Value = stateData.OnTimeMinutes;
+            worksheet.Cells[row, OnTimePercentageColumn].Value = MathExtension.CalculatePercentage(
                 allMinutes,
-                item.OnTimeMinutes
+                stateData.OnTimeMinutes
             );
 
-            worksheet.Cells[columnNumber, 6].Value = item.WorkTimeMinutes;
-            worksheet.Cells[columnNumber, 7].Value = MathExtension.CalculatePercentage(
-                allMinutes,
-                item.WorkTimeMinutes
-            );
+            worksheet.Cells[row, WorkTimeMinutesColumn].Value = stateData.WorkTimeMinutes;
+            worksheet.Cells[row, WorkTimePercentageColumn].Value =
+                MathExtension.CalculatePercentage(allMinutes, stateData.WorkTimeMinutes);
 
-            worksheet.Cells[columnNumber, 8].Value = item.DowntimeMinutes;
-            worksheet.Cells[columnNumber, 9].Value = MathExtension.CalculatePercentage(
-                allMinutes,
-                item.DowntimeMinutes
-            );
+            worksheet.Cells[row, DowntimeMinutesColumn].Value = stateData.DowntimeMinutes;
+            worksheet.Cells[row, DowntimePercentageColumn].Value =
+                MathExtension.CalculatePercentage(allMinutes, stateData.DowntimeMinutes);
 
-            worksheet.Cells[columnNumber, 10].Value = allMinutes;
+            worksheet.Cells[row, TotalMinutesColumn].Value = allMinutes;
+
+            SetStylesToDataCells(worksheet, row);
+
+            row++;
         }
+    }
 
-        using (var rangeHeaders = worksheet.Cells[3, 1, data.Count + 2, 1])
+    private void SetStylesToDataCells(ExcelWorksheet worksheet, int row)
+    {
+        for (int i = OffTimeMinutesColumn; i <= TotalMinutesColumn; i++)
         {
-            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+            worksheet.Cells[row, i].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells[row, i].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            worksheet.Cells[row, i].Style.Border.BorderAround(ExcelBorderStyle.Thin);
         }
 
-        using (var rangeHeaders = worksheet.Cells[3, 3, data.Count + 2, 3])
-        {
-            rangeHeaders.Style.Numberformat.Format = "#,##0.00";
-        }
-
-        using (var rangeHeaders = worksheet.Cells[3, 5, data.Count + 2, 5])
-        {
-            rangeHeaders.Style.Numberformat.Format = "#,##0.00";
-        }
-
-        using (var rangeHeaders = worksheet.Cells[3, 7, data.Count + 2, 7])
-        {
-            rangeHeaders.Style.Numberformat.Format = "#,##0.00";
-        }
-
-        using (var rangeHeaders = worksheet.Cells[3, 9, data.Count + 2, 9])
-        {
-            rangeHeaders.Style.Numberformat.Format = "#,##0.00";
-        }
+        worksheet.Cells[row, OffTimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
+        worksheet.Cells[row, OnTimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
+        worksheet.Cells[row, WorkTimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
+        worksheet.Cells[row, DowntimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
     }
 
     private void CreateTableHeader(ExcelWorksheet worksheet)
     {
-        worksheet.Cells[1, 1].Value = "Состояние";
-        var columnOne = worksheet.Column(1);
+        worksheet.Cells[HeaderStartRow, StateColumn].Value = "Состояние";
+        worksheet.Cells[HeaderStartRow, StateColumn, HeaderEndRow, StateColumn].Merge = true;
+        worksheet.Column(StateColumn).Width = ColumnWidth;
 
-        worksheet.Cells[1, 1, 2, 1].Merge = true;
-        columnOne.Width = 20;
+        _excelExtensions.AutoFitMergedColumns(
+            worksheet,
+            OffStateName,
+            StateColumn,
+            OffTimeMinutesColumn,
+            OffTimePercentageColumn
+        );
+        _excelExtensions.AutoFitMergedColumns(
+            worksheet,
+            OnStateName,
+            StateColumn,
+            OnTimeMinutesColumn,
+            OnTimePercentageColumn
+        );
+        _excelExtensions.AutoFitMergedColumns(
+            worksheet,
+            WeldingStateName,
+            StateColumn,
+            WorkTimeMinutesColumn,
+            WorkTimePercentageColumn
+        );
+        _excelExtensions.AutoFitMergedColumns(
+            worksheet,
+            DowntimeStateName,
+            StateColumn,
+            DowntimeMinutesColumn,
+            DowntimePercentageColumn
+        );
 
-        _excelExtensions.AutoFitMergedColumns(worksheet, "Св. аппарат ВЫКЛЮЧЕН", 1, 2, 3);
-        _excelExtensions.AutoFitMergedColumns(worksheet, "Св. аппарат ВКЛЮЧЕН", 1, 4, 5);
-        _excelExtensions.AutoFitMergedColumns(worksheet, "СВАРКА", 1, 6, 7);
-        _excelExtensions.AutoFitMergedColumns(worksheet, "Вынужденный простой", 1, 8, 9);
+        worksheet.Cells[HeaderStartRow, TotalMinutesColumn].Value = TotalTimeColumnName;
 
-        worksheet.Cells[1, 10].Value = "Общий фонд рабочего времени";
+        worksheet.Column(TotalMinutesColumn).AutoFit();
 
-        worksheet.Column(10).AutoFit();
+        worksheet.Columns[WorkTimeMinutesColumn, WorkTimePercentageColumn].Width = 9;
 
-        worksheet.Columns[6, 7].Width = 9;
+        worksheet.Cells[HeaderEndRow, OffTimeMinutesColumn].Value = MinutesColumnName;
+        worksheet.Cells[HeaderEndRow, OffTimePercentageColumn].Value = PercentageColumnName;
 
-        worksheet.Cells[2, 2].Value = "Минут";
-        worksheet.Cells[2, 3].Value = "%";
+        worksheet.Cells[HeaderEndRow, OnTimeMinutesColumn].Value = MinutesColumnName;
+        worksheet.Cells[HeaderEndRow, OnTimePercentageColumn].Value = PercentageColumnName;
 
-        worksheet.Cells[2, 4].Value = "Минут";
-        worksheet.Cells[2, 5].Value = "%";
+        worksheet.Cells[HeaderEndRow, WorkTimeMinutesColumn].Value = MinutesColumnName;
+        worksheet.Cells[HeaderEndRow, WorkTimePercentageColumn].Value = PercentageColumnName;
 
-        worksheet.Cells[2, 6].Value = "Минут";
-        worksheet.Cells[2, 7].Value = "%";
+        worksheet.Cells[HeaderEndRow, DowntimeMinutesColumn].Value = MinutesColumnName;
+        worksheet.Cells[HeaderEndRow, DowntimePercentageColumn].Value = PercentageColumnName;
 
-        worksheet.Cells[2, 8].Value = "Минут";
-        worksheet.Cells[2, 9].Value = "%";
+        worksheet.Cells[HeaderEndRow, TotalMinutesColumn].Value = MinutesColumnName;
 
-        worksheet.Cells[2, 10].Value = "Минут";
-
-        using (var rangeHeaders = worksheet.Cells[1, 1, 2, 10])
+        using (
+            var rangeHeaders = worksheet.Cells[
+                HeaderStartRow,
+                StateColumn,
+                HeaderEndRow,
+                TotalMinutesColumn
+            ]
+        )
         {
             rangeHeaders.Style.WrapText = true;
 
@@ -178,5 +206,15 @@ public class EquipmentOperationAnalysisReportService
             rangeHeaders.Style.Border.Right.Style = ExcelBorderStyle.Thin;
             rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
         }
+    }
+
+    private void AddShiftLabel(ExcelWorksheet worksheet, int row, int shiftNumber)
+    {
+        var shiftLabel = string.Format(ShiftLabelFormat, shiftNumber);
+        worksheet.Cells[row, StateColumn].Value = shiftLabel;
+
+        worksheet.Cells[row, StateColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+        worksheet.Cells[row, StateColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+        worksheet.Cells[row, StateColumn].Style.Border.BorderAround(ExcelBorderStyle.Thin);
     }
 }
