@@ -315,9 +315,7 @@ export const Seam = ({
                     isFreeAction: true,
                     onClick: () => {
                       setIsModalOpen(true);
-                      setIsModalNumb(15); 
-                      console.log("Добавить шоваааа")
-
+                      setIsModalNumb(15);   
                     },
                   },
                   {
@@ -328,8 +326,13 @@ export const Seam = ({
                       setIsModalOpen(true);
                       setIsModalNumb(7) 
 
-                      console.log(rowData)
-                      console.log("Редактировать шваааа")
+                      
+                      setproductionArea(rowData?.productionArea?.id)
+                      setproductValue(rowData?.product?.id)
+                      setknotValue(rowData?.knot?.id)
+                      setdetail(rowData?.detail?.id)
+                      settechnologicalProcess(rowData?.technologicalProcess?.id)
+                      console.log(rowData) 
                     },
                   },
                 ]
