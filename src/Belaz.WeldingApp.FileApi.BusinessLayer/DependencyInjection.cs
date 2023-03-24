@@ -46,6 +46,10 @@ public static class DependencyInjection
             IExcelFileService<WelderOperationTimeDto>,
             WelderOperationReportService
         >();
+        services.AddScoped<
+            IExcelFileService<List<EquipmentEfficiencyReportDto>>,
+            EquipmentEfficiencyReportService
+        >();
 
         return services;
     }
