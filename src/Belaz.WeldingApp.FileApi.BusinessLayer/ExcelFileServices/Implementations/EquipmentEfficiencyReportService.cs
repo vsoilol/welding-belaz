@@ -71,38 +71,28 @@ public class EquipmentEfficiencyReportService
 
         var range = worksheet.Cells[DataStartRow, ReportDateColumn].LoadFromCollection(data, false);
 
+        range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
         range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Top.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Right.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Left.Style = ExcelBorderStyle.Thin;
 
-        using (
-            var rangeHeaders = worksheet.Cells[
-                DataStartRow,
-                ReportDateColumn,
-                data.Count + 1,
-                ReportDateColumn
-            ]
-        )
-        {
-            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+        worksheet.Cells[DataStartRow, ReportDateColumn, data.Count + 1, ReportDateColumn]
+            .Style
+            .Numberformat
+            .Format = "dd.MMM";
 
-            rangeHeaders.Style.Numberformat.Format = "dd.MM";
-        }
-
-        using (
-            var rangeHeaders = worksheet.Cells[
-                DataStartRow,
-                OverallEquipmentEfficiencyColumn,
-                data.Count + 1,
-                OverallEquipmentEfficiencyColumn
-            ]
-        )
-        {
-            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-        }
+        worksheet.Cells[
+            DataStartRow,
+            OverallEquipmentEfficiencyColumn,
+            data.Count + 1,
+            OverallEquipmentEfficiencyColumn
+        ]
+            .Style
+            .Numberformat
+            .Format = "#,##0.00";
     }
 
     private void CreateChart(ExcelWorksheet worksheet, List<EquipmentEfficiencyReportDto> data)
