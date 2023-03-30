@@ -795,8 +795,10 @@ export const Equipment = ({
 
                   <div className={styles.row}>
                     <Input
-                      onChange={(e) => {
-                        handleChange(e);
+                     onChange={(e) => {
+                        if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       width="200"
                       style={{ height: 40, padding: "0 20px 0 30px" }}
@@ -809,7 +811,9 @@ export const Equipment = ({
 
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        if (/^[A-Za-z0-9-]+$/.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       width="200"
                       style={{ height: 40, padding: "0 20px 0 30px" }}
@@ -822,8 +826,10 @@ export const Equipment = ({
                   </div>
                   <div className={styles.row}>
                     <Input
-                      onChange={(e) => {
-                        handleChange(e);
+                       onChange={(e) => {
+                        if (/^[0-9A-Fa-f:]+$/.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       style={{
                         width: 380,
@@ -848,6 +854,9 @@ export const Equipment = ({
                         height: 40,
                         padding: "0px 0px 0px 20px"
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.factoryNumber}
                       name={`factoryNumber`}
                       placeholder="Заводской  (инвентарный) номер"
@@ -895,7 +904,9 @@ export const Equipment = ({
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       style={{
                         width: 280,
@@ -916,6 +927,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.idleVoltage}
                       name={`idleVoltage`}
                       placeholder="Напряжение холостого хода"
@@ -963,6 +977,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.height}
                       name={`height`}
                       autocomplete="off"
@@ -977,6 +994,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.width}
                       name={`width`}
                       placeholder="Ширина"
@@ -991,6 +1011,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.lenght}
                       name={`lenght`}
                       placeholder="Длина"
@@ -1029,6 +1052,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.weldingCurrentMin}
                       name={`weldingCurrentMin`}
                       placeholder="min"
@@ -1044,6 +1070,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.weldingCurrentMax}
                       name={`weldingCurrentMax`}
                       placeholder="max"
@@ -1062,6 +1091,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.arcVoltageMin}
                       name={`arcVoltageMin`}
                       placeholder="min"
@@ -1076,6 +1108,9 @@ export const Equipment = ({
                         height: 40,
                         paddingLeft: 20,
                       }}
+                      type="number"
+                      min="0"
+                      step="1"
                       value={values.arcVoltageMax}
                       name={`arcVoltageMax`}
                       placeholder="max"

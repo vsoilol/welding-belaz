@@ -16,7 +16,7 @@ import TableHead from "@material-ui/core/TableHead";
 import Paper from "@material-ui/core/Paper";
 import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import imgcalendar from "assets/icons/calendar.png"; 
+import imgcalendar from "assets/icons/calendar.png";
 const useStyles = makeStyles(() => ({
   rowStyle: {
     padding: 10,
@@ -54,7 +54,7 @@ export const ExecutorsTable = ({
   const classes = useStyles();
   const initialValues = {
     id: modalData?.id ?? "",
-    rfidTag: modalData?.rfidTag  ?? modalData?.idFromSystem ?? "",
+    rfidTag: modalData?.rfidTag ?? modalData?.idFromSystem ?? "",
     firstName: modalData?.firstName ?? "",
     lastName: modalData?.lastName ?? "",
     middleName: modalData?.middleName ?? "",
@@ -134,7 +134,7 @@ export const ExecutorsTable = ({
     {
       title: "Закреплённое оборудование ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length!=0) { 
+        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
           return (
             rowData.weldingEquipments?.map(equipments =>
               <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
@@ -194,7 +194,7 @@ export const ExecutorsTable = ({
     },
   ];
 
- 
+
 
   function ReturnWorkshop(Area) {
     if (area != undefined) {
@@ -288,7 +288,7 @@ export const ExecutorsTable = ({
     {
       title: "Закреплённое оборудование ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length!=0) { 
+        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
           return (
             rowData.weldingEquipments?.map(equipments =>
               <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
@@ -314,7 +314,7 @@ export const ExecutorsTable = ({
 
   const renderRowChildren = (rowData) => {
 
-    if (rowData?.weldingEquipments?.length != 0) {
+    if (rowData.weldingEquipments.length > 0) {
       return (
         <TableContainer component={Paper}>
 
@@ -407,9 +407,8 @@ export const ExecutorsTable = ({
   };
 
   function OpenCalendar(rowData) {
-    window.localStorage.setItem("executorId", rowData.id)
-    window.localStorage.setItem("executor", `Сварщик: ${rowData.middleName} ${rowData.firstName} ${rowData.lastName}`)
-    window.localStorage.removeItem("equipmentId")
+    window.localStorage.setItem("executorId", rowData.id) 
+    window.localStorage.removeItem("equipment") 
     setTimeout(() => {
       window.location.href = "/calendar"
     }, 500);
@@ -570,7 +569,7 @@ export const ExecutorsTable = ({
           title="Сотрудники"
           isLoading={isRequesting}
           actions={
-            userRole === "Admin"||userRole === "Master"
+            userRole === "Admin" || userRole === "Master"
               ? [
                 {
                   icon: "add",
@@ -646,38 +645,44 @@ export const ExecutorsTable = ({
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    handleChange(e);
+                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
+                      handleChange(e);
+                    }
                   }}
                   width="200"
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.middleName}
                   name="middleName"
                   placeholder="Фамилия"
-                  onBlur={handleBlur}
+                  onBlur={handleBlur} 
                   autocomplete="off"
                 />
 
 
                 <Input
                   onChange={(e) => {
-                    handleChange(e);
+                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
+                      handleChange(e);
+                    }
                   }}
                   width="200"
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.firstName}
                   name="firstName"
                   placeholder="Имя"
-                  onBlur={handleBlur}
+                  onBlur={handleBlur} 
                   autocomplete="off"
                 />
                 <Input
                   onChange={(e) => {
-                    handleChange(e);
+                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
+                      handleChange(e);
+                    }
                   }}
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.lastName}
                   name="lastName"
-                  placeholder="Отчество"
+                  placeholder="Отчество" 
                   onBlur={handleBlur}
                   autocomplete="off"
                 />
@@ -698,27 +703,30 @@ export const ExecutorsTable = ({
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    handleChange(e);
+                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
+                      handleChange(e);
+                    }
                   }}
                   style={{ height: 40, width: 562 }}
                   value={values.position}
                   name="position"
                   placeholder="Должность"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off" 
                 />
               </div>
               <div className={styles.row}>
                 <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
+                  onChange={handleChange}
                   style={{ height: 40, width: 562 }}
                   value={values.serviceNumber}
                   name="serviceNumber"
                   placeholder="Табельный номер"
+                  type="number"
+                  min="0"
+                  step="1"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
               <DisplaySelects select={type} />

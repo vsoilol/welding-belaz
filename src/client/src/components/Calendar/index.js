@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Calendars from "../Calendar/Calendar";
+import { Calendars } from "../Calendar/Calendar";
 import "../Calendar/styleCalendar.css";
 import imgSmena from "assets/icons/Smena.png";
 import imgEdit from "assets/icons/pen.png";
@@ -103,6 +103,7 @@ export const Calendar = ({
 
 
 
+
   const requiredKeys = [
     "object",
     "sector",
@@ -139,8 +140,7 @@ export const Calendar = ({
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
 
-
-
+ 
 
   ////////////////////////////////////////////////////////////////////
 
@@ -278,348 +278,39 @@ export const Calendar = ({
     setIsModalEditWorkDayOpen(true)
   }
 
-  function EdditWorkingShift() {
 
-    document.querySelectorAll(".imgEdit").forEach((elem, index) => {
-      elem.addEventListener("click", function () {
-        let numbDay = Number(document.querySelectorAll(".imgEdit")[index].parentElement.querySelector("span").innerHTML)
-
-        if (window.localStorage.getItem("executorId")) {
-          for (let index = 0; index < calendar?.days[1]?.length; index++) {
-            let day = calendar?.days[1][index]
-            if (numbDay === day.number) {
-              setIdEdditWorkingShift(calendar?.days[1][index].id)
-            }
-          }
-        }
-        else {
-          for (let index = 0; index < days?.length; index++) {
-            if (days[index] != undefined) {
-              console.log(days[index].number)
-              if (numbDay === days[index].number) {
-                console.log(days[index].id)
-                setIdEdditWorkingShift(days[index].id)
-              }
-            }
-
-          }
-        }
-        setIsModalEditWorkDayOpen(true)
-      })
-    })
-  }
-
-
-  ////*****************//////////////////  Calendar
-  let currMonth = 0;
-  let currYear = 0;
-  var Cal = function (divId) {
-    //Сохраняем идентификатор div
-    this.divId = divId;
-    // Дни недели с понедельника
-    this.DaysOfWeek = [
-      'Пн',
-      'Вт',
-      'Ср',
-      'Чт',
-      'Пт',
-      'Сб',
-      'Вс'
-    ];
-    // Месяцы начиная с января
-    this.Months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-    //Устанавливаем текущий месяц, год
-    var d = new Date();
-    this.currMonth = d.getMonth();
-    this.currYear = d.getFullYear();
-    this.currDay = d.getDate();
-  };
-  // Переход к следующему месяцу
-  Cal.prototype.nextMonth = function () {
-    if (this.currMonth == 11) {
-      this.currMonth = 0;
-      this.currYear = this.currYear + 1;
-    }
-    else {
-      this.currMonth = this.currMonth + 1;
-    }
-    this.showcurr();
-  };
-  // Переход к предыдущему месяцу
-  Cal.prototype.previousMonth = function () {
-    if (this.currMonth == 0) {
-      this.currMonth = 11;
-      this.currYear = this.currYear - 1;
-    }
-    else {
-      this.currMonth = this.currMonth - 1;
-    }
-    this.showcurr();
-  };
-  // Показать текущий месяц
-  Cal.prototype.showcurr = function () {
-    this.showMonth(this.currYear, this.currMonth);
-  };
-  // Показать месяц (год, месяц)
-  Cal.prototype.showMonth = function (y, m) {
-    var d = new Date()
-      // Первый день недели в выбранном месяце 
-      , firstDayOfMonth = new Date(y, m, 7).getDay()
-      // Последний день выбранного месяца
-      , lastDateOfMonth = new Date(y, m + 1, 0).getDate()
-      // Последний день предыдущего месяца
-      , lastDayOfLastMonth = m == 0 ? new Date(y - 1, 11, 0).getDate() : new Date(y, m, 0).getDate();
-    var html = '<table>';
-    // Запись выбранного месяца и года
-    html += '<thead><tr>';
-    html += '<td colspan="7">' + this.Months[m] + ' ' + y + '</td>';
-    html += '</tr></thead>';
-    // заголовок дней недели
-    html += '<tr class="days">';
-    for (var i = 0; i < this.DaysOfWeek.length; i++) {
-      html += '<td>' + this.DaysOfWeek[i] + '</td>';
-    }
-    html += '</tr>';
-    // Записываем дни
-    var i = 1;
-    do {
-      var dow = new Date(y, m, i).getDay();
-      // Начать новую строку в понедельник
-      if (dow == 1) {
-        html += '<tr>';
-      }
-      // Если первый день недели не понедельник показать последние дни предыдущего месяца
-      else if (i == 1) {
-        html += '<tr>';
-        var k = lastDayOfLastMonth - firstDayOfMonth + 1;
-        for (var j = 0; j < firstDayOfMonth; j++) {
-          html += '<td class="dayCalend not-current">' + '<span>' + k + '</span>' + '</td>';
-          k++;
-        }
-      }
-      // Записываем текущий день в цикл
-      var chk = new Date();
-      var chkY = chk.getFullYear();
-      var chkM = chk.getMonth();
-
-      if (chkY == this.currYear && chkM == this.currMonth && i == this.currDay) {
-        html +=
-          `
-           <td class="dayCalend today smena">
-             <img class="imgSmena" src="${imgSmena}">
-             <img class="imgEdit" src="${imgEdit}">
-             
-             <span>${i}</span> 
-             <div class="vkladka">
-               <div class="events"> 
-                
-               </div>
-             </div>
-           </td>
-        `
-      } else {
-        html +=
-          `
-           <td class="dayCalend normal smena">
-             <img class="imgSmena" src="${imgSmena}">
-             <img   class="imgEdit" src="${imgEdit}">
-             <span>${i}</span> 
-             <div class="vkladka">
-              <div class="events">
-                
-              </div>
-             </div>
-           </td>
-        `
-      }
-      // закрыть строку в воскресенье
-      if (dow == 0) {
-        html += '</tr>';
-      }
-      // Если последний день месяца не воскресенье, показать первые дни следующего месяца
-      else if (i == lastDateOfMonth) {
-        var k = 1;
-        for (dow; dow < 7; dow++) {
-          html += '<td class="dayCalend not-current">' + '<span>' + k + '</span>' + '</td>';
-          k++;
-        }
-      }
-      i++;
-    } while (i <= lastDateOfMonth);
-    // Конец таблицы
-    html += '</table>';
-    // Записываем HTML в div
-    document.getElementById(this.divId).innerHTML = html;
-
-    /////////////////
-    currMonth = this.currMonth + 1
-    currYear = this.currYear
-
-    DisplayWorkingShift()
-    DisplayWorkingShiftTable()
-  };
-  // Начать календарь
-  if (calendar != undefined) {
-    var c = new Cal("divCal");
-    c.showcurr();
-    // Привязываем кнопки «Следующий» и «Предыдущий»
-    getId('btnNext').onclick = function () {
-      c.nextMonth();
-    };
-    getId('btnPrev').onclick = function () {
-      c.previousMonth();
-    };
-  }
-  // Получить элемент по id
-  function getId(id) {
-    return document.getElementById(id);
-  }
-
-  //Отображение иконок рабочих дней при наличии
-  function DisplayWorkingShift() {
-
-    if (currYear === calendar?.year) { 
-      if (window.localStorage.getItem("executorId")) {
-        if (calendar?.days[1] != undefined || calendar?.days[1] != null) {  
-          for (let index = 0; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ").length; index++) {
-            let dayCell = document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ")[index]
-            dayCell.classList.add("Smena") 
-          } 
-          for (let index = 1; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) ").length; index++) {
-            let rowWeeks = document.querySelectorAll(".calendar-wrapper table tr:not(.days) ")[index]
-            rowWeeks.querySelectorAll("td")[6].classList.remove("Smena") 
-            rowWeeks.querySelectorAll("td")[5].classList.remove("Smena")
-          }
-          // for (let index = 0; index < calendar?.days[1]?.length; index++) {
-          //   let day = calendar?.days[1][index]
-          //   if (day != undefined) {
-          //     if (day.monthNumber === currMonth && day.isWorkingDay) {
-          //       document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
-          //         if (Number(span.innerHTML) === day.number) {
-          //           document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].classList.add("Smena")
-          //         } 
-          //       })
-          //     }
-          //   } 
-          // }
-        } 
-      }
-      else {
-        if (days != undefined || days != null) {
-          for (let index = 0; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ").length; index++) {
-            let dayCell = document.querySelectorAll(".calendar-wrapper table tr:not(.days) td.dayCalend ")[index]
-            dayCell.classList.add("Smena")
-          }
-          for (let index = 1; index < document.querySelectorAll(".calendar-wrapper table tr:not(.days) ").length; index++) {
-            let rowWeeks = document.querySelectorAll(".calendar-wrapper table tr:not(.days) ")[index]
-            rowWeeks.querySelectorAll("td")[6].classList.remove("Smena") 
-            rowWeeks.querySelectorAll("td")[5].classList.remove("Smena")
-          }
-          // for (let index = 0; index < days?.length; index++) {
-          //   if (days[index] != undefined) {
-          //     if (days[index].monthNumber === currMonth && days[index].isWorkingDay) {
-          //       document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
-          //         if (Number(span.innerHTML) === days[index].number) {
-          //           document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].classList.add("Smena")
-          //         } 
-          //       })
-          //     }
-          //   } 
-          // }
-        } 
-      }
-      EdditWorkingShift() 
-    } 
-  }
-  ///Отображать список смен в всплывашке 
-  function DisplayWorkingShiftTable() {
-    if (currYear === calendar?.year) { 
-      if (window.localStorage.getItem("executorId")) {
-        if (calendar?.days[1] != undefined || calendar?.days[1] != null) {
-          for (let index = 0; index < calendar?.days[1]?.length; index++) {
-            let day = calendar?.days[1][index]
-            if (day.monthNumber === currMonth && day.isWorkingDay) {
-              document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
-                let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events"); 
-                if (Number(span.innerHTML) === day.number) {
-                  let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events"); 
-                  if (dayCalend != null) {
-                    dayCalend.innerHTML +=
-                      `
-                     <div class="row"> 
-                       <p>Смена <abbr>${day.workingShifts[0].number}</abbr> <em>( ${day.workingShifts[0].shiftStart} - ${day.workingShifts[0].shiftEnd} )</em></p> 
-                       <p>Перерыв  <em>( ${day.workingShifts[0].breakStart} - ${day.workingShifts[0].breakEnd} )</em></p>
-                     </div> 
-                     `
-                  } 
-                } else if (dayCalend != null) {
-                  dayCalend.innerHTML =
-                  `
-                  <div class="row"> 
-                    <p>Смена <abbr>${day.workingShifts[0].number}</abbr> <em>( ${day.workingShifts[0].shiftStart} - ${day.workingShifts[0].shiftEnd} )</em></p> 
-                    <p>Перерыв  <em>( ${day.workingShifts[0].breakStart} - ${day.workingShifts[0].breakEnd} )</em></p>
-                  </div> 
-                  `
-                }
-                
-               
-              })
-            }
-          }
-        } 
-      }
-      else {
-        if (days != undefined || days != null) {
-          for (let index = 0; index < days?.length; index++) {
-
-            if (days[index].monthNumber === currMonth && days[index].isWorkingDay) {
-              document.querySelectorAll(".calendar-wrapper table tr span").forEach((span, index2) => {
-                if (Number(span.innerHTML) === days[index].number) {
-                  let dayCalend = document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events");
-                
-                  if (dayCalend != null) {
-                    dayCalend.innerHTML +=
-                      `
-                      <div class="row"> 
-                        <p>Смена <abbr>${days[index].workingShifts[0].number}</abbr> <em>( ${days[index].workingShifts[0].shiftStart} - ${days[index].workingShifts[0].shiftEnd} )</em></p> 
-                        <p>Перерыв  <em>( ${days[index].workingShifts[0].breakStart} - ${days[index].workingShifts[0].breakEnd} )</em></p>
-                      </div> 
-                      `
-                  } 
-                }else if ( document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events") != null) {
-                  document.querySelectorAll(".calendar-wrapper table .dayCalend")[index2].querySelector(".events").innerHTML =
-                  `
-                  <div class="row"> 
-                    <p>Смена <abbr>${days[index].workingShifts[0].number}</abbr> <em>( ${days[index].workingShifts[0].shiftStart} - ${days[index].workingShifts[0].shiftEnd} )</em></p> 
-                    <p>Перерыв  <em>( ${days[index].workingShifts[0].breakStart} - ${days[index].workingShifts[0].breakEnd} )</em></p>
-                  </div> 
-                  `
-                }
-              })
-            }
-          }
-        }
-      }
-
-    }
-    
-  }
   ////*****************//////////////////!!!!!  Calendar
 
+  const ArrayDays = calendar?.days[1];
 
+  const resultArrayDays = ArrayDays?.map((Day) => { 
+    const [breakStartHour, breakStartMinute] = Day.workingShifts[0].breakStart.split(':');
+    const [breakEndHour, breakEndMinute] = Day.workingShifts[0].breakEnd.split(':');
 
-  function EditWorkDaySend(variables) {
+    const [shiftStartHour, shiftStartMinute] = Day.workingShifts[0].shiftStart.split(':');
+    const [shiftEndHour, shiftEndMinute] = Day.workingShifts[0].shiftEnd.split(':');
 
-    variables["daiID"] = valueIdEdditWorkingShift
-    variables["monthNumber"] = new Date(variables.workDay).getUTCMonth() + 1;
-    variables["number"] = new Date(variables.workDay).getUTCDate();
-    editDay(variables)
-  }
+    let shiftStart = new Date(Day.year, Day.monthNumber-1, Day.number, shiftStartHour, shiftStartMinute) ;
+    let shiftEnd = new Date(Day.year, Day.monthNumber-1, Day.number, shiftEndHour,shiftEndMinute) ;
+    
+    let breakStart = new Date(Day.year, Day.monthNumber-1, Day.number, breakStartHour, breakStartMinute) ;
+    let breakEnd = new Date(Day.year, Day.monthNumber-1, Day.number, breakEndHour, breakEndMinute) ;
+     return{
+        title: `Смена ${Day.workingShifts[0].number}`,
+        start: shiftStart,
+        end: breakStart,
 
+        shiftEnd:shiftEnd,
+        breakEnd:breakEnd,
+        breakStart:breakStart,
 
-  function CreatShift(params) {
-    addShift(params)
-  }
+        year:Day.year,
+        shiftStart:Day.workingShifts[0].breakStart,
+        shiftEnd:Day.workingShifts[0].breakStart,
+
+    }
+  }); 
+
 
   return (
     <div className={styles.innerWrapper}>
@@ -634,13 +325,13 @@ export const Calendar = ({
 
 
         <div class="calendar-wrapper">
-          {(window.localStorage.getItem("executorId")) != null
-            ? <h2>Производственный календарь <span className={styles.obj}>{window.localStorage.getItem("executor")}</span></h2>
-            : <h2>Производственный календарь <span className={styles.obj}>{window.localStorage.getItem("equipment")}</span></h2>
-          }
-          <button id="btnPrev" type="button">Предыдущий</button>
-          <button id="btnNext" type="button">Следующий</button>
-          <div id="divCal"></div>
+          <h2>Производственный календарь </h2>
+          <Calendars
+            executors={executors}
+            equipment={equipment}
+            resultArrayDays={resultArrayDays}
+          >
+          </Calendars>
         </div>
 
         <div className={styles.RowToolsBtns}>
@@ -792,7 +483,6 @@ export const Calendar = ({
               const { id, ...dataToSend } = variables;
               setIsModalEditWorkDayOpen(false);
               setModalData(null);
-              EditWorkDaySend(variables)
             }}
           >
             {({
@@ -856,7 +546,6 @@ export const Calendar = ({
               const { id, ...dataToSend } = variables;
               setIsModalAddShift(false);
               setModalData(null);
-              CreatShift(variables)
             }}
           >
             {({

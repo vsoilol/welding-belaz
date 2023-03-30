@@ -1,184 +1,127 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'moment/locale/ru';
+
+import "./styleCalendar.css";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import styles from "./styles.module.css";
 
 
-import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import ReactDOM from "react-dom";
-
-import "../Calendar/styleCalendar.css";
-import imgSmena from "assets/icons/Smena.png";
 
 
-const Calendars = (calendar) => {
+export const Calendars = ({
+  executors,
+  equipment,
+  resultArrayDays,
+}) => {
 
+  const localizer = momentLocalizer(moment);
+  moment.locale('ru');
 
-  let currMonth = 0;
-  let currYear = 0;
-
-  var Cal = function (divId) {
-    //Сохраняем идентификатор div
-    this.divId = divId;
-    // Дни недели с понедельника
-    this.DaysOfWeek = [
-      'Пн',
-      'Вт',
-      'Ср',
-      'Чт',
-      'Пт',
-      'Суб',
-      'Вск'
-    ];
-    // Месяцы начиная с января
-    this.Months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-    //Устанавливаем текущий месяц, год
-    var d = new Date();
-    this.currMonth = d.getMonth();
-    this.currYear = d.getFullYear();
-    this.currDay = d.getDate();
-  };
-  // Переход к следующему месяцу
-  Cal.prototype.nextMonth = function () {
-    if (this.currMonth == 11) {
-      this.currMonth = 0;
-      this.currYear = this.currYear + 1;
-    }
-    else {
-      this.currMonth = this.currMonth + 1;
-    }
-    this.showcurr();
-  };
-  // Переход к предыдущему месяцу
-  Cal.prototype.previousMonth = function () {
-    if (this.currMonth == 0) {
-      this.currMonth = 11;
-      this.currYear = this.currYear - 1;
-    }
-    else {
-      this.currMonth = this.currMonth - 1;
-    }
-    this.showcurr();
-  };
-  // Показать текущий месяц
-  Cal.prototype.showcurr = function () {
-    this.showMonth(this.currYear, this.currMonth);
-  };
-  // Показать месяц (год, месяц)
-  Cal.prototype.showMonth = function (y, m) {
-    var d = new Date()
-      // Первый день недели в выбранном месяце 
-      , firstDayOfMonth = new Date(y, m, 7).getDay()
-      // Последний день выбранного месяца
-      , lastDateOfMonth = new Date(y, m + 1, 0).getDate()
-      // Последний день предыдущего месяца
-      , lastDayOfLastMonth = m == 0 ? new Date(y - 1, 11, 0).getDate() : new Date(y, m, 0).getDate();
-    var html = '<table>';
-    // Запись выбранного месяца и года
-    html += '<thead><tr>';
-    html += '<td colspan="7">' + this.Months[m] + ' ' + y + '</td>';
-    html += '</tr></thead>';
-    // заголовок дней недели
-    html += '<tr class="days">';
-    for (var i = 0; i < this.DaysOfWeek.length; i++) {
-      html += '<td>' + this.DaysOfWeek[i] + '</td>';
-    }
-    html += '</tr>';
-    // Записываем дни
-    var i = 1;
-    do {
-      var dow = new Date(y, m, i).getDay();
-      // Начать новую строку в понедельник
-      if (dow == 1) {
-        html += '<tr>';
+  const events = resultArrayDays 
+  const [selectedEvent, setSelectedEvent] = useState(null); 
+  const modalEventBodyRef = useRef(null); 
+  const handleSelectEvent = (event) => {
+    setSelectedEvent(event);
+  }; 
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
+  const messages = {
+    today: 'Сегодня',
+    previous: 'Назад',
+    next: 'Вперед',
+    month: 'Месяц',
+    week: 'Неделя',
+  }; 
+  let InfoForCalendarEquipment = equipment[0]?.find(item => item.id === window.localStorage.getItem("equipmentId"))
+  let InfoForCalendar = executors?.find(item => item.id === window.localStorage.getItem("executorId")) 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (modalEventBodyRef.current && !modalEventBodyRef.current.contains(event.target)) {
+        setSelectedEvent(null);
       }
-      // Если первый день недели не понедельник показать последние дни предыдущего месяца
-      else if (i == 1) {
-        html += '<tr>';
-        var k = lastDayOfLastMonth - firstDayOfMonth + 1;
-        for (var j = 0; j < firstDayOfMonth; j++) {
-          html += '<td class="not-current">' + '<span>' + k + '</span>' + '</td>';
-          k++;
-        }
-      }
-      // Записываем текущий день в цикл
-      var chk = new Date();
-      var chkY = chk.getFullYear();
-      var chkM = chk.getMonth();
-      if (chkY == this.currYear && chkM == this.currMonth && i == this.currDay) {
-        html += '<td class="today">' + `<img class="imgSmena" src="${imgSmena}">` + '<span>' + i + '</span>' + '</td>';
-      } else {
-        html += '<td class="normal">' + `<img class="imgSmena" src="${imgSmena}">` + '<span>' + i + '</span>' + '</td>';
-      }
-      // закрыть строку в воскресенье
-      if (dow == 0) {
-        html += '</tr>';
-      }
-      // Если последний день месяца не воскресенье, показать первые дни следующего месяца
-      else if (i == lastDateOfMonth) {
-        var k = 1;
-        for (dow; dow < 7; dow++) {
-          html += '<td class="not-current">' + '<span>' + k + '</span>' + '</td>';
-          k++;
-        }
-      }
-      i++;
-    } while (i <= lastDateOfMonth);
-    // Конец таблицы
-    html += '</table>';
-    // Записываем HTML в div
-    document.getElementById(this.divId).innerHTML = html;
-
-    /////////////////
-    currMonth = this.currMonth + 1
-    currYear = this.currYear
-    DisplayWorkingShift()
-  };
-  // При загрузке окна
-  window.onload = function () {
-    // Начать календарь
-    var c = new Cal("divCal");
-    c.showcurr();
-    // Привязываем кнопки «Следующий» и «Предыдущий»
-    getId('btnNext').onclick = function () {
-      c.nextMonth();
+    } 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-    getId('btnPrev').onclick = function () {
-      c.previousMonth();
+  }, [modalEventBodyRef]);  
+  function isWeekend(date) {
+    const day = date.getDay();
+    return day === 0 || day === 6; 
+  } 
+  function eventPropGetter(event, start, end, isSelected) {
+    const style = {};
+    if (isWeekend(start)) {
+      style.backgroundColor = 'red';  
+    }
+    return {
+      style,
     };
   }
-  // Получить элемент по id
-  function getId(id) {
-    return document.getElementById(id);
-  }
 
-
-  //Отображение иконок рабочих дней при наличии
-  function DisplayWorkingShift() {
-
-    if (currYear === calendar.calendar.year) { 
-      calendar.calendar.days.forEach(day => {
-        if (day.monthNumber === currMonth && day.isWorkingDay) { 
-          document.querySelectorAll(".calendar-wrapper #divCal .normal span").forEach((span, index) => {
-            if (Number(span.innerHTML) === day.number) {
-              document.querySelectorAll(".calendar-wrapper #divCal .normal ")[index].classList.add("Smena")
-            }
-          })
-        }
-      });
-
-    }
-  }
-
-
-
-
+  console.log(selectedEvent)
 
   return (
-    <div class="calendar-wrapper">
-      <button id="btnPrev" type="button">Предыдущий</button>
-      <button id="btnNext" type="button">Следующий</button>
-      <div id="divCal"></div>
+    <div className={styles.calendar_wrapper}>
+
+      {events === undefined
+        ? (
+          <div class="preloader">
+            <div class="loader"> </div>
+            <h3>Подождите, идет загрузка...</h3>
+          </div>
+        )
+        : <div></div>
+      } 
+      {InfoForCalendar
+        ? (
+          <div className='InfoForCalendar'>
+            <h2>Сварщик: <span>{InfoForCalendar?.middleName} {InfoForCalendar?.firstName} {InfoForCalendar?.lastName}</span></h2>
+            <p>Цех: <span>{InfoForCalendar?.workshop?.name}</span>  </p>
+            <p>Должность: <span>{InfoForCalendar?.position}</span>  </p>
+            <p>Производственный участок: <span>{InfoForCalendar?.productionArea?.name}</span>  </p>
+          </div>
+        )
+        : (
+          <div className='InfoForCalendar'>
+            <h2>Оборудование: <span>{InfoForCalendarEquipment?.name}</span> </h2>
+            <p>Цех: <span>{InfoForCalendarEquipment?.workshop?.name}</span>  </p>
+            <p>Маркировка: <span>{InfoForCalendarEquipment?.marking}</span>  </p>
+            <p>Производственный участок: <span>{InfoForCalendarEquipment?.productionArea?.name}</span>  </p>
+          </div>
+        )
+      } 
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        titleAccessor="title"
+        allDayAccessor="allDay"
+        defaultView="month"
+        selectable
+        onSelectEvent={handleSelectEvent}
+        min={startOfMonth}
+        max={endOfMonth}
+        views={['month', 'week']}
+        messages={messages}
+        weekdayFormat="dd"
+        dayHeaderFormat="ddd"
+        toolbar={['month', 'week']}
+        eventPropGetter={eventPropGetter}
+      /> 
+      {selectedEvent && (
+        <div className='ModalEvent'>
+          <div className='ModalEventBody' ref={modalEventBodyRef}>
+            <h2>{selectedEvent.title}</h2>
+            <p><span>Время смены:</span> <br></br> <em>{selectedEvent.start.toLocaleString()} - {selectedEvent.shiftEnd.toLocaleString()}</em> </p>
+            <p><span>Время перерыва:</span> <br></br> <em>{selectedEvent.end.toLocaleString()} - {selectedEvent.breakEnd.toLocaleString()}</em></p>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
-
-export default Calendars;
+};

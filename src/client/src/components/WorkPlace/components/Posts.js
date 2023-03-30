@@ -599,6 +599,9 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     value={values.number}
                     name="number"
                     placeholder="Номер"
+                    type="number"
+                    min="0"
+                    step="1"
                     autocomplete="off"
                     onBlur={handleBlur}
                   />
