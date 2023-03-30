@@ -562,7 +562,7 @@ export const Knot = ({
   const TechProc = texprocwelding?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.number}`,
     };
   });
   //select Сварочный шов  
@@ -763,7 +763,7 @@ export const Knot = ({
   const productsOptions = product?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.number}`,
     };
   });
 
@@ -1052,6 +1052,9 @@ export const Knot = ({
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
+                    type="number"
+                    min="0"
+                    step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
                     autocomplete="off"

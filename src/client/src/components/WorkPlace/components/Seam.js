@@ -197,7 +197,7 @@ export const Seam = ({
   const TechProc = texprocwelding?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.number}`,
     };
   });
   //select Сварочный шов  
@@ -214,21 +214,21 @@ export const Seam = ({
   const productsOptions = product?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.number}`,
     };
   });
   //select узел
   const knotsOptions = knot?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.number}`,
     };
   });
   //select деталь
   const detailOptions = detail?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.number}`,
     };
   });
 
@@ -391,6 +391,9 @@ export const Seam = ({
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
+                    type="number"
+                    min="0"
+                    step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
                     autocomplete="off"
