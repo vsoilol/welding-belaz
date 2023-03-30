@@ -693,7 +693,9 @@ export const TexProcWelding = ({
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    handleChange(e);
+                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
+                      handleChange(e);
+                    }
                   }}
                   style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                   value={values.weldPassagesName}
@@ -713,6 +715,9 @@ export const TexProcWelding = ({
                   value={values.weldingCurrentMin}
                   name="weldingCurrentMin"
                   placeholder="Сварочный ток min"
+                  type="number"
+                  min="0"
+                  step="1"
                   onBlur={handleBlur}
                   autocomplete="off"
                 />
@@ -725,6 +730,9 @@ export const TexProcWelding = ({
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.weldingCurrentMax}
                   name="weldingCurrentMax"
+                  type="number"
+                  min="0"
+                  step="1"
                   placeholder="Сварочный ток max"
                   onBlur={handleBlur}
                   autocomplete="off"
@@ -740,6 +748,9 @@ export const TexProcWelding = ({
                   value={values.arcVoltageMin}
                   name="arcVoltageMin"
                   placeholder="Напряжение дуги min"
+                  type="number"
+                  min="0"
+                  step="1"
                   onBlur={handleBlur}
                   autocomplete="off"
                 />
@@ -753,6 +764,9 @@ export const TexProcWelding = ({
                   value={values.arcVoltageMax}
                   name="arcVoltageMax"
                   placeholder="Напряжение дуги max"
+                  type="number"
+                  min="0"
+                  step="1"
                   onBlur={handleBlur}
                   autocomplete="off"
                 />
@@ -769,6 +783,9 @@ export const TexProcWelding = ({
                   placeholder="Температура предварительного нагрева min"
                   onBlur={handleBlur}
                   autocomplete="off"
+                  type="number"
+                  min="0"
+                  step="1"
                 />
 
                 <Input
@@ -782,6 +799,9 @@ export const TexProcWelding = ({
                   placeholder="Температура предварительного нагрева max"
                   onBlur={handleBlur}
                   autocomplete="off"
+                  type="number"
+                  min="0"
+                  step="1"
                 />
               </div>
               {!modalData && (

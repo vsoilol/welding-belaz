@@ -7,6 +7,9 @@ import "./styleCalendar.css";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import styles from "./styles.module.css";
 
+
+
+
 export const Calendars = ({
   executors,
   equipment,
@@ -16,49 +19,55 @@ export const Calendars = ({
   const localizer = momentLocalizer(moment);
   moment.locale('ru');
 
-  const events = resultArrayDays;
-
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
-  const modalEventBodyRef = useRef(null);
-
+  const events = resultArrayDays 
+  const [selectedEvent, setSelectedEvent] = useState(null); 
+  const modalEventBodyRef = useRef(null); 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
-  };
-
+  }; 
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
   const messages = {
     today: 'Сегодня',
     previous: 'Назад',
     next: 'Вперед',
     month: 'Месяц',
     week: 'Неделя',
-  };
-
-  let InfoForCalendarEquipment = equipment[0]?.find(item => item.id === window.localStorage.getItem("equipmentId"));
-  let InfoForCalendar = executors?.find(item => item.id === window.localStorage.getItem("executorId"));
-
+  }; 
+  let InfoForCalendarEquipment = equipment[0]?.find(item => item.id === window.localStorage.getItem("equipmentId"))
+  let InfoForCalendar = executors?.find(item => item.id === window.localStorage.getItem("executorId")) 
   useEffect(() => {
     function handleClickOutside(event) {
       if (modalEventBodyRef.current && !modalEventBodyRef.current.contains(event.target)) {
         setSelectedEvent(null);
       }
-    }
-
+    } 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [modalEventBodyRef]);
- 
-  
+  }, [modalEventBodyRef]);  
+  function isWeekend(date) {
+    const day = date.getDay();
+    return day === 0 || day === 6; 
+  } 
+  function eventPropGetter(event, start, end, isSelected) {
+    const style = {};
+    if (isWeekend(start)) {
+      style.backgroundColor = 'red';  
+    }
+    return {
+      style,
+    };
+  }
+
+  console.log(selectedEvent)
+
   return (
     <div className={styles.calendar_wrapper}>
 
-     {/*  {events?.length !=0
+      {events === undefined
         ? (
           <div class="preloader">
             <div class="loader"> </div>
@@ -66,7 +75,7 @@ export const Calendars = ({
           </div>
         )
         : <div></div>
-      } */}
+      } 
       {InfoForCalendar
         ? (
           <div className='InfoForCalendar'>
@@ -84,7 +93,7 @@ export const Calendars = ({
             <p>Производственный участок: <span>{InfoForCalendarEquipment?.productionArea?.name}</span>  </p>
           </div>
         )
-      }
+      } 
       <Calendar
         localizer={localizer}
         events={events}
@@ -101,8 +110,9 @@ export const Calendars = ({
         messages={messages}
         weekdayFormat="dd"
         dayHeaderFormat="ddd"
-        toolbar={['month', 'week']} 
-      />
+        toolbar={['month', 'week']}
+        eventPropGetter={eventPropGetter}
+      /> 
       {selectedEvent && (
         <div className='ModalEvent'>
           <div className='ModalEventBody' ref={modalEventBodyRef}>
