@@ -562,7 +562,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
   const TechProc = texprocwelding?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.number}`,
     };
   });
   //select Сварочный шов  
@@ -1017,6 +1017,9 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
+                    type="number"
+                    min="0"
+                    step="1"
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}

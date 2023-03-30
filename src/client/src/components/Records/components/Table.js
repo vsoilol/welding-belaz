@@ -69,7 +69,7 @@ export const RecordsTable = ({ records, isRequesting }) => {
     },
 
     {
-      title: "Оборудование", render: (rowData) => (
+      title: "Оборудование ( номер )", render: (rowData) => (
         <div>
           <span> {rowData.weldingEquipment?.marking}  </span>
           <span> {rowData.weldingEquipment?.factoryNumber}</span>
