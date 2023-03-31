@@ -22,4 +22,16 @@ public interface IFileService
     Task<Result<DocumentDto>> GenerateExcelDeviationReportByWelderAsync(
         GenerateExcelDeviationReportByWelderRequest request
     );
+
+    Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync();
+
+    Task<Result<DocumentDto>> GenerateExcelEquipmentOperationTimeReportAsync();
+
+    Task<Result<DocumentDto>> GenerateExcelEquipmentDowntimeReportAsync();
+
+    Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportAsync();
+
+    Task<Result<DocumentDto>> GenerateExcelWelderOperationReportAsync();
+
+    Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportAsync();
 }

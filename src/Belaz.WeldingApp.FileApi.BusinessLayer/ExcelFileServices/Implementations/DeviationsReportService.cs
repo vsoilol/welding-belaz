@@ -21,32 +21,32 @@ public class DeviationsReportService : IExcelFileService<List<WeldPassageDeviati
         var shortTermDeviation = data.Sum(_ => _.ShortTermDeviation ?? 0) / 60;
         var weldingTime = data.Sum(_ => _.WeldingTime) / 60d;
 
-        var chartData = new List<ParameterDeviationReportModel>
+        var chartData = new List<TableReportModel>
         {
             new()
             {
                 Parameter = "В пределах нормы",
-                TimeSum = weldingTime - longTermDeviation - shortTermDeviation,
-                TimeSumPercentages =
+                Value = weldingTime - longTermDeviation - shortTermDeviation,
+                ValuePercentages =
                     (100 * (weldingTime - longTermDeviation - shortTermDeviation)) / weldingTime
             },
             new()
             {
                 Parameter = "Отклонение кратковременные, до 1 секунды",
-                TimeSum = shortTermDeviation,
-                TimeSumPercentages = (100 * shortTermDeviation) / weldingTime
+                Value = shortTermDeviation,
+                ValuePercentages = (100 * shortTermDeviation) / weldingTime
             },
             new()
             {
                 Parameter = "Отклонения длительные, более 1 секунды",
-                TimeSum = longTermDeviation,
-                TimeSumPercentages = (100 * longTermDeviation) / weldingTime
+                Value = longTermDeviation,
+                ValuePercentages = (100 * longTermDeviation) / weldingTime
             },
             new()
             {
                 Parameter = "Общее время сварки, мин",
-                TimeSum = weldingTime,
-                TimeSumPercentages = 100
+                Value = weldingTime,
+                ValuePercentages = 100
             }
         };
 
@@ -75,7 +75,7 @@ public class DeviationsReportService : IExcelFileService<List<WeldPassageDeviati
 
     private void CreateTableForParameterDeviations(
         ExcelWorksheet worksheet,
-        List<ParameterDeviationReportModel> chartData
+        List<TableReportModel> chartData
     )
     {
         worksheet.Cells[1, 1].Value = "Параметры режима сварки";
@@ -120,7 +120,7 @@ public class DeviationsReportService : IExcelFileService<List<WeldPassageDeviati
 
     private void CreateChartForParameterDeviations(
         ExcelWorksheet worksheet,
-        List<ParameterDeviationReportModel> chartData
+        List<TableReportModel> chartData
     )
     {
         var pieChart = worksheet.Drawings.AddPieChart("Chart1", ePieChartType.Pie3D);

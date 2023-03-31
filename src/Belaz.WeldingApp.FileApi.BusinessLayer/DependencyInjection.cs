@@ -7,6 +7,7 @@ using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
+using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,28 @@ public static class DependencyInjection
         services.AddScoped<
             IExcelFileService<List<WeldPassageDeviationsDto>>,
             DeviationsReportService
+        >();
+        services.AddScoped<IExcelFileService<SeamAmountDto>, SeamAmountReportService>();
+        services.AddScoped<IExcelExtensions, ExcelExtensions>();
+        services.AddScoped<
+            IExcelFileService<EquipmentOperationTimeDto>,
+            EquipmentOperationReportService
+        >();
+        services.AddScoped<
+            IExcelFileService<List<EquipmentDowntimeDto>>,
+            EquipmentDowntimeReportService
+        >();
+        services.AddScoped<
+            IExcelFileService<List<EquipmentOperationTimeWithShiftDto>>,
+            EquipmentOperationAnalysisReportService
+        >();
+        services.AddScoped<
+            IExcelFileService<WelderOperationTimeDto>,
+            WelderOperationReportService
+        >();
+        services.AddScoped<
+            IExcelFileService<List<EquipmentEfficiencyReportDto>>,
+            EquipmentEfficiencyReportService
         >();
 
         return services;

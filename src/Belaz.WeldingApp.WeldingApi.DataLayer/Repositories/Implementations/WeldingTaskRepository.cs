@@ -161,7 +161,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
                         .MainProduct
             )
             .Include(_ => _.SeamAccount.Seam.ProductionArea!.Workshop)
-            .Include(_ => _.SeamAccount.ProductAccount)
+            .Include(_ => _.SeamAccount.ProductAccount.WeldingEquipments)
             .Include(_ => _.SeamAccount.SeamResults)
             .Include(_ => _.SeamAccount.Seam.Product.TechnologicalProcess)
             .Include(_ => _.SeamAccount.Seam.TechnologicalInstruction)

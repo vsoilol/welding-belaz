@@ -53,4 +53,46 @@ public class FileController : ControllerBase
         var result = await _fileService.GenerateExcelDeviationReportByWelderAsync(request);
         return result.ToFile();
     }
+
+    [HttpGet("seamAmountReport")]
+    public async Task<IActionResult> GenerateExcelSeamAmountReportAsync()
+    {
+        var result = await _fileService.GenerateExcelSeamAmountReportAsync();
+        return result.ToFile();
+    }
+
+    [HttpGet("equipmentOperationTime")]
+    public async Task<IActionResult> GenerateExcelEquipmentOperationTimeReportAsync()
+    {
+        var result = await _fileService.GenerateExcelEquipmentOperationTimeReportAsync();
+        return result.ToFile();
+    }
+
+    [HttpGet("equipmentDowntime")]
+    public async Task<IActionResult> GenerateExcelEquipmentDowntimeReportAsync()
+    {
+        var result = await _fileService.GenerateExcelEquipmentDowntimeReportAsync();
+        return result.ToFile();
+    }
+
+    [HttpGet("equipmentOperationAnalysis")]
+    public async Task<IActionResult> GenerateExcelEquipmentOperationAnalysisReportAsync()
+    {
+        var result = await _fileService.GenerateExcelEquipmentOperationAnalysisReportAsync();
+        return result.ToFile();
+    }
+
+    [HttpGet("welderOperationReport")]
+    public async Task<IActionResult> GenerateExcelWelderOperationReportAsync()
+    {
+        var result = await _fileService.GenerateExcelWelderOperationReportAsync();
+        return result.ToFile();
+    }
+
+    [HttpGet("equipmentEfficiencyReport")]
+    public async Task<IActionResult> GenerateExcelEquipmentEfficiencyReportAsync()
+    {
+        var result = await _fileService.GenerateExcelEquipmentEfficiencyReportAsync();
+        return result.ToFile();
+    }
 }
