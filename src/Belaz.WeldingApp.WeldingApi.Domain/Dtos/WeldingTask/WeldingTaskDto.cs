@@ -57,7 +57,7 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
 
     public UserFullNameDto? Inspector { get; set; }
 
-    public WeldingEquipmentDto? WeldingEquipment { get; set; }
+    public List<WeldingEquipmentDto>? WeldingEquipments { get; set; }
 
     /// <summary>
     /// Есть ли отклонения
@@ -78,6 +78,10 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
             .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
             .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master.UserInfo))
             .ForMember(
+                dto => dto.WeldingEquipments,
+                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.WeldingEquipments)
+            )
+            .ForMember(
                 dto => dto.ManufacturedAmount,
                 opt =>
                     opt.MapFrom(
@@ -87,16 +91,16 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
                                 .Amount
                     )
             )
-            .ForMember(
-                dto => dto.WeldingEquipment,
-                opt =>
-                    opt.MapFrom(
-                        x =>
-                            x.WeldPassages.Any()
-                                ? x.WeldPassages.First().WeldingRecord.WeldingEquipment
-                                : null
-                    )
-            )
+            // .ForMember(
+            //     dto => dto.WeldingEquipment,
+            //     opt =>
+            //         opt.MapFrom(
+            //             x =>
+            //                 x.WeldPassages.Any()
+            //                     ? x.WeldPassages.First().WeldingRecord.WeldingEquipment
+            //                     : null
+            //         )
+            // )
             .ForMember(
                 dto => dto.AreDeviations,
                 opt =>

@@ -123,6 +123,15 @@ public class ProductAccountRepository : IProductAccountRepository
             )
         )!;
 
+        var seamResults = (
+            await _context.SeamResults.FirstOrDefaultAsync(
+                _ =>
+                    _.Status == ResultProductStatus.Manufactured
+                    && _.SeamAccount.ProductAccountId == id
+            )
+        )!;
+
+        seamResults.Amount = manufacturedAmount;
         productResults.Amount = manufacturedAmount;
 
         await _context.SaveChangesAsync();
