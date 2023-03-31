@@ -107,6 +107,16 @@ public class ProductAccountRepository : IProductAccountRepository
 
         productAccount.AmountFromPlan = amountFromPlan;
 
+        var seamResults = (
+            await _context.SeamResults.FirstOrDefaultAsync(
+                _ =>
+                    _.Status == ResultProductStatus.Manufactured
+                    && _.SeamAccount.ProductAccountId == id
+            )
+        )!;
+
+        seamResults.Amount = amountFromPlan;
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(id);
