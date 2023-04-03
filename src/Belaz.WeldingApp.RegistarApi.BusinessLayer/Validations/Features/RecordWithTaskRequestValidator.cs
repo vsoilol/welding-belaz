@@ -28,14 +28,10 @@ public class RecordWithTaskRequestValidator : AbstractValidator<RecordWithTaskRe
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<RecordWithTaskRequest, WeldingTask>(context));
 
-        RuleFor(model => model.WeldPassageNumber)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .GreaterThanOrEqualTo(1);
+        RuleFor(model => model.WeldPassageNumber).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
 
         RuleFor(model => model.PreheatingTemperature)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty()
             .GreaterThanOrEqualTo(0);
 
         RuleFor(model => model.WelderId)
@@ -45,14 +41,8 @@ public class RecordWithTaskRequestValidator : AbstractValidator<RecordWithTaskRe
 
         RuleFor(model => model.StartDateTime).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleForEach(model => model.Amperages)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .GreaterThanOrEqualTo(0);
+        RuleForEach(model => model.Amperages).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
 
-        RuleForEach(model => model.Voltages)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .GreaterThanOrEqualTo(0);
+        RuleForEach(model => model.Voltages).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
     }
 }

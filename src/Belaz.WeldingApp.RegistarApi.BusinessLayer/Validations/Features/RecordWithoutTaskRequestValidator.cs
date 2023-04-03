@@ -11,32 +11,24 @@ public class RecordWithoutTaskRequestValidator : AbstractValidator<RecordWithout
 {
     public RecordWithoutTaskRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.RegistarId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
-        
+        RuleFor(model => model.RegistarId).Cascade(CascadeMode.Stop).NotEmpty();
+
         RuleFor(model => model.WeldingEquipmentId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<RecordWithoutTaskRequest, WeldingEquipment>(context));
-        
+            .SetValidator(
+                new SqlIdValidatorFor<RecordWithoutTaskRequest, WeldingEquipment>(context)
+            );
+
         RuleFor(model => model.WelderId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<RecordWithoutTaskRequest, Welder>(context));
-        
-        RuleFor(model => model.StartDateTime)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
-        
-        RuleForEach(model => model.Amperages)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .GreaterThanOrEqualTo(0);
-        
-        RuleForEach(model => model.Voltages)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .GreaterThanOrEqualTo(0);
+
+        RuleFor(model => model.StartDateTime).Cascade(CascadeMode.Stop).NotEmpty();
+
+        RuleForEach(model => model.Amperages).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
+
+        RuleForEach(model => model.Voltages).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
     }
 }
