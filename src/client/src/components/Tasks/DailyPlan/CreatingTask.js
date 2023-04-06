@@ -33,7 +33,9 @@ export const CreatingTask = ({
     user,
     equipment,
     userRole,
-    techs
+    techs,
+
+    loadTasks
 
 }) => {
 
@@ -274,7 +276,7 @@ export const CreatingTask = ({
         }
 
     }
-    const [dateCrateTask, setdateCrateTask] = useState("");
+    const [dateCrateTask, setdateCrateTask] = useState(new Date().toLocaleDateString('ru-RU'));
 
 
     ///Создать задание
@@ -328,6 +330,7 @@ export const CreatingTask = ({
                 .then((response) => {
                     GetProductionbyChoiseDate(valueChioseDate)
                     GetAllDate()
+                    
                 })
                 .catch((error) => { });
         }
@@ -338,7 +341,7 @@ export const CreatingTask = ({
             })
                 .then((response) => {
                     GetProductionbyChoiseDate(valueChioseDate)
-                    GetAllDate()
+                    GetAllDate() 
                 })
                 .catch((error) => { });
         }
@@ -357,6 +360,9 @@ export const CreatingTask = ({
     const [productreason, setproductreason] = useState("");
 
     const [idPlan, setidPlan] = useState("");
+    const [toDay, settoDay] = useState(new Date().toLocaleDateString('ru-RU'));
+
+    
 
     function ChangeManufacturedDefective(AmountManufactured, AmountDefective) {
         api.put(`/productAccount/amountFromPlan`, {
@@ -404,6 +410,8 @@ export const CreatingTask = ({
             })
                 .then((response) => { GetProductionbyChoiseDate(valueDate) })
                 .catch((error) => { });
+
+                loadTasks();
         }
         else {
             api.put(`/productAccount/acceptedAmount`, {
@@ -421,6 +429,9 @@ export const CreatingTask = ({
             })
                 .then((response) => { GetProductionbyChoiseDate(valueDate) })
                 .catch((error) => { });
+
+
+                loadTasks();
         }
 
 
@@ -510,6 +521,7 @@ export const CreatingTask = ({
                                 onChange={(e) => {
                                     // handleChange(e);
                                     setdateCrateTask(e.target.value)
+                                    settoDay(new Date(e.target.value).toLocaleDateString('ru-RU'))
                                 }}
                                 width="200"
                                 style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
@@ -523,9 +535,12 @@ export const CreatingTask = ({
                                 autocomplete="off"
                             /><br></br>
 
-                            <button className={styles.create} onClick={CreatePlan}> Создать план</button>
+
                         </div>
+
+
                     </div>
+                    <button className={styles.create} onClick={CreatePlan} style={{ marginLeft: "20px" }}> Создать план на {toDay}</button>
                     {userRole === "Master" || userRole === "Admin"
                         ? (
                             <button className={styles.create} style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>

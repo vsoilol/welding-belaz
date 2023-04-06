@@ -263,9 +263,15 @@ export const Tasks = ({
     },
     {
       title: "Оборудование  ( инвентарный номер )",
-      field: "weldingEquipment.factoryNumber",
-      customFilterAndSearch: (term, rowData) => rowData?.weldingEquipment?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.weldingEquipment?.factoryNumber ?? "-"
+      field: "weldingEquipments.factoryNumber",
+      customFilterAndSearch: (term, rowData) => rowData?.weldingEquipments?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) => { 
+        if (rowData?.weldingEquipments) {
+          return <p>{`${rowData?.weldingEquipments[0]?.name} ${rowData?.weldingEquipments[0]?.factoryNumber}`}</p>
+        } else {
+          return <p>-</p>
+        } 
+      }
     },
     {
       title: "Исполнитель",
@@ -596,6 +602,7 @@ export const Tasks = ({
               equipment={equipment}
               userRole={userRole}
               techs={techs}
+              loadTasks={loadTasks}
             />
           )
           : (
