@@ -19,7 +19,7 @@ import {
   AreaChart,
   Area,
   ResponsiveContainer,
-  Layer 
+  Layer
 } from "recharts";
 import styles from "../styles.module.css";
 
@@ -116,18 +116,17 @@ export const RecordsTable = ({ records, isRequesting }) => {
       ArrayweldingCurrentValues.push({ id: 0, value: rowData.weldingCurrentValues[index] })
     }
 
- 
+
 
     const formatYAxis = (value) => Math.round(value / 10);
 
 
     return (
-      <TableContainer className={styles.border} component={Paper} >
-
-        <p>Сварочный ток, А</p>
-        <div className={styles.AxisBlocks}> 
+      <TableContainer className={styles.border} component={Paper}>
+        <div className={styles.AxisBlocks}>
+          <p>Сварочный ток, А</p>
           <ResponsiveContainer width="100%" height={250}>
-            <LineChart 
+            <LineChart
               data={ArrayVoltageValues}
               syncId="anyId"
               margin={{
@@ -138,16 +137,20 @@ export const RecordsTable = ({ records, isRequesting }) => {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <YAxis  
+              <YAxis
                 label={{
                   value: 'Ток ',
                   angle: -90,
                   offset: 6,
-                  position: 'insideLeft', 
-                }} 
+                  position: 'insideLeft',
+                }}
                 labelOffset={-80}
-              /> 
-              <XAxis interval={9} tickFormatter={formatYAxis}  label={{ value: 'Время сварки ( секунды )', position: 'insideBottom', offset: -4 }}/>
+              />
+              <XAxis
+                interval={9}
+                tickFormatter={formatYAxis}
+                label={{ value: 'Время сварки ( секунды )', position: 'insideBottom', offset: -4 }}
+              />
               <Tooltip />
               <Line
                 type="monotone"
@@ -157,52 +160,49 @@ export const RecordsTable = ({ records, isRequesting }) => {
                 dot={false}
               />
             </LineChart>
-          </ResponsiveContainer> 
+          </ResponsiveContainer>
         </div>
 
-        <p>Напряжение на дуге, В</p>
-
-        <div className={styles.AxisBlocks}> 
+        <div className={styles.AxisBlocks}  >
+          <p>Напряжение на дуге, В</p>
           <ResponsiveContainer width="100%" height={250}>
-       
-            <LineChart width={500} height={400}  
-             data={ArrayweldingCurrentValues}
-             syncId="anyId"
-             margin={{
-               top: 10,
-               right: 30,
-               left: 0,
-               bottom: 0,
-             }}
+            <LineChart
+              data={ArrayweldingCurrentValues}
+              syncId="anyId"
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <YAxis  
+              <YAxis
                 label={{
                   value: 'Напряжение ',
                   angle: -90,
                   offset: 10,
-                  position: 'insideLeft', 
-                }} 
+                  position: 'insideLeft',
+                }}
                 labelOffset={-80}
               />
-              <XAxis 
-                interval={9} 
-                tickFormatter={formatYAxis}   
-                label={{ value: 'Время сварки ( секунды )', position: 'insideBottom', offset: -2 }} 
+              <XAxis
+                interval={9}
+                tickFormatter={formatYAxis}
+                label={{ value: 'Время сварки ( секунды )', position: 'insideBottom', offset: -2 }}
                 style={{ marginBottom: 45 }}
               />
               <Tooltip />
-
               <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#82ca9d"
-                  fill="#82ca9d"
-                  dot={false}
-                />  
-              <Brush interval={9} tickFormatter={formatYAxis}  height={45}  marginTop={20} /> 
+                type="monotone"
+                dataKey="value"
+                stroke="#82ca9d"
+                fill="#82ca9d"
+                dot={false}
+              />
+              <Brush interval={9}  tickFormatter={formatYAxis}  height={45}  marginTop={30}  />
             </LineChart>
-          </ResponsiveContainer> 
+          </ResponsiveContainer>
         </div>
 
 
