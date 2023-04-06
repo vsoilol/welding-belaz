@@ -246,6 +246,8 @@ export const Calendar = ({
     params["WorkingShiftnumber"] = valueWorkingShift
     params["workingShifts"] = SetworkingShifts(valueWorkingShift)
 
+
+     console.log(params)
     if (fun === "AddWorkDay") {
       if (valueObj === 1) {
         params["valueExecutors"] = null
@@ -253,12 +255,15 @@ export const Calendar = ({
       else {
         params["valueEquipment"] = null
       }
+      if (params?.workingShifts?.number===3) {
+        params.number++
+      }
       addDay(params)
     }
     if (fun === "EditWorkDay") {
       editDay(params)
     }
-    // console.log(params)
+  
   }
 
   function SetworkingShifts(valueWorkingShift) {
@@ -310,7 +315,7 @@ export const Calendar = ({
 
     }
   }); 
-
+ 
 
   return (
     <div className={styles.innerWrapper}>
