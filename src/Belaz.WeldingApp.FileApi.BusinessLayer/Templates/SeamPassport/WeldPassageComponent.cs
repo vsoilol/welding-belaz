@@ -94,7 +94,7 @@ public class WeldPassageComponent : IComponent
                         || WeldPassageInstructionInfo.PreheatingTemperatureMin is null
                     )
                     {
-                        ensuringAccessText = "Да";
+                        ensuringAccessText = "-";
                     }
                     else
                     {
@@ -173,7 +173,7 @@ public class WeldPassageComponent : IComponent
                     .TotalSeconds
             );
 
-            var weldTimeString = String.Format("{0:0.##}", weldingTimeSeconds.TotalMinutes);
+            var weldTimeString = String.Format("{0:0.##}", weldingTimeSeconds.TotalSeconds / 60);
 
             table.Cell().Element(BlockLeft).Text("Время сварки, мин").Style(Typography.Normal);
 
