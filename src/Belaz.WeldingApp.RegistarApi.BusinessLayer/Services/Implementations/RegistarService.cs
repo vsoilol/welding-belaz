@@ -312,9 +312,17 @@ public class RegistarService : IRegistarService
             WeldingTaskId = taskId,
             WeldingRecord = record,
             ShortTermDeviation =
-                (amperagesTermDeviation.ShortCount + voltagesTermDeviation.ShortCount) * 0.1,
+                (
+                    amperagesTermDeviation.ShortCount > voltagesTermDeviation.ShortCount
+                        ? amperagesTermDeviation.ShortCount
+                        : voltagesTermDeviation.ShortCount
+                ) * 0.1,
             LongTermDeviation =
-                (amperagesTermDeviation.LongCount + voltagesTermDeviation.LongCount) * 0.1,
+                (
+                    amperagesTermDeviation.LongCount > voltagesTermDeviation.LongCount
+                        ? amperagesTermDeviation.LongCount
+                        : voltagesTermDeviation.LongCount
+                ) * 0.1,
             IsEnsuringCurrentAllowance = IsProvideAllowance(
                 record.WeldingCurrentValues,
                 weldPassageInstruction.WeldingCurrentMin,
