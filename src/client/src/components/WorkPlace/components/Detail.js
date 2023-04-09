@@ -143,10 +143,13 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
     //Добавить Деталь
     if (isModalNumb == 14) {
       variables["status"] = "add"
+      variables["mainProductId"] = valuetProduct
+      
       addDetail(variables)
     }
     //Редактировать Деталь
     if (isModalNumb == 6) {
+      variables["mainProductId"] = valuetProduct
       editDetail(variables)
     }
 
@@ -1000,7 +1003,7 @@ const knotsOptions = knot?.map((item) => {
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -1011,7 +1014,7 @@ const knotsOptions = knot?.map((item) => {
                     }}
                     options={workplaceIdOptions}
                   />
-                </div>
+                </div> */}
                 <div className={styles.row}>
                   <Select
                     name="valuetProduct"
