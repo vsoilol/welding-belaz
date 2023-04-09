@@ -334,7 +334,7 @@ function* addProduct(variables) {
       if (variables.payload.valEx === undefined) {
         const { data } = yield call(api.post, `/product`, {
           "name": variables.payload.name,
-          "number": variables.payload.number,
+          "number": `${variables.payload.number}`,
           "isControlSubject": true,
           "productionAreaId": variables.payload.productionAreaId,
           "workplaceId": variables.payload.workplaceId,
@@ -362,7 +362,7 @@ function* editProduct(variables) {
     const { data } = yield call(api.put, `/product`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": variables.payload.number,
+      "number": `${variables.payload.number}`,
       "isControlSubject": true,
       "productionAreaId": variables.payload.productionAreaId,
       "workplaceId": variables.payload.workplaceId,
@@ -417,7 +417,7 @@ function* addKnot(variables) {
       if (variables.payload.valEx === undefined) {
         const { data } = yield call(api.post, `/knot`, {
           "name": variables.payload.name,
-          "number": variables.payload.number,
+          "number": `${variables.payload.number}`,
           "isControlSubject": false,
           "productionAreaId": variables.payload.productionAreaId,
           "workplaceId": variables.payload.workplaceId,
@@ -447,7 +447,7 @@ function* editKnot(variables) {
     const { data } = yield call(api.put, `/knot`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": variables.payload.number,
+      "number": `${variables.payload.number}`,
       "isControlSubject": false,
       "productionAreaId": variables.payload.productionAreaId,
       "technologicalProcessId": variables.payload.technologicalProcessId,
@@ -493,7 +493,7 @@ function* addDetail(variables) {
        
         const { data } = yield call(api.post, `/detail`, {
           "name": variables.payload.name,
-          "number": variables.payload.number,
+          "number": `${variables.payload.number}`,
           "isControlSubject": true,
           "productionAreaId": variables.payload.productionAreaId,
           "workplaceId": variables.payload.workplaceId,
@@ -522,7 +522,7 @@ function* editDetail(variables) {
     const { data } = yield call(api.put, `/detail`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": variables.payload.number,
+      "number": `${variables.payload.number}`,
       "seams":variables.payload.seams,
       "isControlSubject": true,
       "productionAreaId": variables.payload.productionAreaId,
@@ -562,22 +562,15 @@ function* addSeam(variables) {
       });
     }
 
-    if (variables.payload.valEx === undefined) {
+    if (variables.payload.valEx === undefined) { 
       const { data } = yield call(api.post, `/seam`, {
-        
-        "isControlSubject": true,
-        "isPerformed": true,
-        
-        // "workplaceId": variables.payload.workplaceId,
-
         "number": variables.payload.number,
         "isControlSubject": true,
         "isPerformed": true,
         "length": 0,
         "productionAreaId": variables.payload.productionAreaId,
-        "productId": null
-        // "technologicalInstructionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        // "productId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        "technologicalInstructionId": variables.payload.technologicalProcessId,
+        "productId": variables.payload.productId 
       });
       yield put(addSeamSuccess(data));
     }
@@ -588,14 +581,16 @@ function* addSeam(variables) {
   }
 }
 function* editSeam(variables) {
-  try {
-    console.log(variables)
-    const { data } = yield call(api.put, `/seam`, {
+  try { 
+    const { data } = yield call(api.put, `/seam`, { 
       "id": variables.payload.id,
       "number": variables.payload.number,
       "isControlSubject": true,
+      "isPerformed": true,
+      "length": 0,
       "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId": variables.payload.workplaceId,
+      "technologicalInstructionId": variables.payload.technologicalProcessId,
+      "productId": variables.payload.productId 
     });
     yield put(editSeamSuccess(data));
   } catch (error) {

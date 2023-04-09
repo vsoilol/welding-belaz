@@ -527,8 +527,9 @@ export const Knot = ({
 
   ///Изменение заголовка модалки
   function TitleTextModal(params) {
-    if (params === 6) {
-      return "Редактировать Деталь"
+    console.log(params)
+    if (params === 5) {
+      return "Редактировать Узел"
     }
 
     if (params === 13) {
