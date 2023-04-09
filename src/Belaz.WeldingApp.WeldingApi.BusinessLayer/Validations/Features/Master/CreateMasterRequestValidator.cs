@@ -11,24 +11,32 @@ public class CreateMasterRequestValidator : AbstractValidator<CreateMasterReques
     {
         RuleFor(model => model.RfidTag)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+            .NotEmpty()
+            .SetAsyncValidator(
+                new IsRfidTagExistValidatorFor<
+                    CreateMasterRequest,
+                    Domain.Entities.IdentityUser.UserData
+                >(context)
+            );
 
-        RuleFor(model => model.FirstName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.ServiceNumber).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.LastName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.Position).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.MiddleName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.FirstName).Cascade(CascadeMode.Stop).NotEmpty();
+
+        RuleFor(model => model.LastName).Cascade(CascadeMode.Stop).NotEmpty();
+
+        RuleFor(model => model.MiddleName).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateMasterRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateMasterRequest,
+                    Domain.Entities.Production.ProductionArea
+                >(context)
+            );
     }
 }

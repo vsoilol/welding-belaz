@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Inspector;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Inspector;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
@@ -14,29 +15,31 @@ public class UpdateInspectorRequestValidator : AbstractValidator<UpdateInspector
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateInspectorRequest,
-                Domain.Entities.Users.Inspector>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<UpdateInspectorRequest, Domain.Entities.Users.Inspector>(
+                    context
+                )
+            );
 
         RuleFor(model => model.RfidTag)
             .Cascade(CascadeMode.Stop)
+            .SetAsyncValidator(new IsInspectorRfidTagUniqueValidatorForUpdate(context))
             .NotEmpty();
 
-        RuleFor(model => model.FirstName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.FirstName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.LastName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.LastName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.MiddleName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.MiddleName).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateInspectorRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateInspectorRequest,
+                    Domain.Entities.Production.ProductionArea
+                >(context)
+            );
     }
 }
