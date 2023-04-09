@@ -280,10 +280,10 @@ export const CreatingTask = ({
 
 
     ///Создать задание
-    function CreateTask() {
+    function CreateTask() { 
         if (userRole === "Admin") {
             api.post(`/productAccount/generateTasks`, {
-                "date": new Date().toLocaleDateString('ru-RU'),
+                "date": valueDate,
                 "productionAreaId": masters.find(obj => obj.id === valChioseMaster)?.productionArea.id,
                 "masterId": masters.find(obj => obj.id === valChioseMaster)?.id,
             })
@@ -294,7 +294,7 @@ export const CreatingTask = ({
         }
         else {
             api.post(`/productAccount/generateTasks`, {
-                "date": new Date().toLocaleDateString('ru-RU'),
+                "date": valueDate,
                 "productionAreaId": localStorage.getItem('USER_productionAreaId'),
                 "masterId": masters[0].id
             })
@@ -543,7 +543,7 @@ export const CreatingTask = ({
                     <button className={styles.create} onClick={CreatePlan} style={{ marginLeft: "20px" }}> Создать план на {toDay}</button>
                     {userRole === "Master" || userRole === "Admin"
                         ? (
-                            <button className={styles.create} style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>
+                            <button className={`${styles.create} ${styles.createTaskBtn}`}style={{ marginLeft: "15px" }} onClick={CreateTask}> Создать задание</button>
                         )
                         : (
                             <div></div>

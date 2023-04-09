@@ -70,7 +70,7 @@ function* addInst(variables) {
       "weldPassages": [
         {
           "name": variables.payload.weldPassagesName,
-          "number": variables.payload.number,
+          "number": variables.payload.weldPassagesNumber,
           "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
           "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
           "arcVoltageMin": Number(variables.payload.arcVoltageMin),
@@ -78,7 +78,7 @@ function* addInst(variables) {
           "preheatingTemperatureMin": Number(variables.payload.preheatingTemperatureMin),
           "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
         }
-      ]
+      ] 
     });
     window.location.reload();
     // yield put(addInstSuccess(variables.payload));
@@ -91,12 +91,12 @@ function* editInst(variables) {
   try {  
     const { data } = yield call(api.put, `/TechnologicalInstruction`, {
       "id": variables.payload.id,
-      "number": Number(variables.payload.number),
+      "number": variables.payload.number,
       "name": variables.payload.name,  
       "weldPassages": [
         {
           "id": variables.payload.weldPassagesId,
-          "number": Number(variables.payload.number),
+          "number": variables.payload.weldPassagesNumber,
           "name": variables.payload.weldPassagesName,
           "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
           "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
@@ -106,7 +106,7 @@ function* editInst(variables) {
           "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
         }
       ]
-    }); 
+    });  
     yield put(editInstSuccess(data));
   } catch (error) {
     yield put(editInstFailure(error));

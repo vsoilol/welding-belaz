@@ -78,7 +78,7 @@ function* addEquipment({ payload }) {
       "rfidTag": payload.rfidTag,
       "name": payload.name,
       "marking": payload.marking,
-      "factoryNumber": payload.factoryNumber,
+      "factoryNumber": `${payload.factoryNumber}`,
       "commissioningDate": new Date(payload.commissioningDate).toLocaleDateString(),
       "height": Number(payload.height),
       "width": Number(payload.width),
@@ -92,7 +92,8 @@ function* addEquipment({ payload }) {
       "weldingCurrentMax": Number(payload.weldingCurrentMax),
       "arcVoltageMin": Number(payload.arcVoltageMin),
       "arcVoltageMax": Number(payload.arcVoltageMax),
-      "postId": payload.postId
+      "postId": payload.postId,
+      "workplaceIds": payload.workplaceIds
     }); 
     yield put(addEquipmentSuccess(data));
   } catch (error) {
@@ -109,7 +110,7 @@ function* editEquipment({ payload }) {
       "rfidTag": payload.rfidTag,
       "name": payload.name,
       "marking": payload.marking,
-      "factoryNumber": payload.factoryNumber,
+      "factoryNumber": `${payload.factoryNumber}`,
       "commissioningDate": payload.commissioningDate,
       "height": Number(payload.height),
       "width": Number(payload.width),
@@ -125,6 +126,7 @@ function* editEquipment({ payload }) {
       "arcVoltageMin": Number(payload.arcVoltageMin),
       "arcVoltageMax": Number(payload.arcVoltageMax),
       "postId": payload.postId,
+      "workplaceIds": payload.workplaceIds
     }); 
     yield put(editEquipmentSuccess(data));
   } catch (error) {

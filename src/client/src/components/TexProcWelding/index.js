@@ -196,14 +196,14 @@ export const TexProcWelding = ({
       },
     },
     {
-      title: "Температура предварительного нагрева ",
-      render: (rowData) => {
-        return (
-          <p>
-            {`${rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin} - ${rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax}`}
-          </p>
-        );
-      },
+      title: "Температура предварительного нагрева",
+      render: (rowData) => (
+        <p>
+          {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin != null && rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax != null
+            ? `${rowData.weldPassageInstructions[0].preheatingTemperatureMin} - ${rowData.weldPassageInstructions[0].preheatingTemperatureMax}`
+            : '-'}
+        </p>
+      ),
     }
   ]
   const renderRowChildren = (rowData) => {
@@ -466,10 +466,23 @@ export const TexProcWelding = ({
   //Запрос на редактирование или добавление
   function SendData(variables) {
     variables["seamId"] = valuetSeam;
-    variables["technologicalProcessId"] = texprocwelding[0].id; 
-    variables["number"] = texprocwelding.find(task => task.id === valueTexProcOptions).number
+    variables["technologicalProcessId"] = texprocwelding[0].id;  
 
-    if (isModalOpenNumb === 0) {
+   
+    if(modalData!=null){
+      variables["number"] = modalData?.number ;
+      variables["weldPassagesNumber"] = modalData.weldPassageInstructions[0].number  
+    }
+    else{
+      variables["number"] = 1
+      variables["weldPassagesNumber"] = 1
+    }
+    
+    /* texprocwelding.find(task => task.id === valueTexProcOptions).number */
+    
+
+    
+    if (isModalOpenNumb === 0) { 
       addInst(variables)
     }
     if (isModalOpenNumb === 1) {
