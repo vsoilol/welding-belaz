@@ -19,9 +19,9 @@ public interface IProductRepository
 
     Task<List<ProductDto>> GetAllByInspectorIdAsync(Guid inspectorId, ProductType productType);
 
-    Task<ProductDto> CreateAsync(Product entity, Guid mainProductId);
+    Task<ProductDto> CreateAsync(Product entity, Guid? mainProductId);
 
-    Task<ProductDto> UpdateAsync(Product entity, Guid mainProductId);
+    Task<ProductDto> UpdateAsync(Product entity, Guid? mainProductId);
 
     Task AssignProductToMasterAsync(Guid productId, Guid masterId);
 

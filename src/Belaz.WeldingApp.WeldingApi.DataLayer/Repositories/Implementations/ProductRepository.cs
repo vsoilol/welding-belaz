@@ -80,7 +80,7 @@ public class ProductRepository : IProductRepository
         return mapProducts;
     }
 
-    public async Task<ProductDto> CreateAsync(Product entity, Guid mainProductId)
+    public async Task<ProductDto> CreateAsync(Product entity, Guid? mainProductId)
     {
         var mainProduct = await _context.Products
             .Where(_ => _.Id == mainProductId)
@@ -95,7 +95,7 @@ public class ProductRepository : IProductRepository
         return await GetByIdAsync(newProduct.Id);
     }
 
-    public async Task<ProductDto> UpdateAsync(Product entity, Guid mainProductId)
+    public async Task<ProductDto> UpdateAsync(Product entity, Guid? mainProductId)
     {
         var updatedProduct = (
             await _context.Products
