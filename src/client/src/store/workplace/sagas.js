@@ -415,13 +415,12 @@ function* addKnot(variables) {
       }
   
       if (variables.payload.valEx === undefined) {
-        const { data } = yield call(api.post, `/knot`, {
+        const { data } = yield call(api.post, `/knot`, { 
+
           "name": variables.payload.name,
           "number": `${variables.payload.number}`,
           "isControlSubject": false,
-          "productionAreaId": variables.payload.productionAreaId,
-          "workplaceId": variables.payload.workplaceId,
-          "seams":variables.payload.seams,
+          "productionAreaId": variables.payload.productionAreaId,  
           "technologicalProcessId": variables.payload.technologicalProcessId,
           "mainProductId": variables.payload.mainProductId
         });
@@ -449,10 +448,9 @@ function* editKnot(variables) {
       "name": variables.payload.name,
       "number": `${variables.payload.number}`,
       "isControlSubject": false,
-      "productionAreaId": variables.payload.productionAreaId,
+      "productionAreaId": variables.payload.productionAreaId,  
       "technologicalProcessId": variables.payload.technologicalProcessId,
-      "workplaceId": variables.payload.workplaceId,
-      "seams":variables.payload.seams,
+      "mainProductId": variables.payload.mainProductId
     });
     yield put(editKnotSuccess(data));
   } catch (error) {
@@ -495,10 +493,9 @@ function* addDetail(variables) {
           "name": variables.payload.name,
           "number": `${variables.payload.number}`,
           "isControlSubject": true,
-          "productionAreaId": variables.payload.productionAreaId,
-          "workplaceId": variables.payload.workplaceId,
-          "technologicalProcessId": variables.payload.technologicalProcessId,
-          "seams":variables.payload.seams,
+          "productionAreaId": variables.payload.productionAreaId, 
+          "technologicalProcessId": variables.payload.technologicalProcessId,  
+          "mainProductId": variables.payload.mainProductId,  
         });
         yield put(addDetailSuccess(data));
       }
@@ -522,12 +519,12 @@ function* editDetail(variables) {
     const { data } = yield call(api.put, `/detail`, {
       "id": variables.payload.id,
       "name": variables.payload.name,
-      "number": `${variables.payload.number}`,
-      "seams":variables.payload.seams,
+      "number": `${variables.payload.number}`, 
       "isControlSubject": true,
       "productionAreaId": variables.payload.productionAreaId,
       "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId,
+      "technologicalProcessId": variables.payload.technologicalProcessId, 
+      "mainProductId": variables.payload.mainProductId,  
     });
     yield put(editDetailSuccess(data));
   } catch (error) {
@@ -570,7 +567,7 @@ function* addSeam(variables) {
         "length": 0,
         "productionAreaId": variables.payload.productionAreaId,
         "technologicalInstructionId": variables.payload.technologicalProcessId,
-        "productId": variables.payload.productId 
+        "productId": variables.payload.productId, 
       });
       yield put(addSeamSuccess(data));
     }

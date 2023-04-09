@@ -137,16 +137,18 @@ export const Knot = ({
     variables["postId"] = valuetWorkPlace
     variables["workplaceId"] = valueWorkplace
 
-
-    variables["mainProductId"] = valuetProduct
+ 
 
     //Добавить Узел
     if (isModalNumb == 13) {
       variables["status"] = "add"
+      variables["mainProductId"] = valuetProduct
       addKnot(variables)
     }
     //Редактировать Узел
     if (isModalNumb == 5) {
+      variables["mainProductId"] = valuetProduct
+
       editKnot(variables)
     }
 
@@ -1062,7 +1064,7 @@ export const Knot = ({
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -1073,7 +1075,7 @@ export const Knot = ({
                     }}
                     options={workplaceIdOptions}
                   />
-                </div>
+                </div> */}
 
                 <div className={styles.row}>
                   <Select
