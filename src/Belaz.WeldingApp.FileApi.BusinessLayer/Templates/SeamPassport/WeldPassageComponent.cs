@@ -480,8 +480,10 @@ public class WeldPassageComponent : IComponent
         model.Series.Add(main);
 
         var minValue = values.Min();
+        var maximumAxes =
+            (values.Max() + 10 < max) && max is not null ? (double)max + 10 : values.Max() + 10;
 
-        var valuesDifference = values.Max() - minValue;
+        var valuesDifference = maximumAxes - minValue;
         var leftAxesStep = 10;
 
         if (valuesDifference / 10 > 15)
@@ -499,7 +501,7 @@ public class WeldPassageComponent : IComponent
                 MajorGridlineStyle = LineStyle.Solid,
                 MajorGridlineThickness = 1,
                 Minimum = minimumAxes,
-                Maximum = values.Max() + 10,
+                Maximum = maximumAxes,
                 MajorStep = leftAxesStep,
                 FontSize = 14,
             }
