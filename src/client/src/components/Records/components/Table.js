@@ -162,18 +162,17 @@ export const RecordsTable = ({ records, isRequesting }) => {
             </LineChart>
           </ResponsiveContainer>
         </div>
-
-        <div className={styles.AxisBlocks}  >
-          <p>Напряжение на дуге, В</p>
+        <div className={styles.AxisBlocks}>
+        <p>Напряжение на дуге, В</p>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart
-              data={ArrayweldingCurrentValues}
+               data={ArrayweldingCurrentValues}
               syncId="anyId"
               margin={{
                 top: 10,
                 right: 30,
                 left: 0,
-                bottom: 0,
+                bottom: 20,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
@@ -200,12 +199,20 @@ export const RecordsTable = ({ records, isRequesting }) => {
                 fill="#82ca9d"
                 dot={false}
               />
-              <Brush interval={9}  tickFormatter={formatYAxis}  height={45}  marginTop={30}  />
             </LineChart>
           </ResponsiveContainer>
         </div>
-
-
+        <div className={styles.AxisBlocks}  > 
+          <ResponsiveContainer width="100%" height={50}>
+            <LineChart
+              data={ArrayweldingCurrentValues}
+              syncId="anyId" 
+            >
+               
+              <Brush interval={9}  tickFormatter={formatYAxis}  height={45}  marginTop={30}  />
+            </LineChart>
+          </ResponsiveContainer>
+        </div> 
       </TableContainer>
     );
   };

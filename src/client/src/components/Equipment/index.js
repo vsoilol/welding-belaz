@@ -446,6 +446,7 @@ export const Equipment = ({
     variables["postNumber"] = valuetPostsNumber
     variables["commissioningDate"] = variables.commissioningDate
     variables["nextAttestationDate"] = new Date(variables.nextAttestationDate).toLocaleDateString()
+    variables["workplaceIds"] = []
     //Добавить Оборудование 
     if (isModalNumb == 0) {
       addEquipment(variables)
