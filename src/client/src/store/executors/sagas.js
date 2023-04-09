@@ -86,7 +86,7 @@ function* addExecutor({ payload }) {
       "workplaceId": payload.workplaceId,
       "weldingEquipmentId": payload.weldingEquipment[0].id,
       "position":  payload.position, 
-      "serviceNumber":  payload.serviceNumber, 
+      "serviceNumber":  `${payload.serviceNumber}`, 
     }); 
     yield put(addExecutorSuccess(data));
   } catch (error) {
@@ -107,7 +107,7 @@ function* editExecutor({ payload, userId }) {
       "workplaceId": payload.workplaceId,
       "weldingEquipmentId": payload.weldingEquipmentId,
       "position":  payload.position, 
-      "serviceNumber":  payload.serviceNumber, 
+      "serviceNumber":  `${payload.serviceNumber}`, 
     }); 
     yield put(editExecutorSuccess(data));
   } catch (error) {
@@ -149,7 +149,7 @@ function* addMaster({ payload }) {
       "productionAreaId": payload.productionAreaId,
       "weldingEquipmentId": payload.weldingEquipmentId, 
       "position":  payload.position, 
-      "serviceNumber":  payload.serviceNumber, 
+      "serviceNumber":  `${payload.serviceNumber}`, 
     }); 
     yield put(addMasterSuccess(data));
   } catch (error) {
@@ -169,7 +169,7 @@ function* editMaster({payload}) {
       "weldingEquipmentId": payload.weldingEquipmentId,
       "id": payload.id,
       "position":  payload.position, 
-      "serviceNumber":  payload.serviceNumber, 
+      "serviceNumber":  `${payload.serviceNumber}`, 
     }); 
     yield put(editMasterSuccess(data));
   } catch (error) {
@@ -211,7 +211,7 @@ function* addTech({ payload }) {
       "middleName": payload.middleName,
       "productionAreaId": payload.productionAreaId,
       "position":  payload.position, 
-      "serviceNumber":  payload.serviceNumber, 
+      "serviceNumber":  `${payload.serviceNumber}`, 
     }); 
     yield put(addTechSuccess(data));
   } catch (error) {
@@ -230,7 +230,7 @@ function* editTech({ payload, userId }) {
        "productionAreaId": payload.productionAreaId,
        "id": payload.id,
        "position":  payload.position, 
-       "serviceNumber":  payload.serviceNumber, 
+       "serviceNumber":  `${payload.serviceNumber}`, 
     }); 
     yield put(editTechSuccess(data));
   } catch (error) {

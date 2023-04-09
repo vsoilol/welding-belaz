@@ -267,7 +267,15 @@ export const Tasks = ({
       customFilterAndSearch: (term, rowData) => rowData?.weldingEquipments?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
       render: (rowData) => { 
         if (rowData?.weldingEquipments) {
-          return <p>{`${rowData?.weldingEquipments[0]?.name} ${rowData?.weldingEquipments[0]?.factoryNumber}`}</p>
+          return (
+            <ul>
+              {rowData.weldingEquipments.map(equipment => (
+                <li key={equipment.factoryNumber}>
+                  {`${equipment.name} ${equipment.factoryNumber}`}
+                </li>
+              ))}
+            </ul>
+          );
         } else {
           return <p>-</p>
         } 

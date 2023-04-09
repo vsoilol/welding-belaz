@@ -610,7 +610,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == ""
+                      values.number == ""  
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

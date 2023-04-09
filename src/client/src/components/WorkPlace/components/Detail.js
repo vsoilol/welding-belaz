@@ -1071,7 +1071,7 @@ const knotsOptions = knot?.map((item) => {
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == "" /* || valuetSeam.length == 0 */
+                      values.number == ""   
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

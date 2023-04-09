@@ -52,6 +52,22 @@ export const Seam = ({
   userRole,
   addSeam,
   editSeam,
+
+
+  valueProdArea, 
+  valuetPosts,
+  valuetTechProc,
+  valuetSeam,
+  valuetWorkPlace,       
+  setValuetPosts,
+  setValuetTechProc,
+  setvaluetProduct,
+  setvaluetKnots,
+  setvaluetDetail,
+     
+  valuetProduct, 
+  valuetKnots,  
+  valuetDetail,
 }) => {
 
   const [modalData, setModalData] = useState(null); 
@@ -251,27 +267,28 @@ export const Seam = ({
   function SendData(variables) {
 
 
-    // variables["workshopId"] = valueProdArea
-    // variables["workshopNumber"] = SetValue(valueProdArea, 0)
-    // variables["productionAreaId"] = valuetPosts
-    // variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
+    variables["workshopId"] = valueProdArea
+    variables["workshopNumber"] = SetValue(valueProdArea, 0)
+    variables["productionAreaId"] = productionArea
+    variables["productionAreaNumber"] = SetValue(productionArea, 1)
 
-    // variables["technologicalProcessId"] = valuetTechProc
+    variables["technologicalProcessId"] = valuetTechProc
 
-    // variables["seams"] = [valuetSeam]
+    variables["seams"] = [valuetSeam]
 
-    // variables["postId"] = valuetWorkPlace
-    // variables["workplaceId"] = valueWorkplace
+    variables["postId"] = valuetWorkPlace
+    variables["workplaceId"] = valueWorkplace
+    variables["productId"] = productValue
 
  
-    // //Добавить Сварочный шов
-    // if (isModalNumb == 15) {
-    //   addSeam(variables)
-    // }
-    // //Редактировать Сварочный шов
-    // if (isModalNumb == 7) {
-    //   editSeam(variables)
-    // }
+    //Добавить Сварочный шов
+    if (isModalNumb == 15) {
+      addSeam(variables)
+    }
+    //Редактировать Сварочный шов
+    if (isModalNumb == 7) {
+      editSeam(variables)
+    }
 
   }
   function SetValue(valueId, index) {
