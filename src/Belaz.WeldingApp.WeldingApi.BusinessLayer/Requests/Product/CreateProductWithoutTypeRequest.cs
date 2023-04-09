@@ -19,7 +19,7 @@ public class CreateProductWithoutTypeRequest : IMapTo<Domain.Entities.ProductInf
 
     public Guid TechnologicalProcessId { get; set; }
 
-    public Guid MainProductId { get; set; }
+    public Guid? MainProductId { get; set; }
 
     public void Mapping(Profile profile)
     {
