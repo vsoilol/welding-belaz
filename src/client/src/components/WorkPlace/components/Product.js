@@ -1027,7 +1027,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -1038,7 +1038,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     }}
                     options={workplaceIdOptions}
                   />
-                </div>
+                </div> */}
 
                 <div className={styles.row}>
                   <Select
