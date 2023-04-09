@@ -13,19 +13,18 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
         RuleFor(model => model.RfidTag)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .When(_ => _.RfidTag is not null);
+            .SetAsyncValidator(
+                new IsRfidTagExistValidatorFor<
+                    CreateEquipmentRequest,
+                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+                >(context)
+            );
 
-        RuleFor(model => model.Name)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.Name).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.Marking)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.Marking).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.FactoryNumber)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.FactoryNumber).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.CommissioningDate)
             .Cascade(CascadeMode.Stop)
@@ -46,21 +45,15 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
             .GreaterThanOrEqualTo(1)
             .When(_ => _.Lenght is not null);
 
-        RuleFor(model => model.GroupNumber)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.GroupNumber).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.ManufacturerName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.ManufacturerName).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.NextAttestationDate)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new DateValidatorFor<CreateEquipmentRequest>());
 
-        RuleFor(model => model.WeldingProcess)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.WeldingProcess).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.IdleVoltage)
             .Cascade(CascadeMode.Stop)
@@ -86,7 +79,7 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
             .Cascade(CascadeMode.Stop)
             .GreaterThan(0)
             .When(_ => _.ArcVoltageMax is not null);
-        
+
         RuleFor(model => model.LoadDuration)
             .Cascade(CascadeMode.Stop)
             .GreaterThan(0)
@@ -95,14 +88,20 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
         RuleFor(model => model.PostId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateEquipmentRequest,
-                Domain.Entities.Production.Post>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<CreateEquipmentRequest, Domain.Entities.Production.Post>(
+                    context
+                )
+            )
             .When(_ => _.PostId is not null);
 
         RuleForEach(model => model.WorkplaceIds)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateEquipmentRequest,
-                Domain.Entities.Production.Workplace>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<CreateEquipmentRequest, Domain.Entities.Production.Workplace>(
+                    context
+                )
+            );
     }
 }

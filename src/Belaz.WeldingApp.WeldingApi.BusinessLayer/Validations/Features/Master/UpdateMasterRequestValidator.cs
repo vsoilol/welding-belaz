@@ -1,5 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Master;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
@@ -12,29 +13,29 @@ public class UpdateMasterRequestValidator : AbstractValidator<UpdateMasterReques
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateMasterRequest,
-                Domain.Entities.Users.Master>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<UpdateMasterRequest, Domain.Entities.Users.Master>(context)
+            );
 
         RuleFor(model => model.RfidTag)
             .Cascade(CascadeMode.Stop)
+            .SetAsyncValidator(new IsMasterRfidTagUniqueValidatorForUpdate(context))
             .NotEmpty();
 
-        RuleFor(model => model.FirstName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.FirstName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.LastName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.LastName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.MiddleName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.MiddleName).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateMasterRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateMasterRequest,
+                    Domain.Entities.Production.ProductionArea
+                >(context)
+            );
     }
 }

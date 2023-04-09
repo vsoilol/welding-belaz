@@ -11,31 +11,42 @@ public class CreateWelderRequestValidator : AbstractValidator<CreateWelderReques
     {
         RuleFor(model => model.RfidTag)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+            .NotEmpty()
+            .SetAsyncValidator(
+                new IsRfidTagExistValidatorFor<
+                    CreateWelderRequest,
+                    Domain.Entities.IdentityUser.UserData
+                >(context)
+            );
 
-        RuleFor(model => model.FirstName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.FirstName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.LastName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.LastName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.MiddleName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.MiddleName).Cascade(CascadeMode.Stop).NotEmpty();
+
+        RuleFor(model => model.ServiceNumber).Cascade(CascadeMode.Stop).NotEmpty();
+
+        RuleFor(model => model.Position).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateWelderRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateWelderRequest,
+                    Domain.Entities.Production.ProductionArea
+                >(context)
+            );
 
         RuleFor(model => model.WorkplaceId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateWelderRequest,
-                Domain.Entities.Production.Workplace>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<CreateWelderRequest, Domain.Entities.Production.Workplace>(
+                    context
+                )
+            )
             .When(_ => _.WorkplaceId is not null);
     }
 }

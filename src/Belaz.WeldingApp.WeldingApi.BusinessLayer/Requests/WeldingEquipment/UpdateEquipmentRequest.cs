@@ -11,7 +11,7 @@ public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
     /// <summary>
     /// RFID-метка
     /// </summary>
-    public string? RfidTag { get; set; } = null!;
+    public string RfidTag { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 
@@ -94,12 +94,18 @@ public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<UpdateEquipmentRequest, Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>()
-            .ForMember(dto => dto.NextAttestationDate,
-                opt => opt
-                    .MapFrom(x => x.NextAttestationDate.ToDateTime()))
-            .ForMember(dto => dto.CommissioningDate,
-                opt => opt
-                    .MapFrom(x => x.CommissioningDate.ToDateTime()));
+        profile
+            .CreateMap<
+                UpdateEquipmentRequest,
+                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+            >()
+            .ForMember(
+                dto => dto.NextAttestationDate,
+                opt => opt.MapFrom(x => x.NextAttestationDate.ToDateTime())
+            )
+            .ForMember(
+                dto => dto.CommissioningDate,
+                opt => opt.MapFrom(x => x.CommissioningDate.ToDateTime())
+            );
     }
 }
