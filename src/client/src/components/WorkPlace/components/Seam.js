@@ -417,7 +417,7 @@ export const Seam = ({
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
                     value={valueWorkplace}
@@ -428,7 +428,7 @@ export const Seam = ({
                     }}
                     options={workplaceIdOptions}
                   />
-                </div>
+                </div> */}
                 <div className={styles.row}>
                   <Select
                     name="productionArea"
