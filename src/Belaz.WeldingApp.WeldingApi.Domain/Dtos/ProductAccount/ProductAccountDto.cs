@@ -15,7 +15,7 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
 
     public int AmountFromPlan { get; set; }
 
-    public ProductBriefDto Product { get; set; } = null!;
+    public ProductDto Product { get; set; } = null!;
 
     public int AmountManufactured { get; set; }
 
