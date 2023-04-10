@@ -127,7 +127,8 @@ export const RecordsTable = ({ records, isRequesting }) => {
           <p>Сварочный ток, А</p>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart
-              data={ArrayVoltageValues}
+             data={ArrayweldingCurrentValues}
+              
               syncId="anyId"
               margin={{
                 top: 10,
@@ -166,7 +167,7 @@ export const RecordsTable = ({ records, isRequesting }) => {
         <p>Напряжение на дуге, В</p>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart
-               data={ArrayweldingCurrentValues}
+              data={ArrayVoltageValues}
               syncId="anyId"
               margin={{
                 top: 10,
