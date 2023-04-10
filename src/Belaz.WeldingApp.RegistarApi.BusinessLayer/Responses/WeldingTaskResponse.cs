@@ -64,6 +64,15 @@ public class WeldingTaskResponse : IMapFrom<WeldingTaskDto>
     [JsonPropertyName("passages")]
     public List<WeldPassageInstructionResponse> WeldPassageInstructions { get; set; } = null!;
 
+    [JsonPropertyName("ProdN")]
+    public string ProductNumber { get; set; } = null!;
+
+    [JsonPropertyName("AsmN")]
+    public string? KnotNumber { get; set; }
+
+    [JsonPropertyName("DtlN")]
+    public string? DetailNumber { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile
@@ -103,6 +112,9 @@ public class WeldingTaskResponse : IMapFrom<WeldingTaskDto>
             )
             .ForMember(dto => dto.SeamId, opt => opt.MapFrom(x => x.Seam.Id))
             .ForMember(dto => dto.SeamNumber, opt => opt.MapFrom(x => x.Seam.Number))
-            .ForMember(dto => dto.SeamLength, opt => opt.MapFrom(x => x.Seam.Length));
+            .ForMember(dto => dto.SeamLength, opt => opt.MapFrom(x => x.Seam.Length))
+            .ForMember(dto => dto.ProductNumber, opt => opt.MapFrom(x => x.Seam.Product.Number))
+            .ForMember(dto => dto.KnotNumber, opt => opt.MapFrom(x => x.Seam.Knot!.Number))
+            .ForMember(dto => dto.DetailNumber, opt => opt.MapFrom(x => x.Seam.Detail!.Number));
     }
 }
