@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
@@ -378,15 +379,21 @@ public class ProductAccountRepository : IProductAccountRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task<List<ProductAccountDto>> GetAllByDateAsync(DateTime date, Guid productionAreaId)
+    public async Task<List<ProductAccountDto>> GetAllByDateAsync(
+        DateTime date,
+        Guid productionAreaId
+    )
     {
-        return _context.Products
-            .Where(_ => _.ProductionAreaId == productionAreaId)
-            .SelectMany(_ => _.ProductAccounts)
+        var productAccounts = await GetProductAccountsWithIncludesByFilter(
+                _ => _.Product.ProductionAreaId == productionAreaId
+            )
             .Where(_ => _.DateFromPlan.Date.Equals(date.Date))
             .OrderBy(_ => _.Number)
-            .ProjectTo<ProductAccountDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+
+        var mapProductAccounts = _mapper.Map<List<ProductAccountDto>>(productAccounts);
+
+        return mapProductAccounts;
     }
 
     public async Task<List<string>> GetAllDatesByProductionAreaAsync(Guid productionAreaId)
@@ -398,12 +405,14 @@ public class ProductAccountRepository : IProductAccountRepository
             .ToList();
     }
 
-    public Task<ProductAccountDto> GetByIdAsync(Guid id)
+    public async Task<ProductAccountDto> GetByIdAsync(Guid id)
     {
-        return _context.ProductAccounts
-            .Where(_ => _.Id == id)
-            .ProjectTo<ProductAccountDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync()!;
+        var productAccount = await GetProductAccountsWithIncludesByFilter(_ => _.Id == id)
+            .FirstOrDefaultAsync();
+
+        var mapProductAccount = _mapper.Map<ProductAccountDto>(productAccount);
+
+        return mapProductAccount;
     }
 
     public async Task<ProductAccountDto> SetProductAccountDefectiveReasonAsync(
@@ -421,5 +430,30 @@ public class ProductAccountRepository : IProductAccountRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(productAccountId);
+    }
+
+    private IQueryable<ProductAccount> GetProductAccountsWithIncludesByFilter(
+        Expression<Func<ProductAccount, bool>>? filter = null
+    )
+    {
+        IQueryable<ProductAccount> productAccounts = _context.ProductAccounts
+            .Include(_ => _.ProductResults)
+            .Include(_ => _.SeamAccounts)
+            .ThenInclude(_ => _.WeldingTasks)
+            .ThenInclude(_ => _.WeldPassages)
+            .Include(_ => _.WeldingEquipments)
+            .Include(s => s.Product.ProductMain!.MainProduct.ProductMain!.MainProduct)
+            .Include(p => p.Product.ProductInsides)
+            .ThenInclude(pi => pi.InsideProduct)
+            .Include(s => s.Product.Seams)
+            .Include(s => s.Product.ProductionArea.Workshop)
+            .Include(s => s.Product.TechnologicalProcess);
+
+        if (filter != null)
+        {
+            productAccounts = productAccounts.Where(filter);
+        }
+
+        return productAccounts;
     }
 }
