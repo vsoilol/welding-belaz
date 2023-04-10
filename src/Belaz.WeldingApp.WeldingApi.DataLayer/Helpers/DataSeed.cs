@@ -79,7 +79,7 @@ public class DataSeed
 
         if (!context.WeldingTasks.Any())
         {
-            await AddWeldingTasks(context);
+            //await AddWeldingTasks(context);
             await GenerateTaskByProductAccounts(context);
         }
     }
