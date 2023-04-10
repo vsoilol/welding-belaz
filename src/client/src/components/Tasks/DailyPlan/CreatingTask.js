@@ -102,6 +102,12 @@ export const CreatingTask = ({
             title: "Номер", field: "product.number"
         },
         {
+            title: "Наименование изделия", field: "product.product.name", 
+        },
+        {
+            title: "Номер изделия", field: "product.product.number", 
+        },
+        {
             title: "Количество из плана ", field: "amountFromPlan"
         },
         {
@@ -788,3 +794,5 @@ export const CreatingTask = ({
         </div>
     );
 };
+
+ 
