@@ -2699,9 +2699,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2717,9 +2726,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2735,9 +2753,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2753,9 +2780,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2771,9 +2807,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2789,9 +2834,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2807,9 +2861,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2825,9 +2888,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2843,9 +2915,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2861,9 +2942,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
@@ -2879,9 +2969,18 @@ public class DataSeed
                 {
                     new()
                     {
-                        Name = "Заполняющий",
+                        Name = "Корневой",
                         Number = 1,
-                        WeldingCurrentMin = 230,
+                        WeldingCurrentMin = 200,
+                        WeldingCurrentMax = 270,
+                        ArcVoltageMin = 23,
+                        ArcVoltageMax = 26
+                    },
+                    new()
+                    {
+                        Name = "Заполняющий",
+                        Number = 2,
+                        WeldingCurrentMin = 270,
                         WeldingCurrentMax = 310,
                         ArcVoltageMin = 23,
                         ArcVoltageMax = 26
