@@ -43,7 +43,9 @@ public class WorkshopRepository : IWorkshopRepository
 
     public async Task<WorkshopDto> UpdateAsync(Workshop entity)
     {
-        var updatedWorkshop = (await _context.Workshops.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedWorkshop = (
+            await _context.Workshops.FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedWorkshop.Name = entity.Name;
         updatedWorkshop.Number = entity.Number;
@@ -51,5 +53,34 @@ public class WorkshopRepository : IWorkshopRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedWorkplaces = _context.ProductionAreas
+            .Where(_ => _.WorkshopId == id)
+            .SelectMany(_ => _.Workplaces);
+        _context.Workplaces.RemoveRange(deletedWorkplaces);
+
+        var deletedSeams = _context.ProductionAreas
+            .Where(_ => _.WorkshopId == id)
+            .SelectMany(_ => _.Seams);
+        _context.Seams.RemoveRange(deletedSeams);
+
+        var deletedProductInside = _context.ProductionAreas
+            .Where(_ => _.WorkshopId == id)
+            .SelectMany(_ => _.Products)
+            .SelectMany(_ => _.ProductInsides);
+        _context.ProductInsides.RemoveRange(deletedProductInside);
+
+        var deletedWorkshop = (
+            await _context.Workshops
+                .Include(_ => _.ProductionAreas)
+                .ThenInclude(_ => _.Users)
+                .FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        _context.Workshops.Remove(deletedWorkshop);
+        await _context.SaveChangesAsync();
     }
 }

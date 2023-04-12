@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,13 +35,17 @@ public class ProductionAreaController : ControllerBase
     [ProducesResponseType(typeof(ProductionAreaDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<ProductionAreaDto>> GetByIdAsync([FromRoute] Guid id)
     {
-        var result = await _productionAreaService.GetByIdAsync(new GetProductionAreaByIdRequest { Id = id });
+        var result = await _productionAreaService.GetByIdAsync(
+            new GetProductionAreaByIdRequest { Id = id }
+        );
         return result.ToOk();
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(ProductionAreaDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProductionAreaDto>> CreateAsync([FromBody] CreateProductionAreaRequest request)
+    public async Task<ActionResult<ProductionAreaDto>> CreateAsync(
+        [FromBody] CreateProductionAreaRequest request
+    )
     {
         var result = await _productionAreaService.CreateAsync(request);
         return result.ToOk();
@@ -48,9 +53,20 @@ public class ProductionAreaController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(ProductionAreaDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ProductionAreaDto>> UpdateAsync([FromBody] UpdateProductionAreaRequest request)
+    public async Task<ActionResult<ProductionAreaDto>> UpdateAsync(
+        [FromBody] UpdateProductionAreaRequest request
+    )
     {
         var result = await _productionAreaService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _productionAreaService.DeleteAsync(
+            new DeleteProductionAreaRequest { Id = id }
+        );
         return result.ToOk();
     }
 }

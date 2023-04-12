@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workplace;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,9 @@ public class WorkplaceController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(WorkplaceDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkplaceDto>> CreateAsync([FromBody] CreateWorkplaceRequest request)
+    public async Task<ActionResult<WorkplaceDto>> CreateAsync(
+        [FromBody] CreateWorkplaceRequest request
+    )
     {
         var result = await _workplaceService.CreateAsync(request);
         return result.ToOk();
@@ -48,9 +51,18 @@ public class WorkplaceController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(WorkplaceDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkplaceDto>> UpdateAsync([FromBody] UpdateWorkplaceRequest request)
+    public async Task<ActionResult<WorkplaceDto>> UpdateAsync(
+        [FromBody] UpdateWorkplaceRequest request
+    )
     {
         var result = await _workplaceService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _workplaceService.DeleteAsync(new DeleteWorkplaceRequest { Id = id });
         return result.ToOk();
     }
 }

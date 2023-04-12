@@ -43,14 +43,24 @@ public class WorkplaceRepository : IWorkplaceRepository
 
     public async Task<WorkplaceDto> UpdateAsync(Workplace entity)
     {
-        var updatedWorkplace = (await _context.Workplaces.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedWorkplace = (
+            await _context.Workplaces.FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedWorkplace.Number = entity.Number;
         updatedWorkplace.ProductionAreaId = entity.ProductionAreaId;
         updatedWorkplace.PostId = entity.PostId;
-        
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedWorkplace = (await _context.Workplaces.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        _context.Workplaces.Remove(deletedWorkplace);
+        await _context.SaveChangesAsync();
     }
 }

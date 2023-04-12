@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -16,7 +17,11 @@ public class PostService : IPostService
     private readonly IMapper _mapper;
     private readonly IPostRepository _postRepository;
 
-    public PostService(IValidationService validationService, IMapper mapper, IPostRepository postRepository)
+    public PostService(
+        IValidationService validationService,
+        IMapper mapper,
+        IPostRepository postRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -38,7 +43,7 @@ public class PostService : IPostService
     public async Task<Result<PostDto>> CreateAsync(CreatePostRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
-        
+
         return await validationResult.ToDataResult(() =>
         {
             var post = _mapper.Map<Post>(request);
@@ -50,12 +55,23 @@ public class PostService : IPostService
     public async Task<Result<PostDto>> UpdateAsync(UpdatePostRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
-        
+
         return await validationResult.ToDataResult(() =>
         {
             var post = _mapper.Map<Post>(request);
 
             return _postRepository.UpdateAsync(post);
+        });
+    }
+
+    public async Task<Result<Unit>> DeleteAsync(DeletePostRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _postRepository.DeleteAsync(request.Id);
+            return Unit.Default;
         });
     }
 }

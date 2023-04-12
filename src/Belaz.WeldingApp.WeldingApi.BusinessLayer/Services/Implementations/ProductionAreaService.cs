@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -16,8 +17,11 @@ public class ProductionAreaService : IProductionAreaService
     private readonly IMapper _mapper;
     private readonly IProductionAreaRepository _productionAreaRepository;
 
-    public ProductionAreaService(IValidationService validationService, IMapper mapper,
-        IProductionAreaRepository productionAreaRepository)
+    public ProductionAreaService(
+        IValidationService validationService,
+        IMapper mapper,
+        IProductionAreaRepository productionAreaRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -33,13 +37,15 @@ public class ProductionAreaService : IProductionAreaService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() => _productionAreaRepository.GetByIdAsync(request.Id));
+        return await validationResult.ToDataResult(
+            () => _productionAreaRepository.GetByIdAsync(request.Id)
+        );
     }
 
     public async Task<Result<ProductionAreaDto>> CreateAsync(CreateProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
-        
+
         return await validationResult.ToDataResult(() =>
         {
             var productionArea = _mapper.Map<ProductionArea>(request);
@@ -51,12 +57,23 @@ public class ProductionAreaService : IProductionAreaService
     public async Task<Result<ProductionAreaDto>> UpdateAsync(UpdateProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
-        
+
         return await validationResult.ToDataResult(() =>
         {
             var productionArea = _mapper.Map<ProductionArea>(request);
 
             return _productionAreaRepository.UpdateAsync(productionArea);
+        });
+    }
+
+    public async Task<Result<Unit>> DeleteAsync(DeleteProductionAreaRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _productionAreaRepository.DeleteAsync(request.Id);
+            return Unit.Default;
         });
     }
 }

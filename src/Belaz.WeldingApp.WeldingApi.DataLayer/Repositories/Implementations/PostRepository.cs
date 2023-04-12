@@ -20,9 +20,7 @@ public class PostRepository : IPostRepository
 
     public Task<List<PostDto>> GetAllAsync()
     {
-        return _context.Posts
-            .ProjectTo<PostDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        return _context.Posts.ProjectTo<PostDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
     public Task<PostDto> GetByIdAsync(Guid id)
@@ -47,9 +45,20 @@ public class PostRepository : IPostRepository
 
         updatedPost.Number = entity.Number;
         updatedPost.ProductionAreaId = entity.ProductionAreaId;
-        
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedWorkplaces = _context.Workplaces.Where(_ => _.PostId == id);
+        _context.Workplaces.RemoveRange(deletedWorkplaces);
+
+        var deletedPost = (await _context.Posts.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        _context.Posts.Remove(deletedPost);
+        await _context.SaveChangesAsync();
     }
 }

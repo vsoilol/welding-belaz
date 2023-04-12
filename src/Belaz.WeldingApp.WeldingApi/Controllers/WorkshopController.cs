@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +41,9 @@ public class WorkshopController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkshopDto>> CreateAsync([FromBody] CreateWorkshopRequest request)
+    public async Task<ActionResult<WorkshopDto>> CreateAsync(
+        [FromBody] CreateWorkshopRequest request
+    )
     {
         var result = await _workshopService.CreateAsync(request);
         return result.ToOk();
@@ -48,9 +51,18 @@ public class WorkshopController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WorkshopDto>> UpdateAsync([FromBody] UpdateWorkshopRequest request)
+    public async Task<ActionResult<WorkshopDto>> UpdateAsync(
+        [FromBody] UpdateWorkshopRequest request
+    )
     {
         var result = await _workshopService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _workshopService.DeleteAsync(new DeleteWorkshopRequest { Id = id });
         return result.ToOk();
     }
 }

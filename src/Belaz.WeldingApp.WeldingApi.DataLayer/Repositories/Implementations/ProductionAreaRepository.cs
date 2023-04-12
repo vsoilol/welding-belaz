@@ -43,8 +43,9 @@ public class ProductionAreaRepository : IProductionAreaRepository
 
     public async Task<ProductionAreaDto> UpdateAsync(ProductionArea entity)
     {
-        var updatedProductionArea = (await _context.ProductionAreas
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedProductionArea = (
+            await _context.ProductionAreas.FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedProductionArea.Name = entity.Name;
         updatedProductionArea.Number = entity.Number;
@@ -53,5 +54,28 @@ public class ProductionAreaRepository : IProductionAreaRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedWorkplaces = _context.Workplaces.Where(_ => _.ProductionAreaId == id);
+        _context.Workplaces.RemoveRange(deletedWorkplaces);
+
+        var deletedSeams = _context.Seams.Where(_ => _.ProductionAreaId == id);
+        _context.Seams.RemoveRange(deletedSeams);
+
+        var deletedProductInside = _context.Products
+            .Where(_ => _.ProductionAreaId == id)
+            .SelectMany(_ => _.ProductInsides);
+        _context.ProductInsides.RemoveRange(deletedProductInside);
+
+        var deletedProductionArea = (
+            await _context.ProductionAreas
+                .Include(_ => _.Users)
+                .FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        _context.ProductionAreas.Remove(deletedProductionArea);
+        await _context.SaveChangesAsync();
     }
 }
