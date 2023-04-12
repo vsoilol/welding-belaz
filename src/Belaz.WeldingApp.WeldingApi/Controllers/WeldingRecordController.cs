@@ -1,5 +1,8 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingRecord;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +23,20 @@ public class WeldingRecordController : ControllerBase
     {
         _weldingRecordService = weldingRecordService;
     }
-    
+
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<RecordDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RecordDto>>> GetAllWeldingEquipmentsAsync()
     {
         return await _weldingRecordService.GetAllAsync();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _weldingRecordService.DeleteAsync(
+            new DeleteWeldingRecordRequest { Id = id }
+        );
+        return result.ToOk();
     }
 }

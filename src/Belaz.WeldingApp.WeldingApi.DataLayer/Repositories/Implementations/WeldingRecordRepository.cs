@@ -19,6 +19,16 @@ public class WeldingRecordRepository : IWeldingRecordRepository
         _mapper = mapper;
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedWeldingRecord = (
+            await _context.WeldingRecords.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        _context.WeldingRecords.Remove(deletedWeldingRecord);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<List<RecordDto>> GetAllAsync()
     {
         var weldingRecords = await GetWeldingRecordsWithIncludesByFilter()
@@ -67,7 +77,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .ThenInclude(_ => _.WeldingRecord.WeldingEquipment.Workplaces)
             .ThenInclude(_ => _!.ProductionArea!.Workshop)
             .Include(_ => _.WeldPassage!.WeldingTask.Inspector!.UserInfo)
-            .Include(_ => _.WeldPassage!.WeldingTask.Master.UserInfo)
+            .Include(_ => _.WeldPassage!.WeldingTask.Master!.UserInfo)
             .Include(_ => _.WeldPassage!.WeldingTask.Welder!.UserInfo);
 
         if (filter != null)
