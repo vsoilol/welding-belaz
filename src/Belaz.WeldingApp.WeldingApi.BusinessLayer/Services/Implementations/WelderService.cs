@@ -7,6 +7,7 @@ using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -17,7 +18,11 @@ public class WelderService : IWelderService
     private readonly IMapper _mapper;
     private readonly IWelderRepository _welderRepository;
 
-    public WelderService(IValidationService validationService, IMapper mapper, IWelderRepository welderRepository)
+    public WelderService(
+        IValidationService validationService,
+        IMapper mapper,
+        IWelderRepository welderRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -50,6 +55,17 @@ public class WelderService : IWelderService
             var welder = _mapper.Map<Welder>(request);
 
             return _welderRepository.UpdateAsync(welder);
+        });
+    }
+
+    public async Task<Result<Unit>> DeleteAsync(DeleteWelderRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _welderRepository.DeleteAsync(request.Id);
+            return Unit.Default;
         });
     }
 }

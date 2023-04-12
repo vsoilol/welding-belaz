@@ -3,6 +3,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,13 @@ public class MasterController : ControllerBase
     public async Task<ActionResult<MasterDto>> UpdateAsync([FromBody] UpdateMasterRequest request)
     {
         var result = await _masterService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _masterService.DeleteAsync(new DeleteMasterRequest { Id = id });
         return result.ToOk();
     }
 }

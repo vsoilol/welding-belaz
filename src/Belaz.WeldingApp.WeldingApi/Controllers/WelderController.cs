@@ -3,6 +3,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,13 @@ public class WelderController : ControllerBase
     public async Task<ActionResult<WelderDto>> UpdateAsync([FromBody] UpdateWelderRequest request)
     {
         var result = await _welderService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _welderService.DeleteAsync(new DeleteWelderRequest { Id = id });
         return result.ToOk();
     }
 }
