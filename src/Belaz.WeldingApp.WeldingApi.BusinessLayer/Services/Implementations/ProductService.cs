@@ -170,4 +170,15 @@ public class ProductService : IProductService
             return Unit.Default;
         });
     }
+
+    public async Task<Result<Unit>> DeleteAsync(DeleteProductRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _productRepository.DeleteAsync(request.Id);
+            return Unit.Default;
+        });
+    }
 }

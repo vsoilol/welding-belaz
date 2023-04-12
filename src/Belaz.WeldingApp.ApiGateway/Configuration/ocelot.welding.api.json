@@ -4,7 +4,7 @@
       "UpstreamPathTemplate": "/api/detail/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/detail/{id}",
       "ServiceName": "welding",
@@ -62,7 +62,7 @@
       "UpstreamPathTemplate": "/api/knot/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/knot/{id}",
       "ServiceName": "welding",
@@ -106,7 +106,7 @@
       "UpstreamPathTemplate": "/api/product/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/product/{id}",
       "ServiceName": "welding",
@@ -418,7 +418,7 @@
       "UpstreamPathTemplate": "/api/seam/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/seam/{id}",
       "ServiceName": "welding",

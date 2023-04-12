@@ -21,7 +21,11 @@ public class SeamService : ISeamService
     private readonly IMapper _mapper;
     private readonly ISeamRepository _seamRepository;
 
-    public SeamService(IValidationService validationService, IMapper mapper, ISeamRepository seamRepository)
+    public SeamService(
+        IValidationService validationService,
+        IMapper mapper,
+        ISeamRepository seamRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -37,8 +41,7 @@ public class SeamService : ISeamService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
-            _seamRepository.GetByIdAsync(request.Id));
+        return await validationResult.ToDataResult(() => _seamRepository.GetByIdAsync(request.Id));
     }
 
     public Task<List<SeamDto>> GetAllByControlSubjectAsync(bool isControlSubject)
@@ -70,12 +73,15 @@ public class SeamService : ISeamService
         });
     }
 
-    public async Task<Result<List<SeamDto>>> GetAllByInspectorIdAsync(GetAllByInspectorIdRequest request)
+    public async Task<Result<List<SeamDto>>> GetAllByInspectorIdAsync(
+        GetAllByInspectorIdRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
-            _seamRepository.GetAllByInspectorIdAsync(request.InspectorId));
+        return await validationResult.ToDataResult(
+            () => _seamRepository.GetAllByInspectorIdAsync(request.InspectorId)
+        );
     }
 
     public async Task<Result<Unit>> AssignSeamToInspectorAsync(AssignSeamToInspectorRequest request)
@@ -89,7 +95,9 @@ public class SeamService : ISeamService
         });
     }
 
-    public async Task<Result<Unit>> AssignSeamsToInspectorAsync(AssignSeamsToInspectorRequest request)
+    public async Task<Result<Unit>> AssignSeamsToInspectorAsync(
+        AssignSeamsToInspectorRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -105,7 +113,9 @@ public class SeamService : ISeamService
         return _seamRepository.GetAllDefectiveSeamsAsync();
     }
 
-    public async Task<Result<DefectiveSeamDto>> AddDefectiveReasonToSeamAsync(AddDefectiveReasonToSeamRequest request)
+    public async Task<Result<DefectiveSeamDto>> AddDefectiveReasonToSeamAsync(
+        AddDefectiveReasonToSeamRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -118,7 +128,8 @@ public class SeamService : ISeamService
     }
 
     public async Task<Result<DefectiveSeamDto>> UpdateDefectiveReasonSeamAsync(
-        UpdateDefectiveReasonToSeamRequest request)
+        UpdateDefectiveReasonToSeamRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -127,6 +138,17 @@ public class SeamService : ISeamService
             var statusReason = _mapper.Map<DefectiveReason>(request);
 
             return _seamRepository.UpdateDefectiveReasonSeamAsync(statusReason);
+        });
+    }
+
+    public async Task<Result<Unit>> DeleteAsync(DeleteSeamRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _seamRepository.DeleteAsync(request.Id);
+            return Unit.Default;
         });
     }
 }

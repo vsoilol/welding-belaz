@@ -166,6 +166,19 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedProductInside = _context.ProductInsides.Where(
+            _ => _.MainProductId == id || _.InsideProductId == id
+        );
+        _context.ProductInsides.RemoveRange(deletedProductInside);
+
+        var deletedProduct = (await _context.Products.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        _context.Products.Remove(deletedProduct);
+        await _context.SaveChangesAsync();
+    }
+
     private IQueryable<Product> GetProductsWithIncludesByFilter(
         Expression<Func<Product, bool>>? filter = null
     )
