@@ -483,15 +483,15 @@ public class WeldPassageComponent : IComponent
         var maximumAxes =
             (values.Max() + 10 < max) && max is not null ? (double)max + 10 : values.Max() + 10;
 
-        var valuesDifference = maximumAxes - minValue;
+        var minimumAxes = min < minValue && min is not null ? (double)min - 10 : minValue - 10;
+
+        var valuesDifference = maximumAxes - minimumAxes;
         var leftAxesStep = 10;
 
         if (valuesDifference / 10 > 15)
         {
             leftAxesStep = (int)(valuesDifference / 15);
         }
-
-        var minimumAxes = minValue <= 10 || min < minValue || max < minValue ? 0 : minValue - 10;
 
         model.Axes.Add(
             new LinearAxis
