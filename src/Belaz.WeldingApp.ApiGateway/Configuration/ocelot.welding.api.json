@@ -802,6 +802,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/Inspector/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/Inspector/{id}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/Master",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [

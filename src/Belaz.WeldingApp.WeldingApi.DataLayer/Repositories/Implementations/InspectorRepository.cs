@@ -61,4 +61,17 @@ public class InspectorRepository : IInspectorRepository
 
         return await GetByIdAsync(entity.Id);
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedUser = (
+            await _context.Users.FirstOrDefaultAsync(
+                _ => _.Inspectors.Any(inspector => inspector.Id == id)
+            )
+        )!;
+
+        _context.Users.Remove(deletedUser);
+
+        await _context.SaveChangesAsync();
+    }
 }
