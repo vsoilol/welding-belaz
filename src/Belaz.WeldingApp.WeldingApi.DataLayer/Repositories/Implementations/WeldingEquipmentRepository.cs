@@ -50,7 +50,10 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .ToListAsync();
     }
 
-    public async Task<WeldingEquipmentDto> CreateAsync(WeldingEquipment entity, List<Guid> workplaceIds)
+    public async Task<WeldingEquipmentDto> CreateAsync(
+        WeldingEquipment entity,
+        List<Guid> workplaceIds
+    )
     {
         var workplaces = await _context.Workplaces
             .Where(_ => workplaceIds.Any(workplaceId => workplaceId == _.Id))
@@ -64,11 +67,16 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
         return await GetByIdAsync(newWeldingEquipment.Id);
     }
 
-    public async Task<WeldingEquipmentDto> UpdateAsync(WeldingEquipment entity, List<Guid> workplaceIds)
+    public async Task<WeldingEquipmentDto> UpdateAsync(
+        WeldingEquipment entity,
+        List<Guid> workplaceIds
+    )
     {
-        var updatedWeldingEquipment = (await _context.WeldingEquipments
-            .Include(_ => _.Workplaces)
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedWeldingEquipment = (
+            await _context.WeldingEquipments
+                .Include(_ => _.Workplaces)
+                .FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         var workplaces = await _context.Workplaces
             .Where(_ => workplaceIds.Any(workplaceId => workplaceId == _.Id))
@@ -101,19 +109,26 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
     }
 
     public async Task<WeldingEquipmentDowntimeDto> AddWeldingEquipmentDowntimeAsync(
-        WeldingEquipmentConditionTime entity)
+        WeldingEquipmentConditionTime entity
+    )
     {
-        var newWeldingEquipmentConditionTime = _context.WeldingEquipmentConditionTimes.Add(entity).Entity;
+        var newWeldingEquipmentConditionTime = _context.WeldingEquipmentConditionTimes
+            .Add(entity)
+            .Entity;
         await _context.SaveChangesAsync();
 
         return await GetConditionByIdAsync(newWeldingEquipmentConditionTime.Id);
     }
 
     public async Task<WeldingEquipmentDowntimeDto> UpdateWeldingEquipmentDowntimeAsync(
-        WeldingEquipmentConditionTime entity)
+        WeldingEquipmentConditionTime entity
+    )
     {
-        var updatedWeldingEquipmentConditionTime =
-            (await _context.WeldingEquipmentConditionTimes.FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedWeldingEquipmentConditionTime = (
+            await _context.WeldingEquipmentConditionTimes.FirstOrDefaultAsync(
+                _ => _.Id == entity.Id
+            )
+        )!;
 
         updatedWeldingEquipmentConditionTime.Condition = entity.Condition;
         updatedWeldingEquipmentConditionTime.Date = entity.Date;
@@ -127,7 +142,10 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
         return await GetConditionByIdAsync(entity.Id);
     }
 
-    public async Task AssignEquipmentsToWeldersAsync(List<Guid> weldingEquipmentIds, List<Guid> welderIds)
+    public async Task AssignEquipmentsToWeldersAsync(
+        List<Guid> weldingEquipmentIds,
+        List<Guid> welderIds
+    )
     {
         var weldingEquipments = await _context.WeldingEquipments
             .Where(_ => weldingEquipmentIds.Any(weldingEquipmentId => weldingEquipmentId == _.Id))
@@ -147,12 +165,24 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .Where(_ => weldingEquipmentIds.Any(weldingEquipmentId => weldingEquipmentId == _.Id))
             .ToListAsync();
 
-        var master = (await _context.Masters
-            .Include(_ => _.WeldingEquipments)
-            .FirstOrDefaultAsync(_ => _.Id == masterId))!;
+        var master = (
+            await _context.Masters
+                .Include(_ => _.WeldingEquipments)
+                .FirstOrDefaultAsync(_ => _.Id == masterId)
+        )!;
 
         master.WeldingEquipments = weldingEquipments;
 
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedWeldingEquipment = (
+            await _context.WeldingEquipments.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        _context.WeldingEquipments.Remove(deletedWeldingEquipment);
         await _context.SaveChangesAsync();
     }
 }

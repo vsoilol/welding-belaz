@@ -16,12 +16,16 @@ public interface IWeldingEquipmentService
     Task<Result<WeldingEquipmentDto>> UpdateAsync(UpdateEquipmentRequest request);
 
     Task<Result<WeldingEquipmentDowntimeDto>> AddWeldingEquipmentDowntimeAsync(
-        CreateWeldingEquipmentDowntimeRequest request);
+        CreateWeldingEquipmentDowntimeRequest request
+    );
 
     Task<Result<WeldingEquipmentDowntimeDto>> UpdateWeldingEquipmentDowntimeAsync(
-        UpdateWeldingEquipmentDowntimeRequest request);
-    
+        UpdateWeldingEquipmentDowntimeRequest request
+    );
+
     Task<Result<Unit>> AssignEquipmentsToWeldersAsync(AssignEquipmentsToWeldersRequest request);
-    
+
     Task<Result<Unit>> AssignEquipmentsToMasterAsync(AssignEquipmentsToMastersRequest request);
+
+    Task<Result<Unit>> DeleteAsync(DeleteWeldingEquipmentRequest request);
 }

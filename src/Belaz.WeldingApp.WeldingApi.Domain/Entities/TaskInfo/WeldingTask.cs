@@ -66,10 +66,10 @@ public class WeldingTask : Entity
     [ForeignKey(nameof(WelderId))]
     public Welder? Welder { get; set; } = null!;
 
-    public Guid MasterId { get; set; }
+    public Guid? MasterId { get; set; }
 
     [ForeignKey(nameof(MasterId))]
-    public Master Master { get; set; } = null!;
+    public Master? Master { get; set; }
 
     public Guid? InspectorId { get; set; }
 

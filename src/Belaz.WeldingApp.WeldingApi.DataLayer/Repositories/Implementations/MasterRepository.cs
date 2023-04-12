@@ -79,6 +79,8 @@ public class MasterRepository : IMasterRepository
                 .ThenInclude(_ => _.WeldingEquipments)
                 .Include(p => p.Masters)
                 .ThenInclude(_ => _.WeldingRecords)
+                .Include(p => p.Masters)
+                .ThenInclude(_ => _.WeldingTasks)
                 .FirstOrDefaultAsync(_ => _.Masters.Any(master => master.Id == id))
         )!;
 

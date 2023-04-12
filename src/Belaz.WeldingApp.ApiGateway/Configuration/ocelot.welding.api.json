@@ -625,6 +625,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/WeldingEquipment/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/WeldingEquipment/{id}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/WeldingEquipment/downtime",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
