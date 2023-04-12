@@ -133,4 +133,11 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.AssignProductsToMasterAsync(request);
         return result.ToOk();
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _productService.DeleteAsync(new DeleteProductRequest { Id = id });
+        return result.ToOk();
+    }
 }

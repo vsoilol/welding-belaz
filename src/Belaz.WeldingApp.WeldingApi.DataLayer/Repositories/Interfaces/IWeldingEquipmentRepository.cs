@@ -6,9 +6,9 @@ namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 public interface IWeldingEquipmentRepository
 {
     Task<List<WeldingEquipmentDto>> GetAllAsync();
-    
+
     Task<WeldingEquipmentDto> GetByIdAsync(Guid id);
-    
+
     Task<WeldingEquipmentDowntimeDto> GetConditionByIdAsync(Guid id);
 
     Task<List<WeldingEquipmentDowntimeDto>> GetAllWeldingEquipmentDowntimesAsync();
@@ -17,11 +17,17 @@ public interface IWeldingEquipmentRepository
 
     Task<WeldingEquipmentDto> UpdateAsync(WeldingEquipment entity, List<Guid> workplaceIds);
 
-    Task<WeldingEquipmentDowntimeDto> AddWeldingEquipmentDowntimeAsync(WeldingEquipmentConditionTime entity);
+    Task<WeldingEquipmentDowntimeDto> AddWeldingEquipmentDowntimeAsync(
+        WeldingEquipmentConditionTime entity
+    );
 
-    Task<WeldingEquipmentDowntimeDto> UpdateWeldingEquipmentDowntimeAsync(WeldingEquipmentConditionTime entity);
-    
+    Task<WeldingEquipmentDowntimeDto> UpdateWeldingEquipmentDowntimeAsync(
+        WeldingEquipmentConditionTime entity
+    );
+
     Task AssignEquipmentsToWeldersAsync(List<Guid> weldingEquipmentIds, List<Guid> welderIds);
-    
+
     Task AssignEquipmentsToMasterAsync(List<Guid> weldingEquipmentIds, Guid masterId);
+
+    Task DeleteAsync(Guid id);
 }

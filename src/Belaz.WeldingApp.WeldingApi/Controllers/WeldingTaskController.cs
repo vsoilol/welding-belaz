@@ -68,7 +68,6 @@ public class WeldingTaskController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(typeof(WeldingTaskDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _weldingTaskService.DeleteAsync(

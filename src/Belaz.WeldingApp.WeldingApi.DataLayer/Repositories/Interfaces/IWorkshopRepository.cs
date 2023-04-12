@@ -12,4 +12,6 @@ public interface IWorkshopRepository
     Task<WorkshopDto> CreateAsync(Workshop entity);
 
     Task<WorkshopDto> UpdateAsync(Workshop entity);
+
+    Task DeleteAsync(Guid id);
 }

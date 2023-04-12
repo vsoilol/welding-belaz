@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,13 @@ public class PostController : ControllerBase
     public async Task<ActionResult<PostDto>> UpdateAsync([FromBody] UpdatePostRequest request)
     {
         var result = await _postService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _postService.DeleteAsync(new DeletePostRequest { Id = id });
         return result.ToOk();
     }
 }

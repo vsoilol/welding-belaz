@@ -10,6 +10,8 @@ public interface IPostRepository
     Task<PostDto> GetByIdAsync(Guid id);
 
     Task<PostDto> CreateAsync(Post entity);
-    
+
     Task<PostDto> UpdateAsync(Post entity);
+
+    Task DeleteAsync(Guid id);
 }

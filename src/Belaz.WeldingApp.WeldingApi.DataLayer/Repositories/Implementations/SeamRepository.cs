@@ -142,6 +142,14 @@ public class SeamRepository : ISeamRepository
         return await GetDefectiveReasonByIdAsync(entity.Id);
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedSeam = (await _context.Seams.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        _context.Seams.Remove(deletedSeam);
+        await _context.SaveChangesAsync();
+    }
+
     private IQueryable<Seam> GetSeamsWithIncludesByFilter(
         Expression<Func<Seam, bool>>? filter = null
     )

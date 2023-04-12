@@ -4,7 +4,7 @@
       "UpstreamPathTemplate": "/api/detail/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/detail/{id}",
       "ServiceName": "welding",
@@ -62,7 +62,7 @@
       "UpstreamPathTemplate": "/api/knot/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/knot/{id}",
       "ServiceName": "welding",
@@ -106,7 +106,7 @@
       "UpstreamPathTemplate": "/api/product/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/product/{id}",
       "ServiceName": "welding",
@@ -418,7 +418,7 @@
       "UpstreamPathTemplate": "/api/seam/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/seam/{id}",
       "ServiceName": "welding",
@@ -432,7 +432,7 @@
       "UpstreamPathTemplate": "/api/post/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/post/{id}",
       "ServiceName": "welding",
@@ -462,7 +462,7 @@
       "UpstreamPathTemplate": "/api/ProductionArea/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/ProductionArea/{id}",
       "ServiceName": "welding",
@@ -492,7 +492,7 @@
       "UpstreamPathTemplate": "/api/Workplace/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/Workplace/{id}",
       "ServiceName": "welding",
@@ -522,7 +522,7 @@
       "UpstreamPathTemplate": "/api/Workshop/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/Workshop/{id}",
       "ServiceName": "welding",
@@ -552,7 +552,7 @@
       "UpstreamPathTemplate": "/api/TechnologicalProcess/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/TechnologicalProcess/{id}",
       "ServiceName": "welding",
@@ -595,6 +595,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/Welder/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/Welder/{id}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/WeldingEquipment",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -603,6 +617,20 @@
         "PUT"
       ],
       "DownstreamPathTemplate": "/api/WeldingEquipment",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/WeldingEquipment/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/WeldingEquipment/{id}",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
@@ -770,6 +798,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/TechnologicalInstruction/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/TechnologicalInstruction/{id}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/Chief",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -802,6 +844,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/Inspector/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/Inspector/{id}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/Master",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -810,6 +866,20 @@
         "PUT"
       ],
       "DownstreamPathTemplate": "/api/Master",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/Master/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/Master/{id}",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {
@@ -1028,6 +1098,20 @@
         "GET"
       ],
       "DownstreamPathTemplate": "/api/weldingRecord",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/weldingRecord/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/weldingRecord/{id}",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {

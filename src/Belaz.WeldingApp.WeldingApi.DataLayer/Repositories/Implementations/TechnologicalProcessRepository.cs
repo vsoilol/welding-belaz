@@ -64,6 +64,18 @@ public class TechnologicalProcessRepository : ITechnologicalProcessRepository
         return await GetByIdAsync(entity.Id);
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedTechnologicalProcess = (
+            await _context.TechnologicalProcesses
+                .Include(_ => _.Products)
+                .FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        _context.TechnologicalProcesses.Remove(deletedTechnologicalProcess);
+        await _context.SaveChangesAsync();
+    }
+
     private IQueryable<TechnologicalProcess> FilterTechnologicalProcesses(
         Expression<Func<TechnologicalProcess, bool>> filter
     )

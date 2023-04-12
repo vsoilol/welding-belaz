@@ -33,15 +33,22 @@ public class WeldingEquipmentController : ControllerBase
     }
 
     [HttpGet("downtime")]
-    [ProducesResponseType(typeof(IEnumerable<WeldingEquipmentDowntimeDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<WeldingEquipmentDowntimeDto>>> GetAllWeldingEquipmentDowntimesAsync()
+    [ProducesResponseType(
+        typeof(IEnumerable<WeldingEquipmentDowntimeDto>),
+        StatusCodes.Status200OK
+    )]
+    public async Task<
+        ActionResult<IEnumerable<WeldingEquipmentDowntimeDto>>
+    > GetAllWeldingEquipmentDowntimesAsync()
     {
         return await _weldingEquipmentService.GetAllWeldingEquipmentDowntimesAsync();
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(WeldingEquipmentDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WeldingEquipmentDto>> CreateAsync([FromBody] CreateEquipmentRequest request)
+    public async Task<ActionResult<WeldingEquipmentDto>> CreateAsync(
+        [FromBody] CreateEquipmentRequest request
+    )
     {
         var result = await _weldingEquipmentService.CreateAsync(request);
         return result.ToOk();
@@ -49,7 +56,9 @@ public class WeldingEquipmentController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(WeldingEquipmentDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WeldingEquipmentDto>> UpdateAsync([FromBody] UpdateEquipmentRequest request)
+    public async Task<ActionResult<WeldingEquipmentDto>> UpdateAsync(
+        [FromBody] UpdateEquipmentRequest request
+    )
     {
         var result = await _weldingEquipmentService.UpdateAsync(request);
         return result.ToOk();
@@ -58,7 +67,8 @@ public class WeldingEquipmentController : ControllerBase
     [HttpPost("downtime")]
     [ProducesResponseType(typeof(WeldingEquipmentDowntimeDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<WeldingEquipmentDowntimeDto>> AddWeldingEquipmentDowntimeAsync(
-        [FromBody] CreateWeldingEquipmentDowntimeRequest request)
+        [FromBody] CreateWeldingEquipmentDowntimeRequest request
+    )
     {
         var result = await _weldingEquipmentService.AddWeldingEquipmentDowntimeAsync(request);
         return result.ToOk();
@@ -66,8 +76,9 @@ public class WeldingEquipmentController : ControllerBase
 
     [HttpPut("downtime")]
     [ProducesResponseType(typeof(WeldingEquipmentDowntimeDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<WeldingEquipmentDowntimeDto>> UpdateWeldingEquipmentDowntimeAsync(
-        [FromBody] UpdateWeldingEquipmentDowntimeRequest request)
+    public async Task<
+        ActionResult<WeldingEquipmentDowntimeDto>
+    > UpdateWeldingEquipmentDowntimeAsync([FromBody] UpdateWeldingEquipmentDowntimeRequest request)
     {
         var result = await _weldingEquipmentService.UpdateWeldingEquipmentDowntimeAsync(request);
         return result.ToOk();
@@ -75,7 +86,8 @@ public class WeldingEquipmentController : ControllerBase
 
     [HttpPut("assignMaster")]
     public async Task<ActionResult<Unit>> AssignEquipmentsToMasterAsync(
-        [FromBody] AssignEquipmentsToMastersRequest request)
+        [FromBody] AssignEquipmentsToMastersRequest request
+    )
     {
         var result = await _weldingEquipmentService.AssignEquipmentsToMasterAsync(request);
         return result.ToOk();
@@ -83,9 +95,19 @@ public class WeldingEquipmentController : ControllerBase
 
     [HttpPut("assignWelders")]
     public async Task<ActionResult<Unit>> AssignEquipmentToWeldersAsync(
-        [FromBody] AssignEquipmentsToWeldersRequest request)
+        [FromBody] AssignEquipmentsToWeldersRequest request
+    )
     {
         var result = await _weldingEquipmentService.AssignEquipmentsToWeldersAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _weldingEquipmentService.DeleteAsync(
+            new DeleteWeldingEquipmentRequest { Id = id }
+        );
         return result.ToOk();
     }
 }

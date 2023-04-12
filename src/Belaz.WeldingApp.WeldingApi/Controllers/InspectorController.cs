@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,9 @@ public class InspectorController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(InspectorDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<InspectorDto>> CreateAsync([FromBody] CreateInspectorRequest request)
+    public async Task<ActionResult<InspectorDto>> CreateAsync(
+        [FromBody] CreateInspectorRequest request
+    )
     {
         var result = await _inspectorService.CreateAsync(request);
         return result.ToOk();
@@ -40,9 +43,18 @@ public class InspectorController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(typeof(InspectorDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<InspectorDto>> UpdateAsync([FromBody] UpdateInspectorRequest request)
+    public async Task<ActionResult<InspectorDto>> UpdateAsync(
+        [FromBody] UpdateInspectorRequest request
+    )
     {
         var result = await _inspectorService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _inspectorService.DeleteAsync(new DeleteInspectorRequest { Id = id });
         return result.ToOk();
     }
 }

@@ -70,4 +70,22 @@ public class MasterRepository : IMasterRepository
             .Where(_ => weldingEquipmentIds.Any(equipmentId => equipmentId == _.Id))
             .ToListAsync();
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedUser = (
+            await _context.Users
+                .Include(p => p.Masters)
+                .ThenInclude(_ => _.WeldingEquipments)
+                .Include(p => p.Masters)
+                .ThenInclude(_ => _.WeldingRecords)
+                .Include(p => p.Masters)
+                .ThenInclude(_ => _.WeldingTasks)
+                .FirstOrDefaultAsync(_ => _.Masters.Any(master => master.Id == id))
+        )!;
+
+        _context.Users.Remove(deletedUser);
+
+        await _context.SaveChangesAsync();
+    }
 }

@@ -12,4 +12,6 @@ public interface IInspectorRepository
     Task<InspectorDto> CreateAsync(Inspector entity);
 
     Task<InspectorDto> UpdateAsync(Inspector entity);
+
+    Task DeleteAsync(Guid id);
 }

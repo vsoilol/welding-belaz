@@ -71,4 +71,15 @@ public class WelderRepository : IWelderRepository
             .Where(_ => weldingEquipmentIds.Any(equipmentId => equipmentId == _.Id))
             .ToListAsync();
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedUser = (
+            await _context.Users.FirstOrDefaultAsync(_ => _.Welders.Any(welder => welder.Id == id))
+        )!;
+
+        _context.Users.Remove(deletedUser);
+
+        await _context.SaveChangesAsync();
+    }
 }

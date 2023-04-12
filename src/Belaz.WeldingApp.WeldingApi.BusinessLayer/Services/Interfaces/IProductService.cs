@@ -31,4 +31,6 @@ public interface IProductService
     Task<Result<Unit>> AssignProductsToMasterAsync(AssignProductsToMasterRequest request);
 
     Task<Result<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request);
+
+    Task<Result<Unit>> DeleteAsync(DeleteProductRequest request);
 }

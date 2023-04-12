@@ -8,6 +8,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -18,8 +19,11 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
     private readonly IMapper _mapper;
     private readonly ITechnologicalInstructionRepository _technologicalInstructionRepository;
 
-    public TechnologicalInstructionService(IValidationService validationService, IMapper mapper,
-        ITechnologicalInstructionRepository technologicalInstructionRepository)
+    public TechnologicalInstructionService(
+        IValidationService validationService,
+        IMapper mapper,
+        ITechnologicalInstructionRepository technologicalInstructionRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -31,7 +35,9 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
         return _technologicalInstructionRepository.GetAllAsync();
     }
 
-    public async Task<Result<TechnologicalInstructionDto>> CreateAsync(CreateInstructionRequest request)
+    public async Task<Result<TechnologicalInstructionDto>> CreateAsync(
+        CreateInstructionRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -40,11 +46,16 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
             var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
             var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
 
-            return _technologicalInstructionRepository.CreateAsync(technologicalInstruction, weldPassages);
+            return _technologicalInstructionRepository.CreateAsync(
+                technologicalInstruction,
+                weldPassages
+            );
         });
     }
 
-    public async Task<Result<TechnologicalInstructionDto>> UpdateAsync(UpdateInstructionRequest request)
+    public async Task<Result<TechnologicalInstructionDto>> UpdateAsync(
+        UpdateInstructionRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -53,7 +64,21 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
             var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
             var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
 
-            return _technologicalInstructionRepository.UpdateAsync(technologicalInstruction, weldPassages);
+            return _technologicalInstructionRepository.UpdateAsync(
+                technologicalInstruction,
+                weldPassages
+            );
+        });
+    }
+
+    public async Task<Result<Unit>> DeleteAsync(DeleteInstructionRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        return await validationResult.ToDataResult(async () =>
+        {
+            await _technologicalInstructionRepository.DeleteAsync(request.Id);
+            return Unit.Default;
         });
     }
 }

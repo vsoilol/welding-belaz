@@ -40,7 +40,9 @@ public class WeldingTaskToDtoConverter : ITypeConverter<WeldingTask, WeldingTask
             source.SeamAccount.Seam.Product.TechnologicalProcess
         );
         destination.WeldPassageInstructions = _mapper.Map<List<WeldPassageInstructionDto>>(
-            source.SeamAccount.Seam.TechnologicalInstruction!.WeldPassageInstructions
+            source.SeamAccount.Seam.TechnologicalInstruction!.WeldPassageInstructions.OrderBy(
+                _ => _.Number
+            )
         );
 
         var seamDto = _mapper.Map<SeamDto>(source.SeamAccount.Seam);

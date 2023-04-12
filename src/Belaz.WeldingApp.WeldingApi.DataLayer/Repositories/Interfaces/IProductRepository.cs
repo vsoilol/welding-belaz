@@ -30,4 +30,6 @@ public interface IProductRepository
     Task AssignProductToInspectorAsync(Guid productId, Guid inspectorId);
 
     Task AssignProductsToInspectorAsync(List<Guid> productIds, Guid inspectorId);
+
+    Task DeleteAsync(Guid id);
 }

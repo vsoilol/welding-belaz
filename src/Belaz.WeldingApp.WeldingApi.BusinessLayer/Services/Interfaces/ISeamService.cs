@@ -28,7 +28,13 @@ public interface ISeamService
 
     Task<List<DefectiveSeamDto>> GetAllDefectiveSeamsAsync();
 
-    Task<Result<DefectiveSeamDto>> AddDefectiveReasonToSeamAsync(AddDefectiveReasonToSeamRequest request);
+    Task<Result<DefectiveSeamDto>> AddDefectiveReasonToSeamAsync(
+        AddDefectiveReasonToSeamRequest request
+    );
 
-    Task<Result<DefectiveSeamDto>> UpdateDefectiveReasonSeamAsync(UpdateDefectiveReasonToSeamRequest request);
+    Task<Result<DefectiveSeamDto>> UpdateDefectiveReasonSeamAsync(
+        UpdateDefectiveReasonToSeamRequest request
+    );
+
+    Task<Result<Unit>> DeleteAsync(DeleteSeamRequest request);
 }

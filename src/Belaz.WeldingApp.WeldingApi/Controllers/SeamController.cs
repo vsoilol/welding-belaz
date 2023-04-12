@@ -25,7 +25,7 @@ public class SeamController : ControllerBase
     {
         _seamService = seamService;
     }
-    
+
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllAsync()
@@ -43,7 +43,9 @@ public class SeamController : ControllerBase
 
     [HttpGet("byControlSubject/{isControlSubject}")]
     [ProducesResponseType(typeof(IEnumerable<SeamDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByControlSubjectAsync([FromRoute] bool isControlSubject)
+    public async Task<ActionResult<IEnumerable<SeamDto>>> GetAllByControlSubjectAsync(
+        [FromRoute] bool isControlSubject
+    )
     {
         return await _seamService.GetAllByControlSubjectAsync(isControlSubject);
     }
@@ -66,10 +68,13 @@ public class SeamController : ControllerBase
 
     [HttpGet("byInspector/{inspectorId}")]
     [ProducesResponseType(typeof(List<SeamDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<SeamDto>>> GetAllByInspectorIdAsync([FromRoute] Guid inspectorId)
+    public async Task<ActionResult<List<SeamDto>>> GetAllByInspectorIdAsync(
+        [FromRoute] Guid inspectorId
+    )
     {
-        var result = await _seamService.GetAllByInspectorIdAsync(new GetAllByInspectorIdRequest
-            { InspectorId = inspectorId });
+        var result = await _seamService.GetAllByInspectorIdAsync(
+            new GetAllByInspectorIdRequest { InspectorId = inspectorId }
+        );
         return result.ToOk();
     }
 
@@ -87,9 +92,11 @@ public class SeamController : ControllerBase
         var result = await _seamService.AssignSeamToInspectorAsync(request);
         return result.ToOk();
     }*/
-    
+
     [HttpPut("assignInspector")]
-    public async Task<ActionResult<Unit>> AssignSeamsToInspectorAsync([FromBody] AssignSeamsToInspectorRequest request)
+    public async Task<ActionResult<Unit>> AssignSeamsToInspectorAsync(
+        [FromBody] AssignSeamsToInspectorRequest request
+    )
     {
         var result = await _seamService.AssignSeamsToInspectorAsync(request);
         return result.ToOk();
@@ -105,7 +112,8 @@ public class SeamController : ControllerBase
     [HttpPost("defective")]
     [ProducesResponseType(typeof(DefectiveSeamDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<DefectiveSeamDto>> AddDefectiveReasonToSeamAsync(
-        [FromBody] AddDefectiveReasonToSeamRequest request)
+        [FromBody] AddDefectiveReasonToSeamRequest request
+    )
     {
         var result = await _seamService.AddDefectiveReasonToSeamAsync(request);
         return result.ToOk();
@@ -114,9 +122,17 @@ public class SeamController : ControllerBase
     [HttpPut("defective")]
     [ProducesResponseType(typeof(DefectiveSeamDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<DefectiveSeamDto>> UpdateDefectiveReasonSeamAsync(
-        [FromBody] UpdateDefectiveReasonToSeamRequest request)
+        [FromBody] UpdateDefectiveReasonToSeamRequest request
+    )
     {
         var result = await _seamService.UpdateDefectiveReasonSeamAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _seamService.DeleteAsync(new DeleteSeamRequest { Id = id });
         return result.ToOk();
     }
 }
