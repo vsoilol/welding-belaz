@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,8 +28,9 @@ public class TechnologicalProcessController : ControllerBase
     [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<TechnologicalProcessDto>> GetByIdAsync([FromRoute] Guid id)
     {
-        var result = await _technologicalProcessService
-            .GetByIdAsync(new GetTechnologicalProcessByIdRequest { Id = id });
+        var result = await _technologicalProcessService.GetByIdAsync(
+            new GetTechnologicalProcessByIdRequest { Id = id }
+        );
         return result.ToOk();
     }
 
@@ -42,7 +44,8 @@ public class TechnologicalProcessController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<TechnologicalProcessDto>> CreateAsync(
-        [FromBody] CreateTechnologicalProcessRequest request)
+        [FromBody] CreateTechnologicalProcessRequest request
+    )
     {
         var result = await _technologicalProcessService.CreateAsync(request);
         return result.ToOk();
@@ -51,9 +54,19 @@ public class TechnologicalProcessController : ControllerBase
     [HttpPut]
     [ProducesResponseType(typeof(TechnologicalProcessDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<TechnologicalProcessDto>> UpdateAsync(
-        [FromBody] UpdateTechnologicalProcessRequest request)
+        [FromBody] UpdateTechnologicalProcessRequest request
+    )
     {
         var result = await _technologicalProcessService.UpdateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
+    {
+        var result = await _technologicalProcessService.DeleteAsync(
+            new DeleteTechnologicalProcessRequest { Id = id }
+        );
         return result.ToOk();
     }
 }

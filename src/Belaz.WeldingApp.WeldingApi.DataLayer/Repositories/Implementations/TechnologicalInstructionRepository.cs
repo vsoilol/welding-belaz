@@ -118,6 +118,18 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         _context.WeldPassageInstructions.AddRange(weldPassages);
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        var deletedTechnologicalInstruction = (
+            await _context.TechnologicalInstructions
+                .Include(_ => _.Seams)
+                .FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        _context.TechnologicalInstructions.Remove(deletedTechnologicalInstruction);
+        await _context.SaveChangesAsync();
+    }
+
     private IQueryable<TechnologicalInstruction> FilterTechnologicalInstructions(
         Expression<Func<TechnologicalInstruction, bool>> filter
     )

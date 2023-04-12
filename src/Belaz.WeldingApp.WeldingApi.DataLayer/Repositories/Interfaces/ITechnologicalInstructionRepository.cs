@@ -11,7 +11,15 @@ public interface ITechnologicalInstructionRepository
 
     Task<TechnologicalInstructionDto> GetByIdAsync(Guid id);
 
-    Task<TechnologicalInstructionDto> CreateAsync(TechnologicalInstruction entity, List<WeldPassageInstruction> weldPassages);
+    Task<TechnologicalInstructionDto> CreateAsync(
+        TechnologicalInstruction entity,
+        List<WeldPassageInstruction> weldPassages
+    );
 
-    Task<TechnologicalInstructionDto> UpdateAsync(TechnologicalInstruction entity, List<WeldPassageInstruction> weldPassages);
+    Task<TechnologicalInstructionDto> UpdateAsync(
+        TechnologicalInstruction entity,
+        List<WeldPassageInstruction> weldPassages
+    );
+
+    Task DeleteAsync(Guid id);
 }

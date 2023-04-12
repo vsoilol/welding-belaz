@@ -1,5 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalProcess;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
@@ -13,4 +14,6 @@ public interface ITechnologicalProcessService
     Task<Result<TechnologicalProcessDto>> CreateAsync(CreateTechnologicalProcessRequest request);
 
     Task<Result<TechnologicalProcessDto>> UpdateAsync(UpdateTechnologicalProcessRequest request);
+
+    Task<Result<Unit>> DeleteAsync(DeleteTechnologicalProcessRequest request);
 }
