@@ -227,26 +227,29 @@ export const Seam = ({
 
 
   //select изделие
-  const productsOptions = product?.map((item) => {
-    return {
+  const productsOptions = [
+    { value: null, label: "Не выбрано" },
+    ...(product?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    };
-  });
+    })) || []),
+  ]
   //select узел
-  const knotsOptions = knot?.map((item) => {
-    return {
+  const knotsOptions = [
+    { value: null, label: "Не выбрано" },
+    ...(knot?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    };
-  });
+    })) || []), 
+  ];
   //select деталь
-  const detailOptions = detail?.map((item) => {
-    return {
+  const detailOptions = [
+    { value: null, label: "Не выбрано" },
+    ...(detail?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    };
-  });
+    })) || []), 
+  ];
 
 
   const TabPanel = (props_panel) => {

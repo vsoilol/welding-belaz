@@ -95,8 +95,8 @@ export const Product = ({
   const [valueChoise, setvalueChoise] = useState("");
   //Id выбранного изделие/деталь/узел
   const [valueIdIzdelia, setIdIzdelia] = useState("");
-///дописываю для чего просматриваем закрепленные объекты
-const [isDisplayFixed, setDisplayFixed] = useState("");
+  ///дописываю для чего просматриваем закрепленные объекты
+  const [isDisplayFixed, setDisplayFixed] = useState("");
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -166,7 +166,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id);setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -185,8 +185,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id);setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
@@ -208,7 +208,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -248,7 +248,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
-      
+
       // {
       //   title: "Закрерить сварщика",
       //   render: (rowData) => {
@@ -266,9 +266,9 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id);setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id);setDisplayFixed(rowData?.name) }}>Узел </p>
-              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id);setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id); setDisplayFixed(rowData?.name) }}>Узел </p>
+              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -314,8 +314,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id);setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id);setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -362,7 +362,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы");setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы"); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -388,47 +388,47 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       // {
       //   title: "Номер  рабочего места  ", field: "workplace.number"
       // },
-      
+
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      }, 
+      },
       {
         title: "Технологическая инструкция", field: "technologicalInstruction.name"
       },
       {
-        title: "Наименование изделия ", 
+        title: "Наименование изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  изделия ", 
+        title: "Номер  изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование узла ", 
+        title: "Наименование узла ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  узла ", 
+        title: "Номер  узла ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование детали ", 
+        title: "Наименование детали ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  детали ", 
+        title: "Номер  детали ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number ?? "-"}</span>
         },
       },
       // {
@@ -582,7 +582,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
     setValue(-1);
     setValue2(-1);
     setValuegoToHeadTable(columns[Object.keys(columns)[param]])
-    
+
     /////////////////
     //Вывод деталей для изделий
     if (param === 6) {
@@ -827,7 +827,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed+" - " +value_goToTitle}
+                  title={isDisplayFixed + " - " + value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -852,7 +852,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 value={0}
                 data={product}
                 actions={
-                  userRole === "Admin"||userRole === "Master"
+                  userRole === "Admin" || userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -877,6 +877,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                           setIsModalOpen(true);
                           setIsModalNumb(4)
 
+                          console.log(rowData)
+
                           setValueProdArea(rowData.workshop?.id)
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
@@ -900,7 +902,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
           ? (
             <div className={styles.TableToFixed}>
 
-               
+
               <h2>Закрерить сварщика</h2>
               <h3>Изделие: {valueChoise}</h3>
 
@@ -914,7 +916,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                   displaySeams === 1
                     ? (
                       <TabPanel
-                        style={{  minWidth: "800px", }}
+                        style={{ minWidth: "800px", }}
                       >
                         <Table
                           title="Сварные швы"
@@ -926,7 +928,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     : <div></div>
                 }
 
-                
+
 
               </div>
 
@@ -1013,17 +1015,17 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
-                      handleChange(e);
+                      const value = e.target.value;
+                      if (/^[\dA-Z-]+$/.test(value)) {
+                        handleChange(e);
+                      }
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
-                    type="number"
-                    min="0"
-                    step="1"
                     name="number"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -1079,7 +1081,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == ""  
+                      values.number == "" || values.name == ""
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

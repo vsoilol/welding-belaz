@@ -186,12 +186,12 @@ export const Equipment = ({
         return <span>{DetArea(rowData.post, "numb") ?? "-"}</span>
       },
     },
-    {
+    /* {
       title: "Закрерить сотрудников",
       render: (rowData) => {
         return <p className={styles.Fix} onClick={e => { setvalueChoiseWelder(true); setweldingEquipmentId(rowData?.id) }}>Закрерить</p>;
       },
-    },
+    }, */
     {
       title: "Просмотреть календарь",
       render: (rowData) => {
@@ -422,12 +422,13 @@ export const Equipment = ({
     );
   };
   //select Посты   
-  const optPosts = posts?.map((item) => {
-    return {
+  const optPosts = [
+    { value: null, label: "Не выбрано" },
+    ...(posts?.map((item) => ({
       value: item.id,
       label: `Пост ${item.number}`,
-    };
-  });
+    })) || []),
+  ];
   const reasonOptions = reason?.map((item) => {
     return {
       value: item.id,
@@ -828,7 +829,8 @@ export const Equipment = ({
                   <div className={styles.row}>
                     <Input
                        onChange={(e) => {
-                        if (/^[0-9A-Fa-f:]+$/.test(e.target.value)) {
+                        const value = e.target.value;
+                        if (value === "" || /^[0-9A-Fa-f:]+$/.test(value)) {
                           handleChange(e);
                         }
                       }}
