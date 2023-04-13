@@ -763,12 +763,13 @@ export const Knot = ({
 
   //наименование изделия 
   const [valuetProduct, setvaluetProduct] = useState("");
-  const productsOptions = product?.map((item) => {
-    return {
+  const productsOptions = [
+    { value: null, label: "Не выбрано" },
+    ...(product?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    };
-  });
+    })) || []),
+  ]
 
 
 
@@ -1048,19 +1049,19 @@ export const Knot = ({
                   />
                 </div>
                 <div className={styles.row}>
-                  <Input
+                <Input
                     onChange={(e) => {
-                      handleChange(e);
+                      const value = e.target.value;
+                      if (/^[\dA-Z-]+$/.test(value)) {
+                        handleChange(e);
+                      }
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
-                    type="number"
-                    min="0"
-                    step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
 

@@ -90,13 +90,13 @@ export const Detail = ({
   //Создание задания
   const [createTask, setcreateTask] = useState(0);
   //Выбранные сварщики
-  const [welderListChoise, setwelderListChoise] = useState([]); 
+  const [welderListChoise, setwelderListChoise] = useState([]);
   //Выбранное изделие/деталь/узел
-  const [valueChoise, setvalueChoise] = useState(""); 
+  const [valueChoise, setvalueChoise] = useState("");
   //Id выбранного изделие/деталь/узел
-  const [valueIdIzdelia, setIdIzdelia] = useState(""); 
-///дописываю для чего просматриваем закрепленные объекты
-const [isDisplayFixed, setDisplayFixed] = useState("");
+  const [valueIdIzdelia, setIdIzdelia] = useState("");
+  ///дописываю для чего просматриваем закрепленные объекты
+  const [isDisplayFixed, setDisplayFixed] = useState("");
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -125,37 +125,28 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
   }
   //Запрос на редактирование или добавление
   function SendData(variables) {
-
-    variables["workshopId"] = valueProdArea
-    variables["workshopNumber"] = SetValue(valueProdArea, 0)
-
-    variables["productionAreaId"] = valuetPosts
-    variables["productionAreaNumber"] = SetValue(valuetPosts, 1)
-
-    variables["technologicalProcessId"] = valuetTechProc
-
-    variables["seams"] = [valuetSeam]
-
-    variables["postId"] = valuetWorkPlace
-    variables["workplaceId"] = valueWorkplace
-
-
-    //Добавить Деталь
-    if (isModalNumb == 14) {
-      variables["status"] = "add"
-      variables["mainProductId"] = valuetProduct
-      
-      addDetail(variables)
+    variables.workshopId = valueProdArea;
+    variables.workshopNumber = SetValue(valueProdArea, 0);
+    variables.productionAreaId = valuetPosts;
+    variables.productionAreaNumber = SetValue(valuetPosts, 1);
+    variables.technologicalProcessId = valuetTechProc;
+    variables.seams = [valuetSeam];
+    variables.postId = valuetWorkPlace;
+    variables.workplaceId = valueWorkplace;
+    
+    if (isModalNumb === 14) {
+      variables.status = 'add';
+      variables.mainProductId = valuetKnots ? valuetKnots : valuetProduct;
+      addDetail(variables);
     }
-    //Редактировать Деталь
-    if (isModalNumb == 6) {
-      variables["mainProductId"] = valuetProduct
-      editDetail(variables)
-    }
-
+    
+    if (isModalNumb === 6) { 
+      variables.mainProductId = valuetKnots ? valuetKnots : valuetProduct;
+      editDetail(variables);
+    }  
   }
 
-  const columns = {  
+  const columns = {
     workshops: [
       {
         title: "Наименование цеха",
@@ -250,11 +241,11 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
-      
+
       {
         title: "Закрерить сварщика",
         render: (rowData) => {
-          return <p className={styles.Fix} onClick={e => { 
+          return <p className={styles.Fix} onClick={e => {
             setValuegoTo(2);
             setvalueChoise(rowData.name)
             setIdIzdelia(rowData.id)
@@ -368,7 +359,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы", rowData.id);setDisplayFixed(rowData?.name)  }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -394,47 +385,47 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       // {
       //   title: "Номер  рабочего места  ", field: "workplace.number"
       // },
-      
+
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      }, 
+      },
       {
         title: "Технологическая инструкция", field: "technologicalInstruction.name"
       },
       {
-        title: "Наименование изделия ", 
+        title: "Наименование изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  изделия ", 
+        title: "Номер  изделия ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование узла ", 
+        title: "Наименование узла ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  узла ", 
+        title: "Номер  узла ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.number ?? "-"}</span>
         },
       },
       {
-        title: "Наименование детали ", 
+        title: "Наименование детали ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name ?? "-"}</span>
         },
       },
       {
-        title: "Номер  детали ", 
+        title: "Номер  детали ",
         render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number??"-"}</span>
+          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number ?? "-"}</span>
         },
       },
       // {
@@ -483,11 +474,11 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
       },
     ],
-    welder:[
+    welder: [
       {
         title: "Закрепить сварщика",
         render: (rowData) => {
-          return <input type="checkbox" onClick={e=>{ChioseWelder(rowData)}}></input>
+          return <input type="checkbox" onClick={e => { ChioseWelder(rowData) }}></input>
         },
       },
       {
@@ -510,14 +501,14 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       },
       {
         title: "Цех",
-        render: (rowData) => { 
+        render: (rowData) => {
           return rowData?.workshop?.name;
         },
       },
       {
         title: "Производственный участок",
         field: "productionArea.name",
-      }, 
+      },
     ]
 
   };
@@ -578,96 +569,53 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
   function GoTo(param, title, id) {
     setValuegoToTitle(title)
     setValuegoTo(1)
-
-
-    setValue(-1);
-    setValue2(-1);
-    setValuegoToHeadTable(columns[Object.keys(columns)[param]])
+    setValue(-1)
+    setValue2(-1)
   
-    /////////////////
-    //Вывод деталей для изделий
-    if (param === 6) {
-      let detailNew = []
-      for (let index = 0; index < product.length; index++) {
-        if (product[index].id === id) {
-
-          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
-            if (product[index].insideProducts[index2].productType === 3) {
-              detailNew.push(product[index].insideProducts[index2])
-            }
-          }
-        }
-      }
-      setValuegoToBodyTable(detailNew)
+    const handlers = {
+      5: handleKnots,
+      6: handleInsideProducts,
+      7: handleSeams,
+      10: handleInsideProductsForKnot,
+      11: handleSeamsForKnot,
+      12: handleSeamsForDetail,
     }
-    //Вывод узлов для изделий
-    if (param === 5) {
-      let knotNew = []
-      for (let index = 0; index < product.length; index++) {
-        if (product[index].id === id) {
-          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
-            if (product[index].insideProducts[index2].productType === 2) {
-              knotNew.push(product[index].insideProducts[index2])
-            }
-          }
-        }
-      }
+  
+    if (handlers[param]) {
+      handlers[param](id)
+    }
+  
+    function handleKnots(id) {
+      const knotNew = product.find(p => p.id === id)?.insideProducts.filter(ip => ip.productType === 2) || []
       setValuegoToBodyTable(knotNew)
     }
-    //Вывод швов для изделий
-    if (param === 7) {
-      let seamNew = []
-      for (let index = 0; index < product.length; index++) {
-        if (product[index].id === id) {
-          seamNew = product[index].seams
-        }
-      }
-      setValuegoToBodyTable(seamNew)
-    }
-    /////////////////
-    //Вывод деталей для узла
-    if (param === 10) {
-      let detailNew = []
-      for (let index = 0; index < knot.length; index++) {
-        if (knot[index].id === id) {
-
-          for (let index2 = 0; index2 < knot[index].insideProducts.length; index2++) {
-            if (knot[index].insideProducts[index2].productType === 3) {
-              detailNew.push(knot[index].insideProducts[index2])
-            }
-          }
-        }
-      }
-      setValuegoToHeadTable(columns[Object.keys(columns)[6]])
+  
+    function handleInsideProducts(id) {
+      const detailNew = product.find(p => p.id === id)?.insideProducts.filter(ip => ip.productType === 3) || []
       setValuegoToBodyTable(detailNew)
     }
-    //Вывод швов для узла
-    if (param === 11) {
-      let seamNew = []
-      for (let index = 0; index < knot.length; index++) {
-        if (knot[index].id === id) {
-          seamNew = knot[index].seams
-        }
-      }
-      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+  
+    function handleSeams(id) {
+      const seamNew = product.find(p => p.id === id)?.seams || []
+      setValuegoToBodyTable(seamNew)
+      setValuegoToHeadTable(columns.seam)
+    }
+  
+    function handleInsideProductsForKnot(id) {
+      const detailNew = knot.find(k => k.id === id)?.insideProducts.filter(ip => ip.productType === 3) || []
+      setValuegoToHeadTable(columns.insideProducts)
+      setValuegoToBodyTable(detailNew)
+    }
+  
+    function handleSeamsForKnot(id) {
+      const seamNew = knot.find(k => k.id === id)?.seams || []
+      setValuegoToHeadTable(columns.seam)
       setValuegoToBodyTable(seamNew)
     }
-    //Вывод швов для узла
-    if (param === 11) {
-      let seamNew = []
-      for (let index = 0; index < knot.length; index++) {
-        if (knot[index].id === id) {
-          seamNew = knot[index].seams
-        }
-      }
-      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
-      setValuegoToBodyTable(seamNew)
-    }
-    //Вывод швов для деталей
-    if (param === 12) {
-     
-      let seamNew = detail.find(det=>det.id===id).seams  
-      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
+  
+    function handleSeamsForDetail(id) {
+      const seamNew = detail.find(d => d.id === id)?.seams || []
+      setValuegoToHeadTable(columns.seam)
       setValuegoToBodyTable(seamNew)
     }
   }
@@ -678,7 +626,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
   };
 
 
- 
+
 
 
   const exec = [
@@ -703,105 +651,108 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
 
 
 
-  const [welderList, setwelderList] = useState(welderGetList (area[0].id,0)); 
+  const [welderList, setwelderList] = useState(welderGetList(area[0].id, 0));
 
-  function welderGetList (idArea,tools_numb) { 
-    if (tools_numb!=0) {
+  function welderGetList(idArea, tools_numb) {
+    if (tools_numb != 0) {
       let welderList = []
       for (let index = 0; index < executors.length; index++) {
-        if (executors[index].productionArea.id===idArea) {
+        if (executors[index].productionArea.id === idArea) {
           welderList.push(executors[index])
-        } 
+        }
       }
-      setwelderList(welderList) 
+      setwelderList(welderList)
     }
-    else{
+    else {
       let welderList = []
       for (let index = 0; index < executors.length; index++) {
-        if (executors[index].productionArea.id===idArea) {
+        if (executors[index].productionArea.id === idArea) {
           welderList.push(executors[index])
-        } 
+        }
       }
       return welderList
-    } 
-  } 
+    }
+  }
 
-  function ChioseWelder(welder) {  
-    if (welder["active"]===undefined) {
-       welderListChoise.push(welder.id)
-       welder["active"]=1
-       setwelderListChoise(welderListChoise)
+  function ChioseWelder(welder) {
+    if (welder["active"] === undefined) {
+      welderListChoise.push(welder.id)
+      welder["active"] = 1
+      setwelderListChoise(welderListChoise)
     }
-    else if (welder["active"]===1) {
+    else if (welder["active"] === 1) {
       for (let index = 0; index < welderListChoise.length; index++) {
-        if (welderListChoise[index].id===welder.id) {
-          welderListChoise.splice(index,1)
-        }        
+        if (welderListChoise[index].id === welder.id) {
+          welderListChoise.splice(index, 1)
+        }
       }
-      welder["active"]=0
+      welder["active"] = 0
     }
-    else if (welder["active"]===0) {
+    else if (welder["active"] === 0) {
       welderListChoise.push(welder.id)
       setwelderListChoise(welderListChoise)
-      welder["active"]=1
-    } 
+      welder["active"] = 1
+    }
   }
   function SendChoiseWelder() {
     let dataToassignWelders = {
-     "productId": valueIdIzdelia,
-     "welderIds": welderListChoise,
-     status :"assign"
-    }  
+      "productId": valueIdIzdelia,
+      "welderIds": welderListChoise,
+      status: "assign"
+    }
     addDetail(dataToassignWelders)
-     
- }
 
- ////Скрыть отобразить сварные швы изделия/узла/детали 
- const [displaySeams, setdisplaySeams] = useState(0);
- const [SeamsList, setSeamsList] = useState([]);
+  }
 
- function SeamsDisplay() {
-   if (displaySeams === 0) {
-     GetSeams()
-     setdisplaySeams(1)
-   }
-   else {
-     setdisplaySeams(0)
-   }
- }
+  ////Скрыть отобразить сварные швы изделия/узла/детали 
+  const [displaySeams, setdisplaySeams] = useState(0);
+  const [SeamsList, setSeamsList] = useState([]);
 
- const [valuetProduct, setvaluetProduct] = useState("");
- function GetSeams() {
+  function SeamsDisplay() {
+    if (displaySeams === 0) {
+      GetSeams()
+      setdisplaySeams(1)
+    }
+    else {
+      setdisplaySeams(0)
+    }
+  }
 
-   let SeamsArray = []
-   for (let index = 0; index < detail.length; index++) {
-     if (detail[index].id === valueIdIzdelia) {
-       for (let index2 = 0; index2 < seam.length; index2++) {
+  const [valuetProduct, setvaluetProduct] = useState("");
+  function GetSeams() {
 
-         for (let index3 = 0; index3 < detail[index].seams.length; index3++) {
-           if (seam[index2].id === detail[index].seams[index3].id) {
-             SeamsArray.push(seam[index2])
-           }
-         }
-       }
+    let SeamsArray = []
+    for (let index = 0; index < detail.length; index++) {
+      if (detail[index].id === valueIdIzdelia) {
+        for (let index2 = 0; index2 < seam.length; index2++) {
 
-     }
-   }
-   setSeamsList(SeamsArray)
- }
- const productsOptions = product?.map((item) => {
-  return {
-    value: item.id,
-    label: `${item.name} ${item.number}`,
-  };
-});
-const [valuetKnots, setvaluetKnots] = useState("");
-const knotsOptions = knot?.map((item) => {
-  return {
-    value: item.id,
-    label: `${item.name} ${item.number}`,
-  };
-});
+          for (let index3 = 0; index3 < detail[index].seams.length; index3++) {
+            if (seam[index2].id === detail[index].seams[index3].id) {
+              SeamsArray.push(seam[index2])
+            }
+          }
+        }
+
+      }
+    }
+    setSeamsList(SeamsArray)
+  }
+  const productsOptions = [ 
+    { value: null, label: "Не выбрано" },
+    ...(product?.map((item) => ({
+      value: item.id,
+      label: `${item.name} ${item.number}`,
+    })) || []),
+  ];
+
+  const [valuetKnots, setvaluetKnots] = useState("");
+  const knotsOptions = [
+    { value: null, label: "Не выбрано" },
+    ...(knot?.map((item) => ({
+      value: item.id,
+      label: `${item.name} ${item.number}`,
+    })) || []), 
+  ];
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -819,7 +770,7 @@ const knotsOptions = knot?.map((item) => {
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed+" - " +value_goToTitle}
+                  title={isDisplayFixed + " - " + value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -841,7 +792,7 @@ const knotsOptions = knot?.map((item) => {
                 columns={columns.details}
                 data={detail}
                 actions={
-                  userRole === "Admin"||userRole === "Master"
+                  userRole === "Admin" || userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -885,11 +836,11 @@ const knotsOptions = knot?.map((item) => {
 
           ? (
             <div className={styles.TableToFixed}>
- 
+
               <h2>Закрепить сварщика</h2>
               <h3>Деталь: {valueChoise}</h3>
               <div className={styles.Seams}>
-               
+
                 {
                   displaySeams === 1
                     ? (
@@ -906,11 +857,11 @@ const knotsOptions = knot?.map((item) => {
                     : <div></div>
                 }
 
-                
+
 
               </div>
               <div className={styles.selects}>
-                
+
                 <div className={styles.roww}>
                   <p>Производственные участки</p>
                   <Select
@@ -920,7 +871,7 @@ const knotsOptions = knot?.map((item) => {
                     placeholder="Производственные участки"
                     onChange={(event) => {
                       setValuetPosts(event.value)
-                      welderGetList(event.value,1)
+                      welderGetList(event.value, 1)
                     }}
                     options={optPosts}
                   />
@@ -935,7 +886,7 @@ const knotsOptions = knot?.map((item) => {
                   columns={columnsFix.welder}
                   data={welderList}
                 />
-              </TabPanel> 
+              </TabPanel>
             </div>
           )
           : (
@@ -944,7 +895,7 @@ const knotsOptions = knot?.map((item) => {
 
         }
 
- 
+
 
 
         <ModalWindow
@@ -989,17 +940,17 @@ const knotsOptions = knot?.map((item) => {
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
-                      handleChange(e);
+                      const value = e.target.value;
+                      if (/^[\dA-Z-]+$/.test(value)) {
+                        handleChange(e);
+                      }
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
                     name="number"
-                    type="number"
-                    min="0"
-                    step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -1074,7 +1025,7 @@ const knotsOptions = knot?.map((item) => {
                   <Button
                     type="submit"
                     disabled={
-                      values.number == ""   
+                      values.number == ""
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

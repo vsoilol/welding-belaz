@@ -88,7 +88,7 @@ export const ExecutorsTable = ({
     {
       title: "RFID-метка",
       render: (rowData) => {
-        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+        return <p>{rowData?.rfidTag ?? "-"}</p>;
       },
     },
     {
@@ -149,7 +149,7 @@ export const ExecutorsTable = ({
     {
       title: "RFID-метка",
       render: (rowData) => {
-        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+        return <p>{rowData?.rfidTag ?? "-"}</p>;
       },
     },
     {
@@ -242,7 +242,7 @@ export const ExecutorsTable = ({
     {
       title: "RFID-метка",
       render: (rowData) => {
-        return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
+        return <p>{rowData?.rfidTag ?? "-"}</p>;
       },
     },
     {
