@@ -70,8 +70,8 @@ export const Place = ({
 
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
-///дописываю для чего просматриваем закрепленные объекты
-const [isDisplayFixed, setDisplayFixed] = useState("");
+  ///дописываю для чего просматриваем закрепленные объекты
+  const [isDisplayFixed, setDisplayFixed] = useState("");
 
   const initialValues = {
     name: modalData?.name ?? "",
@@ -151,7 +151,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id);setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -170,8 +170,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id);setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
@@ -183,7 +183,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Наименование поста ",
         render: (rowData) => {
-          return <p>Пост {rowData.number??"-"}</p>;
+          return <p>Пост {rowData.number ?? "-"}</p>;
         },
       },
       {
@@ -193,7 +193,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -201,7 +201,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number??"-"}</p>;
+          return <p>Рабочее место {rowData.number ?? "-"}</p>;
         },
       },
       {
@@ -211,26 +211,26 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name??"-"}</span>
+          return <span>{rowData?.workshop.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number??"-"}</span>
+          return <span>{rowData?.workshop.number ?? "-"}</span>
         },
       },
 
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.name??"-"}</span>
+          return <span>{rowData?.productionArea.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.number??"-"}</span>
+          return <span>{rowData?.productionArea.number ?? "-"}</span>
         },
       },
 
@@ -238,18 +238,18 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Наименование поста",
         render: (rowData) => {
-          return <span>{rowData?.post?.name??"-"}</span>
+          return <span>{rowData?.post?.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  поста",
         render: (rowData) => {
-          return <span>{rowData?.post?.number??"-"}</span>
+          return <span>{rowData?.post?.number ?? "-"}</span>
         },
       },
     ],
 
-     
+
   };
 
 
@@ -277,12 +277,13 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
     };
   });
   //select Рабочие места 
-  const WorkPlaceOpt = posts?.map((item) => {
-    return {
+  const WorkPlaceOpt =[
+    { value: null, label: "Не выбрано" },
+    ...(posts?.map((item) => ({
       value: item.id,
-      label: "Пост " + item.number,
-    };
-  });
+      label: `${item.name} ${item.number}`,
+    })) || []),
+  ]
 
   ///Перейти к 
   function GoTo(param, title, id) {
@@ -436,6 +437,12 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       label: item.name,
     };
   });
+
+
+  const [isPostSelected, setIsPostSelected] = useState(false);
+  const handleChangeRadio = (event) => {
+    setIsPostSelected(event.target.value === "post");
+  };
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
@@ -457,7 +464,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed+" - " +value_goToTitle}
+                  title={isDisplayFixed + " - " + value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -476,7 +483,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 className="workshops"
                 data={workplace}
                 actions={
-                  userRole === "Admin"||userRole === "Master"
+                  userRole === "Admin" || userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -555,6 +562,32 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     autocomplete="off"
                   />
                 </div> */}
+                <p>Пост /  Производственный участок</p>
+                <div className={styles.radioPost}>
+                  <div>
+                    <input
+                      type="radio"
+                      id="post"
+                      name="option"
+                      value="post" 
+                      checked={isPostSelected}
+                      onChange={handleChangeRadio}
+                    />
+                    <label htmlFor="post">Пост</label>
+                  </div>
+                  <div>
+                    <input
+                      type="radio"
+                      id="prodArea"
+                      name="option"
+                      value="prodArea" 
+                      checked={!isPostSelected}
+                      onChange={handleChangeRadio}
+                    />
+                    <label htmlFor="prodArea">Производственный участок</label>
+                  </div>
+                  
+                </div>
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
@@ -571,28 +604,36 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                     autocomplete="off"
                   />
                 </div>
+                
 
                 <div className={styles.row}>
-                  <Select
-                    name="valuetWorkPlace"
-                    width="380px"
-                    value={valuetWorkPlace}
-                    placeholder="Пост"
-                    onChange={(event) => setValuetWorkPlace(event.value)}
-                    options={WorkPlaceOpt}
-                  />
+                  {isPostSelected ? (
+                     <div className={styles.row}>
+                        <Select
+                          name="valuetWorkPlace"
+                          width="380px"
+                          value={valuetWorkPlace}
+                          placeholder="Пост"
+                          onChange={(event) => setValuetWorkPlace(event.value)}
+                          options={WorkPlaceOpt}
+                        />
+                      </div>
+                  ) : (
+                    <div className={styles.row}>
+                      <Select
+                        name="valuetPosts"
+                        width="380px"
+                        value={valuetPosts}
+                        placeholder="Производственные участки"
+                        onChange={(event) => setValuetPosts(event.value)}
+                        options={optPosts}
+                      />
+                    </div>
+                  )}
                 </div>
+               
 
-                <div className={styles.row}>
-                  <Select
-                    name="valuetPosts"
-                    width="380px"
-                    value={valuetPosts}
-                    placeholder="Производственные участки"
-                    onChange={(event) => setValuetPosts(event.value)}
-                    options={optPosts}
-                  />
-                </div>
+                
                 <div className={styles.row}>
                   <Select
                     name="valueProdArea"
@@ -610,7 +651,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                   <Button
                     type="submit"
                     disabled={
-                      values.number == ""  
+                      values.number == ""
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

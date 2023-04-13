@@ -70,7 +70,7 @@ export const Calendar = ({
   const [isModalOpenIndex, setIsModalOpenIndex] = useState(false);
   const [modalData, setModalData] = useState(null);
   const dispatch = useDispatch();
-  const [valueObj, setValueObj] = useState(1);
+  const [valueObj, setValueObj] = useState(0);
 
   const [valueExecutors, setValueExecutors] = useState(null);
   const [valueNameExecutors, setValueNameExecutors] = useState(null);
@@ -247,21 +247,21 @@ export const Calendar = ({
     params["workingShifts"] = SetworkingShifts(valueWorkingShift)
 
 
-     console.log(params)
+ 
     if (fun === "AddWorkDay") {
-      if (valueObj === 1) {
-        params["valueExecutors"] = null
-      }
-      else {
-        params["valueEquipment"] = null
-      }
-      if (params?.workingShifts?.number===3) {
-        params.number++
-      }
-      addDay(params)
-    }
-    if (fun === "EditWorkDay") {
-      editDay(params)
+      const executorId = window.localStorage.getItem("executorId");
+      const equipmentId = window.localStorage.getItem("equipmentId"); 
+      if (executorId) {
+        params.valueExecutors = executorId;
+      } else if (equipmentId) {
+        params.valueEquipment = equipmentId;
+      } 
+      if (params.workingShifts?.number === 3) {
+        params.number++;
+      } 
+      addDay(params);
+    } else if (fun === "EditWorkDay") {
+      editDay(params);
     }
   
   }
@@ -286,22 +286,23 @@ export const Calendar = ({
 
   ////*****************//////////////////!!!!!  Calendar
 
-  const ArrayDays = calendar?.days[1];
+  const ArrayDays = calendar?.days??[];
+ 
+  const resultArrayDays = ArrayDays?.map((Day) => {  
+    const [breakStartHour, breakStartMinute] = Day?.workingShifts?.[0]?.breakStart?.split(':') ?? [null, null];
 
-  const resultArrayDays = ArrayDays?.map((Day) => { 
-    const [breakStartHour, breakStartMinute] = Day.workingShifts[0].breakStart.split(':');
-    const [breakEndHour, breakEndMinute] = Day.workingShifts[0].breakEnd.split(':');
+    const [breakEndHour, breakEndMinute] = Day?.workingShifts?.[0].breakEnd.split(':')?? [null, null];
 
-    const [shiftStartHour, shiftStartMinute] = Day.workingShifts[0].shiftStart.split(':');
-    const [shiftEndHour, shiftEndMinute] = Day.workingShifts[0].shiftEnd.split(':');
+    const [shiftStartHour, shiftStartMinute] = Day?.workingShifts?.[0].shiftStart.split(':')?? [null, null];
+    const [shiftEndHour, shiftEndMinute] = Day?.workingShifts?.[0].shiftEnd.split(':')?? [null, null];
 
-    let shiftStart = new Date(Day.year, Day.monthNumber-1, Day.number, shiftStartHour, shiftStartMinute) ;
-    let shiftEnd = new Date(Day.year, Day.monthNumber-1, Day.number, shiftEndHour,shiftEndMinute) ;
+    let shiftStart = new Date(Day?.year, Day?.monthNumber-1, Day?.number, shiftStartHour, shiftStartMinute) ;
+    let shiftEnd = new Date(Day?.year, Day?.monthNumber-1, Day?.number, shiftEndHour,shiftEndMinute) ;
     
-    let breakStart = new Date(Day.year, Day.monthNumber-1, Day.number, breakStartHour, breakStartMinute) ;
-    let breakEnd = new Date(Day.year, Day.monthNumber-1, Day.number, breakEndHour, breakEndMinute) ;
+    let breakStart = new Date(Day?.year, Day?.monthNumber-1, Day?.number, breakStartHour, breakStartMinute) ;
+    let breakEnd = new Date(Day?.year, Day?.monthNumber-1, Day?.number, breakEndHour, breakEndMinute) ;
      return{
-        title: `Смена ${Day.workingShifts[0].number}`,
+        title: `Смена ${Day?.workingShifts?.[0].number}`,
         start: shiftStart,
         end: breakStart,
 
@@ -309,9 +310,9 @@ export const Calendar = ({
         breakEnd:breakEnd,
         breakStart:breakStart,
 
-        year:Day.year,
-        shiftStart:Day.workingShifts[0].breakStart,
-        shiftEnd:Day.workingShifts[0].breakStart,
+        year:Day?.year,
+        shiftStart:Day?.workingShifts?.[0].breakStart,
+        shiftEnd:Day?.workingShifts?.[0].breakStart,
 
     }
   }); 
@@ -394,7 +395,7 @@ export const Calendar = ({
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valueObj"
                     value={valueObj}
@@ -405,10 +406,10 @@ export const Calendar = ({
                     }}
                     options={optObs}
                   />
-                </div>
+                </div> */}
 
 
-                {valueObj === 1
+                {/* {valueObj === 1
                   ? (
                     <div className={styles.row}>
                       <Select
@@ -438,7 +439,7 @@ export const Calendar = ({
                       />
                     </div>
                   )
-                }
+                } */}
 
 
 
