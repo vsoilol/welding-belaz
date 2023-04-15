@@ -15,7 +15,7 @@ public class WeldingEquipmentConditionTime : Entity
     /// <summary>
     /// Сколько оборудование находиться в данном состоянии в минутах
     /// </summary>
-    public int Time { get; set; } = 0;
+    public double Time { get; set; } = 0;
 
     public Guid WeldingEquipmentId { get; set; }
 
@@ -24,5 +24,6 @@ public class WeldingEquipmentConditionTime : Entity
 
     public Guid? DowntimeReasonId { get; set; }
 
-    [ForeignKey(nameof(DowntimeReasonId))] public DowntimeReason? DowntimeReason { get; set; }
+    [ForeignKey(nameof(DowntimeReasonId))]
+    public DowntimeReason? DowntimeReason { get; set; }
 }

@@ -89,6 +89,16 @@
       "DownstreamPathTemplate": "/api/excelSeamAmountReport/byWorkplace",
       "ServiceName": "file",
       "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentOperationTimeReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentOperationTimeReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
     }
   ]
 }

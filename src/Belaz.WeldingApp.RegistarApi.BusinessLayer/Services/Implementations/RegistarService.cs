@@ -263,7 +263,7 @@ public class RegistarService : IRegistarService
     {
         record.MasterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(weldingEquipmentId);
 
-        var seconds = (int)Math.Round(0.1 * valuesLength);
+        var seconds = Math.Round(0.1 * valuesLength);
         var weldingEndTime = record.WeldingStartTime.Add(TimeSpan.FromSeconds(seconds));
 
         record.WeldingEndTime = weldingEndTime;
@@ -271,7 +271,7 @@ public class RegistarService : IRegistarService
         var weldingEquipmentConditionTime = new WeldingEquipmentConditionTime
         {
             Condition = Condition.AtWork,
-            Time = seconds,
+            Time = seconds / 60,
             Date = startDateTime.Date,
             StartConditionTime = startDateTime.TimeOfDay,
             WeldingEquipmentId = weldingEquipmentId
