@@ -178,7 +178,11 @@ export const Tasks = ({
   };
 
 
-  const combinedArray = tasks?.tasks?.concat(tasks.fullNames);
+  const combinedArray = tasks?.tasks?.concat(tasks.fullNames)
+    .sort((a, b) => new Date(a.weldingDate
+      .split('.')
+      .reverse()
+      .join('-')) - new Date(b.weldingDate.split('.').reverse().join('-'))).reverse();
 
 
   function comparisonDate(weldingDate) {
@@ -194,9 +198,9 @@ export const Tasks = ({
 
   const columns = [
     {
-      title:"Удаление",
-      render:(rowData)=>{
-         return <img className={styles.deleteIcon} src={deleteIcon} onClick={()=>{
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
           setdeleteTaskModal(true);
           setidPlan(rowData?.id)
         }}></img>
@@ -204,7 +208,7 @@ export const Tasks = ({
     },
     {
       title: "№ задания»", field: "number",
-    }, 
+    },
     {
       title: "Номер шва", field: "seam.number",
     },
@@ -265,7 +269,7 @@ export const Tasks = ({
       title: "Оборудование  ( инвентарный номер )",
       field: "weldingEquipments.factoryNumber",
       customFilterAndSearch: (term, rowData) => rowData?.weldingEquipments?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => { 
+      render: (rowData) => {
         if (rowData?.weldingEquipments) {
           return (
             <ul>
@@ -278,7 +282,7 @@ export const Tasks = ({
           );
         } else {
           return <p>-</p>
-        } 
+        }
       }
     },
     {
@@ -331,7 +335,7 @@ export const Tasks = ({
   const columnsWelder = [
     {
       title: "№ задания»", field: "number",
-    }, 
+    },
     {
       title: "Номер шва", field: "seam.number",
     },
@@ -466,52 +470,55 @@ export const Tasks = ({
 
 
   function ChangeManufacturedDefective(AmountManufactured, variables) {
-
-
-    ////Редактирование даты задания 
-    api.put(`/WeldingTask/changeDate`, {
+    const promises = [];
+    // Редактирование даты задания
+    const datePromise = api.put(`/WeldingTask/changeDate`, {
       "id": idPlan,
       "date": new Date(variables.date).toLocaleDateString('ru-RU')
     })
-      .then((response) => { loadTasks() })
-      .catch((error) => { });
-
-
-    ////Редактирование количества швов 
-    api.put(`/WeldingTask/changeSeamAmount`, {
+      .then((response) => {
+        loadTasks();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    promises.push(datePromise);
+    // Редактирование количества швов 
+    const seamAmountPromise = api.put(`/WeldingTask/changeSeamAmount`, {
       "id": idPlan,
       "seamAmount": AmountManufactured
     })
-      .then((response) => { loadTasks() })
-      .catch((error) => { });
-
-    ////Редактирование количества швов 
-    api.put(`/WeldingTask/changeSeamAmount`, {
-      "id": idPlan,
-      "seamAmount": AmountManufactured
-    })
-      .then((response) => { loadTasks() })
-      .catch((error) => { });
-
-
-
-    ////Редактирование статуса 
-    if (isChecked1===true) {
-      api.put(`/WeldingTask/changeStatus`, {
-        "id": idPlan,
-        "status": 3
-       })
-         .then((response) => { loadTasks() })
-         .catch((error) => { });
-    }
-    else{
-      api.put(`/WeldingTask/changeStatus`, {
-        "id": idPlan,
-        "status": 1
-       })
-         .then((response) => { loadTasks() })
-         .catch((error) => { });
-    } 
+      .then((response) => {
+        loadTasks();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    promises.push(seamAmountPromise);
+    // Редактирование статуса
+    const statusPromise = isChecked1
+      ? api.put(`/WeldingTask/changeStatus`, { "id": idPlan, "status": 3 })
+        .then((response) => {
+          loadTasks();
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+      : api.put(`/WeldingTask/changeStatus`, { "id": idPlan, "status": 1 })
+        .then((response) => {
+          loadTasks();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    promises.push(statusPromise);
+    Promise.all(promises)
+      .then(() => {
+        console.log('All requests have been completed.');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
 
@@ -532,7 +539,7 @@ export const Tasks = ({
 
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
 
-  function deleteTaskAjax() {  
+  function deleteTaskAjax() {
     api.remove(`/WeldingTask/${idPlan}`)
       .then((response) => { loadTasks() })
       .catch((error) => { });
@@ -566,7 +573,7 @@ export const Tasks = ({
         >
           <Table
             title="Сменные задания на сварку"
-            columns={userRole === "Admin" || userRole === "Master"?columns:columnsWelder}
+            columns={userRole === "Admin" || userRole === "Master" ? columns : columnsWelder}
             data={combinedArray}
             isLoading={isRequesting}
             actions={
@@ -578,16 +585,16 @@ export const Tasks = ({
                     onClick: (event, rowData) => {
                       setAmountManufactured(rowData?.manufacturedAmount)
                       setidPlan(rowData?.id)
-                      setmodalchangeInfoproductAccount(true) 
-                      if (rowData?.status===3) {
+                      setmodalchangeInfoproductAccount(true)
+                      if (rowData?.status === 3) {
                         setIsChecked1(true)
                         setIsChecked2(false)
                       }
-                      else{
+                      else {
                         setIsChecked1(false)
                         setIsChecked2(true)
-                      }   
-                      setdateTask(rowData?.weldingDate.split(".").reverse().join("-")) 
+                      }
+                      setdateTask(rowData?.weldingDate.split(".").reverse().join("-"))
                     },
                   },
                 ]
@@ -669,7 +676,7 @@ export const Tasks = ({
 
                     <Input
                       onChange={(e) => {
-                        handleChange(e);   
+                        handleChange(e);
                         setdateTask(e.target.value)
                       }}
                       width="200"
@@ -688,17 +695,17 @@ export const Tasks = ({
 
                   <p style={{ padding: "15px 20px 0 30px" }}>Изменение статус задания </p>
                   <div className={styles.rowCheck}>
-                    <div className={styles.row}  onClick={() => handleCheckboxChange(1)}>
+                    <div className={styles.row} onClick={() => handleCheckboxChange(1)}>
                       <input
                         type="checkbox"
-                        checked={isChecked1} 
+                        checked={isChecked1}
                       />
                       <span className={styles.Done}>Завершено</span>
                     </div>
                     <div className={styles.row} onClick={() => handleCheckboxChange(2)}>
                       <input
                         type="checkbox"
-                        checked={isChecked2} 
+                        checked={isChecked2}
                       />
                       <span className={styles.InProcess}>В процессе</span>
                     </div>
@@ -721,7 +728,7 @@ export const Tasks = ({
             )}
           </Formik>
         </ModalWindow>
-        
+
 
         {/*Удаление задания*/}
         <ModalWindow
@@ -737,7 +744,7 @@ export const Tasks = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              setdeleteTaskModal(false) 
+              setdeleteTaskModal(false)
               deleteTaskAjax()
             }}
           >
@@ -751,10 +758,10 @@ export const Tasks = ({
               <form onSubmit={handleSubmit}>
 
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное задание ? </h4> 
+                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное задание ? </h4>
 
                   <div className={styles.row}>
-                    <Button 
+                    <Button
                       type="submit"
                     >
                       Удалить
