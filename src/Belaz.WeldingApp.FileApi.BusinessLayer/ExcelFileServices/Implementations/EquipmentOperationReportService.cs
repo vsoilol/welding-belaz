@@ -118,6 +118,8 @@ public class EquipmentOperationReportService : IExcelFileService<EquipmentOperat
         {
             rangeData.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             rangeData.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            rangeData.Style.Numberformat.Format = "#,##0.00";
         }
 
         using (var rangeData = worksheet.Cells[2, 3, tableReportModels.Count + 1, 3])

@@ -61,17 +61,10 @@ public class RegistarService : IRegistarService
                 request.EquipmentRfidTag
             );
 
-            var weldingEquipmentConditionTime = new WeldingEquipmentConditionTime
-            {
-                Condition = Condition.On,
-                Time = 60,
-                Date = request.StartDateTime.Date,
-                StartConditionTime = request.StartDateTime.TimeOfDay,
-                WeldingEquipmentId = weldingEquipment.Id
-            };
-
-            await _weldingEquipmentRepository.AddWeldingEquipmentConditionTimeAsync(
-                weldingEquipmentConditionTime
+            await UpdateWeldingEquipmentConditionAsync(
+                request.StartDateTime.Date,
+                request.StartDateTime.TimeOfDay,
+                weldingEquipment.Id
             );
 
             var welder = await _welderRepository.GetByRfidTagAsync(request.WelderRfidTag);
@@ -383,5 +376,67 @@ public class RegistarService : IRegistarService
         }
 
         return result;
+    }
+
+    private async Task UpdateWeldingEquipmentConditionAsync(
+        DateTime date,
+        TimeSpan startConditionTime,
+        Guid weldingEquipmentId
+    )
+    {
+        var existingConditionTime = await _weldingEquipmentRepository.GetLastConditionTimeAsync(
+            startConditionTime,
+            weldingEquipmentId
+        );
+
+        if (
+            existingConditionTime == null
+            || existingConditionTime.Condition == Condition.AtWork
+            || existingConditionTime.Condition == Condition.Off
+        )
+        {
+            await CreateWeldingEquipmentConditionTimeAsync(
+                Condition.On,
+                date,
+                startConditionTime,
+                weldingEquipmentId
+            );
+            return;
+        }
+
+        if (existingConditionTime.Condition == Condition.On && existingConditionTime.Time > 5)
+        {
+            await CreateWeldingEquipmentConditionTimeAsync(
+                Condition.ForcedDowntime,
+                date,
+                startConditionTime,
+                weldingEquipmentId
+            );
+            return;
+        }
+
+        await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
+            existingConditionTime.Id,
+            existingConditionTime.Time + 1
+        );
+    }
+
+    private Task CreateWeldingEquipmentConditionTimeAsync(
+        Condition condition,
+        DateTime date,
+        TimeSpan startConditionTime,
+        Guid weldingEquipmentId
+    )
+    {
+        return _weldingEquipmentRepository.AddWeldingEquipmentConditionTimeAsync(
+            new WeldingEquipmentConditionTime
+            {
+                Condition = condition,
+                Time = 1,
+                Date = date,
+                StartConditionTime = startConditionTime,
+                WeldingEquipmentId = weldingEquipmentId
+            }
+        );
     }
 }
