@@ -18,12 +18,12 @@ public class WeldPassage : Entity
     public double? PreheatingTemperature { get; set; }
 
     /// <summary>
-    /// Отклонение кратковременные, до 1 секунды, в секундах
+    /// Отклонение кратковременные, до 1 секунды
     /// </summary>
     public double? ShortTermDeviation { get; set; }
 
     /// <summary>
-    /// Отклонения длительные, более 1 секунды, в секундах
+    /// Отклонения длительные, более 1 секунды
     /// </summary>
     public double? LongTermDeviation { get; set; }
 

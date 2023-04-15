@@ -12,14 +12,8 @@ namespace Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
 /// <summary>
 /// Сварочное оборудование
 /// </summary>
-[Index(nameof(RfidTag), IsUnique = true)]
-public class WeldingEquipment : Entity
+public class WeldingEquipment : EntityWithRfidTag
 {
-    /// <summary>
-    /// RFID-метка
-    /// </summary>
-    public string? RfidTag { get; set; }
-
     public string Name { get; set; } = null!;
 
     /// <summary>

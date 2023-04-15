@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
+using Belaz.WeldingApp.FileApi.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.IdentityUser;
 
-[Index(nameof(RfidTag), IsUnique = true)]
-public class UserData : Entity
+public class UserData : EntityWithRfidTag
 {
     public string FirstName { get; set; } = null!;
 
@@ -31,15 +31,18 @@ public class UserData : Entity
     /// </summary>
     public DateTime? CertificateValidityPeriod { get; set; }
 
-    /// <summary>
-    /// RFID-метка
-    /// </summary>
-    public string? RfidTag { get; set; }
-
     public Guid? ProductionAreaId { get; set; }
 
     [ForeignKey(nameof(ProductionAreaId))]
     public ProductionArea? ProductionArea { get; set; }
 
     public List<UserRole> UserRoles { get; set; } = null!;
+
+    public List<Welder> Welders { get; set; } = null!;
+
+    public List<Master> Masters { get; set; } = null!;
+
+    public List<Inspector> Inspectors { get; set; } = null!;
+
+    public List<Chief> Chiefs { get; set; } = null!;
 }
