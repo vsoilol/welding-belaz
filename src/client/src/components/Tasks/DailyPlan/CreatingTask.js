@@ -190,11 +190,16 @@ export const CreatingTask = ({
     const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
     const [editExistingPlanDateModal, setEditExistingPlanDateModal] = useState(false);
     const [ProductAccountId, setProductAccountId] = useState("");
-    const [AmountManufactured, setAmountManufactured] = useState(0);
-    const [AmountDefective, setAmountDefective] = useState(0);
-    const [acceptedAmount, setacceptedAmount] = useState(0);
-    const [productreason, setproductreason] = useState("");
+
+
     const [idPlan, setidPlan] = useState("");
+
+
+
+    const [prodQuantities, setprodQuantities] = useState(0);
+    const [manufacProducts, setmanufacProducts] = useState(0);
+    const [acceptedProducts, setacceptedProducts] = useState(0);
+    const [productreason, setproductreason] = useState("");
 
 
     ///Создание плана 
@@ -221,77 +226,63 @@ export const CreatingTask = ({
 
 
     //Изменение ввода выработки и брака
-    function ChangeData() {
-        const requests = [];
+    async function ChangeData() {
+        try {
+            if (idPlan && idPlan.length > 0) { 
 
-        if (idPlan && idPlan.length > 0) {
-            if (AmountManufactured >= 0) {
-                requests.push(api.put(`/productAccount/amountFromPlan`, {
-                    "id": idPlan,
-                    "amount": Number(AmountManufactured)
-                }));
-            }
-
-            if (AmountDefective >= 0) {
-                requests.push(api.put(`/productAccount/manufacturedAmount`, {
-                    "id": idPlan,
-                    "amount": AmountDefective
-                }));
-            }
-
-            if (userRole === "Admin") {
-                /*  if (acceptedAmount >= 0 && valChioseInstruct) {
-                     requests.push(api.put(`/productAccount/acceptedAmount`, {
-                         "id": idPlan,
-                         "amount": Number(acceptedAmount),
-                         "masterId": valChioseInstruct
-                     }));
-                 } */
-
-                if (productreason && ProductAccountId) {
-                    requests.push(api.put(`/productAccount/reason`, {
-                        "productAccountId": ProductAccountId,
-                        "defectiveReason": productreason
-                    }));
-                }
-
-                if (acceptedAmount >= 0 && techs[0] && techs[0].id) {
-                    requests.push(api.put(`/productAccount/acceptedAmount`, {
+                if (prodQuantities >= 0) {
+                    await api.put(`/productAccount/amountFromPlan`, {
                         "id": idPlan,
-                        "amount": Number(acceptedAmount),
-                        "inspectorId": techs[0].id
-                    }));
+                        "amount": Number(prodQuantities)
+                    });
                 }
-            } else {
-                if (acceptedAmount >= 0 && techs[0] && techs[0].id) {
-                    requests.push(api.put(`/productAccount/acceptedAmount`, {
+
+                if (manufacProducts >= 0) {
+                    await api.put(`/productAccount/manufacturedAmount`, {
                         "id": idPlan,
-                        "amount": Number(acceptedAmount),
-                        "inspectorId": techs[0].id
-                    }));
-                }
-                if (productreason) {
-                    api.put(`/productAccount/reason`, {
-                        "productAccountId": ProductAccountId,
-                        "defectiveReason": productreason
-                    })
+                        "amount": manufacProducts
+                    });
                 }
 
+                if (userRole === "Admin") {
+                    if (acceptedProducts >= 0 && techs[0] && techs[0].id) {
+                        await api.put(`/productAccount/acceptedAmount`, {
+                            "id": idPlan,
+                            "amount": Number(acceptedProducts),
+                            "inspectorId": techs[0].id
+                        });
+                    }
+                    if (productreason && ProductAccountId) {
+                        await api.put(`/productAccount/reason`, {
+                            "productAccountId": ProductAccountId,
+                            "defectiveReason": productreason
+                        });
+                    }
 
+                } else {
+                    if (acceptedProducts >= 0 && techs[0] && techs[0].id) {
+                        await api.put(`/productAccount/acceptedAmount`, {
+                            "id": idPlan,
+                            "amount": Number(acceptedProducts),
+                            "inspectorId": techs[0].id
+                        });
+                    }
+                    if (productreason) {
+                        await api.put(`/productAccount/reason`, {
+                            "productAccountId": ProductAccountId,
+                            "defectiveReason": productreason
+                        });
+                    }
+                }
 
-            }
-        }
-
-        Promise.all(requests)
-            .then((responses) => {
-                // все запросы успешно выполнены
+                // Все запросы успешно выполнены
                 GetProductionbyDate(valueChioseDate);
                 loadTasks();
-            })
-            .catch((error) => {
-                // произошла ошибка при выполнении запросов
-                console.error(error);
-            });
+            }
+        } catch (error) {
+            // Произошла ошибка при выполнении запросов
+            console.error(error);
+        }
     }
     const handleSelectChange = (event) => {
         if (event.active === undefined) {
@@ -444,13 +435,10 @@ export const CreatingTask = ({
                                 tooltip: "Редактировать план",
                                 onClick: (event, rowData) => {
                                     setmodalchangeInfoproductAccount(true)
-                                    setproductreason("")
-                                    setAmountManufactured(rowData?.amountFromPlan)
-                                    setAmountDefective(rowData?.amountManufactured)
                                     setidPlan(rowData?.id)
-                                    setmodalchangeInfoproductAccount(true)
-                                    setProductAccountId(rowData?.id)
-                                    setacceptedAmount(rowData?.amountAccept)
+                                    setprodQuantities(rowData?.amountFromPlan)
+                                    setmanufacProducts(rowData?.amountManufactured)
+                                    setacceptedProducts(rowData?.amountAccept)
                                 },
                             },
                         ]
@@ -547,11 +535,11 @@ export const CreatingTask = ({
                                             <Input
                                                 onChange={(e) => {
                                                     handleChange(e);
-                                                    setAmountManufactured(e.target.value)
+                                                    setprodQuantities(e.target.value)
                                                 }}
                                                 style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={AmountManufactured}
-                                                name="AmountManufactured"
+                                                value={prodQuantities}
+                                                name="prodQuantities"
                                                 placeholder="Количество забракованной продукции"
                                                 onBlur={handleBlur}
                                                 autocomplete="off"
@@ -564,12 +552,12 @@ export const CreatingTask = ({
                                             <Input
                                                 onChange={(e) => {
                                                     handleChange(e);
-                                                    setAmountDefective(e.target.value)
+                                                    setmanufacProducts(e.target.value)
 
                                                 }}
                                                 style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={AmountDefective}
-                                                name="AmountDefective"
+                                                value={manufacProducts}
+                                                name="manufacProducts"
                                                 placeholder="Количество изготовленной продукции"
                                                 onBlur={handleBlur}
                                                 autocomplete="off"
@@ -605,11 +593,11 @@ export const CreatingTask = ({
                                             <Input
                                                 onChange={(e) => {
                                                     handleChange(e);
-                                                    setacceptedAmount(e.target.value)
+                                                    setacceptedProducts(e.target.value)
                                                 }}
                                                 style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={acceptedAmount}
-                                                name="acceptedAmount"
+                                                value={acceptedProducts}
+                                                name="acceptedProducts"
                                                 placeholder="Количество принятой продукции"
                                                 onBlur={handleBlur}
                                                 autocomplete="off"
