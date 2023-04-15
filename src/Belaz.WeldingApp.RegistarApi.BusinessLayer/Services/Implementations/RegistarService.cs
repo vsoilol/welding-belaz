@@ -6,8 +6,6 @@ using Belaz.WeldingApp.RegistarApi.BusinessLayer.Responses;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
-using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
 using LanguageExt;
@@ -176,6 +174,12 @@ public class RegistarService : IRegistarService
                 request.TaskId,
                 request.WeldPassageNumber,
                 request.PreheatingTemperature
+            );
+
+            await _weldingTaskRepository.UpdateWeldingTaskStatusAsync(
+                request.TaskId,
+                request.WelderId,
+                WeldingTaskStatus.ExecutionAccepted
             );
 
             return Unit.Default;

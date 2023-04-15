@@ -108,12 +108,6 @@ public class DataSeed
 
         foreach (var seamAccount in seamAccounts)
         {
-            var seamManufacturedAmount = seamAccount.SeamResults.FirstOrDefault(
-                _ => _.Status == ResultProductStatus.Manufactured
-            )!;
-
-            seamManufacturedAmount.Amount = seamAccount.ProductAccount.AmountFromPlan;
-
             weldingTasks.Add(
                 new WeldingTask
                 {
