@@ -264,8 +264,17 @@ h4 span{
   color: red;
 }
 
-
+h3 span{
+  font-weight: 700;
+}
 
 .createTaskBtn{
   background-color: #b5d8f2;
+}
+
+
+h3.ExistingPlan{
+  text-align: center;
+  font-weight: 700;
+  padding-left: 0;
 }
