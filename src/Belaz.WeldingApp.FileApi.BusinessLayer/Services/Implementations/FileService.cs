@@ -1,18 +1,12 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
-using Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;
-using Belaz.WeldingApp.FileApi.Domain.Exceptions;
-using Belaz.WeldingApp.FileApi.Domain.Extensions;
-using LanguageExt;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Hosting;
 using QuestPDF.Fluent;
@@ -25,8 +19,6 @@ public class FileService : IFileService
     private readonly IWebHostEnvironment _environment;
     private readonly IMarkEstimateService _markEstimateService;
     private readonly IValidationService _validationService;
-    private readonly IExcelFileService<List<WeldPassageDeviationsDto>> _excelDeviationReportService;
-    private readonly IWeldPassageRepository _weldPassageRepository;
     private readonly IExcelFileService<SeamAmountDto> _excelSeamAmountReportService;
     private readonly IExcelFileService<EquipmentOperationTimeDto> _excelEquipmentOperationTimeReportService;
     private readonly IExcelFileService<
@@ -45,8 +37,6 @@ public class FileService : IFileService
         IWebHostEnvironment environment,
         IMarkEstimateService markEstimateService,
         IValidationService validationService,
-        IExcelFileService<List<WeldPassageDeviationsDto>> excelDeviationReportService,
-        IWeldPassageRepository weldPassageRepository,
         IExcelFileService<SeamAmountDto> excelSeamAmountReportService,
         IExcelFileService<EquipmentOperationTimeDto> excelEquipmentOperationTimeReportService,
         IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService,
@@ -61,8 +51,6 @@ public class FileService : IFileService
         _environment = environment;
         _markEstimateService = markEstimateService;
         _validationService = validationService;
-        _excelDeviationReportService = excelDeviationReportService;
-        _weldPassageRepository = weldPassageRepository;
         _excelSeamAmountReportService = excelSeamAmountReportService;
         _excelEquipmentOperationTimeReportService = excelEquipmentOperationTimeReportService;
         _excelEquipmentDowntimeReportService = excelEquipmentDowntimeReportService;
@@ -103,80 +91,6 @@ public class FileService : IFileService
         };
 
         return result;
-    }
-
-    public Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkshopAsync(
-        GenerateExcelDeviationReportByWorkshopRequest request
-    )
-    {
-        return GenerateExcelDeviationReportAsync(
-            request,
-            request.WorkshopId,
-            _weldPassageRepository.GetAllDeviationsByWorkshopAndDatePeriodAsync
-        );
-    }
-
-    public Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
-        GenerateExcelDeviationReportByProductionAreaRequest request
-    )
-    {
-        return GenerateExcelDeviationReportAsync(
-            request,
-            request.ProductionAreaId,
-            _weldPassageRepository.GetAllDeviationsByProductionAreaAndDatePeriodAsync
-        );
-    }
-
-    public Task<Result<DocumentDto>> GenerateExcelDeviationReportByWelderAsync(
-        GenerateExcelDeviationReportByWelderRequest request
-    )
-    {
-        return GenerateExcelDeviationReportAsync(
-            request,
-            request.WelderId,
-            _weldPassageRepository.GetAllDeviationsByWelderAndDatePeriodAsync
-        );
-    }
-
-    private async Task<Result<DocumentDto>> GenerateExcelDeviationReportAsync<T>(
-        T request,
-        Guid additionalId,
-        Func<
-            Guid,
-            Guid,
-            Guid?,
-            DateTime,
-            DateTime,
-            Task<List<WeldPassageDeviationsDto>>
-        > getAllDeviationsFunc
-    )
-        where T : GenerateExcelDeviationReportRequest
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            return new Result<DocumentDto>(validationResult.Exception);
-        }
-
-        var dateStart = request.StartDate.ToDateTime();
-        var dateEnd = request.EndDate.ToDateTime();
-
-        var deviations = await getAllDeviationsFunc(
-            additionalId,
-            request.ProductId,
-            request.SeamId,
-            dateStart,
-            dateEnd
-        );
-
-        if (!deviations.Any())
-        {
-            var exception = new ListIsEmptyException();
-            return new Result<DocumentDto>(exception);
-        }
-
-        return await _excelDeviationReportService.GenerateReportAsync(deviations);
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync()

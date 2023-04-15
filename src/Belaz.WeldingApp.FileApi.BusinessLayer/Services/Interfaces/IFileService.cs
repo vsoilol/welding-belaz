@@ -11,18 +11,6 @@ public interface IFileService
         GenerateSeamPassportByTaskIdRequest request
     );
 
-    Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkshopAsync(
-        GenerateExcelDeviationReportByWorkshopRequest request
-    );
-
-    Task<Result<DocumentDto>> GenerateExcelDeviationReportByProductionAreaAsync(
-        GenerateExcelDeviationReportByProductionAreaRequest request
-    );
-
-    Task<Result<DocumentDto>> GenerateExcelDeviationReportByWelderAsync(
-        GenerateExcelDeviationReportByWelderRequest request
-    );
-
     Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync();
 
     Task<Result<DocumentDto>> GenerateExcelEquipmentOperationTimeReportAsync();

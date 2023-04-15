@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Belaz.WeldingApp.FileApi.Domain.Entities;
 
 [Index(nameof(IdFromSystem), IsUnique = true)]
-public class Entity
+public abstract class Entity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
