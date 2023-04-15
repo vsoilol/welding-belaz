@@ -108,16 +108,6 @@ public class ProductAccountRepository : IProductAccountRepository
 
         productAccount.AmountFromPlan = amountFromPlan;
 
-        var seamResults = (
-            await _context.SeamResults.FirstOrDefaultAsync(
-                _ =>
-                    _.Status == ResultProductStatus.Manufactured
-                    && _.SeamAccount.ProductAccountId == id
-            )
-        )!;
-
-        seamResults.Amount = amountFromPlan;
-
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(id);
@@ -134,16 +124,22 @@ public class ProductAccountRepository : IProductAccountRepository
             )
         )!;
 
+        productResults.Amount = manufacturedAmount;
+
         var seamResults = (
-            await _context.SeamResults.FirstOrDefaultAsync(
-                _ =>
-                    _.Status == ResultProductStatus.Manufactured
-                    && _.SeamAccount.ProductAccountId == id
-            )
+            await _context.SeamResults
+                .Where(
+                    _ =>
+                        _.Status == ResultProductStatus.Manufactured
+                        && _.SeamAccount.ProductAccountId == id
+                )
+                .ToListAsync()
         )!;
 
-        seamResults.Amount = manufacturedAmount;
-        productResults.Amount = manufacturedAmount;
+        foreach (var seamResult in seamResults)
+        {
+            seamResult.Amount = manufacturedAmount;
+        }
 
         await _context.SaveChangesAsync();
 
@@ -334,7 +330,7 @@ public class ProductAccountRepository : IProductAccountRepository
         var oldWeldingTask = _context.WeldingTasks.Where(
             _ =>
                 _.WeldingDate.Date.Equals(date.Date)
-                && _.Master.UserInfo.ProductionAreaId == productionAreaId
+                && _.Master!.UserInfo.ProductionAreaId == productionAreaId
         );
 
         _context.RemoveRange(oldWeldingTask);
@@ -358,12 +354,6 @@ public class ProductAccountRepository : IProductAccountRepository
 
         foreach (var seamAccount in seamAccounts)
         {
-            var seamManufacturedAmount = seamAccount.SeamResults.FirstOrDefault(
-                _ => _.Status == ResultProductStatus.Manufactured
-            )!;
-
-            seamManufacturedAmount.Amount = seamAccount.ProductAccount.AmountFromPlan;
-
             weldingTasks.Add(
                 new WeldingTask
                 {

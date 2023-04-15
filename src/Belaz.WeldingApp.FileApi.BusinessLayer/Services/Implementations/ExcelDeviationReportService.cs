@@ -18,7 +18,6 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 public class ExcelDeviationReportService : IExcelDeviationReportService
 {
     private readonly IWeldPassageRepository _weldPassageRepository;
-
     private readonly IExcelFileService<List<WeldPassageDeviationsDto>> _excelDeviationReportService;
     private readonly IValidationService _validationService;
 

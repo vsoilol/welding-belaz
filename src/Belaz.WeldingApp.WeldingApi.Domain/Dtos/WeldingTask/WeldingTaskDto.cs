@@ -83,13 +83,7 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
             )
             .ForMember(
                 dto => dto.ManufacturedAmount,
-                opt =>
-                    opt.MapFrom(
-                        x =>
-                            x.SeamAccount.SeamResults
-                                .FirstOrDefault(_ => _.Status == ResultProductStatus.Manufactured)!
-                                .Amount
-                    )
+                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.AmountFromPlan)
             )
             // .ForMember(
             //     dto => dto.WeldingEquipment,
