@@ -10,7 +10,7 @@ using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 using FluentValidation;
 
-namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Features;
+namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Features.ExcelDeviationReport;
 
 public class GenerateExcelDeviationReportByWorkshopRequestValidator
     : AbstractValidator<GenerateExcelDeviationReportByWorkshopRequest>

@@ -4,21 +4,20 @@ using Belaz.WeldingApp.FileApi.DataLayer;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 using FluentValidation;
 
-namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Features;
+namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Features.ExcelDeviationReport;
 
-public class GenerateExcelDeviationReportByProductionAreaRequestValidator
-    : AbstractValidator<GenerateExcelDeviationReportByProductionAreaRequest>
+public class GenerateExcelDeviationReportByWorkplaceRequestValidator
+    : AbstractValidator<GenerateExcelDeviationReportByWorkplaceRequest>
 {
-    public GenerateExcelDeviationReportByProductionAreaRequestValidator(ApplicationContext context)
+    public GenerateExcelDeviationReportByWorkplaceRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.ProductionAreaId)
+        RuleFor(model => model.WorkplaceId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<
-                    GenerateExcelDeviationReportByProductionAreaRequest,
-                    ProductionArea
-                >(context)
+                new SqlIdValidatorFor<GenerateExcelDeviationReportByWorkplaceRequest, Workplace>(
+                    context
+                )
             );
 
         RuleFor(model => model)

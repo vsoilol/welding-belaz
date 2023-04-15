@@ -27,33 +27,6 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
-    [HttpGet("deviationReport/byWorkshop")]
-    public async Task<IActionResult> GetExcelDeviationReportByWorkshopAsync(
-        [FromQuery] GenerateExcelDeviationReportByWorkshopRequest request
-    )
-    {
-        var result = await _fileService.GenerateExcelDeviationReportByWorkshopAsync(request);
-        return result.ToFile();
-    }
-
-    [HttpGet("deviationReport/byProductionArea")]
-    public async Task<IActionResult> GetExcelDeviationReportByProductionAreaAsync(
-        [FromQuery] GenerateExcelDeviationReportByProductionAreaRequest request
-    )
-    {
-        var result = await _fileService.GenerateExcelDeviationReportByProductionAreaAsync(request);
-        return result.ToFile();
-    }
-
-    [HttpGet("deviationReport/byWelder")]
-    public async Task<IActionResult> GenerateExcelDeviationReportByWelderAsync(
-        [FromQuery] GenerateExcelDeviationReportByWelderRequest request
-    )
-    {
-        var result = await _fileService.GenerateExcelDeviationReportByWelderAsync(request);
-        return result.ToFile();
-    }
-
     [HttpGet("seamAmountReport")]
     public async Task<IActionResult> GenerateExcelSeamAmountReportAsync()
     {

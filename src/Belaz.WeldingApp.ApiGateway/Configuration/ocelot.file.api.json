@@ -9,6 +9,46 @@
       "DownstreamPathTemplate": "/api/file/seamPassport/{taskId}",
       "ServiceName": "file",
       "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelDeviationReport/byWorkshop",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelDeviationReport/byWorkshop",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelDeviationReport/byProductionArea",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelDeviationReport/byProductionArea",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelDeviationReport/byWelder",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelDeviationReport/byWelder",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelDeviationReport/byWorkplace",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelDeviationReport/byWorkplace",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
     }
   ]
 }

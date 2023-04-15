@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IMarkEstimateService, MarkEstimateService>();
+        services.AddScoped<IExcelDeviationReportService, ExcelDeviationReportService>();
 
         services.AddScoped<
             IExcelFileService<List<WeldPassageDeviationsDto>>,
