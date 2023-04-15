@@ -99,6 +99,16 @@
       "DownstreamPathTemplate": "/api/excelEquipmentOperationTimeReport",
       "ServiceName": "file",
       "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentDowntimeReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentDowntimeReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
     }
   ]
 }

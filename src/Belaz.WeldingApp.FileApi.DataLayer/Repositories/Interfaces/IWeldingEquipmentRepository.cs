@@ -9,4 +9,10 @@ public interface IWeldingEquipmentRepository
         DateTime startDate,
         DateTime endDate
     );
+
+    Task<List<EquipmentDowntimeDto>> GetDownTimeInfoByIdAndDatePeriodAsync(
+        Guid id,
+        DateTime startDate,
+        DateTime endDate
+    );
 }

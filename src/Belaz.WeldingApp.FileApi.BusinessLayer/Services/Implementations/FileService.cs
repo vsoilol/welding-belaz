@@ -19,7 +19,6 @@ public class FileService : IFileService
     private readonly IWebHostEnvironment _environment;
     private readonly IMarkEstimateService _markEstimateService;
     private readonly IValidationService _validationService;
-    private readonly IExcelFileService<EquipmentOperationTimeDto> _excelEquipmentOperationTimeReportService;
     private readonly IExcelFileService<
         List<EquipmentDowntimeDto>
     > _excelEquipmentDowntimeReportService;
@@ -36,7 +35,6 @@ public class FileService : IFileService
         IWebHostEnvironment environment,
         IMarkEstimateService markEstimateService,
         IValidationService validationService,
-        IExcelFileService<EquipmentOperationTimeDto> excelEquipmentOperationTimeReportService,
         IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService,
         IExcelFileService<
             List<EquipmentOperationTimeWithShiftDto>
@@ -49,7 +47,6 @@ public class FileService : IFileService
         _environment = environment;
         _markEstimateService = markEstimateService;
         _validationService = validationService;
-        _excelEquipmentOperationTimeReportService = excelEquipmentOperationTimeReportService;
         _excelEquipmentDowntimeReportService = excelEquipmentDowntimeReportService;
         _excelEquipmentOperationAnalysisReportService =
             excelEquipmentOperationAnalysisReportService;
@@ -88,21 +85,6 @@ public class FileService : IFileService
         };
 
         return result;
-    }
-
-    public async Task<Result<DocumentDto>> GenerateExcelEquipmentOperationTimeReportAsync()
-    {
-        var equipmentOperationTime = new EquipmentOperationTimeDto
-        {
-            OffTimeMinutes = 300,
-            OnTimeMinutes = 60,
-            WorkTimeMinutes = 250,
-            DowntimeMinutes = 110
-        };
-
-        return await _excelEquipmentOperationTimeReportService.GenerateReportAsync(
-            equipmentOperationTime
-        );
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentDowntimeReportAsync()

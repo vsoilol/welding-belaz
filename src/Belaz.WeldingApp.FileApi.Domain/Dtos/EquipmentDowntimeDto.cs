@@ -4,5 +4,5 @@ public class EquipmentDowntimeDto
 {
     public string Reason { get; set; } = null!;
 
-    public int Time { get; set; } = 0;
+    public double Time { get; set; } = 0;
 }

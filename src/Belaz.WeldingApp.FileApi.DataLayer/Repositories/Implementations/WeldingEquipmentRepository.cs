@@ -17,6 +17,29 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
         _mapper = mapper;
     }
 
+    public Task<List<EquipmentDowntimeDto>> GetDownTimeInfoByIdAndDatePeriodAsync(
+        Guid id,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var equipmentDowntimes = _context.WeldingEquipmentConditionTimes
+            .Include(_ => _.DowntimeReason)
+            .Where(
+                w =>
+                    w.WeldingEquipmentId == id
+                    && w.Date >= startDate
+                    && w.Date <= endDate
+                    && w.Condition == Condition.ForcedDowntime
+                    && w.DowntimeReason != null
+            )
+            .GroupBy(w => w.DowntimeReason!.Reason)
+            .Select(g => new EquipmentDowntimeDto { Reason = g.Key, Time = g.Sum(w => w.Time) })
+            .ToListAsync();
+
+        return equipmentDowntimes;
+    }
+
     public async Task<EquipmentOperationTimeDto> GetEquipmentOperationTimeByIdAndDatePeriodAsync(
         Guid id,
         DateTime startDate,

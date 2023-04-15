@@ -11,8 +11,6 @@ public interface IFileService
         GenerateSeamPassportByTaskIdRequest request
     );
 
-    Task<Result<DocumentDto>> GenerateExcelEquipmentOperationTimeReportAsync();
-
     Task<Result<DocumentDto>> GenerateExcelEquipmentDowntimeReportAsync();
 
     Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportAsync();
