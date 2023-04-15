@@ -27,20 +27,6 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
-    [HttpGet("seamAmountReport")]
-    public async Task<IActionResult> GenerateExcelSeamAmountReportAsync()
-    {
-        var result = await _fileService.GenerateExcelSeamAmountReportAsync();
-        return result.ToFile();
-    }
-
-    [HttpGet("equipmentOperationTime")]
-    public async Task<IActionResult> GenerateExcelEquipmentOperationTimeReportAsync()
-    {
-        var result = await _fileService.GenerateExcelEquipmentOperationTimeReportAsync();
-        return result.ToFile();
-    }
-
     [HttpGet("equipmentDowntime")]
     public async Task<IActionResult> GenerateExcelEquipmentDowntimeReportAsync()
     {

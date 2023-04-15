@@ -26,9 +26,36 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public async Task AddWeldingEquipmentConditionTimeAsync(WeldingEquipmentConditionTime conditionTime)
+    public async Task AddWeldingEquipmentConditionTimeAsync(
+        WeldingEquipmentConditionTime conditionTime
+    )
     {
         _context.WeldingEquipmentConditionTimes.Add(conditionTime);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<WeldingEquipmentConditionTimeDto?> GetLastConditionTimeAsync(
+        TimeSpan startTime,
+        Guid weldingEquipmentId
+    )
+    {
+        var conditionTime = await _context.WeldingEquipmentConditionTimes
+            .Where(_ => _.WeldingEquipmentId == weldingEquipmentId)
+            .OrderBy(x => x.Date)
+            .ThenBy(x => x.StartConditionTime)
+            .LastOrDefaultAsync();
+
+        return _mapper.Map<WeldingEquipmentConditionTimeDto?>(conditionTime);
+    }
+
+    public async Task UpdateEquipmentConditionTimeAsync(Guid id, double time)
+    {
+        var updatedConditionTime = (
+            await _context.WeldingEquipmentConditionTimes.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        updatedConditionTime.Time = time;
+
         await _context.SaveChangesAsync();
     }
 }

@@ -25,6 +25,14 @@ public static class DependencyInjection
         services.AddScoped<IMarkEstimateService, MarkEstimateService>();
         services.AddScoped<IExcelDeviationReportService, ExcelDeviationReportService>();
         services.AddScoped<IExcelSeamAmountReportService, ExcelSeamAmountReportService>();
+        services.AddScoped<
+            IExcelEquipmentOperationTimeReportService,
+            ExcelEquipmentOperationTimeReportService
+        >();
+        services.AddScoped<
+            IExcelEquipmentDowntimeReportService,
+            ExcelEquipmentDowntimeReportService
+        >();
 
         services.AddScoped<
             IExcelFileService<List<WeldPassageDeviationsDto>>,
