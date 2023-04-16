@@ -23,19 +23,17 @@ public class WeldingEquipmentDowntimeDto : IMapFrom<WeldingEquipmentConditionTim
 
     public string StartConditionTime { get; set; } = null!;
 
-    public int Time { get; set; }
+    public double Time { get; set; }
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<WeldingEquipmentConditionTime, WeldingEquipmentDowntimeDto>()
-            .ForMember(dto => dto.StartConditionTime,
-                opt => opt
-                    .MapFrom(x => x.StartConditionTime.ToHoursMinutesString()))
-            .ForMember(dto => dto.DowntimeReason,
-                opt => opt
-                    .MapFrom(x => x.DowntimeReason!.Reason))
-            .ForMember(dto => dto.Date,
-                opt => opt
-                    .MapFrom(x => x.Date.ToDayInfoString()));
+        profile
+            .CreateMap<WeldingEquipmentConditionTime, WeldingEquipmentDowntimeDto>()
+            .ForMember(
+                dto => dto.StartConditionTime,
+                opt => opt.MapFrom(x => x.StartConditionTime.ToHoursMinutesString())
+            )
+            .ForMember(dto => dto.DowntimeReason, opt => opt.MapFrom(x => x.DowntimeReason!.Reason))
+            .ForMember(dto => dto.Date, opt => opt.MapFrom(x => x.Date.ToDayInfoString()));
     }
 }
