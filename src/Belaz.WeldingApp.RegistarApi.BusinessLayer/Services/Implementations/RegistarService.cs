@@ -385,7 +385,6 @@ public class RegistarService : IRegistarService
     )
     {
         var existingConditionTime = await _weldingEquipmentRepository.GetLastConditionTimeAsync(
-            startConditionTime,
             weldingEquipmentId
         );
 
@@ -394,6 +393,25 @@ public class RegistarService : IRegistarService
             || existingConditionTime.Condition == Condition.AtWork
             || existingConditionTime.Condition == Condition.Off
         )
+        {
+            await CreateWeldingEquipmentConditionTimeAsync(
+                Condition.On,
+                date,
+                startConditionTime,
+                weldingEquipmentId
+            );
+            return;
+        }
+
+        var lastConditionDateTime = existingConditionTime.Date
+            .Add(existingConditionTime.StartConditionTime)
+            .AddMinutes(existingConditionTime.Time);
+
+        var newConditionDateTime = date.Add(startConditionTime);
+
+        var idleMinutes = newConditionDateTime.Subtract(lastConditionDateTime).Minutes;
+
+        if (idleMinutes >= 3)
         {
             await CreateWeldingEquipmentConditionTimeAsync(
                 Condition.On,
