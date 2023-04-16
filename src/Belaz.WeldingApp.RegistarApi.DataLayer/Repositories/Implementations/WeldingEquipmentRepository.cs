@@ -35,7 +35,6 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
     }
 
     public async Task<WeldingEquipmentConditionTimeDto?> GetLastConditionTimeAsync(
-        TimeSpan startTime,
         Guid weldingEquipmentId
     )
     {

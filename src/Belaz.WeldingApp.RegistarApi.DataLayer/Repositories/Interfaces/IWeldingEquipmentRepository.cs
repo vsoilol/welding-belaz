@@ -9,10 +9,7 @@ public interface IWeldingEquipmentRepository
 
     Task AddWeldingEquipmentConditionTimeAsync(WeldingEquipmentConditionTime conditionTime);
 
-    Task<WeldingEquipmentConditionTimeDto?> GetLastConditionTimeAsync(
-        TimeSpan startTime,
-        Guid weldingEquipmentId
-    );
+    Task<WeldingEquipmentConditionTimeDto?> GetLastConditionTimeAsync(Guid weldingEquipmentId);
 
     Task UpdateEquipmentConditionTimeAsync(Guid id, double time);
 }
