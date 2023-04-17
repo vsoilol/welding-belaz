@@ -318,9 +318,9 @@ export const CreatingTask = ({
     function CreateTask() {
         const masterId = userRole === "Admin" ? valChioseMaster : masters[0].id;
         const productionAreaId = userRole === "Admin" ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id : localStorage.getItem('USER_productionAreaId');
-
+ 
         api.post(`/productAccount/generateTasks`, {
-            "date": valueDate,
+            "date": valueChioseDate,
             "productionAreaId": productionAreaId,
             "masterId": masterId,
         })
@@ -345,7 +345,7 @@ export const CreatingTask = ({
                                 placeholder="Мастера"
                                 onChange={(event) => {
                                     setvalChioseMaster(event.value);
-                                    GetProductionbyDate(valueDate, 2, valChioseMaster)
+                                    GetProductionbyDate(valueChioseDate, 2, valChioseMaster)
                                 }}
                                 options={mastersOptions}
                             />
@@ -360,7 +360,7 @@ export const CreatingTask = ({
                                 placeholder="Контролеры"
                                 onChange={(event) => {
                                     setvalChioseInstruct(event.value);
-                                    GetProductionbyDate(valueDate, 2, valChioseInstruct)
+                                    GetProductionbyDate(valueChioseDate, 2, valChioseInstruct)
                                 }}
                                 options={techsOptions}
                             />
