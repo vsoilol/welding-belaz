@@ -17,11 +17,11 @@ import Select from "components/shared/Select";
 import { Table } from "components/shared/Table";
 import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "./styles.module.css";
 
-
-
+import deleteIcon from "assets/icons/delete.png";
+import api from "services/api";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -68,12 +68,17 @@ export const TexProcWelding = ({
   const [valuetSeam, setValuetSeam] = useState(0);
   const [valuetVkladka, setValuetVkladka] = useState(0);
 
+
+  const [idPassages, setidPassages] = useState(0);
+
+
   const initialValues = {
 
     id: modalData?.weldPassageInstructions.id ?? "",
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
     weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
+    weldPassagesNumber: modalData?.weldPassageInstructions[0].number ?? "",
     weldingCurrentMin: modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
     weldingCurrentMax: modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
     arcVoltageMin: modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
@@ -105,7 +110,10 @@ export const TexProcWelding = ({
 
 
   ////////////////////////////////////////////////////////////////////
+  const [deleteTaskModal, setdeleteTaskModal] = useState(false);
+  const [idInstr, setidInstr] = useState("");
   const columns = [
+
     {
       title: "Наименование", field: "name",
     },
@@ -156,6 +164,15 @@ export const TexProcWelding = ({
   ]
   const colinstructions = [
     {
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+          setdeleteTaskModal(true);
+          setidInstr(rowData?.id)
+        }}></img>
+      }
+    },
+    {
       title: "Наименование", field: "name",
     },
     {
@@ -164,11 +181,20 @@ export const TexProcWelding = ({
     {
       title: "Шов",
       render: (rowData) => {
-        return (
-          <p>
-            Cварочный шов {rowData?.seam?.number}
-          </p>
-        );
+        if (rowData?.seams[0]?.number) {
+          return (
+            <span>
+              Cварочный шов {rowData?.seams[0]?.number}
+            </span>
+          )
+        }
+        else {
+          return (
+            <span>
+              -
+            </span>
+          )
+        }
       }
     },
     {
@@ -208,7 +234,7 @@ export const TexProcWelding = ({
   ]
   const renderRowChildren = (rowData) => {
     return (
-      rowData && (
+      rowData?.weldPassageInstructions?.length > 0 && (
         <TableContainer component={Paper}>
           <MaterialTable aria-label="simple table">
             <TableHead>
@@ -220,7 +246,6 @@ export const TexProcWelding = ({
                   align="center"
                 >
                   № прохода
-
                 </TableCell>
 
                 <TableCell
@@ -269,52 +294,48 @@ export const TexProcWelding = ({
 
                 <TableCell align="center">min</TableCell>
                 <TableCell align="left">max</TableCell>
-
-
-                {/* <TableCell align="center">Длина</TableCell>
-                <TableCell align="center">Высота</TableCell>
-                <TableCell align="center">Ширина</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.number ?? "-"}
-                </TableCell>
+              {rowData.weldPassageInstructions.map((passage) => (
+                <TableRow key={passage.id}>
+                  <TableCell align="center" component="th" scope="row">
+                    {passage.number ?? "-"}
+                  </TableCell>
 
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.name ?? "-"}
-                </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    {passage.name ?? "-"}
+                  </TableCell>
 
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin ?? "-"}
-                </TableCell>
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax ?? "-"}
-                </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    {passage.preheatingTemperatureMin ?? "-"}
+                  </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    {passage.preheatingTemperatureMax ?? "-"}
+                  </TableCell>
 
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMin ?? "-"}
-                </TableCell>
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.weldingCurrentMax ?? "-"}
-                </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    {passage.weldingCurrentMin ?? "-"}
+                  </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    {passage.weldingCurrentMax ?? "-"}
+                  </TableCell>
 
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.arcVoltageMin ?? "-"}
-                </TableCell>
-                <TableCell align="left" component="th" scope="row">
-                  {rowData?.weldPassageInstructions[0]?.arcVoltageMax ?? "-"}
-                </TableCell>
-
-
-              </TableRow>
+                  <TableCell align="center" component="th" scope="row">
+                    {passage.arcVoltageMin ?? "-"}
+                  </TableCell>
+                  <TableCell align="left" component="th" scope="row">
+                    {passage.arcVoltageMax ?? "-"}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </MaterialTable>
         </TableContainer>
       )
     );
   };
+
 
   const renderRowChildrenTexProc = (rowData) => {
     return (
@@ -450,6 +471,7 @@ export const TexProcWelding = ({
 
   const [value_panel, setValue] = useState(0);
   const [valueTexProcOptions, setvalueTexProcOptions] = useState(0);
+  const [valueNameInst, setvalueNameInst] = useState("");
   const ChangePanels = (event, newValue) => {
     setValue(newValue);
   };
@@ -465,33 +487,436 @@ export const TexProcWelding = ({
 
   //Запрос на редактирование или добавление
   function SendData(variables) {
-    variables["seamId"] = valuetSeam;
-    variables["technologicalProcessId"] = texprocwelding[0].id;
-
-
-    if (modalData != null) {
-      variables["number"] = modalData?.number;
-      variables["weldPassagesNumber"] = modalData.weldPassageInstructions[0].number
-    }
-    else {
-      variables["number"] = 1
-      variables["weldPassagesNumber"] = 1
-    }
-
-    /* texprocwelding.find(task => task.id === valueTexProcOptions).number */
-
-
-
+    const filteredVariables = variables.filter(item => {
+      return Object.values(item).some(val => val !== '');
+    });
+    
     if (isModalOpenNumb === 0) {
-      addInst(variables)
+      const data = {
+        number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
+        name: valueNameInst,
+        weldPassages: filteredVariables.map(item => ({
+          name: item.weldPassagesName,
+          number: item.weldPassagesNumber,
+          weldingCurrentMin: item.weldingCurrentMin,
+          weldingCurrentMax: item.weldingCurrentMax,
+          arcVoltageMin: item.arcVoltageMin,
+          arcVoltageMax: item.arcVoltageMax,
+          preheatingTemperatureMin: item.preheatingTemperatureMin,
+          preheatingTemperatureMax: item.preheatingTemperatureMax,
+        })),
+      };
+      addInst(data);
     }
     if (isModalOpenNumb === 1) {
-      variables["id"] = modalData.id;
-      variables["weldPassagesId"] = modalData?.weldPassageInstructions[0].id
-      editInst(variables)
+      const data = {
+        id:idPassages,
+        number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
+        name: valueNameInst,
+        weldPassages: filteredVariables.map(item => ({
+          id:item.id,
+          name: item.weldPassagesName,
+          number: item.weldPassagesNumber,
+          weldingCurrentMin: item.weldingCurrentMin,
+          weldingCurrentMax: item.weldingCurrentMax,
+          arcVoltageMin: item.arcVoltageMin,
+          arcVoltageMax: item.arcVoltageMax,
+          preheatingTemperatureMin: item.preheatingTemperatureMin,
+          preheatingTemperatureMax: item.preheatingTemperatureMax,
+        })),
+      };  
+      editInst(data)
     }
   }
-  ////////////////////////////////////////////////////////////////////
+
+
+
+  function WeldingInputs() {
+    const [passages, setPassages] = useState([
+      {
+        weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
+        weldPassagesNumber: modalData?.weldPassageInstructions[0].number ?? "",
+        weldingCurrentMin: modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
+        weldingCurrentMax: modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
+        arcVoltageMin: modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
+        arcVoltageMax: modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
+        preheatingTemperatureMin: modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
+        preheatingTemperatureMax: modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
+      },
+    ]);
+    const addPassage = () => {
+      setPassages([
+        ...passages,
+        {
+          weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
+          weldPassagesNumber: modalData?.weldPassageInstructions[0].number ?? "",
+          weldingCurrentMin: modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
+          weldingCurrentMax: modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
+          arcVoltageMin: modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
+          arcVoltageMax: modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
+          preheatingTemperatureMin: modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
+          preheatingTemperatureMax: modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
+        },
+      ]);
+    };
+    const removePassage = (index) => {
+      const newPassages = [...passages];
+      newPassages.splice(index, 1);
+      setPassages(newPassages);
+    };
+    const handleChange = (name, value, index) => {
+      const updatedPassages = [...passages];
+      updatedPassages[index][name] = value;
+      setPassages(updatedPassages);
+    };
+    return (
+      <>
+        {passages.map((passage, index) => (
+          <div>
+            <p>Информация для прохода</p>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  if (/^[а-яА-ЯЁё0-9\s]*$/.test(e.target.value)) {
+                    handleChange(e.target.name, e.target.value, index);
+                  }
+                }}
+                style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldPassagesName}
+                name="weldPassagesName"
+                placeholder="Наименование прохода"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldPassagesNumber}
+                type="number"
+                min="0"
+                step="1"
+                name="weldPassagesNumber"
+                placeholder="Номер прохода"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldingCurrentMin}
+                name="weldingCurrentMin"
+                placeholder="Сварочный ток min"
+                type="number"
+                min="0"
+                step="1"
+                autoComplete="off"
+              />
+
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldingCurrentMax}
+                name="weldingCurrentMax"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="Сварочный ток max"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.arcVoltageMin}
+                name="arcVoltageMin"
+                placeholder="Напряжение дуги min"
+                type="number"
+                min="0"
+                step="1"
+                autoComplete="off"
+              />
+
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.arcVoltageMax}
+                name="arcVoltageMax"
+                placeholder="Напряжение дуги max"
+                type="number"
+                min="0"
+                step="1"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.preheatingTemperatureMin}
+                name="preheatingTemperatureMin"
+                placeholder="Температура предварительного нагрева min"
+                autoComplete="off"
+                type="number"
+                min="0"
+                step="1"
+              />
+
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.preheatingTemperatureMax}
+                name="preheatingTemperatureMax"
+                placeholder="Температура предварительного нагрева max"
+                autoComplete="off"
+                type="number"
+                min="0"
+                step="1"
+              />
+            </div>
+            {index !== 0 && (
+              <Button className={styles.remowePassages} onClick={() => removePassage(index)}>
+                Убрать проход
+              </Button>
+            )}
+          </div>
+        ))}
+        <div className={styles.row}>
+          <Button onClick={addPassage}>Добавить проход</Button>
+        </div>
+        <div className={styles.row}>
+          <Button
+            type="submit"
+            onClick={() => SendData(passages)}
+          >
+            {modalData ? "Сохранить" : "Создать"}
+          </Button>
+        </div>
+      </>
+    )
+  }
+
+  const [passagesCnange, setpassagesCnange] = useState([]);
+  function CnangeWeldingInputs() {
+
+    const [passages, setPassages] = useState(passagesCnange.map(item => ({
+      id: item.id,
+      weldPassagesName: item.name,
+      weldPassagesNumber: item.number,
+      weldingCurrentMin: item.weldingCurrentMin,
+      weldingCurrentMax: item.weldingCurrentMax,
+      arcVoltageMin: item.arcVoltageMin,
+      arcVoltageMax: item.arcVoltageMax,
+      preheatingTemperatureMin: item.preheatingTemperatureMin,
+      preheatingTemperatureMax: item.preheatingTemperatureMax,
+    })));
+
+    console.log(passages)
+    const addPassage = () => {
+      setPassages([
+        ...passages,
+        {
+          id: "",
+          weldPassagesName: "",
+          weldPassagesNumber:  "",
+          weldingCurrentMin: "",
+          weldingCurrentMax: "",
+          arcVoltageMin: "",
+          arcVoltageMax: "",
+          preheatingTemperatureMin: "",
+          preheatingTemperatureMax: "",
+        },
+      ]);
+    };
+    const removePassage = (index) => {
+      const newPassages = [...passages];
+      newPassages.splice(index, 1);
+      setPassages(newPassages);
+    };
+    const handleChange = (name, value, index) => {
+      const updatedPassages = [...passages];
+      updatedPassages[index][name] = value;
+      setPassages(updatedPassages);
+    };
+    return (
+      <>
+        {passages.map((passage, index) => (
+          <div>
+            <p>Информация для прохода</p>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  if (/^[а-яА-ЯЁё0-9\s]*$/.test(e.target.value)) {
+                    handleChange(e.target.name, e.target.value, index);
+                  }
+                }}
+                style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldPassagesName}
+                name="weldPassagesName"
+                placeholder="Наименование прохода"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldPassagesNumber}
+                type="number"
+                min="0"
+                step="1"
+                name="weldPassagesNumber"
+                placeholder="Номер прохода"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldingCurrentMin}
+                name="weldingCurrentMin"
+                placeholder="Сварочный ток min"
+                type="number"
+                min="0"
+                step="1"
+                autoComplete="off"
+              />
+
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.weldingCurrentMax}
+                name="weldingCurrentMax"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="Сварочный ток max"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.arcVoltageMin}
+                name="arcVoltageMin"
+                placeholder="Напряжение дуги min"
+                type="number"
+                min="0"
+                step="1"
+                autoComplete="off"
+              />
+
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.arcVoltageMax}
+                name="arcVoltageMax"
+                placeholder="Напряжение дуги max"
+                type="number"
+                min="0"
+                step="1"
+                autoComplete="off"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.preheatingTemperatureMin}
+                name="preheatingTemperatureMin"
+                placeholder="Температура предварительного нагрева min"
+                autoComplete="off"
+                type="number"
+                min="0"
+                step="1"
+              />
+
+              <Input
+                onChange={(e) => {
+                  handleChange(e.target.name, e.target.value, index);
+                }}
+                width="200"
+                style={{ height: 40, padding: "0 20px 0 30px" }}
+                value={passage.preheatingTemperatureMax}
+                name="preheatingTemperatureMax"
+                placeholder="Температура предварительного нагрева max"
+                autoComplete="off"
+                type="number"
+                min="0"
+                step="1"
+              />
+            </div>
+            {index !== 0 && (
+              <Button className={styles.remowePassages} onClick={() => removePassage(index)}>
+                Убрать проход
+              </Button>
+            )}
+          </div>
+        ))}
+
+        <div className={styles.row}>
+          <Button onClick={addPassage}>Добавить проход</Button>
+        </div>
+        <div className={styles.row}>
+          <Button
+            type="submit"
+            onClick={() => SendData(passages)}
+          >
+            {modalData ? "Сохранить" : "Создать"}
+          </Button>
+        </div>
+      </>
+    )
+  }
+
+  ///
+  function deleteInstruction() {
+    api.remove(`/TechnologicalInstruction/${idInstr}`)
+      .then((response) => { loadInstructions() })
+      .catch((error) => { });
+  }
+
   return (
 
     <div className={styles.innerWrapper}>
@@ -549,7 +974,6 @@ export const TexProcWelding = ({
                     isFreeAction: true,
                     onClick: () => {
                       setIsModalOpen(true);
-
                     },
                   },
                   {
@@ -601,11 +1025,14 @@ export const TexProcWelding = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalOpenNumb(1)
-
-                      console.log(rowData)
-
                       setValuetSeam(rowData?.seams[0]?.id)
                       setValuetVkladka(1)
+
+                      setidPassages(rowData.id);
+                      setvalueNameInst(rowData.name); 
+                      setpassagesCnange(rowData.weldPassageInstructions)
+
+                      console.log(rowData.weldPassageInstructions)
                     },
                   },
                 ]
@@ -640,7 +1067,6 @@ export const TexProcWelding = ({
           setIsModalOpen(state);
           setModalData(null);
 
-
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -649,7 +1075,7 @@ export const TexProcWelding = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            SendData(variables, id)
+
             setIsModalOpen(false);
             setModalData(null);
           }}
@@ -661,41 +1087,21 @@ export const TexProcWelding = ({
             setFieldValue,
             handleBlur,
           }) => (
+            //Форма для Технологические инструкции
             <form onSubmit={handleSubmit}>
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    handleChange(e);
+                    setvalueNameInst(e.target.value);
                   }}
                   style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                  value={values.name}
+                  value={valueNameInst}
                   name="name"
                   autocomplete="off"
                   placeholder="Наименовние"
                   onBlur={handleBlur}
                 />
               </div>
-              {/* <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                  value={values.number}
-                  autocomplete="off"
-                  name="number"
-                  placeholder="Номер технологического процесса"
-                  onBlur={handleBlur}
-                />  
-                <Select
-                  name="valueTexProcOptions"
-                  width="380px"
-                  value={valueTexProcOptions}
-                  placeholder="Номер технологического процесса"
-                  onChange={(event) => {setvalueTexProcOptions(event.value)}}
-                  options={TexProcOptions}
-                />
-              </div> */}
               <div className={styles.row}>
                 <Select
                   name="valuetTechProc"
@@ -706,139 +1112,64 @@ export const TexProcWelding = ({
                   options={SeamOptions}
                 />
               </div>
-              <p>Информация для прохода</p>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
-                      handleChange(e);
-                    }
-                  }}
-                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                  value={values.weldPassagesName}
-                  name="weldPassagesName"
-                  placeholder="Наименование прохода"
-                  onBlur={handleBlur}
-                  autocomplete="off"
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.weldingCurrentMin}
-                  name="weldingCurrentMin"
-                  placeholder="Сварочный ток min"
-                  type="number"
-                  min="0"
-                  step="1"
-                  onBlur={handleBlur}
-                  autocomplete="off"
-                />
 
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.weldingCurrentMax}
-                  name="weldingCurrentMax"
-                  type="number"
-                  min="0"
-                  step="1"
-                  placeholder="Сварочный ток max"
-                  onBlur={handleBlur}
-                  autocomplete="off"
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.arcVoltageMin}
-                  name="arcVoltageMin"
-                  placeholder="Напряжение дуги min"
-                  type="number"
-                  min="0"
-                  step="1"
-                  onBlur={handleBlur}
-                  autocomplete="off"
-                />
 
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.arcVoltageMax}
-                  name="arcVoltageMax"
-                  placeholder="Напряжение дуги max"
-                  type="number"
-                  min="0"
-                  step="1"
-                  onBlur={handleBlur}
-                  autocomplete="off"
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.preheatingTemperatureMin}
-                  name="preheatingTemperatureMin"
-                  placeholder="Температура предварительного нагрева min"
-                  onBlur={handleBlur}
-                  autocomplete="off"
-                  type="number"
-                  min="0"
-                  step="1"
-                />
+              {isModalOpenNumb === 0
+                ? <WeldingInputs />
+                : <CnangeWeldingInputs />
+              }
 
-                <Input
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px" }}
-                  value={values.preheatingTemperatureMax}
-                  name="preheatingTemperatureMax"
-                  placeholder="Температура предварительного нагрева max"
-                  onBlur={handleBlur}
-                  autocomplete="off"
-                  type="number"
-                  min="0"
-                  step="1"
-                />
-              </div>
-              <div className={styles.row}>
-                <Button  >
-                  Добавить проход
-                </Button>
-              </div>
 
-              <div className={styles.row}>
-                <Button
-                  type="submit"
-                >
-                  {modalData ? "Сохранить" : "Создать"}
-                </Button>
+            </form>
+
+          )}
+        </Formik>
+      </ModalWindow>
+
+
+      {/*Удаление задания*/}
+      <ModalWindow
+        isOpen={deleteTaskModal}
+        headerText="Удаление"
+        setIsOpen={(state) => {
+          setdeleteTaskModal(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setdeleteTaskModal(false)
+            deleteInstruction()
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данную инструкцию ? </h4>
+
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Удалить
+                  </Button>
+                </div>
+
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
     </div>
   );
 };
