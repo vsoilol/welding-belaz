@@ -19,7 +19,11 @@
   margin: 0 20px 0 20px;
   /* font-weight: 700; */
 }
-
+button.remowePassages{
+  background-color: brown !important;
+  display: block;
+  margin: 0 auto;
+}
 .row {
   display: flex;
   justify-content: space-around;
@@ -68,8 +72,9 @@
 }
 
 
-
-.TableTech{
-
+.deleteIcon{
+  cursor: pointer;
+  width: 20px;
+  position: relative;
+  top: 5px;
 }
-
