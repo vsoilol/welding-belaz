@@ -61,27 +61,10 @@ function* loadInstructions() {
 }
 
 function* addInst(variables) {
-  try {   
-    const { data } = yield call(api.post, `/TechnologicalInstruction`, {
-      "number": variables.payload.number,
-      "name": variables.payload.name,
-      "seamId": variables.payload.seamId,
-      "technologicalProcessId": variables.payload.technologicalProcessId,
-      "weldPassages": [
-        {
-          "name": variables.payload.weldPassagesName,
-          "number": variables.payload.weldPassagesNumber,
-          "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
-          "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
-          "arcVoltageMin": Number(variables.payload.arcVoltageMin),
-          "arcVoltageMax": Number(variables.payload.arcVoltageMax),
-          "preheatingTemperatureMin": Number(variables.payload.preheatingTemperatureMin),
-          "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
-        }
-      ] 
-    });
-    window.location.reload();
-    // yield put(addInstSuccess(variables.payload));
+  try {    
+    const { data } = yield call(api.post, `/TechnologicalInstruction`, variables.payload);
+    yield put(addInstSuccess(variables.payload));
+    yield call(loadInstructions); // выполнение функции loadInstructions
   } catch (error) {
     yield put(addInstFailure(error));
     yield put(setError(error.message));
@@ -89,24 +72,9 @@ function* addInst(variables) {
 }
 function* editInst(variables) {
   try {  
-    const { data } = yield call(api.put, `/TechnologicalInstruction`, {
-      "id": variables.payload.id,
-      "number": variables.payload.number,
-      "name": variables.payload.name,  
-      "weldPassages": [
-        {
-          "id": variables.payload.weldPassagesId,
-          "number": variables.payload.weldPassagesNumber,
-          "name": variables.payload.weldPassagesName,
-          "weldingCurrentMin": Number(variables.payload.weldingCurrentMin),
-          "weldingCurrentMax": Number(variables.payload.weldingCurrentMax),
-          "arcVoltageMin": Number(variables.payload.arcVoltageMin),
-          "arcVoltageMax": Number(variables.payload.arcVoltageMax),
-          "preheatingTemperatureMin": Number(variables.payload.preheatingTemperatureMin),
-          "preheatingTemperatureMax": Number(variables.payload.preheatingTemperatureMax)
-        }
-      ]
-    });  
+    const { data } = yield call(api.put, `/TechnologicalInstruction`, variables.payload);
+    yield put(addInstSuccess(variables.payload));
+    yield call(loadInstructions); // выполнение функции loadInstructions
     yield put(editInstSuccess(data));
   } catch (error) {
     yield put(editInstFailure(error));

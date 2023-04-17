@@ -1125,7 +1125,7 @@ export const Equipment = ({
                   <div className={styles.row}>
                     <Button
                       disabled={
-                        values.name == "" || valuetPosts == undefined || values.marking == "" || values.rfidTag == "" || values.factoryNumber == "" ||
+                        values.name == "" || values.marking == "" || values.rfidTag == "" || values.factoryNumber == "" ||
                         values.nextAttestationDate == "" || values.commissioningDate == "" || values.weldingProcess == "" || values.idleVoltage == "" ||
                         values.loadPercentage == "" || values.manufacturerName == "" || /* values.height == ""  || values.width == "" || values.lenght == "" ||*/
                         values.weldingCurrentMin == "" || values.weldingCurrentMax == "" || values.arcVoltageMin == "" || values.arcVoltageMax == ""
