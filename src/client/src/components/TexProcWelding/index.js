@@ -58,9 +58,11 @@ export const TexProcWelding = ({
 
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalpProcOpen, setisModalpProcOpen] = useState(false);
   const [isModalOpenNumb, setIsModalOpenNumb] = useState(0);
 
   const [modalData, setModalData] = useState(null);
+  const [modalDataNumb, setmodalDataNumb] = useState(0);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
   const [activeEquipment, setActiveEquipment] = useState("");
   const [open, setOpen] = useState(false);
@@ -73,19 +75,19 @@ export const TexProcWelding = ({
 
 
   const initialValues = {
-
-    id: modalData?.weldPassageInstructions.id ?? "",
+    id: modalData?.weldPassageInstructions?.id ?? "",
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
-    weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
-    weldPassagesNumber: modalData?.weldPassageInstructions[0].number ?? "",
-    weldingCurrentMin: modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
-    weldingCurrentMax: modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
-    arcVoltageMin: modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
-    arcVoltageMax: modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
-    preheatingTemperatureMin: modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
-    preheatingTemperatureMax: modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
-    weldPassagesId: modalData?.weldPassageInstructions[0].id ?? "",
+    weldPassagesName: modalData?.weldPassageInstructions?.[0]?.name ?? "",
+    weldPassagesNumber: modalData?.weldPassageInstructions?.[0]?.number ?? "",
+    weldingCurrentMin: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
+    weldingCurrentMax: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
+    arcVoltageMin: modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
+    arcVoltageMax: modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
+    preheatingTemperatureMin: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ?? "",
+    preheatingTemperatureMax: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ?? "",
+    weldPassagesId: modalData?.weldPassageInstructions?.[0]?.id ?? "",
+    pdmSystemFileLink: modalData?.pdmSystemFileLink ?? ""
   };
 
   const formattedMasters = masters?.map((item) => {
@@ -111,9 +113,19 @@ export const TexProcWelding = ({
 
   ////////////////////////////////////////////////////////////////////
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
+  const [deleteProcModal, setdeleteProcModal] = useState(false);
+  const [idProc, setidProc] = useState("");
   const [idInstr, setidInstr] = useState("");
   const columns = [
-
+    {
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+          setdeleteProcModal(true);
+          setidProc(rowData?.id)
+        }}></img>
+      }
+    },
     {
       title: "Наименование", field: "name",
     },
@@ -123,7 +135,7 @@ export const TexProcWelding = ({
     {
       title: "Ссылка на PDF-файл ",
       render: (rowData) => (
-        <a href={rowData?.pdmSystemFileLink}>
+        <a href={rowData?.pdmSystemFileLink} target="_blank">
           {rowData?.pdmSystemFileLink ?? "-"}
         </a>
       ),
@@ -490,7 +502,7 @@ export const TexProcWelding = ({
     const filteredVariables = variables.filter(item => {
       return Object.values(item).some(val => val !== '');
     });
-    
+
     if (isModalOpenNumb === 0) {
       const data = {
         number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
@@ -510,11 +522,11 @@ export const TexProcWelding = ({
     }
     if (isModalOpenNumb === 1) {
       const data = {
-        id:idPassages,
+        id: idPassages,
         number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
         name: valueNameInst,
         weldPassages: filteredVariables.map(item => ({
-          id: item.id || null, 
+          id: item.id || null,
           name: item.weldPassagesName,
           number: item.weldPassagesNumber,
           weldingCurrentMin: item.weldingCurrentMin,
@@ -524,8 +536,7 @@ export const TexProcWelding = ({
           preheatingTemperatureMin: item.preheatingTemperatureMin,
           preheatingTemperatureMax: item.preheatingTemperatureMax,
         })),
-      };  
-      console.log(data)
+      };
       editInst(data)
     }
   }
@@ -535,28 +546,28 @@ export const TexProcWelding = ({
   function WeldingInputs() {
     const [passages, setPassages] = useState([
       {
-        weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
-        weldPassagesNumber: modalData?.weldPassageInstructions[0].number ?? "",
-        weldingCurrentMin: modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
-        weldingCurrentMax: modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
-        arcVoltageMin: modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
-        arcVoltageMax: modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
-        preheatingTemperatureMin: modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
-        preheatingTemperatureMax: modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
+        weldPassagesName: modalData?.weldPassageInstructions?.[0]?.name ?? "",
+        weldPassagesNumber: modalData?.weldPassageInstructions?.[0]?.number ?? "",
+        weldingCurrentMin: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
+        weldingCurrentMax: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
+        arcVoltageMin: modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
+        arcVoltageMax: modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
+        preheatingTemperatureMin: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ?? "",
+        preheatingTemperatureMax: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ?? "",
       },
     ]);
     const addPassage = () => {
       setPassages([
         ...passages,
         {
-          weldPassagesName: modalData?.weldPassageInstructions[0].name ?? "",
-          weldPassagesNumber: modalData?.weldPassageInstructions[0].number ?? "",
-          weldingCurrentMin: modalData?.weldPassageInstructions[0].weldingCurrentMin ?? "",
-          weldingCurrentMax: modalData?.weldPassageInstructions[0].weldingCurrentMax ?? "",
-          arcVoltageMin: modalData?.weldPassageInstructions[0].arcVoltageMin ?? "",
-          arcVoltageMax: modalData?.weldPassageInstructions[0].arcVoltageMax ?? "",
-          preheatingTemperatureMin: modalData?.weldPassageInstructions[0].preheatingTemperatureMin ?? "",
-          preheatingTemperatureMax: modalData?.weldPassageInstructions[0].preheatingTemperatureMax ?? "",
+          weldPassagesName: modalData?.weldPassageInstructions?.[0]?.name ?? "",
+          weldPassagesNumber: modalData?.weldPassageInstructions?.[0]?.number ?? "",
+          weldingCurrentMin: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
+          weldingCurrentMax: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
+          arcVoltageMin: modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
+          arcVoltageMax: modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
+          preheatingTemperatureMin: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ?? "",
+          preheatingTemperatureMax: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ?? "",
         },
       ]);
     };
@@ -733,14 +744,14 @@ export const TexProcWelding = ({
       preheatingTemperatureMin: item.preheatingTemperatureMin,
       preheatingTemperatureMax: item.preheatingTemperatureMax,
     })));
- 
+
     const addPassage = () => {
       setPassages([
         ...passages,
         {
           id: "",
           weldPassagesName: "",
-          weldPassagesNumber:  "",
+          weldPassagesNumber: "",
           weldingCurrentMin: "",
           weldingCurrentMax: "",
           arcVoltageMin: "",
@@ -917,6 +928,32 @@ export const TexProcWelding = ({
       .catch((error) => { });
   }
 
+
+  async function SendDataProc(variables) {
+    const { name, number, pdmSystemFileLink } = variables;
+    const newObj = { name, number, pdmSystemFileLink };
+    try {
+      if (modalDataNumb === 0) {
+        await api.post("/TechnologicalProcess", newObj);
+      } else if (modalDataNumb === 1) {
+        newObj["id"] = idProc
+        await api.put("/TechnologicalProcess", newObj);
+      }
+      loadTexprocwelding();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function deleteProc(params) {
+    try {
+      const response = await api.remove(`/TechnologicalProcess/${params}`);
+      loadTexprocwelding();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
 
     <div className={styles.innerWrapper}>
@@ -973,7 +1010,13 @@ export const TexProcWelding = ({
                     tooltip: "Добавить ",
                     isFreeAction: true,
                     onClick: () => {
-                      setIsModalOpen(true);
+                      setisModalpProcOpen(true);
+                      setmodalDataNumb(0)
+                      setModalData({
+                        name: "",
+                        number: "",
+                        pdmSystemFileLink: ""
+                      });
                     },
                   },
                   {
@@ -981,7 +1024,9 @@ export const TexProcWelding = ({
                     tooltip: "Редактировать ",
                     onClick: (event, rowData) => {
                       setModalData(rowData);
-                      setIsModalOpen(true);
+                      setisModalpProcOpen(true);
+                      setmodalDataNumb(1)
+                      setidProc(rowData?.id)
                     },
                   },
                 ]
@@ -1029,8 +1074,8 @@ export const TexProcWelding = ({
                       setValuetVkladka(1)
 
                       setidPassages(rowData.id);
-                      setvalueNameInst(rowData.name); 
-                      setpassagesCnange(rowData.weldPassageInstructions) 
+                      setvalueNameInst(rowData.name);
+                      setpassagesCnange(rowData.weldPassageInstructions)
                     },
                   },
                 ]
@@ -1041,14 +1086,6 @@ export const TexProcWelding = ({
           />
         </TabPanel>
       </div>
-
-
-
-
-
-
-
-
 
       <ResultsModal
         type={"EQUIPMENT"}
@@ -1064,7 +1101,6 @@ export const TexProcWelding = ({
         setIsOpen={(state) => {
           setIsModalOpen(state);
           setModalData(null);
-
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -1073,9 +1109,9 @@ export const TexProcWelding = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-
             setIsModalOpen(false);
             setModalData(null);
+
           }}
         >
           {({
@@ -1085,7 +1121,6 @@ export const TexProcWelding = ({
             setFieldValue,
             handleBlur,
           }) => (
-            //Форма для Технологические инструкции
             <form onSubmit={handleSubmit}>
               <div className={styles.row}>
                 <Input
@@ -1120,6 +1155,94 @@ export const TexProcWelding = ({
 
             </form>
 
+          )}
+        </Formik>
+      </ModalWindow>
+
+
+
+      {/*Технологические процессы  */}
+      <ModalWindow
+        isOpen={isModalpProcOpen}
+        headerText={
+          modalDataNumb ? "Редактировать " : "Добавить "
+        }
+        setIsOpen={(state) => {
+          setisModalpProcOpen(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setisModalpProcOpen(false)
+            SendDataProc(variables)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    value={values.name}
+                    name="name"
+                    autocomplete="off"
+                    placeholder="Наименовние"
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      const pattern = /^[0-9-]*$/; // задаем шаблон для вводимых символов
+                      if (pattern.test(e.target.value)) { // проверяем соответствие вводимых символов шаблону
+                        handleChange(e);
+                      }
+                    }}
+                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    value={values.number}
+                    name="number"
+                    autoComplete="off"
+                    placeholder="Номер технологического процесса"
+                    onBlur={handleBlur} 
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => { 
+                      handleChange(e);
+                    }}
+                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    value={values.pdmSystemFileLink}
+                    name="pdmSystemFileLink"
+                    autocomplete="off"
+                    placeholder="Ссылка на PDF-файл "
+                    onBlur={handleBlur}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    {modalDataNumb ? "Редактировать " : "Добавить "}
+                  </Button>
+                </div>
+
+              </div>
+            </form>
           )}
         </Formik>
       </ModalWindow>
@@ -1168,6 +1291,53 @@ export const TexProcWelding = ({
           )}
         </Formik>
       </ModalWindow>
+
+
+      {/*Удаление процесса*/}
+      <ModalWindow
+        isOpen={deleteProcModal}
+        headerText="Удаление"
+        setIsOpen={(state) => {
+          setdeleteProcModal(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setdeleteProcModal(false)
+            deleteProc(idProc)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> процесс ? </h4>
+
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Удалить
+                  </Button>
+                </div>
+
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+
+
     </div>
   );
 };

@@ -57,7 +57,8 @@ export const Product = ({
   userRole,
   addProduct,
   editProduct,
-
+  deleteProduct,
+  deleteIcon
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -103,7 +104,9 @@ export const Product = ({
     id: modalData?.id ?? "",
 
   };
-
+  /////Удоление
+  const [deleteProdModal, setdeleteProdModal] = useState(false);
+  const [idProduct, setidProduct] = useState("");
   function SetValue(valueId, index) {
 
     ///area
@@ -226,6 +229,15 @@ export const Product = ({
     ],
 
     goods: [
+      {
+        title: "Удаление",
+        render: (rowData) => {
+          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+            setdeleteProdModal(true);
+            setidProduct(rowData?.id)
+          }}></img>
+        }
+      },
       {
         title: "Наименование изделия ", field: "name"
       },
@@ -1095,7 +1107,47 @@ export const Product = ({
         </ModalWindow>
 
 
+        {/*Удаление */}
+        <ModalWindow
+          isOpen={deleteProdModal}
+          headerText="Удаление"
+          setIsOpen={(state) => {
+            setdeleteProdModal(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setdeleteProdModal(false)
+              deleteProduct({ id: idProduct, index: 4 })
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
 
+                <div>
+                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное изделие ? </h4>
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
       </div>
     </div>
   );
