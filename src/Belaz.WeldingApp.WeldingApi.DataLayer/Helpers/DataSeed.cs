@@ -133,7 +133,7 @@ public class DataSeed
 
         var weldingEquipment = (
             await context.WeldingEquipments
-                .Where(_ => _.RfidTag == "03:3D:93:0D")
+                .Where(_ => _.IdFromSystem == "49232")
                 .FirstOrDefaultAsync()
         )!;
 
@@ -423,7 +423,7 @@ public class DataSeed
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка",
-                RfidTag = "03:3D:93:0D",
+                RfidTag = "3A:94:69:86",
                 WeldingCurrentMin = 80,
                 WeldingCurrentMax = 550,
                 ArcVoltageMin = 18,
