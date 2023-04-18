@@ -62,6 +62,18 @@ public class TechnologicalInstructionRepository : ITechnologicalInstructionRepos
         List<WeldPassageInstruction> weldPassages
     )
     {
+        var weldPassageIds = weldPassages.Select(_ => _.Id).ToList();
+
+        var deletedWeldPassageInstructions = await _context.WeldPassageInstructions
+            .Where(
+                _ =>
+                    !weldPassageIds.Any(id => id == _.Id)
+                    && _.TechnologicalInstructionId == entity.Id
+            )
+            .ToListAsync();
+
+        _context.WeldPassageInstructions.RemoveRange(deletedWeldPassageInstructions);
+
         var updatedTechnologicalInstruction = (
             await _context.TechnologicalInstructions
                 .Include(_ => _.WeldPassageInstructions)
