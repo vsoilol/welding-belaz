@@ -136,6 +136,11 @@ const { Types, Creators } = createActions({
   loadWeldingtaskFailure: ["error"],
 
 
+
+  deleteProductRequest: ["payload"],
+  deleteProductSuccess: ["id"],
+  deleteProductFailure: ["error"],
+
 });
 
 const workplaceActions = {

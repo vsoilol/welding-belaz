@@ -89,6 +89,7 @@ const mapDispatchToProps = {
 
   ////
   loadWeldingTask: Actions.Creators.loadWeldingtaskRequest,
+  deleteProduct: Actions.Creators.deleteProductRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkPlacePage);

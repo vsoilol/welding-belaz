@@ -253,6 +253,12 @@ const loadWeldingtaskSuccess = (state = INITIAL_STATE, { weldingtask }) => {
   };
 };
 
+const deleteProductSuccess = (state = INITIAL_STATE, { id }) => {
+  console.log(state)
+  return state; 
+};
+
+
 
 const failure = (state = INITIAL_STATE, { error }) => {
   console.log(error)
@@ -316,7 +322,9 @@ export const HANDLERS = {
   [Types.EDIT_WORKPLACE_FAILURE]: failure,
 
 
-
+  [Types.DELETE_PRODUCT_REQUEST]: request,
+  [Types.DELETE_PRODUCT_SUCCESS]: deleteProductSuccess,
+  [Types.DELETE_PRODUCT_FAILURE]: failure,
 
 
 

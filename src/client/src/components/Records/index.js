@@ -4,7 +4,7 @@ import ToolTip from "components/shared/ToolTip";
 import React, { useEffect } from "react";
 import styles from "./styles.module.css";
 
-export const Records = ({ records, loadRecords, isRequesting }) => {
+export const Records = ({ records, loadRecords, isRequesting, deleteRecords }) => {
   useEffect(() => {
     loadRecords();
   }, [loadRecords]);
@@ -20,6 +20,7 @@ export const Records = ({ records, loadRecords, isRequesting }) => {
         tableType="OTK"
         isRequesting={isRequesting}
         records={records}
+        deleteRecords={deleteRecords}
       />
     </div>
   );

@@ -66,7 +66,7 @@ export const Product = ({
 
   const [valueProdArea, setValueProdArea] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
-  const [valuetPosts, setValuetPosts] = useState(area[0]?.id);
+  const [valuetPosts, setValuetPosts] = useState(area?.[0].id);
   const [valuetWorkPlace, setValuetWorkPlace] = useState();
 
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);

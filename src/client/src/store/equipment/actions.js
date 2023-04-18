@@ -9,7 +9,7 @@ const { Types, Creators } = createActions({
   loadPostsRequest: ["payload"],
   loadPostsSuccess: ["posts"],
   loadPostsFailure: ["error"],
- 
+
 
   editEquipmentRequest: ["payload"],
   editEquipmentSuccess: ["equipment"],
@@ -39,10 +39,10 @@ const { Types, Creators } = createActions({
   assignWeldersSuccess: ["assignwelders"],
   assignWeldersFailure: ["error"],
 
-   ////assignMaster
-   assignMasterRequest: ["payload"],
-   assignMasterSuccess: ["assignmaster"],
-   assignMasterFailure: ["error"],
+  ////assignMaster
+  assignMasterRequest: ["payload"],
+  assignMasterSuccess: ["assignmaster"],
+  assignMasterFailure: ["error"],
 
 
   //loaddowntime

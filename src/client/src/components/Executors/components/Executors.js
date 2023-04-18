@@ -17,6 +17,8 @@ import Paper from "@material-ui/core/Paper";
 import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import imgcalendar from "assets/icons/calendar.png";
+import deleteIcon from "assets/icons/delete.png";
+
 const useStyles = makeStyles(() => ({
   rowStyle: {
     padding: 10,
@@ -72,8 +74,8 @@ export const ExecutorsTable = ({
       },
     ],
   };
-
-
+  const [deleteTaskModal, setdeleteTaskModal] = useState(false);
+  const [idExecutor, setidExecutor] = useState("");
   const requiredKeys = [
     "rfidTag",
     "firstName",
@@ -85,6 +87,15 @@ export const ExecutorsTable = ({
   ];
 
   const controllerColumns = [
+    {
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+          setdeleteTaskModal(true); 
+          setidExecutor(rowData?.id)
+        }}></img>
+      }
+    },
     {
       title: "RFID-метка",
       render: (rowData) => {
@@ -146,6 +157,15 @@ export const ExecutorsTable = ({
   ];
 
   const controllersColumns = [
+    {
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+          setdeleteTaskModal(true); 
+          setidExecutor(rowData?.id)
+        }}></img>
+      }
+    },
     {
       title: "RFID-метка",
       render: (rowData) => {
@@ -239,6 +259,15 @@ export const ExecutorsTable = ({
   };
 
   const extraUserColumns = [
+    {
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+          setdeleteTaskModal(true);
+          setidExecutor(rowData?.id)
+        }}></img>
+      }
+    },
     {
       title: "RFID-метка",
       render: (rowData) => {
@@ -592,8 +621,7 @@ export const ExecutorsTable = ({
                 },
               ]
               : []
-          }
-          deleteAction={userRole === "admin" ? deleteExecutor : null}
+          } 
           renderRowChildren={renderRowChildren}
           rowStyle={classes.rowStyle}
           columns={type === "executor" ? extraUserColumns : controllerColumns}
@@ -741,6 +769,50 @@ export const ExecutorsTable = ({
                 >
                   {modalData ? "Сохранить" : "Создать"}
                 </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+
+      {/*Удаление сотрудника*/}
+      <ModalWindow
+        isOpen={deleteTaskModal}
+        headerText="Удаление"
+        setIsOpen={(state) => {
+          setdeleteTaskModal(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setdeleteTaskModal(false) 
+            deleteExecutor(idExecutor)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> сотрудника ? </h4>
+
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Удалить
+                  </Button>
+                </div>
+
               </div>
             </form>
           )}

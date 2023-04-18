@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   loadRecords: Actions.Creators.loadRecordsRequest,
+  deleteRecords:Actions.Creators.deleteRecordsRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecordsPage);

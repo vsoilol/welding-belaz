@@ -136,12 +136,10 @@ function* editEquipment({ payload }) {
 }
 
 function* deleteEquipment({ payload }) {
-  try {
-    const { data } = yield call(
-      api.remove,
-      `/machines/${payload.machineId}`
-    );
+  try { 
+    const { data } = yield call(api.remove, `/WeldingEquipment/${payload}`);  
     yield put(deleteEquipmentSuccess(data));
+    
   } catch (error) {
     yield put(deleteEquipmentFailure(error));
     yield put(setError(error.message));
