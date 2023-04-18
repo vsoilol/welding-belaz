@@ -56,7 +56,10 @@ export const Knot = ({
 
   masters,
   techs,
-  executors
+  executors,
+
+  deleteProduct,
+  deleteIcon
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -101,7 +104,9 @@ export const Knot = ({
     id: modalData?.id ?? "",
 
   };
-
+  /////Удоление
+  const [deleteProdModal, setdeleteProdModal] = useState(false);
+  const [idProduct, setidProduct] = useState("");
   function SetValue(valueId, index) {
 
     ///area
@@ -137,7 +142,7 @@ export const Knot = ({
     variables["postId"] = valuetWorkPlace
     variables["workplaceId"] = valueWorkplace
 
- 
+
 
     //Добавить Узел
     if (isModalNumb == 13) {
@@ -276,6 +281,15 @@ export const Knot = ({
       },
     ],
     node: [
+      {
+        title: "Удаление",
+        render: (rowData) => {
+          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+            setdeleteProdModal(true);
+            setidProduct(rowData?.id)
+          }}></img>
+        }
+      },
       {
         title: "Наименование узла ", field: "name"
       },
@@ -1049,7 +1063,7 @@ export const Knot = ({
                   />
                 </div>
                 <div className={styles.row}>
-                <Input
+                  <Input
                     onChange={(e) => {
                       const value = e.target.value;
                       if (/^[\dA-Z-]+$/.test(value)) {
@@ -1139,7 +1153,47 @@ export const Knot = ({
 
         </ModalWindow>
 
+        {/*Удаление */}
+        <ModalWindow
+          isOpen={deleteProdModal}
+          headerText="Удаление"
+          setIsOpen={(state) => {
+            setdeleteProdModal(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setdeleteProdModal(false)
+              deleteProduct({ id: idProduct, index: 5 })
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
 
+                <div>
+                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данный узел ? </h4>
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
 
       </div>
     </div>
