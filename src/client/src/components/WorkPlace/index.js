@@ -43,7 +43,7 @@ import { Seam } from "components/WorkPlace/components";
 import { Weldingtask } from "components/WorkPlace/components";
 
 
-
+import deleteIcon from "assets/icons/delete.png";
 
 
 
@@ -123,6 +123,9 @@ export const WorkPlace = ({
   loadWeldingTask,
   weldingtask,
 
+
+  deleteProduct
+
 }) => {
 
  
@@ -152,7 +155,7 @@ export const WorkPlace = ({
     loadMasters();
     loadTechs();
     loadWeldingTask()
-    loadExecutors();
+    loadExecutors(); 
   }, [
     loadWorkshop,
     loadArea,
@@ -165,7 +168,7 @@ export const WorkPlace = ({
     loadMasters,
     loadTechs,
     loadWeldingTask,
-    loadExecutors,
+    loadExecutors,  
   ]);
 
   const ChangePanelsworkplace = (event, newValue) => {
@@ -220,6 +223,9 @@ export const WorkPlace = ({
           userRole={userRole}
           addWorkshop={addWorkshop}
           editWorkshop={editWorkshop}
+
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
         />
       )
     }
@@ -239,7 +245,8 @@ export const WorkPlace = ({
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
           addArea={addArea}
           editArea={editArea}
         />
@@ -260,7 +267,8 @@ export const WorkPlace = ({
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
           addPosts={addPosts}
           editPosts={editPosts}
         />
@@ -281,7 +289,8 @@ export const WorkPlace = ({
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
           addWorkplace={addWorkplace}
           editWorkplace={editWorkplace}
         />
@@ -309,7 +318,8 @@ export const WorkPlace = ({
 
           masters={masters}
           techs={techs}
-
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
 
           addProduct={addProduct}
           editProduct={editProduct}
@@ -333,7 +343,8 @@ export const WorkPlace = ({
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
           masters={masters}
           techs={techs}
 
@@ -359,7 +370,8 @@ export const WorkPlace = ({
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
           addDetail={addDetail}
           editDetail={editDetail}
         />
@@ -381,7 +393,8 @@ export const WorkPlace = ({
           value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-
+          deleteProduct={deleteProduct}
+          deleteIcon={deleteIcon}
           addSeam={addSeam}
           editSeam={editSeam}
         />

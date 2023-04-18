@@ -6,7 +6,12 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Table } from "components/shared/Table";
-import React from "react";
+import deleteIcon from "assets/icons/delete.png";
+import React, { useEffect, useState } from "react";
+import ModalWindow from "components/shared/ModalWindow";
+import { Formik } from "formik";
+import Button from "components/shared/Button";
+
 import {
   LineChart,
   Line,
@@ -24,20 +29,30 @@ import {
 import styles from "../styles.module.css";
 
 import "../style.css";
-
 const dateOptions = {
   day: "numeric",
   month: "short",
   year: "numeric",
 };
-
 const StyleNewTable = {
   width: "calc(100% - 80px)",
   margin: "0 auto"
 }
 
-export const RecordsTable = ({ records, isRequesting }) => {
+
+export const RecordsTable = ({ records, isRequesting, deleteRecords }) => {
+  const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
+  const [idRecords, setidRecords] = useState("");
   const columns = [
+    {
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+          setdeleteRecordsModal(true);
+          setidRecords(rowData?.id)
+        }}></img>
+      }
+    },
     { title: "Дата", field: "date" },
     { title: "Время начала сварки", field: "weldingStart" },
     {
@@ -89,46 +104,33 @@ export const RecordsTable = ({ records, isRequesting }) => {
 
 
   ];
-
   const renderRowChildren = (rowData) => {
-
     let time = rowData.startTime
     let Endtime = rowData.date
-
     let dateObject = new Date(time);
     let dateObjectEnd = new Date(Endtime);
-
-
     Array.prototype.max = function () {
       return Math.max.apply(null, this);
     };
     Array.prototype.min = function () {
       return Math.min.apply(null, this);
     };
-
     let ArrayVoltageValues = []
     let ArrayweldingCurrentValues = []
-
     for (let index = 0; index < rowData.arcVoltageValues.length; index++) {
       ArrayVoltageValues.push({ id: 0, value: rowData.arcVoltageValues[index] })
     }
     for (let index = 0; index < rowData.weldingCurrentValues.length; index++) {
       ArrayweldingCurrentValues.push({ id: 0, value: rowData.weldingCurrentValues[index] })
     }
-
-
-
     const formatYAxis = (value) => Math.round(value / 10);
-
-
     return (
       <TableContainer className={styles.border} component={Paper}>
         <div className={styles.AxisBlocks}>
           <p>Сварочный ток, А</p>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart
-             data={ArrayweldingCurrentValues}
-              
+              data={ArrayweldingCurrentValues}
               syncId="anyId"
               margin={{
                 top: 10,
@@ -164,7 +166,7 @@ export const RecordsTable = ({ records, isRequesting }) => {
           </ResponsiveContainer>
         </div>
         <div className={styles.AxisBlocks}>
-        <p>Напряжение на дуге, В</p>
+          <p>Напряжение на дуге, В</p>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart
               data={ArrayVoltageValues}
@@ -203,17 +205,16 @@ export const RecordsTable = ({ records, isRequesting }) => {
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className={styles.AxisBlocks}  > 
+        <div className={styles.AxisBlocks}  >
           <ResponsiveContainer width="100%" height={50}>
             <LineChart
               data={ArrayweldingCurrentValues}
-              syncId="anyId" 
+              syncId="anyId"
             >
-               
-              <Brush interval={9}  tickFormatter={formatYAxis}  height={45}  marginTop={30}  />
+              <Brush interval={9} tickFormatter={formatYAxis} height={45} marginTop={30} />
             </LineChart>
           </ResponsiveContainer>
-        </div> 
+        </div>
       </TableContainer>
     );
   };
@@ -229,6 +230,49 @@ export const RecordsTable = ({ records, isRequesting }) => {
         isLoading={isRequesting}
         deleteAction={null}
       />
+      {/*Удаление записи*/}
+      <ModalWindow
+        isOpen={deleteRecordsModal}
+        headerText="Удаление"
+        setIsOpen={(state) => {
+          setdeleteRecordsModal(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={{}}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setdeleteRecordsModal(false)
+            deleteRecords(idRecords)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> запись ? </h4>
+
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Удалить
+                  </Button>
+                </div>
+
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
     </div>
   );
 };

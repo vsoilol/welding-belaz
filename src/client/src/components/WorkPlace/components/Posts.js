@@ -51,6 +51,8 @@ export const Posts = ({
   userRole,
   addPosts,
   editPosts,
+  deleteProduct,
+  deleteIcon
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -69,8 +71,12 @@ export const Posts = ({
 
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
-///дописываю для чего просматриваем закрепленные объекты
-const [isDisplayFixed, setDisplayFixed] = useState("");
+  ///дописываю для чего просматриваем закрепленные объекты
+  const [isDisplayFixed, setDisplayFixed] = useState("");
+  /////Удоление
+  const [deleteProdModal, setdeleteProdModal] = useState(false);
+  const [idProduct, setidProduct] = useState("");
+
 
   const initialValues = {
     name: modalData?.name ?? "",
@@ -132,23 +138,23 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
         title: "Номер  цеха",
         field: "number",
       },
-      
+
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id,"name")??"-"}</span>
+          return <span>{DetArea(rowData.id, "name") ?? "-"}</span>
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id,"numb")??"-"}</span>
+          return <span>{DetArea(rowData.id, "numb") ?? "-"}</span>
         },
       },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id);setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -160,17 +166,17 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Номер  производственного участка ",
         field: "number",
-      }, 
+      },
       {
         title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name??"-"}</span>
+          return <span>{rowData?.workshop.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number??"-"}</span>
+          return <span>{rowData?.workshop.number ?? "-"}</span>
         },
       },
       {
@@ -179,8 +185,8 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id);setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
@@ -189,6 +195,15 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       },
     ],
     posts: [
+      {
+        title: "Удаление",
+        render: (rowData) => {
+          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+            setdeleteProdModal(true);
+            setidProduct(rowData?.id)
+          }}></img>
+        }
+      },
       {
         title: "Наименование поста ",
         render: (rowData) => {
@@ -228,7 +243,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id);setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -236,7 +251,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number??"-"}</p>;
+          return <p>Рабочее место {rowData.number ?? "-"}</p>;
         },
       },
       {
@@ -246,26 +261,26 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name??"-"}</span>
+          return <span>{rowData?.workshop.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number??"-"}</span>
+          return <span>{rowData?.workshop.number ?? "-"}</span>
         },
       },
 
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.name??"-"}</span>
+          return <span>{rowData?.productionArea.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.number??"-"}</span>
+          return <span>{rowData?.productionArea.number ?? "-"}</span>
         },
       },
 
@@ -273,16 +288,16 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
       {
         title: "Наименование поста",
         render: (rowData) => {
-          return <span>{rowData?.post?.name??"-"}</span>
+          return <span>{rowData?.post?.name ?? "-"}</span>
         },
       },
       {
         title: "Номер  поста",
         render: (rowData) => {
-          return <span>{rowData?.post?.number??"-"}</span>
+          return <span>{rowData?.post?.number ?? "-"}</span>
         },
       },
-    ], 
+    ],
 
   };
 
@@ -502,7 +517,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 style={{ minWidth: "800px" }}
               >
                 <Table
-                  title={isDisplayFixed+" - " +value_goToTitle}
+                  title={isDisplayFixed + " - " + value_goToTitle}
                   columns={value_goToHeadTable}
                   data={value_goToBodyTable}
                 />
@@ -519,7 +534,7 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
                 className="posts"
                 data={posts}
                 actions={
-                  userRole === "Admin"||userRole === "Master"
+                  userRole === "Admin" || userRole === "Master"
                     ? [
                       {
                         icon: "add",
@@ -646,7 +661,49 @@ const [isDisplayFixed, setDisplayFixed] = useState("");
 
         </ModalWindow>
 
+        {/*Удаление */}
+        <ModalWindow
+          isOpen={deleteProdModal}
+          headerText="Удаление"
+          setIsOpen={(state) => {
+            setdeleteProdModal(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setdeleteProdModal(false)
+              deleteProduct({ id: idProduct, index: 2 })
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
 
+                <div>
+                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данный пост ? </h4>
+
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
 
       </div>
     </div>

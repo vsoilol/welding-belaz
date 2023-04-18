@@ -79,7 +79,12 @@
 }
 
 
- 
+.deleteIcon{
+  cursor: pointer;
+  width: 20px;
+  position: relative;
+  top: 5px;
+}
 
 
 
