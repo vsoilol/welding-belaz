@@ -514,7 +514,7 @@ export const TexProcWelding = ({
         number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
         name: valueNameInst,
         weldPassages: filteredVariables.map(item => ({
-          id:item.id,
+          id: item.id || null, 
           name: item.weldPassagesName,
           number: item.weldPassagesNumber,
           weldingCurrentMin: item.weldingCurrentMin,
@@ -525,6 +525,7 @@ export const TexProcWelding = ({
           preheatingTemperatureMax: item.preheatingTemperatureMax,
         })),
       };  
+      console.log(data)
       editInst(data)
     }
   }
@@ -732,8 +733,7 @@ export const TexProcWelding = ({
       preheatingTemperatureMin: item.preheatingTemperatureMin,
       preheatingTemperatureMax: item.preheatingTemperatureMax,
     })));
-
-    console.log(passages)
+ 
     const addPassage = () => {
       setPassages([
         ...passages,
@@ -966,7 +966,7 @@ export const TexProcWelding = ({
             isLoading={isRequesting}
 
             actions={
-              userRole === "admin"
+              userRole === "Admin"
                 ? [
                   {
                     icon: "add",
@@ -1030,9 +1030,7 @@ export const TexProcWelding = ({
 
                       setidPassages(rowData.id);
                       setvalueNameInst(rowData.name); 
-                      setpassagesCnange(rowData.weldPassageInstructions)
-
-                      console.log(rowData.weldPassageInstructions)
+                      setpassagesCnange(rowData.weldPassageInstructions) 
                     },
                   },
                 ]

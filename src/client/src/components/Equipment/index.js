@@ -20,7 +20,7 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import imgcalendar from "assets/icons/calendar.png";
-
+import deleteIcon from "assets/icons/delete.png";
 
 
 import Tabs from "@material-ui/core/Tabs";
@@ -92,8 +92,7 @@ export const Equipment = ({
   //weldingEquipmentId
   const [weldingEquipmentId, setweldingEquipmentId] = useState(null);
 
-
-
+  const [deleteTaskModal, setdeleteTaskModal] = useState(false); 
   const initialValues = {
     rfidTag: modalData?.rfidTag ?? "",
     name: modalData?.name ?? "",
@@ -143,10 +142,19 @@ export const Equipment = ({
 
     loadWorkshop();
     loadArea();
-  }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder,loadWorkshop, loadArea]);
+  }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder, loadWorkshop, loadArea]);
 
 
   const columns = [
+    {
+      title: "Удаление",
+      render: (rowData) => {
+        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+          setdeleteTaskModal(true);
+          setweldingEquipmentId(rowData?.id)
+        }}></img>
+      }
+    },
     { title: "Наименование", field: "name" },
     { title: "Маркировка", field: "marking" },
     {
@@ -772,7 +780,7 @@ export const Equipment = ({
                     <Select
                       name="valueWorkshop"
                       value={valueWorkshop}
-                      width="380px" 
+                      width="380px"
                       placeholder="Цех"
                       onChange={(event) => {
                         setvalueWorkshop(event.value)
@@ -785,7 +793,7 @@ export const Equipment = ({
                     <Select
                       name="valueoptArea"
                       value={valueoptArea}
-                      width="380px" 
+                      width="380px"
                       placeholder="Поизводственный участок"
                       onChange={(event) => {
                         setvalueoptArea(event.value)
@@ -797,7 +805,7 @@ export const Equipment = ({
 
                   <div className={styles.row}>
                     <Input
-                     onChange={(e) => {
+                      onChange={(e) => {
                         if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
                           handleChange(e);
                         }
@@ -828,7 +836,7 @@ export const Equipment = ({
                   </div>
                   <div className={styles.row}>
                     <Input
-                       onChange={(e) => {
+                      onChange={(e) => {
                         const value = e.target.value;
                         if (value === "" || /^[0-9A-Fa-f:]+$/.test(value)) {
                           handleChange(e);
@@ -1243,7 +1251,49 @@ export const Equipment = ({
 
       </ModalWindow>
 
+      {/*Удаление оборудования*/}
+      <ModalWindow
+        isOpen={deleteTaskModal}
+        headerText="Удаление"
+        setIsOpen={(state) => {
+          setdeleteTaskModal(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setdeleteTaskModal(false)
+            deleteEquipment(weldingEquipmentId)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
 
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> оборудование ? </h4>
+
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Удалить
+                  </Button>
+                </div>
+
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
     </div>
   );
 };
