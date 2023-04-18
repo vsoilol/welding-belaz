@@ -117,12 +117,10 @@ function* editExecutor({ payload, userId }) {
 }
 
 function* deleteExecutor({ payload }) {
-  try {
-    const { data } = yield call(
-      api.remove,
-      `/users/executors/${payload.executorId}`
-    );
-    yield put(deleteExecutorSuccess(data.toString()));
+  try { 
+    const { data } = yield call(api.remove, `/Welder/${payload}`);
+    yield put(deleteExecutorSuccess(payload));
+    yield call(loadExecutors);  
   } catch (error) {
     yield put(deleteExecutorFailure(error));
     yield put(setError(error.message));
@@ -179,12 +177,10 @@ function* editMaster({payload}) {
 }
 
 function* deleteMaster({ payload }) {
-  try {
-    const { data } = yield call(
-      api.remove,
-      `/users/masters/${payload.masterId}`
-    );
-    yield put(deleteMasterSuccess(data.toString()));
+  try { 
+    const { data } = yield call(api.remove, `/Master/${payload}`);
+    yield put(deleteExecutorSuccess(payload));
+    yield call(loadMasters);  
   } catch (error) {
     yield put(deleteMasterFailure(error));
     yield put(setError(error.message));
@@ -241,50 +237,15 @@ function* editTech({ payload, userId }) {
 
 function* deleteTech({ payload }) {
   try {
-    const { data } = yield call(
-      api.remove,
-      `/users/technicals/${payload.techUserId}`
-    );
-    yield put(deleteTechSuccess(data.toString()));
+    const { data } = yield call(api.remove, `/Inspector/${payload}`);
+    yield put(deleteExecutorSuccess(payload));
+    yield call(loadTechs);  
   } catch (error) {
     yield put(deleteTechFailure(error));
     yield put(setError(error.message));
   }
 }
-
-///Оборудование
-// function* loadEquipment() {
-//   try {
-//     console.log("Exe")
-//     const { data } = yield call(api.get, `/WeldingEquipment`);
-//     const downtime = yield call(api.get, `/WeldingEquipment/downtime`);
-//     let data_equipment = [data, downtime.data]
-//     yield put(loadEquipmentSuccess(data_equipment));
-//   } catch (error) {
-//     yield put(loadEquipmentFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
-///Производственные участки 
-// function* loadArea() {
-//   try {
-//     const { data } = yield call(api.get, `/ProductionArea`);
-//     yield put(loadAreaSuccess(data));
-//   } catch (error) {
-//     yield put(loadAreaFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
-///Цеха 
-// function* loadWorkshop() {
-//   try {
-//     const { data } = yield call(api.get, `/Workshop`);
-//     yield put(loadWorkshopSuccess(data));
-//   } catch (error) {
-//     yield put(loadWorkshopFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
+ 
 export function* executorsSaga() {
   yield takeLatest(LOAD_EXECUTORS_REQUEST, loadExecutors);
   yield takeLatest(ADD_EXECUTOR_REQUEST, addExecutor);
@@ -298,13 +259,4 @@ export function* executorsSaga() {
   yield takeLatest(ADD_TECH_REQUEST, addTech);
   yield takeLatest(DELETE_TECH_REQUEST, deleteTech);
   yield takeLatest(EDIT_TECH_REQUEST, editTech);
-
-
-  // yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
-
-   ///Цеха 
-  //  yield takeLatest(LOAD_WORKSHOP_REQUEST, loadWorkshop);
-   ///Производственные участки 
-  // yield takeLatest(LOAD_AREA_REQUEST, loadArea);
-
 }

@@ -52,6 +52,9 @@ export const Place = ({
   value_panel2,
   addWorkplace,
   editWorkplace,
+
+  deleteProduct,
+  deleteIcon
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -73,6 +76,11 @@ export const Place = ({
   ///дописываю для чего просматриваем закрепленные объекты
   const [isDisplayFixed, setDisplayFixed] = useState("");
 
+
+
+  /////Удоление
+  const [deleteProdModal, setdeleteProdModal] = useState(false);
+  const [idProduct, setidProduct] = useState("");
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
@@ -198,6 +206,15 @@ export const Place = ({
       },
     ],
     jobs_place: [
+      {
+        title: "Удаление",
+        render: (rowData) => {
+          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+            setdeleteProdModal(true);
+            setidProduct(rowData?.id)
+          }}></img>
+        }
+      },
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
@@ -662,6 +679,55 @@ export const Place = ({
             )}
           </Formik>
 
+        </ModalWindow>
+
+
+
+
+
+
+        {/*Удаление */}
+        <ModalWindow
+          isOpen={deleteProdModal}
+          headerText="Удаление"
+          setIsOpen={(state) => {
+            setdeleteProdModal(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setdeleteProdModal(false)
+              deleteProduct({ id: idProduct, index: 3 })
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
+
+                <div>
+                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное рабочее место ? </h4>
+
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+
+                </div>
+              </form>
+            )}
+          </Formik>
         </ModalWindow>
 
 

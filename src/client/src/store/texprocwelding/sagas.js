@@ -11,8 +11,8 @@ const {
     LOAD_INSTRUCTIONS_REQUEST,
     ADD_INST_REQUEST,
     EDIT_INST_REQUEST,
-     ///Сварные швы
-     LOAD_SEAM_REQUEST,
+    ///Сварные швы
+    LOAD_SEAM_REQUEST,
   },
   Creators: {
     ///Технологические процессы 
@@ -28,9 +28,9 @@ const {
     editInstSuccess,
     editInstFailure,
 
-     ///Сварные швы
-     loadSeamSuccess,
-     loadSeamFailure,
+    ///Сварные швы
+    loadSeamSuccess,
+    loadSeamFailure,
 
 
   },
@@ -52,7 +52,7 @@ function* loadTexprocwelding() {
 ///Технологические инструкции  
 function* loadInstructions() {
   try {
-    const { data } = yield call(api.get, `/TechnologicalInstruction`); 
+    const { data } = yield call(api.get, `/TechnologicalInstruction`);
     yield put(loadInstructionsSuccess(data));
   } catch (error) {
     yield put(loadInstructionsFailure(error));
@@ -61,7 +61,7 @@ function* loadInstructions() {
 }
 
 function* addInst(variables) {
-  try {    
+  try {
     const { data } = yield call(api.post, `/TechnologicalInstruction`, variables.payload);
     yield put(addInstSuccess(variables.payload));
     yield call(loadInstructions); // выполнение функции loadInstructions
@@ -71,7 +71,7 @@ function* addInst(variables) {
   }
 }
 function* editInst(variables) {
-  try {  
+  try { 
     const { data } = yield call(api.put, `/TechnologicalInstruction`, variables.payload);
     yield put(addInstSuccess(variables.payload));
     yield call(loadInstructions); // выполнение функции loadInstructions
@@ -101,6 +101,6 @@ export function* texprocweldingSaga() {
   yield takeLatest(ADD_INST_REQUEST, addInst);
   yield takeLatest(EDIT_INST_REQUEST, editInst);
 
-   ///Сварные швы
-   yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
+  ///Сварные швы
+  yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
 }

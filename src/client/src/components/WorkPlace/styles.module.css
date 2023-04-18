@@ -213,3 +213,11 @@ p{
    line-height: 20px;
    margin: 20px 20px 10px; 
 }
+
+
+.deleteIcon{
+  cursor: pointer;
+  width: 20px;
+  position: relative;
+  top: 5px;
+}

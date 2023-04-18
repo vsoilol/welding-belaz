@@ -33,6 +33,7 @@ const editEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
 };
 
 const deleteEquipmentSuccess = (state = INITIAL_STATE, { machineId }) => {
+  window.location.reload()
   return {
     ...state,
     isRequesting: false,
