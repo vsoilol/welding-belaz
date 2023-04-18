@@ -19,7 +19,7 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "components/WorkPlace/styles.module.css";
- 
+
 
 import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
@@ -54,28 +54,32 @@ export const Seam = ({
   editSeam,
 
 
-  valueProdArea, 
+  valueProdArea,
   valuetPosts,
   valuetTechProc,
   valuetSeam,
-  valuetWorkPlace,       
+  valuetWorkPlace,
   setValuetPosts,
   setValuetTechProc,
   setvaluetProduct,
   setvaluetKnots,
   setvaluetDetail,
-     
-  valuetProduct, 
-  valuetKnots,  
+
+  valuetProduct,
+  valuetKnots,
   valuetDetail,
+
+
+  deleteProduct,
+  deleteIcon
 }) => {
 
-  const [modalData, setModalData] = useState(null); 
+  const [modalData, setModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalNumb, setIsModalNumb] = useState(0);
   const [value_goTo, setValuegoTo] = useState(0);
   const [value_goToTitle, setValuegoToTitle] = useState("");
- 
+
   const [value_goToBodyTable, setValuegoToBodyTable] = useState(area);
   const [valueWorkplace, setValueWorkplace] = useState();
 
@@ -85,20 +89,22 @@ export const Seam = ({
   const [detailnot, setdetail] = useState();
   const [technologicalProcess, settechnologicalProcess] = useState();
 
-  
+  /////Удоление
+  const [deleteProdModal, setdeleteProdModal] = useState(false);
+  const [idProduct, setidProduct] = useState("");
 
-  
+
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
-    id: modalData?.id ?? "",  
+    id: modalData?.id ?? "",
 
-    productionArea:modalData?.productionArea?.id?? "",  
-    technologicalProcess:modalData?.technologicalProcess?.id?? "",
+    productionArea: modalData?.productionArea?.id ?? "",
+    technologicalProcess: modalData?.technologicalProcess?.id ?? "",
 
-    product:modalData?.product?.id,
-    knot:modalData?.knot?.id,
-    detail:modalData?.detail?.id,
+    product: modalData?.product?.id,
+    knot: modalData?.knot?.id,
+    detail: modalData?.detail?.id,
   };
 
 
@@ -107,6 +113,15 @@ export const Seam = ({
   const columns = {
 
     welding_seam: [
+      {
+        title: "Удаление",
+        render: (rowData) => {
+          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+            setdeleteProdModal(true);
+            setidProduct(rowData?.id)
+          }}></img>
+        }
+      },
       {
         title: "Наименование сварного шва ",
         render: (rowData) => {
@@ -240,7 +255,7 @@ export const Seam = ({
     ...(knot?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    })) || []), 
+    })) || []),
   ];
   //select деталь
   const detailOptions = [
@@ -248,7 +263,7 @@ export const Seam = ({
     ...(detail?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    })) || []), 
+    })) || []),
   ];
 
 
@@ -283,7 +298,7 @@ export const Seam = ({
     variables["workplaceId"] = valueWorkplace
     variables["productId"] = productValue
 
- 
+
     //Добавить Сварочный шов
     if (isModalNumb == 15) {
       addSeam(variables)
@@ -335,7 +350,7 @@ export const Seam = ({
                     isFreeAction: true,
                     onClick: () => {
                       setIsModalOpen(true);
-                      setIsModalNumb(15);   
+                      setIsModalNumb(15);
                     },
                   },
                   {
@@ -344,15 +359,15 @@ export const Seam = ({
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
-                      setIsModalNumb(7) 
+                      setIsModalNumb(7)
 
-                      
+
                       setproductionArea(rowData?.productionArea?.id)
                       setproductValue(rowData?.product?.id)
                       setknotValue(rowData?.knot?.id)
                       setdetail(rowData?.detail?.id)
                       settechnologicalProcess(rowData?.technologicalProcess?.id)
-                      console.log(rowData) 
+                      console.log(rowData)
                     },
                   },
                 ]
@@ -374,7 +389,7 @@ export const Seam = ({
               data={value_goToBodyTable}
             />
           </TabPanel>
-        </div> 
+        </div>
 
         <ModalWindow
           isOpen={isModalOpen}
@@ -444,8 +459,8 @@ export const Seam = ({
                     options={optPosts}
                   />
                 </div>
-                
-                
+
+
 
 
 
@@ -456,13 +471,13 @@ export const Seam = ({
                     value={technologicalProcess}
                     placeholder="Технологический процесс"
                     onChange={(event) => {
-                       settechnologicalProcess(event.value)
+                      settechnologicalProcess(event.value)
                     }}
                     options={TechProc}
                   />
                 </div>
 
-                
+
 
                 <div className={styles.row}>
                   <Select
@@ -489,7 +504,7 @@ export const Seam = ({
                     }}
                     options={knotsOptions}
                   />
-                </div> 
+                </div>
 
 
                 <div className={styles.row}>
@@ -503,7 +518,7 @@ export const Seam = ({
                     }}
                     options={detailOptions}
                   />
-                </div> 
+                </div>
 
 
 
@@ -522,6 +537,48 @@ export const Seam = ({
 
         </ModalWindow>
 
+
+        {/*Удаление */}
+        <ModalWindow
+          isOpen={deleteProdModal}
+          headerText="Удаление"
+          setIsOpen={(state) => {
+            setdeleteProdModal(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setdeleteProdModal(false)
+              deleteProduct({ id: idProduct, index: 7 })
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
+
+                <div>
+                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данный шов ? </h4>
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
 
       </div>
     </div>

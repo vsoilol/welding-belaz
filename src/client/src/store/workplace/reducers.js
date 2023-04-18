@@ -28,21 +28,21 @@ const addWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
   return {
     ...state,
     isRequesting: false,
-    workshop: [...state.workshop, workshop],
+    /* workshop: [...state.workshop, workshop], */
   };
 };
 const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => { 
   return {
     ...state,
     isRequesting: false,
-    workshop: state.workshop?.map((shop) => {
+    /* workshop: state.workshop?.map((shop) => {
       if (shop.id === workshop.id) {
         shop.name = workshop.name
         shop.id = workshop.id
         shop.number = workshop.number
       }
       return shop;
-    }),
+    }), */
   };
 };
 ///Производственные участки 
@@ -57,7 +57,7 @@ const addAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
   return {
     ...state,
     isRequesting: false,
-    productionArea: [...state.productionArea, productionArea],
+    /* productionArea: [...state.productionArea, productionArea], */
   };
 };
 const editAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
@@ -65,14 +65,14 @@ const editAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
   return {
     ...state,
     isRequesting: false,
-    productionArea: state.productionArea?.map((Area) => {
+    /* productionArea: state.productionArea?.map((Area) => {
       if (Area.id === productionArea.id) {
         Area.name = productionArea.name
         Area.id = productionArea.id
         Area.number = productionArea.number
       }
       return Area;
-    }),
+    }), */
   };
 };
 ///Посты
@@ -87,21 +87,21 @@ const addPostsSuccess = (state = INITIAL_STATE, { posts }) => {
   return {
     ...state,
     isRequesting: false,
-    posts: [...state.posts, posts],
+    /* posts: [...state.posts, posts], */
   };
 };
 const editPostsSuccess = (state = INITIAL_STATE, { posts }) => {
   return {
     ...state,
     isRequesting: false,
-    posts: state.posts?.map((Posts) => {
+    /* posts: state.posts?.map((Posts) => {
       if (Posts.id === posts.id) {
         Posts.name = posts.name
         Posts.id = posts.id
         Posts.number = posts.number
       }
       return Posts;
-    }),
+    }), */
   };
 };
 ///Рабочие места
@@ -116,21 +116,21 @@ const addWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
   return {
     ...state,
     isRequesting: false,
-    workplace: [...state.workplace, workplace],
+    /* workplace: [...state.workplace, workplace], */
   };
 };
 const editWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
   return {
     ...state,
     isRequesting: false,
-    workplace: state.workplace?.map((Place) => {
+    /* workplace: state.workplace?.map((Place) => {
       if (Place.id === workplace.id) {
         Place.name = workplace.name
         Place.id = workplace.id
         Place.number = workplace.number
       }
       return Place;
-    }),
+    }), */
   };
 };
 
@@ -149,7 +149,7 @@ const addProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
     ...state,
     isRequesting: false,
-    product: [...state.product, product],
+    /* product: [...state.product, product], */
   };
 };
 const editProductSuccess = (state = INITIAL_STATE, { product }) => {
@@ -157,7 +157,7 @@ const editProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
     ...state,
     isRequesting: false,
-    product: state.product.map((item, index) => item.id === product.id ? state.product[index] = product : item)
+    /* product: state.product.map((item, index) => item.id === product.id ? state.product[index] = product : item) */
   };
 }; 
 
@@ -173,14 +173,14 @@ const addKnotSuccess = (state = INITIAL_STATE, { knot }) => {
   return {
     ...state,
     isRequesting: false,
-    knot: [...state.knot, knot],
+    /* knot: [...state.knot, knot], */
   };
 };
 const editKnotSuccess = (state = INITIAL_STATE, { knot }) => {
   return {
     ...state,
     isRequesting: false,
-    knot: state.knot.map((item, index) => item.id === knot.id ? state.knot[index] = knot : item)
+    /* knot: state.knot.map((item, index) => item.id === knot.id ? state.knot[index] = knot : item) */
   };
 };
 ///Детали
@@ -195,14 +195,14 @@ const addDetailSuccess = (state = INITIAL_STATE, { detail }) => {
   return {
     ...state,
     isRequesting: false,
-    detail: [...state.detail, detail],
+    /* detail: [...state.detail, detail], */
   };
 };
 const editDetailSuccess = (state = INITIAL_STATE, { detail }) => {
   return {
     ...state,
     isRequesting: false,
-    detail: state.detail.map((item, index) => item.id === detail.id ? state.detail[index] = detail : item)
+    /* detail: state.detail.map((item, index) => item.id === detail.id ? state.detail[index] = detail : item) */
   };
 };
 ///Сварные швы
@@ -217,14 +217,14 @@ const addSeamSuccess = (state = INITIAL_STATE, { seam }) => {
   return {
     ...state,
     isRequesting: false,
-    seam: [...state.seam, seam],
+    /* seam: [...state.seam, seam], */
   };
 };
 const editSeamSuccess = (state = INITIAL_STATE, { seam }) => {
   return {
     ...state,
     isRequesting: false,
-    seam: state.seam.map((item, index) => item.id === seam.id ? state.seam[index] = seam : item)
+    /* seam: state.seam.map((item, index) => item.id === seam.id ? state.seam[index] = seam : item) */
   };
 };
 ///Технологические процессы 
@@ -253,8 +253,7 @@ const loadWeldingtaskSuccess = (state = INITIAL_STATE, { weldingtask }) => {
   };
 };
 
-const deleteProductSuccess = (state = INITIAL_STATE, { id }) => {
-  console.log(state)
+const deleteProductSuccess = (state = INITIAL_STATE, { id }) => { 
   return state; 
 };
 

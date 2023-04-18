@@ -620,6 +620,10 @@ const deleteEndpoints = {
   1: { endpoint: '/ProductionArea', loadFunction: loadArea },
   2: { endpoint: '/post', loadFunction: loadPosts },
   3: { endpoint: '/Workplace', loadFunction: loadWorkplace },
+  4: { endpoint: '/product', loadFunction: loadProduct },
+  5: { endpoint: '/knot', loadFunction: loadKnot },
+  6: { endpoint: '/detail', loadFunction: loadDetail },
+  7: { endpoint: '/seam', loadFunction: loadSeam },
 };
 
 function* deleteProduct({ payload }) {
