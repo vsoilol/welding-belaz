@@ -57,7 +57,11 @@ export const Detail = ({
 
   masters,
   techs,
-  executors
+  executors,
+
+
+  deleteProduct,
+  deleteIcon
 }) => {
 
   const [modalData, setModalData] = useState(null);
@@ -103,7 +107,9 @@ export const Detail = ({
     id: modalData?.id ?? "",
 
   };
-
+  /////Удоление
+  const [deleteProdModal, setdeleteProdModal] = useState(false);
+  const [idProduct, setidProduct] = useState("");
   function SetValue(valueId, index) {
 
     ///area
@@ -133,17 +139,17 @@ export const Detail = ({
     variables.seams = [valuetSeam];
     variables.postId = valuetWorkPlace;
     variables.workplaceId = valueWorkplace;
-    
+
     if (isModalNumb === 14) {
       variables.status = 'add';
       variables.mainProductId = valuetKnots ? valuetKnots : valuetProduct;
       addDetail(variables);
     }
-    
-    if (isModalNumb === 6) { 
+
+    if (isModalNumb === 6) {
       variables.mainProductId = valuetKnots ? valuetKnots : valuetProduct;
       editDetail(variables);
-    }  
+    }
   }
 
   const columns = {
@@ -315,6 +321,15 @@ export const Detail = ({
 
     ],
     details: [
+      {
+        title: "Удаление",
+        render: (rowData) => {
+          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
+            setdeleteProdModal(true);
+            setidProduct(rowData?.id)
+          }}></img>
+        }
+      },
       {
         title: "Наименование детали ", field: "name"
       },
@@ -571,7 +586,7 @@ export const Detail = ({
     setValuegoTo(1)
     setValue(-1)
     setValue2(-1)
-  
+
     const handlers = {
       5: handleKnots,
       6: handleInsideProducts,
@@ -580,39 +595,39 @@ export const Detail = ({
       11: handleSeamsForKnot,
       12: handleSeamsForDetail,
     }
-  
+
     if (handlers[param]) {
       handlers[param](id)
     }
-  
+
     function handleKnots(id) {
       const knotNew = product.find(p => p.id === id)?.insideProducts.filter(ip => ip.productType === 2) || []
       setValuegoToBodyTable(knotNew)
     }
-  
+
     function handleInsideProducts(id) {
       const detailNew = product.find(p => p.id === id)?.insideProducts.filter(ip => ip.productType === 3) || []
       setValuegoToBodyTable(detailNew)
     }
-  
+
     function handleSeams(id) {
       const seamNew = product.find(p => p.id === id)?.seams || []
       setValuegoToBodyTable(seamNew)
       setValuegoToHeadTable(columns.seam)
     }
-  
+
     function handleInsideProductsForKnot(id) {
       const detailNew = knot.find(k => k.id === id)?.insideProducts.filter(ip => ip.productType === 3) || []
       setValuegoToHeadTable(columns.insideProducts)
       setValuegoToBodyTable(detailNew)
     }
-  
+
     function handleSeamsForKnot(id) {
       const seamNew = knot.find(k => k.id === id)?.seams || []
       setValuegoToHeadTable(columns.seam)
       setValuegoToBodyTable(seamNew)
     }
-  
+
     function handleSeamsForDetail(id) {
       const seamNew = detail.find(d => d.id === id)?.seams || []
       setValuegoToHeadTable(columns.seam)
@@ -737,7 +752,7 @@ export const Detail = ({
     }
     setSeamsList(SeamsArray)
   }
-  const productsOptions = [ 
+  const productsOptions = [
     { value: null, label: "Не выбрано" },
     ...(product?.map((item) => ({
       value: item.id,
@@ -751,7 +766,7 @@ export const Detail = ({
     ...(knot?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    })) || []), 
+    })) || []),
   ];
   ////////////////////////////////////////////////////////////////////
   return (
@@ -1039,6 +1054,47 @@ export const Detail = ({
         </ModalWindow>
 
 
+        {/*Удаление */}
+        <ModalWindow
+          isOpen={deleteProdModal}
+          headerText="Удаление"
+          setIsOpen={(state) => {
+            setdeleteProdModal(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setdeleteProdModal(false)
+              deleteProduct({ id: idProduct, index: 6 })
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
+
+                <div>
+                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данную деталь ? </h4>
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
 
       </div>
     </div>
