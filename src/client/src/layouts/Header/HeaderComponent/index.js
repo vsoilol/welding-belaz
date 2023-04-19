@@ -26,6 +26,7 @@ export const Header = () => {
     
     { name: "Записи", route: "/records" }, 
     { name: "Задания", route: "/tasks" }, 
+    { name: "Отчеты", route: "/reports" }, 
     
   ];
 

@@ -7,3 +7,4 @@ export { default as TechProcWeldImage } from "./TechProcWeld.jpg";
 
 export { default as tasksImage } from "./tasks.jpg";
 export { default as instructionsImage } from "./instructions.jpg";
+export { default as reportsImage } from "./reports.jpg";

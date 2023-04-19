@@ -3,14 +3,15 @@ import {
   EquipmentContainer,
 
   WorkPlacePage,
-  TexProcWeldingPage, 
+  TexProcWeldingPage,
 
   ExecutorsContainer,
   InstructionsContainer,
   LoginContainer,
   TasksContainer,
-  RecordsContainer
-} from "containers"; 
+  RecordsContainer,
+  ReportsContainer
+} from "containers";
 import UploadContainer from "containers/Upload.container";
 import MobileContext from "context/MobileContext";
 import TabletContext from "context/TabletContext";
@@ -136,11 +137,12 @@ function App({ error, errorType, clearError }) {
               />
               <PrivateRoute
                 allow={isAuth}
-                path="/fileUpload"
+                path="/reports"
                 exact
-                component={UploadContainer}
+                component={ReportsContainer}
                 redirectTo="/login"
               />
+
             </Switch>
           </ScrollToTop>
           {/* </React.StrictMode> */}
