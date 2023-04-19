@@ -11,7 +11,5 @@ export { Records } from "components/Records";
 export { Upload } from "components/Upload";
 
 export {Reports} from "components/Reports";
-
- 
  
 

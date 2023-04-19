@@ -14,7 +14,7 @@ import styles from "./styles.module.css";
 export const Header = () => {
   const isTablet = useContext(TabletContext);
   const [isMobileMenuOpened, setIsMobileMenuOpened] = useState(false);
- 
+
   const menuItems = [
     
     
@@ -27,7 +27,6 @@ export const Header = () => {
     { name: "Записи", route: "/records" }, 
     { name: "Задания", route: "/tasks" }, 
     { name: "Отчеты", route: "/reports" }, 
-    { name: "Панель", route: "/creates-user" }, 
     
   ];
 

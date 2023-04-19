@@ -16,7 +16,7 @@ import Button from "components/shared/Button";
 import Select from "components/shared/Select";
 import Input from "components/shared/Input";
 import api from "services/api";
-import Paper from "@material-ui/core/Paper";
+
 export const Reports = ({
   loadWorkshop,
   loadArea,
@@ -54,7 +54,6 @@ export const Reports = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalNothinOpen, setisModalNothinOpen] = useState(false);
-  const [isModalErrOpen, setisModalErrOpen] = useState(false);
   const [modalData, setmodalData] = useState(null);
   const [idReports, setidReports] = useState(0);
 
@@ -68,13 +67,9 @@ export const Reports = ({
     welderId: modalData?.welderId ?? "",
     WorkplaceId: modalData?.WorkplaceId ?? "",
     WeldingEquipmentId: modalData?.WeldingEquipmentId ?? "",
-
-    cutType: modalData?.cutType ?? "",
   });
 
-  const [accessibility, setaccessibility] = useState("");
-  const [efficiency, setefficiency] = useState("");
-  const [quality, setquality] = useState("");
+
 
   ////Select
   const executorsOptions = executors?.map((item) => {
@@ -92,7 +87,7 @@ export const Reports = ({
   const areaOptions = area?.map((item) => {
     return {
       value: item.id,
-      label: `№${item.number} ${item.name} `,
+      label: item.name,
     };
   });
   const productOptions = product?.map((item) => {
@@ -119,32 +114,6 @@ export const Reports = ({
       label: `${item.name} ${item.factoryNumber}  `,
     };
   });
-  const cutTypeOptions = [
-    {
-      value: 1,
-      label: `В разрезе рабочих смен`,
-    },
-    {
-      value: 2,
-      label: `В разрезе дней`,
-    },
-    {
-      value: 3,
-      label: `В разрезе недель`,
-    },
-    {
-      value: 4,
-      label: `В разрезе месяцев`,
-    },
-    {
-      value: 5,
-      label: `В разрезе лет`,
-    }
-  ].map(item => ({
-    value: item.value,
-    label: item.label,
-  }));
-
 
   ////!Select
   const reports = [
@@ -166,13 +135,11 @@ export const Reports = ({
     },
     {
       id: 4,
-      name: "Отчет о простоях оборудования за период ",
-      tableData: null
+      name: "Отчет о простоях оборудования за период "
     },
     {
       id: 5,
-      name: "Отчет работе оборудования за период  ",
-      tableData: null
+      name: "Отчет работе оборудования за период  "
     },
     {
       id: 6,
@@ -190,65 +157,7 @@ export const Reports = ({
       id: 9,
       name: "Отчет о выполненных операциях по производственному участку  "
     },
-    {
-      id: 10,
-      name: "Отчет о работе сварщиков по цеху"
-    },
-    {
-      id: 11,
-      name: "Отчет о работе сварщиков по производственному участку"
-    },
-    {
-      id: 12,
-      name: "Отчет о работе сварщиков по исполнителю"
-    },
-    {
-      id: 13,
-      name: "Отчет о работе сварщиков по рабочему месту"
-    },
-    {
-      id: 14,
-      name: "Отчет о работе сварщиков для завода"
-    },
-    {
-      id: 15,
-      name: "Отчет об отклонениях от нормативных параметров режимов сварки для завода"
-    },
-    {
-      id: 16,
-      name: "Отчет о выполненных операциях (швах) для завода"
-    },
-
-    {
-      id: 17,
-      name: "Отчет об анализе работы оборудования для завода"
-    },
-    {
-      id: 18,
-      name: "Отчет об анализе работы оборудования по цеху"
-    },
-    {
-      id: 19,
-      name: "Отчет об анализе работы оборудования  по производственному участку"
-    },
-    {
-      id: 20,
-      name: "Отчет об эффективности использования оборудования для завода"
-    },
-    {
-      id: 21,
-      name: "Отчет об эффективности использования оборудования  по рабочему месту"
-    },
-    {
-      id: 22,
-      name: "Отчет об эффективности использования оборудования  по цеху"
-    },
-    {
-      id: 23,
-      name: "Отчет об эффективности использования оборудования  по производственному участку"
-    },
   ]
- 
   const colinstructions = [
     {
       title: "Наименование",
@@ -258,39 +167,21 @@ export const Reports = ({
       title: "", render: (rowData) => {
         return (
           <span className={styles.ReportsSpan} onClick={e => {
-            e.preventDefault();
             setIsModalOpen(true);
-            setidReports(rowData?.id); 
-            api.post(`/eventLog`,{
-                "information": `Сгенерировал ${rowData.name}`
-            })
+            setidReports(rowData?.id);
           }}> Сгенерировать </span>
         )
       }
     },
   ]
+
+
   function FormTable() {
     const handleChange = (name, value) => {
       setInitialValues({ ...initialValues, [name]: value });
     };
 
-    {/*cutType*/ }
-    function CutType() {
-      return (
-        <div className={styles.row}>
-          <Select
-            name="cutType"
-            value={initialValues.cutType}
-            width="380px"
-            placeholder="Тип разреза "
-            onChange={(event) => {
-              handleChange("cutType", event.value)
-            }}
-            options={cutTypeOptions}
-          />
-        </div>
-      )
-    }
+
     {/*Seam*/ }
     function SeamComp() {
       return (
@@ -349,152 +240,42 @@ export const Reports = ({
         </div>
       )
     }
-    {/*productId*/ }
+    {/*productId*/}
     function Product() {
       return (
         <div className={styles.row}>
-          <Select
-            name="productId"
-            value={initialValues.productId}
-            width="380px"
-            placeholder="Изделие"
-            onChange={(event) => {
-              handleChange("productId", event.value)
-            }}
-            options={productOptions}
-          />
-        </div>
-      )
-    }
-    {/*workshopId*/ }
-    function WorkshopId() {
-      return (
-        <div className={styles.row}>
-          <Select
-            name="workshopId"
-            value={initialValues.workshopId}
-            width="380px"
-            placeholder="Цех"
-            onChange={(event) => {
-              handleChange("workshopId", event.value)
-            }}
-            options={workshopOptions}
-          />
-        </div>
-      )
-    }
-    {/*productionAreaId*/ }
-    function ProductionAreaId() {
-      return (
-        <div className={styles.row}>
-          <Select
-            name="productionAreaId"
-            value={initialValues.productionAreaId}
-            width="380px"
-            placeholder="Производственный участок"
-            onChange={(event) => {
-              handleChange("productionAreaId", event.value)
-            }}
-            options={areaOptions}
-          />
-        </div>
-      )
-    }
-    {/*welderId*/ }
-    function WelderId() {
-      return (
-        <div className={styles.row}>
-          <Select
-            name="welderId"
-            value={initialValues.welderId}
-            width="380px"
-            placeholder="Сварщик"
-            onChange={(event) => {
-              handleChange("welderId", event.value)
-            }}
-            options={executorsOptions}
-          />
-        </div>
-      )
-    }
-    {/*WorkplaceId*/ }
-    function WorkplaceId() {
-      return (
-        <div className={styles.row}>
-          <Select
-            name="WorkplaceId"
-            value={initialValues.WorkplaceId}
-            width="380px"
-            placeholder="Рабочие места"
-            onChange={(event) => {
-              handleChange("WorkplaceId", event.value)
-            }}
-            options={workplaceOptions}
-          />
-        </div>
-      )
-    }
-    {/*accessibility  efficiency  quality */ }
-    function AccesEfficQuality() {
-      return (
-        <div>
-          <div className={styles.row}>
-            <Input
+            <Select
+              name="productId"
+              value={initialValues.productId}
+              width="380px"
+              placeholder="Изделие"
               onChange={(event) => {
-                setaccessibility(event.target.value)
+                handleChange("productId", event.value)
               }}
-              style={{ height: 40, width: 562 }}
-              value={accessibility}
-              name="accessibility "
-              placeholder="Доступность "
-              type="number"
-              min="0"
-              step="1"
-              autoComplete="off"
+              options={productOptions}
             />
           </div>
-          <div className={styles.row}>
-            <Input
-              onChange={(event) => {
-                setefficiency(event.target.value)
-              }}
-              style={{ height: 40, width: 562 }}
-              value={efficiency}
-              name="efficiency "
-              placeholder="Производительность "
-              type="number"
-              min="0"
-              step="1"
-              autoComplete="off"
-            />
-          </div>
-          <div className={styles.row}>
-            <Input
-              onChange={(event) => {
-                setquality(event.target.value)
-              }}
-              style={{ height: 40, width: 562 }}
-              value={quality}
-              name="quality "
-              placeholder="Качество "
-              type="number"
-              min="0"
-              step="1"
-              autoComplete="off"
-            />
-          </div>
-        </div>
-
       )
     }
     if (idReports === 0) {
       return (
         <div>
-
-
-          <WorkshopId />
-          <Product />
-          <SeamComp />
+          {/*workshopId*/}
+          <div className={styles.row}>
+            <Select
+              name="workshopId"
+              value={initialValues.workshopId}
+              width="380px"
+              placeholder="Цех"
+              onChange={(event) => {
+                handleChange("workshopId", event.value)
+              }}
+              options={workshopOptions}
+            />
+          </div>
+          
+          <Product /> 
+          <SeamComp /> 
           <StartDateEndDate />
 
         </div>
@@ -504,9 +285,20 @@ export const Reports = ({
     if (idReports === 1) {
       return (
         <div>
-
-          <ProductionAreaId />
-          <Product />
+          {/*productionAreaId*/}
+          <div className={styles.row}>
+            <Select
+              name="productionAreaId"
+              value={initialValues.productionAreaId}
+              width="380px"
+              placeholder="Производственный участок"
+              onChange={(event) => {
+                handleChange("productionAreaId", event.value)
+              }}
+              options={areaOptions}
+            />
+          </div>
+          <Product /> 
           <SeamComp />
           <StartDateEndDate />
         </div>
@@ -516,8 +308,20 @@ export const Reports = ({
     if (idReports === 2) {
       return (
         <div>
-          <WelderId />
-          <Product />
+          {/*welderId*/}
+          <div className={styles.row}>
+            <Select
+              name="welderId"
+              value={initialValues.welderId}
+              width="380px"
+              placeholder="Сварщик"
+              onChange={(event) => {
+                handleChange("welderId", event.value)
+              }}
+              options={executorsOptions}
+            />
+          </div>
+          <Product /> 
           <SeamComp />
           <StartDateEndDate />
         </div>
@@ -527,8 +331,20 @@ export const Reports = ({
     if (idReports === 3) {
       return (
         <div>
-          <WorkplaceId />
-          <Product />
+          {/*WorkplaceId*/}
+          <div className={styles.row}>
+            <Select
+              name="WorkplaceId"
+              value={initialValues.WorkplaceId}
+              width="380px"
+              placeholder="Рабочие места"
+              onChange={(event) => {
+                handleChange("WorkplaceId", event.value)
+              }}
+              options={workplaceOptions}
+            />
+          </div>
+          <Product /> 
           <SeamComp />
           <StartDateEndDate />
         </div>
@@ -560,7 +376,19 @@ export const Reports = ({
     if (idReports === 6) {
       return (
         <div>
-          <WorkshopId />
+          {/*workshopId*/}
+          <div className={styles.row}>
+            <Select
+              name="workshopId"
+              value={initialValues.workshopId}
+              width="380px"
+              placeholder="Цех"
+              onChange={(event) => {
+                handleChange("workshopId", event.value)
+              }}
+              options={workshopOptions}
+            />
+          </div>
 
           <StartDateEndDate />
         </div>
@@ -570,7 +398,20 @@ export const Reports = ({
     if (idReports === 7) {
       return (
         <div>
-          <WelderId />
+          {/*welderId*/}
+          <div className={styles.row}>
+            <Select
+              name="welderId"
+              value={initialValues.welderId}
+              width="380px"
+              placeholder="Сварщик"
+              onChange={(event) => {
+                handleChange("welderId", event.value)
+              }}
+              options={executorsOptions}
+            />
+          </div>
+
           <StartDateEndDate />
         </div>
 
@@ -579,7 +420,19 @@ export const Reports = ({
     if (idReports === 8) {
       return (
         <div>
-          <WorkshopId />
+          {/*WorkplaceId*/}
+          <div className={styles.row}>
+            <Select
+              name="WorkplaceId"
+              value={initialValues.WorkplaceId}
+              width="380px"
+              placeholder="Рабочие места"
+              onChange={(event) => {
+                handleChange("WorkplaceId", event.value)
+              }}
+              options={workplaceOptions}
+            />
+          </div>
 
           <StartDateEndDate />
         </div>
@@ -589,138 +442,20 @@ export const Reports = ({
     if (idReports === 9) {
       return (
         <div>
-          <ProductionAreaId />
+          {/*productionAreaId*/}
+          <div className={styles.row}>
+            <Select
+              name="productionAreaId"
+              value={initialValues.productionAreaId}
+              width="380px"
+              placeholder="Производственный участок"
+              onChange={(event) => {
+                handleChange("productionAreaId", event.value)
+              }}
+              options={areaOptions}
+            />
+          </div>
 
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 10) {
-      return (
-        <div>
-          <WorkshopId />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 11) {
-      return (
-        <div>
-          <ProductionAreaId />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 12) {
-      return (
-        <div>
-          <WelderId />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 13) {
-      return (
-        <div>
-          <WorkplaceId />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 14) {
-      return (
-        <div>
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 15) {
-      return (
-        <div>
-          <SeamComp />
-          <Product />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 16) {
-      return (
-        <div>
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 17) {
-      return (
-        <div>
-          <CutType />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 18) {
-      return (
-        <div>
-          <WorkshopId />
-          <CutType />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 19) {
-      return (
-        <div>
-          <ProductionAreaId />
-          <CutType />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 20) {
-      return (
-        <div>
-          <AccesEfficQuality />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 21) {
-      return (
-        <div>
-          <AccesEfficQuality />
-          <WorkplaceId />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 22) {
-      return (
-        <div>
-          <AccesEfficQuality />
-          <WorkshopId />
-          <StartDateEndDate />
-        </div>
-
-      )
-    }
-    if (idReports === 23) {
-      return (
-        <div>
-          <AccesEfficQuality />
-          <ProductionAreaId />
           <StartDateEndDate />
         </div>
 
@@ -752,35 +487,8 @@ export const Reports = ({
       endpoint = `excelSeamAmountReport/byWorkplace?WorkplaceId=${initialValues.WorkplaceId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
     } else if (idReports === 9) {
       endpoint = `excelSeamAmountReport/byProductionArea?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 10) {
-      endpoint = `excelWelderOperationReport/byWorkshop?WorkshopId=${initialValues.workshopId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 11) {
-      endpoint = `excelWelderOperationReport/byProductionArea?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 12) {
-      endpoint = `excelWelderOperationReport/byWelder?WelderId=${initialValues.welderId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 13) {
-      endpoint = `excelWelderOperationReport/byWorkplace?WorkplaceId=${initialValues.WorkplaceId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 14) {
-      endpoint = `excelWelderOperationReport?StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 15) {
-      endpoint = `excelDeviationReport?ProductId=${initialValues.productId}&SeamId=${initialValues.seamId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 16) {
-      endpoint = `excelSeamAmountReport?StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    } else if (idReports === 17) {
-      endpoint = `excelEquipmentOperationAnalysisReport?StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&CutType=${initialValues.cutType}`;
-    } else if (idReports === 18) {
-      endpoint = `excelEquipmentOperationAnalysisReport?WorkshopId=${initialValues.workshopId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&CutType=${initialValues.cutType}`;
-    } else if (idReports === 19) {
-      endpoint = `excelEquipmentOperationAnalysisReport?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&CutType=${initialValues.cutType}`;
-    } else if (idReports === 20) {
-      endpoint = `excelEquipmentEfficiencyReport?StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
-    } else if (idReports === 21) {
-      endpoint = `excelEquipmentEfficiencyReport?WorkplaceId=${initialValues.WorkplaceId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
-    } else if (idReports === 22) {
-      endpoint = `excelEquipmentEfficiencyReport?WorkshopId=${initialValues.workshopId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
-    } else if (idReports === 23) {
-      endpoint = `excelEquipmentEfficiencyReport?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
     }
+
 
     try {
       const res = await api.get(endpoint);
@@ -788,10 +496,12 @@ export const Reports = ({
         setisModalNothinOpen(true);
       }
       if (res.status === 200) {
-        window.open(res.request.responseURL);
+        const file = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
       }
     } catch (error) {
-      setisModalErrOpen(true)
+      console.log(error);
     }
   }
 
@@ -815,14 +525,15 @@ export const Reports = ({
 
       <div className={styles.tableWrapper}>
         <TabPanel
-          style={{ minWidth: "800px" }}
+          style={{ minWidth: "800px", }}
           className="TableTech"
         >
           <Table
             title="Выберите отчет"
             columns={colinstructions}
             value={0}
-            data={reports} 
+            data={reports}
+
           />
         </TabPanel>
 
@@ -901,50 +612,6 @@ export const Reports = ({
 
                 <div>
                   <h4 style={{ padding: "35px 40px" }}>В данный момент ничего нету </h4>
-
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Закрыть
-                    </Button>
-                  </div>
-
-                </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
-
-
-        {/*Ошибка*/}
-        <ModalWindow
-          isOpen={isModalErrOpen}
-          headerText="Ошибка"
-          setIsOpen={(state) => {
-            setisModalErrOpen(false)
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setisModalErrOpen(false)
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Произошла ошибка, перепроверьте введенные данные </h4>
 
                   <div className={styles.row}>
                     <Button
