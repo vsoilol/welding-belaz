@@ -75,4 +75,40 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             WorkTimeMinutes = workTimeMinutes
         };
     }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByProductionAreaIdAndDatePeriodAsync(
+        Guid productionAreaId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWelderIdAndDatePeriodAsync(
+        Guid welderId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWorkplaceIdAndDatePeriodAsync(
+        Guid workplaceId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWorkshopIdAndDatePeriodAsync(
+        Guid workshopId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
+    }
 }

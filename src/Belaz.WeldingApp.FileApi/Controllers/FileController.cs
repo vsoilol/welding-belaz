@@ -27,13 +27,6 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
-    [HttpGet("equipmentDowntime")]
-    public async Task<IActionResult> GenerateExcelEquipmentDowntimeReportAsync()
-    {
-        var result = await _fileService.GenerateExcelEquipmentDowntimeReportAsync();
-        return result.ToFile();
-    }
-
     [HttpGet("equipmentOperationAnalysis")]
     public async Task<IActionResult> GenerateExcelEquipmentOperationAnalysisReportAsync()
     {

@@ -20,9 +20,6 @@ public class FileService : IFileService
     private readonly IMarkEstimateService _markEstimateService;
     private readonly IValidationService _validationService;
     private readonly IExcelFileService<
-        List<EquipmentDowntimeDto>
-    > _excelEquipmentDowntimeReportService;
-    private readonly IExcelFileService<
         List<EquipmentOperationTimeWithShiftDto>
     > _excelEquipmentOperationAnalysisReportService;
     private readonly IExcelFileService<WelderOperationTimeDto> _excelWelderOperationReportService;
@@ -35,7 +32,6 @@ public class FileService : IFileService
         IWebHostEnvironment environment,
         IMarkEstimateService markEstimateService,
         IValidationService validationService,
-        IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService,
         IExcelFileService<
             List<EquipmentOperationTimeWithShiftDto>
         > excelEquipmentOperationAnalysisReportService,
@@ -47,7 +43,6 @@ public class FileService : IFileService
         _environment = environment;
         _markEstimateService = markEstimateService;
         _validationService = validationService;
-        _excelEquipmentDowntimeReportService = excelEquipmentDowntimeReportService;
         _excelEquipmentOperationAnalysisReportService =
             excelEquipmentOperationAnalysisReportService;
         _excelWelderOperationReportService = excelWelderOperationReportService;
@@ -85,37 +80,6 @@ public class FileService : IFileService
         };
 
         return result;
-    }
-
-    public async Task<Result<DocumentDto>> GenerateExcelEquipmentDowntimeReportAsync()
-    {
-        var equipmentDowntimeDtos = new List<EquipmentDowntimeDto>
-        {
-            new() { Reason = "Плановый ремонт", Time = 300 },
-            new() { Reason = "Аварийный ремонт", Time = 0 },
-            new() { Reason = "Отсутствие заданий", Time = 250 },
-            new() { Reason = "Отсутствие материала, заготовок, деталей", Time = 410 },
-            new()
-            {
-                Reason = "Отсутствие инструмента, оснастки, вспомогательного оборудования",
-                Time = 520
-            },
-            new() { Reason = "Отсутствие крана, транспорта", Time = 430 },
-            new() { Reason = "Отсутствие сварщика в связи с необеспеченностью", Time = 0 },
-            new() { Reason = "Неявка сварщика (б/лист, отпуск и др.)", Time = 32 },
-            new() { Reason = "Отсутствие энергоносителей", Time = 15 },
-            new() { Reason = "Отсутствие сотрудника ОТК", Time = 0 },
-            new()
-            {
-                Reason = "Отсутствие конструктора, технолога или ожидание его решения",
-                Time = 160
-            },
-            new() { Reason = "Естественные надобности", Time = 323 }
-        };
-
-        return await _excelEquipmentDowntimeReportService.GenerateReportAsync(
-            equipmentDowntimeDtos
-        );
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportAsync()
