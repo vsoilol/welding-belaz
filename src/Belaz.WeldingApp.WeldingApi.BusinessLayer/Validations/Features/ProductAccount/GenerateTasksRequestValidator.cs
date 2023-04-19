@@ -18,8 +18,7 @@ public class GenerateTasksRequestValidator : AbstractValidator<GenerateTasksRequ
             .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<
-                    GenerateTasksRequest,
-                    Domain.Entities.Production.ProductionArea
+                    GenerateTasksRequest, Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
 
@@ -27,7 +26,7 @@ public class GenerateTasksRequestValidator : AbstractValidator<GenerateTasksRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<GenerateTasksRequest, Domain.Entities.Users.Master>(context)
+                new SqlIdValidatorFor<GenerateTasksRequest, Belaz.WeldingApp.Common.Entities.Users.Master>(context)
             );
     }
 }

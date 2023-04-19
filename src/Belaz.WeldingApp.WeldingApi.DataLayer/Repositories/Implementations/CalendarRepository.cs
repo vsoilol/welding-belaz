@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -18,7 +18,11 @@ public class CalendarRepository : ICalendarRepository
         _mapper = mapper;
     }
 
-    public async Task<CalendarDto> CreateAsync(Calendar calendar, List<Day>? days, List<WorkingShift> workingShifts)
+    public async Task<CalendarDto> CreateAsync(
+        Calendar calendar,
+        List<Day>? days,
+        List<WorkingShift> workingShifts
+    )
     {
         var createdCalendar = _context.Calendars.Add(calendar).Entity;
 
@@ -38,8 +42,9 @@ public class CalendarRepository : ICalendarRepository
 
     public async Task<CalendarDto> UpdateAsync(Calendar calendar)
     {
-        var updatedCalendar = (await _context.Calendars
-            .FirstOrDefaultAsync(_ => _.Id == calendar.Id))!;
+        var updatedCalendar = (
+            await _context.Calendars.FirstOrDefaultAsync(_ => _.Id == calendar.Id)
+        )!;
 
         updatedCalendar.Year = calendar.Year;
 
@@ -60,9 +65,7 @@ public class CalendarRepository : ICalendarRepository
     public Task<CalendarDto?> GetByWelderIdAndYearAsync(Guid welderId, int year)
     {
         return _context.Calendars
-            .Where(_ => _.IsMain == false 
-                                      && _.WelderId == welderId 
-                                      && _.Year == year)
+            .Where(_ => _.IsMain == false && _.WelderId == welderId && _.Year == year)
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
@@ -70,9 +73,12 @@ public class CalendarRepository : ICalendarRepository
     public Task<CalendarDto?> GetByEquipmentIdAndYearAsync(Guid weldingEquipmentId, int year)
     {
         return _context.Calendars
-            .Where(_ => _.IsMain == false 
-                        && _.WeldingEquipmentId == weldingEquipmentId 
-                        && _.Year == year)
+            .Where(
+                _ =>
+                    _.IsMain == false
+                    && _.WeldingEquipmentId == weldingEquipmentId
+                    && _.Year == year
+            )
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }

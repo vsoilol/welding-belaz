@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Workshop;
 
-public class UpdateWorkshopRequest : IMapTo<Domain.Entities.Production.Workshop>
+public class UpdateWorkshopRequest : IMapTo<Belaz.WeldingApp.Common.Entities.Production.Workshop>
 {
     public Guid Id { get; set; }
 

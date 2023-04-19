@@ -8,7 +8,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 
-public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>
+public class WeldingEquipmentDto
+    : IMapFrom<Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment>
 {
     public Guid Id { get; set; }
 
@@ -108,7 +109,10 @@ public class WeldingEquipmentDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment, WeldingEquipmentDto>()
+            .CreateMap<
+                Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment,
+                WeldingEquipmentDto
+            >()
             .ForMember(
                 dto => dto.CommissioningDate,
                 opt => opt.MapFrom(x => x.CommissioningDate.ToDayInfoString())

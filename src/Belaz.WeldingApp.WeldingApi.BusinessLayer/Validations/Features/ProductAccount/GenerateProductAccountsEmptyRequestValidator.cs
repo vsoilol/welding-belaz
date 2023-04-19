@@ -20,7 +20,7 @@ public class GenerateProductAccountsEmptyRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     GenerateProductAccountsEmptyRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
     }

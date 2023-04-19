@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
 
-public class PostDto : IMapFrom<Entities.Production.Post>
+public class PostDto : IMapFrom<Belaz.WeldingApp.Common.Entities.Production.Post>
 {
     public Guid Id { get; set; }
 
@@ -22,7 +22,7 @@ public class PostDto : IMapFrom<Entities.Production.Post>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Entities.Production.Post, PostDto>()
+            .CreateMap<Belaz.WeldingApp.Common.Entities.Production.Post, PostDto>()
             .ForMember(dto => dto.Workshop, opt => opt.MapFrom(x => x.ProductionArea.Workshop));
     }
 }

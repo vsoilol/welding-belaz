@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -17,11 +17,12 @@ public class WorkingShiftRepository : IWorkingShiftRepository
         _context = context;
         _mapper = mapper;
     }
-    
+
     public async Task<WorkingShiftDto> UpdateAsync(WorkingShift entity)
     {
-        var updatedWorkingShift = (await _context.WorkingShifts
-            .FirstOrDefaultAsync(_ => _.Id == entity.Id))!;
+        var updatedWorkingShift = (
+            await _context.WorkingShifts.FirstOrDefaultAsync(_ => _.Id == entity.Id)
+        )!;
 
         updatedWorkingShift.Number = entity.Number;
         updatedWorkingShift.ShiftStart = entity.ShiftStart;
@@ -60,14 +61,10 @@ public class WorkingShiftRepository : IWorkingShiftRepository
         var calendar = await _context.Calendars
             .Where(_ => _.Year == year && _.IsMain)
             .FirstOrDefaultAsync();
-        
+
         if (calendar is null)
         {
-            var newCalendar = new Calendar
-            {
-                Year = year,
-                IsMain = true
-            };
+            var newCalendar = new Calendar { Year = year, IsMain = true };
 
             calendar = _context.Calendars.Add(newCalendar).Entity;
         }

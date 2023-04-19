@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 
-public class MasterDto : IMapFrom<Entities.Users.Master>
+public class MasterDto : IMapFrom<Belaz.WeldingApp.Common.Entities.Users.Master>
 {
     public Guid Id { get; set; }
 
@@ -22,7 +22,7 @@ public class MasterDto : IMapFrom<Entities.Users.Master>
     public string? Position { get; set; }
 
     /// <summary>
-    /// Табельный номер 
+    /// Табельный номер
     /// </summary>
     public string? ServiceNumber { get; set; }
 
@@ -32,27 +32,17 @@ public class MasterDto : IMapFrom<Entities.Users.Master>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Entities.Users.Master, MasterDto>()
-            .ForMember(dto => dto.RfidTag,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.RfidTag))
-            .ForMember(dto => dto.FirstName,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.FirstName))
-            .ForMember(dto => dto.MiddleName,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.MiddleName))
-            .ForMember(dto => dto.Position,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.Position))
-            .ForMember(dto => dto.LastName,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.LastName))
-            .ForMember(dto => dto.ProductionArea,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea))
-            .ForMember(dto => dto.ServiceNumber,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.ServiceNumber));
+        profile
+            .CreateMap<Belaz.WeldingApp.Common.Entities.Users.Master, MasterDto>()
+            .ForMember(dto => dto.RfidTag, opt => opt.MapFrom(x => x.UserInfo.RfidTag))
+            .ForMember(dto => dto.FirstName, opt => opt.MapFrom(x => x.UserInfo.FirstName))
+            .ForMember(dto => dto.MiddleName, opt => opt.MapFrom(x => x.UserInfo.MiddleName))
+            .ForMember(dto => dto.Position, opt => opt.MapFrom(x => x.UserInfo.Position))
+            .ForMember(dto => dto.LastName, opt => opt.MapFrom(x => x.UserInfo.LastName))
+            .ForMember(
+                dto => dto.ProductionArea,
+                opt => opt.MapFrom(x => x.UserInfo.ProductionArea)
+            )
+            .ForMember(dto => dto.ServiceNumber, opt => opt.MapFrom(x => x.UserInfo.ServiceNumber));
     }
 }

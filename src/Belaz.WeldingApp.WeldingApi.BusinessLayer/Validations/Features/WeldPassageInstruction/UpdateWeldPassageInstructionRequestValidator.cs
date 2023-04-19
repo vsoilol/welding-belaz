@@ -16,7 +16,7 @@ public class UpdateWeldPassageInstructionRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateWeldPassageInstructionRequest,
-                    Domain.Entities.TechnologicalProcessInfo.WeldPassageInstruction
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.WeldPassageInstruction
                 >(context)
             )
             .When(_ => _.Id is not null);

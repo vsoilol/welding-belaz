@@ -1,5 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 

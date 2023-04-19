@@ -14,6 +14,6 @@ public class GetByIdRequestValidator : AbstractValidator<GetByIdRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<GetByIdRequest,
-                Domain.Entities.Production.Workshop>(context));
+                Belaz.WeldingApp.Common.Entities.Production.Workshop>(context));
     }
 }

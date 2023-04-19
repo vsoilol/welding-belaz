@@ -19,7 +19,7 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateProductRequest, Domain.Entities.ProductInfo.Product>(
+                new SqlIdValidatorFor<UpdateProductRequest, Belaz.WeldingApp.Common.Entities.ProductInfo.Product>(
                     context
                 )
             );
@@ -37,7 +37,7 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateProductRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
 
@@ -47,7 +47,7 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateProductRequest,
-                    Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalProcess
                 >(context)
             );
 
@@ -55,7 +55,7 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateProductRequest, Domain.Entities.ProductInfo.Product>(
+                new SqlIdValidatorFor<UpdateProductRequest, Belaz.WeldingApp.Common.Entities.ProductInfo.Product>(
                     context
                 )
             )

@@ -5,10 +5,11 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 
-public class WeldingEquipmentBriefDto : IMapFrom<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>
+public class WeldingEquipmentBriefDto
+    : IMapFrom<Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment>
 {
     public Guid Id { get; set; }
-    
+
     public string? IdFromSystem { get; set; }
 
     /// <summary>
@@ -40,9 +41,14 @@ public class WeldingEquipmentBriefDto : IMapFrom<Domain.Entities.WeldingEquipmen
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment, WeldingEquipmentBriefDto>()
-            .ForMember(dto => dto.CommissioningDate,
-                opt => opt
-                    .MapFrom(x => x.CommissioningDate.ToDayInfoString()));
+        profile
+            .CreateMap<
+                Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment,
+                WeldingEquipmentBriefDto
+            >()
+            .ForMember(
+                dto => dto.CommissioningDate,
+                opt => opt.MapFrom(x => x.CommissioningDate.ToDayInfoString())
+            );
     }
 }

@@ -13,12 +13,14 @@ public class UpdateWorkplaceRequestValidator : AbstractValidator<UpdateWorkplace
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateWorkplaceRequest,
-                Domain.Entities.Production.Workplace>(context));
-        
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateWorkplaceRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workplace
+                >(context)
+            );
+
+        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
@@ -39,19 +41,27 @@ public class UpdateWorkplaceRequestValidator : AbstractValidator<UpdateWorkplace
             .Cascade(CascadeMode.Stop)
             .NotNull()
             .When(_ => _.ProductionAreaId is null);
-        
+
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotNull()
-            .SetValidator(new SqlIdValidatorFor<UpdateWorkplaceRequest, 
-                Domain.Entities.Production.ProductionArea>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateWorkplaceRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
+                >(context)
+            )
             .When(_ => _.ProductionAreaId is not null && _.PostId is null);
-        
+
         RuleFor(model => model.PostId)
             .Cascade(CascadeMode.Stop)
             .NotNull()
-            .SetValidator(new SqlIdValidatorFor<UpdateWorkplaceRequest, 
-                Domain.Entities.Production.Post>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateWorkplaceRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Post
+                >(context)
+            )
             .When(_ => _.PostId is not null && _.ProductionAreaId is null);
     }
 }

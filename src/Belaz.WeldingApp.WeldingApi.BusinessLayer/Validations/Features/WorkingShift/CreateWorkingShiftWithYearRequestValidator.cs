@@ -6,7 +6,8 @@ using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.WorkingShift;
 
-public class CreateWorkingShiftWithYearRequestValidator : AbstractValidator<CreateWorkingShiftWithYearRequest>
+public class CreateWorkingShiftWithYearRequestValidator
+    : AbstractValidator<CreateWorkingShiftWithYearRequest>
 {
     public CreateWorkingShiftWithYearRequestValidator(ApplicationContext context)
     {
@@ -15,21 +16,25 @@ public class CreateWorkingShiftWithYearRequestValidator : AbstractValidator<Crea
             .GreaterThanOrEqualTo(1)
             .LessThanOrEqualTo(10);
 
-        When(_ => _.BreakStart is not null,
+        When(
+            _ => _.BreakStart is not null,
             () =>
             {
                 RuleFor(model => model.BreakEnd!)
                     .Cascade(CascadeMode.Stop)
                     .SetValidator(new TimeValidatorFor<CreateWorkingShiftWithYearRequest>());
-            });
+            }
+        );
 
-        When(_ => _.BreakEnd is not null,
+        When(
+            _ => _.BreakEnd is not null,
             () =>
             {
                 RuleFor(model => model.BreakStart!)
                     .Cascade(CascadeMode.Stop)
                     .SetValidator(new TimeValidatorFor<CreateWorkingShiftWithYearRequest>());
-            });
+            }
+        );
 
         RuleFor(model => model.ShiftStart)
             .Cascade(CascadeMode.Stop)
@@ -39,45 +44,56 @@ public class CreateWorkingShiftWithYearRequestValidator : AbstractValidator<Crea
             .Cascade(CascadeMode.Stop)
             .SetValidator(new TimeValidatorFor<CreateWorkingShiftWithYearRequest>());
 
-        When(_ => _.Year is null,
+        When(
+            _ => _.Year is null,
             () =>
             {
                 RuleFor(model => model.DayId)
                     .Cascade(CascadeMode.Stop)
                     .NotNull()
-                    .SetValidator(new SqlIdValidatorFor<CreateWorkingShiftWithYearRequest,
-                        Domain.Entities.CalendarInfo.Day>(context));
-            });
+                    .SetValidator(
+                        new SqlIdValidatorFor<
+                            CreateWorkingShiftWithYearRequest,
+                            Belaz.WeldingApp.Common.Entities.CalendarInfo.Day
+                        >(context)
+                    );
+            }
+        );
 
-        When(_ => _.Year is not null,
+        When(
+            _ => _.Year is not null,
             () =>
             {
-                RuleFor(model => model.DayId)
-                    .Cascade(CascadeMode.Stop)
-                    .Null();
-                
+                RuleFor(model => model.DayId).Cascade(CascadeMode.Stop).Null();
+
                 RuleFor(model => model.Year)
                     .Cascade(CascadeMode.Stop)
                     .NotNull()
                     .NotEmpty()
                     .SetValidator(new YearValidatorFor<CreateWorkingShiftWithYearRequest>());
-            });
+            }
+        );
 
-        When(_ => _.DayId is not null,
+        When(
+            _ => _.DayId is not null,
             () =>
             {
-                RuleFor(model => model.Year)
-                    .Cascade(CascadeMode.Stop)
-                    .Null();
-                
+                RuleFor(model => model.Year).Cascade(CascadeMode.Stop).Null();
+
                 RuleFor(model => model.DayId)
                     .Cascade(CascadeMode.Stop)
                     .NotNull()
-                    .SetValidator(new SqlIdValidatorFor<CreateWorkingShiftWithYearRequest,
-                        Domain.Entities.CalendarInfo.Day>(context));
-            });
+                    .SetValidator(
+                        new SqlIdValidatorFor<
+                            CreateWorkingShiftWithYearRequest,
+                            Belaz.WeldingApp.Common.Entities.CalendarInfo.Day
+                        >(context)
+                    );
+            }
+        );
 
-        When(_ => _.DayId is null,
+        When(
+            _ => _.DayId is null,
             () =>
             {
                 RuleFor(model => model.Year)
@@ -85,6 +101,7 @@ public class CreateWorkingShiftWithYearRequestValidator : AbstractValidator<Crea
                     .NotNull()
                     .NotEmpty()
                     .SetValidator(new YearValidatorFor<CreateWorkingShiftWithYearRequest>());
-            });
+            }
+        );
     }
 }

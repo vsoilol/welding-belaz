@@ -3,7 +3,7 @@
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldPassageInstruction;
 
 public class UpdateWeldPassageInstructionRequest
-    : IMapTo<Domain.Entities.TechnologicalProcessInfo.WeldPassageInstruction>
+    : IMapTo<Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.WeldPassageInstruction>
 {
     public Guid? Id { get; set; }
 

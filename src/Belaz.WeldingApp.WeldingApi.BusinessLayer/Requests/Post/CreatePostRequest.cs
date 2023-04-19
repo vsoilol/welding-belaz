@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Post;
 
-public class CreatePostRequest : IMapTo<Domain.Entities.Production.Post>
+public class CreatePostRequest : IMapTo<Belaz.WeldingApp.Common.Entities.Production.Post>
 {
     public int Number { get; set; }
 

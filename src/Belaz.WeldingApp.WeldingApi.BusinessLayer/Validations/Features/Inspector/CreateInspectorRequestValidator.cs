@@ -1,5 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Inspector;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Inspector;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
@@ -16,7 +15,7 @@ public class CreateInspectorRequestValidator : AbstractValidator<CreateInspector
             .SetAsyncValidator(
                 new IsRfidTagExistValidatorFor<
                     CreateInspectorRequest,
-                    Domain.Entities.IdentityUser.UserData
+                    Belaz.WeldingApp.Common.Entities.IdentityUser.UserData
                 >(context)
             );
 
@@ -36,7 +35,7 @@ public class CreateInspectorRequestValidator : AbstractValidator<CreateInspector
             .SetValidator(
                 new SqlIdValidatorFor<
                     CreateInspectorRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
     }

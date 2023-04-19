@@ -13,21 +13,18 @@ public class UpdateInstructionRequestValidator : AbstractValidator<UpdateInstruc
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateInstructionRequest,
-                Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateInstructionRequest,
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction
+                >(context)
+            );
 
-        RuleFor(model => model.Name)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.Name).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
-        
-        RuleFor(model => model.WeldPassages)
-            .Cascade(CascadeMode.Stop)
-            .NotNull()
-            .NotEmpty();
+        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
+
+        RuleFor(model => model.WeldPassages).Cascade(CascadeMode.Stop).NotNull().NotEmpty();
 
         RuleForEach(model => model.WeldPassages)
             .Cascade(CascadeMode.Stop)

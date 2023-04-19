@@ -13,29 +13,37 @@ public class UpdateWorkingShiftRequestValidator : AbstractValidator<UpdateWorkin
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateWorkingShiftRequest,
-                Domain.Entities.CalendarInfo.WorkingShift>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateWorkingShiftRequest,
+                    Belaz.WeldingApp.Common.Entities.CalendarInfo.WorkingShift
+                >(context)
+            );
 
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1)
             .LessThanOrEqualTo(10);
 
-        When(_ => _.BreakStart is not null,
+        When(
+            _ => _.BreakStart is not null,
             () =>
             {
                 RuleFor(model => model.BreakEnd!)
                     .Cascade(CascadeMode.Stop)
                     .SetValidator(new TimeValidatorFor<UpdateWorkingShiftRequest>());
-            });
+            }
+        );
 
-        When(_ => _.BreakEnd is not null,
+        When(
+            _ => _.BreakEnd is not null,
             () =>
             {
                 RuleFor(model => model.BreakStart!)
                     .Cascade(CascadeMode.Stop)
                     .SetValidator(new TimeValidatorFor<UpdateWorkingShiftRequest>());
-            });
+            }
+        );
 
         RuleFor(model => model.ShiftStart)
             .Cascade(CascadeMode.Stop)

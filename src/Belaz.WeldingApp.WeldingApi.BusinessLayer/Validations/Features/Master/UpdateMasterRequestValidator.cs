@@ -14,7 +14,7 @@ public class UpdateMasterRequestValidator : AbstractValidator<UpdateMasterReques
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateMasterRequest, Domain.Entities.Users.Master>(context)
+                new SqlIdValidatorFor<UpdateMasterRequest, Belaz.WeldingApp.Common.Entities.Users.Master>(context)
             );
 
         RuleFor(model => model.RfidTag)
@@ -34,7 +34,7 @@ public class UpdateMasterRequestValidator : AbstractValidator<UpdateMasterReques
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateMasterRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
     }

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Welder;
 
-public class UpdateWelderRequest : IMapTo<Domain.Entities.Users.Welder>
+public class UpdateWelderRequest : IMapTo<Belaz.WeldingApp.Common.Entities.Users.Welder>
 {
     public Guid Id { get; set; }
 
@@ -30,7 +30,7 @@ public class UpdateWelderRequest : IMapTo<Domain.Entities.Users.Welder>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<UpdateWelderRequest, Domain.Entities.Users.Welder>()
+            .CreateMap<UpdateWelderRequest, Belaz.WeldingApp.Common.Entities.Users.Welder>()
             .ForMember(dto => dto.UserInfo, opt => opt.MapFrom(x => x));
 
         profile.CreateMap<UpdateWelderRequest, UserData>();

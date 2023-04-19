@@ -18,6 +18,11 @@ public class UpdateCalendarRequestValidator : AbstractValidator<UpdateCalendarRe
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateCalendarRequest, Domain.Entities.CalendarInfo.Calendar>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateCalendarRequest,
+                    Belaz.WeldingApp.Common.Entities.CalendarInfo.Calendar
+                >(context)
+            );
     }
 }

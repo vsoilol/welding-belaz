@@ -17,9 +17,10 @@ public class DeleteWorkplaceRequestValidator : AbstractValidator<DeleteWorkplace
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeleteWorkplaceRequest, Domain.Entities.Production.Workplace>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    DeleteWorkplaceRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workplace
+                >(context)
             );
     }
 }

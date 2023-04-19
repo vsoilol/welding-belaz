@@ -16,7 +16,7 @@ public class DeleteTechnologicalProcessRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     DeleteTechnologicalProcessRequest,
-                    Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalProcess
                 >(context)
             );
     }

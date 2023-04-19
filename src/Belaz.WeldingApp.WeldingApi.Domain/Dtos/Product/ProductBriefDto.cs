@@ -3,7 +3,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 
-public class ProductBriefDto : IMapFrom<Entities.ProductInfo.Product>
+public class ProductBriefDto : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInfo.Product>
 {
     public Guid Id { get; set; }
 

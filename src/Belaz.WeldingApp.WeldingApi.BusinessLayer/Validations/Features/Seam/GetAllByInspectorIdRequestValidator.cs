@@ -12,7 +12,11 @@ public class GetAllByInspectorIdRequestValidator : AbstractValidator<GetAllByIns
         RuleFor(model => model.InspectorId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetAllByInspectorIdRequest,
-                Domain.Entities.Users.Inspector>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    GetAllByInspectorIdRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Inspector
+                >(context)
+            );
     }
 }

@@ -8,7 +8,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 
-public class ProductOverviewDto : IMapFrom<Entities.ProductInfo.Product>
+public class ProductOverviewDto : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInfo.Product>
 {
     public Guid Id { get; set; }
 
@@ -35,7 +35,7 @@ public class ProductOverviewDto : IMapFrom<Entities.ProductInfo.Product>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Entities.ProductInfo.Product, ProductOverviewDto>()
+            .CreateMap<Belaz.WeldingApp.Common.Entities.ProductInfo.Product, ProductOverviewDto>()
             .ConvertUsing<ProductOverviewDtoConverter>();
     }
 }

@@ -4,7 +4,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 
-public class MainProductDto : IMapFrom<Entities.ProductInfo.Product>
+public class MainProductDto : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInfo.Product>
 {
     public Guid Id { get; set; }
 
@@ -21,7 +21,7 @@ public class MainProductDto : IMapFrom<Entities.ProductInfo.Product>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Entities.ProductInfo.Product, MainProductDto>()
+            .CreateMap<Belaz.WeldingApp.Common.Entities.ProductInfo.Product, MainProductDto>()
             .ForMember(dto => dto.MainProduct, opt => opt.MapFrom(x => x.ProductMain!.MainProduct));
     }
 }

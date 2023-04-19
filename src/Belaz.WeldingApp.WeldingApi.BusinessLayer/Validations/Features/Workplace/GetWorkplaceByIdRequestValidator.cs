@@ -14,7 +14,11 @@ public class GetWorkplaceByIdRequestValidator : AbstractValidator<GetWorkplaceBy
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetWorkplaceByIdRequest,
-                Domain.Entities.Production.Workplace>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    GetWorkplaceByIdRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workplace
+                >(context)
+            );
     }
 }

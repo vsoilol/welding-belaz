@@ -16,7 +16,7 @@ public class GetAllByProductAccountIdRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     GetAllByProductAccountIdRequest,
-                    Domain.Entities.ProductInfo.ProductAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             );
     }

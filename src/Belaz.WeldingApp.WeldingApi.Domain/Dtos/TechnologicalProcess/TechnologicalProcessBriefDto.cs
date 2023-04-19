@@ -3,7 +3,7 @@
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
 
 public class TechnologicalProcessBriefDto
-    : IMapFrom<Entities.TechnologicalProcessInfo.TechnologicalProcess>
+    : IMapFrom<Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalProcess>
 {
     public Guid Id { get; set; }
 

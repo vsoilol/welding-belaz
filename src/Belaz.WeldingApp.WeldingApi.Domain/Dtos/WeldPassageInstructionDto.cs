@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
+﻿using Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;

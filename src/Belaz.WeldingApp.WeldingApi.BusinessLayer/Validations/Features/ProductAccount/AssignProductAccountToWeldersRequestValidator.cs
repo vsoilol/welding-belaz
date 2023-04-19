@@ -16,7 +16,7 @@ public class AssignProductAccountToWeldersRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     AssignProductAccountToWeldingEquipmentsRequest,
-                    Domain.Entities.ProductInfo.ProductAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             );
 
@@ -26,7 +26,7 @@ public class AssignProductAccountToWeldersRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     AssignProductAccountToWeldingEquipmentsRequest,
-                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+                    Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment
                 >(context)
             );
     }

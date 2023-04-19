@@ -4,7 +4,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WorkingShift;
 
-public class CreateWorkingShiftRequest : IMapTo<Domain.Entities.CalendarInfo.WorkingShift>
+public class CreateWorkingShiftRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.CalendarInfo.WorkingShift>
 {
     public int Number { get; set; }
 
@@ -18,18 +19,14 @@ public class CreateWorkingShiftRequest : IMapTo<Domain.Entities.CalendarInfo.Wor
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<CreateWorkingShiftRequest, Domain.Entities.CalendarInfo.WorkingShift>()
-            .ForMember(dto => dto.ShiftStart,
-                opt => opt
-                    .MapFrom(x => x.ShiftStart.ToTimeSpan()))
-            .ForMember(dto => dto.ShiftEnd,
-                opt => opt
-                    .MapFrom(x => x.ShiftEnd.ToTimeSpan()))
-            .ForMember(dto => dto.BreakStart,
-                opt => opt
-                    .MapFrom(x => x.BreakStart.ToTimeSpan()))
-            .ForMember(dto => dto.BreakEnd,
-                opt => opt
-                    .MapFrom(x => x.BreakEnd.ToTimeSpan()));
+        profile
+            .CreateMap<
+                CreateWorkingShiftRequest,
+                Belaz.WeldingApp.Common.Entities.CalendarInfo.WorkingShift
+            >()
+            .ForMember(dto => dto.ShiftStart, opt => opt.MapFrom(x => x.ShiftStart.ToTimeSpan()))
+            .ForMember(dto => dto.ShiftEnd, opt => opt.MapFrom(x => x.ShiftEnd.ToTimeSpan()))
+            .ForMember(dto => dto.BreakStart, opt => opt.MapFrom(x => x.BreakStart.ToTimeSpan()))
+            .ForMember(dto => dto.BreakEnd, opt => opt.MapFrom(x => x.BreakEnd.ToTimeSpan()));
     }
 }

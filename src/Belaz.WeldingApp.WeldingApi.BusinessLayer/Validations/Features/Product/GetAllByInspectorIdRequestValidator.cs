@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
@@ -12,12 +12,13 @@ public class GetAllByInspectorIdRequestValidator : AbstractValidator<GetAllByIns
         RuleFor(model => model.InspectorId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetAllByInspectorIdRequest,
-                Domain.Entities.Users.Inspector>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    GetAllByInspectorIdRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Inspector
+                >(context)
+            );
 
-        RuleFor(model => model.Type)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .IsInEnum();
+        RuleFor(model => model.Type).Cascade(CascadeMode.Stop).NotEmpty().IsInEnum();
     }
 }

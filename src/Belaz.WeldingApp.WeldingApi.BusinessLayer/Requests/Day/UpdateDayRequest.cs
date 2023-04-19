@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
 
-public class UpdateDayRequest : IMapTo<Domain.Entities.CalendarInfo.Day>
+public class UpdateDayRequest : IMapTo<Belaz.WeldingApp.Common.Entities.CalendarInfo.Day>
 {
     public Guid Id { get; set; }
 

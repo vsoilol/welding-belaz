@@ -12,13 +12,21 @@ public class AssignProductToMasterRequestValidator : AbstractValidator<AssignPro
         RuleFor(model => model.MasterId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignProductToMasterRequest,
-                Domain.Entities.Users.Master>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    AssignProductToMasterRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Master
+                >(context)
+            );
 
         RuleFor(model => model.ProductId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignProductToMasterRequest,
-                Domain.Entities.ProductInfo.Product>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    AssignProductToMasterRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
+            );
     }
 }

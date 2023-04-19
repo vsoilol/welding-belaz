@@ -14,7 +14,7 @@ public class DeleteWeldingRecordRequestValidator : AbstractValidator<DeleteWeldi
             .SetValidator(
                 new SqlIdValidatorFor<
                     DeleteWeldingRecordRequest,
-                    Domain.Entities.TaskInfo.WeldingRecord
+                    Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingRecord
                 >(context)
             );
     }

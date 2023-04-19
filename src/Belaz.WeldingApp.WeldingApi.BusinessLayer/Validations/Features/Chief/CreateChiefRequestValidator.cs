@@ -29,6 +29,6 @@ public class CreateChiefRequestValidator : AbstractValidator<CreateChiefRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<CreateChiefRequest,
-                Domain.Entities.Production.Workshop>(context));
+                Belaz.WeldingApp.Common.Entities.Production.Workshop>(context));
     }
 }

@@ -12,12 +12,13 @@ public class GetAllByMasterIdRequestValidator : AbstractValidator<GetAllByMaster
         RuleFor(model => model.MasterId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetAllByMasterIdRequest,
-                Domain.Entities.Users.Master>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    GetAllByMasterIdRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Master
+                >(context)
+            );
 
-        RuleFor(model => model.Type)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .IsInEnum();
+        RuleFor(model => model.Type).Cascade(CascadeMode.Stop).NotEmpty().IsInEnum();
     }
 }

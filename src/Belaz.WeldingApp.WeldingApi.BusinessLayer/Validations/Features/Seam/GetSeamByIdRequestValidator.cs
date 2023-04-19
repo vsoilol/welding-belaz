@@ -12,7 +12,11 @@ public class GetSeamByIdRequestValidator : AbstractValidator<GetSeamByIdRequest>
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetSeamByIdRequest,
-                Domain.Entities.ProductInfo.Seam>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    GetSeamByIdRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Seam
+                >(context)
+            );
     }
 }

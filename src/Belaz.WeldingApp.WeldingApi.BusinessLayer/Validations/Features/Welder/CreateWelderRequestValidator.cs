@@ -15,7 +15,7 @@ public class CreateWelderRequestValidator : AbstractValidator<CreateWelderReques
             .SetAsyncValidator(
                 new IsRfidTagExistValidatorFor<
                     CreateWelderRequest,
-                    Domain.Entities.IdentityUser.UserData
+                    Belaz.WeldingApp.Common.Entities.IdentityUser.UserData
                 >(context)
             );
 
@@ -35,7 +35,7 @@ public class CreateWelderRequestValidator : AbstractValidator<CreateWelderReques
             .SetValidator(
                 new SqlIdValidatorFor<
                     CreateWelderRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
 
@@ -43,9 +43,10 @@ public class CreateWelderRequestValidator : AbstractValidator<CreateWelderReques
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateWelderRequest, Domain.Entities.Production.Workplace>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    CreateWelderRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workplace
+                >(context)
             )
             .When(_ => _.WorkplaceId is not null);
     }

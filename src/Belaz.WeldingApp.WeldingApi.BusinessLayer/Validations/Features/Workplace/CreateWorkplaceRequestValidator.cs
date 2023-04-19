@@ -10,9 +10,7 @@ public class CreateWorkplaceRequestValidator : AbstractValidator<CreateWorkplace
 {
     public CreateWorkplaceRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
@@ -33,19 +31,27 @@ public class CreateWorkplaceRequestValidator : AbstractValidator<CreateWorkplace
             .Cascade(CascadeMode.Stop)
             .NotNull()
             .When(_ => _.ProductionAreaId is null);
-        
+
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotNull()
-            .SetValidator(new SqlIdValidatorFor<CreateWorkplaceRequest, 
-                Domain.Entities.Production.ProductionArea>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateWorkplaceRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
+                >(context)
+            )
             .When(_ => _.ProductionAreaId is not null && _.PostId is null);
-        
+
         RuleFor(model => model.PostId)
             .Cascade(CascadeMode.Stop)
             .NotNull()
-            .SetValidator(new SqlIdValidatorFor<CreateWorkplaceRequest, 
-                Domain.Entities.Production.Post>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateWorkplaceRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Post
+                >(context)
+            )
             .When(_ => _.PostId is not null && _.ProductionAreaId is null);
     }
 }

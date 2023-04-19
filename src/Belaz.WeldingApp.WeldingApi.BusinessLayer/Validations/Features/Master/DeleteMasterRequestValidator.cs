@@ -13,7 +13,10 @@ public class DeleteMasterRequestValidator : AbstractValidator<DeleteMasterReques
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeleteMasterRequest, Domain.Entities.Users.Master>(context)
+                new SqlIdValidatorFor<
+                    DeleteMasterRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Master
+                >(context)
             );
     }
 }

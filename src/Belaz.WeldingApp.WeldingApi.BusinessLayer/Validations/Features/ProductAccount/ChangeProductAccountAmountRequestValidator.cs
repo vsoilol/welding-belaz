@@ -16,7 +16,7 @@ public class ChangeProductAccountAmountRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeProductAccountAmountRequest,
-                    Domain.Entities.ProductInfo.ProductAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             );
 

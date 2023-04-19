@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
+using Belaz.WeldingApp.Common.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
@@ -23,18 +21,11 @@ public class ChiefDto : IMapFrom<Chief>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Chief, ChiefDto>()
-            .ForMember(dto => dto.RfidTag,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.RfidTag))
-            .ForMember(dto => dto.FirstName,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.FirstName))
-            .ForMember(dto => dto.MiddleName,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.MiddleName))
-            .ForMember(dto => dto.LastName,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.LastName));
+        profile
+            .CreateMap<Chief, ChiefDto>()
+            .ForMember(dto => dto.RfidTag, opt => opt.MapFrom(x => x.UserInfo.RfidTag))
+            .ForMember(dto => dto.FirstName, opt => opt.MapFrom(x => x.UserInfo.FirstName))
+            .ForMember(dto => dto.MiddleName, opt => opt.MapFrom(x => x.UserInfo.MiddleName))
+            .ForMember(dto => dto.LastName, opt => opt.MapFrom(x => x.UserInfo.LastName));
     }
 }

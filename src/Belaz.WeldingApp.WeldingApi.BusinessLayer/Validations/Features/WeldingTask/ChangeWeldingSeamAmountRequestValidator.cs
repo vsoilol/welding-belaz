@@ -15,7 +15,7 @@ public class ChangeWeldingSeamAmountRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeWeldingSeamAmountRequest,
-                    Domain.Entities.TaskInfo.WeldingTask
+                    Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask
                 >(context)
             );
 

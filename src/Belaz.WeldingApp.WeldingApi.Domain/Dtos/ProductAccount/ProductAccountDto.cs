@@ -6,7 +6,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
 
-public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAccount>
+public class ProductAccountDto
+    : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount>
 {
     public Guid Id { get; set; }
 
@@ -34,7 +35,10 @@ public class ProductAccountDto : IMapFrom<Domain.Entities.ProductInfo.ProductAcc
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Domain.Entities.ProductInfo.ProductAccount, ProductAccountDto>()
+            .CreateMap<
+                Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount,
+                ProductAccountDto
+            >()
             .ForMember(
                 dto => dto.AmountManufactured,
                 opt =>

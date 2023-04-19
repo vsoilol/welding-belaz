@@ -1,5 +1,5 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+using Belaz.WeldingApp.Common.Entities.Production;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 

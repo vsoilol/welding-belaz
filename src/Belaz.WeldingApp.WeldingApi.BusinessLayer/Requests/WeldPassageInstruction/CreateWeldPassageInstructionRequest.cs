@@ -2,8 +2,8 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldPassageInstruction;
 
-public class
-    CreateWeldPassageInstructionRequest : IMapTo<Domain.Entities.TechnologicalProcessInfo.WeldPassageInstruction>
+public class CreateWeldPassageInstructionRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.WeldPassageInstruction>
 {
     public string Name { get; set; } = null!;
 

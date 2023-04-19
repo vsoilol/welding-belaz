@@ -19,7 +19,7 @@ public class ChangeOrderRequestValidator : AbstractValidator<ChangeOrderRequest>
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeOrderRequest,
-                    Domain.Entities.ProductInfo.ProductAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             );
 
@@ -29,7 +29,7 @@ public class ChangeOrderRequestValidator : AbstractValidator<ChangeOrderRequest>
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeOrderRequest,
-                    Domain.Entities.ProductInfo.ProductAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             );
     }
