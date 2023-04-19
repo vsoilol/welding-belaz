@@ -45,7 +45,7 @@ export const CreatingTask = ({
     const [valChioseMaster, setvalChioseMaster] = useState(masters[0].id);
     const [valChioseInstruct, setvalChioseInstruct] = useState(techs[0].id);
     const [valueDate, setvalueDate] = useState(0);
-    const [dateCratePlan, setdateCratePlan] = useState(new Date().toLocaleDateString('ru-RU'));
+    const [dateCratePlan, setdateCratePlan] = useState("");
     const [toDay, settoDay] = useState(new Date().toLocaleDateString('ru-RU'));
 
 
@@ -228,7 +228,7 @@ export const CreatingTask = ({
     //Изменение ввода выработки и брака
     async function ChangeData() {
         try {
-            if (idPlan && idPlan.length > 0) { 
+            if (idPlan && idPlan.length > 0) {
 
                 if (prodQuantities >= 0) {
                     await api.put(`/productAccount/amountFromPlan`, {
@@ -318,7 +318,7 @@ export const CreatingTask = ({
     function CreateTask() {
         const masterId = userRole === "Admin" ? valChioseMaster : masters[0].id;
         const productionAreaId = userRole === "Admin" ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id : localStorage.getItem('USER_productionAreaId');
- 
+
         api.post(`/productAccount/generateTasks`, {
             "date": valueChioseDate,
             "productionAreaId": productionAreaId,
@@ -414,7 +414,11 @@ export const CreatingTask = ({
 
 
             </div>
-            <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {toDay}</button>
+            <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
+                dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
+                    ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
+                    : ''
+            }</button>
             {userRole === "Master" || userRole === "Admin"
                 ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
                 : <div></div>
