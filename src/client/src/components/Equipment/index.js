@@ -591,6 +591,8 @@ export const Equipment = ({
                       setIsModalNumb(1);
                       setEquipmentNumb(rowData.id)
                       setValuetPosts(rowData.post?.id)
+                      setvalueWorkshop(rowData?.workshop?.id)
+                      setvalueoptArea(rowData?.productionArea?.id)
                     },
                   },
                 ]
@@ -821,7 +823,7 @@ export const Equipment = ({
 
                     <Input
                       onChange={(e) => {
-                        if (/^[A-Za-z0-9-]+$/.test(e.target.value)) {
+                        if (value === "" ||/^[A-Za-z0-9-]+$/.test(e.target.value)) {
                           handleChange(e);
                         }
                       }}
@@ -838,7 +840,7 @@ export const Equipment = ({
                     <Input
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (value === "" || /^[0-9A-Fa-f:]+$/.test(value)) {
+                        if (value === "" || /^[0-9A-Za-z:]+$/.test(value)) {
                           handleChange(e);
                         }
                       }}
@@ -1056,7 +1058,10 @@ export const Equipment = ({
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        const re = /^[0-9]+([,.][0-9]*)?$/;
+                        if (e.target.value === '' || re.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       style={{
                         width: 180,
@@ -1064,8 +1069,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0"
-                      step="1"
+                      min="0" 
                       value={values.weldingCurrentMin}
                       name={`weldingCurrentMin`}
                       placeholder="min"
@@ -1074,7 +1078,10 @@ export const Equipment = ({
                     />
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        const re = /^[0-9]+([,.][0-9]*)?$/;
+                        if (e.target.value === '' || re.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       style={{
                         width: 180,
@@ -1082,8 +1089,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0"
-                      step="1"
+                      min="0" 
                       value={values.weldingCurrentMax}
                       name={`weldingCurrentMax`}
                       placeholder="max"
@@ -1095,7 +1101,10 @@ export const Equipment = ({
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        const re = /^[0-9]+([,.][0-9]*)?$/;
+                        if (e.target.value === '' || re.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       style={{
                         width: 180,
@@ -1103,8 +1112,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0"
-                      step="1"
+                      min="0" 
                       value={values.arcVoltageMin}
                       name={`arcVoltageMin`}
                       placeholder="min"
@@ -1112,7 +1120,10 @@ export const Equipment = ({
                     />
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        const re = /^[0-9]+([,.][0-9]*)?$/;
+                        if (e.target.value === '' || re.test(e.target.value)) {
+                          handleChange(e);
+                        }
                       }}
                       style={{
                         width: 180,
@@ -1120,8 +1131,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0"
-                      step="1"
+                      min="0" 
                       value={values.arcVoltageMax}
                       name={`arcVoltageMax`}
                       placeholder="max"
@@ -1135,7 +1145,7 @@ export const Equipment = ({
                       disabled={
                         values.name == "" || values.marking == "" || values.rfidTag == "" || values.factoryNumber == "" ||
                         values.nextAttestationDate == "" || values.commissioningDate == "" || values.weldingProcess == "" || values.idleVoltage == "" ||
-                        values.loadPercentage == "" || values.manufacturerName == "" || /* values.height == ""  || values.width == "" || values.lenght == "" ||*/
+                        values.loadPercentage == "" || values.manufacturerName == "" || values.height == ""  || values.width == "" || values.lenght == "" ||
                         values.weldingCurrentMin == "" || values.weldingCurrentMax == "" || values.arcVoltageMin == "" || values.arcVoltageMax == ""
                       }
                       type="submit"

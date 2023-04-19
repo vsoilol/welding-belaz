@@ -495,10 +495,8 @@ export const Reports = ({
       if (res.status === 204) {
         setisModalNothinOpen(true);
       }
-      if (res.status === 200) {
-        const file = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
+      if (res.status === 200) {  
+        window.open(res.request.responseURL); 
       }
     } catch (error) {
       console.log(error);
