@@ -1,5 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
+﻿using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.Extensions;
@@ -7,9 +6,8 @@ using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
+using Belaz.WeldingApp.Common.Attributes;
+using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 

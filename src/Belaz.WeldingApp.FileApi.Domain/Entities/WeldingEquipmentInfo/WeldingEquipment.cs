@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.Domain.Entities.CalendarInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace WeldingApp.Common.ValidatorFactory;
+namespace Belaz.WeldingApp.Common.ValidatorFactory;
 
 public interface ICustomValidatorFactory
 {

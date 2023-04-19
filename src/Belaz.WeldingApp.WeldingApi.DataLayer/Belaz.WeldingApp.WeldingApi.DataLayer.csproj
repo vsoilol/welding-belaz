@@ -13,7 +13,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Belaz.WeldingApp.WeldingApi.Domain\Belaz.WeldingApp.WeldingApi.Domain.csproj" />
-        <ProjectReference Include="..\WeldingApp.Common\WeldingApp.Common.csproj" />
+        <ProjectReference Include="..\Belaz.WeldingApp.Common\Belaz.WeldingApp.Common.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using WeldingApp.Common.Enums;
+﻿using Belaz.WeldingApp.Common.Enums;
+using Microsoft.AspNetCore.Authorization;
 
-namespace WeldingApp.Common.Attributes;
+namespace Belaz.WeldingApp.Common.Attributes;
 
 public class AuthorizeRolesAttribute : AuthorizeAttribute
 {

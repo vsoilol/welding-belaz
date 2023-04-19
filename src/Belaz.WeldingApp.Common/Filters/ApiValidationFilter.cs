@@ -1,11 +1,11 @@
-﻿using FluentValidation;
+﻿using Belaz.WeldingApp.Common.Extensions;
+using Belaz.WeldingApp.Common.ValidatorFactory;
+using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using WeldingApp.Common.Extensions;
-using WeldingApp.Common.ValidatorFactory;
 
-namespace WeldingApp.Common.Filters;
+namespace Belaz.WeldingApp.Common.Filters;
 
 public class ApiValidationFilter : IAsyncActionFilter
 {

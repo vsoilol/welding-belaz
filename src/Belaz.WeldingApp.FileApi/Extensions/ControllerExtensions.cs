@@ -3,7 +3,7 @@ using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Exceptions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
+using BadRequestResult = Belaz.WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.FileApi.Extensions;
 

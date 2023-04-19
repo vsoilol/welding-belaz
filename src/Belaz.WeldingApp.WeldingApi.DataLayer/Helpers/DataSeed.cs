@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+﻿using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
@@ -7,7 +8,6 @@ using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
 

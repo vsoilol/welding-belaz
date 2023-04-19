@@ -1,4 +1,4 @@
-﻿namespace WeldingApp.Common.Enums;
+﻿namespace Belaz.WeldingApp.Common.Enums;
 
 public enum SeamStatus
 {

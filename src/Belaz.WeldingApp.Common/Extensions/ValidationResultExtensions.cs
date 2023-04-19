@@ -1,8 +1,8 @@
-﻿using System.Net;
+﻿using Belaz.WeldingApp.Common.Models;
 using FluentValidation.Results;
-using WeldingApp.Common.Models;
+using System.Net;
 
-namespace WeldingApp.Common.Extensions;
+namespace Belaz.WeldingApp.Common.Extensions;
 
 public static class ValidationResultExtensions
 {
@@ -13,7 +13,7 @@ public static class ValidationResultExtensions
         var problemDetails = new BadRequestResult
         {
             Title = "Validation error, please check the error list for more details",
-            StatusCode = (int) (HttpStatusCode.BadRequest),
+            StatusCode = (int)HttpStatusCode.BadRequest,
             Errors = errors,
         };
 

@@ -1,5 +1,5 @@
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 

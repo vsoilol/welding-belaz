@@ -1,6 +1,6 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
+﻿using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 

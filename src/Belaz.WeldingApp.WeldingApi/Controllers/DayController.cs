@@ -5,8 +5,8 @@ using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
+using Belaz.WeldingApp.Common.Attributes;
+using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -50,16 +50,21 @@ public class DayController : ControllerBase
     [ProducesResponseType(typeof(List<DayDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<DayDto>>> GetAllByWelderIdAsync([FromRoute] Guid welderId)
     {
-        var result = await _dayService.GetAllByWelderIdAsync(new GetDaysByWelderIdRequest { WelderId = welderId });
+        var result = await _dayService.GetAllByWelderIdAsync(
+            new GetDaysByWelderIdRequest { WelderId = welderId }
+        );
         return result.ToOk();
     }
 
     [HttpGet("byEquipment/{equipmentId}")]
     [ProducesResponseType(typeof(List<DayDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<DayDto>>> GetAllByEquipmentIdAsync([FromRoute] Guid equipmentId)
+    public async Task<ActionResult<List<DayDto>>> GetAllByEquipmentIdAsync(
+        [FromRoute] Guid equipmentId
+    )
     {
-        var result = await _dayService
-            .GetAllByEquipmentIdAsync(new GetDaysByEquipmentIdRequest { EquipmentId = equipmentId });
+        var result = await _dayService.GetAllByEquipmentIdAsync(
+            new GetDaysByEquipmentIdRequest { EquipmentId = equipmentId }
+        );
         return result.ToOk();
     }
 }

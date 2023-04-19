@@ -1,9 +1,9 @@
-﻿using System.Reflection;
+﻿using Belaz.WeldingApp.Common.ValidatorFactory;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using WeldingApp.Common.ValidatorFactory;
+using System.Reflection;
 
-namespace WeldingApp.Common.Extensions;
+namespace Belaz.WeldingApp.Common.Extensions;
 
 public static class FluentValidationExtensions
 {

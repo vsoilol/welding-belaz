@@ -1,4 +1,4 @@
-namespace WeldingApp.Common.Options;
+namespace Belaz.WeldingApp.Common.Options;
 
 public class AuthOptions
 {

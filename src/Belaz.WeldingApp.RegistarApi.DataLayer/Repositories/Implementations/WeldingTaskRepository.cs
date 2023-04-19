@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
 using AutoMapper;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Implementations;
 

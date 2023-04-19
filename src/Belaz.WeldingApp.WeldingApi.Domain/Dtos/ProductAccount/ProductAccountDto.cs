@@ -1,9 +1,8 @@
 using AutoMapper;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
 

@@ -1,4 +1,4 @@
-﻿namespace WeldingApp.Common.Models;
+﻿namespace Belaz.WeldingApp.Common.Models;
 
 public class BadRequestResult
 {

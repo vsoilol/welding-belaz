@@ -1,4 +1,7 @@
 using System.Text;
+using Belaz.WeldingApp.Common.Extensions;
+using Belaz.WeldingApp.Common.Filters;
+using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi;
 using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
@@ -13,9 +16,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
-using WeldingApp.Common.Extensions;
-using WeldingApp.Common.Filters;
-using WeldingApp.Common.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 

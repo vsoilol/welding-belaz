@@ -3,7 +3,7 @@ using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
+using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 

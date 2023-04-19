@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
 using Belaz.WeldingApp.FileApi.Domain.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.FileApi.Domain.Entities.Users;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 

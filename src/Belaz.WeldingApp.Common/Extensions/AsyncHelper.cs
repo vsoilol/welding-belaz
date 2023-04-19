@@ -1,6 +1,6 @@
-﻿namespace WeldingApp.Common.Extensions;
+﻿namespace Belaz.WeldingApp.Common.Extensions;
 
-public static class AsyncHelper  
+public static class AsyncHelper
 {
     private static readonly TaskFactory _taskFactory = new
         TaskFactory(CancellationToken.None,

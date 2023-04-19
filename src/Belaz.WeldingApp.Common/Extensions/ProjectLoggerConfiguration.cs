@@ -3,7 +3,7 @@ using Serilog.Events;
 using Serilog.Filters;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace WeldingApp.Common.Extensions;
+namespace Belaz.WeldingApp.Common.Extensions;
 
 public static class ProjectLoggerConfiguration
 {

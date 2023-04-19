@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WeldingApp.Common.ValidatorFactory;
+namespace Belaz.WeldingApp.Common.ValidatorFactory;
 
 public class CustomValidatorFactory : ICustomValidatorFactory
 {
