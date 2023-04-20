@@ -423,7 +423,7 @@ public class DataSeed
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка",
-                RfidTag = "3A:94:69:86",
+                RfidTag = "03:3D:93:0D",
                 WeldingCurrentMin = 80,
                 WeldingCurrentMax = 550,
                 ArcVoltageMin = 18,
