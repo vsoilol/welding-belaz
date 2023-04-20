@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalInstruction;
 
 public class TechnologicalInstructionDto
-    : IMapFrom<Entities.TechnologicalProcessInfo.TechnologicalInstruction>
+    : IMapFrom<Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction>
 {
     public Guid Id { get; set; }
 
@@ -21,7 +21,7 @@ public class TechnologicalInstructionDto
     {
         profile
             .CreateMap<
-                Entities.TechnologicalProcessInfo.TechnologicalInstruction,
+                Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction,
                 TechnologicalInstructionDto
             >()
             .ForMember(

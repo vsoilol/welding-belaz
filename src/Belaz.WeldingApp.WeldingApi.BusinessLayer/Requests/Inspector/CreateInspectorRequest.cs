@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Inspector;
 
-public class CreateInspectorRequest : IMapTo<Domain.Entities.Users.Inspector>
+public class CreateInspectorRequest : IMapTo<Belaz.WeldingApp.Common.Entities.Users.Inspector>
 {
     public string RfidTag { get; set; } = null!;
 
@@ -26,7 +26,7 @@ public class CreateInspectorRequest : IMapTo<Domain.Entities.Users.Inspector>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<CreateInspectorRequest, Domain.Entities.Users.Inspector>()
+            .CreateMap<CreateInspectorRequest, Belaz.WeldingApp.Common.Entities.Users.Inspector>()
             .ForMember(dto => dto.UserInfo, opt => opt.MapFrom(x => x));
 
         profile.CreateMap<CreateInspectorRequest, UserData>();

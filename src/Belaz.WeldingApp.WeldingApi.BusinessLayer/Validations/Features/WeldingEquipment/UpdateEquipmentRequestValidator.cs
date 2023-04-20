@@ -17,7 +17,7 @@ public class UpdateEquipmentRequestValidator : AbstractValidator<UpdateEquipment
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateEquipmentRequest,
-                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+                    Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment
                 >(context)
             );
 
@@ -95,9 +95,10 @@ public class UpdateEquipmentRequestValidator : AbstractValidator<UpdateEquipment
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateEquipmentRequest, Domain.Entities.Production.Post>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    UpdateEquipmentRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Post
+                >(context)
             )
             .When(_ => _.PostId is not null);
 
@@ -105,9 +106,10 @@ public class UpdateEquipmentRequestValidator : AbstractValidator<UpdateEquipment
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateEquipmentRequest, Domain.Entities.Production.Workplace>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    UpdateEquipmentRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workplace
+                >(context)
             );
     }
 }

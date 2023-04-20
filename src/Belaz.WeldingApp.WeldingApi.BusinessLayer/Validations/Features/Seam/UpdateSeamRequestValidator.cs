@@ -13,7 +13,10 @@ public class UpdateSeamRequestValidator : AbstractValidator<UpdateSeamRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateSeamRequest, Domain.Entities.ProductInfo.Seam>(context)
+                new SqlIdValidatorFor<
+                    UpdateSeamRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Seam
+                >(context)
             );
 
         RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
@@ -22,9 +25,10 @@ public class UpdateSeamRequestValidator : AbstractValidator<UpdateSeamRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateSeamRequest, Domain.Entities.Production.ProductionArea>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    UpdateSeamRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
+                >(context)
             );
 
         RuleFor(model => model.TechnologicalInstructionId)
@@ -33,7 +37,7 @@ public class UpdateSeamRequestValidator : AbstractValidator<UpdateSeamRequest>
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateSeamRequest,
-                    Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction
                 >(context)
             )
             .When(_ => _.TechnologicalInstructionId is not null);
@@ -42,9 +46,10 @@ public class UpdateSeamRequestValidator : AbstractValidator<UpdateSeamRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateSeamRequest, Domain.Entities.ProductInfo.Product>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    UpdateSeamRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
             );
     }
 }

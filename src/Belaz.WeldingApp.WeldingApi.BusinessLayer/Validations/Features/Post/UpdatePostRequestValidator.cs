@@ -1,5 +1,4 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Post;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
@@ -14,7 +13,7 @@ public class UpdatePostRequestValidator : AbstractValidator<UpdatePostRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<UpdatePostRequest,
-                Domain.Entities.Production.Post>(context));
+                Belaz.WeldingApp.Common.Entities.Production.Post>(context));
         
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)
@@ -28,6 +27,6 @@ public class UpdatePostRequestValidator : AbstractValidator<UpdatePostRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<UpdatePostRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+                Belaz.WeldingApp.Common.Entities.Production.ProductionArea>(context));
     }
 }

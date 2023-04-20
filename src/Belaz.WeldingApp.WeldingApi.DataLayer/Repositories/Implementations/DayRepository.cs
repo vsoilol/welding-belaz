@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -44,9 +44,11 @@ public class DayRepository : IDayRepository
 
     public async Task<DayDto> UpdateAsync(Day day)
     {
-        var updatedDay = (await _context.Days
-            .Include(_ => _.WorkingShifts)
-            .FirstOrDefaultAsync(_ => _.Id == day.Id))!;
+        var updatedDay = (
+            await _context.Days
+                .Include(_ => _.WorkingShifts)
+                .FirstOrDefaultAsync(_ => _.Id == day.Id)
+        )!;
 
         updatedDay.MonthNumber = day.MonthNumber;
         updatedDay.Number = day.Number;
@@ -62,14 +64,22 @@ public class DayRepository : IDayRepository
         return await GetByIdAsync(day.Id);
     }
 
-    public async Task<DayDto> CreateAsync(Day day, int year, Guid? weldingEquipmentId, Guid? welderId)
+    public async Task<DayDto> CreateAsync(
+        Day day,
+        int year,
+        Guid? weldingEquipmentId,
+        Guid? welderId
+    )
     {
         var calendar = await _context.Calendars
-            .Where(_ => _.Year == year &&
-                        _.WelderId == welderId &&
-                        _.WeldingEquipmentId == weldingEquipmentId)
+            .Where(
+                _ =>
+                    _.Year == year
+                    && _.WelderId == welderId
+                    && _.WeldingEquipmentId == weldingEquipmentId
+            )
             .FirstOrDefaultAsync();
-        
+
         if (calendar is null)
         {
             var newCalendar = new Calendar
@@ -82,7 +92,7 @@ public class DayRepository : IDayRepository
 
             calendar = _context.Calendars.Add(newCalendar).Entity;
         }
-        
+
         day.CalendarId = calendar.Id;
         var createdDay = _context.Days.Add(day).Entity;
         await _context.SaveChangesAsync();

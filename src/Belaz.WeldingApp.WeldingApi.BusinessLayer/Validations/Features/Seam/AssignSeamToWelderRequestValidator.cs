@@ -12,13 +12,21 @@ public class AssignSeamToWelderRequestValidator : AbstractValidator<AssignSeamTo
         RuleFor(model => model.SeamId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignSeamToWelderRequest,
-                Domain.Entities.ProductInfo.Seam>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    AssignSeamToWelderRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Seam
+                >(context)
+            );
 
         RuleFor(model => model.WelderId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignSeamToWelderRequest,
-                Domain.Entities.Users.Welder>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    AssignSeamToWelderRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Welder
+                >(context)
+            );
     }
 }

@@ -16,7 +16,7 @@ public class SetProductAccountDefectiveReasonRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     SetProductAccountDefectiveReasonRequest,
-                    Domain.Entities.ProductInfo.ProductAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             );
 

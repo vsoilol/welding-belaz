@@ -17,9 +17,10 @@ public class DeleteProductRequestValidator : AbstractValidator<DeleteProductRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeleteProductRequest, Domain.Entities.ProductInfo.Product>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    DeleteProductRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
             );
     }
 }

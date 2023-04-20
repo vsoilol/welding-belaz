@@ -1,6 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductionArea;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
+using Belaz.WeldingApp.Common.Entities.Production;
 using LanguageExt;
 using LanguageExt.Common;
 

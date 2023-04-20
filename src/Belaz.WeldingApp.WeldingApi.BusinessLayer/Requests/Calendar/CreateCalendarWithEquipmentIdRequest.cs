@@ -5,22 +5,25 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 
-public class CreateCalendarWithEquipmentIdRequest : IMapTo<Domain.Entities.CalendarInfo.Calendar>
+public class CreateCalendarWithEquipmentIdRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.CalendarInfo.Calendar>
 {
     public int Year { get; set; }
 
     public Guid WeldingEquipmentId { get; set; }
 
     public List<CreateWorkingShiftRequest> MainWorkingShift { get; set; } = null!;
-    
+
     public List<CreateDayRequest>? Days { get; set; }
-    
+
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<CreateCalendarWithEquipmentIdRequest, Domain.Entities.CalendarInfo.Calendar>()
-            .ForMember(dto => dto.Days,
-                opt => opt.Ignore())
-            .ForMember(dto => dto.MainWorkingShifts,
-                opt => opt.Ignore());
+        profile
+            .CreateMap<
+                CreateCalendarWithEquipmentIdRequest,
+                Belaz.WeldingApp.Common.Entities.CalendarInfo.Calendar
+            >()
+            .ForMember(dto => dto.Days, opt => opt.Ignore())
+            .ForMember(dto => dto.MainWorkingShifts, opt => opt.Ignore());
     }
 }

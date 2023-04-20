@@ -1,6 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.TechnologicalProcess;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 

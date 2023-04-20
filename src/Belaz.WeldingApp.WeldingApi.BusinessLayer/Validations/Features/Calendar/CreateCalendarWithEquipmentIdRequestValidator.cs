@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Calendar;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +20,7 @@ public class CreateCalendarWithEquipmentIdRequestValidator : AbstractValidator<C
             .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<CreateCalendarWithEquipmentIdRequest,
-                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
+                    Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment>(context));
 
         RuleFor(model => model)
             .Cascade(CascadeMode.Stop)

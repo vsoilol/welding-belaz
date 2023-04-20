@@ -14,7 +14,7 @@ public class UpdateWelderRequestValidator : AbstractValidator<UpdateWelderReques
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateWelderRequest, Domain.Entities.Users.Welder>(context)
+                new SqlIdValidatorFor<UpdateWelderRequest, Belaz.WeldingApp.Common.Entities.Users.Welder>(context)
             );
 
         RuleFor(model => model.RfidTag)
@@ -37,8 +37,7 @@ public class UpdateWelderRequestValidator : AbstractValidator<UpdateWelderReques
             .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<
-                    UpdateWelderRequest,
-                    Domain.Entities.Production.ProductionArea
+                    UpdateWelderRequest, Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
 
@@ -46,7 +45,7 @@ public class UpdateWelderRequestValidator : AbstractValidator<UpdateWelderReques
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateWelderRequest, Domain.Entities.Production.Workplace>(
+                new SqlIdValidatorFor<UpdateWelderRequest, Belaz.WeldingApp.Common.Entities.Production.Workplace>(
                     context
                 )
             )

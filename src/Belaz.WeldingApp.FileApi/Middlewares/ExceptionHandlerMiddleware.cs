@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using Belaz.WeldingApp.FileApi.Domain.Exceptions;
-using WeldingApp.Common.Models;
+using Belaz.WeldingApp.Common.Models;
 
 namespace Belaz.WeldingApp.FileApi.Middlewares;
 

@@ -4,7 +4,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalInstruction;
 
-public class UpdateInstructionRequest : IMapTo<Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction>
+public class UpdateInstructionRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction>
 {
     public Guid Id { get; set; }
 

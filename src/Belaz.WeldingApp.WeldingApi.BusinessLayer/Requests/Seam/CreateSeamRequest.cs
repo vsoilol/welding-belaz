@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
 
-public class CreateSeamRequest : IMapTo<Domain.Entities.ProductInfo.Seam>
+public class CreateSeamRequest : IMapTo<Belaz.WeldingApp.Common.Entities.ProductInfo.Seam>
 {
     public int Number { get; set; }
 

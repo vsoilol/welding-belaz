@@ -12,23 +12,19 @@ public class UpdateWeldingTaskRequestValidator : AbstractValidator<UpdateWelding
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .SetValidator(
-                new SqlIdValidatorFor<UpdateWeldingTaskRequest, Domain.Entities.TaskInfo.WeldingTask>(context));
+                new SqlIdValidatorFor<
+                    UpdateWeldingTaskRequest,
+                    Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask
+                >(context)
+            );
 
-        RuleFor(model => model.BasicMaterial)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.BasicMaterial).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.MainMaterialBatchNumber)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.MainMaterialBatchNumber).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.WeldingMaterial)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.WeldingMaterial).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.WeldingMaterialBatchNumber)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.WeldingMaterialBatchNumber).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.ProtectiveGas)
             .Cascade(CascadeMode.Stop)

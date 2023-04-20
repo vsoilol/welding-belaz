@@ -21,7 +21,7 @@ public class ChangeSeamAccountDefectiveAmountRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeSeamAccountDefectiveAmountRequest,
-                    Domain.Entities.ProductInfo.SeamAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.SeamAccount
                 >(context)
             );
 

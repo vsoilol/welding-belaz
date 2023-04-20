@@ -17,7 +17,7 @@ public class ChangeProductAccountAcceptedAmountRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeProductAccountAcceptedAmountRequest,
-                    Domain.Entities.ProductInfo.ProductAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             )
             .DependentRules(() =>
@@ -34,7 +34,7 @@ public class ChangeProductAccountAcceptedAmountRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeProductAccountAcceptedAmountRequest,
-                    Domain.Entities.Users.Inspector
+                    Belaz.WeldingApp.Common.Entities.Users.Inspector
                 >(context)
             );
     }

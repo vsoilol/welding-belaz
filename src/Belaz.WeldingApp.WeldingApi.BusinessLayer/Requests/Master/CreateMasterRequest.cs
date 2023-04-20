@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
 
-public class CreateMasterRequest : IMapTo<Domain.Entities.Users.Master>
+public class CreateMasterRequest : IMapTo<Belaz.WeldingApp.Common.Entities.Users.Master>
 {
     public string RfidTag { get; set; } = null!;
 
@@ -26,7 +26,7 @@ public class CreateMasterRequest : IMapTo<Domain.Entities.Users.Master>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<CreateMasterRequest, Domain.Entities.Users.Master>()
+            .CreateMap<CreateMasterRequest, Belaz.WeldingApp.Common.Entities.Users.Master>()
             .ForMember(dto => dto.UserInfo, opt => opt.MapFrom(x => x));
 
         profile.CreateMap<CreateMasterRequest, UserData>();

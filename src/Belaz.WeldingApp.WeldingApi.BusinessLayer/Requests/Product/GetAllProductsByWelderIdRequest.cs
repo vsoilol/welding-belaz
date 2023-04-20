@@ -1,4 +1,4 @@
-﻿using WeldingApp.Common.Enums;
+﻿using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 

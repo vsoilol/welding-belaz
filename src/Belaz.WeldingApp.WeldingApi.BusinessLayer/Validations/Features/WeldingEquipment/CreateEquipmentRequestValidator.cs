@@ -15,8 +15,7 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
             .NotEmpty()
             .SetAsyncValidator(
                 new IsRfidTagExistValidatorFor<
-                    CreateEquipmentRequest,
-                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+                    CreateEquipmentRequest, Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment
                 >(context)
             );
 
@@ -89,7 +88,7 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateEquipmentRequest, Domain.Entities.Production.Post>(
+                new SqlIdValidatorFor<CreateEquipmentRequest, Belaz.WeldingApp.Common.Entities.Production.Post>(
                     context
                 )
             )
@@ -99,7 +98,7 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateEquipmentRequest, Domain.Entities.Production.Workplace>(
+                new SqlIdValidatorFor<CreateEquipmentRequest, Belaz.WeldingApp.Common.Entities.Production.Workplace>(
                     context
                 )
             );

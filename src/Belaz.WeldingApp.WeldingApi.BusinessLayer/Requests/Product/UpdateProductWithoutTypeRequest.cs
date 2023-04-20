@@ -3,7 +3,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 
-public class UpdateProductWithoutTypeRequest : IMapTo<Domain.Entities.ProductInfo.Product>
+public class UpdateProductWithoutTypeRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.ProductInfo.Product>
 {
     public Guid Id { get; set; }
 
@@ -25,7 +26,10 @@ public class UpdateProductWithoutTypeRequest : IMapTo<Domain.Entities.ProductInf
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<UpdateProductWithoutTypeRequest, Domain.Entities.ProductInfo.Product>()
+            .CreateMap<
+                UpdateProductWithoutTypeRequest,
+                Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+            >()
             .ForMember(dto => dto.Seams, opt => opt.Ignore());
     }
 }

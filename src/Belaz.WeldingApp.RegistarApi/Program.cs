@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using Belaz.WeldingApp.Common.Extensions;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer;
 using Belaz.WeldingApp.RegistarApi.DataLayer;
 using Belaz.WeldingApp.RegistarApi.Middlewares;
@@ -8,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
-using WeldingApp.Common.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

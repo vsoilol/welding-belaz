@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
 
-public class UpdateSeamRequest : IMapTo<Domain.Entities.ProductInfo.Seam>
+public class UpdateSeamRequest : IMapTo<Belaz.WeldingApp.Common.Entities.ProductInfo.Seam>
 {
     public Guid Id { get; set; }
 

@@ -6,21 +6,30 @@ using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Product;
 
-public class AssignProductsToMasterRequestValidator : AbstractValidator<AssignProductsToMasterRequest>
+public class AssignProductsToMasterRequestValidator
+    : AbstractValidator<AssignProductsToMasterRequest>
 {
     public AssignProductsToMasterRequestValidator(ApplicationContext context)
     {
         RuleForEach(model => model.ProductIds)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignProductsToMasterRequest,
-                Domain.Entities.ProductInfo.Product>(context))
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    AssignProductsToMasterRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
+            )
             .SetAsyncValidator(new IsMasterAlreadyHasProductValidatorAssignProducts(context));
 
         RuleFor(model => model.MasterId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AssignProductsToMasterRequest,
-                Domain.Entities.Users.Master>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    AssignProductsToMasterRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Master
+                >(context)
+            );
     }
 }

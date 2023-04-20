@@ -12,7 +12,11 @@ public class GetProductByIdRequestValidator : AbstractValidator<GetProductByIdRe
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetProductByIdRequest,
-                Domain.Entities.ProductInfo.Product>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    GetProductByIdRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
+            );
     }
 }

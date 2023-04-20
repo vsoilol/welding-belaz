@@ -3,8 +3,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;

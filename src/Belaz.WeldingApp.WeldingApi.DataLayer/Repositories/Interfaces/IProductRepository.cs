@@ -1,6 +1,6 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
-using WeldingApp.Common.Enums;
+﻿using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 

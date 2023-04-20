@@ -13,7 +13,10 @@ public class DeleteSeamRequestValidator : AbstractValidator<DeleteSeamRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeleteSeamRequest, Domain.Entities.ProductInfo.Seam>(context)
+                new SqlIdValidatorFor<
+                    DeleteSeamRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Seam
+                >(context)
             );
     }
 }

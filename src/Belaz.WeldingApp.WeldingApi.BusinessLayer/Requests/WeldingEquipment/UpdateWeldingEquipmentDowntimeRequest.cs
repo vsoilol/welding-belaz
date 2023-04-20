@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingEquipment;
 
@@ -28,15 +28,13 @@ public class UpdateWeldingEquipmentDowntimeRequest : IMapTo<WeldingEquipmentCond
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<UpdateWeldingEquipmentDowntimeRequest, WeldingEquipmentConditionTime>()
-            .ForMember(dto => dto.Condition,
-                opt => opt
-                    .MapFrom(x => Condition.ForcedDowntime))
-            .ForMember(dto => dto.Date,
-                opt => opt
-                    .MapFrom(x => x.Date.ToDateTime()))
-            .ForMember(dto => dto.StartConditionTime,
-                opt => opt
-                    .MapFrom(x => x.StartConditionTime.ToTimeSpan()));
+        profile
+            .CreateMap<UpdateWeldingEquipmentDowntimeRequest, WeldingEquipmentConditionTime>()
+            .ForMember(dto => dto.Condition, opt => opt.MapFrom(x => Condition.ForcedDowntime))
+            .ForMember(dto => dto.Date, opt => opt.MapFrom(x => x.Date.ToDateTime()))
+            .ForMember(
+                dto => dto.StartConditionTime,
+                opt => opt.MapFrom(x => x.StartConditionTime.ToTimeSpan())
+            );
     }
 }

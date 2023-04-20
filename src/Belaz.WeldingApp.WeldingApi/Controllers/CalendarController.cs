@@ -1,12 +1,12 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
+﻿using Belaz.WeldingApp.Common.Attributes;
+using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -25,7 +25,9 @@ public class CalendarController : ControllerBase
 
     [HttpPost("main")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<CalendarDto>> CreateMainCalendarAsync([FromBody] CreateCalendarRequest request)
+    public async Task<ActionResult<CalendarDto>> CreateMainCalendarAsync(
+        [FromBody] CreateCalendarRequest request
+    )
     {
         var result = await _calendarService.CreateAsync(request, true);
         return result.ToOk();
@@ -35,14 +37,17 @@ public class CalendarController : ControllerBase
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<CalendarDto?>> GetMainCalendarByYearAsync([FromRoute] int year)
     {
-        var result = await _calendarService
-            .GetMainCalendarByYearAsync(new GetMainCalendarByYearRequest { Year = year });
+        var result = await _calendarService.GetMainCalendarByYearAsync(
+            new GetMainCalendarByYearRequest { Year = year }
+        );
         return result.ToOk();
     }
 
     [HttpPut]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<CalendarDto>> UpdateAsync([FromBody] UpdateCalendarRequest request)
+    public async Task<ActionResult<CalendarDto>> UpdateAsync(
+        [FromBody] UpdateCalendarRequest request
+    )
     {
         var result = await _calendarService.UpdateAsync(request);
         return result.ToOk();
@@ -51,7 +56,8 @@ public class CalendarController : ControllerBase
     [HttpPost("withWelder")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<CalendarDto>> CreateForWelderAsync(
-        [FromBody] CreateCalendarWithWelderIdRequest request)
+        [FromBody] CreateCalendarWithWelderIdRequest request
+    )
     {
         var result = await _calendarService.CreateForWelderAsync(request);
         return result.ToOk();
@@ -59,7 +65,9 @@ public class CalendarController : ControllerBase
 
     [HttpGet("byWelder")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<CalendarDto?>> GetByWelderIdAsync([FromQuery] GetByWelderIdRequest request)
+    public async Task<ActionResult<CalendarDto?>> GetByWelderIdAsync(
+        [FromQuery] GetByWelderIdRequest request
+    )
     {
         var result = await _calendarService.GetByWelderIdAndYearAsync(request);
         return result.ToOk();
@@ -68,7 +76,8 @@ public class CalendarController : ControllerBase
     [HttpPost("withEquipment")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<CalendarDto>> CreateForEquipmentAsync(
-        [FromBody] CreateCalendarWithEquipmentIdRequest request)
+        [FromBody] CreateCalendarWithEquipmentIdRequest request
+    )
     {
         var result = await _calendarService.CreateForEquipmentAsync(request);
         return result.ToOk();
@@ -76,7 +85,9 @@ public class CalendarController : ControllerBase
 
     [HttpGet("byEquipment")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<CalendarDto?>> GetByEquipmentIdAsync([FromQuery] GetByEquipmentIdRequest request)
+    public async Task<ActionResult<CalendarDto?>> GetByEquipmentIdAsync(
+        [FromQuery] GetByEquipmentIdRequest request
+    )
     {
         var result = await _calendarService.GetByEquipmentIdAndYearAsync(request);
         return result.ToOk();

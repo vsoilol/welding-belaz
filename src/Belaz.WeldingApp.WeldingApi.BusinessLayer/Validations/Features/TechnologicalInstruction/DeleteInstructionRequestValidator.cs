@@ -15,7 +15,7 @@ public class DeleteInstructionRequestValidator : AbstractValidator<DeleteInstruc
             .SetValidator(
                 new SqlIdValidatorFor<
                     DeleteInstructionRequest,
-                    Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction
                 >(context)
             );
     }

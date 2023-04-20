@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
+using Belaz.WeldingApp.Common.Attributes;
+using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -13,7 +13,6 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public class ProductController : CommonProductController
 {
-    public ProductController(IProductService productService) : base(productService, ProductType.Product)
-    {
-    }
+    public ProductController(IProductService productService)
+        : base(productService, ProductType.Product) { }
 }

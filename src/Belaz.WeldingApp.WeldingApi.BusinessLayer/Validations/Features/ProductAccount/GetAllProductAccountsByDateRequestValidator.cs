@@ -28,7 +28,7 @@ public class GetAllProductAccountsByDateRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     GetAllProductAccountsByDateRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
     }

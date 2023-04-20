@@ -1,13 +1,13 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.ProductInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Production;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TaskInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.TechnologicalProcessInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.WeldingEquipmentInfo;
+﻿using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.Common.Entities.CalendarInfo;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.Production;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo;
+using Belaz.WeldingApp.Common.Entities.Users;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
 
@@ -423,7 +423,7 @@ public class DataSeed
                 GroupNumber = "3.11",
                 ManufacturerName = "CLOOS",
                 WeldingProcess = "Полуавтоматическая сварка",
-                RfidTag = "3A:94:69:86",
+                RfidTag = "03:3D:93:0D",
                 WeldingCurrentMin = 80,
                 WeldingCurrentMax = 550,
                 ArcVoltageMin = 18,

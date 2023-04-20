@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Calendar;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.Common.Entities.Users;
 using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Calendar;
@@ -18,7 +18,7 @@ public class CreateCalendarWithWelderIdRequestValidator : AbstractValidator<Crea
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateCalendarWithWelderIdRequest, Domain.Entities.Users.Welder>(context));
+                new SqlIdValidatorFor<CreateCalendarWithWelderIdRequest, Belaz.WeldingApp.Common.Entities.Users.Welder>(context));
 
         RuleFor(model => model)
             .Cascade(CascadeMode.Stop)

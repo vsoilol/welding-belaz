@@ -16,7 +16,7 @@ public class DeleteWeldingEquipmentRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     DeleteWeldingEquipmentRequest,
-                    Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+                    Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment
                 >(context)
             );
     }

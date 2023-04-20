@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 
-public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
+public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask>
 {
     public Guid Id { get; set; }
 
@@ -67,7 +67,7 @@ public class WeldingTaskDto : IMapFrom<Entities.TaskInfo.WeldingTask>
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
+            .CreateMap<Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
             .ForMember(
                 dto => dto.WeldingDate,
                 opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())

@@ -13,21 +13,25 @@ public class UpdateProductionAreaRequestValidator : AbstractValidator<UpdateProd
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateProductionAreaRequest,
-                Domain.Entities.Production.ProductionArea>(context));
-        
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateProductionAreaRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
+                >(context)
+            );
 
-        RuleFor(model => model.Name)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
-        
+        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
+
+        RuleFor(model => model.Name).Cascade(CascadeMode.Stop).NotEmpty();
+
         RuleFor(model => model.WorkshopId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateProductionAreaRequest,
-                Domain.Entities.Production.Workshop>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateProductionAreaRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workshop
+                >(context)
+            );
     }
 }

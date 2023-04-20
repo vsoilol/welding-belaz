@@ -5,7 +5,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingEquipment;
 
-public class CreateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>
+public class CreateEquipmentRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment>
 {
     /// <summary>
     /// RFID-метка
@@ -96,7 +97,7 @@ public class CreateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
         profile
             .CreateMap<
                 CreateEquipmentRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+                Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment
             >()
             .ForMember(
                 dto => dto.NextAttestationDate,

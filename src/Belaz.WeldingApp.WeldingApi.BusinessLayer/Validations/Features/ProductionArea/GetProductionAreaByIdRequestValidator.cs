@@ -13,7 +13,11 @@ public class GetProductionAreaByIdRequestValidator : AbstractValidator<GetProduc
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<GetProductionAreaByIdRequest,
-                Domain.Entities.Production.ProductionArea>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    GetProductionAreaByIdRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
+                >(context)
+            );
     }
 }

@@ -1,8 +1,8 @@
 using AutoMapper;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Converters;
 

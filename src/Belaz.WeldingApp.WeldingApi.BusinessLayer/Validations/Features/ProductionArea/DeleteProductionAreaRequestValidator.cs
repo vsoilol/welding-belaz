@@ -15,7 +15,7 @@ public class DeleteProductionAreaRequestValidator : AbstractValidator<DeleteProd
             .SetValidator(
                 new SqlIdValidatorFor<
                     DeleteProductionAreaRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
     }

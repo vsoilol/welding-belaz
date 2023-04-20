@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Models;
 using LanguageExt.Common;
 
@@ -17,7 +17,11 @@ public class DayService : IDayService
     private readonly IMapper _mapper;
     private readonly IDayRepository _dayRepository;
 
-    public DayService(IValidationService validationService, IMapper mapper, IDayRepository dayRepository)
+    public DayService(
+        IValidationService validationService,
+        IMapper mapper,
+        IDayRepository dayRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -32,8 +36,12 @@ public class DayService : IDayService
         {
             var day = _mapper.Map<Day>(request);
 
-            return _dayRepository
-                .CreateAsync(day, request.Year, request.WeldingEquipmentId, request.WelderId);
+            return _dayRepository.CreateAsync(
+                day,
+                request.Year,
+                request.WeldingEquipmentId,
+                request.WelderId
+            );
         });
     }
 
@@ -46,16 +54,20 @@ public class DayService : IDayService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
-            _dayRepository.GetAllByWelderIdAsync(request.WelderId));
+        return await validationResult.ToDataResult(
+            () => _dayRepository.GetAllByWelderIdAsync(request.WelderId)
+        );
     }
 
-    public async Task<Result<List<DayDto>>> GetAllByEquipmentIdAsync(GetDaysByEquipmentIdRequest request)
+    public async Task<Result<List<DayDto>>> GetAllByEquipmentIdAsync(
+        GetDaysByEquipmentIdRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
-            _dayRepository.GetAllByWelderIdAsync(request.EquipmentId));
+        return await validationResult.ToDataResult(
+            () => _dayRepository.GetAllByWelderIdAsync(request.EquipmentId)
+        );
     }
 
     public async Task<Result<DayDto>> UpdateAsync(UpdateDayRequest request)

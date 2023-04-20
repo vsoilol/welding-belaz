@@ -12,29 +12,29 @@ public class UpdateChiefRequestValidator : AbstractValidator<UpdateChiefRequest>
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateChiefRequest,
-                Domain.Entities.Users.Chief>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateChiefRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Chief
+                >(context)
+            );
 
-        RuleFor(model => model.RfidTag)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.RfidTag).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.FirstName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.FirstName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.LastName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.LastName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.MiddleName)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.MiddleName).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.WorkshopId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateChiefRequest,
-                Domain.Entities.Production.Workshop>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateChiefRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workshop
+                >(context)
+            );
     }
 }

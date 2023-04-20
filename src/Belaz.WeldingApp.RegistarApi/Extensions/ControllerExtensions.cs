@@ -2,7 +2,7 @@
 using Belaz.WeldingApp.RegistarApi.Domain.Exceptions;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
-using BadRequestResult = WeldingApp.Common.Models.BadRequestResult;
+using BadRequestResult = Belaz.WeldingApp.Common.Models.BadRequestResult;
 
 namespace Belaz.WeldingApp.RegistarApi.Extensions;
 

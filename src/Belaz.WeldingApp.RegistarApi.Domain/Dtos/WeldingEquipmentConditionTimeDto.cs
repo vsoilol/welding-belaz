@@ -1,6 +1,6 @@
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Dtos;
 

@@ -6,20 +6,25 @@ using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Seam;
 
-public class AddDefectiveReasonToSeamRequestValidator : AbstractValidator<AddDefectiveReasonToSeamRequest>
+public class AddDefectiveReasonToSeamRequestValidator
+    : AbstractValidator<AddDefectiveReasonToSeamRequest>
 {
     public AddDefectiveReasonToSeamRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Reason)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+        RuleFor(model => model.Reason).Cascade(CascadeMode.Stop).NotEmpty();
 
         RuleFor(model => model.WeldingTaskId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<AddDefectiveReasonToSeamRequest,
-                Domain.Entities.TaskInfo.WeldingTask>(context))
-            .SetAsyncValidator(new IsDefectiveReasonAlreadyExistValidatorForAddDefectiveReason(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    AddDefectiveReasonToSeamRequest,
+                    Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask
+                >(context)
+            )
+            .SetAsyncValidator(
+                new IsDefectiveReasonAlreadyExistValidatorForAddDefectiveReason(context)
+            );
 
         RuleFor(model => model.DetectedDefectiveDate)
             .Cascade(CascadeMode.Stop)

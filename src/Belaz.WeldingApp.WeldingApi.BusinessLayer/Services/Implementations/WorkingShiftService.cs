@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.CalendarInfo;
+using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -16,15 +16,20 @@ public class WorkingShiftService : IWorkingShiftService
     private readonly IMapper _mapper;
     private readonly IWorkingShiftRepository _workingShiftRepository;
 
-    public WorkingShiftService(IValidationService validationService, IMapper mapper,
-        IWorkingShiftRepository workingShiftRepository)
+    public WorkingShiftService(
+        IValidationService validationService,
+        IMapper mapper,
+        IWorkingShiftRepository workingShiftRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
         _workingShiftRepository = workingShiftRepository;
     }
 
-    public async Task<Result<WorkingShiftDto>> CreateAsync(CreateWorkingShiftWithYearRequest request)
+    public async Task<Result<WorkingShiftDto>> CreateAsync(
+        CreateWorkingShiftWithYearRequest request
+    )
     {
         var validationResult = await _validationService.ValidateAsync(request);
 

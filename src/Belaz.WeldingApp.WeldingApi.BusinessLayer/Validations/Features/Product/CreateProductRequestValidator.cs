@@ -1,9 +1,9 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
+﻿using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Product;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Product;
 
@@ -28,7 +28,7 @@ public class CreateProductRequestValidator : AbstractValidator<CreateProductRequ
             .SetValidator(
                 new SqlIdValidatorFor<
                     CreateProductRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
 
@@ -38,7 +38,7 @@ public class CreateProductRequestValidator : AbstractValidator<CreateProductRequ
             .SetValidator(
                 new SqlIdValidatorFor<
                     CreateProductRequest,
-                    Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalProcess
                 >(context)
             );
 
@@ -46,7 +46,7 @@ public class CreateProductRequestValidator : AbstractValidator<CreateProductRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateProductRequest, Domain.Entities.ProductInfo.Product>(
+                new SqlIdValidatorFor<CreateProductRequest, Belaz.WeldingApp.Common.Entities.ProductInfo.Product>(
                     context
                 )
             )

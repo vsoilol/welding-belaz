@@ -18,7 +18,7 @@ public class DeleteWeldingTaskRequestValidator : AbstractValidator<DeleteWelding
             .SetValidator(
                 new SqlIdValidatorFor<
                     DeleteWeldingTaskRequest,
-                    Domain.Entities.TaskInfo.WeldingTask
+                    Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask
                 >(context)
             );
     }

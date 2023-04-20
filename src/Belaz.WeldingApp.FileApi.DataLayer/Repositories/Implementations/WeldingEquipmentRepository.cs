@@ -1,8 +1,8 @@
 using AutoMapper;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 
@@ -74,5 +74,41 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             DowntimeMinutes = downtimeMinutes,
             WorkTimeMinutes = workTimeMinutes
         };
+    }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByProductionAreaIdAndDatePeriodAsync(
+        Guid productionAreaId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWelderIdAndDatePeriodAsync(
+        Guid welderId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWorkplaceIdAndDatePeriodAsync(
+        Guid workplaceId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWorkshopIdAndDatePeriodAsync(
+        Guid workshopId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        throw new NotImplementedException();
     }
 }

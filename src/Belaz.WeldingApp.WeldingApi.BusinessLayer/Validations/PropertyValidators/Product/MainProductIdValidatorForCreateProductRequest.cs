@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Product;
 

@@ -16,7 +16,7 @@ public class UpdateInspectorRequestValidator : AbstractValidator<UpdateInspector
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateInspectorRequest, Domain.Entities.Users.Inspector>(
+                new SqlIdValidatorFor<UpdateInspectorRequest, Belaz.WeldingApp.Common.Entities.Users.Inspector>(
                     context
                 )
             );
@@ -38,7 +38,7 @@ public class UpdateInspectorRequestValidator : AbstractValidator<UpdateInspector
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateInspectorRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
     }

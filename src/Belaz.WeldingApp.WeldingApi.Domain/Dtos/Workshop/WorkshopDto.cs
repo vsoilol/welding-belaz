@@ -3,7 +3,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 
-public class WorkshopDto : IMapFrom<Entities.Production.Workshop>
+public class WorkshopDto : IMapFrom<Belaz.WeldingApp.Common.Entities.Production.Workshop>
 {
     public Guid Id { get; set; }
 

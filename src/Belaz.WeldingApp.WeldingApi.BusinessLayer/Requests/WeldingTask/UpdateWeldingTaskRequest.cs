@@ -4,7 +4,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingTask;
 
-public class UpdateWeldingTaskRequest : IMapTo<Domain.Entities.TaskInfo.WeldingTask>
+public class UpdateWeldingTaskRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask>
 {
     public Guid Id { get; set; }
 
@@ -29,12 +30,12 @@ public class UpdateWeldingTaskRequest : IMapTo<Domain.Entities.TaskInfo.WeldingT
     public string WeldingMaterialBatchNumber { get; set; } = null!;
 
     /// <summary>
-    /// Защитный газ 
+    /// Защитный газ
     /// </summary>
     public string? ProtectiveGas { get; set; }
 
     /// <summary>
-    /// № сертификата (партии) на защитный газ 
+    /// № сертификата (партии) на защитный газ
     /// </summary>
     public string? ProtectiveGasBatchNumber { get; set; }
 }

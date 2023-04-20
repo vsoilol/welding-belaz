@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.Users;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 

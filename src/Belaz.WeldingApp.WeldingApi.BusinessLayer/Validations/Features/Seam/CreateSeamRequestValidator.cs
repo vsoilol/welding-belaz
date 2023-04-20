@@ -15,18 +15,20 @@ public class CreateSeamRequestValidator : AbstractValidator<CreateSeamRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateSeamRequest, Domain.Entities.Production.ProductionArea>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    CreateSeamRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
+                >(context)
             );
 
         RuleFor(model => model.ProductId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateSeamRequest, Domain.Entities.ProductInfo.Product>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    CreateSeamRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
             );
 
         RuleFor(model => model.TechnologicalInstructionId)
@@ -35,7 +37,7 @@ public class CreateSeamRequestValidator : AbstractValidator<CreateSeamRequest>
             .SetValidator(
                 new SqlIdValidatorFor<
                     CreateSeamRequest,
-                    Domain.Entities.TechnologicalProcessInfo.TechnologicalInstruction
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction
                 >(context)
             )
             .When(_ => _.TechnologicalInstructionId is not null);

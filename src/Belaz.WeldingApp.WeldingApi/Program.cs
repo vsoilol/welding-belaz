@@ -6,11 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
-using WeldingApp.Common.Extensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
 using Belaz.WeldingApp.WeldingApi.Middlewares;
 using ApplicationContext = Belaz.WeldingApp.WeldingApi.DataLayer.ApplicationContext;
+using Belaz.WeldingApp.Common.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

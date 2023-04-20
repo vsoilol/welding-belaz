@@ -5,7 +5,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
-using Belaz.WeldingApp.WeldingApi.Domain.Entities.Users;
+using Belaz.WeldingApp.Common.Entities.Users;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -16,7 +16,11 @@ public class ChiefService : IChiefService
     private readonly IMapper _mapper;
     private readonly IChiefRepository _chiefRepository;
 
-    public ChiefService(IValidationService validationService, IMapper mapper, IChiefRepository chiefRepository)
+    public ChiefService(
+        IValidationService validationService,
+        IMapper mapper,
+        IChiefRepository chiefRepository
+    )
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -31,7 +35,7 @@ public class ChiefService : IChiefService
     public async Task<Result<ChiefDto>> CreateAsync(CreateChiefRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
-        
+
         return await validationResult.ToDataResult(() =>
         {
             var chief = _mapper.Map<Chief>(request);
@@ -43,7 +47,7 @@ public class ChiefService : IChiefService
     public async Task<Result<ChiefDto>> UpdateAsync(UpdateChiefRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
-        
+
         return await validationResult.ToDataResult(() =>
         {
             var chief = _mapper.Map<Chief>(request);

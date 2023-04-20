@@ -15,7 +15,7 @@ public class ChangeWeldingTaskStatusRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeWeldingTaskStatusRequest,
-                    Domain.Entities.TaskInfo.WeldingTask
+                    Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask
                 >(context)
             );
 

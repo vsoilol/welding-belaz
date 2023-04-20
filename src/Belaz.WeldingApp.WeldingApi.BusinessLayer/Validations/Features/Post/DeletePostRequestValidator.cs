@@ -13,7 +13,10 @@ public class DeletePostRequestValidator : AbstractValidator<DeletePostRequest>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeletePostRequest, Domain.Entities.Production.Post>(context)
+                new SqlIdValidatorFor<
+                    DeletePostRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Post
+                >(context)
             );
     }
 }

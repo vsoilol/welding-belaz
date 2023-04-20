@@ -16,7 +16,7 @@ public class UpdateTechnologicalProcessRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     UpdateTechnologicalProcessRequest,
-                    Domain.Entities.TechnologicalProcessInfo.TechnologicalProcess
+                    Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalProcess
                 >(context)
             );
 

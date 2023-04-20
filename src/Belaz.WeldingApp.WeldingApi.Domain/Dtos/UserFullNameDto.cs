@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Entities.IdentityUser;
+﻿using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;

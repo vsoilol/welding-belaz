@@ -14,7 +14,7 @@ public class ChangeWeldingTaskDateRequestValidator : AbstractValidator<ChangeWel
             .SetValidator(
                 new SqlIdValidatorFor<
                     ChangeWeldingTaskDateRequest,
-                    Domain.Entities.TaskInfo.WeldingTask
+                    Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask
                 >(context)
             );
 

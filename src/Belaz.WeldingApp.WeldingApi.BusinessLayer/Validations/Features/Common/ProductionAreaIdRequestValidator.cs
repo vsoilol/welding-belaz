@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
@@ -19,7 +15,7 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Common
                 .SetValidator(
                     new SqlIdValidatorFor<
                         ProductionAreaIdRequest,
-                        Domain.Entities.Production.ProductionArea
+                        Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                     >(context)
                 );
         }

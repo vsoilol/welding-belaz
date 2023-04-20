@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 

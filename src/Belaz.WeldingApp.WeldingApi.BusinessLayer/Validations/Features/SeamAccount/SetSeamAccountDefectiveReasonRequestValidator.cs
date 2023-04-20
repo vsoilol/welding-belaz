@@ -20,7 +20,7 @@ public class SetSeamAccountDefectiveReasonRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     SetSeamAccountDefectiveReasonRequest,
-                    Domain.Entities.ProductInfo.SeamAccount
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.SeamAccount
                 >(context)
             );
 

@@ -4,7 +4,8 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingEquipment;
 
-public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInfo.WeldingEquipment>
+public class UpdateEquipmentRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment>
 {
     public Guid Id { get; set; }
 
@@ -97,7 +98,7 @@ public class UpdateEquipmentRequest : IMapTo<Domain.Entities.WeldingEquipmentInf
         profile
             .CreateMap<
                 UpdateEquipmentRequest,
-                Domain.Entities.WeldingEquipmentInfo.WeldingEquipment
+                Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo.WeldingEquipment
             >()
             .ForMember(
                 dto => dto.NextAttestationDate,

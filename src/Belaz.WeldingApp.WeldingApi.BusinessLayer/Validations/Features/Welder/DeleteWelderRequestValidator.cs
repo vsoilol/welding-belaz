@@ -13,7 +13,10 @@ public class DeleteWelderRequestValidator : AbstractValidator<DeleteWelderReques
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeleteWelderRequest, Domain.Entities.Users.Welder>(context)
+                new SqlIdValidatorFor<
+                    DeleteWelderRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Welder
+                >(context)
             );
     }
 }

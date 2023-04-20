@@ -10,18 +10,18 @@ public class CreateProductionAreaRequestValidator : AbstractValidator<CreateProd
 {
     public CreateProductionAreaRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Number)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
 
-        RuleFor(model => model.Name)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty();
-        
+        RuleFor(model => model.Name).Cascade(CascadeMode.Stop).NotEmpty();
+
         RuleFor(model => model.WorkshopId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<CreateProductionAreaRequest,
-                Domain.Entities.Production.Workshop>(context));
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    CreateProductionAreaRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workshop
+                >(context)
+            );
     }
 }

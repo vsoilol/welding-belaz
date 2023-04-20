@@ -17,9 +17,10 @@ public class DeleteInspectorRequestValidator : AbstractValidator<DeleteInspector
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeleteInspectorRequest, Domain.Entities.Users.Inspector>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    DeleteInspectorRequest,
+                    Belaz.WeldingApp.Common.Entities.Users.Inspector
+                >(context)
             );
     }
 }

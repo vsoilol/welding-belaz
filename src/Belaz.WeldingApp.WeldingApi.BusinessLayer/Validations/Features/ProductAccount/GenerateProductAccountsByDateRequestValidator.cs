@@ -32,7 +32,7 @@ public class GenerateProductAccountsByDateRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<
                     GenerateProductAccountsByDateRequest,
-                    Domain.Entities.Production.ProductionArea
+                    Belaz.WeldingApp.Common.Entities.Production.ProductionArea
                 >(context)
             );
     }

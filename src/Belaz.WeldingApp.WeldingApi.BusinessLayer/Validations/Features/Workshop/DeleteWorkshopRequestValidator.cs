@@ -13,9 +13,10 @@ public class DeleteWorkshopRequestValidator : AbstractValidator<DeleteWorkshopRe
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<DeleteWorkshopRequest, Domain.Entities.Production.Workshop>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    DeleteWorkshopRequest,
+                    Belaz.WeldingApp.Common.Entities.Production.Workshop
+                >(context)
             );
     }
 }

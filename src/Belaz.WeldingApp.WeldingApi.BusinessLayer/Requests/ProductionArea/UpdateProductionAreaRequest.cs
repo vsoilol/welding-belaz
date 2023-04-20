@@ -2,7 +2,8 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductionArea;
 
-public class UpdateProductionAreaRequest : IMapTo<Domain.Entities.Production.ProductionArea>
+public class UpdateProductionAreaRequest
+    : IMapTo<Belaz.WeldingApp.Common.Entities.Production.ProductionArea>
 {
     public Guid Id { get; set; }
 

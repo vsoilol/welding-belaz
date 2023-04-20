@@ -4,8 +4,8 @@ using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WeldingApp.Common.Attributes;
-using WeldingApp.Common.Enums;
+using Belaz.WeldingApp.Common.Attributes;
+using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.IdentityApi.Controllers;
 
@@ -48,19 +48,25 @@ public class UserController : ControllerBase
     {
         var createdUserContract = await _userManager.AddAsync(userContract);
 
-        return CreatedAtAction(nameof(Get), new { userId = createdUserContract.Id }, createdUserContract);
+        return CreatedAtAction(
+            nameof(Get),
+            new { userId = createdUserContract.Id },
+            createdUserContract
+        );
     }
 
     [HttpPut("{userId}")]
     [AuthorizeRoles(Role.Admin)]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Update([FromRoute] Guid userId, [FromBody] CreateUserRequest userContract)
+    public async Task<IActionResult> Update(
+        [FromRoute] Guid userId,
+        [FromBody] CreateUserRequest userContract
+    )
     {
         var updatedUser = await _userManager.UpdateAsync(userId, userContract);
 
         return Ok(updatedUser);
     }
-
 
     [HttpDelete("{userId}")]
     [AuthorizeRoles(Role.Admin)]

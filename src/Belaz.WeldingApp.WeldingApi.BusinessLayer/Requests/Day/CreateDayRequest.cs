@@ -3,7 +3,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
 
-public class CreateDayRequest : IMapTo<Domain.Entities.CalendarInfo.Day>
+public class CreateDayRequest : IMapTo<Belaz.WeldingApp.Common.Entities.CalendarInfo.Day>
 {
     public int MonthNumber { get; set; }
 

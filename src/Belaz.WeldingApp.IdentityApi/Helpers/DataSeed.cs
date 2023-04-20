@@ -3,7 +3,7 @@ using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Extensions;
 using Microsoft.EntityFrameworkCore;
-using WeldingApp.Common.Enums;
+using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.IdentityApi.Helpers;
 

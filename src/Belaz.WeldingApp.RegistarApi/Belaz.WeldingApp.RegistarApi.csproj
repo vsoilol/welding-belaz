@@ -23,7 +23,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Belaz.WeldingApp.RegistarApi.BusinessLayer\Belaz.WeldingApp.RegistarApi.BusinessLayer.csproj" />
       <ProjectReference Include="..\Belaz.WeldingApp.RegistarApi.Domain\Belaz.WeldingApp.RegistarApi.Domain.csproj" />
-      <ProjectReference Include="..\WeldingApp.Common\WeldingApp.Common.csproj" />
+      <ProjectReference Include="..\Belaz.WeldingApp.Common\Belaz.WeldingApp.Common.csproj" />
     </ItemGroup>
 
 </Project>

@@ -13,13 +13,18 @@ public class UpdateDayRequestValidator : AbstractValidator<UpdateDayRequest>
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetValidator(new SqlIdValidatorFor<UpdateDayRequest, Domain.Entities.CalendarInfo.Day>(context));
-        
+            .SetValidator(
+                new SqlIdValidatorFor<
+                    UpdateDayRequest,
+                    Belaz.WeldingApp.Common.Entities.CalendarInfo.Day
+                >(context)
+            );
+
         RuleFor(model => model.MonthNumber)
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1)
             .LessThanOrEqualTo(12);
-        
+
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1)

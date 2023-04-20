@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Models;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Requests;
@@ -10,7 +11,6 @@ using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
 using LanguageExt;
 using LanguageExt.Common;
-using WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Implementations;
 
