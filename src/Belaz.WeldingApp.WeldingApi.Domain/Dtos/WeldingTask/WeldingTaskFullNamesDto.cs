@@ -21,8 +21,8 @@ public class WeldingTaskFullNamesDto
                 Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask,
                 WeldingTaskFullNamesDto
             >()
-            .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector.UserInfo))
-            .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder.UserInfo))
-            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master.UserInfo));
+            .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
+            .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
+            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master!.UserInfo));
     }
 }
