@@ -1,9 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi.Contracts.Responses.Identity;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

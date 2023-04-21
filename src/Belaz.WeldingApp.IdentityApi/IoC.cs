@@ -1,5 +1,5 @@
-﻿using Belaz.WeldingApp.IdentityApi.Data.Repositories;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+﻿using Belaz.WeldingApp.Common.Entities.IdentityUser;
+using Belaz.WeldingApp.IdentityApi.Data.Repositories;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Managers.Implementations;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;

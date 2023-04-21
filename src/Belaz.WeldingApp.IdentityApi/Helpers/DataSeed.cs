@@ -1,9 +1,10 @@
 ﻿using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
+using Belaz.WeldingApp.Common.Entities.Users;
 
 namespace Belaz.WeldingApp.IdentityApi.Helpers;
 

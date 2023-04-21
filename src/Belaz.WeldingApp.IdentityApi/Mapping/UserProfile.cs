@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.IdentityApi.Contracts.Responses.User;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 
 namespace Belaz.WeldingApp.IdentityApi.Mapping;
 

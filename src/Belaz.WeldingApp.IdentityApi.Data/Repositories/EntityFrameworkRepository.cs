@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+using Belaz.WeldingApp.Common.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,7 +14,10 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
 
         private readonly ILogger<EntityFrameworkRepository<T>> _logger;
 
-        protected EntityFrameworkRepository(IdentityDbContext context, ILogger<EntityFrameworkRepository<T>> logger)
+        protected EntityFrameworkRepository(
+            IdentityDbContext context,
+            ILogger<EntityFrameworkRepository<T>> logger
+        )
         {
             Context = context;
             _entities = context.Set<T>();

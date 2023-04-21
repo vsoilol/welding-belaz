@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

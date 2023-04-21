@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+﻿using Belaz.WeldingApp.Common.Entities.IdentityUser;
 
 namespace Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces
 {

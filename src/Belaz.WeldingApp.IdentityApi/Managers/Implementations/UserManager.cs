@@ -1,9 +1,9 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.IdentityApi.Contracts.Requests.Identity;
 using Belaz.WeldingApp.IdentityApi.Contracts.Requests.User;
 using Belaz.WeldingApp.IdentityApi.Contracts.Responses.User;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Exceptions;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;

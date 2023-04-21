@@ -1,6 +1,6 @@
-using System.Security.Cryptography;
-using System.Text;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
+using Belaz.WeldingApp.Common.Entities.Production;
+using Belaz.WeldingApp.Common.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.IdentityApi.Data.DataAccess
