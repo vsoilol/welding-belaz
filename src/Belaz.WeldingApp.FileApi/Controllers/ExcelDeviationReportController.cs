@@ -61,4 +61,13 @@ public class ExcelDeviationReportController : ControllerBase
             );
         return result.ToFile();
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GenerateExcelDeviationReportAsync(
+        [FromQuery] GenerateExcelDeviationReportRequest request
+    )
+    {
+        var result = await _excelDeviationReportService.GenerateExcelDeviationReportAsync(request);
+        return result.ToFile();
+    }
 }

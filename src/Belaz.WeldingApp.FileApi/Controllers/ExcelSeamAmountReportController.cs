@@ -64,4 +64,15 @@ public class ExcelSeamAmountReportController : ControllerBase
             );
         return result.ToFile();
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GenerateExcelSeamAmountReportAsync(
+        [FromQuery] GenerateExcelSeamAmountReportRequest request
+    )
+    {
+        var result = await _excelSeamAmountReportService.GenerateExcelSeamAmountReportAsync(
+            request
+        );
+        return result.ToFile();
+    }
 }

@@ -21,4 +21,8 @@ public interface IExcelDeviationReportService
     Task<Result<DocumentDto>> GenerateExcelDeviationReportByWorkplaceAsync(
         GenerateExcelDeviationReportByWorkplaceRequest request
     );
+
+    Task<Result<DocumentDto>> GenerateExcelDeviationReportAsync(
+        GenerateExcelDeviationReportRequest request
+    );
 }

@@ -51,6 +51,16 @@
       "SwaggerKey": "file"
     },
     {
+      "UpstreamPathTemplate": "/api/excelDeviationReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelDeviationReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
       "UpstreamPathTemplate": "/api/excelSeamAmountReport/byWorkshop",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -87,6 +97,16 @@
         "GET"
       ],
       "DownstreamPathTemplate": "/api/excelSeamAmountReport/byWorkplace",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelSeamAmountReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelSeamAmountReport",
       "ServiceName": "file",
       "SwaggerKey": "file"
     },

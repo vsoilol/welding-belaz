@@ -27,6 +27,31 @@ public class ExcelSeamAmountReportService : IExcelSeamAmountReportService
         _seamAccountRepository = seamAccountRepository;
     }
 
+    public async Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync(
+        GenerateExcelSeamAmountReportRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var dateStart = request.StartDate.ToDateTime();
+        var dateEnd = request.EndDate.ToDateTime();
+
+        var data = await _seamAccountRepository.GetSeamAmountByDatePeriodAsync(dateStart, dateEnd);
+
+        if (data is null)
+        {
+            var exception = new ListIsEmptyException();
+            return new Result<DocumentDto>(exception);
+        }
+
+        return await _excelSeamAmountReportService.GenerateReportAsync(data);
+    }
+
     public Task<Result<DocumentDto>> GenerateExcelSeamAmountReportByProductionAreaAsync(
         GenerateExcelSeamAmountReportByProductionAreaRequest request
     )

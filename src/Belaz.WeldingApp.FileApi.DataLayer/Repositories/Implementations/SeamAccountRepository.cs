@@ -109,6 +109,23 @@ public class SeamAccountRepository : ISeamAccountRepository
         return result;
     }
 
+    public async Task<SeamAmountDto?> GetSeamAmountByDatePeriodAsync(
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var query = QuerySeamAccountsWithFilters(startDate, endDate);
+
+        if (!(await query.AnyAsync()))
+        {
+            return null;
+        }
+
+        var result = await GetSeamAmountFromSeamAccounts(query);
+
+        return result;
+    }
+
     private IQueryable<SeamAccount> QuerySeamAccountsWithFilters(
         DateTime startDate,
         DateTime endDate

@@ -18,6 +18,20 @@ public class WeldPassageRepository : IWeldPassageRepository
         _mapper = mapper;
     }
 
+    public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByDatePeriodAsync(
+        Guid productId,
+        Guid? seamId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var query = QueryWeldPassagesWithFilters(productId, seamId, startDate, endDate);
+
+        return query
+            .ProjectTo<WeldPassageDeviationsDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByProductionAreaAndDatePeriodAsync(
         Guid productionAreaId,
         Guid productId,

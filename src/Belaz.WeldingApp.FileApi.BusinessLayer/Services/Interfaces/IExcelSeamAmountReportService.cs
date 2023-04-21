@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelSeamAmountReport;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using LanguageExt.Common;
@@ -24,5 +20,9 @@ public interface IExcelSeamAmountReportService
 
     Task<Result<DocumentDto>> GenerateExcelSeamAmountReportByProductionAreaAsync(
         GenerateExcelSeamAmountReportByProductionAreaRequest request
+    );
+
+    Task<Result<DocumentDto>> GenerateExcelSeamAmountReportAsync(
+        GenerateExcelSeamAmountReportRequest request
     );
 }
