@@ -1,5 +1,4 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
@@ -17,7 +16,6 @@ public class FileService : IFileService
 {
     private readonly ITaskRepository _taskRepository;
     private readonly IWebHostEnvironment _environment;
-    private readonly IMarkEstimateService _markEstimateService;
     private readonly IValidationService _validationService;
     private readonly IExcelFileService<
         List<EquipmentOperationTimeWithShiftDto>
@@ -30,7 +28,6 @@ public class FileService : IFileService
     public FileService(
         ITaskRepository taskRepository,
         IWebHostEnvironment environment,
-        IMarkEstimateService markEstimateService,
         IValidationService validationService,
         IExcelFileService<
             List<EquipmentOperationTimeWithShiftDto>
@@ -41,7 +38,6 @@ public class FileService : IFileService
     {
         _taskRepository = taskRepository;
         _environment = environment;
-        _markEstimateService = markEstimateService;
         _validationService = validationService;
         _excelEquipmentOperationAnalysisReportService =
             excelEquipmentOperationAnalysisReportService;
@@ -63,7 +59,7 @@ public class FileService : IFileService
         var task = await _taskRepository.GetByIdAsync(request.TaskId);
 
         var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
-        var document = new SeamPassportDocument(task, fontsPath, _markEstimateService);
+        var document = new SeamPassportDocument(task, fontsPath);
 
         byte[] bytes;
         using (var stream = new MemoryStream())

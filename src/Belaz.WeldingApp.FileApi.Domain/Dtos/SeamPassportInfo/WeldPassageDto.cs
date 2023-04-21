@@ -60,6 +60,8 @@ public class WeldPassageDto : IMapFrom<WeldPassage>
     /// </summary>
     public bool? IsEnsuringTemperatureAllowance { get; set; }
 
+    public double Estimation { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile

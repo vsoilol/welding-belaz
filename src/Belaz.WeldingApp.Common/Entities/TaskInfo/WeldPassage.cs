@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.Common.Entities.ProductInfo;
 
 namespace Belaz.WeldingApp.Common.Entities.TaskInfo;
 
@@ -41,6 +40,8 @@ public class WeldPassage : Entity
     /// Обеспечивает ли допуск для температуры. True - обеспечивает, false - не обеспечивает
     /// </summary>
     public bool? IsEnsuringTemperatureAllowance { get; set; }
+
+    public double? Estimation { get; set; }
 
     public Guid WeldingRecordId { get; set; }
 

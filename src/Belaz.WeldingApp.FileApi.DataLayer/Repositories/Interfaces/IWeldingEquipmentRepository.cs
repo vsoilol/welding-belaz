@@ -15,28 +15,4 @@ public interface IWeldingEquipmentRepository
         DateTime startDate,
         DateTime endDate
     );
-
-    Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWelderIdAndDatePeriodAsync(
-        Guid welderId,
-        DateTime startDate,
-        DateTime endDate
-    );
-
-    Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWorkplaceIdAndDatePeriodAsync(
-        Guid workplaceId,
-        DateTime startDate,
-        DateTime endDate
-    );
-
-    Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByProductionAreaIdAndDatePeriodAsync(
-        Guid productionAreaId,
-        DateTime startDate,
-        DateTime endDate
-    );
-
-    Task<WelderOperationTimeDto> GetWelderOperationTimeInfoByWorkshopIdAndDatePeriodAsync(
-        Guid workshopId,
-        DateTime startDate,
-        DateTime endDate
-    );
 }

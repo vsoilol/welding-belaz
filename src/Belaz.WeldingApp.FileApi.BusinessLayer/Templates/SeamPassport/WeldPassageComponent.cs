@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Extensions;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
@@ -17,17 +16,13 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 
 public class WeldPassageComponent : IComponent
 {
-    private readonly IMarkEstimateService _markEstimateService;
-
     public WeldPassageComponent(
         WeldPassageInstructionDto weldPassageInstruction,
-        WeldPassageDto weldPassage,
-        IMarkEstimateService markEstimateService
+        WeldPassageDto weldPassage
     )
     {
         WeldPassageInstructionInfo = weldPassageInstruction;
         WeldPassageInfo = weldPassage;
-        _markEstimateService = markEstimateService;
     }
 
     public WeldPassageInstructionDto WeldPassageInstructionInfo { get; }
@@ -323,14 +318,7 @@ public class WeldPassageComponent : IComponent
                     ? "Да"
                     : ((bool)isEnsuringCurrentAllowance ? "Да" : "Нет");
 
-                var estimation = _markEstimateService.GetAverageEstimation(
-                    WeldPassageInfo.WeldingCurrentValues,
-                    WeldPassageInfo.ArcVoltageValues,
-                    WeldPassageInstructionInfo.WeldingCurrentMin,
-                    WeldPassageInstructionInfo.WeldingCurrentMax,
-                    WeldPassageInstructionInfo.ArcVoltageMin,
-                    WeldPassageInstructionInfo.ArcVoltageMax
-                );
+                var estimation = WeldPassageInfo.Estimation;
 
                 table.Cell().Element(BlockLeft).Text("Сварочный ток, А").Style(Typography.Normal);
 

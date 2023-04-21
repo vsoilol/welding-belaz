@@ -1,8 +1,5 @@
-﻿using System.Globalization;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
+﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
-using Microsoft.AspNetCore.Hosting;
 using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -13,17 +10,11 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 public class SeamPassportDocument : IDocument
 {
     private readonly string _fontsPath;
-    private readonly IMarkEstimateService _markEstimateService;
 
-    public SeamPassportDocument(
-        TaskDto task,
-        string fontsPath,
-        IMarkEstimateService markEstimateService
-    )
+    public SeamPassportDocument(TaskDto task, string fontsPath)
     {
         Task = task;
         _fontsPath = fontsPath;
-        _markEstimateService = markEstimateService;
     }
 
     public TaskDto Task { get; }
@@ -92,11 +83,7 @@ public class SeamPassportDocument : IDocument
 
                         row.Item()
                             .Component(
-                                new WeldPassageComponent(
-                                    weldPassageInstruction,
-                                    weldPassage,
-                                    _markEstimateService
-                                )
+                                new WeldPassageComponent(weldPassageInstruction, weldPassage)
                             );
                     }
                 });

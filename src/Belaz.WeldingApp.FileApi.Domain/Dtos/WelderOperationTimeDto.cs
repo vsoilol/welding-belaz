@@ -1,17 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Belaz.WeldingApp.FileApi.Domain.Dtos;
 
 public class WelderOperationTimeDto
 {
-    public int WeldingPreparationTimeMinutes { get; set; }
+    /// <summary>
+    /// Подготовка к сварке
+    /// </summary>
+    public double WeldingPreparationTimeMinutes { get; set; }
 
-    public int WorkTimeMinutes { get; set; }
+    /// <summary>
+    /// СВАРКА
+    /// </summary>
+    public double WorkTimeMinutes { get; set; }
 
-    public int DowntimeMinutes { get; set; }
+    /// <summary>
+    /// Вынужденный простой
+    /// </summary>
+    public double DowntimeMinutes { get; set; }
 
+    /// <summary>
+    /// Средняя оценка за период
+    /// </summary>
     public double AverageEstimation { get; set; }
 }

@@ -11,6 +11,7 @@ using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using LanguageExt;
 using LanguageExt.Common;
+using Belaz.WeldingApp.RegistarApi.BusinessLayer.Helpers.Interfaces;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Implementations;
 
@@ -25,6 +26,7 @@ public class RegistarService : IRegistarService
     private readonly IWeldingTaskRepository _weldingTaskRepository;
     private readonly IWeldPassageRepository _weldPassageRepository;
     private readonly IWeldPassageInstructionRepository _weldPassageInstructionRepository;
+    private readonly IMarkEstimateService _markEstimateService;
 
     public RegistarService(
         IValidationService validationService,
@@ -35,7 +37,8 @@ public class RegistarService : IRegistarService
         IMasterRepository masterRepository,
         IWeldingTaskRepository weldingTaskRepository,
         IWeldPassageRepository weldPassageRepository,
-        IWeldPassageInstructionRepository weldPassageInstructionRepository
+        IWeldPassageInstructionRepository weldPassageInstructionRepository,
+        IMarkEstimateService markEstimateService
     )
     {
         _validationService = validationService;
@@ -47,6 +50,7 @@ public class RegistarService : IRegistarService
         _weldingTaskRepository = weldingTaskRepository;
         _weldPassageRepository = weldPassageRepository;
         _weldPassageInstructionRepository = weldPassageInstructionRepository;
+        _markEstimateService = markEstimateService;
     }
 
     public async Task<Result<WelderWithEquipmentResponse>> GetWelderWithEquipmentAsync(
@@ -294,6 +298,15 @@ public class RegistarService : IRegistarService
             weldPassageNumber
         );
 
+        var estimation = _markEstimateService.GetAverageEstimation(
+            record.WeldingCurrentValues,
+            record.ArcVoltageValues,
+            weldPassageInstruction.WeldingCurrentMin,
+            weldPassageInstruction.WeldingCurrentMax,
+            weldPassageInstruction.ArcVoltageMin,
+            weldPassageInstruction.ArcVoltageMax
+        );
+
         var amperagesTermDeviation = CalculateTermDeviation(
             record.WeldingCurrentValues,
             weldPassageInstruction.WeldingCurrentMin,
@@ -313,6 +326,7 @@ public class RegistarService : IRegistarService
             PreheatingTemperature = preheatingTemperature,
             WeldingTaskId = taskId,
             WeldingRecord = record,
+            Estimation = estimation,
             ShortTermDeviation =
                 (
                     amperagesTermDeviation.ShortCount > voltagesTermDeviation.ShortCount
