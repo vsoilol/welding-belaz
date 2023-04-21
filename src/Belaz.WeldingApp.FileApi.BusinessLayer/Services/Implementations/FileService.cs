@@ -113,19 +113,6 @@ public class FileService : IFileService
         );
     }
 
-    public async Task<Result<DocumentDto>> GenerateExcelWelderOperationReportAsync()
-    {
-        var welderOperationTimeDto = new WelderOperationTimeDto
-        {
-            WeldingPreparationTimeMinutes = 300,
-            WorkTimeMinutes = 250,
-            DowntimeMinutes = 170,
-            AverageEstimation = 7.5
-        };
-
-        return await _excelWelderOperationReportService.GenerateReportAsync(welderOperationTimeDto);
-    }
-
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportAsync()
     {
         var equipmentEfficiencyReportDtos = new List<EquipmentEfficiencyReportDto>

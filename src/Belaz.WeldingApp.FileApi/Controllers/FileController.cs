@@ -34,13 +34,6 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
-    [HttpGet("welderOperationReport")]
-    public async Task<IActionResult> GenerateExcelWelderOperationReportAsync()
-    {
-        var result = await _fileService.GenerateExcelWelderOperationReportAsync();
-        return result.ToFile();
-    }
-
     [HttpGet("equipmentEfficiencyReport")]
     public async Task<IActionResult> GenerateExcelEquipmentEfficiencyReportAsync()
     {
