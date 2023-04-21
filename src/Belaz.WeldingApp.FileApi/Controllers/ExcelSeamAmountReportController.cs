@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelSeamAmountReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.Extensions;

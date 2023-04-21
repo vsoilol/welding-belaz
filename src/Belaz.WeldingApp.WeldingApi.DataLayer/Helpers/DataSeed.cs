@@ -80,13 +80,13 @@ public class DataSeed
         if (!context.WeldingTasks.Any())
         {
             //await AddWeldingTasks(context);
-            //await GenerateTaskByProductAccounts(context);
+            await GenerateTaskByProductAccounts(context);
         }
     }
 
     private static async Task GenerateTaskByProductAccounts(ApplicationContext context)
     {
-        var date = new DateTime(2023, 3, 12);
+        var date = DateTime.Now;
 
         var master = (
             await context.Masters.FirstOrDefaultAsync(_ => _.UserInfo.ServiceNumber == "10422")
@@ -133,7 +133,7 @@ public class DataSeed
 
         var weldingEquipment = (
             await context.WeldingEquipments
-                .Where(_ => _.IdFromSystem == "49232")
+                .Where(_ => _.IdFromSystem == "49283")
                 .FirstOrDefaultAsync()
         )!;
 
@@ -161,7 +161,7 @@ public class DataSeed
 
                 var seamAccount = new SeamAccount
                 {
-                    DateFromPlan = new DateTime(2023, 3, 12),
+                    DateFromPlan = DateTime.Now,
                     Seam = seam,
                     SeamResults = seamResultStatus
                 };
@@ -171,8 +171,8 @@ public class DataSeed
             var productAccount = new ProductAccount
             {
                 Number = i + 1,
-                AmountFromPlan = 2,
-                DateFromPlan = new DateTime(2023, 3, 12),
+                AmountFromPlan = 10,
+                DateFromPlan = DateTime.Now,
                 Product = product,
                 ProductResults = productResultStatus,
                 SeamAccounts = seamAccounts,
