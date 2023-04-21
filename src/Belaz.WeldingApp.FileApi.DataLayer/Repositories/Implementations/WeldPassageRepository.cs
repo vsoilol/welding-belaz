@@ -2,7 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;
-using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;

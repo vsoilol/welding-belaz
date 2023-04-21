@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
-using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;

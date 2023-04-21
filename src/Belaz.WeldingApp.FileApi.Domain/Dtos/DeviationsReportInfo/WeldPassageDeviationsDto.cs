@@ -1,5 +1,5 @@
 using AutoMapper;
-using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;

@@ -1,7 +1,7 @@
 using AutoMapper;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
-using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Microsoft.EntityFrameworkCore;
 using Belaz.WeldingApp.Common.Enums;
 
