@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using AutoMapper;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Requests;

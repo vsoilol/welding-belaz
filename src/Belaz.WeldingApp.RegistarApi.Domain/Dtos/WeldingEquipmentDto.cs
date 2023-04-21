@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
+﻿using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Dtos;
@@ -6,9 +6,9 @@ namespace Belaz.WeldingApp.RegistarApi.Domain.Dtos;
 public class WeldingEquipmentDto : IMapFrom<WeldingEquipment>
 {
     public Guid Id { get; set; }
-    
+
     public string Name { get; set; } = null!;
-    
+
     /// <summary>
     /// Маркировка
     /// </summary>

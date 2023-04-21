@@ -1,6 +1,6 @@
 using AutoMapper;
 using Belaz.WeldingApp.RegistarApi.Domain.Converters;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Dtos;
