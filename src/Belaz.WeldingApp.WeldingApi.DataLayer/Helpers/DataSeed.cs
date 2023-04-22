@@ -1,5 +1,4 @@
 ﻿using Belaz.WeldingApp.Common.Enums;
-using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Belaz.WeldingApp.Common.Entities.Production;
@@ -76,13 +75,13 @@ public class DataSeed
 
         if (!context.ProductAccounts.Any())
         {
-            await AddProductAccounts(context);
+            //await AddProductAccounts(context);
         }
 
         if (!context.WeldingTasks.Any())
         {
             //await AddWeldingTasks(context);
-            await GenerateTaskByProductAccounts(context);
+            //await GenerateTaskByProductAccounts(context);
         }
     }
 
