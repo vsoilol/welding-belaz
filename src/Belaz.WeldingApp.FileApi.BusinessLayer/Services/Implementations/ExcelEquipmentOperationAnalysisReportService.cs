@@ -18,6 +18,7 @@ internal class ExcelEquipmentOperationAnalysisReportService
     : IExcelEquipmentOperationAnalysisReportService
 {
     private const int DayMinutes = 1440;
+    private const int WeekMinutes = 10080;
 
     private readonly IValidationService _validationService;
     private readonly IExcelFileService<
@@ -76,6 +77,9 @@ internal class ExcelEquipmentOperationAnalysisReportService
             case CutType.Day:
                 data = GetEquipmentOperationTimeForDays(dateStart, dateEnd, conditionTimes);
                 break;
+            case CutType.Week:
+                data = GetEquipmentOperationTimeForWeeks(dateStart, dateEnd, conditionTimes);
+                break;
         }
 
         if (!data.Any())
@@ -103,14 +107,64 @@ internal class ExcelEquipmentOperationAnalysisReportService
         throw new NotImplementedException();
     }
 
+    private List<EquipmentOperationTimeWithShiftDto> GetEquipmentOperationTimeForWeeks(
+        DateTime startDate,
+        DateTime endDate,
+        List<ConditionTimeDto> conditionTimes
+    )
+    {
+        var result = new List<EquipmentOperationTimeWithShiftDto>();
+
+        var weekStartDate = GetNearestDayOfWeek(startDate, DayOfWeek.Monday);
+        var weekEndDate = GetNearestDayOfWeek(endDate, DayOfWeek.Sunday);
+
+        for (DateTime date = weekStartDate; date <= weekEndDate; date = date.AddDays(7))
+        {
+            var nextWeekDate = date.AddDays(6);
+
+            var dayConditionTimes = conditionTimes
+                .Where(_ => _.Date.Date <= nextWeekDate.Date && _.Date.Date >= date.Date)
+                .ToList();
+
+            var conditionTimeGroups = dayConditionTimes
+                .GroupBy(w => w.Condition)
+                .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
+                .ToList();
+
+            var allMinutes = WeekMinutes;
+
+            var onTimeMinutes =
+                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
+            var workTimeMinutes =
+                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.AtWork)?.Time ?? 0;
+            var downtimeMinutes =
+                conditionTimeGroups
+                    .FirstOrDefault(g => g.Condition == Condition.ForcedDowntime)
+                    ?.Time ?? 0;
+
+            var offTimeMinutes = allMinutes - downtimeMinutes - workTimeMinutes - onTimeMinutes;
+
+            result.Add(
+                new EquipmentOperationTimeWithShiftDto
+                {
+                    CutInfo = $"{date.ToString("MMMM dd")} - {nextWeekDate.ToString("MMMM dd")}",
+                    OnTimeMinutes = onTimeMinutes,
+                    WorkTimeMinutes = workTimeMinutes,
+                    DowntimeMinutes = downtimeMinutes,
+                    OffTimeMinutes = offTimeMinutes
+                }
+            );
+        }
+
+        return result;
+    }
+
     private List<EquipmentOperationTimeWithShiftDto> GetEquipmentOperationTimeForDays(
         DateTime startDate,
         DateTime endDate,
         List<ConditionTimeDto> conditionTimes
     )
     {
-        var dayConditionTimeMap = new Dictionary<DateTime, List<ConditionTimeDto>>();
-
         var result = new List<EquipmentOperationTimeWithShiftDto>();
 
         for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
@@ -353,5 +407,14 @@ internal class ExcelEquipmentOperationAnalysisReportService
             DowntimeMinutes = downtimeMinutes,
             OffTimeMinutes = offTimeMinutes
         };
+    }
+
+    public static DateTime GetNearestDayOfWeek(DateTime dateTime, DayOfWeek dayOfWeek)
+    {
+        while (dateTime.DayOfWeek != dayOfWeek)
+        {
+            dateTime = dateTime.AddDays(dateTime.DayOfWeek < dayOfWeek ? 1 : -1);
+        }
+        return dateTime;
     }
 }
