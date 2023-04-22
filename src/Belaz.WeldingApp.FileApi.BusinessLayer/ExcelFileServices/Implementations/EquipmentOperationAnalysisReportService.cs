@@ -125,7 +125,7 @@ public class EquipmentOperationAnalysisReportService
             worksheet.Cells[row, i].Style.Border.BorderAround(ExcelBorderStyle.Thin);
         }
 
-        worksheet.Cells[row, OffTimePercentageColumn, row, TotalMinutesColumn]
+        worksheet.Cells[row, OffTimeMinutesColumn, row, TotalMinutesColumn]
             .Style
             .Numberformat
             .Format = "#,##0.00";

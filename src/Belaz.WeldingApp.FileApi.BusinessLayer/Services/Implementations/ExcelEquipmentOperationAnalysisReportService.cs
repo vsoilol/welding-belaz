@@ -83,6 +83,9 @@ internal class ExcelEquipmentOperationAnalysisReportService
             case CutType.Mounth:
                 data = GetEquipmentOperationTimeForMonths(dateStart, dateEnd, conditionTimes);
                 break;
+            case CutType.Year:
+                data = GetEquipmentOperationTimeForYears(dateStart, dateEnd, conditionTimes);
+                break;
         }
 
         if (!data.Any())
@@ -108,6 +111,65 @@ internal class ExcelEquipmentOperationAnalysisReportService
     )
     {
         throw new NotImplementedException();
+    }
+
+    private List<EquipmentOperationTimeWithShiftDto> GetEquipmentOperationTimeForYears(
+        DateTime startDate,
+        DateTime endDate,
+        List<ConditionTimeDto> conditionTimes
+    )
+    {
+        var result = new List<EquipmentOperationTimeWithShiftDto>();
+
+        var yearStartDate = new DateTime(startDate.Year, 1, 1);
+        var yearEndDate = new DateTime(endDate.Year, 1, 1);
+
+        for (DateTime date = yearStartDate; date <= yearEndDate; date = date.AddYears(1))
+        {
+            var nextYearDate = date.AddYears(1);
+
+            var dayConditionTimes = conditionTimes
+                .Where(_ => _.Date.Date < nextYearDate.Date && _.Date.Date >= date.Date)
+                .ToList();
+
+            var conditionTimeGroups = dayConditionTimes
+                .GroupBy(w => w.Condition)
+                .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
+                .ToList();
+
+            int year = date.Year;
+
+            DateTime start = new DateTime(year, 1, 1);
+            DateTime end = new DateTime(year + 1, 1, 1);
+
+            TimeSpan duration = end - start;
+
+            var allMinutes = duration.TotalMinutes;
+
+            var onTimeMinutes =
+                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
+            var workTimeMinutes =
+                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.AtWork)?.Time ?? 0;
+            var downtimeMinutes =
+                conditionTimeGroups
+                    .FirstOrDefault(g => g.Condition == Condition.ForcedDowntime)
+                    ?.Time ?? 0;
+
+            var offTimeMinutes = allMinutes - downtimeMinutes - workTimeMinutes - onTimeMinutes;
+
+            result.Add(
+                new EquipmentOperationTimeWithShiftDto
+                {
+                    CutInfo = date.ToString("yyyy"),
+                    OnTimeMinutes = onTimeMinutes,
+                    WorkTimeMinutes = workTimeMinutes,
+                    DowntimeMinutes = downtimeMinutes,
+                    OffTimeMinutes = offTimeMinutes
+                }
+            );
+        }
+
+        return result;
     }
 
     private List<EquipmentOperationTimeWithShiftDto> GetEquipmentOperationTimeForMonths(
@@ -153,7 +215,7 @@ internal class ExcelEquipmentOperationAnalysisReportService
             result.Add(
                 new EquipmentOperationTimeWithShiftDto
                 {
-                    CutInfo = date.ToString("MMMM yy"),
+                    CutInfo = date.ToString("MMMM yyyy"),
                     OnTimeMinutes = onTimeMinutes,
                     WorkTimeMinutes = workTimeMinutes,
                     DowntimeMinutes = downtimeMinutes,
