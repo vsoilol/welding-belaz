@@ -62,10 +62,112 @@ internal class ExcelEquipmentOperationAnalysisReportService
             dateEnd
         );
 
-        List<EquipmentOperationTimeWithShiftDto> data =
-            new List<EquipmentOperationTimeWithShiftDto>();
+        var data = await GetEquipmentOperationTimeByCutTypeAsync(
+            conditionTimes,
+            request.CutType,
+            dateStart,
+            dateEnd
+        );
 
-        switch (request.CutType)
+        if (!data.Any())
+        {
+            var exception = new ListIsEmptyException();
+            return new Result<DocumentDto>(exception);
+        }
+
+        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(data);
+    }
+
+    public async Task<
+        Result<DocumentDto>
+    > GenerateExcelEquipmentOperationAnalysisReportByProductionAreaAsync(
+        ExcelEquipmentOperationAnalysisReportByProductionAreaRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var dateStart = request.StartDate.ToDateTime();
+        var dateEnd = request.EndDate.ToDateTime();
+
+        var conditionTimes =
+            await _weldingEquipmentRepository.GetConditionTimeByProductionAreaAndDatePeriodAsync(
+                request.ProductionAreaId,
+                dateStart,
+                dateEnd
+            );
+
+        var data = await GetEquipmentOperationTimeByCutTypeAsync(
+            conditionTimes,
+            request.CutType,
+            dateStart,
+            dateEnd
+        );
+
+        if (!data.Any())
+        {
+            var exception = new ListIsEmptyException();
+            return new Result<DocumentDto>(exception);
+        }
+
+        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(data);
+    }
+
+    public async Task<
+        Result<DocumentDto>
+    > GenerateExcelEquipmentOperationAnalysisReportByWorkshopAsync(
+        ExcelEquipmentOperationAnalysisReportByWorkshopRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var dateStart = request.StartDate.ToDateTime();
+        var dateEnd = request.EndDate.ToDateTime();
+
+        var conditionTimes =
+            await _weldingEquipmentRepository.GetConditionTimeByWorkshopAndDatePeriodAsync(
+                request.WorkshopId,
+                dateStart,
+                dateEnd
+            );
+
+        var data = await GetEquipmentOperationTimeByCutTypeAsync(
+            conditionTimes,
+            request.CutType,
+            dateStart,
+            dateEnd
+        );
+
+        if (!data.Any())
+        {
+            var exception = new ListIsEmptyException();
+            return new Result<DocumentDto>(exception);
+        }
+
+        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(data);
+    }
+
+    private async Task<
+        List<EquipmentOperationTimeWithShiftDto>
+    > GetEquipmentOperationTimeByCutTypeAsync(
+        List<ConditionTimeDto> conditionTimes,
+        CutType cutType,
+        DateTime dateStart,
+        DateTime dateEnd
+    )
+    {
+        var data = new List<EquipmentOperationTimeWithShiftDto>();
+
+        switch (cutType)
         {
             case CutType.WorkingShift:
                 data = await GetEquipmentOperationTimeForWorkingShiftAsync(
@@ -88,29 +190,7 @@ internal class ExcelEquipmentOperationAnalysisReportService
                 break;
         }
 
-        if (!data.Any())
-        {
-            var exception = new ListIsEmptyException();
-            return new Result<DocumentDto>(exception);
-        }
-
-        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(data);
-    }
-
-    public Task<
-        Result<DocumentDto>
-    > GenerateExcelEquipmentOperationAnalysisReportByProductionAreaAsync(
-        ExcelEquipmentOperationAnalysisReportByProductionAreaRequest request
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportByWorkshopAsync(
-        ExcelEquipmentOperationAnalysisReportByWorkshopRequest request
-    )
-    {
-        throw new NotImplementedException();
+        return data;
     }
 
     private List<EquipmentOperationTimeWithShiftDto> GetEquipmentOperationTimeForYears(
@@ -128,13 +208,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
         {
             var nextYearDate = date.AddYears(1);
 
-            var dayConditionTimes = conditionTimes
+            var yearConditionTimes = conditionTimes
                 .Where(_ => _.Date.Date < nextYearDate.Date && _.Date.Date >= date.Date)
-                .ToList();
-
-            var conditionTimeGroups = dayConditionTimes
-                .GroupBy(w => w.Condition)
-                .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
                 .ToList();
 
             int year = date.Year;
@@ -144,28 +219,12 @@ internal class ExcelEquipmentOperationAnalysisReportService
 
             TimeSpan duration = end - start;
 
-            var allMinutes = duration.TotalMinutes;
-
-            var onTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
-            var workTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.AtWork)?.Time ?? 0;
-            var downtimeMinutes =
-                conditionTimeGroups
-                    .FirstOrDefault(g => g.Condition == Condition.ForcedDowntime)
-                    ?.Time ?? 0;
-
-            var offTimeMinutes = allMinutes - downtimeMinutes - workTimeMinutes - onTimeMinutes;
-
             result.Add(
-                new EquipmentOperationTimeWithShiftDto
-                {
-                    CutInfo = date.ToString("yyyy"),
-                    OnTimeMinutes = onTimeMinutes,
-                    WorkTimeMinutes = workTimeMinutes,
-                    DowntimeMinutes = downtimeMinutes,
-                    OffTimeMinutes = offTimeMinutes
-                }
+                CalculateConditionTime(
+                    yearConditionTimes,
+                    duration.TotalMinutes,
+                    date.ToString("yyyy")
+                )
             );
         }
 
@@ -187,40 +246,19 @@ internal class ExcelEquipmentOperationAnalysisReportService
         {
             var nextMonthDate = date.AddMonths(1);
 
-            var dayConditionTimes = conditionTimes
+            var monthConditionTimes = conditionTimes
                 .Where(_ => _.Date.Date < nextMonthDate.Date && _.Date.Date >= date.Date)
-                .ToList();
-
-            var conditionTimeGroups = dayConditionTimes
-                .GroupBy(w => w.Condition)
-                .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
                 .ToList();
 
             int daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
             int totalMinutesInMonth = daysInMonth * 1440;
 
-            var allMinutes = totalMinutesInMonth;
-
-            var onTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
-            var workTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.AtWork)?.Time ?? 0;
-            var downtimeMinutes =
-                conditionTimeGroups
-                    .FirstOrDefault(g => g.Condition == Condition.ForcedDowntime)
-                    ?.Time ?? 0;
-
-            var offTimeMinutes = allMinutes - downtimeMinutes - workTimeMinutes - onTimeMinutes;
-
             result.Add(
-                new EquipmentOperationTimeWithShiftDto
-                {
-                    CutInfo = date.ToString("MMMM yyyy"),
-                    OnTimeMinutes = onTimeMinutes,
-                    WorkTimeMinutes = workTimeMinutes,
-                    DowntimeMinutes = downtimeMinutes,
-                    OffTimeMinutes = offTimeMinutes
-                }
+                CalculateConditionTime(
+                    monthConditionTimes,
+                    totalMinutesInMonth,
+                    date.ToString("MMMM yyyy")
+                )
             );
         }
 
@@ -242,37 +280,16 @@ internal class ExcelEquipmentOperationAnalysisReportService
         {
             var nextWeekDate = date.AddDays(6);
 
-            var dayConditionTimes = conditionTimes
+            var weekConditionTimes = conditionTimes
                 .Where(_ => _.Date.Date <= nextWeekDate.Date && _.Date.Date >= date.Date)
                 .ToList();
 
-            var conditionTimeGroups = dayConditionTimes
-                .GroupBy(w => w.Condition)
-                .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
-                .ToList();
-
-            var allMinutes = WeekMinutes;
-
-            var onTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
-            var workTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.AtWork)?.Time ?? 0;
-            var downtimeMinutes =
-                conditionTimeGroups
-                    .FirstOrDefault(g => g.Condition == Condition.ForcedDowntime)
-                    ?.Time ?? 0;
-
-            var offTimeMinutes = allMinutes - downtimeMinutes - workTimeMinutes - onTimeMinutes;
-
             result.Add(
-                new EquipmentOperationTimeWithShiftDto
-                {
-                    CutInfo = $"{date.ToString("MMMM dd")} - {nextWeekDate.ToString("MMMM dd")}",
-                    OnTimeMinutes = onTimeMinutes,
-                    WorkTimeMinutes = workTimeMinutes,
-                    DowntimeMinutes = downtimeMinutes,
-                    OffTimeMinutes = offTimeMinutes
-                }
+                CalculateConditionTime(
+                    weekConditionTimes,
+                    WeekMinutes,
+                    $"{date.ToString("MMMM dd")} - {nextWeekDate.ToString("MMMM dd")}"
+                )
             );
         }
 
@@ -291,33 +308,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
         {
             var dayConditionTimes = conditionTimes.Where(_ => _.Date.Date == date.Date).ToList();
 
-            var conditionTimeGroups = dayConditionTimes
-                .GroupBy(w => w.Condition)
-                .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
-                .ToList();
-
-            var allMinutes = DayMinutes;
-
-            var onTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
-            var workTimeMinutes =
-                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.AtWork)?.Time ?? 0;
-            var downtimeMinutes =
-                conditionTimeGroups
-                    .FirstOrDefault(g => g.Condition == Condition.ForcedDowntime)
-                    ?.Time ?? 0;
-
-            var offTimeMinutes = allMinutes - downtimeMinutes - workTimeMinutes - onTimeMinutes;
-
             result.Add(
-                new EquipmentOperationTimeWithShiftDto
-                {
-                    CutInfo = date.ToString("MMMM dd"),
-                    OnTimeMinutes = onTimeMinutes,
-                    WorkTimeMinutes = workTimeMinutes,
-                    DowntimeMinutes = downtimeMinutes,
-                    OffTimeMinutes = offTimeMinutes
-                }
+                CalculateConditionTime(dayConditionTimes, DayMinutes, date.ToString("MMMM dd"))
             );
         }
 
@@ -496,11 +488,6 @@ internal class ExcelEquipmentOperationAnalysisReportService
         List<WorkingShiftDto> mainWorkingShifts
     )
     {
-        var conditionTimeGroups = workingShiftConditionTimes
-            .GroupBy(w => w.Condition)
-            .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
-            .ToList();
-
         var allMinutes = GetWorkingShiftAllMinutesByDateTimeDuration(
             workingShiftNumber,
             startDate,
@@ -508,6 +495,33 @@ internal class ExcelEquipmentOperationAnalysisReportService
             days!,
             mainWorkingShifts
         );
+
+        return CalculateConditionTime(
+            workingShiftConditionTimes,
+            allMinutes,
+            $"Смена {workingShiftNumber}"
+        );
+    }
+
+    private DateTime GetNearestDayOfWeek(DateTime dateTime, DayOfWeek dayOfWeek)
+    {
+        while (dateTime.DayOfWeek != dayOfWeek)
+        {
+            dateTime = dateTime.AddDays(dateTime.DayOfWeek < dayOfWeek ? 1 : -1);
+        }
+        return dateTime;
+    }
+
+    private EquipmentOperationTimeWithShiftDto CalculateConditionTime(
+        List<ConditionTimeDto> conditionTimes,
+        double allMinutes,
+        string text
+    )
+    {
+        var conditionTimeGroups = conditionTimes
+            .GroupBy(w => w.Condition)
+            .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
+            .ToList();
 
         var onTimeMinutes =
             conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
@@ -521,20 +535,11 @@ internal class ExcelEquipmentOperationAnalysisReportService
 
         return new EquipmentOperationTimeWithShiftDto
         {
-            CutInfo = $"Смена {workingShiftNumber}",
+            CutInfo = text,
             OnTimeMinutes = onTimeMinutes,
             WorkTimeMinutes = workTimeMinutes,
             DowntimeMinutes = downtimeMinutes,
             OffTimeMinutes = offTimeMinutes
         };
-    }
-
-    public static DateTime GetNearestDayOfWeek(DateTime dateTime, DayOfWeek dayOfWeek)
-    {
-        while (dateTime.DayOfWeek != dayOfWeek)
-        {
-            dateTime = dateTime.AddDays(dateTime.DayOfWeek < dayOfWeek ? 1 : -1);
-        }
-        return dateTime;
     }
 }

@@ -30,4 +30,28 @@ public class ExcelEquipmentOperationAnalysisReportController : ControllerBase
             );
         return result.ToFile();
     }
+
+    [HttpGet("byProductionArea")]
+    public async Task<IActionResult> GenerateExcelEquipmentOperationAnalysisReportByProductionAreaAsync(
+        [FromQuery] ExcelEquipmentOperationAnalysisReportByProductionAreaRequest request
+    )
+    {
+        var result =
+            await _excelEquipmentOperationAnalysisReportService.GenerateExcelEquipmentOperationAnalysisReportByProductionAreaAsync(
+                request
+            );
+        return result.ToFile();
+    }
+
+    [HttpGet("byWorkshop")]
+    public async Task<IActionResult> GenerateExcelEquipmentOperationAnalysisReportByWorkshopAsync(
+        [FromQuery] ExcelEquipmentOperationAnalysisReportByWorkshopRequest request
+    )
+    {
+        var result =
+            await _excelEquipmentOperationAnalysisReportService.GenerateExcelEquipmentOperationAnalysisReportByWorkshopAsync(
+                request
+            );
+        return result.ToFile();
+    }
 }

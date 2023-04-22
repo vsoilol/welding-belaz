@@ -179,6 +179,36 @@
       "DownstreamPathTemplate": "/api/excelWelderOperationReport/byWorkshop",
       "ServiceName": "file",
       "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byProductionArea",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byProductionArea",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byWorkshop",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byWorkshop",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
     }
   ]
 }
