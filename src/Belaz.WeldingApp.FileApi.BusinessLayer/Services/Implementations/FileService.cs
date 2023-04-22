@@ -17,25 +17,16 @@ public class FileService : IFileService
     private readonly ITaskRepository _taskRepository;
     private readonly IWebHostEnvironment _environment;
     private readonly IValidationService _validationService;
-    private readonly IExcelFileService<
-        List<EquipmentEfficiencyReportDto>
-    > _excelEquipmentEfficiencyReportService;
 
     public FileService(
         ITaskRepository taskRepository,
         IWebHostEnvironment environment,
-        IValidationService validationService,
-        IExcelFileService<
-            List<EquipmentOperationTimeWithShiftDto>
-        > excelEquipmentOperationAnalysisReportService,
-        IExcelFileService<WelderOperationTimeDto> excelWelderOperationReportService,
-        IExcelFileService<List<EquipmentEfficiencyReportDto>> excelEquipmentEfficiencyReportService
+        IValidationService validationService
     )
     {
         _taskRepository = taskRepository;
         _environment = environment;
         _validationService = validationService;
-        _excelEquipmentEfficiencyReportService = excelEquipmentEfficiencyReportService;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -69,36 +60,5 @@ public class FileService : IFileService
         };
 
         return result;
-    }
-
-    public async Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportAsync()
-    {
-        var equipmentEfficiencyReportDtos = new List<EquipmentEfficiencyReportDto>
-        {
-            new() { ReportDate = new DateTime(2023, 9, 1), OverallEquipmentEfficiency = 0.38 },
-            new() { ReportDate = new DateTime(2023, 9, 2), OverallEquipmentEfficiency = 0.39 },
-            new() { ReportDate = new DateTime(2023, 9, 5), OverallEquipmentEfficiency = 0.4 },
-            new() { ReportDate = new DateTime(2023, 9, 6), OverallEquipmentEfficiency = 0.41 },
-            new() { ReportDate = new DateTime(2023, 9, 7), OverallEquipmentEfficiency = 0.41 },
-            new() { ReportDate = new DateTime(2023, 9, 8), OverallEquipmentEfficiency = 0.39 },
-            new() { ReportDate = new DateTime(2023, 9, 9), OverallEquipmentEfficiency = 0.4 },
-            new() { ReportDate = new DateTime(2023, 9, 12), OverallEquipmentEfficiency = 0.38 },
-            new() { ReportDate = new DateTime(2023, 9, 13), OverallEquipmentEfficiency = 0.39 },
-            new() { ReportDate = new DateTime(2023, 9, 14), OverallEquipmentEfficiency = 0.41 },
-            new() { ReportDate = new DateTime(2023, 9, 15), OverallEquipmentEfficiency = 0.42 },
-            new() { ReportDate = new DateTime(2023, 9, 16), OverallEquipmentEfficiency = 0.38 },
-            new() { ReportDate = new DateTime(2023, 9, 19), OverallEquipmentEfficiency = 0.39 },
-            new() { ReportDate = new DateTime(2023, 9, 20), OverallEquipmentEfficiency = 0.41 },
-            new() { ReportDate = new DateTime(2023, 9, 21), OverallEquipmentEfficiency = 0.45 },
-            new() { ReportDate = new DateTime(2023, 9, 22), OverallEquipmentEfficiency = 0.42 },
-            new() { ReportDate = new DateTime(2023, 9, 23), OverallEquipmentEfficiency = 0.4 },
-            new() { ReportDate = new DateTime(2023, 9, 26), OverallEquipmentEfficiency = 0.38 },
-            new() { ReportDate = new DateTime(2023, 9, 27), OverallEquipmentEfficiency = 0.4 },
-            new() { ReportDate = new DateTime(2023, 9, 28), OverallEquipmentEfficiency = 0.42 },
-        };
-
-        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(
-            equipmentEfficiencyReportDtos
-        );
     }
 }
