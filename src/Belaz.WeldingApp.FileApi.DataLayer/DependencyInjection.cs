@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<ISeamAccountRepository, SeamAccountRepository>();
         services.AddScoped<IWeldingEquipmentRepository, WeldingEquipmentRepository>();
         services.AddScoped<IWelderRepository, WelderRepository>();
+        services.AddScoped<ICalendarRepository, CalendarRepository>();
 
         return services;
     }

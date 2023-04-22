@@ -7,7 +7,7 @@ using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 
-public class SeamAccountRepository : ISeamAccountRepository
+internal class SeamAccountRepository : ISeamAccountRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;

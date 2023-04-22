@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 
-public class TaskRepository : ITaskRepository
+internal class TaskRepository : ITaskRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;

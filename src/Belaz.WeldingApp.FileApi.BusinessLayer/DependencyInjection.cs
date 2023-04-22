@@ -30,6 +30,10 @@ public static class DependencyInjection
             ExcelEquipmentDowntimeReportService
         >();
         services.AddScoped<IExcelWelderOperationReportService, ExcelWelderOperationReportService>();
+        services.AddScoped<
+            IExcelEquipmentOperationAnalysisReportService,
+            ExcelEquipmentOperationAnalysisReportService
+        >();
 
         services.AddScoped<
             IExcelFileService<List<WeldPassageDeviationsDto>>,

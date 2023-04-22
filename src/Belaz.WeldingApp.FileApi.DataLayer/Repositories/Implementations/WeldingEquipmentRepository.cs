@@ -1,12 +1,14 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
+using Belaz.WeldingApp.FileApi.Domain.Dtos.ConditionTimeInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 
-public class WeldingEquipmentRepository : IWeldingEquipmentRepository
+internal class WeldingEquipmentRepository : IWeldingEquipmentRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;
@@ -15,6 +17,66 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
     {
         _context = context;
         _mapper = mapper;
+    }
+
+    public Task<List<ConditionTimeDto>> GetConditionTimeByDatePeriodAsync(
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w => w.Date >= startDate && w.Date <= endDate
+        );
+
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ConditionTimeDto>> GetConditionTimeByProductionAreaAndDatePeriodAsync(
+        Guid productionAreaId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w =>
+                w.WeldingEquipment.Workplaces.Any(
+                    wp =>
+                        wp.PostId == null
+                            ? wp.ProductionAreaId == productionAreaId
+                            : wp.Post!.ProductionAreaId == productionAreaId
+                )
+                && w.Date >= startDate
+                && w.Date <= endDate
+        );
+
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ConditionTimeDto>> GetConditionTimeByWorkshopAndDatePeriodAsync(
+        Guid workshopId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w =>
+                w.WeldingEquipment.Workplaces.Any(
+                    wp =>
+                        wp.PostId == null
+                            ? wp.ProductionArea!.WorkshopId == workshopId
+                            : wp.Post!.ProductionArea.WorkshopId == workshopId
+                )
+                && w.Date >= startDate
+                && w.Date <= endDate
+        );
+
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public Task<List<EquipmentDowntimeDto>> GetDownTimeInfoByIdAndDatePeriodAsync(

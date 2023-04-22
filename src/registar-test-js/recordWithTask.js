@@ -27,15 +27,15 @@ function recordWithTask(callback) {
     // ArcVoltageMax = 26
 
     const postData = JSON.stringify({
-        tID: "31b32617-5ce8-454d-8f60-a058b4d7965d",
+        tID: "5b868974-2134-43d9-8ecd-3953b086accf",
         PasN: 2,
         preTemp: 12.2,
         RegID: "string",
-        EqpID: "cc38be9c-9245-4211-a4bc-f7975a341708",
-        EplID: "e0c4b3ae-d915-41a9-a9a2-bc4efcbbebfa",
+        EqpID: "cc52f444-97f1-4aa9-b4dc-de0d3b3be3f8",
+        EplID: "a9889668-a179-48d2-a4b0-ad1f1f2ec176",
         SDT: isoString,
-        Amp: generateRandomNumbers(260, 320, 500),
-        Volt: generateRandomNumbers(22, 28, 500),
+        Amp: generateRandomNumbers(270, 315, 500),
+        Volt: generateRandomNumbers(23, 26, 500),
     });
 
     const options = {

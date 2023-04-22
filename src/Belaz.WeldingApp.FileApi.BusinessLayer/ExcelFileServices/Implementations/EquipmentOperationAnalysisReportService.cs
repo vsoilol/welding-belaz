@@ -31,7 +31,6 @@ public class EquipmentOperationAnalysisReportService
     private const string TotalTimeColumnName = "Общий фонд рабочего времени";
     private const string MinutesColumnName = "Минут";
     private const string PercentageColumnName = "%";
-    private const string ShiftLabelFormat = "Смена {0}";
 
     private readonly IExcelExtensions _excelExtensions;
 
@@ -87,7 +86,7 @@ public class EquipmentOperationAnalysisReportService
                 + stateData.WorkTimeMinutes
                 + stateData.DowntimeMinutes;
 
-            AddShiftLabel(worksheet, row, stateData.WorkingShifNumber);
+            AddShiftLabel(worksheet, row, stateData.CutInfo);
 
             worksheet.Cells[row, OffTimeMinutesColumn].Value = stateData.OffTimeMinutes;
             worksheet.Cells[row, OffTimePercentageColumn].Value = MathExtension.CalculatePercentage(
@@ -126,10 +125,10 @@ public class EquipmentOperationAnalysisReportService
             worksheet.Cells[row, i].Style.Border.BorderAround(ExcelBorderStyle.Thin);
         }
 
-        worksheet.Cells[row, OffTimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
-        worksheet.Cells[row, OnTimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
-        worksheet.Cells[row, WorkTimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
-        worksheet.Cells[row, DowntimePercentageColumn].Style.Numberformat.Format = "#,##0.00";
+        worksheet.Cells[row, OffTimePercentageColumn, row, TotalMinutesColumn]
+            .Style
+            .Numberformat
+            .Format = "#,##0.00";
     }
 
     private void CreateTableHeader(ExcelWorksheet worksheet)
@@ -208,10 +207,9 @@ public class EquipmentOperationAnalysisReportService
         }
     }
 
-    private void AddShiftLabel(ExcelWorksheet worksheet, int row, int shiftNumber)
+    private void AddShiftLabel(ExcelWorksheet worksheet, int row, string cutInfo)
     {
-        var shiftLabel = string.Format(ShiftLabelFormat, shiftNumber);
-        worksheet.Cells[row, StateColumn].Value = shiftLabel;
+        worksheet.Cells[row, StateColumn].Value = cutInfo;
 
         worksheet.Cells[row, StateColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
         worksheet.Cells[row, StateColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;

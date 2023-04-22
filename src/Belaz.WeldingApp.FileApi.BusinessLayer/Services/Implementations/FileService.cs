@@ -84,7 +84,7 @@ public class FileService : IFileService
         {
             new()
             {
-                WorkingShifNumber = 1,
+                CutInfo = "Смена 1",
                 OffTimeMinutes = 120,
                 OnTimeMinutes = 80,
                 WorkTimeMinutes = 132,
@@ -92,7 +92,7 @@ public class FileService : IFileService
             },
             new()
             {
-                WorkingShifNumber = 2,
+                CutInfo = "Смена 2",
                 OffTimeMinutes = 133,
                 OnTimeMinutes = 92,
                 WorkTimeMinutes = 140,
@@ -100,7 +100,7 @@ public class FileService : IFileService
             },
             new()
             {
-                WorkingShifNumber = 3,
+                CutInfo = "Смена 3",
                 OffTimeMinutes = 145,
                 OnTimeMinutes = 98,
                 WorkTimeMinutes = 125,

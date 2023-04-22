@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 
-public class WeldPassageRepository : IWeldPassageRepository
+internal class WeldPassageRepository : IWeldPassageRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;
