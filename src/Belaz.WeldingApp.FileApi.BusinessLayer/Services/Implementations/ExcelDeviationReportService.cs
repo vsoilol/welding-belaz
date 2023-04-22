@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
@@ -74,6 +70,36 @@ public class ExcelDeviationReportService : IExcelDeviationReportService
             request.WorkplaceId,
             _weldPassageRepository.GetAllDeviationsByWorkplaceAndDatePeriodAsync
         );
+    }
+
+    public async Task<Result<DocumentDto>> GenerateExcelDeviationReportAsync(
+        GenerateExcelDeviationReportRequest request
+    )
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var dateStart = request.StartDate.ToDateTime();
+        var dateEnd = request.EndDate.ToDateTime();
+
+        var deviations = await _weldPassageRepository.GetAllDeviationsByDatePeriodAsync(
+            request.ProductId,
+            request.SeamId,
+            dateStart,
+            dateEnd
+        );
+
+        if (!deviations.Any())
+        {
+            var exception = new ListIsEmptyException();
+            return new Result<DocumentDto>(exception);
+        }
+
+        return await _excelDeviationReportService.GenerateReportAsync(deviations);
     }
 
     private async Task<Result<DocumentDto>> GenerateExcelDeviationReportAsync<T>(

@@ -7,10 +7,11 @@ using Belaz.WeldingApp.RegistarApi.BusinessLayer.Responses;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using LanguageExt;
 using LanguageExt.Common;
+using Belaz.WeldingApp.RegistarApi.BusinessLayer.Helpers.Interfaces;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Implementations;
 
@@ -25,6 +26,7 @@ public class RegistarService : IRegistarService
     private readonly IWeldingTaskRepository _weldingTaskRepository;
     private readonly IWeldPassageRepository _weldPassageRepository;
     private readonly IWeldPassageInstructionRepository _weldPassageInstructionRepository;
+    private readonly IMarkEstimateService _markEstimateService;
 
     public RegistarService(
         IValidationService validationService,
@@ -35,7 +37,8 @@ public class RegistarService : IRegistarService
         IMasterRepository masterRepository,
         IWeldingTaskRepository weldingTaskRepository,
         IWeldPassageRepository weldPassageRepository,
-        IWeldPassageInstructionRepository weldPassageInstructionRepository
+        IWeldPassageInstructionRepository weldPassageInstructionRepository,
+        IMarkEstimateService markEstimateService
     )
     {
         _validationService = validationService;
@@ -47,6 +50,7 @@ public class RegistarService : IRegistarService
         _weldingTaskRepository = weldingTaskRepository;
         _weldPassageRepository = weldPassageRepository;
         _weldPassageInstructionRepository = weldPassageInstructionRepository;
+        _markEstimateService = markEstimateService;
     }
 
     public async Task<Result<WelderWithEquipmentResponse>> GetWelderWithEquipmentAsync(
@@ -61,13 +65,14 @@ public class RegistarService : IRegistarService
                 request.EquipmentRfidTag
             );
 
+            var welder = await _welderRepository.GetByRfidTagAsync(request.WelderRfidTag);
+
             await UpdateWeldingEquipmentConditionAsync(
                 request.StartDateTime.Date,
                 request.StartDateTime.TimeOfDay,
-                weldingEquipment.Id
+                weldingEquipment.Id,
+                welder.Id
             );
-
-            var welder = await _welderRepository.GetByRfidTagAsync(request.WelderRfidTag);
 
             return new WelderWithEquipmentResponse
             {
@@ -106,6 +111,7 @@ public class RegistarService : IRegistarService
             await CreateWeldingRecordAsync(
                 weldingRecord,
                 request.WeldingEquipmentId,
+                request.WelderId,
                 request.Voltages.Length,
                 request.StartDateTime
             );
@@ -158,6 +164,7 @@ public class RegistarService : IRegistarService
             var record = await CreateWeldingRecordAsync(
                 weldingRecord,
                 request.WeldingEquipmentId,
+                request.WelderId,
                 request.Voltages.Length,
                 request.StartDateTime
             );
@@ -250,6 +257,7 @@ public class RegistarService : IRegistarService
     private async Task<WeldingRecord> CreateWeldingRecordAsync(
         WeldingRecord record,
         Guid weldingEquipmentId,
+        Guid welderId,
         int valuesLength,
         DateTime startDateTime
     )
@@ -267,7 +275,8 @@ public class RegistarService : IRegistarService
             Time = seconds / 60,
             Date = startDateTime.Date,
             StartConditionTime = startDateTime.TimeOfDay,
-            WeldingEquipmentId = weldingEquipmentId
+            WeldingEquipmentId = weldingEquipmentId,
+            WelderId = welderId
         };
 
         await _weldingEquipmentRepository.AddWeldingEquipmentConditionTimeAsync(
@@ -289,6 +298,15 @@ public class RegistarService : IRegistarService
             weldPassageNumber
         );
 
+        var estimation = _markEstimateService.GetAverageEstimation(
+            record.WeldingCurrentValues,
+            record.ArcVoltageValues,
+            weldPassageInstruction.WeldingCurrentMin,
+            weldPassageInstruction.WeldingCurrentMax,
+            weldPassageInstruction.ArcVoltageMin,
+            weldPassageInstruction.ArcVoltageMax
+        );
+
         var amperagesTermDeviation = CalculateTermDeviation(
             record.WeldingCurrentValues,
             weldPassageInstruction.WeldingCurrentMin,
@@ -308,6 +326,7 @@ public class RegistarService : IRegistarService
             PreheatingTemperature = preheatingTemperature,
             WeldingTaskId = taskId,
             WeldingRecord = record,
+            Estimation = estimation,
             ShortTermDeviation =
                 (
                     amperagesTermDeviation.ShortCount > voltagesTermDeviation.ShortCount
@@ -381,7 +400,8 @@ public class RegistarService : IRegistarService
     private async Task UpdateWeldingEquipmentConditionAsync(
         DateTime date,
         TimeSpan startConditionTime,
-        Guid weldingEquipmentId
+        Guid weldingEquipmentId,
+        Guid welderId
     )
     {
         var existingConditionTime = await _weldingEquipmentRepository.GetLastConditionTimeAsync(
@@ -398,7 +418,8 @@ public class RegistarService : IRegistarService
                 Condition.On,
                 date,
                 startConditionTime,
-                weldingEquipmentId
+                weldingEquipmentId,
+                welderId
             );
             return;
         }
@@ -417,7 +438,8 @@ public class RegistarService : IRegistarService
                 Condition.On,
                 date,
                 startConditionTime,
-                weldingEquipmentId
+                weldingEquipmentId,
+                welderId
             );
             return;
         }
@@ -428,7 +450,8 @@ public class RegistarService : IRegistarService
                 Condition.ForcedDowntime,
                 date,
                 startConditionTime,
-                weldingEquipmentId
+                weldingEquipmentId,
+                welderId
             );
             return;
         }
@@ -443,7 +466,8 @@ public class RegistarService : IRegistarService
         Condition condition,
         DateTime date,
         TimeSpan startConditionTime,
-        Guid weldingEquipmentId
+        Guid weldingEquipmentId,
+        Guid welderId
     )
     {
         return _weldingEquipmentRepository.AddWeldingEquipmentConditionTimeAsync(
@@ -453,7 +477,8 @@ public class RegistarService : IRegistarService
                 Time = 1,
                 Date = date,
                 StartConditionTime = startConditionTime,
-                WeldingEquipmentId = weldingEquipmentId
+                WeldingEquipmentId = weldingEquipmentId,
+                WelderId = welderId
             }
         );
     }

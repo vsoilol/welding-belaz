@@ -174,7 +174,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .ThenInclude(_ => _.WeldingRecord.WeldingEquipment.Workplaces)
             .ThenInclude(_ => _!.ProductionArea!.Workshop)
             .Include(_ => _.Inspector!.UserInfo)
-            .Include(_ => _.Master.UserInfo)
+            .Include(_ => _.Master!.UserInfo)
             .Include(_ => _.Welder!.UserInfo);
 
         if (filter != null)

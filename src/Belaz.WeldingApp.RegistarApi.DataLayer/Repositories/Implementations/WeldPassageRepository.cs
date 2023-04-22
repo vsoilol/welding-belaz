@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
-using Microsoft.EntityFrameworkCore;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Implementations;
 

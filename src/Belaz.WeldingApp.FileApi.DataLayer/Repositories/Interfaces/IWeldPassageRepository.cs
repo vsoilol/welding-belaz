@@ -40,4 +40,11 @@ public interface IWeldPassageRepository
         DateTime startDate,
         DateTime endDate
     );
+
+    Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByDatePeriodAsync(
+        Guid productId,
+        Guid? seamId,
+        DateTime startDate,
+        DateTime endDate
+    );
 }

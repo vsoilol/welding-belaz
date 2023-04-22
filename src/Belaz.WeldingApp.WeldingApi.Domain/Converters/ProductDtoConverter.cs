@@ -27,6 +27,7 @@ public class ProductDtoConverter : ITypeConverter<Product, ProductDto>
         destination.Number = source.Number;
         destination.Name = source.Name;
         destination.IsControlSubject = source.IsControlSubject;
+        destination.ManufacturingTime = source.ManufacturingTime;
 
         MapRelatedEntities(source, destination);
 

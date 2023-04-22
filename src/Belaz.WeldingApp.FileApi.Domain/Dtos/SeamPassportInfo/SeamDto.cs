@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;

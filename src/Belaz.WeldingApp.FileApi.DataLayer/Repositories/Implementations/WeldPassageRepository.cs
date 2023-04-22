@@ -2,12 +2,12 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;
-using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 
-public class WeldPassageRepository : IWeldPassageRepository
+internal class WeldPassageRepository : IWeldPassageRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;
@@ -16,6 +16,20 @@ public class WeldPassageRepository : IWeldPassageRepository
     {
         _context = context;
         _mapper = mapper;
+    }
+
+    public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByDatePeriodAsync(
+        Guid productId,
+        Guid? seamId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var query = QueryWeldPassagesWithFilters(productId, seamId, startDate, endDate);
+
+        return query
+            .ProjectTo<WeldPassageDeviationsDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByProductionAreaAndDatePeriodAsync(

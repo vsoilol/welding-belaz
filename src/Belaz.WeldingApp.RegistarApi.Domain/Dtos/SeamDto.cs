@@ -1,5 +1,4 @@
-using AutoMapper;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Belaz.WeldingApp.RegistarApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.RegistarApi.Domain.Dtos;

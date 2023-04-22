@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
@@ -71,6 +71,16 @@ public class TaskDto : IMapFrom<WeldingTask>
             .ForMember(
                 dto => dto.WeldingEquipment,
                 opt => opt.MapFrom(x => x.WeldPassages.First().WeldingRecord.WeldingEquipment)
+            )
+            .ForMember(
+                dto => dto.WeldPassages,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassages
+                                .OrderBy(_ => _.WeldingRecord.Date.Date)
+                                .ThenBy(_ => _.WeldingRecord.WeldingStartTime.TotalSeconds)
+                    )
             );
     }
 }

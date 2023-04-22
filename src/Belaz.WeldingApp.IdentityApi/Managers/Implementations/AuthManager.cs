@@ -1,7 +1,7 @@
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi.Contracts.Requests.Identity;
 using Belaz.WeldingApp.IdentityApi.Contracts.Responses.Identity;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Exceptions;
 using Belaz.WeldingApp.IdentityApi.Extensions;

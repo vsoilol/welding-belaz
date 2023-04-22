@@ -388,7 +388,11 @@ public class ProductAccountRepository : IProductAccountRepository
     public async Task<List<string>> GetAllDatesByProductionAreaAsync(Guid productionAreaId)
     {
         return (
-            await _context.ProductAccounts.Select(_ => _.DateFromPlan.Date).Distinct().ToListAsync()
+            await _context.ProductAccounts
+                .Select(_ => _.DateFromPlan.Date)
+                .Distinct()
+                .OrderBy(_ => _.Date)
+                .ToListAsync()
         )
             .Select(_ => _.ToDayInfoString())
             .ToList();

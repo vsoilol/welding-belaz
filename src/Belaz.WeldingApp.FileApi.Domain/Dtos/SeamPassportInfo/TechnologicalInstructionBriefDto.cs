@@ -1,4 +1,4 @@
-﻿using Belaz.WeldingApp.FileApi.Domain.Entities.TechnologicalProcessInfo;
+﻿using Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;

@@ -3,7 +3,7 @@ using AutoMapper;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Implementations;
@@ -104,7 +104,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .ThenInclude(_ => _.WeldingRecord.WeldingEquipment.Workplaces)
             .ThenInclude(_ => _!.ProductionArea!.Workshop)
             .Include(_ => _.Inspector!.UserInfo)
-            .Include(_ => _.Master.UserInfo)
+            .Include(_ => _.Master!.UserInfo)
             .Include(_ => _.Welder!.UserInfo);
 
         if (filter != null)

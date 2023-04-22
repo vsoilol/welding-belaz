@@ -1,6 +1,6 @@
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelWelderOperationReport;
 
-public abstract class GenerateExcelWelderOperationReportRequest
+public class GenerateExcelWelderOperationReportRequest
 {
     public string StartDate { get; set; } = null!;
 

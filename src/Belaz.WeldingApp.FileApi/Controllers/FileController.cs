@@ -1,5 +1,4 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -24,27 +23,6 @@ public class FileController : ControllerBase
             new GenerateSeamPassportByTaskIdRequest { TaskId = taskId }
         );
 
-        return result.ToFile();
-    }
-
-    [HttpGet("equipmentOperationAnalysis")]
-    public async Task<IActionResult> GenerateExcelEquipmentOperationAnalysisReportAsync()
-    {
-        var result = await _fileService.GenerateExcelEquipmentOperationAnalysisReportAsync();
-        return result.ToFile();
-    }
-
-    [HttpGet("welderOperationReport")]
-    public async Task<IActionResult> GenerateExcelWelderOperationReportAsync()
-    {
-        var result = await _fileService.GenerateExcelWelderOperationReportAsync();
-        return result.ToFile();
-    }
-
-    [HttpGet("equipmentEfficiencyReport")]
-    public async Task<IActionResult> GenerateExcelEquipmentEfficiencyReportAsync()
-    {
-        var result = await _fileService.GenerateExcelEquipmentEfficiencyReportAsync();
         return result.ToFile();
     }
 }

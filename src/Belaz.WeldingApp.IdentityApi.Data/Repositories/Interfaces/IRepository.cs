@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
+using Belaz.WeldingApp.Common.Entities;
 
 namespace Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces
 {
     public interface IRepository<T>
-         where T : Entity
+        where T : Entity
     {
         Task<IEnumerable<T>> GetAllAsync();
 

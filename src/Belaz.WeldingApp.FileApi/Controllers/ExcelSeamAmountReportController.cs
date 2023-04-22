@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelSeamAmountReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.Extensions;
@@ -66,6 +62,17 @@ public class ExcelSeamAmountReportController : ControllerBase
             await _excelSeamAmountReportService.GenerateExcelSeamAmountReportByProductionAreaAsync(
                 request
             );
+        return result.ToFile();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GenerateExcelSeamAmountReportAsync(
+        [FromQuery] GenerateExcelSeamAmountReportRequest request
+    )
+    {
+        var result = await _excelSeamAmountReportService.GenerateExcelSeamAmountReportAsync(
+            request
+        );
         return result.ToFile();
     }
 }

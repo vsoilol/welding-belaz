@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.Common.Entities.IdentityUser;
-using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Belaz.WeldingApp.Common.Entities.Production;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
@@ -30,4 +29,6 @@ public class Welder : Entity
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
 
     public List<WeldingRecord> WeldingRecords { get; set; } = null!;
+
+    public List<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; } = null!;
 }

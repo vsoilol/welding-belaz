@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.RegistarApi.DataLayer;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.TaskInfo;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.Users;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.Users;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using FluentValidation;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Validations.Features;

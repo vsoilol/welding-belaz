@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Implementations;

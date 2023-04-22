@@ -27,4 +27,6 @@ public interface ISeamAccountRepository
         DateTime startDate,
         DateTime endDate
     );
+
+    Task<SeamAmountDto?> GetSeamAmountByDatePeriodAsync(DateTime startDate, DateTime endDate);
 }

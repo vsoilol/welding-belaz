@@ -1,5 +1,5 @@
 ﻿using Belaz.WeldingApp.FileApi.DataLayer;
-using Belaz.WeldingApp.FileApi.Domain.Entities;
+using Belaz.WeldingApp.Common.Entities;
 using FluentValidation;
 using FluentValidation.Validators;
 

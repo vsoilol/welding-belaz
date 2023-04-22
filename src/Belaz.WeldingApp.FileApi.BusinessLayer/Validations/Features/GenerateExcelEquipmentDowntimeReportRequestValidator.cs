@@ -1,7 +1,7 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.FileApi.DataLayer;
-using Belaz.WeldingApp.FileApi.Domain.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using FluentValidation;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Features;

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Belaz.WeldingApp.Common.Entities.Users;
 using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.Common.Entities.ProductInfo;

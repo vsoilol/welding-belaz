@@ -21,4 +21,8 @@ public interface IExcelWelderOperationReportService
     Task<Result<DocumentDto>> GenerateExcelWelderOperationReportByProductionAreaAsync(
         GenerateExcelWelderOperationReportByProductionAreaRequest request
     );
+
+    Task<Result<DocumentDto>> GenerateExcelWelderOperationReportAsync(
+        GenerateExcelWelderOperationReportRequest request
+    );
 }

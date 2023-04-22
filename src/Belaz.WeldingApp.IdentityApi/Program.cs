@@ -1,10 +1,10 @@
 using System.Text;
+using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.Common.Extensions;
 using Belaz.WeldingApp.Common.Filters;
 using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi;
 using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Entities;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Helpers;
 using Belaz.WeldingApp.IdentityApi.Middlewares;

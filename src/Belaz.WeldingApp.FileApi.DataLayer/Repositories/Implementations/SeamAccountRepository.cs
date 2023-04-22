@@ -1,13 +1,13 @@
 using AutoMapper;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
-using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Microsoft.EntityFrameworkCore;
 using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;
 
-public class SeamAccountRepository : ISeamAccountRepository
+internal class SeamAccountRepository : ISeamAccountRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;
@@ -98,6 +98,23 @@ public class SeamAccountRepository : ISeamAccountRepository
         var query = QuerySeamAccountsWithFilters(startDate, endDate);
 
         query = query.Where(_ => _.Seam.ProductionAreaId == productionAreaId);
+
+        if (!(await query.AnyAsync()))
+        {
+            return null;
+        }
+
+        var result = await GetSeamAmountFromSeamAccounts(query);
+
+        return result;
+    }
+
+    public async Task<SeamAmountDto?> GetSeamAmountByDatePeriodAsync(
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var query = QuerySeamAccountsWithFilters(startDate, endDate);
 
         if (!(await query.AnyAsync()))
         {

@@ -51,6 +51,16 @@
       "SwaggerKey": "file"
     },
     {
+      "UpstreamPathTemplate": "/api/excelDeviationReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelDeviationReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
       "UpstreamPathTemplate": "/api/excelSeamAmountReport/byWorkshop",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -91,6 +101,16 @@
       "SwaggerKey": "file"
     },
     {
+      "UpstreamPathTemplate": "/api/excelSeamAmountReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelSeamAmountReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
       "UpstreamPathTemplate": "/api/excelEquipmentOperationTimeReport",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -107,6 +127,126 @@
         "GET"
       ],
       "DownstreamPathTemplate": "/api/excelEquipmentDowntimeReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelWelderOperationReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelWelderOperationReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelWelderOperationReport/byWelder",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelWelderOperationReport/byWelder",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelWelderOperationReport/byWorkplace",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelWelderOperationReport/byWorkplace",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelWelderOperationReport/byProductionArea",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelWelderOperationReport/byProductionArea",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelWelderOperationReport/byWorkshop",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelWelderOperationReport/byWorkshop",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byProductionArea",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byProductionArea",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byWorkshop",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport/byWorkshop",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentOperationAnalysisReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentEfficiencyReport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentEfficiencyReport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentEfficiencyReport/byWorkplace",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentEfficiencyReport/byWorkplace",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentEfficiencyReport/byWorkshop",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentEfficiencyReport/byWorkshop",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/excelEquipmentEfficiencyReport/byProductionArea",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/excelEquipmentEfficiencyReport/byProductionArea",
       "ServiceName": "file",
       "SwaggerKey": "file"
     }

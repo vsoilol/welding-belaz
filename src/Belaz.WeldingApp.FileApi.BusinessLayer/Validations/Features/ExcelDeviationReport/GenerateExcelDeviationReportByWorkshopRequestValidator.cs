@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.FileApi.DataLayer;
-using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
-using Belaz.WeldingApp.FileApi.Domain.Entities.Production;
+using Belaz.WeldingApp.Common.Entities.Production;
 using FluentValidation;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Features.ExcelDeviationReport;

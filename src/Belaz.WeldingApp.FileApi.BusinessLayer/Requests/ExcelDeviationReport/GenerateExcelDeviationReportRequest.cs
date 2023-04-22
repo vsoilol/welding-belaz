@@ -1,6 +1,6 @@
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 
-public abstract class GenerateExcelDeviationReportRequest
+public class GenerateExcelDeviationReportRequest
 {
     public Guid ProductId { get; set; }
 

@@ -76,7 +76,7 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
             .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
             .ForMember(dto => dto.Seam, opt => opt.MapFrom(x => x.SeamAccount.Seam))
             .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
-            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master.UserInfo))
+            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master!.UserInfo))
             .ForMember(
                 dto => dto.WeldingEquipments,
                 opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.WeldingEquipments)

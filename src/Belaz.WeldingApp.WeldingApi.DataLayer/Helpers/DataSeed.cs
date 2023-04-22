@@ -1,5 +1,4 @@
 ﻿using Belaz.WeldingApp.Common.Enums;
-using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Belaz.WeldingApp.Common.Entities.Production;
@@ -22,11 +21,6 @@ public class DataSeed
             await AddDowntimeReasons(context);
         }
 
-        if (!context.Calendars.Any())
-        {
-            await AddCalendar(context);
-        }
-
         if (!context.Workshops.Any())
         {
             await AddProduction(context);
@@ -35,6 +29,13 @@ public class DataSeed
         if (!context.WeldingEquipments.Any())
         {
             await AddWeldingEquipmentsAsync(context);
+        }
+
+        if (!context.Calendars.Any())
+        {
+            var calendar = CalendarGenerator.GenerateCalendar();
+            context.Calendars.Add(calendar);
+            await context.SaveChangesAsync();
         }
 
         if (!context.Inspectors.Any())
@@ -74,19 +75,19 @@ public class DataSeed
 
         if (!context.ProductAccounts.Any())
         {
-            await AddProductAccounts(context);
+            //await AddProductAccounts(context);
         }
 
         if (!context.WeldingTasks.Any())
         {
             //await AddWeldingTasks(context);
-            await GenerateTaskByProductAccounts(context);
+            //await GenerateTaskByProductAccounts(context);
         }
     }
 
     private static async Task GenerateTaskByProductAccounts(ApplicationContext context)
     {
-        var date = new DateTime(2023, 3, 12);
+        var date = DateTime.Now;
 
         var master = (
             await context.Masters.FirstOrDefaultAsync(_ => _.UserInfo.ServiceNumber == "10422")
@@ -133,7 +134,7 @@ public class DataSeed
 
         var weldingEquipment = (
             await context.WeldingEquipments
-                .Where(_ => _.IdFromSystem == "49232")
+                .Where(_ => _.IdFromSystem == "49283")
                 .FirstOrDefaultAsync()
         )!;
 
@@ -161,7 +162,7 @@ public class DataSeed
 
                 var seamAccount = new SeamAccount
                 {
-                    DateFromPlan = new DateTime(2023, 3, 12),
+                    DateFromPlan = DateTime.Now,
                     Seam = seam,
                     SeamResults = seamResultStatus
                 };
@@ -171,8 +172,8 @@ public class DataSeed
             var productAccount = new ProductAccount
             {
                 Number = i + 1,
-                AmountFromPlan = 2,
-                DateFromPlan = new DateTime(2023, 3, 12),
+                AmountFromPlan = 10,
+                DateFromPlan = DateTime.Now,
                 Product = product,
                 ProductResults = productResultStatus,
                 SeamAccounts = seamAccounts,
@@ -245,65 +246,6 @@ public class DataSeed
         };
 
         await context.DowntimeReasons.AddRangeAsync(downtimeReasons);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddCalendar(ApplicationContext context)
-    {
-        var calendar = new Calendar
-        {
-            Year = 2023,
-            IsMain = true,
-            Days = new List<Day>
-            {
-                new Day
-                {
-                    MonthNumber = 1,
-                    Number = 10,
-                    IsWorkingDay = true,
-                    WorkingShifts = new List<WorkingShift>
-                    {
-                        new WorkingShift
-                        {
-                            Number = 1,
-                            ShiftStart = new TimeSpan(12, 10, 0),
-                            ShiftEnd = new TimeSpan(13, 10, 0),
-                            BreakStart = new TimeSpan(13, 20, 0),
-                            BreakEnd = new TimeSpan(13, 50, 0),
-                        }
-                    }
-                }
-            },
-            MainWorkingShifts = new List<WorkingShift>
-            {
-                new WorkingShift
-                {
-                    Number = 1,
-                    ShiftStart = new TimeSpan(12, 0, 0),
-                    ShiftEnd = new TimeSpan(13, 0, 0),
-                    BreakStart = new TimeSpan(13, 10, 0),
-                    BreakEnd = new TimeSpan(13, 40, 0),
-                },
-                new WorkingShift
-                {
-                    Number = 2,
-                    ShiftStart = new TimeSpan(14, 0, 0),
-                    ShiftEnd = new TimeSpan(15, 0, 0),
-                    BreakStart = new TimeSpan(15, 10, 0),
-                    BreakEnd = new TimeSpan(15, 40, 0),
-                },
-                new WorkingShift
-                {
-                    Number = 3,
-                    ShiftStart = new TimeSpan(16, 0, 0),
-                    ShiftEnd = new TimeSpan(17, 0, 0),
-                    BreakStart = new TimeSpan(17, 10, 0),
-                    BreakEnd = new TimeSpan(17, 40, 0),
-                }
-            }
-        };
-
-        await context.Calendars.AddAsync(calendar);
         await context.SaveChangesAsync();
     }
 
@@ -835,6 +777,7 @@ public class DataSeed
             Name = "Рама",
             ProductType = ProductType.Product,
             ProductionArea = productionArea6,
+            ManufacturingTime = 10,
             TechnologicalProcess = technologicalProcess3330041,
             Seams = new List<Seam>
             {
@@ -891,6 +834,7 @@ public class DataSeed
                         Name = "Поперечина рамы задняя",
                         TechnologicalProcess = technologicalProcess3330041,
                         ProductType = ProductType.Knot,
+                        ManufacturingTime = 20,
                         ProductionArea = productionArea6,
                         Seams = new List<Seam>
                         {
@@ -926,6 +870,7 @@ public class DataSeed
             IdFromSystem = "4536479362",
             Number = "75131-2800010-70",
             Name = "Рама",
+            ManufacturingTime = 11,
             ProductType = ProductType.Product,
             ProductionArea = productionArea6,
             TechnologicalProcess = technologicalProcess3291137,
@@ -982,6 +927,7 @@ public class DataSeed
                     {
                         Number = "75131-2801300-20",
                         Name = "Поперечина рамы задняя",
+                        ManufacturingTime = 41,
                         TechnologicalProcess = technologicalProcess3291137,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,

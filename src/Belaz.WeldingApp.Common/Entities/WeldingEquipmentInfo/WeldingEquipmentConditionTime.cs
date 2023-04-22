@@ -1,5 +1,5 @@
-﻿using Belaz.WeldingApp.Common.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using Belaz.WeldingApp.Common.Entities.Users;
+using Belaz.WeldingApp.Common.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
@@ -21,6 +21,11 @@ public class WeldingEquipmentConditionTime : Entity
 
     [ForeignKey(nameof(WeldingEquipmentId))]
     public WeldingEquipment WeldingEquipment { get; set; } = null!;
+
+    public Guid WelderId { get; set; }
+
+    [ForeignKey(nameof(WelderId))]
+    public Welder Welder { get; set; } = null!;
 
     public Guid? DowntimeReasonId { get; set; }
 

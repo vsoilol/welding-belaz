@@ -1,5 +1,5 @@
 ﻿using Belaz.WeldingApp.RegistarApi.DataLayer;
-using Belaz.WeldingApp.RegistarApi.Domain.Entities;
+using Belaz.WeldingApp.Common.Entities;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -23,6 +23,6 @@ public class SqlIdValidatorFor<T, TEntity> : PropertyValidator<T, Guid>
 
     public override string Name => "SqlIdValidatorFor";
 
-    protected override string GetDefaultMessageTemplate(string errorCode)
-        => "'Id' must be a valid.";
+    protected override string GetDefaultMessageTemplate(string errorCode) =>
+        "'Id' must be a valid.";
 }

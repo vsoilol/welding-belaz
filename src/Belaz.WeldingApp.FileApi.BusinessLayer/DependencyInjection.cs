@@ -1,11 +1,8 @@
 ﻿using System.Reflection;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Implementations;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Helpers.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Validations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.DeviationsReportInfo;
@@ -22,7 +19,6 @@ public static class DependencyInjection
 
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<IFileService, FileService>();
-        services.AddScoped<IMarkEstimateService, MarkEstimateService>();
         services.AddScoped<IExcelDeviationReportService, ExcelDeviationReportService>();
         services.AddScoped<IExcelSeamAmountReportService, ExcelSeamAmountReportService>();
         services.AddScoped<
@@ -32,6 +28,15 @@ public static class DependencyInjection
         services.AddScoped<
             IExcelEquipmentDowntimeReportService,
             ExcelEquipmentDowntimeReportService
+        >();
+        services.AddScoped<IExcelWelderOperationReportService, ExcelWelderOperationReportService>();
+        services.AddScoped<
+            IExcelEquipmentOperationAnalysisReportService,
+            ExcelEquipmentOperationAnalysisReportService
+        >();
+        services.AddScoped<
+            IExcelEquipmentEfficiencyReportService,
+            ExcelEquipmentEfficiencyReportService
         >();
 
         services.AddScoped<

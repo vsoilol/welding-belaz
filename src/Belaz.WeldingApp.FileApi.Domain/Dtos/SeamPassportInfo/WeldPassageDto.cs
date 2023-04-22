@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.FileApi.Domain.Entities.ProductInfo;
-using Belaz.WeldingApp.FileApi.Domain.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
@@ -60,6 +59,8 @@ public class WeldPassageDto : IMapFrom<WeldPassage>
     /// Обеспечивает ли допуск для температуры. True - обеспечивает, false - не обеспечивает
     /// </summary>
     public bool? IsEnsuringTemperatureAllowance { get; set; }
+
+    public double Estimation { get; set; }
 
     public void Mapping(Profile profile)
     {

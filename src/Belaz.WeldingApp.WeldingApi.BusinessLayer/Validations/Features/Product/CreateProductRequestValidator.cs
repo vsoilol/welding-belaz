@@ -22,6 +22,10 @@ public class CreateProductRequestValidator : AbstractValidator<CreateProductRequ
 
         RuleFor(model => model.Request.Number).Cascade(CascadeMode.Stop).NotEmpty();
 
+        RuleFor(model => model.Request.ManufacturingTime)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(0);
+
         RuleFor(model => model.Request.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
@@ -46,9 +50,10 @@ public class CreateProductRequestValidator : AbstractValidator<CreateProductRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<CreateProductRequest, Belaz.WeldingApp.Common.Entities.ProductInfo.Product>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    CreateProductRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
             )
             .SetAsyncValidator(new MainProductIdValidatorForCreateProductRequest(context))
             .When(_ => _.Type != ProductType.Product);

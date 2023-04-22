@@ -2,13 +2,13 @@ namespace Belaz.WeldingApp.FileApi.Domain.Dtos;
 
 public class EquipmentOperationTimeWithShiftDto
 {
-    public int WorkingShifNumber { get; set; }
+    public string CutInfo { get; set; } = null!;
 
-    public int OnTimeMinutes { get; set; }
+    public double OnTimeMinutes { get; set; }
 
-    public int OffTimeMinutes { get; set; }
+    public double OffTimeMinutes { get; set; }
 
-    public int WorkTimeMinutes { get; set; }
+    public double WorkTimeMinutes { get; set; }
 
-    public int DowntimeMinutes { get; set; }
+    public double DowntimeMinutes { get; set; }
 }
