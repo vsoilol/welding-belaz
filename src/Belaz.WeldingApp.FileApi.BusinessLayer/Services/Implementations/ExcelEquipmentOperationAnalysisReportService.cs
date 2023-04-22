@@ -17,6 +17,8 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 internal class ExcelEquipmentOperationAnalysisReportService
     : IExcelEquipmentOperationAnalysisReportService
 {
+    private const int DayMinutes = 1440;
+
     private readonly IValidationService _validationService;
     private readonly IExcelFileService<
         List<EquipmentOperationTimeWithShiftDto>
@@ -71,6 +73,9 @@ internal class ExcelEquipmentOperationAnalysisReportService
                     conditionTimes
                 );
                 break;
+            case CutType.Day:
+                data = GetEquipmentOperationTimeForDays(dateStart, dateEnd, conditionTimes);
+                break;
         }
 
         if (!data.Any())
@@ -96,6 +101,53 @@ internal class ExcelEquipmentOperationAnalysisReportService
     )
     {
         throw new NotImplementedException();
+    }
+
+    private List<EquipmentOperationTimeWithShiftDto> GetEquipmentOperationTimeForDays(
+        DateTime startDate,
+        DateTime endDate,
+        List<ConditionTimeDto> conditionTimes
+    )
+    {
+        var dayConditionTimeMap = new Dictionary<DateTime, List<ConditionTimeDto>>();
+
+        var result = new List<EquipmentOperationTimeWithShiftDto>();
+
+        for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        {
+            var dayConditionTimes = conditionTimes.Where(_ => _.Date.Date == date.Date).ToList();
+
+            var conditionTimeGroups = dayConditionTimes
+                .GroupBy(w => w.Condition)
+                .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
+                .ToList();
+
+            var allMinutes = DayMinutes;
+
+            var onTimeMinutes =
+                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
+            var workTimeMinutes =
+                conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.AtWork)?.Time ?? 0;
+            var downtimeMinutes =
+                conditionTimeGroups
+                    .FirstOrDefault(g => g.Condition == Condition.ForcedDowntime)
+                    ?.Time ?? 0;
+
+            var offTimeMinutes = allMinutes - downtimeMinutes - workTimeMinutes - onTimeMinutes;
+
+            result.Add(
+                new EquipmentOperationTimeWithShiftDto
+                {
+                    CutInfo = date.ToString("MMMM dd"),
+                    OnTimeMinutes = onTimeMinutes,
+                    WorkTimeMinutes = workTimeMinutes,
+                    DowntimeMinutes = downtimeMinutes,
+                    OffTimeMinutes = offTimeMinutes
+                }
+            );
+        }
+
+        return result;
     }
 
     private async Task<
