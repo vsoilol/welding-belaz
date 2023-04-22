@@ -18,10 +18,6 @@ public class FileService : IFileService
     private readonly IWebHostEnvironment _environment;
     private readonly IValidationService _validationService;
     private readonly IExcelFileService<
-        List<EquipmentOperationTimeWithShiftDto>
-    > _excelEquipmentOperationAnalysisReportService;
-    private readonly IExcelFileService<WelderOperationTimeDto> _excelWelderOperationReportService;
-    private readonly IExcelFileService<
         List<EquipmentEfficiencyReportDto>
     > _excelEquipmentEfficiencyReportService;
 
@@ -39,9 +35,6 @@ public class FileService : IFileService
         _taskRepository = taskRepository;
         _environment = environment;
         _validationService = validationService;
-        _excelEquipmentOperationAnalysisReportService =
-            excelEquipmentOperationAnalysisReportService;
-        _excelWelderOperationReportService = excelWelderOperationReportService;
         _excelEquipmentEfficiencyReportService = excelEquipmentEfficiencyReportService;
     }
 
@@ -76,41 +69,6 @@ public class FileService : IFileService
         };
 
         return result;
-    }
-
-    public async Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportAsync()
-    {
-        var equipmentOperationTimeWithShiftDtos = new List<EquipmentOperationTimeWithShiftDto>
-        {
-            new()
-            {
-                CutInfo = "Смена 1",
-                OffTimeMinutes = 120,
-                OnTimeMinutes = 80,
-                WorkTimeMinutes = 132,
-                DowntimeMinutes = 118
-            },
-            new()
-            {
-                CutInfo = "Смена 2",
-                OffTimeMinutes = 133,
-                OnTimeMinutes = 92,
-                WorkTimeMinutes = 140,
-                DowntimeMinutes = 105
-            },
-            new()
-            {
-                CutInfo = "Смена 3",
-                OffTimeMinutes = 145,
-                OnTimeMinutes = 98,
-                WorkTimeMinutes = 125,
-                DowntimeMinutes = 82
-            }
-        };
-
-        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(
-            equipmentOperationTimeWithShiftDtos
-        );
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportAsync()

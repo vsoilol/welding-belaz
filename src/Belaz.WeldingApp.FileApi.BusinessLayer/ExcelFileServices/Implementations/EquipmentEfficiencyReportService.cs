@@ -84,15 +84,15 @@ public class EquipmentEfficiencyReportService
             .Numberformat
             .Format = "dd.MMM";
 
-        worksheet.Cells[
-            DataStartRow,
-            OverallEquipmentEfficiencyColumn,
-            data.Count + 1,
-            OverallEquipmentEfficiencyColumn
-        ]
-            .Style
-            .Numberformat
-            .Format = "#,##0.00";
+        // worksheet.Cells[
+        //     DataStartRow,
+        //     OverallEquipmentEfficiencyColumn,
+        //     data.Count + 1,
+        //     OverallEquipmentEfficiencyColumn
+        // ]
+        //     .Style
+        //     .Numberformat
+        //     .Format = "#,##0.00";
     }
 
     private void CreateChart(ExcelWorksheet worksheet, List<EquipmentEfficiencyReportDto> data)

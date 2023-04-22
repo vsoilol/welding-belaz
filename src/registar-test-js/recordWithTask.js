@@ -1,5 +1,11 @@
 const http = require("http");
 
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
+
 const generateRandomNumbers = (min, max, times) => {
     const randoms = []
 
@@ -12,7 +18,7 @@ const generateRandomNumbers = (min, max, times) => {
 
 function recordWithTask(callback) {
     const now = new Date();
-    const isoString = now.toISOString();
+    const isoString = now.addDays(6).toISOString();
 
     // Number = 1,
     // WeldingCurrentMin = 200,
@@ -27,15 +33,15 @@ function recordWithTask(callback) {
     // ArcVoltageMax = 26
 
     const postData = JSON.stringify({
-        tID: "5b868974-2134-43d9-8ecd-3953b086accf",
+        tID: "1c43909c-5aae-487d-a4fd-0ebd6939c125",
         PasN: 2,
         preTemp: 12.2,
         RegID: "string",
-        EqpID: "cc52f444-97f1-4aa9-b4dc-de0d3b3be3f8",
-        EplID: "a9889668-a179-48d2-a4b0-ad1f1f2ec176",
+        EqpID: "69f00ef3-6fda-4076-a381-a63234731fb0",
+        EplID: "134ff62e-b491-4f47-9fab-ae9071244c2f",
         SDT: isoString,
-        Amp: generateRandomNumbers(270, 315, 500),
-        Volt: generateRandomNumbers(23, 26, 500),
+        Amp: generateRandomNumbers(270, 315, 900),
+        Volt: generateRandomNumbers(23, 26, 900),
     });
 
     const options = {

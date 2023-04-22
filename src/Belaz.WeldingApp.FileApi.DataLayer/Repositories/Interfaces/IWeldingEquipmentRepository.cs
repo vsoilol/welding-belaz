@@ -33,4 +33,27 @@ public interface IWeldingEquipmentRepository
         DateTime startDate,
         DateTime endDate
     );
+
+    Task<List<ConditionTimeDto>> GetOnConditionTimeByProductionAreaAndDatePeriodAsync(
+        Guid productionAreaId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<List<ConditionTimeDto>> GetOnConditionTimeByWorkshopAndDatePeriodAsync(
+        Guid workshopId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<List<ConditionTimeDto>> GetOnConditionTimeByDatePeriodAsync(
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<List<ConditionTimeDto>> GetOnConditionTimeByWorkplaceAndDatePeriodAsync(
+        Guid workplaceId,
+        DateTime startDate,
+        DateTime endDate
+    );
 }

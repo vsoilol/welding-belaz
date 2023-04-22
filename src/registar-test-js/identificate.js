@@ -2,9 +2,15 @@ const http = require("http");
 
 const REGISTAR_URL = "http://localhost:5006";
 
+Date.prototype.addDays = function(days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
 setInterval(() => {
   const now = new Date();
-  const isoString = now.toISOString();
+  const isoString = now.addDays(6).toISOString();
 
   const postData = JSON.stringify({
     RegID: "sdfsdf",
@@ -40,6 +46,6 @@ setInterval(() => {
 
   req.write(postData);
   req.end();
-}, 10000);
+}, 5000);
 
 

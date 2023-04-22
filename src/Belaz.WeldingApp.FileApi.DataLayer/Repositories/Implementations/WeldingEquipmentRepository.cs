@@ -137,4 +137,85 @@ internal class WeldingEquipmentRepository : IWeldingEquipmentRepository
             WorkTimeMinutes = workTimeMinutes
         };
     }
+
+    public Task<List<ConditionTimeDto>> GetOnConditionTimeByDatePeriodAsync(
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w => w.Date >= startDate && w.Date <= endDate && w.Condition == Condition.On
+        );
+
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ConditionTimeDto>> GetOnConditionTimeByProductionAreaAndDatePeriodAsync(
+        Guid productionAreaId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w =>
+                w.WeldingEquipment.Workplaces.Any(
+                    wp =>
+                        wp.PostId == null
+                            ? wp.ProductionAreaId == productionAreaId
+                            : wp.Post!.ProductionAreaId == productionAreaId
+                )
+                && w.Date >= startDate
+                && w.Date <= endDate
+                && w.Condition == Condition.On
+        );
+
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ConditionTimeDto>> GetOnConditionTimeByWorkshopAndDatePeriodAsync(
+        Guid workshopId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w =>
+                w.WeldingEquipment.Workplaces.Any(
+                    wp =>
+                        wp.PostId == null
+                            ? wp.ProductionArea!.WorkshopId == workshopId
+                            : wp.Post!.ProductionArea.WorkshopId == workshopId
+                )
+                && w.Date >= startDate
+                && w.Date <= endDate
+                && w.Condition == Condition.On
+        );
+
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<ConditionTimeDto>> GetOnConditionTimeByWorkplaceAndDatePeriodAsync(
+        Guid workplaceId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w =>
+                w.WeldingEquipment.Workplaces.Any(wp => wp.Id == workplaceId)
+                && w.Date >= startDate
+                && w.Date <= endDate
+                && w.Condition == Condition.On
+        );
+
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
 }

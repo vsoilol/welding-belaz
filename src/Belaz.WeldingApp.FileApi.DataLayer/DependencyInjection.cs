@@ -20,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<IWeldingEquipmentRepository, WeldingEquipmentRepository>();
         services.AddScoped<IWelderRepository, WelderRepository>();
         services.AddScoped<ICalendarRepository, CalendarRepository>();
+        services.AddScoped<IProductAccountRepository, ProductAccountRepository>();
 
         return services;
     }

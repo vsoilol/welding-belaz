@@ -34,6 +34,10 @@ public static class DependencyInjection
             IExcelEquipmentOperationAnalysisReportService,
             ExcelEquipmentOperationAnalysisReportService
         >();
+        services.AddScoped<
+            IExcelEquipmentEfficiencyReportService,
+            ExcelEquipmentEfficiencyReportService
+        >();
 
         services.AddScoped<
             IExcelFileService<List<WeldPassageDeviationsDto>>,
