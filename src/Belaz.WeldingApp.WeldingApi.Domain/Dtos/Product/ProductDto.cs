@@ -20,6 +20,8 @@ public class ProductDto : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInfo.
 
     public bool IsControlSubject { get; set; }
 
+    public double ManufacturingTime { get; set; }
+
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 
     public WorkshopBriefDto Workshop { get; set; } = null!;

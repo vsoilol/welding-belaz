@@ -19,15 +19,20 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateProductRequest, Belaz.WeldingApp.Common.Entities.ProductInfo.Product>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    UpdateProductRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
             );
 
         RuleFor(model => model.Request.Name)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .When(_ => _.Request.Name is not null);
+
+        RuleFor(model => model.Request.ManufacturingTime)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(0);
 
         RuleFor(model => model.Request.Number).Cascade(CascadeMode.Stop).NotEmpty();
 
@@ -55,9 +60,10 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetValidator(
-                new SqlIdValidatorFor<UpdateProductRequest, Belaz.WeldingApp.Common.Entities.ProductInfo.Product>(
-                    context
-                )
+                new SqlIdValidatorFor<
+                    UpdateProductRequest,
+                    Belaz.WeldingApp.Common.Entities.ProductInfo.Product
+                >(context)
             )
             .SetAsyncValidator(new MainProductIdValidatorForUpdateProductRequest(context))
             .NotEqual(_ => _.Request.Id)

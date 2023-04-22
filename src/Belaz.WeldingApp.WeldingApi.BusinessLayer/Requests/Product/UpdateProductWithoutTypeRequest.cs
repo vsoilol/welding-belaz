@@ -23,6 +23,11 @@ public class UpdateProductWithoutTypeRequest
 
     public Guid? MainProductId { get; set; }
 
+    /// <summary>
+    /// Норма времени на изготовление
+    /// </summary>
+    public double ManufacturingTime { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile

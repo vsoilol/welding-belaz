@@ -778,6 +778,7 @@ public class DataSeed
             Name = "Рама",
             ProductType = ProductType.Product,
             ProductionArea = productionArea6,
+            ManufacturingTime = 10,
             TechnologicalProcess = technologicalProcess3330041,
             Seams = new List<Seam>
             {
@@ -834,6 +835,7 @@ public class DataSeed
                         Name = "Поперечина рамы задняя",
                         TechnologicalProcess = technologicalProcess3330041,
                         ProductType = ProductType.Knot,
+                        ManufacturingTime = 20,
                         ProductionArea = productionArea6,
                         Seams = new List<Seam>
                         {
@@ -869,6 +871,7 @@ public class DataSeed
             IdFromSystem = "4536479362",
             Number = "75131-2800010-70",
             Name = "Рама",
+            ManufacturingTime = 11,
             ProductType = ProductType.Product,
             ProductionArea = productionArea6,
             TechnologicalProcess = technologicalProcess3291137,
@@ -925,6 +928,7 @@ public class DataSeed
                     {
                         Number = "75131-2801300-20",
                         Name = "Поперечина рамы задняя",
+                        ManufacturingTime = 41,
                         TechnologicalProcess = technologicalProcess3291137,
                         ProductType = ProductType.Knot,
                         ProductionArea = productionArea6,

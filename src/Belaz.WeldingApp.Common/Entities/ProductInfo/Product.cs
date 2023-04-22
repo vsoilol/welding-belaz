@@ -20,6 +20,11 @@ public class Product : Entity
     /// </summary>
     public bool IsControlSubject { get; set; } = true;
 
+    /// <summary>
+    /// Норма времени на изготовление
+    /// </summary>
+    public double ManufacturingTime { get; set; } = 0;
+
     public ProductType ProductType { get; set; }
 
     public Guid? TechnologicalProcessId { get; set; }
