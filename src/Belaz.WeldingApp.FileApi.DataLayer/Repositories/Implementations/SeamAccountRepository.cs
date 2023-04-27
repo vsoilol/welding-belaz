@@ -180,12 +180,13 @@ internal class SeamAccountRepository : ISeamAccountRepository
 
     private Task<int> GetNumControlledRegistrarSeamsAsync(IQueryable<SeamAccount> seamAccounts)
     {
-        var numControlledRegistrar = seamAccounts.SumAsync(
-            _ =>
-                _.WeldingTasks.Sum(
-                    weldingTask => weldingTask.WeldPassages.Count(_ => _.Number == 1)
-                )
-        );
+        var weldPassagesQuery = seamAccounts
+            .SelectMany(_ => _.WeldingTasks)
+            .SelectMany(_ => _.WeldPassages);
+
+        var numControlledRegistrar = weldPassagesQuery
+            .GroupBy(_ => _.Number)
+            .MinAsync(_ => _.Count());
 
         return numControlledRegistrar;
     }
@@ -239,7 +240,7 @@ internal class SeamAccountRepository : ISeamAccountRepository
             .SelectMany(_ => _.WeldPassages)
             .ToListAsync();
 
-        var numDeviantWelding = deviantWeldPassages.GroupBy(_ => _.Number).Max(_ => _.Count());
+        var numDeviantWelding = deviantWeldPassages.GroupBy(_ => _.Number).Min(_ => _.Count());
 
         return numDeviantWelding;
     }
