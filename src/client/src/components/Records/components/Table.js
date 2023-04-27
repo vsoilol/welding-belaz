@@ -158,6 +158,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords }) => {
               <Line
                 type="monotone"
                 dataKey="value"
+                strokeWidth={3}
                 stroke="#8884d8"
                 fill="#8884d8"
                 dot={false}
@@ -198,6 +199,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords }) => {
               <Line
                 type="monotone"
                 dataKey="value"
+                strokeWidth={3}
                 stroke="#82ca9d"
                 fill="#82ca9d"
                 dot={false}

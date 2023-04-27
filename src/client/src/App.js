@@ -8,6 +8,7 @@ import {
   ExecutorsContainer,
   InstructionsContainer,
   LoginContainer,
+  RegContainer,
   TasksContainer,
   RecordsContainer,
   ReportsContainer
@@ -58,6 +59,13 @@ function App({ error, errorType, clearError }) {
                 path="/login"
                 exact
                 component={LoginContainer}
+                redirectTo="/"
+              />
+              <PrivateRoute
+                allow={!isAuth}
+                path="/reg"
+                exact
+                component={RegContainer}
                 redirectTo="/"
               />
               <PrivateRoute
