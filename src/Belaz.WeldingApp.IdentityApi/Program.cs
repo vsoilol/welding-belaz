@@ -2,6 +2,7 @@ using System.Text;
 using Belaz.WeldingApp.Common.Extensions;
 using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Configs;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Helpers;
 using Belaz.WeldingApp.IdentityApi.DataLayer;
 using Belaz.WeldingApp.IdentityApi.Filters;
@@ -90,6 +91,12 @@ builder.Services
             ValidateAudience = false,
         };
     });
+
+var emailConfig = builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+
+builder.Services.AddSingleton(emailConfig);
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
