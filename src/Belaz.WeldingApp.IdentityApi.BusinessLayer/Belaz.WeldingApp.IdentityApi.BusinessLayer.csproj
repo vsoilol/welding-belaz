@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.0" />
+        <PackageReference Include="MailKit" Version="4.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+        <PackageReference Include="FluentValidation" Version="11.4.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
+        <PackageReference Include="LanguageExt.Core" Version="4.4.0" />
+        <PackageReference Include="MimeKit" Version="4.0.0" />
+        <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Belaz.WeldingApp.IdentityApi.DataLayer\Belaz.WeldingApp.IdentityApi.DataLayer.csproj" />
+      <ProjectReference Include="..\Belaz.WeldingApp.IdentityApi.Domain\Belaz.WeldingApp.IdentityApi.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

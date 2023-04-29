@@ -1,12 +1,14 @@
-using Belaz.WeldingApp.IdentityApi.Contracts.Requests.User;
-using Belaz.WeldingApp.IdentityApi.Contracts.Responses.User;
-using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Requests.User;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Contracts;
+using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
+using Belaz.WeldingApp.IdentityApi.Extensions;
+using LanguageExt;
 
 namespace Belaz.WeldingApp.IdentityApi.Controllers;
 
@@ -15,11 +17,11 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserController : ControllerBase
 {
-    private readonly IUserManager _userManager;
+    private readonly IUserService _userService;
 
-    public UserController(IUserManager userManager)
+    public UserController(IUserService userService)
     {
-        _userManager = userManager;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -27,9 +29,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<UserDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll()
     {
-        var users = await _userManager.GetAllAsync();
+        var users = await _userService.GetAllAsync();
 
-        HttpContext.Items[ContextItems.LogMessage] = "Получение всех пользователей";
+        HttpContext.Items[ContextItems.LogMessage] = "Получение информации о всех пользователях";
 
         return Ok(users);
     }
@@ -37,56 +39,65 @@ public class UserController : ControllerBase
     [HttpGet("{userId}")]
     [AuthorizeRoles(Role.Admin, Role.Master)]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get([FromRoute] Guid userId)
+    public async Task<ActionResult<UserDto>> Get([FromRoute] Guid userId)
     {
-        var user = await _userManager.GetByIdAsync(userId);
+        var result = await _userService.GetByIdAsync(new GetUserByIdRequest { Id = userId });
 
-        HttpContext.Items[ContextItems.LogMessage] =
-            $"Получение пользователя {user.MiddleName} {user.FirstName} {user.LastName}";
-
-        return Ok(user);
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Получение информации о пользователе: {_.MiddleName} {_.FirstName} {_.LastName}";
+        });
     }
 
     [HttpPost]
     [AuthorizeRoles(Role.Admin)]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> Add([FromBody] CreateUserRequest userContract)
+    public async Task<ActionResult<UserDto>> Add([FromBody] CreateUserRequest userContract)
     {
-        var createdUserContract = await _userManager.AddAsync(userContract);
+        var result = await _userService.AddAsync(userContract);
 
-        return CreatedAtAction(
-            nameof(Get),
-            new { userId = createdUserContract.Id },
-            createdUserContract
-        );
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Добавление нового пользователя: {_.MiddleName} {_.FirstName} {_.LastName}";
+        });
     }
 
-    [HttpPut("{userId}")]
+    [HttpPut]
     [AuthorizeRoles(Role.Admin)]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Update(
-        [FromRoute] Guid userId,
-        [FromBody] CreateUserRequest userContract
+    public async Task<ActionResult<UserDto>> Update(
+        [FromBody] UpdateUserRequest request
     )
     {
-        var updatedUser = await _userManager.UpdateAsync(userId, userContract);
+        var result = await _userService.UpdateAsync(request);
 
-        return Ok(updatedUser);
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Обновление информации о пользователе: {_.MiddleName} {_.FirstName} {_.LastName}";
+        });
     }
 
     [HttpDelete("{userId}")]
     [AuthorizeRoles(Role.Admin)]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Delete([FromRoute] Guid userId)
+    public async Task<ActionResult<Unit>> Delete([FromRoute] Guid userId)
     {
-        var isDeleted = await _userManager.DeleteAsync(userId);
+        var userResult = await _userService.GetByIdAsync(new GetUserByIdRequest{Id = userId});
+        var user = userResult.Match(
+            obj => obj,
+            _ => new UserDto()
+        );
 
-        if (isDeleted)
+        var result = await _userService.DeleteAsync(new DeleteUserRequest{Id = userId});
+
+        return result.ToOk(_ =>
         {
-            return Ok(userId);
-        }
-
-        return BadRequest($"During remove user process accured error, please check your request.");
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Удаление пользователя: {user.MiddleName} {user.FirstName} {user.LastName}";
+        });
     }
 }

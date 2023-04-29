@@ -14,8 +14,6 @@ public class DataSeed
 {
     public static async Task SeedSampleDataAsync(ApplicationContext context)
     {
-        await CreateRolesAsync(context);
-
         if (!context.DowntimeReasons.Any())
         {
             await AddDowntimeReasons(context);
@@ -184,21 +182,6 @@ public class DataSeed
 
         context.ProductAccounts.AddRange(productAccounts);
         await context.SaveChangesAsync();
-    }
-
-    private static async Task CreateRolesAsync(ApplicationContext context)
-    {
-        var enumValues = Enum.GetNames(typeof(Role));
-
-        foreach (var role in enumValues)
-        {
-            if (!context.Roles.Any(_ => _.Name == role))
-            {
-                var creationRole = new RoleData { Name = role };
-                await context.Roles.AddAsync(creationRole);
-                await context.SaveChangesAsync();
-            }
-        }
     }
 
     private static async Task AddDowntimeReasons(ApplicationContext context)
@@ -407,10 +390,6 @@ public class DataSeed
 
     private static async Task AddInspectors(ApplicationContext context)
     {
-        var techUserRole = (
-            await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Inspector))
-        )!;
-
         var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(
             _ => _.IdFromSystem == "06"
         );
@@ -428,7 +407,7 @@ public class DataSeed
                     LastName = "Сергеевна",
                     Position = "Контролер сварочных работ",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = techUserRole } }
+                    Role = Role.Inspector
                 }
             },
             new Inspector
@@ -442,7 +421,7 @@ public class DataSeed
                     LastName = "Николаевна",
                     Position = "Контролер сварочных работ",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = techUserRole } }
+                    Role = Role.Inspector
                 }
             }
         };
@@ -453,10 +432,6 @@ public class DataSeed
 
     private static async Task AddMasters(ApplicationContext context)
     {
-        var masterRole = (
-            await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Master))
-        )!;
-
         var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(
             _ => _.IdFromSystem == "06"
         );
@@ -480,7 +455,7 @@ public class DataSeed
                     LastName = "Александрович",
                     Position = "Мастер производственного участка",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = masterRole } }
+                    Role = Role.Master
                 },
             },
             new Master
@@ -495,7 +470,7 @@ public class DataSeed
                     LastName = "Николаевич",
                     Position = "Мастер производственного участка",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = masterRole } }
+                    Role = Role.Master
                 },
             }
         };
@@ -523,10 +498,6 @@ public class DataSeed
             await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49232")
         )!;
 
-        var welderRole = (
-            await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Welder))
-        )!;
-
         var welders = new List<Welder>
         {
             new Welder
@@ -546,7 +517,7 @@ public class DataSeed
                     LastName = "Сергеевич",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             },
             new Welder
@@ -566,7 +537,7 @@ public class DataSeed
                     LastName = "Васильевич",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             },
             new Welder
@@ -582,7 +553,7 @@ public class DataSeed
                     LastName = "Владимирович",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             },
             new Welder
@@ -598,7 +569,7 @@ public class DataSeed
                     LastName = "Анатольевич",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             },
             new Welder
@@ -614,7 +585,7 @@ public class DataSeed
                     LastName = "Францевич",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             },
             new Welder
@@ -630,7 +601,7 @@ public class DataSeed
                     LastName = "Александрович",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             },
             new Welder
@@ -650,7 +621,7 @@ public class DataSeed
                     LastName = "Владимирович",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             },
             new Welder
@@ -670,7 +641,7 @@ public class DataSeed
                     LastName = "Сергеевич",
                     Position = "Электросварщик на автоматических и полуавтоматических машинах",
                     ProductionArea = productionArea6,
-                    UserRoles = new List<UserRole> { new UserRole { Role = welderRole } }
+                    Role = Role.Welder
                 }
             }
         };
@@ -681,9 +652,6 @@ public class DataSeed
 
     private static async Task AddChief(ApplicationContext context)
     {
-        var chiefRole = (
-            await context.Roles.FirstOrDefaultAsync(_ => _.Name == nameof(Role.Chief))
-        )!;
         var workshop = (await context.Workshops.FirstOrDefaultAsync())!;
 
         var chief = new Chief
@@ -701,7 +669,7 @@ public class DataSeed
                 Position = "Должность 1",
                 ServiceNumber = "Табельный номер  1",
                 RfidTag = "RFID метка начальника цеха 1",
-                UserRoles = new List<UserRole> { new UserRole { Role = chiefRole } }
+                Role = Role.Chief
             },
         };
 

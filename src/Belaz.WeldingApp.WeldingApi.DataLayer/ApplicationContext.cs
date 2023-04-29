@@ -15,10 +15,6 @@ public sealed class ApplicationContext : DbContext
 {
     public DbSet<UserData> Users { get; set; } = null!;
 
-    public DbSet<RoleData> Roles { get; set; } = null!;
-
-    public DbSet<UserRole> UserRoles { get; set; } = null!;
-
     public DbSet<Post> Posts { get; set; } = null!;
 
     public DbSet<ProductionArea> ProductionAreas { get; set; } = null!;
@@ -98,8 +94,7 @@ public sealed class ApplicationContext : DbContext
             .HasOne(e => e.InsideProduct)
             .WithOne(e => e.ProductMain)
             .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<UserRole>().HasKey(t => new { t.RoleId, t.UserId });
+        
         modelBuilder
             .Entity<ProductInside>()
             .HasKey(t => new { t.InsideProductId, t.MainProductId });

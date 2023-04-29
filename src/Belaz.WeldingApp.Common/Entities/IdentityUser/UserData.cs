@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.Common.Entities.Production;
 using Belaz.WeldingApp.Common.Entities.Users;
+using Belaz.WeldingApp.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.Common.Entities.IdentityUser;
@@ -18,6 +19,8 @@ public class UserData : EntityWithRfidTag
 
     public string? Email { get; set; }
 
+    public bool IsEmailConfirmed { get; set; }
+
     public string? PasswordHash { get; set; }
 
     public string? Position { get; set; }
@@ -31,13 +34,13 @@ public class UserData : EntityWithRfidTag
     /// Срок действия удостоверения
     /// </summary>
     public DateTime? CertificateValidityPeriod { get; set; }
+    
+    public Role Role { get; set; }
 
     public Guid? ProductionAreaId { get; set; }
 
     [ForeignKey(nameof(ProductionAreaId))]
     public ProductionArea? ProductionArea { get; set; }
-
-    public List<UserRole> UserRoles { get; set; } = null!;
 
     public List<Welder> Welders { get; set; } = null!;
 
@@ -46,4 +49,6 @@ public class UserData : EntityWithRfidTag
     public List<Inspector> Inspectors { get; set; } = null!;
 
     public List<Chief> Chiefs { get; set; } = null!;
+    
+    public List<EventLog> EventLogs { get; set; } = null!;
 }
