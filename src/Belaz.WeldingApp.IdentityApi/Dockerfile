@@ -6,7 +6,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Belaz.WeldingApp.IdentityApi/Belaz.WeldingApp.IdentityApi.csproj", "Belaz.WeldingApp.IdentityApi/"]
-COPY ["Belaz.WeldingApp.IdentityApi.Data/Belaz.WeldingApp.IdentityApi.Data.csproj", "Belaz.WeldingApp.IdentityApi.Data/"]
+COPY ["Belaz.WeldingApp.IdentityApi.Domain/Belaz.WeldingApp.IdentityApi.Domain.csproj", "Belaz.WeldingApp.IdentityApi.Domain/"]
+COPY ["Belaz.WeldingApp.IdentityApi.DataLayer/Belaz.WeldingApp.IdentityApi.DataLayer.csproj", "Belaz.WeldingApp.IdentityApi.DataLayer/"]
+COPY ["Belaz.WeldingApp.IdentityApi.BusinessLayer/Belaz.WeldingApp.IdentityApi.BusinessLayer.csproj", "Belaz.WeldingApp.IdentityApi.BusinessLayer/"]
 RUN dotnet restore "Belaz.WeldingApp.IdentityApi/Belaz.WeldingApp.IdentityApi.csproj"
 COPY . .
 WORKDIR "/src/Belaz.WeldingApp.IdentityApi"
