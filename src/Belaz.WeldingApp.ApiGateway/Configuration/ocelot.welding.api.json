@@ -1314,6 +1314,20 @@
         "AuthenticationProviderKey": "ApiGatewayKey",
         "AllowedScopes": []
       }
+    },
+    {
+      "UpstreamPathTemplate": "/api/eventLog",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET", "POST"
+      ],
+      "DownstreamPathTemplate": "/api/eventLog",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
     }
   ]
 }

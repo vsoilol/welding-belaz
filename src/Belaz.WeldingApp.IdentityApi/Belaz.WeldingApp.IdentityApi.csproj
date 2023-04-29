@@ -37,8 +37,4 @@
     <ProjectReference Include="..\Belaz.WeldingApp.Common\Belaz.WeldingApp.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Filters" />
-  </ItemGroup>
-
 </Project>

@@ -1,3 +1,4 @@
+using Belaz.WeldingApp.IdentityApi.Contracts;
 using Belaz.WeldingApp.IdentityApi.Contracts.Requests.Identity;
 using Belaz.WeldingApp.IdentityApi.Contracts.Responses.Identity;
 using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
@@ -33,6 +34,8 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginModelContract loginContract)
     {
         var authResponse = await _authManager.Login(loginContract);
+        HttpContext.Items["id"] = authResponse.UserId;
+        HttpContext.Items[ContextItems.LogMessage] = "Пользователь вошёл в систему";
         return Ok(authResponse);
     }
 
