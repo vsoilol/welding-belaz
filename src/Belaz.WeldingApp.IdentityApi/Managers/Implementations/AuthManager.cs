@@ -16,7 +16,6 @@ public class AuthManager : IAuthManager
 {
     private readonly AuthOptions _authOptions;
     private readonly IRepository<UserData> _userRepository;
-    private readonly IRoleRepository _roleRepository;
     private readonly ITokenManager _tokenManager;
 
     private HttpContext HttpContext { get; set; }
@@ -25,13 +24,11 @@ public class AuthManager : IAuthManager
         IHttpContextAccessor httpContextAccessor,
         IOptions<AuthOptions> options,
         IRepository<UserData> userRepository,
-        IRoleRepository roleRepository,
         ITokenManager tokenManager
     )
     {
         _authOptions = options.Value;
         _userRepository = userRepository;
-        _roleRepository = roleRepository;
         _tokenManager = tokenManager;
         HttpContext = httpContextAccessor.HttpContext;
     }
@@ -94,13 +91,6 @@ public class AuthManager : IAuthManager
             registerContract.Password = _authOptions.DefaultPassword;
         }
 
-        var userRole = await _roleRepository.GetRoleByName(registerContract.Role);
-
-        if (userRole is null)
-        {
-            throw new RegisterFailedException($"Cannot find {registerContract.Role} role!");
-        }
-
         var newUser = new UserData
         {
             FirstName = registerContract.FirstName,
@@ -108,8 +98,7 @@ public class AuthManager : IAuthManager
             LastName = registerContract.LastName,
             Email = registerContract.Email,
             UserName = registerContract.UserName,
-            PasswordHash = SecurePasswordHasher.Hash(registerContract.Password),
-            UserRoles = new List<UserRole> { new UserRole { Role = userRole } }
+            PasswordHash = SecurePasswordHasher.Hash(registerContract.Password)
         };
 
         var createdUser = await _userRepository.AddAsync(newUser);

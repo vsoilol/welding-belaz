@@ -11,8 +11,6 @@ public static class IoC
     public static void RegisterDependency(this IServiceCollection services)
     {
         services.AddScoped<IRepository<UserData>, UserRepository>();
-        services.AddScoped<IRepository<RoleData>, RoleRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserManager, UserManager>();
         services.AddScoped<ITokenManager, TokenManager>();
         services.AddScoped<IAuthManager, AuthManager>();

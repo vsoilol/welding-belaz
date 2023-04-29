@@ -15,15 +15,13 @@ public class UserManager : IUserManager
 {
     private readonly IRepository<UserData> _userRepository;
     private readonly IMapper _mapper;
-    private readonly IRoleRepository _roleRepository;
     private readonly IAuthManager _authManager;
 
-    public UserManager(IRepository<UserData> userRepository, IMapper mapper, IRoleRepository roleRepository,
+    public UserManager(IRepository<UserData> userRepository, IMapper mapper,
         IAuthManager authManager)
     {
         _userRepository = userRepository;
         _mapper = mapper;
-        _roleRepository = roleRepository;
         _authManager = authManager;
     }
 

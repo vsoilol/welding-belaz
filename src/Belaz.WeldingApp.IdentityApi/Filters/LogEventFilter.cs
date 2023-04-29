@@ -32,13 +32,6 @@ internal class LogEventFilter : IAsyncResultFilter
             return;
         }
 
-        // DateTime.UtcNow.
-
-        //TimeZoneInfo.ConvertTimeFromUtc(timeUtc, TimeZoneInfo.)
-
-        var currentTimeZone = TimeZone.CurrentTimeZone.StandardName; //Current time zone name
-        var offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now); //time equation
-
         var eventLog = new EventLog { UserId = userId, DateTime = DateTime.UtcNow, Information = logMessage };
 
         _context.EventLogs.Add(eventLog);

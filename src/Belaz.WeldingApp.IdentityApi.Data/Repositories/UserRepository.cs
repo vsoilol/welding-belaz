@@ -18,16 +18,12 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
 
         public override IQueryable<UserData> AsQueryable()
         {
-            return Context.Users.AsQueryable()
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role);
+            return Context.Users.AsQueryable();
         }
 
         public override async Task<IEnumerable<UserData>> GetAllAsync()
         {
             return await Context.Users
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
                 .ToListAsync();
         }
 
@@ -37,8 +33,6 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
         {
             return await Context.Users
                 .Where(filter)
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
                 .Include(_ => _.ProductionArea)
                 .ToListAsync();
         }
@@ -47,8 +41,6 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
         {
             return await Context.Users
                 .Where(x => x.Id == id)
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
                 .FirstOrDefaultAsync();
         }
     }

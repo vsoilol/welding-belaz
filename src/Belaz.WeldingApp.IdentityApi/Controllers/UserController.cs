@@ -29,7 +29,7 @@ public class UserController : ControllerBase
     {
         var users = await _userManager.GetAllAsync();
 
-        HttpContext.Items[ContextItems.LogMessage] = "Получение всех пользователей";
+        HttpContext.Items[ContextItems.LogMessage] = "Получение информации о всех пользователях";
 
         return Ok(users);
     }
@@ -42,7 +42,7 @@ public class UserController : ControllerBase
         var user = await _userManager.GetByIdAsync(userId);
 
         HttpContext.Items[ContextItems.LogMessage] =
-            $"Получение пользователя {user.MiddleName} {user.FirstName} {user.LastName}";
+            $"Получение информации о пользователе: {user.MiddleName} {user.FirstName} {user.LastName}";
 
         return Ok(user);
     }
@@ -53,6 +53,9 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Add([FromBody] CreateUserRequest userContract)
     {
         var createdUserContract = await _userManager.AddAsync(userContract);
+
+        HttpContext.Items[ContextItems.LogMessage] =
+            $"Добавление нового пользователя: {createdUserContract.MiddleName} {createdUserContract.FirstName} {createdUserContract.LastName}";
 
         return CreatedAtAction(
             nameof(Get),
@@ -71,6 +74,9 @@ public class UserController : ControllerBase
     {
         var updatedUser = await _userManager.UpdateAsync(userId, userContract);
 
+        HttpContext.Items[ContextItems.LogMessage] =
+            $"Обновление информации о пользователе: {updatedUser.MiddleName} {updatedUser.FirstName} {updatedUser.LastName}";
+
         return Ok(updatedUser);
     }
 
@@ -80,10 +86,13 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete([FromRoute] Guid userId)
     {
+        var user = await _userManager.GetByIdAsync(userId);
         var isDeleted = await _userManager.DeleteAsync(userId);
 
         if (isDeleted)
         {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Удаление пользователя: {user.MiddleName} {user.FirstName} {user.LastName}";
             return Ok(userId);
         }
 

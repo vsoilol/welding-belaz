@@ -130,9 +130,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var userRepository = services.GetRequiredService<IRepository<UserData>>();
-        var roleRepository = services.GetRequiredService<IRepository<RoleData>>();
         var context = services.GetRequiredService<IdentityDbContext>();
-        await DataSeed.SeedSampleDataAsync(roleRepository, userRepository, context);
+        await DataSeed.SeedSampleDataAsync(userRepository, context);
     }
     catch (Exception ex)
     {

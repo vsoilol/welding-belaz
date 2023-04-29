@@ -32,9 +32,8 @@ public class TokenManager : ITokenManager
             new Claim(JwtRegisteredClaimNames.Email, user.Email!),
             new Claim("id", user.Id.ToString()),
             new Claim("productionAreaId", user.ProductionAreaId.ToString() ?? ""),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
         };
-
-        claims.AddRange(user.UserRoles.Select(_ => new Claim(ClaimTypes.Role, _.Role.Name)));
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
