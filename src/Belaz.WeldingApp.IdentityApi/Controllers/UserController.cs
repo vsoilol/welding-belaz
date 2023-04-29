@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.IdentityApi.Contracts;
 
 namespace Belaz.WeldingApp.IdentityApi.Controllers;
 
@@ -28,6 +29,8 @@ public class UserController : ControllerBase
     {
         var users = await _userManager.GetAllAsync();
 
+        HttpContext.Items[ContextItems.LogMessage] = "Получение всех пользователей";
+
         return Ok(users);
     }
 
@@ -37,6 +40,9 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Get([FromRoute] Guid userId)
     {
         var user = await _userManager.GetByIdAsync(userId);
+
+        HttpContext.Items[ContextItems.LogMessage] =
+            $"Получение пользователя {user.MiddleName} {user.FirstName} {user.LastName}";
 
         return Ok(user);
     }

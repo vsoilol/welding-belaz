@@ -18,7 +18,9 @@ namespace Belaz.WeldingApp.IdentityApi.Data.Repositories
 
         public override IQueryable<UserData> AsQueryable()
         {
-            return Context.Users.AsQueryable().Include(x => x.UserRoles).ThenInclude(x => x.Role);
+            return Context.Users.AsQueryable()
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role);
         }
 
         public override async Task<IEnumerable<UserData>> GetAllAsync()

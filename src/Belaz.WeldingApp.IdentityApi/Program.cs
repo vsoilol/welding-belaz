@@ -6,6 +6,7 @@ using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi;
 using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
 using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
+using Belaz.WeldingApp.IdentityApi.Filters;
 using Belaz.WeldingApp.IdentityApi.Helpers;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
 using FluentValidation;
@@ -60,6 +61,7 @@ builder.Services
     .AddControllers(options =>
     {
         options.Filters.Add<ApiValidationFilter>();
+        options.Filters.Add<LogEventFilter>();
     })
     .AddNewtonsoftJson(
         options =>
@@ -114,6 +116,8 @@ builder.Services.AddCors(
             }
         )
 );
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
