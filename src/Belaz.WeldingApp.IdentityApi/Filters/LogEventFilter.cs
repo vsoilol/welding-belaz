@@ -1,17 +1,17 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Belaz.WeldingApp.Common.Entities;
 using Belaz.WeldingApp.IdentityApi.Contracts;
-using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
+using Belaz.WeldingApp.IdentityApi.DataLayer;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.IdentityApi.Filters;
 
 internal class LogEventFilter : IAsyncResultFilter
 {
-    private readonly IdentityDbContext _context;
+    private readonly ApplicationContext _context;
 
-    public LogEventFilter(IdentityDbContext context)
+    public LogEventFilter(ApplicationContext context)
     {
         _context = context;
     }
@@ -24,6 +24,11 @@ internal class LogEventFilter : IAsyncResultFilter
         var userId = context.HttpContext.Items["id"] is null
             ? Guid.Parse(context.HttpContext.User.FindFirstValue("id"))
             : (Guid)context.HttpContext.Items["id"]!;
+
+        if (!(await _context.Users.AnyAsync(_ => _.Id == userId)))
+        {
+            return;
+        }
 
         var logMessage = (string?)context.HttpContext.Items[ContextItems.LogMessage];
 

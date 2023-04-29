@@ -1,18 +1,12 @@
 using System.Text;
-using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.Common.Extensions;
-using Belaz.WeldingApp.Common.Filters;
 using Belaz.WeldingApp.Common.Options;
-using Belaz.WeldingApp.IdentityApi;
-using Belaz.WeldingApp.IdentityApi.Data.DataAccess;
-using Belaz.WeldingApp.IdentityApi.Data.Repositories.Interfaces;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Helpers;
+using Belaz.WeldingApp.IdentityApi.DataLayer;
 using Belaz.WeldingApp.IdentityApi.Filters;
-using Belaz.WeldingApp.IdentityApi.Helpers;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -44,33 +38,24 @@ builder.WebHost.ConfigureAppConfiguration(
 
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
 
-builder.Services.AddDbContext<IdentityDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityDb"))
-);
+var domainProjectAssembly =
+    typeof(Belaz.WeldingApp.IdentityApi.Domain.Mappings.MappingProfile).Assembly;
+var businessLayerProjectAssembly =
+    typeof(Belaz.WeldingApp.IdentityApi.BusinessLayer.Mappings.MappingProfile).Assembly;
 
-builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(domainProjectAssembly, businessLayerProjectAssembly);
 
-builder.Services.AddHttpContextAccessor();
+var connectionString = builder.Configuration.GetConnectionString("IdentityDb");
 
-builder.Services.RegisterDependency();
+builder.Services.AddDataLayer(connectionString);
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddBusinessLayer();
 
 builder.Services
     .AddControllers(options =>
     {
-        options.Filters.Add<ApiValidationFilter>();
         options.Filters.Add<LogEventFilter>();
-    })
-    .AddNewtonsoftJson(
-        options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
-                .Json
-                .ReferenceLoopHandling
-                .Ignore
-    )
-    .RegisterValidatorsInAssembly(typeof(Program).Assembly);
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -106,44 +91,21 @@ builder.Services
         };
     });
 
-builder.Services.AddCors(
-    options =>
-        options.AddPolicy(
-            name: "NgOrigins",
-            policy =>
-            {
-                policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-            }
-        )
-);
-
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    try
-    {
-        var userRepository = services.GetRequiredService<IRepository<UserData>>();
-        var context = services.GetRequiredService<IdentityDbContext>();
-        await DataSeed.SeedSampleDataAsync(userRepository, context);
-    }
-    catch (Exception ex)
-    {
-        Log.Fatal(ex, "Application start-up failed");
-    }
-    finally
-    {
-        await Log.CloseAndFlushAsync();
-    }
+    var context = services.GetRequiredService<ApplicationContext>();
+    await DataSeed.SeedSampleDataAsync(context);
 }
-
-app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseSwagger(c =>
 {
@@ -155,17 +117,11 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "api/swagger";
 });
 
-app.UseCors("NgOrigins");
 app.UseHttpsRedirection();
-
-app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();

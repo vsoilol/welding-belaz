@@ -19,7 +19,7 @@ public class UserData : EntityWithRfidTag
 
     public string? Email { get; set; }
 
-    public bool IsEmailConfirmed { get; set; } = false;
+    public bool IsEmailConfirmed { get; set; }
 
     public string? PasswordHash { get; set; }
 
@@ -49,4 +49,6 @@ public class UserData : EntityWithRfidTag
     public List<Inspector> Inspectors { get; set; } = null!;
 
     public List<Chief> Chiefs { get; set; } = null!;
+    
+    public List<EventLog> EventLogs { get; set; } = null!;
 }

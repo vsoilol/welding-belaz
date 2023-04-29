@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
-using Belaz.WeldingApp.IdentityApi.Exceptions;
 using Belaz.WeldingApp.Common.Models;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Exceptions;
 
 namespace Belaz.WeldingApp.IdentityApi.Middlewares;
 

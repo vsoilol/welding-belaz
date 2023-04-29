@@ -1,7 +1,8 @@
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Requests.Identity;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Responses;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Contracts;
-using Belaz.WeldingApp.IdentityApi.Contracts.Requests.Identity;
-using Belaz.WeldingApp.IdentityApi.Contracts.Responses.Identity;
-using Belaz.WeldingApp.IdentityApi.Managers.Interfaces;
+using Belaz.WeldingApp.IdentityApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,39 +12,42 @@ namespace Belaz.WeldingApp.IdentityApi.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthManager _authManager;
+    private readonly IAuthService _authService;
 
-    public AuthController(IAuthManager authManager)
+    public AuthController(IAuthService authService)
     {
-        _authManager = authManager;
+        _authService = authService;
     }
 
-    [AllowAnonymous, HttpPost("register")]
+    /*[AllowAnonymous, HttpPost("register")]
     [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterModelContract registerContract)
     {
         var authResponse = await _authManager.Register(registerContract);
         return Ok(authResponse);
-    }
+    }*/
 
     [AllowAnonymous, HttpPost("login")]
     [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Login([FromBody] LoginModelContract loginContract)
+    public async Task<ActionResult<AuthSuccessResponse>> Login([FromBody] LoginRequest request)
     {
-        var authResponse = await _authManager.Login(loginContract);
-        HttpContext.Items["id"] = authResponse.UserId;
-        HttpContext.Items[ContextItems.LogMessage] = "Пользователь вошёл в систему";
-        return Ok(authResponse);
+        var result = await _authService.LoginAsync(request);
+
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items["id"] = _.UserId;
+            HttpContext.Items[ContextItems.LogMessage] = "Пользователь вошёл в систему";
+        });
     }
 
     [Authorize]
     [HttpPost("logout")]
     public async Task<ActionResult<bool>> Logout()
     {
-        var response = await _authManager.Logout();
+        var response = await _authService.LogoutAsync();
 
         return response;
     }
