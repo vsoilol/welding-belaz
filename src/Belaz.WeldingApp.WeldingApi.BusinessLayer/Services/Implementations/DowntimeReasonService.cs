@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 
@@ -13,8 +14,12 @@ public class DowntimeReasonService : IDowntimeReasonService
         _downtimeReasonRepository = downtimeReasonRepository;
     }
 
-    public Task<List<DowntimeReasonDto>> GetAllAsync()
+    public async Task<BaseRequest<List<DowntimeReasonDto>>> GetAllAsync()
     {
-        return _downtimeReasonRepository.GetAllAsync();
+        var data = await _downtimeReasonRepository.GetAllAsync();
+
+        var message = $"Получение всех причин простоя";
+
+        return new BaseRequest<List<DowntimeReasonDto>>(data, message);
     }
 }
