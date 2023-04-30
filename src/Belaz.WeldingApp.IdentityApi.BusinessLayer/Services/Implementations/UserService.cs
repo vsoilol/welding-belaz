@@ -51,7 +51,9 @@ internal class UserService : IUserService
 
         var createdUser = _mapper.Map<UserData>(request);
 
-        return await _userRepository.CreateUserAsync(createdUser);
+        var user = await _userRepository.CreateUserAsync(createdUser);
+
+        return user;
     }
 
     public async Task<Result<UserDto>> UpdateAsync(UpdateUserRequest request)

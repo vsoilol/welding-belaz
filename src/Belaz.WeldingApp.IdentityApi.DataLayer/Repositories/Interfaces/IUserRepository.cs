@@ -20,4 +20,8 @@ public interface IUserRepository
     Task<UserDto> UpdateUserAsync(UserData entity);
     
     Task DeleteUserAsync(Guid id);
+    
+    Task UpdateConfirmEmailTokenAsync(Guid id, string token);
+    
+    Task<bool> CheckConfirmEmailTokenValidAsync(Guid id, string token);
 }

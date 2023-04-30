@@ -94,10 +94,35 @@ internal class UserRepository : IUserRepository
     public async Task DeleteUserAsync(Guid id)
     {
         var deletedUser = (
-            await _context.Users.FirstOrDefaultAsync(_ => _.Id == id)
+            await _context.Users.Include(_ => _.EventLogs).FirstOrDefaultAsync(_ => _.Id == id)
         )!;
 
         _context.Users.Remove(deletedUser);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateConfirmEmailTokenAsync(Guid id, string token)
+    {
+        var user = (await _context.Users.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        user.ConfirmEmailToken = token;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> CheckConfirmEmailTokenValidAsync(Guid id, string token)
+    {
+        var user = (await _context.Users.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        if (user.ConfirmEmailToken != token)
+        {
+            return false;
+        }
+
+        user.IsEmailConfirmed = true;
+
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }

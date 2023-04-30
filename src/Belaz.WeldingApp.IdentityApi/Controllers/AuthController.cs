@@ -1,5 +1,10 @@
+using System.Net;
+using Belaz.WeldingApp.Common.Attributes;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Requests.Identity;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Requests.User;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Responses;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Models;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Contracts;
 using Belaz.WeldingApp.IdentityApi.Extensions;
@@ -9,14 +14,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace Belaz.WeldingApp.IdentityApi.Controllers;
 
 [Route("api/auth")]
-[ApiController]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly IEmailSender _emailSender;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, IEmailSender emailSender)
     {
         _authService = authService;
+        _emailSender = emailSender;
     }
 
     /*[AllowAnonymous, HttpPost("register")]
@@ -49,6 +55,58 @@ public class AuthController : ControllerBase
     {
         var response = await _authService.LogoutAsync();
 
+        HttpContext.Items[ContextItems.LogMessage] = "Пользователь вышел из системы";
+
         return response;
+    }
+
+
+    [AllowAnonymous, HttpGet("confirmEmail")]
+    public async Task<ActionResult> ConfirmEmail([FromQuery] ConfirmEmailResponse request)
+    {
+        var isConfirm = await _authService.ConfirmEmailAsync(request.Id, request.Token);
+
+        var status = isConfirm
+            ? "Thank you for confirming your email"
+            : "Your email is not confirmed, please try again later";
+
+        HttpContext.Items["id"] = request.Id;
+        HttpContext.Items[ContextItems.LogMessage] = "Пользователь подтвердил электронную почту";
+
+        return Ok(status);
+    }
+
+    [AuthorizeRoles(Role.Admin)]
+    [HttpPost("send-email-confirmation/{id}")]
+    public async Task<ActionResult> ReConfirmEmail([FromRoute] Guid id)
+    {
+        var confirmationEmailInfoResult = await _authService
+            .GenerateEmailConfirmationTokenAsync(new GenerateEmailConfirmationTokenRequest { Id = id });
+
+        var confirmationEmailInfo = confirmationEmailInfoResult.GetDataOrNullFromResult();
+
+        if (confirmationEmailInfo is not null)
+        {
+            var confirmationLink = Url.Action(
+                nameof(ConfirmEmail),
+                "Auth",
+                new { token = confirmationEmailInfo.Token, id = confirmationEmailInfo.Id },
+                Request.Scheme);
+
+            var emailBody = $"Please confirm your email address <a href=\"{confirmationLink}\">Click here</a>";
+
+            var message = new Message(new[] { confirmationEmailInfo.Email },
+                "Confirm email",
+                emailBody);
+
+            await _emailSender.SendEmailAsync(message);
+        }
+
+        return confirmationEmailInfoResult.ToEmptyOk(
+            _ =>
+            {
+                HttpContext.Items[ContextItems.LogMessage] =
+                    $"Отправка сообщения на подтверждения электронной почты для пользователя {_.Email}";
+            });
     }
 }

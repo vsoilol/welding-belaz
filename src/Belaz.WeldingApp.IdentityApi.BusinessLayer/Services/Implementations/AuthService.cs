@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.Common.Options;
+﻿using System.Security.Cryptography;
+using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Requests.Identity;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Responses;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Exceptions;
@@ -6,6 +7,7 @@ using Belaz.WeldingApp.IdentityApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.IdentityApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -82,8 +84,42 @@ internal class AuthService : IAuthService
         return _tokenService.GenerateAuthenticationResultForUser(userData);
     }
 
+    public async Task<Result<ConfirmEmailResponse>> GenerateEmailConfirmationTokenAsync(
+        GenerateEmailConfirmationTokenRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<ConfirmEmailResponse>(validationResult.Exception);
+        }
+
+        var user = await _userRepository.GetUserByIdAsync(request.Id);
+
+        var token = CreateRandomToken();
+
+        await _userRepository.UpdateConfirmEmailTokenAsync(user.Id, token);
+
+        return new ConfirmEmailResponse
+        {
+            Token = token,
+            Id = user.Id,
+            Email = user.Email!
+        };
+    }
+
+    public Task<bool> ConfirmEmailAsync(Guid id, string token)
+    {
+        return _userRepository.CheckConfirmEmailTokenValidAsync(id, token);
+    }
+
     public Task<bool> LogoutAsync()
     {
         return Task.FromResult(true);
+    }
+
+    private string CreateRandomToken()
+    {
+        return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
     }
 }
