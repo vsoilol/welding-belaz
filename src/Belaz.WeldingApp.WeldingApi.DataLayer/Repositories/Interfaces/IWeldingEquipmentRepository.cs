@@ -8,6 +8,8 @@ public interface IWeldingEquipmentRepository
     Task<List<WeldingEquipmentDto>> GetAllAsync();
 
     Task<WeldingEquipmentDto> GetByIdAsync(Guid id);
+    
+    Task<WeldingEquipmentBriefDto> GetBriefInfoByIdAsync(Guid id);
 
     Task<WeldingEquipmentDowntimeDto> GetConditionByIdAsync(Guid id);
 
