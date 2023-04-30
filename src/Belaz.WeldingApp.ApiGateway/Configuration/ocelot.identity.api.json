@@ -11,20 +11,62 @@
       "SwaggerKey": "identity"
     },
     {
-      "UpstreamPathTemplate": "/api/auth/register",
+      "UpstreamPathTemplate": "/api/auth/user-credentials",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "POST"
       ],
-      "DownstreamPathTemplate": "/api/auth/register",
+      "DownstreamPathTemplate": "/api/auth/user-credentials",
+      "ServiceName": "identity",
+      "SwaggerKey": "identity",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/change-password",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/auth/change-password",
+      "ServiceName": "identity",
+      "SwaggerKey": "identity",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/confirmEmail",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/auth/confirmEmail",
       "ServiceName": "identity",
       "SwaggerKey": "identity"
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/send-email-confirmation/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/auth/send-email-confirmation/{id}",
+      "ServiceName": "identity",
+      "SwaggerKey": "identity",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/users",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST", "GET"
+        "POST", "GET", "PUT"
       ],
       "DownstreamPathTemplate": "/api/users",
       "ServiceName": "identity",
@@ -38,23 +80,9 @@
       "UpstreamPathTemplate": "/api/users/{userId}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "PUT", "GET", "DELETE"
+        "GET", "DELETE"
       ],
       "DownstreamPathTemplate": "/api/users/{userId}",
-      "ServiceName": "identity",
-      "SwaggerKey": "identity",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "ApiGatewayKey",
-        "AllowedScopes": []
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/api/email",
-      "DownstreamScheme": "http",
-      "UpstreamHttpMethod": [
-        "POST"
-      ],
-      "DownstreamPathTemplate": "/api/email",
       "ServiceName": "identity",
       "SwaggerKey": "identity",
       "AuthenticationOptions": {
