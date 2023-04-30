@@ -14,9 +14,12 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
                 RuleFor(model => model.UserName)
                     .Cascade(CascadeMode.Stop)
                     .NotEmpty()
-                    .SetValidator(new EmailValidatorFor<LoginRequest>())
-                    .WithMessage("The UserName field is not a valid e-mail address.");
+                    .MinimumLength(5)
+                    .MaximumLength(100);
             });
-        RuleFor(model => model.Password).Cascade(CascadeMode.Stop).NotEmpty();
+        
+        RuleFor(model => model.Password)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
     }
 }

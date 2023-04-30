@@ -1,17 +1,14 @@
 ﻿using System.Security.Cryptography;
-using Belaz.WeldingApp.Common.Options;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Requests.Identity;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Responses;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Exceptions;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Extensions;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Models;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.IdentityApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
 using LanguageExt.Common;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 
 namespace Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Implementations;
 
@@ -20,39 +17,41 @@ internal class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly ITokenService _tokenService;
     private readonly IValidationService _validationService;
+    private readonly IEmailSender _emailSender;
 
     public AuthService(
         IUserRepository userRepository,
-        ITokenService tokenService, IValidationService validationService)
+        ITokenService tokenService, IValidationService validationService, IEmailSender emailSender)
     {
         _userRepository = userRepository;
         _tokenService = tokenService;
         _validationService = validationService;
+        _emailSender = emailSender;
     }
 
-    public async Task<Result<AuthSuccessResponse>> ChangeUserCredentialsAsync(
+    public async Task<Result<UserDto>> ChangeUserCredentialsAsync(
         ChangeUserCredentialsRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
-            return new Result<AuthSuccessResponse>(validationResult.Exception);
+            return new Result<UserDto>(validationResult.Exception);
         }
 
-        var isUsernameAlreadyExist = await _userRepository.IsUserByUsernameExistAsync(request.UserName);
+        var existedUser = await _userRepository.GetIdentityUserByUsernameAsync(request.UserName);
 
-        if (isUsernameAlreadyExist)
+        if (existedUser is not null && existedUser.Id != request.UserId)
         {
-            return new Result<AuthSuccessResponse>(new RegisterFailedException(
+            return new Result<UserDto>(new RegisterFailedException(
                 $"User with username: {request.UserName} already exist!"
             ));
         }
 
-        var updatedUser = await _userRepository.UpdateUserCredentialsAsync(request.UserId, request.UserName,
+        var user = await _userRepository.UpdateUserCredentialsAsync(request.UserId, request.UserName,
             SecurePasswordHasher.Hash(request.Password));
 
-        return _tokenService.GenerateAuthenticationResultForUser(updatedUser);
+        return user;
     }
 
     public async Task<Result<AuthSuccessResponse>> LoginAsync(LoginRequest request)
@@ -111,6 +110,23 @@ internal class AuthService : IAuthService
     public Task<bool> ConfirmEmailAsync(Guid id, string token)
     {
         return _userRepository.CheckConfirmEmailTokenValidAsync(id, token);
+    }
+
+    public async Task SendNewCredentialsEmailAsync(Guid id, string username, string password)
+    {
+        var user = await _userRepository.GetUserByIdAsync(id);
+        
+        var emailBody =
+            $"The administrator changed your credentials:" +
+            $"<br>New Login: {username}" +
+            $"<br>New Password: {password}";
+
+        var message = new Message(
+            new[] { user.Email! },
+            "New credentials",
+            emailBody);
+
+        await _emailSender.SendEmailAsync(message);
     }
 
     public Task<bool> LogoutAsync()

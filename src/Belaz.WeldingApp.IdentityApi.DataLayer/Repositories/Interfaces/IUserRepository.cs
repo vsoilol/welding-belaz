@@ -8,10 +8,8 @@ public interface IUserRepository
     Task<UserDto> GetUserByIdAsync(Guid id);
 
     Task<IdentityUserDto?> GetIdentityUserByUsernameAsync(string username);
-    
-    Task<bool> IsUserByUsernameExistAsync(string username);
-    
-    Task<IdentityUserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash);
+
+    Task<UserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash);
 
     Task<List<UserDto>> GetAllUsersAsync();
     

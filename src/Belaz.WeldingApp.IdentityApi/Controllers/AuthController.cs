@@ -7,6 +7,7 @@ using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Responses;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Models;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Contracts;
+using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
 using Belaz.WeldingApp.IdentityApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,14 +26,25 @@ public class AuthController : ControllerBase
         _emailSender = emailSender;
     }
 
-    /*[AllowAnonymous, HttpPost("register")]
+    [AuthorizeRoles(Role.Admin)]
+    [HttpPost("user-credentials")]
     [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Register([FromBody] RegisterModelContract registerContract)
+    public async Task<ActionResult<UserDto>> ChangeUserCredentialsAsync([FromBody] ChangeUserCredentialsRequest request)
     {
-        var authResponse = await _authManager.Register(registerContract);
-        return Ok(authResponse);
-    }*/
+        var result = await _authService.ChangeUserCredentialsAsync(request);
+
+        if (result.IsSuccess)
+        {
+            await _authService.SendNewCredentialsEmailAsync(request.UserId, request.UserName, request.Password);
+        }
+
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Изменение данных входа в систему для пользователя: {_.MiddleName} {_.FirstName} {_.LastName}";
+        });
+    }
 
     [AllowAnonymous, HttpPost("login")]
     [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status201Created)]

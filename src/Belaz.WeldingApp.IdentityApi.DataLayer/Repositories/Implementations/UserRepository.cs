@@ -34,12 +34,7 @@ internal class UserRepository : IUserRepository
             .FirstOrDefaultAsync();
     }
 
-    public Task<bool> IsUserByUsernameExistAsync(string username)
-    {
-        return _context.Users.AnyAsync(_ => _.UserName == username);
-    }
-
-    public async Task<IdentityUserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash)
+    public async Task<UserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash)
     {
         var updatedUser = (
             await _context.Users
@@ -53,7 +48,7 @@ internal class UserRepository : IUserRepository
 
         return (await _context.Users
             .Where(_ => _.Id == id)
-            .ProjectTo<IdentityUserDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync())!;
     }
 

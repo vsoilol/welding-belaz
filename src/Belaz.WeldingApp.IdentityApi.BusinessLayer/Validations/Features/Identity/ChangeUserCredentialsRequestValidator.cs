@@ -1,6 +1,7 @@
 ﻿using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Contracts.Requests.Identity;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Validations.PropertyValidators;
+using Belaz.WeldingApp.IdentityApi.BusinessLayer.Validations.PropertyValidators.Identity;
 using Belaz.WeldingApp.IdentityApi.DataLayer;
 using FluentValidation;
 
@@ -12,7 +13,9 @@ public class ChangeUserCredentialsRequestValidator : AbstractValidator<ChangeUse
     {
         RuleFor(model => model.UserName)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty();
+            .NotEmpty()
+            .MinimumLength(5)
+            .MaximumLength(100);
 
         RuleFor(model => model.Password)
             .Cascade(CascadeMode.Stop)
@@ -22,6 +25,7 @@ public class ChangeUserCredentialsRequestValidator : AbstractValidator<ChangeUse
 
         RuleFor(model => model.UserId)
             .Cascade(CascadeMode.Stop)
-            .SetValidator(new SqlIdValidatorFor<ChangeUserCredentialsRequest, UserData>(context));
+            .SetValidator(new SqlIdValidatorFor<ChangeUserCredentialsRequest, UserData>(context))
+            .SetAsyncValidator(new IsEmailNotConfirmOrEmptyValidatorFor<ChangeUserCredentialsRequest>(context));
     }
 }
