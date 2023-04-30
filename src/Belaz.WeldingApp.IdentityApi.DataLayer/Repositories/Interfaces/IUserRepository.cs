@@ -8,10 +8,10 @@ public interface IUserRepository
     Task<UserDto> GetUserByIdAsync(Guid id);
 
     Task<IdentityUserDto?> GetIdentityUserByUsernameAsync(string username);
+
+    Task<UserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash);
     
-    Task<bool> IsUserByUsernameExistAsync(string username);
-    
-    Task<IdentityUserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash);
+    Task UpdateUserPasswordAsync(Guid id, string passwordHash);
 
     Task<List<UserDto>> GetAllUsersAsync();
     
@@ -20,4 +20,8 @@ public interface IUserRepository
     Task<UserDto> UpdateUserAsync(UserData entity);
     
     Task DeleteUserAsync(Guid id);
+    
+    Task UpdateConfirmEmailTokenAsync(Guid id, string token);
+    
+    Task<bool> CheckConfirmEmailTokenValidAsync(Guid id, string token);
 }

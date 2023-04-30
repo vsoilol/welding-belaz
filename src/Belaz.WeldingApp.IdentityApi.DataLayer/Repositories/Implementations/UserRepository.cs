@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.IdentityApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
+using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.IdentityApi.DataLayer.Repositories.Implementations;
@@ -34,12 +35,7 @@ internal class UserRepository : IUserRepository
             .FirstOrDefaultAsync();
     }
 
-    public Task<bool> IsUserByUsernameExistAsync(string username)
-    {
-        return _context.Users.AnyAsync(_ => _.UserName == username);
-    }
-
-    public async Task<IdentityUserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash)
+    public async Task<UserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash)
     {
         var updatedUser = (
             await _context.Users
@@ -53,8 +49,20 @@ internal class UserRepository : IUserRepository
 
         return (await _context.Users
             .Where(_ => _.Id == id)
-            .ProjectTo<IdentityUserDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync())!;
+    }
+
+    public async Task UpdateUserPasswordAsync(Guid id, string passwordHash)
+    {
+        var updatedUser = (
+            await _context.Users
+                .FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+        
+        updatedUser.PasswordHash = passwordHash;
+        
+        await _context.SaveChangesAsync();
     }
 
     public Task<List<UserDto>> GetAllUsersAsync()
@@ -94,10 +102,35 @@ internal class UserRepository : IUserRepository
     public async Task DeleteUserAsync(Guid id)
     {
         var deletedUser = (
-            await _context.Users.FirstOrDefaultAsync(_ => _.Id == id)
+            await _context.Users.Include(_ => _.EventLogs).FirstOrDefaultAsync(_ => _.Id == id)
         )!;
 
         _context.Users.Remove(deletedUser);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateConfirmEmailTokenAsync(Guid id, string token)
+    {
+        var user = (await _context.Users.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        user.ConfirmEmailToken = token;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> CheckConfirmEmailTokenValidAsync(Guid id, string token)
+    {
+        var user = (await _context.Users.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        if (user.ConfirmEmailToken != token)
+        {
+            return false;
+        }
+
+        user.IsEmailConfirmed = true;
+
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }

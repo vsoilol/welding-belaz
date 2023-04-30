@@ -20,6 +20,12 @@ internal class LogEventFilter : IAsyncResultFilter
     {
         await next();
 
+        if (context.HttpContext.Items["id"] is null &&
+            context.HttpContext.User.FindFirstValue("id") is null)
+        {
+            return;
+        }
+
         // Get the JWT token from the request header
         var userId = context.HttpContext.Items["id"] is null
             ? Guid.Parse(context.HttpContext.User.FindFirstValue("id"))

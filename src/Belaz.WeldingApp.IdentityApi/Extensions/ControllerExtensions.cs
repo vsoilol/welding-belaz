@@ -14,17 +14,27 @@ public static class ControllerExtensions
     {
         return result.Match<ActionResult<TResult>>(
             obj => CreateOkResult(obj, afterGetResult),
+            ex => CreateErrorResult<TResult>(ex)
+        );
+    }
+
+    public static ActionResult ToEmptyOk<TResult>(this Result<TResult> result,
+        Action<TResult>? afterGetResult = null)
+    {
+        return result.Match(
+            obj => CreateOkResult(obj, afterGetResult, true),
             CreateErrorResult<TResult>
         );
     }
 
-    private static ActionResult<TResult> CreateOkResult<TResult>(TResult obj, Action<TResult>? afterGetResult)
+    private static ActionResult CreateOkResult<TResult>(TResult obj, Action<TResult>? afterGetResult,
+        bool isEmptyResult = false)
     {
         afterGetResult?.Invoke(obj);
-        return new OkObjectResult(obj);
+        return new OkObjectResult(!isEmptyResult ? obj : null);
     }
 
-    private static ActionResult<TResult> CreateErrorResult<TResult>(Exception exception)
+    private static ActionResult CreateErrorResult<TResult>(Exception exception)
     {
         var statusCode = (int)HttpStatusCode.InternalServerError;
         var errorTitle = "Internal Server Error";

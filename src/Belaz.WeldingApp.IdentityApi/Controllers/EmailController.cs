@@ -19,12 +19,13 @@ public class EmailController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult Get([FromQuery] string email)
+    public async Task<ActionResult> Get([FromQuery] string email)
     {
-        var message = new Message(new string[] { email },
+        var message = new Message(new [] { email },
             "Test email",
             "This is the content from our email.");
-        _emailSender.SendEmail(message);
+
+        await _emailSender.SendEmailAsync(message);
 
         return Ok();
     }

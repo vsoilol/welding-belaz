@@ -51,4 +51,8 @@ public class UserData : EntityWithRfidTag
     public List<Chief> Chiefs { get; set; } = null!;
     
     public List<EventLog> EventLogs { get; set; } = null!;
+    
+    public string? ConfirmEmailToken { get; set; }
+    
+    public string? ResetPasswordToken { get; set; }
 }

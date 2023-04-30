@@ -13,7 +13,6 @@ using LanguageExt;
 namespace Belaz.WeldingApp.IdentityApi.Controllers;
 
 [Route("api/users")]
-[ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserController : ControllerBase
 {
@@ -86,13 +85,13 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Unit>> Delete([FromRoute] Guid userId)
     {
-        var userResult = await _userService.GetByIdAsync(new GetUserByIdRequest{Id = userId});
+        var userResult = await _userService.GetByIdAsync(new GetUserByIdRequest { Id = userId });
         var user = userResult.Match(
             obj => obj,
             _ => new UserDto()
         );
 
-        var result = await _userService.DeleteAsync(new DeleteUserRequest{Id = userId});
+        var result = await _userService.DeleteAsync(new DeleteUserRequest { Id = userId });
 
         return result.ToOk(_ =>
         {

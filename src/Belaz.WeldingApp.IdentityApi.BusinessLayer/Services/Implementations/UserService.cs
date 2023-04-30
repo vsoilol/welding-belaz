@@ -51,7 +51,9 @@ internal class UserService : IUserService
 
         var createdUser = _mapper.Map<UserData>(request);
 
-        return await _userRepository.CreateUserAsync(createdUser);
+        var user = await _userRepository.CreateUserAsync(createdUser);
+
+        return user;
     }
 
     public async Task<Result<UserDto>> UpdateAsync(UpdateUserRequest request)
@@ -66,9 +68,9 @@ internal class UserService : IUserService
         var updatedUser = _mapper.Map<UserData>(request);
         var user = await _userRepository.GetUserByIdAsync(request.Id);
 
-        if (user.Email != updatedUser.Email)
+        if (user.Email == updatedUser.Email)
         {
-            updatedUser.IsEmailConfirmed = false;
+            updatedUser.IsEmailConfirmed = true;
         }
 
         return await _userRepository.UpdateUserAsync(updatedUser);
