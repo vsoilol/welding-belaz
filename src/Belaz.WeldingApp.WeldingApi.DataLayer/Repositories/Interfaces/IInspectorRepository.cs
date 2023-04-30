@@ -8,6 +8,8 @@ public interface IInspectorRepository
     Task<List<InspectorDto>> GetAllAsync();
 
     Task<InspectorDto> GetByIdAsync(Guid id);
+    
+    Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id);
 
     Task<InspectorDto> CreateAsync(Inspector entity);
 

@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using LanguageExt;
 using LanguageExt.Common;
@@ -8,29 +9,29 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface IProductService
 {
-    Task<Result<List<ProductDto>>> GetAllAsync(GetAllProductsRequest request);
+    Task<BaseResultRequest<List<ProductDto>>> GetAllAsync(GetAllProductsRequest request);
 
-    Task<Result<List<ProductDto>>> GetAllByControlSubjectAsync(
+    Task<BaseResultRequest<List<ProductDto>>> GetAllByControlSubjectAsync(
         GetAllByControlSubjectRequest request
     );
 
-    Task<Result<ProductDto>> GetByIdAsync(GetProductByIdRequest request);
+    Task<BaseResultRequest<ProductDto>> GetByIdAsync(GetProductByIdRequest request);
 
-    Task<Result<List<ProductDto>>> GetAllByMasterIdAsync(GetAllByMasterIdRequest request);
+    Task<BaseResultRequest<List<ProductDto>>> GetAllByMasterIdAsync(GetAllByMasterIdRequest request);
 
-    Task<Result<List<ProductDto>>> GetAllByInspectorIdAsync(GetAllByInspectorIdRequest request);
+    Task<BaseResultRequest<List<ProductDto>>> GetAllByInspectorIdAsync(GetAllByInspectorIdRequest request);
 
-    Task<Result<ProductDto>> CreateAsync(CreateProductRequest request);
+    Task<BaseResultRequest<ProductDto>> CreateAsync(CreateProductRequest request);
 
-    Task<Result<ProductDto>> UpdateAsync(UpdateProductRequest request);
+    Task<BaseResultRequest<ProductDto>> UpdateAsync(UpdateProductRequest request);
 
-    Task<Result<Unit>> AssignProductToMasterAsync(AssignProductToMasterRequest request);
+    Task<BaseResultRequest<Unit>> AssignProductToMasterAsync(AssignProductToMasterRequest request);
 
-    Task<Result<Unit>> AssignProductToInspectorAsync(AssignProductToInspectorRequest request);
+    Task<BaseResultRequest<Unit>> AssignProductToInspectorAsync(AssignProductToInspectorRequest request);
 
-    Task<Result<Unit>> AssignProductsToMasterAsync(AssignProductsToMasterRequest request);
+    Task<BaseResultRequest<Unit>> AssignProductsToMasterAsync(AssignProductsToMasterRequest request);
 
-    Task<Result<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request);
+    Task<BaseResultRequest<Unit>> AssignProductsToInspectorAsync(AssignProductsToInspectorRequest request);
 
-    Task<Result<Unit>> DeleteAsync(DeleteProductRequest request);
+    Task<BaseResultRequest<Unit>> DeleteAsync(DeleteProductRequest request);
 }

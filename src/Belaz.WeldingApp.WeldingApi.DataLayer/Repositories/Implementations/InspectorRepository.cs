@@ -33,6 +33,16 @@ public class InspectorRepository : IInspectorRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id)
+    {
+        return _context.Inspectors
+            .Where(_ => _.Id == id)
+            .Include(_ => _.UserInfo)
+            .Select(_ => _.UserInfo)
+            .ProjectTo<UserFullNameDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
+    }
+
     public async Task<InspectorDto> CreateAsync(Inspector entity)
     {
         var newInspector = _context.Inspectors.Add(entity).Entity;

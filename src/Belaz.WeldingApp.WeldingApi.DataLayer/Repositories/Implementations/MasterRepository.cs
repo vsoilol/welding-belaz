@@ -33,6 +33,16 @@ public class MasterRepository : IMasterRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id)
+    {
+        return _context.Masters
+            .Where(_ => _.Id == id)
+            .Include(_ => _.UserInfo)
+            .Select(_ => _.UserInfo)
+            .ProjectTo<UserFullNameDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
+    }
+
     public async Task<MasterDto> CreateAsync(Master entity)
     {
         var newMaster = _context.Masters.Add(entity).Entity;
