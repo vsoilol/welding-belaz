@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -28,7 +29,10 @@ public class DayController : ControllerBase
     public async Task<ActionResult<DayDto>> CreateAsync([FromBody] CreateDayWithYearRequest request)
     {
         var result = await _dayService.CreateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -36,14 +40,21 @@ public class DayController : ControllerBase
     public async Task<ActionResult<DayDto>> UpdateAsync([FromBody] UpdateDayRequest request)
     {
         var result = await _dayService.UpdateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpGet("main")]
     [ProducesResponseType(typeof(IEnumerable<DayDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<DayDto>>> GetAllMainAsync()
     {
-        return await _dayService.GetAllMainAsync();
+        var result = await _dayService.GetAllMainAsync();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
     }
 
     [HttpGet("byWelder/{welderId}")]
@@ -53,7 +64,10 @@ public class DayController : ControllerBase
         var result = await _dayService.GetAllByWelderIdAsync(
             new GetDaysByWelderIdRequest { WelderId = welderId }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpGet("byEquipment/{equipmentId}")]
@@ -65,6 +79,9 @@ public class DayController : ControllerBase
         var result = await _dayService.GetAllByEquipmentIdAsync(
             new GetDaysByEquipmentIdRequest { EquipmentId = equipmentId }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 }
