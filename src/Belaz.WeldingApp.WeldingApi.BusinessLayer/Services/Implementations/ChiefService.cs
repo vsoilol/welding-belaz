@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.Common.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -27,36 +28,47 @@ public class ChiefService : IChiefService
         _chiefRepository = chiefRepository;
     }
 
-    public Task<List<ChiefDto>> GetAllAsync()
+    public async Task<BaseRequest<List<ChiefDto>>> GetAllAsync()
     {
-        return _chiefRepository.GetAllAsync();
+        var chiefs = await _chiefRepository.GetAllAsync();
+        var message = "Получение всех начальников цехов";
+
+        return new BaseRequest<List<ChiefDto>>(chiefs, message);
     }
 
-    public async Task<Result<ChiefDto>> CreateAsync(CreateChiefRequest request)
+    public async Task<BaseResultRequest<ChiefDto>> CreateAsync(CreateChiefRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
-            return new Result<ChiefDto>(validationResult.Exception);
+            var result = new Result<ChiefDto>(validationResult.Exception);
+            return new BaseResultRequest<ChiefDto>(result);
         }
 
         var chief = _mapper.Map<Chief>(request);
 
-        return await _chiefRepository.CreateAsync(chief);
+        var data = await _chiefRepository.CreateAsync(chief);
+        var message = $"Добавление нового начальника цеха: {data.MiddleName} {data.FirstName} {data.LastName}";
+
+        return new BaseResultRequest<ChiefDto>(data, message);
     }
 
-    public async Task<Result<ChiefDto>> UpdateAsync(UpdateChiefRequest request)
+    public async Task<BaseResultRequest<ChiefDto>> UpdateAsync(UpdateChiefRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
-            return new Result<ChiefDto>(validationResult.Exception);
+            var result = new Result<ChiefDto>(validationResult.Exception);
+            return new BaseResultRequest<ChiefDto>(result);
         }
 
         var chief = _mapper.Map<Chief>(request);
 
-        return await _chiefRepository.UpdateAsync(chief);
+        var data = await _chiefRepository.UpdateAsync(chief);
+        var message = $"Изменение информации о начальнике цеха: {data.MiddleName} {data.FirstName} {data.LastName}";
+
+        return new BaseResultRequest<ChiefDto>(data, message);
     }
 }

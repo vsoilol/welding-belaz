@@ -1,6 +1,4 @@
-﻿using Belaz.WeldingApp.Common.Attributes;
-using Belaz.WeldingApp.Common.Enums;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Contracts;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;

@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public class ChiefController : ControllerBase
 {
     private readonly IChiefService _chiefService;
@@ -27,7 +27,11 @@ public class ChiefController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ChiefDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ChiefDto>>> GetAllAsync()
     {
-        return await _chiefService.GetAllAsync();
+        var result = await _chiefService.GetAllAsync();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
     }
 
     [HttpPost]
@@ -35,7 +39,10 @@ public class ChiefController : ControllerBase
     public async Task<ActionResult<ChiefDto>> CreateAsync([FromBody] CreateChiefRequest request)
     {
         var result = await _chiefService.CreateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -43,6 +50,9 @@ public class ChiefController : ControllerBase
     public async Task<ActionResult<ChiefDto>> UpdateAsync([FromBody] UpdateChiefRequest request)
     {
         var result = await _chiefService.UpdateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 }
