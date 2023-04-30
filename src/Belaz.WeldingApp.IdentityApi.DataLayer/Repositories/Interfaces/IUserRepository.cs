@@ -10,6 +10,8 @@ public interface IUserRepository
     Task<IdentityUserDto?> GetIdentityUserByUsernameAsync(string username);
 
     Task<UserDto> UpdateUserCredentialsAsync(Guid id, string username, string passwordHash);
+    
+    Task UpdateUserPasswordAsync(Guid id, string passwordHash);
 
     Task<List<UserDto>> GetAllUsersAsync();
     

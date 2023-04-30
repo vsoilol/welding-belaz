@@ -10,6 +10,8 @@ namespace Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 public interface IAuthService
 {
     Task<Result<UserDto>> ChangeUserCredentialsAsync(ChangeUserCredentialsRequest request);
+    
+    Task<Result<Unit>> ChangePasswordAsync(ChangePasswordRequest request);
 
     Task<Result<AuthSuccessResponse>> LoginAsync(LoginRequest request);
 
@@ -17,8 +19,6 @@ public interface IAuthService
         GenerateEmailConfirmationTokenRequest request);
 
     Task<bool> ConfirmEmailAsync(Guid id, string token);
-    
-    Task SendNewCredentialsEmailAsync(Guid id, string username, string password);
 
     Task<bool> LogoutAsync();
 }

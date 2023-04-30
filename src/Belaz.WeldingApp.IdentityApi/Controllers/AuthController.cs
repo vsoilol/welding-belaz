@@ -9,6 +9,7 @@ using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Contracts;
 using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
 using Belaz.WeldingApp.IdentityApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,15 +35,30 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.ChangeUserCredentialsAsync(request);
 
-        if (result.IsSuccess)
-        {
-            await _authService.SendNewCredentialsEmailAsync(request.UserId, request.UserName, request.Password);
-        }
-
         return result.ToOk(_ =>
         {
             HttpContext.Items[ContextItems.LogMessage] =
                 $"Изменение данных входа в систему для пользователя: {_.MiddleName} {_.FirstName} {_.LastName}";
+        });
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Unit>> ChangePasswordAsync([FromBody] ChangePasswordWithoutIdRequest request)
+    {
+        var result = await _authService.ChangePasswordAsync(new ChangePasswordRequest
+        {
+            Id = Guid.Parse(User.Claims.First(i => i.Type == "id").Value),
+            ConfirmNewPassword = request.ConfirmNewPassword,
+            OldPassword = request.OldPassword,
+            NewPassword = request.NewPassword
+        });
+
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                "Пользователь поменял пароль";
         });
     }
 

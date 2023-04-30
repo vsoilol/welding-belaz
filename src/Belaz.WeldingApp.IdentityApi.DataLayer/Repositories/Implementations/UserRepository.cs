@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.Common.Entities.IdentityUser;
 using Belaz.WeldingApp.IdentityApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
+using FluentValidation.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.IdentityApi.DataLayer.Repositories.Implementations;
@@ -50,6 +51,18 @@ internal class UserRepository : IUserRepository
             .Where(_ => _.Id == id)
             .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync())!;
+    }
+
+    public async Task UpdateUserPasswordAsync(Guid id, string passwordHash)
+    {
+        var updatedUser = (
+            await _context.Users
+                .FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+        
+        updatedUser.PasswordHash = passwordHash;
+        
+        await _context.SaveChangesAsync();
     }
 
     public Task<List<UserDto>> GetAllUsersAsync()

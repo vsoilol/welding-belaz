@@ -8,6 +8,7 @@ using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.IdentityApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.IdentityApi.Domain.Dtos;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Implementations;
@@ -50,8 +51,46 @@ internal class AuthService : IAuthService
 
         var user = await _userRepository.UpdateUserCredentialsAsync(request.UserId, request.UserName,
             SecurePasswordHasher.Hash(request.Password));
+        
+        var emailBody =
+            $"The administrator changed your credentials:" +
+            $"<br>New Login: {request.UserName}" +
+            $"<br>New Password: {request.Password}";
+
+        var message = new Message(
+            new[] { user.Email! },
+            "New credentials",
+            emailBody);
+
+        await _emailSender.SendEmailAsync(message);
 
         return user;
+    }
+
+    public async Task<Result<Unit>> ChangePasswordAsync(ChangePasswordRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _userRepository.UpdateUserPasswordAsync(request.Id, SecurePasswordHasher.Hash(request.NewPassword));
+        var user = await _userRepository.GetUserByIdAsync(request.Id);
+        
+        var emailBody =
+            $"You changed your password." +
+            $"<br>Your new password: {request.NewPassword}";
+
+        var message = new Message(
+            new[] { user.Email! },
+            "New password",
+            emailBody);
+
+        await _emailSender.SendEmailAsync(message);
+
+        return Unit.Default;
     }
 
     public async Task<Result<AuthSuccessResponse>> LoginAsync(LoginRequest request)
@@ -111,24 +150,7 @@ internal class AuthService : IAuthService
     {
         return _userRepository.CheckConfirmEmailTokenValidAsync(id, token);
     }
-
-    public async Task SendNewCredentialsEmailAsync(Guid id, string username, string password)
-    {
-        var user = await _userRepository.GetUserByIdAsync(id);
-        
-        var emailBody =
-            $"The administrator changed your credentials:" +
-            $"<br>New Login: {username}" +
-            $"<br>New Password: {password}";
-
-        var message = new Message(
-            new[] { user.Email! },
-            "New credentials",
-            emailBody);
-
-        await _emailSender.SendEmailAsync(message);
-    }
-
+    
     public Task<bool> LogoutAsync()
     {
         return Task.FromResult(true);
