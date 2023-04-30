@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,7 +31,11 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateAsync(request, true);
-        return result.ToOk();
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Создание производственного календаря на {_.Year}.";
+        });
     }
 
     [HttpGet("main/{year}")]
@@ -40,7 +45,14 @@ public class CalendarController : ControllerBase
         var result = await _calendarService.GetMainCalendarByYearAsync(
             new GetMainCalendarByYearRequest { Year = year }
         );
-        return result.ToOk();
+        return result.ToOk(_ =>
+        {
+            if (_ is not null)
+            {
+                HttpContext.Items[ContextItems.LogMessage] =
+                    $"Получение производственного календаря на {_.Year}.";
+            }
+        });
     }
 
     [HttpPut]
@@ -50,7 +62,11 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.UpdateAsync(request);
-        return result.ToOk();
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Обновление производственного календаря на {_.Year}.";
+        });
     }
 
     [HttpPost("withWelder")]
@@ -60,7 +76,11 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateForWelderAsync(request);
-        return result.ToOk();
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Создание производственного календаря для сварщика на {_.Year}.";
+        });
     }
 
     [HttpGet("byWelder")]
@@ -70,7 +90,14 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.GetByWelderIdAndYearAsync(request);
-        return result.ToOk();
+        return result.ToOk(_ =>
+        {
+            if (_ is not null)
+            {
+                HttpContext.Items[ContextItems.LogMessage] =
+                    $"Получение производственного календаря для сварщика на {_.Year}.";
+            }
+        });
     }
 
     [HttpPost("withEquipment")]
@@ -80,7 +107,11 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateForEquipmentAsync(request);
-        return result.ToOk();
+        return result.ToOk(_ =>
+        {
+            HttpContext.Items[ContextItems.LogMessage] =
+                $"Создание производственного календаря для сварочного оборудования на {_.Year}.";
+        });
     }
 
     [HttpGet("byEquipment")]

@@ -32,17 +32,19 @@ public class DayService : IDayService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var day = _mapper.Map<Day>(request);
+            return new Result<DayDto>(validationResult.Exception);
+        }
 
-            return _dayRepository.CreateAsync(
-                day,
-                request.Year,
-                request.WeldingEquipmentId,
-                request.WelderId
-            );
-        });
+        var day = _mapper.Map<Day>(request);
+
+        return await _dayRepository.CreateAsync(
+            day,
+            request.Year,
+            request.WeldingEquipmentId,
+            request.WelderId
+        );
     }
 
     public Task<List<DayDto>> GetAllMainAsync()
@@ -54,9 +56,12 @@ public class DayService : IDayService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _dayRepository.GetAllByWelderIdAsync(request.WelderId)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<DayDto>>(validationResult.Exception);
+        }
+
+        return await _dayRepository.GetAllByWelderIdAsync(request.WelderId);
     }
 
     public async Task<Result<List<DayDto>>> GetAllByEquipmentIdAsync(
@@ -65,20 +70,25 @@ public class DayService : IDayService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _dayRepository.GetAllByWelderIdAsync(request.EquipmentId)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<DayDto>>(validationResult.Exception);
+        }
+
+        return await _dayRepository.GetAllByWelderIdAsync(request.EquipmentId);
     }
 
     public async Task<Result<DayDto>> UpdateAsync(UpdateDayRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var day = _mapper.Map<Day>(request);
+            return new Result<DayDto>(validationResult.Exception);
+        }
 
-            return _dayRepository.UpdateAsync(day);
-        });
+        var day = _mapper.Map<Day>(request);
+
+        return await _dayRepository.UpdateAsync(day);
     }
 }

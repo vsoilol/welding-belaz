@@ -36,23 +36,27 @@ public class ChiefService : IChiefService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var chief = _mapper.Map<Chief>(request);
+            return new Result<ChiefDto>(validationResult.Exception);
+        }
 
-            return _chiefRepository.CreateAsync(chief);
-        });
+        var chief = _mapper.Map<Chief>(request);
+
+        return await _chiefRepository.CreateAsync(chief);
     }
 
     public async Task<Result<ChiefDto>> UpdateAsync(UpdateChiefRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var chief = _mapper.Map<Chief>(request);
+            return new Result<ChiefDto>(validationResult.Exception);
+        }
 
-            return _chiefRepository.UpdateAsync(chief);
-        });
+        var chief = _mapper.Map<Chief>(request);
+
+        return await _chiefRepository.UpdateAsync(chief);
     }
 }

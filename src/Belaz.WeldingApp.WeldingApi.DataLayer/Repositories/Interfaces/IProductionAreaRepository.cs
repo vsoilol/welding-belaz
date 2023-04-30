@@ -13,5 +13,5 @@ public interface IProductionAreaRepository
 
     Task<ProductionAreaDto> UpdateAsync(ProductionArea entity);
 
-    Task DeleteAsync(Guid id);
+    Task<ProductionAreaDto> DeleteAsync(Guid id);
 }

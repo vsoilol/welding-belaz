@@ -27,83 +27,103 @@ public class CalendarService : ICalendarService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var calendar = _mapper.Map<Calendar>(request);
-            calendar.IsMain = isMain;
+            return new Result<CalendarDto>(validationResult.Exception);
+        }
 
-            var days = _mapper.Map<List<Day>>(request.Days);
-            var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+        var calendar = _mapper.Map<Calendar>(request);
+        calendar.IsMain = isMain;
 
-            return _calendarRepository.CreateAsync(calendar, days, workingShifts);
-        });
+        var days = _mapper.Map<List<Day>>(request.Days);
+        var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+
+        return await _calendarRepository.CreateAsync(calendar, days, workingShifts);
     }
 
     public async Task<Result<CalendarDto>> CreateForEquipmentAsync(CreateCalendarWithEquipmentIdRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var calendar = _mapper.Map<Calendar>(request);
-            calendar.IsMain = false;
+            return new Result<CalendarDto>(validationResult.Exception);
+        }
 
-            var days = _mapper.Map<List<Day>>(request.Days);
-            var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+        var calendar = _mapper.Map<Calendar>(request);
+        calendar.IsMain = false;
 
-            return _calendarRepository.CreateAsync(calendar, days, workingShifts);
-        });
+        var days = _mapper.Map<List<Day>>(request.Days);
+        var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+
+        return await _calendarRepository.CreateAsync(calendar, days, workingShifts);
     }
 
     public async Task<Result<CalendarDto>> CreateForWelderAsync(CreateCalendarWithWelderIdRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var calendar = _mapper.Map<Calendar>(request);
-            calendar.IsMain = false;
+            return new Result<CalendarDto>(validationResult.Exception);
+        }
 
-            var days = _mapper.Map<List<Day>>(request.Days);
-            var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+        var calendar = _mapper.Map<Calendar>(request);
+        calendar.IsMain = false;
 
-            return _calendarRepository.CreateAsync(calendar, days, workingShifts);
-        });
+        var days = _mapper.Map<List<Day>>(request.Days);
+        var workingShifts = _mapper.Map<List<WorkingShift>>(request.MainWorkingShift);
+
+        return await _calendarRepository.CreateAsync(calendar, days, workingShifts);
     }
 
     public async Task<Result<CalendarDto>> UpdateAsync(UpdateCalendarRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var calendar = _mapper.Map<Calendar>(request);
+            return new Result<CalendarDto>(validationResult.Exception);
+        }
+        
+        var calendar = _mapper.Map<Calendar>(request);
 
-            return _calendarRepository.UpdateAsync(calendar);
-        });
+        return await _calendarRepository.UpdateAsync(calendar);
     }
 
     public async Task<Result<CalendarDto?>> GetMainCalendarByYearAsync(GetMainCalendarByYearRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
-            _calendarRepository.GetMainCalendarByYearAsync(request.Year));
+        if (!validationResult.IsValid)
+        {
+            return new Result<CalendarDto?>(validationResult.Exception);
+        }
+
+        return await _calendarRepository.GetMainCalendarByYearAsync(request.Year);
     }
 
     public async Task<Result<CalendarDto?>> GetByWelderIdAndYearAsync(GetByWelderIdRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
-            _calendarRepository.GetByWelderIdAndYearAsync(request.WelderId, request.Year));
+        if (!validationResult.IsValid)
+        {
+            return new Result<CalendarDto?>(validationResult.Exception);
+        }
+
+        return await _calendarRepository.GetByWelderIdAndYearAsync(request.WelderId, request.Year);
     }
 
     public async Task<Result<CalendarDto?>> GetByEquipmentIdAndYearAsync(GetByEquipmentIdRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
-            _calendarRepository.GetByEquipmentIdAndYearAsync(request.WeldingEquipmentId, request.Year));
+        if (!validationResult.IsValid)
+        {
+            return new Result<CalendarDto?>(validationResult.Exception);
+        }
+
+        return await _calendarRepository.GetByEquipmentIdAndYearAsync(request.WeldingEquipmentId, request.Year);
     }
 }

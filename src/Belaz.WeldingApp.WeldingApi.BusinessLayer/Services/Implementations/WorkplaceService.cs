@@ -37,43 +37,52 @@ public class WorkplaceService : IWorkplaceService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _workplaceRepository.GetByIdAsync(request.Id)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<WorkplaceDto>(validationResult.Exception);
+        }
+
+        return await _workplaceRepository.GetByIdAsync(request.Id);
     }
 
     public async Task<Result<WorkplaceDto>> CreateAsync(CreateWorkplaceRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var workplace = _mapper.Map<Workplace>(request);
+            return new Result<WorkplaceDto>(validationResult.Exception);
+        }
 
-            return _workplaceRepository.CreateAsync(workplace);
-        });
+        var workplace = _mapper.Map<Workplace>(request);
+
+        return await _workplaceRepository.CreateAsync(workplace);
     }
 
     public async Task<Result<WorkplaceDto>> UpdateAsync(UpdateWorkplaceRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var workplace = _mapper.Map<Workplace>(request);
+            return new Result<WorkplaceDto>(validationResult.Exception);
+        }
 
-            return _workplaceRepository.UpdateAsync(workplace);
-        });
+        var workplace = _mapper.Map<Workplace>(request);
+
+        return await _workplaceRepository.UpdateAsync(workplace);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteWorkplaceRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _workplaceRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _workplaceRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

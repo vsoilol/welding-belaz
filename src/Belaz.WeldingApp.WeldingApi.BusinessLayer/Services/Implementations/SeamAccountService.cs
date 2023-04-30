@@ -33,12 +33,14 @@ public class SeamAccountService : ISeamAccountService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () =>
-                _seamAccountRepository.ChangeDefectiveAmountAsync(
-                    request.SeamAccountId,
-                    request.Amount
-                )
+        if (!validationResult.IsValid)
+        {
+            return new Result<SeamAccountDto>(validationResult.Exception);
+        }
+
+        return await _seamAccountRepository.ChangeDefectiveAmountAsync(
+            request.SeamAccountId,
+            request.Amount
         );
     }
 
@@ -48,9 +50,12 @@ public class SeamAccountService : ISeamAccountService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _seamAccountRepository.GetAllByProductAccountIdAsync(request.ProductAccountId)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<SeamAccountDto>>(validationResult.Exception);
+        }
+
+        return await _seamAccountRepository.GetAllByProductAccountIdAsync(request.ProductAccountId);
     }
 
     public async Task<Result<SeamAccountDto>> SetSeamAccountDefectiveReasonAsync(
@@ -59,12 +64,14 @@ public class SeamAccountService : ISeamAccountService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () =>
-                _seamAccountRepository.SetSeamAccountDefectiveReasonAsync(
-                    request.SeamAccountId,
-                    request.DefectiveReason
-                )
+        if (!validationResult.IsValid)
+        {
+            return new Result<SeamAccountDto>(validationResult.Exception);
+        }
+
+        return await _seamAccountRepository.SetSeamAccountDefectiveReasonAsync(
+            request.SeamAccountId,
+            request.DefectiveReason
         );
     }
 }

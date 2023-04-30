@@ -37,41 +37,52 @@ public class PostService : IPostService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() => _postRepository.GetByIdAsync(request.Id));
+        if (!validationResult.IsValid)
+        {
+            return new Result<PostDto>(validationResult.Exception);
+        }
+
+        return await _postRepository.GetByIdAsync(request.Id);
     }
 
     public async Task<Result<PostDto>> CreateAsync(CreatePostRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var post = _mapper.Map<Post>(request);
+            return new Result<PostDto>(validationResult.Exception);
+        }
 
-            return _postRepository.CreateAsync(post);
-        });
+        var post = _mapper.Map<Post>(request);
+
+        return await _postRepository.CreateAsync(post);
     }
 
     public async Task<Result<PostDto>> UpdateAsync(UpdatePostRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var post = _mapper.Map<Post>(request);
+            return new Result<PostDto>(validationResult.Exception);
+        }
 
-            return _postRepository.UpdateAsync(post);
-        });
+        var post = _mapper.Map<Post>(request);
+
+        return await _postRepository.UpdateAsync(post);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeletePostRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _postRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _postRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

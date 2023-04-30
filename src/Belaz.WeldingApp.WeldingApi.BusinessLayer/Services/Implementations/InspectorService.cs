@@ -37,34 +37,40 @@ public class InspectorService : IInspectorService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var inspector = _mapper.Map<Inspector>(request);
+            return new Result<InspectorDto>(validationResult.Exception);
+        }
 
-            return _inspectorRepository.CreateAsync(inspector);
-        });
+        var inspector = _mapper.Map<Inspector>(request);
+
+        return await _inspectorRepository.CreateAsync(inspector);
     }
 
     public async Task<Result<InspectorDto>> UpdateAsync(UpdateInspectorRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var inspector = _mapper.Map<Inspector>(request);
+            return new Result<InspectorDto>(validationResult.Exception);
+        }
 
-            return _inspectorRepository.UpdateAsync(inspector);
-        });
+        var inspector = _mapper.Map<Inspector>(request);
+
+        return await _inspectorRepository.UpdateAsync(inspector);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteInspectorRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _inspectorRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _inspectorRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

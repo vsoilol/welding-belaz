@@ -41,16 +41,18 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
-            var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
+            return new Result<TechnologicalInstructionDto>(validationResult.Exception);
+        }
 
-            return _technologicalInstructionRepository.CreateAsync(
-                technologicalInstruction,
-                weldPassages
-            );
-        });
+        var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
+        var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
+
+        return await _technologicalInstructionRepository.CreateAsync(
+            technologicalInstruction,
+            weldPassages
+        );
     }
 
     public async Task<Result<TechnologicalInstructionDto>> UpdateAsync(
@@ -59,26 +61,30 @@ public class TechnologicalInstructionService : ITechnologicalInstructionService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
-            var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
+            return new Result<TechnologicalInstructionDto>(validationResult.Exception);
+        }
 
-            return _technologicalInstructionRepository.UpdateAsync(
-                technologicalInstruction,
-                weldPassages
-            );
-        });
+        var technologicalInstruction = _mapper.Map<TechnologicalInstruction>(request);
+        var weldPassages = _mapper.Map<List<WeldPassageInstruction>>(request.WeldPassages);
+
+        return await _technologicalInstructionRepository.UpdateAsync(
+            technologicalInstruction,
+            weldPassages
+        );
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteInstructionRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _technologicalInstructionRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _technologicalInstructionRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

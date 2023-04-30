@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
 using Belaz.WeldingApp.Common.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
 using LanguageExt;
 using LanguageExt.Common;
 
@@ -28,52 +29,65 @@ public class ProductionAreaService : IProductionAreaService
         _productionAreaRepository = productionAreaRepository;
     }
 
-    public Task<List<ProductionAreaDto>> GetAllAsync()
+    public async Task<BaseRequest<List<ProductionAreaDto>>> GetAllAsync()
     {
-        return _productionAreaRepository.GetAllAsync();
+        var result = await _productionAreaRepository.GetAllAsync();
+
+        return new BaseRequest<List<ProductionAreaDto>>(result, "Получение всех производственных участков");
     }
 
-    public async Task<Result<ProductionAreaDto>> GetByIdAsync(GetProductionAreaByIdRequest request)
+    public async Task<BaseResultRequest<ProductionAreaDto>> GetByIdAsync(GetProductionAreaByIdRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _productionAreaRepository.GetByIdAsync(request.Id)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new BaseResultRequest<ProductionAreaDto>(new Result<ProductionAreaDto>(validationResult.Exception));
+        }
+
+        var data = await _productionAreaRepository.GetByIdAsync(request.Id);
+
+        return new BaseResultRequest<ProductionAreaDto>(data,
+            $"Получение информации о производственном участке. Номер: {data.Number}, Наименование: {data.Name}");
     }
 
     public async Task<Result<ProductionAreaDto>> CreateAsync(CreateProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var productionArea = _mapper.Map<ProductionArea>(request);
+            return new Result<ProductionAreaDto>(validationResult.Exception);
+        }
 
-            return _productionAreaRepository.CreateAsync(productionArea);
-        });
+        var productionArea = _mapper.Map<ProductionArea>(request);
+
+        return await _productionAreaRepository.CreateAsync(productionArea);
     }
 
     public async Task<Result<ProductionAreaDto>> UpdateAsync(UpdateProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var productionArea = _mapper.Map<ProductionArea>(request);
+            return new Result<ProductionAreaDto>(validationResult.Exception);
+        }
 
-            return _productionAreaRepository.UpdateAsync(productionArea);
-        });
+        var productionArea = _mapper.Map<ProductionArea>(request);
+
+        return await _productionAreaRepository.UpdateAsync(productionArea);
     }
 
-    public async Task<Result<Unit>> DeleteAsync(DeleteProductionAreaRequest request)
+    public async Task<Result<ProductionAreaDto>> DeleteAsync(DeleteProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _productionAreaRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<ProductionAreaDto>(validationResult.Exception);
+        }
+
+        return await _productionAreaRepository.DeleteAsync(request.Id);
     }
 }

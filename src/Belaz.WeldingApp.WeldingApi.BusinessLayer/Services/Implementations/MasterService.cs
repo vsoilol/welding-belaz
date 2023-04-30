@@ -38,34 +38,40 @@ public class MasterService : IMasterService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var master = _mapper.Map<Master>(request);
+            return new Result<MasterDto>(validationResult.Exception);
+        }
 
-            return _masterRepository.CreateAsync(master);
-        });
+        var master = _mapper.Map<Master>(request);
+
+        return await _masterRepository.CreateAsync(master);
     }
 
     public async Task<Result<MasterDto>> UpdateAsync(UpdateMasterRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var master = _mapper.Map<Master>(request);
+            return new Result<MasterDto>(validationResult.Exception);
+        }
 
-            return _masterRepository.UpdateAsync(master);
-        });
+        var master = _mapper.Map<Master>(request);
+
+        return await _masterRepository.UpdateAsync(master);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteMasterRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _masterRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _masterRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

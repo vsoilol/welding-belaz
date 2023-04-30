@@ -32,9 +32,12 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _productRepository.GetAllAsync(request.Type)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<ProductDto>>(validationResult.Exception);
+        }
+
+        return await _productRepository.GetAllAsync(request.Type);
     }
 
     public async Task<Result<List<ProductDto>>> GetAllByControlSubjectAsync(
@@ -43,12 +46,14 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () =>
-                _productRepository.GetAllByControlSubjectAsync(
-                    request.IsControlSubject,
-                    request.Type
-                )
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<ProductDto>>(validationResult.Exception);
+        }
+
+        return await _productRepository.GetAllByControlSubjectAsync(
+            request.IsControlSubject,
+            request.Type
         );
     }
 
@@ -56,9 +61,12 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _productRepository.GetByIdAsync(request.Id)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<ProductDto>(validationResult.Exception);
+        }
+
+        return await _productRepository.GetByIdAsync(request.Id);
     }
 
     public async Task<Result<List<ProductDto>>> GetAllByMasterIdAsync(
@@ -67,9 +75,12 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _productRepository.GetAllByMasterIdAsync(request.MasterId, request.Type)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<ProductDto>>(validationResult.Exception);
+        }
+
+        return await _productRepository.GetAllByMasterIdAsync(request.MasterId, request.Type);
     }
 
     public async Task<Result<List<ProductDto>>> GetAllByInspectorIdAsync(
@@ -78,49 +89,58 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _productRepository.GetAllByInspectorIdAsync(request.InspectorId, request.Type)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<ProductDto>>(validationResult.Exception);
+        }
+
+        return await _productRepository.GetAllByInspectorIdAsync(request.InspectorId, request.Type);
     }
 
     public async Task<Result<ProductDto>> CreateAsync(CreateProductRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var product = _mapper.Map<Product>(request.Request);
-            product.ProductType = request.Type;
+            return new Result<ProductDto>(validationResult.Exception);
+        }
 
-            return _productRepository.CreateAsync(product, request.Request.MainProductId);
-        });
+        var product = _mapper.Map<Product>(request.Request);
+        product.ProductType = request.Type;
+
+        return await _productRepository.CreateAsync(product, request.Request.MainProductId);
     }
 
     public async Task<Result<ProductDto>> UpdateAsync(UpdateProductRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var product = _mapper.Map<Product>(request.Request);
-            product.ProductType = request.Type;
+            return new Result<ProductDto>(validationResult.Exception);
+        }
 
-            return _productRepository.UpdateAsync(product, request.Request.MainProductId);
-        });
+        var product = _mapper.Map<Product>(request.Request);
+        product.ProductType = request.Type;
+
+        return await _productRepository.UpdateAsync(product, request.Request.MainProductId);
     }
 
     public async Task<Result<Unit>> AssignProductToMasterAsync(AssignProductToMasterRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _productRepository.AssignProductToMasterAsync(
-                request.ProductId,
-                request.MasterId
-            );
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _productRepository.AssignProductToMasterAsync(
+            request.ProductId,
+            request.MasterId
+        );
+        return Unit.Default;
     }
 
     public async Task<Result<Unit>> AssignProductToInspectorAsync(
@@ -129,14 +149,16 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _productRepository.AssignProductToInspectorAsync(
-                request.ProductId,
-                request.InspectorId
-            );
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _productRepository.AssignProductToInspectorAsync(
+            request.ProductId,
+            request.InspectorId
+        );
+        return Unit.Default;
     }
 
     public async Task<Result<Unit>> AssignProductsToMasterAsync(
@@ -145,14 +167,16 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _productRepository.AssignProductsToMasterAsync(
-                request.ProductIds,
-                request.MasterId
-            );
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _productRepository.AssignProductsToMasterAsync(
+            request.ProductIds,
+            request.MasterId
+        );
+        return Unit.Default;
     }
 
     public async Task<Result<Unit>> AssignProductsToInspectorAsync(
@@ -161,24 +185,28 @@ public class ProductService : IProductService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _productRepository.AssignProductsToInspectorAsync(
-                request.ProductIds,
-                request.InspectorId
-            );
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _productRepository.AssignProductsToInspectorAsync(
+            request.ProductIds,
+            request.InspectorId
+        );
+        return Unit.Default;
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteProductRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _productRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _productRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

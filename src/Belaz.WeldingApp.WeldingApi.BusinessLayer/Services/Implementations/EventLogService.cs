@@ -33,13 +33,15 @@ internal class EventLogService : IEventLogService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var eventLog = _mapper.Map<EventLog>(request);
+            return new Result<EventLogDto>(validationResult.Exception);
+        }
 
-            eventLog.UserId = userId;
+        var eventLog = _mapper.Map<EventLog>(request);
 
-            return _eventLogRepository.AddAsync(eventLog);
-        });
+        eventLog.UserId = userId;
+
+        return await _eventLogRepository.AddAsync(eventLog);
     }
 }

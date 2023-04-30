@@ -42,24 +42,28 @@ public class WeldingEquipmentService : IWeldingEquipmentService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var weldingEquipment = _mapper.Map<WeldingEquipment>(request);
+            return new Result<WeldingEquipmentDto>(validationResult.Exception);
+        }
 
-            return _weldingEquipmentRepository.CreateAsync(weldingEquipment, request.WorkplaceIds);
-        });
+        var weldingEquipment = _mapper.Map<WeldingEquipment>(request);
+
+        return await _weldingEquipmentRepository.CreateAsync(weldingEquipment, request.WorkplaceIds);
     }
 
     public async Task<Result<WeldingEquipmentDto>> UpdateAsync(UpdateEquipmentRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var weldingEquipment = _mapper.Map<WeldingEquipment>(request);
+            return new Result<WeldingEquipmentDto>(validationResult.Exception);
+        }
 
-            return _weldingEquipmentRepository.UpdateAsync(weldingEquipment, request.WorkplaceIds);
-        });
+        var weldingEquipment = _mapper.Map<WeldingEquipment>(request);
+
+        return await _weldingEquipmentRepository.UpdateAsync(weldingEquipment, request.WorkplaceIds);
     }
 
     public async Task<Result<WeldingEquipmentDowntimeDto>> AddWeldingEquipmentDowntimeAsync(
@@ -68,14 +72,16 @@ public class WeldingEquipmentService : IWeldingEquipmentService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var weldingEquipmentConditionTime = _mapper.Map<WeldingEquipmentConditionTime>(request);
+            return new Result<WeldingEquipmentDowntimeDto>(validationResult.Exception);
+        }
 
-            return _weldingEquipmentRepository.AddWeldingEquipmentDowntimeAsync(
-                weldingEquipmentConditionTime
-            );
-        });
+        var weldingEquipmentConditionTime = _mapper.Map<WeldingEquipmentConditionTime>(request);
+
+        return await _weldingEquipmentRepository.AddWeldingEquipmentDowntimeAsync(
+            weldingEquipmentConditionTime
+        );
     }
 
     public async Task<Result<WeldingEquipmentDowntimeDto>> UpdateWeldingEquipmentDowntimeAsync(
@@ -84,14 +90,16 @@ public class WeldingEquipmentService : IWeldingEquipmentService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var weldingEquipmentConditionTime = _mapper.Map<WeldingEquipmentConditionTime>(request);
+            return new Result<WeldingEquipmentDowntimeDto>(validationResult.Exception);
+        }
 
-            return _weldingEquipmentRepository.UpdateWeldingEquipmentDowntimeAsync(
-                weldingEquipmentConditionTime
-            );
-        });
+        var weldingEquipmentConditionTime = _mapper.Map<WeldingEquipmentConditionTime>(request);
+
+        return await _weldingEquipmentRepository.UpdateWeldingEquipmentDowntimeAsync(
+            weldingEquipmentConditionTime
+        );
     }
 
     public async Task<Result<Unit>> AssignEquipmentsToWeldersAsync(
@@ -100,14 +108,16 @@ public class WeldingEquipmentService : IWeldingEquipmentService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _weldingEquipmentRepository.AssignEquipmentsToWeldersAsync(
-                request.WeldingEquipmentIds,
-                request.WelderIds
-            );
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _weldingEquipmentRepository.AssignEquipmentsToWeldersAsync(
+            request.WeldingEquipmentIds,
+            request.WelderIds
+        );
+        return Unit.Default;
     }
 
     public async Task<Result<Unit>> AssignEquipmentsToMasterAsync(
@@ -116,24 +126,28 @@ public class WeldingEquipmentService : IWeldingEquipmentService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _weldingEquipmentRepository.AssignEquipmentsToMasterAsync(
-                request.WeldingEquipmentIds,
-                request.MasterId
-            );
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _weldingEquipmentRepository.AssignEquipmentsToMasterAsync(
+            request.WeldingEquipmentIds,
+            request.MasterId
+        );
+        return Unit.Default;
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteWeldingEquipmentRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _weldingEquipmentRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _weldingEquipmentRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }
