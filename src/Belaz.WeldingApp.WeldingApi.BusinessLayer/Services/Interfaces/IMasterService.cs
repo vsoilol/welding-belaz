@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Master;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 using LanguageExt;
@@ -8,11 +9,11 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 
 public interface IMasterService
 {
-    Task<List<MasterDto>> GetAllAsync();
+    Task<BaseRequest<List<MasterDto>>> GetAllAsync();
 
-    Task<Result<MasterDto>> CreateAsync(CreateMasterRequest request);
+    Task<BaseResultRequest<MasterDto>> CreateAsync(CreateMasterRequest request);
 
-    Task<Result<MasterDto>> UpdateAsync(UpdateMasterRequest request);
+    Task<BaseResultRequest<MasterDto>> UpdateAsync(UpdateMasterRequest request);
 
-    Task<Result<Unit>> DeleteAsync(DeleteMasterRequest request);
+    Task<BaseResultRequest<Unit>> DeleteAsync(DeleteMasterRequest request);
 }
