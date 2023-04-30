@@ -54,6 +54,7 @@ builder.Services.AddBusinessLayer();
 builder.Services
     .AddControllers(options =>
     {
+        options.Filters.Add<AuthorizationFilter>();
         options.Filters.Add<LogEventFilter>();
     });
 
