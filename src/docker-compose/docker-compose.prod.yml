@@ -43,6 +43,7 @@ services:
     user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
+      REAL_API: "http://weldingcontrol.bru.by:4001"
     ports:
       - "5011:80"
     volumes:

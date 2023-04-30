@@ -29,4 +29,14 @@ public class EmailController : ControllerBase
 
         return Ok();
     }
+
+    [HttpGet]
+    [Route("baseurl")]
+    public ActionResult GetBaseUrl()
+    {
+        var request = HttpContext.Request;
+        var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase}";
+
+        return Ok(HttpContext.Request.Headers);
+    }
 }

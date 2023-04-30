@@ -8,6 +8,7 @@ using Belaz.WeldingApp.IdentityApi.DataLayer;
 using Belaz.WeldingApp.IdentityApi.Filters;
 using Belaz.WeldingApp.IdentityApi.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -113,6 +114,11 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ApplicationContext>();
     await DataSeed.SeedSampleDataAsync(context);
 }
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseSwagger(c =>
 {

@@ -42,7 +42,7 @@
       "UpstreamPathTemplate": "/api/auth/confirmEmail",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST"
+        "GET"
       ],
       "DownstreamPathTemplate": "/api/auth/confirmEmail",
       "ServiceName": "identity",
@@ -89,6 +89,16 @@
         "AuthenticationProviderKey": "ApiGatewayKey",
         "AllowedScopes": []
       }
+    },
+    {
+      "UpstreamPathTemplate": "/api/email/baseurl",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/email/baseurl",
+      "ServiceName": "identity",
+      "SwaggerKey": "identity"
     }
   ]
 }
