@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -27,7 +28,11 @@ public class PostController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<PostDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PostDto>>> GetAllAsync()
     {
-        return await _postService.GetAllAsync();
+        var result = await _postService.GetAllAsync();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
     }
 
     [HttpGet("{id}")]
@@ -35,7 +40,10 @@ public class PostController : ControllerBase
     public async Task<ActionResult<PostDto>> GetByIdAsync([FromRoute] Guid id)
     {
         var result = await _postService.GetByIdAsync(new GetPostByIdRequest { Id = id });
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPost]
@@ -43,7 +51,10 @@ public class PostController : ControllerBase
     public async Task<ActionResult<PostDto>> CreateAsync([FromBody] CreatePostRequest request)
     {
         var result = await _postService.CreateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -51,13 +62,19 @@ public class PostController : ControllerBase
     public async Task<ActionResult<PostDto>> UpdateAsync([FromBody] UpdatePostRequest request)
     {
         var result = await _postService.UpdateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _postService.DeleteAsync(new DeletePostRequest { Id = id });
-        return result.ToOk();
+       
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 }
