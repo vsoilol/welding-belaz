@@ -27,11 +27,13 @@ public class WeldingRecordService : IWeldingRecordService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _weldingRecordRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _weldingRecordRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 
     public Task<List<RecordDto>> GetAllAsync()

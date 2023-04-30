@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public abstract class CommonProductController : ControllerBase
 {
     private readonly IProductService _productService;
@@ -30,7 +30,10 @@ public abstract class CommonProductController : ControllerBase
     public async Task<ActionResult<List<ProductDto>>> GetAllAsync()
     {
         var result = await _productService.GetAllAsync(new GetAllProductsRequest { Type = _type });
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpGet("byControlSubject/{isControlSubject}")]
@@ -42,7 +45,10 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.GetAllByControlSubjectAsync(
             new GetAllByControlSubjectRequest { IsControlSubject = isControlSubject, Type = _type }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpGet("{id}")]
@@ -50,7 +56,10 @@ public abstract class CommonProductController : ControllerBase
     public async Task<ActionResult<ProductDto>> GetByIdAsync([FromRoute] Guid id)
     {
         var result = await _productService.GetByIdAsync(new GetProductByIdRequest { Id = id });
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpPost]
@@ -62,7 +71,10 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.CreateAsync(
             new CreateProductRequest { Request = request, Type = _type }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -74,7 +86,10 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.UpdateAsync(
             new UpdateProductRequest { Request = request, Type = _type }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpGet("byInspector/{inspectorId}")]
@@ -86,7 +101,10 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.GetAllByInspectorIdAsync(
             new GetAllByInspectorIdRequest { InspectorId = inspectorId, Type = _type }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpGet("byMaster/{masterId}")]
@@ -98,7 +116,10 @@ public abstract class CommonProductController : ControllerBase
         var result = await _productService.GetAllByMasterIdAsync(
             new GetAllByMasterIdRequest { MasterId = masterId, Type = _type }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     /*[HttpPut("assignInspector")]
@@ -122,7 +143,10 @@ public abstract class CommonProductController : ControllerBase
     )
     {
         var result = await _productService.AssignProductsToInspectorAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpPut("assignMaster")]
@@ -131,13 +155,19 @@ public abstract class CommonProductController : ControllerBase
     )
     {
         var result = await _productService.AssignProductsToMasterAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _productService.DeleteAsync(new DeleteProductRequest { Id = id });
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+        
+        return result.Result.ToOk();
     }
 }

@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public class ProductionAreaController : ControllerBase
 {
     private readonly IProductionAreaService _productionAreaService;
@@ -28,7 +28,11 @@ public class ProductionAreaController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ProductionAreaDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ProductionAreaDto>>> GetAllAsync()
     {
-        return await _productionAreaService.GetAllAsync();
+        var result = await _productionAreaService.GetAllAsync();
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
     }
 
     [HttpGet("{id}")]
@@ -38,7 +42,10 @@ public class ProductionAreaController : ControllerBase
         var result = await _productionAreaService.GetByIdAsync(
             new GetProductionAreaByIdRequest { Id = id }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPost]
@@ -48,7 +55,10 @@ public class ProductionAreaController : ControllerBase
     )
     {
         var result = await _productionAreaService.CreateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -58,7 +68,10 @@ public class ProductionAreaController : ControllerBase
     )
     {
         var result = await _productionAreaService.UpdateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpDelete("{id}")]
@@ -67,6 +80,9 @@ public class ProductionAreaController : ControllerBase
         var result = await _productionAreaService.DeleteAsync(
             new DeleteProductionAreaRequest { Id = id }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 }

@@ -43,12 +43,14 @@ public class WeldingTaskService : IWeldingTaskService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var weldingTask = _mapper.Map<WeldingTask>(request);
+            return new Result<WeldingTaskDto>(validationResult.Exception);
+        }
 
-            return _weldingTaskRepository.UpdateAsync(weldingTask);
-        });
+        var weldingTask = _mapper.Map<WeldingTask>(request);
+
+        return await _weldingTaskRepository.UpdateAsync(weldingTask);
     }
 
     public Task<List<WeldingTaskDto>> GetAllUncompletedTaskAsync()
@@ -62,20 +64,25 @@ public class WeldingTaskService : IWeldingTaskService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _weldingTaskRepository.ChangeWeldingTaskStatusAsync(request.Id, request.Status)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<WeldingTaskDto>(validationResult.Exception);
+        }
+
+        return await _weldingTaskRepository.ChangeWeldingTaskStatusAsync(request.Id, request.Status);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteWeldingTaskRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _weldingTaskRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _weldingTaskRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 
     public async Task<Result<WeldingTaskDto>> ChangeWeldingTaskDateAsync(
@@ -84,12 +91,14 @@ public class WeldingTaskService : IWeldingTaskService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var date = request.Date.ToDateTime();
+            return new Result<WeldingTaskDto>(validationResult.Exception);
+        }
 
-            return _weldingTaskRepository.ChangeWeldingTaskDateAsync(request.Id, date);
-        });
+        var date = request.Date.ToDateTime();
+
+        return await _weldingTaskRepository.ChangeWeldingTaskDateAsync(request.Id, date);
     }
 
     public async Task<Result<WeldingTaskDto>> ChangeWeldingTaskSeamAmountAsync(
@@ -98,12 +107,14 @@ public class WeldingTaskService : IWeldingTaskService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () =>
-                _weldingTaskRepository.ChangeWeldingTaskSeamAmountAsync(
-                    request.Id,
-                    request.SeamAmount
-                )
+        if (!validationResult.IsValid)
+        {
+            return new Result<WeldingTaskDto>(validationResult.Exception);
+        }
+
+        return await _weldingTaskRepository.ChangeWeldingTaskSeamAmountAsync(
+            request.Id,
+            request.SeamAmount
         );
     }
 }

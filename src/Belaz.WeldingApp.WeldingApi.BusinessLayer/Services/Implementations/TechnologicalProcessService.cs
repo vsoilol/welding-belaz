@@ -35,9 +35,12 @@ public class TechnologicalProcessService : ITechnologicalProcessService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _technologicalProcessRepository.GetByIdAsync(request.Id)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<TechnologicalProcessDto>(validationResult.Exception);
+        }
+
+        return await _technologicalProcessRepository.GetByIdAsync(request.Id);
     }
 
     public Task<List<TechnologicalProcessDto>> GetAllAsync()
@@ -51,12 +54,14 @@ public class TechnologicalProcessService : ITechnologicalProcessService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var technologicalProcess = _mapper.Map<TechnologicalProcess>(request);
+            return new Result<TechnologicalProcessDto>(validationResult.Exception);
+        }
 
-            return _technologicalProcessRepository.CreateAsync(technologicalProcess);
-        });
+        var technologicalProcess = _mapper.Map<TechnologicalProcess>(request);
+
+        return await _technologicalProcessRepository.CreateAsync(technologicalProcess);
     }
 
     public async Task<Result<TechnologicalProcessDto>> UpdateAsync(
@@ -65,22 +70,26 @@ public class TechnologicalProcessService : ITechnologicalProcessService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var technologicalProcess = _mapper.Map<TechnologicalProcess>(request);
+            return new Result<TechnologicalProcessDto>(validationResult.Exception);
+        }
 
-            return _technologicalProcessRepository.UpdateAsync(technologicalProcess);
-        });
+        var technologicalProcess = _mapper.Map<TechnologicalProcess>(request);
+
+        return await _technologicalProcessRepository.UpdateAsync(technologicalProcess);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteTechnologicalProcessRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _technologicalProcessRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _technologicalProcessRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

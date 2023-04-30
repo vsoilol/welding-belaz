@@ -14,6 +14,8 @@ public interface IProductRepository
     );
 
     Task<ProductDto> GetByIdAsync(Guid id);
+    
+    Task<ProductBriefDto> GetBriefInfoByIdAsync(Guid id);
 
     Task<List<ProductDto>> GetAllByMasterIdAsync(Guid masterId, ProductType productType);
 

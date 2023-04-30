@@ -11,6 +11,7 @@ using Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
 using Belaz.WeldingApp.WeldingApi.Middlewares;
 using ApplicationContext = Belaz.WeldingApp.WeldingApi.DataLayer.ApplicationContext;
 using Belaz.WeldingApp.Common.Extensions;
+using Belaz.WeldingApp.WeldingApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +51,12 @@ builder.Services.AddDataLayer(connectionString);
 
 builder.Services.AddBusinessLayer();
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers(options =>
+    {
+        options.Filters.Add<AuthorizationFilter>();
+        options.Filters.Add<LogEventFilter>();
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

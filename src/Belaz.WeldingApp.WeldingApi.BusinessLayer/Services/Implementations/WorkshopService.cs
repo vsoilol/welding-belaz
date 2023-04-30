@@ -37,43 +37,52 @@ public class WorkshopService : IWorkshopService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(
-            () => _workshopRepository.GetByIdAsync(request.Id)
-        );
+        if (!validationResult.IsValid)
+        {
+            return new Result<WorkshopDto>(validationResult.Exception);
+        }
+
+        return await _workshopRepository.GetByIdAsync(request.Id);
     }
 
     public async Task<Result<WorkshopDto>> CreateAsync(CreateWorkshopRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var workshop = _mapper.Map<Workshop>(request);
+            return new Result<WorkshopDto>(validationResult.Exception);
+        }
 
-            return _workshopRepository.CreateAsync(workshop);
-        });
+        var workshop = _mapper.Map<Workshop>(request);
+
+        return await _workshopRepository.CreateAsync(workshop);
     }
 
     public async Task<Result<WorkshopDto>> UpdateAsync(UpdateWorkshopRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var workshop = _mapper.Map<Workshop>(request);
+            return new Result<WorkshopDto>(validationResult.Exception);
+        }
 
-            return _workshopRepository.UpdateAsync(workshop);
-        });
+        var workshop = _mapper.Map<Workshop>(request);
+
+        return await _workshopRepository.UpdateAsync(workshop);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteWorkshopRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _workshopRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _workshopRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

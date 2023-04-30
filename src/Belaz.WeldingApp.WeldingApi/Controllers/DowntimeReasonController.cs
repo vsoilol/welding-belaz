@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public class DowntimeReasonController : ControllerBase
 {
     private readonly IDowntimeReasonService _downtimeReasonService;
@@ -25,6 +25,10 @@ public class DowntimeReasonController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<DowntimeReasonDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<DowntimeReasonDto>>> GetAllAsync()
     {
-        return await _downtimeReasonService.GetAllAsync();
+        var result = await _downtimeReasonService.GetAllAsync();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
     }
 }

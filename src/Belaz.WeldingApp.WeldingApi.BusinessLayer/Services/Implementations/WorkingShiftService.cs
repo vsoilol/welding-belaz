@@ -33,23 +33,27 @@ public class WorkingShiftService : IWorkingShiftService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var workingShift = _mapper.Map<WorkingShift>(request);
+            return new Result<WorkingShiftDto>(validationResult.Exception);
+        }
 
-            return _workingShiftRepository.CreateAsync(workingShift, request.Year);
-        });
+        var workingShift = _mapper.Map<WorkingShift>(request);
+
+        return await _workingShiftRepository.CreateAsync(workingShift, request.Year);
     }
 
     public async Task<Result<WorkingShiftDto>> UpdateAsync(UpdateWorkingShiftRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var workingShift = _mapper.Map<WorkingShift>(request);
+            return new Result<WorkingShiftDto>(validationResult.Exception);
+        }
 
-            return _workingShiftRepository.UpdateAsync(workingShift);
-        });
+        var workingShift = _mapper.Map<WorkingShift>(request);
+
+        return await _workingShiftRepository.UpdateAsync(workingShift);
     }
 }

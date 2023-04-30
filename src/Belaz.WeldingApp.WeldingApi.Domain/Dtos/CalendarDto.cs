@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;

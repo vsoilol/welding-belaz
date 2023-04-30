@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.Common.Entities;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Extensions;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.EventLog;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
@@ -24,22 +25,32 @@ internal class EventLogService : IEventLogService
         _mapper = mapper;
     }
 
-    public Task<List<EventLogDto>> GetAllAsync()
+    public async Task<BaseRequest<List<EventLogDto>>> GetAllAsync()
     {
-        return _eventLogRepository.GetAllAsync();
+        var data = await _eventLogRepository.GetAllAsync();
+
+        var message = "Получение всех записей в журнале";
+
+        return new BaseRequest<List<EventLogDto>>(data, message);
     }
 
-    public async Task<Result<EventLogDto>> AddAsync(AddEventLogRequest request, Guid userId)
+    public async Task<BaseResultRequest<EventLogDto>> AddAsync(AddEventLogRequest request, Guid userId)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var eventLog = _mapper.Map<EventLog>(request);
+            var result = new Result<EventLogDto>(validationResult.Exception);
+            return new BaseResultRequest<EventLogDto>(result);
+        }
 
-            eventLog.UserId = userId;
+        var eventLog = _mapper.Map<EventLog>(request);
 
-            return _eventLogRepository.AddAsync(eventLog);
-        });
+        eventLog.UserId = userId;
+
+        var data = await _eventLogRepository.AddAsync(eventLog);
+        var message = $"Добавление записи \"{data.Information}\" в журнал";
+
+        return new BaseResultRequest<EventLogDto>(data, message);
     }
 }

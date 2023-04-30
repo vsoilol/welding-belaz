@@ -38,34 +38,40 @@ public class WelderService : IWelderService
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var welder = _mapper.Map<Welder>(request);
+            return new Result<WelderDto>(validationResult.Exception);
+        }
 
-            return _welderRepository.CreateAsync(welder);
-        });
+        var welder = _mapper.Map<Welder>(request);
+
+        return await _welderRepository.CreateAsync(welder);
     }
 
     public async Task<Result<WelderDto>> UpdateAsync(UpdateWelderRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var welder = _mapper.Map<Welder>(request);
+            return new Result<WelderDto>(validationResult.Exception);
+        }
 
-            return _welderRepository.UpdateAsync(welder);
-        });
+        var welder = _mapper.Map<Welder>(request);
+
+        return await _welderRepository.UpdateAsync(welder);
     }
 
     public async Task<Result<Unit>> DeleteAsync(DeleteWelderRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _welderRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _welderRepository.DeleteAsync(request.Id);
+        return Unit.Default;
     }
 }

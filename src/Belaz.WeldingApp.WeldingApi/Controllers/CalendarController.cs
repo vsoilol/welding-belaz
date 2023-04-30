@@ -1,7 +1,6 @@
-﻿using Belaz.WeldingApp.Common.Attributes;
-using Belaz.WeldingApp.Common.Enums;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Calendar;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,7 +12,6 @@ namespace Belaz.WeldingApp.WeldingApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public class CalendarController : ControllerBase
 {
     private readonly ICalendarService _calendarService;
@@ -30,7 +28,10 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateAsync(request, true);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpGet("main/{year}")]
@@ -40,7 +41,10 @@ public class CalendarController : ControllerBase
         var result = await _calendarService.GetMainCalendarByYearAsync(
             new GetMainCalendarByYearRequest { Year = year }
         );
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -50,7 +54,10 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.UpdateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPost("withWelder")]
@@ -60,7 +67,10 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateForWelderAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpGet("byWelder")]
@@ -70,7 +80,10 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.GetByWelderIdAndYearAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPost("withEquipment")]
@@ -80,7 +93,10 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateForEquipmentAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpGet("byEquipment")]
@@ -90,6 +106,9 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.GetByEquipmentIdAndYearAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 }

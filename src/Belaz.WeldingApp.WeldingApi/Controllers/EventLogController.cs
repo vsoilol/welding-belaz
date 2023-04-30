@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.EventLog;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -23,16 +24,22 @@ public class EventLogController : ApiBaseController
     [AuthorizeRoles(Role.Admin)]
     public async Task<ActionResult<IEnumerable<EventLogDto>>> GetAllAsync()
     {
-        return await _eventLogService.GetAllAsync();
+        var result = await _eventLogService.GetAllAsync();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
     }
     
     [HttpPost]
-    [Authorize]
     [ProducesResponseType(typeof(EventLogDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<EventLogDto>> AddAsync([FromBody] AddEventLogRequest request)
     {
         var userId = GetUserId();
         var result = await _eventLogService.AddAsync(request, userId);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 }

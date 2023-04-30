@@ -7,6 +7,7 @@ using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 using Belaz.WeldingApp.Common.Entities.Users;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
 using LanguageExt;
 using LanguageExt.Common;
 
@@ -29,43 +30,64 @@ public class MasterService : IMasterService
         _masterRepository = masterRepository;
     }
 
-    public Task<List<MasterDto>> GetAllAsync()
+    public async Task<BaseRequest<List<MasterDto>>> GetAllAsync()
     {
-        return _masterRepository.GetAllAsync();
+        var data = await _masterRepository.GetAllAsync();
+        var message = "Получение всех мастеров";
+        return new BaseRequest<List<MasterDto>>(data, message);
     }
 
-    public async Task<Result<MasterDto>> CreateAsync(CreateMasterRequest request)
+    public async Task<BaseResultRequest<MasterDto>> CreateAsync(CreateMasterRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var master = _mapper.Map<Master>(request);
+            var result = new Result<MasterDto>(validationResult.Exception);
+            return new BaseResultRequest<MasterDto>(result);
+        }
 
-            return _masterRepository.CreateAsync(master);
-        });
+        var master = _mapper.Map<Master>(request);
+
+        var data = await _masterRepository.CreateAsync(master);
+        var message = $"Добавление нового мастера: {data.MiddleName} {data.FirstName} {data.LastName}";
+
+        return new BaseResultRequest<MasterDto>(data, message);
     }
 
-    public async Task<Result<MasterDto>> UpdateAsync(UpdateMasterRequest request)
+    public async Task<BaseResultRequest<MasterDto>> UpdateAsync(UpdateMasterRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var master = _mapper.Map<Master>(request);
+            var result = new Result<MasterDto>(validationResult.Exception);
+            return new BaseResultRequest<MasterDto>(result);
+        }
 
-            return _masterRepository.UpdateAsync(master);
-        });
+        var master = _mapper.Map<Master>(request);
+
+        var data = await _masterRepository.UpdateAsync(master);
+        var message = $"Обновление информации мастера: {data.MiddleName} {data.FirstName} {data.LastName}";
+
+        return new BaseResultRequest<MasterDto>(data, message);
     }
 
-    public async Task<Result<Unit>> DeleteAsync(DeleteMasterRequest request)
+    public async Task<BaseResultRequest<Unit>> DeleteAsync(DeleteMasterRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _masterRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            var result = new Result<Unit>(validationResult.Exception);
+            return new BaseResultRequest<Unit>(result);
+        }
+
+        var master = await _masterRepository.GetUserFullNameByIdAsync(request.Id);
+        await _masterRepository.DeleteAsync(request.Id);
+        
+        var message = $"Удаление мастера: {master.MiddleName} {master.FirstName} {master.LastName}";
+
+        return new BaseResultRequest<Unit>(Unit.Default, message);
     }
 }

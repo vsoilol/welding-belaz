@@ -34,6 +34,14 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public Task<WeldingEquipmentBriefDto> GetBriefInfoByIdAsync(Guid id)
+    {
+        return _context.WeldingEquipments
+            .Where(_ => _.Id == id)
+            .ProjectTo<WeldingEquipmentBriefDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
+    }
+
     public Task<WeldingEquipmentDowntimeDto> GetConditionByIdAsync(Guid id)
     {
         return _context.WeldingEquipmentConditionTimes

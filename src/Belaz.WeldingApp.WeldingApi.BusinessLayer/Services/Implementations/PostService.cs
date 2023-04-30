@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Post;
 using Belaz.WeldingApp.Common.Entities.Production;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
 using LanguageExt;
 using LanguageExt.Common;
 
@@ -28,50 +29,82 @@ public class PostService : IPostService
         _postRepository = postRepository;
     }
 
-    public Task<List<PostDto>> GetAllAsync()
+    public async Task<BaseRequest<List<PostDto>>> GetAllAsync()
     {
-        return _postRepository.GetAllAsync();
+        var data = await _postRepository.GetAllAsync();
+
+        var message = $"Получение всех постов";
+
+        return new BaseRequest<List<PostDto>>(data, message);
     }
 
-    public async Task<Result<PostDto>> GetByIdAsync(GetPostByIdRequest request)
+    public async Task<BaseResultRequest<PostDto>> GetByIdAsync(GetPostByIdRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() => _postRepository.GetByIdAsync(request.Id));
-    }
-
-    public async Task<Result<PostDto>> CreateAsync(CreatePostRequest request)
-    {
-        var validationResult = await _validationService.ValidateAsync(request);
-
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var post = _mapper.Map<Post>(request);
+            var result = new Result<PostDto>(validationResult.Exception);
+            return new BaseResultRequest<PostDto>(result);
+        }
 
-            return _postRepository.CreateAsync(post);
-        });
+        var data = await _postRepository.GetByIdAsync(request.Id);
+        var message = $"Получение инофрмации о посте. Наименование: {data.Name} Номер: {data.Number}";
+
+        return new BaseResultRequest<PostDto>(data, message);
     }
 
-    public async Task<Result<PostDto>> UpdateAsync(UpdatePostRequest request)
+    public async Task<BaseResultRequest<PostDto>> CreateAsync(CreatePostRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(() =>
+        if (!validationResult.IsValid)
         {
-            var post = _mapper.Map<Post>(request);
+            var result = new Result<PostDto>(validationResult.Exception);
+            return new BaseResultRequest<PostDto>(result);
+        }
 
-            return _postRepository.UpdateAsync(post);
-        });
+        var post = _mapper.Map<Post>(request);
+
+        var data = await _postRepository.CreateAsync(post);
+        var message = $"Создание нового поста. Наименование: {data.Name} Номер: {data.Number}";
+
+        return new BaseResultRequest<PostDto>(data, message);
     }
 
-    public async Task<Result<Unit>> DeleteAsync(DeletePostRequest request)
+    public async Task<BaseResultRequest<PostDto>> UpdateAsync(UpdatePostRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        return await validationResult.ToDataResult(async () =>
+        if (!validationResult.IsValid)
         {
-            await _postRepository.DeleteAsync(request.Id);
-            return Unit.Default;
-        });
+            var result = new Result<PostDto>(validationResult.Exception);
+            return new BaseResultRequest<PostDto>(result);
+        }
+
+        var post = _mapper.Map<Post>(request);
+
+        var data = await _postRepository.UpdateAsync(post);
+        var message = $"Обновление информации о посте. Наименование: {data.Name} Номер: {data.Number}";
+
+        return new BaseResultRequest<PostDto>(data, message);
+    }
+
+    public async Task<BaseResultRequest<Unit>> DeleteAsync(DeletePostRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<Unit>(validationResult.Exception);
+            return new BaseResultRequest<Unit>(result);
+        }
+
+        var post = await _postRepository.GetByIdAsync(request.Id);
+        await _postRepository.DeleteAsync(request.Id);
+
+        var message = $"Удаление поста. Наименование: {post.Name} Номер: {post.Number}";
+
+        return new BaseResultRequest<Unit>(Unit.Default, message);
     }
 }

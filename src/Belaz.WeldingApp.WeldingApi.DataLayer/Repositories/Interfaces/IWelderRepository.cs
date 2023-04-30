@@ -9,6 +9,8 @@ public interface IWelderRepository
     Task<List<WelderDto>> GetAllAsync();
 
     Task<WelderDto> GetByIdAsync(Guid id);
+    
+    Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id);
 
     Task<WelderDto> CreateAsync(Welder entity);
 

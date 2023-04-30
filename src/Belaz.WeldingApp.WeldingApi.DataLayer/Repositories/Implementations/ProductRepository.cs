@@ -50,6 +50,14 @@ public class ProductRepository : IProductRepository
         return mapProduct;
     }
 
+    public Task<ProductBriefDto> GetBriefInfoByIdAsync(Guid id)
+    {
+        return _context.Products
+            .Where(_ => _.Id == id)
+            .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
+    }
+
     public async Task<List<ProductDto>> GetAllByMasterIdAsync(
         Guid masterId,
         ProductType productType

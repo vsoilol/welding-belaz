@@ -9,6 +9,8 @@ public interface IMasterRepository
     Task<List<MasterDto>> GetAllAsync();
 
     Task<MasterDto> GetByIdAsync(Guid id);
+    
+    Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id);
 
     Task<MasterDto> CreateAsync(Master entity);
 
