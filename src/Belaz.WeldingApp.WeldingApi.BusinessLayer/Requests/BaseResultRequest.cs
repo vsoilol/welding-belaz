@@ -2,7 +2,7 @@
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
 
-public class BaseResultRequest<TRequest> where TRequest : class
+public class BaseResultRequest<TRequest>
 {
     public string? LogMessage { get; set; }
 

@@ -56,10 +56,8 @@ public class ProductionAreaRepository : IProductionAreaRepository
         return await GetByIdAsync(entity.Id);
     }
 
-    public async Task<ProductionAreaDto> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        var productionArea = await GetByIdAsync(id);
-        
         var deletedWorkplaces = _context.Workplaces.Where(_ => _.ProductionAreaId == id);
         _context.Workplaces.RemoveRange(deletedWorkplaces);
 
@@ -79,7 +77,5 @@ public class ProductionAreaRepository : IProductionAreaRepository
 
         _context.ProductionAreas.Remove(deletedProductionArea);
         await _context.SaveChangesAsync();
-
-        return productionArea;
     }
 }

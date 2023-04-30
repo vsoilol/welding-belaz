@@ -55,11 +55,10 @@ public class ProductionAreaController : ControllerBase
     )
     {
         var result = await _productionAreaService.CreateAsync(request);
-        return result.ToOk(_ =>
-        {
-            HttpContext.Items[ContextItems.LogMessage] =
-                $"Создание производственного участка. Номер: {_.Number}, Наименование: {_.Name}";
-        });
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -69,24 +68,21 @@ public class ProductionAreaController : ControllerBase
     )
     {
         var result = await _productionAreaService.UpdateAsync(request);
-        return result.ToOk(_ =>
-        {
-            HttpContext.Items[ContextItems.LogMessage] =
-                $"Обновление производственного участка. Номер: {_.Number}, Наименование: {_.Name}";
-        });
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
+    public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _productionAreaService.DeleteAsync(
             new DeleteProductionAreaRequest { Id = id }
         );
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
-        return result.ToEmptyOk(_ =>
-        {
-            HttpContext.Items[ContextItems.LogMessage] =
-                $"Удаление производственного участка. Номер: {_.Number}, Наименование: {_.Name}";
-        });
+        return result.Result.ToOk();
     }
 }

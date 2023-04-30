@@ -13,9 +13,9 @@ public interface IProductionAreaService
 
     Task<BaseResultRequest<ProductionAreaDto>> GetByIdAsync(GetProductionAreaByIdRequest request);
 
-    Task<Result<ProductionAreaDto>> CreateAsync(CreateProductionAreaRequest request);
+    Task<BaseResultRequest<ProductionAreaDto>> CreateAsync(CreateProductionAreaRequest request);
 
-    Task<Result<ProductionAreaDto>> UpdateAsync(UpdateProductionAreaRequest request);
+    Task<BaseResultRequest<ProductionAreaDto>> UpdateAsync(UpdateProductionAreaRequest request);
 
-    Task<Result<ProductionAreaDto>> DeleteAsync(DeleteProductionAreaRequest request);
+    Task<BaseResultRequest<Unit>> DeleteAsync(DeleteProductionAreaRequest request);
 }

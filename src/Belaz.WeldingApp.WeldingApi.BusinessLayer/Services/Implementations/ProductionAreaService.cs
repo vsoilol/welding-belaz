@@ -42,7 +42,8 @@ public class ProductionAreaService : IProductionAreaService
 
         if (!validationResult.IsValid)
         {
-            return new BaseResultRequest<ProductionAreaDto>(new Result<ProductionAreaDto>(validationResult.Exception));
+            var result = new Result<ProductionAreaDto>(validationResult.Exception);
+            return new BaseResultRequest<ProductionAreaDto>(result);
         }
 
         var data = await _productionAreaRepository.GetByIdAsync(request.Id);
@@ -51,43 +52,60 @@ public class ProductionAreaService : IProductionAreaService
             $"Получение информации о производственном участке. Номер: {data.Number}, Наименование: {data.Name}");
     }
 
-    public async Task<Result<ProductionAreaDto>> CreateAsync(CreateProductionAreaRequest request)
+    public async Task<BaseResultRequest<ProductionAreaDto>> CreateAsync(CreateProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
-            return new Result<ProductionAreaDto>(validationResult.Exception);
+            var result = new Result<ProductionAreaDto>(validationResult.Exception);
+            return new BaseResultRequest<ProductionAreaDto>(result);
         }
 
         var productionArea = _mapper.Map<ProductionArea>(request);
 
-        return await _productionAreaRepository.CreateAsync(productionArea);
+        var data = await _productionAreaRepository.CreateAsync(productionArea);
+        var message = $"Создание производственного участка. Номер: {data.Number}, Наименование: {data.Name}";
+
+        return new BaseResultRequest<ProductionAreaDto>(data, message);
     }
 
-    public async Task<Result<ProductionAreaDto>> UpdateAsync(UpdateProductionAreaRequest request)
+    public async Task<BaseResultRequest<ProductionAreaDto>> UpdateAsync(UpdateProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
-            return new Result<ProductionAreaDto>(validationResult.Exception);
+            var result = new Result<ProductionAreaDto>(validationResult.Exception);
+            return new BaseResultRequest<ProductionAreaDto>(result);
         }
 
         var productionArea = _mapper.Map<ProductionArea>(request);
+        
+        var data = await _productionAreaRepository.UpdateAsync(productionArea);
+        var message = $"Обновление производственного участка. Номер: {data.Number}, Наименование: {data.Name}";
 
-        return await _productionAreaRepository.UpdateAsync(productionArea);
+        return new BaseResultRequest<ProductionAreaDto>(data, message); 
     }
 
-    public async Task<Result<ProductionAreaDto>> DeleteAsync(DeleteProductionAreaRequest request)
+    public async Task<BaseResultRequest<Unit>> DeleteAsync(DeleteProductionAreaRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
         if (!validationResult.IsValid)
         {
-            return new Result<ProductionAreaDto>(validationResult.Exception);
+            var result = new Result<Unit>(validationResult.Exception);
+            return new BaseResultRequest<Unit>(result);
         }
 
-        return await _productionAreaRepository.DeleteAsync(request.Id);
+        var deletedProductionArea = await _productionAreaRepository.GetByIdAsync(request.Id);
+
+        await _productionAreaRepository.DeleteAsync(request.Id);
+
+        var message =  $"Удаление производственного участка. " +
+                       $"Номер: {deletedProductionArea.Number}, " +
+                       $"Наименование: {deletedProductionArea.Name}";
+
+        return new BaseResultRequest<Unit>(Unit.Default, message);
     }
 }
