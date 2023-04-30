@@ -39,6 +39,7 @@ services:
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
+      REAL_API: "http://localhost"
     ports:
       - "5011:80"
     volumes:
