@@ -32,7 +32,6 @@ public class EventLogController : ApiBaseController
     }
     
     [HttpPost]
-    [Authorize]
     [ProducesResponseType(typeof(EventLogDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<EventLogDto>> AddAsync([FromBody] AddEventLogRequest request)
     {

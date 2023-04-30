@@ -5,8 +5,6 @@ using Belaz.WeldingApp.WeldingApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Belaz.WeldingApp.Common.Attributes;
-using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;

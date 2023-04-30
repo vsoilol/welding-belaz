@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Contracts;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[AuthorizeRoles(Role.Admin, Role.Master, Role.Inspector, Role.Welder, Role.Chief)]
 public class InspectorController : ControllerBase
 {
     private readonly IInspectorService _inspectorService;
@@ -28,7 +28,11 @@ public class InspectorController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<InspectorDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<InspectorDto>>> GetAllWeldersAsync()
     {
-        return await _inspectorService.GetAllAsync();
+        var result = await _inspectorService.GetAllAsync();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
     }
 
     [HttpPost]
@@ -38,7 +42,10 @@ public class InspectorController : ControllerBase
     )
     {
         var result = await _inspectorService.CreateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpPut]
@@ -48,13 +55,19 @@ public class InspectorController : ControllerBase
     )
     {
         var result = await _inspectorService.UpdateAsync(request);
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _inspectorService.DeleteAsync(new DeleteInspectorRequest { Id = id });
-        return result.ToOk();
+        
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
     }
 }
