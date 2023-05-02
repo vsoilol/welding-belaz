@@ -106,10 +106,10 @@ public class EquipmentEfficiencyReportService
             worksheet.Cells[
                 DataStartRow,
                 OverallEquipmentEfficiencyColumn,
-                data.Count,
+                data.Count + 1,
                 OverallEquipmentEfficiencyColumn
             ],
-            worksheet.Cells[DataStartRow, ReportDateColumn, data.Count, ReportDateColumn]
+            worksheet.Cells[DataStartRow, ReportDateColumn, data.Count + 1, ReportDateColumn]
         );
 
         lineChart.Title.Text = "OEE";
