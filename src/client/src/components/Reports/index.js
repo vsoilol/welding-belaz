@@ -92,7 +92,7 @@ export const Reports = ({
   const areaOptions = area?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} №${item.number}`,
     };
   });
   const productOptions = product?.map((item) => {
