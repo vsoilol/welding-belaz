@@ -452,7 +452,7 @@ export const ExecutorsTable = ({
   const optArea = area?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} №${item.number}`,
     };
   });
   const optequipment = equipment?.map((item) => {

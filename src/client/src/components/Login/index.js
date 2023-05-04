@@ -14,6 +14,10 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
   const [showError, setShowError] = useState(false);
   const history = useHistory();
 
+
+  const [indexForm, setindexForm] = useState(0);
+
+
   useEffect(() => {
     if (requestType === "LOGIN_FAILURE") {
       setShowError(true);
@@ -24,80 +28,83 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
     <div className={styles.loginPage}>
       <div className={styles.formWrapper}>
         <div className={styles.content}>
-          <div>
-            <Formik
-              initialValues={initialValues}
-              onSubmit={(values) => {
-                logIn(values);
-                history.push("/");
-              }}
-              validationSchema={loginValidation}
-            >
-              {({
-                handleSubmit,
-                handleChange,
-                values,
-                errors,
-                touched,
-                isValid,
-                dirty,
-                handleBlur,
-              }) => {
-                return (
-                  <form className={styles.form} onSubmit={handleSubmit}>
-                    <Field
-                      width={isTablet ? "300px" : "360px"}
-                      onChange={(e) => {
-                        setShowError(false);
-                        handleChange(e);
-                      }}
-                      value={values.email}
-                      invalid={
-                        showError
-                          ? true
-                          : touched.email && Boolean(errors.email)
-                      }
-                      error={showError ? error : errors.email}
-                      name="email"
-                      placeholder="Введите email"
-                      onBlur={handleBlur}
-                      disabled={isRequesting}
-                      type="user"
-                    />
+          <Formik
+            initialValues={initialValues}
+            onSubmit={(values) => {
+              logIn(values);
+              history.push("/");
+            }}
+            validationSchema={loginValidation}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              errors,
+              touched,
+              isValid,
+              dirty,
+              handleBlur,
+            }) => {
+              return (
+                <form className={styles.form} onSubmit={handleSubmit}>
+                  <Field
+                    width={isTablet ? "300px" : "360px"}
+                    onChange={(e) => {
+                      setShowError(false);
+                      handleChange(e);
+                    }}
+                    value={values.email}
+                    invalid={
+                      showError
+                        ? true
+                        : touched.email && Boolean(errors.email)
+                    }
+                    error={showError ? error : errors.email}
+                    name="email"
+                    placeholder="Введите email"
+                    onBlur={handleBlur}
+                    disabled={isRequesting}
+                    type="user"
+                  />
 
-                    <Field
-                      type="password"
-                      width={isTablet ? "300px" : "360px"}
-                      onChange={(e) => {
-                        setShowError(false);
-                        handleChange(e);
-                      }}
-                      value={values.password}
-                      invalid={
-                        showError
-                          ? true
-                          : touched.password && Boolean(errors.password)
-                      }
-                      error={showError ? error : errors.password}
-                      name="password"
-                      placeholder="Пароль"
-                      onBlur={handleBlur}
-                      disabled={isRequesting}
-                    />
-                    <Button
-                      disabled={!(isValid && dirty) || isRequesting}
-                      isRequesting={isRequesting}
-                      width={isTablet ? "275px" : "200px"}
-                      className={styles.button}
-                      type="submit"
-                    >
-                      Войти
-                    </Button>
-                  </form>
-                );
-              }}
-            </Formik>
-          </div>
+                  <Field
+                    type="password"
+                    width={isTablet ? "300px" : "360px"}
+                    onChange={(e) => {
+                      setShowError(false);
+                      handleChange(e);
+                    }}
+                    value={values.password}
+                    invalid={
+                      showError
+                        ? true
+                        : touched.password && Boolean(errors.password)
+                    }
+                    error={showError ? error : errors.password}
+                    name="password"
+                    placeholder="Пароль"
+                    onBlur={handleBlur}
+                    disabled={isRequesting}
+                  />
+
+
+                  <Button
+                    disabled={!(isValid && dirty) || isRequesting}
+                    isRequesting={isRequesting}
+                    width={isTablet ? "275px" : "200px"}
+                    className={styles.button}
+                    type="submit"
+                  >
+                    Войти
+                  </Button>
+                </form>
+              );
+            }}
+          </Formik>
+
+          <a className={styles.refChange} href="/new-password" >Изменить пароль</a>
+          {/* <a className={styles.refChange} href="/creates-user" >Панель админа</a> */}
         </div>
       </div>
     </div>

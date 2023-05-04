@@ -412,7 +412,7 @@ export const Equipment = ({
   const optArea = area?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} №${item.number}`,
     };
   });
 
@@ -453,8 +453,9 @@ export const Equipment = ({
     variables["id"] = isEquipmentNumb
     variables["postId"] = valuetPosts
     variables["postNumber"] = valuetPostsNumber
-    variables["commissioningDate"] = variables.commissioningDate
-    variables["nextAttestationDate"] = new Date(variables.nextAttestationDate).toLocaleDateString()
+    variables["commissioningDate"] = new Date(variables.commissioningDate).toLocaleDateString('ru-RU', { dateStyle: 'short' })
+    variables["nextAttestationDate"] = new Date(variables.nextAttestationDate).toLocaleDateString('ru-RU', { dateStyle: 'short' })
+
     variables["workplaceIds"] = []
     //Добавить Оборудование 
     if (isModalNumb == 0) {
@@ -464,10 +465,11 @@ export const Equipment = ({
     if (isModalNumb == 1) {
       editEquipment(variables)
     }
+    
 
     variables["downtimeReasonId"] = valueReason
     variables["weldingEquipmentId"] = valuetEquipment
-    variables["Date"] = new Date(variables.Date).toLocaleDateString()
+    variables["Date"] = new Date(variables.Date).toLocaleDateString('ru-RU', { dateStyle: 'short' })
     variables["idDownti"] = valueDownti
 
     //Добавить простоя 

@@ -8,7 +8,11 @@ import { useHistory } from "react-router-dom";
 import { resetPasswordValidation } from "validation/auth.validation";
 import styles from "./index.module.css";
 
+import api from "services/api";
+
+
 const initialValues = {
+  oldpassword: "",
   password: "",
   confirmPassword: "",
 };
@@ -16,6 +20,23 @@ const initialValues = {
 const NewPassword = ({ resetPassword, isRequesting }) => {
   const isMobile = useContext(TabletContext);
   const history = useHistory();
+
+
+  async function ChangePassword(params) {
+    try {
+      const response = await api.post(`auth/change-password`,{
+        "oldPassword": params.oldpassword,
+        "newPassword": params.password,
+        "confirmNewPassword": params.confirmPassword
+      }); 
+    } catch (error) {
+      console.log(error);
+    }
+    finally {
+      history.push("/login")
+    }
+  }
+
 
   return (
     <div className={styles.page}>
@@ -36,7 +57,8 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
         initialValues={initialValues}
         validationSchema={resetPasswordValidation}
         onSubmit={(values) => {
-          resetPassword(values);
+          /* resetPassword(values); */
+          ChangePassword(values)
         }}
       >
         {({
@@ -50,6 +72,21 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
           dirty,
         }) => (
           <form className={styles.form} onSubmit={handleSubmit}>
+
+            <Field
+              type="password"
+              width="300px"
+              onChange={handleChange}
+              value={values.oldpassword}
+              invalid={touched.oldpassword && Boolean(errors.oldpassword)}
+              error={errors.oldpassword}
+              name="oldpassword"
+              placeholder="старый пароль"
+              onBlur={handleBlur}
+              withStrength
+              disabled={isRequesting}
+            />
+
             <Field
               type="password"
               width="300px"
@@ -80,7 +117,7 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
             />
 
             <Button
-              onClick={() => history.push("/login")}
+              onClick={{}/* () => history.push("/login") */}
               isRequesting={isRequesting}
               disabled={isRequesting || !(isValid && dirty)}
               width="255px"
@@ -91,6 +128,10 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
           </form>
         )}
       </Formik>
+
+
+
+      
     </div>
   );
 };
