@@ -553,7 +553,7 @@ export const Product = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} №${item.number}`,
     };
   });
   //select Рабочие места 

@@ -10,7 +10,8 @@ export { default as TasksContainer } from "./Tasks.container";
 
 export { default as RecordsContainer } from "./Records.container";
 
-export { default as ReportsContainer } from "./Reports.container";
-export { default as RegContainer } from "./Reg.container";
+export { default as ReportsContainer } from "./Reports.container"; 
+ 
+
 
 
