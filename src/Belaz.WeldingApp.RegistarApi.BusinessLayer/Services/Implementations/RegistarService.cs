@@ -319,6 +319,21 @@ public class RegistarService : IRegistarService
             weldPassageInstruction.ArcVoltageMax
         );
 
+        double shortTermDeviation;
+        double longTermDeviation;
+
+        if (amperagesTermDeviation.ShortCount > voltagesTermDeviation.ShortCount ||
+            amperagesTermDeviation.LongCount > voltagesTermDeviation.LongCount)
+        {
+            shortTermDeviation = amperagesTermDeviation.ShortCount * 0.1d;
+            longTermDeviation = amperagesTermDeviation.LongCount * 0.1d;
+        }
+        else
+        {
+            shortTermDeviation = voltagesTermDeviation.ShortCount * 0.1d;
+            longTermDeviation = voltagesTermDeviation.LongCount * 0.1d;
+        }
+
         var weldPassage = new WeldPassage
         {
             Number = weldPassageNumber,
@@ -327,18 +342,8 @@ public class RegistarService : IRegistarService
             WeldingTaskId = taskId,
             WeldingRecord = record,
             Estimation = estimation,
-            ShortTermDeviation =
-                (
-                    amperagesTermDeviation.ShortCount > voltagesTermDeviation.ShortCount
-                        ? amperagesTermDeviation.ShortCount
-                        : voltagesTermDeviation.ShortCount
-                ) * 0.1,
-            LongTermDeviation =
-                (
-                    amperagesTermDeviation.LongCount > voltagesTermDeviation.LongCount
-                        ? amperagesTermDeviation.LongCount
-                        : voltagesTermDeviation.LongCount
-                ) * 0.1,
+            ShortTermDeviation = shortTermDeviation,
+            LongTermDeviation = longTermDeviation,
             IsEnsuringCurrentAllowance = IsProvideAllowance(
                 record.WeldingCurrentValues,
                 weldPassageInstruction.WeldingCurrentMin,
@@ -371,7 +376,7 @@ public class RegistarService : IRegistarService
 
         var lastValue = values;
 
-        for (int i = 0; i < values.Length; i++)
+        for (var i = 0; i < values.Length; i++)
         {
             if (values[i] < min || values[i] > max)
             {

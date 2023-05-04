@@ -19,7 +19,7 @@ public class DeviationsReportService : IExcelFileService<List<WeldPassageDeviati
     {
         var longTermDeviation = data.Sum(_ => _.LongTermDeviation ?? 0) / 60;
         var shortTermDeviation = data.Sum(_ => _.ShortTermDeviation ?? 0) / 60;
-        var weldingTime = data.Sum(_ => _.WeldingTime) / 60d;
+        var weldingTime = data.Sum(_ => _.WeldingTime) / 60;
 
         var chartData = new List<TableReportModel>
         {

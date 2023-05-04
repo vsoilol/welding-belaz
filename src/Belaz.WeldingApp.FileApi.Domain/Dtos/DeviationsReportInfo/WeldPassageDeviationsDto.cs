@@ -19,7 +19,7 @@ public class WeldPassageDeviationsDto : IMapFrom<WeldPassage>
     /// <summary>
     /// Время сварки, в секундах
     /// </summary>
-    public int WeldingTime { get; set; }
+    public double WeldingTime { get; set; }
 
     public void Mapping(Profile profile)
     {
@@ -32,7 +32,7 @@ public class WeldPassageDeviationsDto : IMapFrom<WeldPassage>
                         x =>
                             x.WeldingRecord.WeldingEndTime
                                 .Subtract(x.WeldingRecord.WeldingStartTime)
-                                .Seconds
+                                .TotalSeconds
                     )
             );
     }
