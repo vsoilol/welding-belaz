@@ -33,16 +33,18 @@ public class RecordWithoutTaskRequestValidator : AbstractValidator<RecordWithout
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0);
 
-        /*RuleFor(model => model.Amperages.Length)
-            .Cascade(CascadeMode.Stop)
-            .Equal(model => model.Voltages.Length);
-
-        RuleFor(model => model.Voltages.Length)
-            .Cascade(CascadeMode.Stop)
-            .Equal(model => model.Amperages.Length);*/
-
         RuleForEach(model => model.Voltages)
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0);
+        
+        RuleFor(model => model.Amperages.Length)
+            .Cascade(CascadeMode.Stop)
+            .Equal(model => model.Voltages.Length)
+            .WithMessage("Amperages must be equal to Voltages");
+
+        RuleFor(model => model.Voltages.Length)
+            .Cascade(CascadeMode.Stop)
+            .Equal(model => model.Amperages.Length)
+            .WithMessage("Voltages must be equal to Amperages");
     }
 }
