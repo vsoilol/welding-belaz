@@ -198,6 +198,12 @@ internal class WelderRepository : IWelderRepository
         var minTime = weldingTimesMinute.Min();
         var maxTime = weldingTimesMinute.Max();
 
+        if (Math.Abs(maxTime - minTime) == 0)
+        {
+            var result = (double)weldPassages.Sum(_ => _.Estimation)! / weldPassages.Count;
+            return result;
+        }
+
         var totalNormalizeTime = 0.0;
         var totalEstimationMultiplyNormalizeTime = 0.0;
 

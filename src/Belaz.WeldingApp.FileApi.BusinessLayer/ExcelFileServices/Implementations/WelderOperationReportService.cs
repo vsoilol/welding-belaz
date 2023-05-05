@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelReportModels;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
@@ -12,15 +13,19 @@ using OfficeOpenXml.Style;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 
-public class WelderOperationReportService : IExcelFileService<WelderOperationTimeDto>
+public class WelderOperationReportService : IExcelFileService<DocumentInfo<WelderOperationTimeDto>>
 {
+    private const int TitleRow = 1;
+
     private const int StateColumn = 1;
     private const int TimeColumn = 2;
     private const int PercentageColumn = 3;
-    private const int HeaderStartRow = 1;
-    private const int DataStartRow = 2;
+
+    private const int HeaderStartRow = 2;
+    private const int DataStartRow = 3;
+    private const int AverageEstimationRow = HeaderStartRow + 5;
+
     private const int ColumnWidth = 22;
-    private const int AverageEstimationRow = 6;
     private readonly IExcelExtensions _excelExtensions;
 
     public WelderOperationReportService(IExcelExtensions excelExtensions)
@@ -28,19 +33,21 @@ public class WelderOperationReportService : IExcelFileService<WelderOperationTim
         _excelExtensions = excelExtensions;
     }
 
-    public async Task<DocumentDto> GenerateReportAsync(WelderOperationTimeDto data)
+    public async Task<DocumentDto> GenerateReportAsync(DocumentInfo<WelderOperationTimeDto> data)
     {
-        var tableReportModels = GetReportModels(data);
+        var tableReportModels = GetReportModels(data.Data);
 
         var content = new MemoryStream();
 
         using (var package = new ExcelPackage(content))
         {
             var worksheet = package.Workbook.Worksheets.Add("Отчет о работе сварщиков");
+            
+            CreateHeader(worksheet, data.TitleText);
 
             CreateTable(worksheet, tableReportModels);
 
-            AddAverageEstimation(worksheet, data.AverageEstimation);
+            AddAverageEstimation(worksheet, data.Data.AverageEstimation);
 
             CreateChart(worksheet, tableReportModels);
 
@@ -80,10 +87,11 @@ public class WelderOperationReportService : IExcelFileService<WelderOperationTim
             worksheet,
             tableReportModels,
             "Chart1",
-            tableReportModels.Count + 3,
+            tableReportModels.Count + HeaderStartRow + 2,
             0,
-            worksheet.Cells[2, 3, tableReportModels.Count, 3],
-            worksheet.Cells[2, 1, tableReportModels.Count, 1]
+            worksheet.Cells[DataStartRow, PercentageColumn, tableReportModels.Count + HeaderStartRow - 1,
+                PercentageColumn],
+            worksheet.Cells[DataStartRow, StateColumn, tableReportModels.Count + HeaderStartRow - 1, StateColumn]
         );
     }
 
@@ -133,24 +141,13 @@ public class WelderOperationReportService : IExcelFileService<WelderOperationTim
             var rangeData = worksheet.Cells[
                 DataStartRow,
                 TimeColumn,
-                tableReportModels.Count + 1,
+                tableReportModels.Count + HeaderStartRow,
                 PercentageColumn
             ]
         )
         {
             rangeData.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             rangeData.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-        }
-
-        using (
-            var rangeData = worksheet.Cells[
-                DataStartRow,
-                TimeColumn,
-                tableReportModels.Count + 1,
-                TimeColumn
-            ]
-        )
-        {
             rangeData.Style.Numberformat.Format = "#,##0.00";
         }
     }
@@ -190,5 +187,29 @@ public class WelderOperationReportService : IExcelFileService<WelderOperationTim
                 ValuePercentages = 100
             }
         };
+    }
+    
+    private void CreateHeader(ExcelWorksheet worksheet, string[] titles)
+    {
+        using (var rangeHeaders =
+               worksheet.Cells[TitleRow, StateColumn, TitleRow, PercentageColumn])
+        {
+            rangeHeaders.Merge = true;
+            rangeHeaders.Style.Font.Bold = true;
+            rangeHeaders.Style.WrapText = true;
+
+            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            rangeHeaders.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        }
+
+        worksheet.Cells[TitleRow, StateColumn].Value = string.Join("\n", titles);
+
+        var textRow = worksheet.Row(TitleRow);
+        textRow.Height = 15 * titles.Length;
     }
 }
