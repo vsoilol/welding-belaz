@@ -1,4 +1,5 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -13,14 +14,12 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 public class ExcelEquipmentDowntimeReportService : IExcelEquipmentDowntimeReportService
 {
     private readonly IValidationService _validationService;
-    private readonly IExcelFileService<
-        List<EquipmentDowntimeDto>
-    > _excelEquipmentDowntimeReportService;
+    private readonly IExcelFileService<DocumentInfo<List<EquipmentDowntimeDto>>> _excelEquipmentDowntimeReportService;
     private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
 
     public ExcelEquipmentDowntimeReportService(
         IValidationService validationService,
-        IExcelFileService<List<EquipmentDowntimeDto>> excelEquipmentDowntimeReportService,
+        IExcelFileService<DocumentInfo<List<EquipmentDowntimeDto>>> excelEquipmentDowntimeReportService,
         IWeldingEquipmentRepository weldingEquipmentRepository
     )
     {
@@ -49,12 +48,24 @@ public class ExcelEquipmentDowntimeReportService : IExcelEquipmentDowntimeReport
             dateEnd
         );
 
-        if (data is null || !data.Any())
+        if (!data.Any())
         {
             var exception = new ListIsEmptyException();
             return new Result<DocumentDto>(exception);
         }
+        
+        var weldingEquipment = await _weldingEquipmentRepository.GetBriefInfoByIdAsync(request.WeldingEquipmentId);
 
-        return await _excelEquipmentDowntimeReportService.GenerateReportAsync(data);
+        var result = new DocumentInfo<List<EquipmentDowntimeDto>>
+        {
+            Data = data,
+            TitleText = new []
+            {
+                $"Для оборудования: {weldingEquipment.FactoryNumber} {weldingEquipment.Name}",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentDowntimeReportService.GenerateReportAsync(result);
     }
 }
