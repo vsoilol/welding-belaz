@@ -1,5 +1,5 @@
-using System.Globalization;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using OfficeOpenXml;
@@ -9,26 +9,42 @@ using OfficeOpenXml.Style;
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 
 public class EquipmentEfficiencyReportService
-    : IExcelFileService<List<EquipmentEfficiencyReportDto>>
+    : IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>
 {
-    private const int HeaderStartRow = 1;
+    private const int TitleRow = 1;
+
+    private int _headerStartRow = 2;
+    private int _dataStartRow = 3;
+
     private const int ReportDateColumn = 1;
     private const int OverallEquipmentEfficiencyColumn = 2;
     private const int ColumnWidth = 22;
-    private const int DataStartRow = 2;
 
-    public async Task<DocumentDto> GenerateReportAsync(List<EquipmentEfficiencyReportDto> data)
+    private readonly IExcelExtensions _excelExtensions;
+
+    public EquipmentEfficiencyReportService(IExcelExtensions excelExtensions)
+    {
+        _excelExtensions = excelExtensions;
+    }
+
+    public async Task<DocumentDto> GenerateReportAsync(DocumentInfo<List<EquipmentEfficiencyReportDto>> data)
     {
         var content = new MemoryStream();
+
+        _headerStartRow = TitleRow + data.TitleText.Length;
+        _dataStartRow = _headerStartRow + 1;
 
         using (var package = new ExcelPackage(content))
         {
             var worksheet = package.Workbook.Worksheets.Add(
                 "Отчет об эффективности использования оборудования"
             );
-            CreateTable(worksheet, data);
 
-            CreateChart(worksheet, data);
+            CreateHeader(worksheet, data.TitleText);
+
+            CreateTable(worksheet, data.Data);
+
+            CreateChart(worksheet, data.Data);
 
             await package.SaveAsync();
         }
@@ -43,17 +59,17 @@ public class EquipmentEfficiencyReportService
 
     private void CreateTable(ExcelWorksheet worksheet, List<EquipmentEfficiencyReportDto> data)
     {
-        worksheet.Cells[HeaderStartRow, ReportDateColumn].Value = "Дата";
-        worksheet.Cells[HeaderStartRow, OverallEquipmentEfficiencyColumn].Value = "OEE";
+        worksheet.Cells[_headerStartRow, ReportDateColumn].Value = "Дата";
+        worksheet.Cells[_headerStartRow, OverallEquipmentEfficiencyColumn].Value = "OEE";
 
-        worksheet.Column(ReportDateColumn).Width = ColumnWidth;
-        worksheet.Column(OverallEquipmentEfficiencyColumn).Width = ColumnWidth;
+        /*worksheet.Column(ReportDateColumn).Width = ColumnWidth;
+        worksheet.Column(OverallEquipmentEfficiencyColumn).Width = ColumnWidth;*/
 
         using (
             var rangeHeaders = worksheet.Cells[
-                HeaderStartRow,
+                _headerStartRow,
                 ReportDateColumn,
-                HeaderStartRow,
+                _headerStartRow,
                 OverallEquipmentEfficiencyColumn
             ]
         )
@@ -69,7 +85,7 @@ public class EquipmentEfficiencyReportService
             rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
         }
 
-        var range = worksheet.Cells[DataStartRow, ReportDateColumn].LoadFromCollection(data, false);
+        var range = worksheet.Cells[_dataStartRow, ReportDateColumn].LoadFromCollection(data, false);
 
         range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
@@ -79,7 +95,7 @@ public class EquipmentEfficiencyReportService
         range.Style.Border.Right.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Left.Style = ExcelBorderStyle.Thin;
 
-        worksheet.Cells[DataStartRow, ReportDateColumn, data.Count + 1, ReportDateColumn]
+        worksheet.Cells[_dataStartRow, ReportDateColumn, data.Count + _headerStartRow, ReportDateColumn]
             .Style
             .Numberformat
             .Format = "dd.MMM";
@@ -96,9 +112,9 @@ public class EquipmentEfficiencyReportService
 
         using (
             var rangeData = worksheet.Cells[
-                DataStartRow,
+                _dataStartRow,
                 OverallEquipmentEfficiencyColumn,
-                data.Count + 1,
+                data.Count + _headerStartRow,
                 OverallEquipmentEfficiencyColumn
             ]
         )
@@ -116,15 +132,53 @@ public class EquipmentEfficiencyReportService
 
         var lineChartSeries = lineChart.Series.Add(
             worksheet.Cells[
-                DataStartRow,
+                _dataStartRow,
                 OverallEquipmentEfficiencyColumn,
-                data.Count + 1,
+                data.Count + _headerStartRow,
                 OverallEquipmentEfficiencyColumn
             ],
-            worksheet.Cells[DataStartRow, ReportDateColumn, data.Count + 1, ReportDateColumn]
+            worksheet.Cells[_dataStartRow, ReportDateColumn, data.Count + _headerStartRow, ReportDateColumn]
         );
 
         lineChart.Title.Text = "OEE";
         lineChart.Legend.Remove();
+    }
+
+    private void CreateHeader(ExcelWorksheet worksheet, string[] titles)
+    {
+        var maxLengthIndex = titles.Select((s, i) => new { Value = s, Index = i })
+            .Aggregate((a, b) => a.Value.Length > b.Value.Length ? a : b)
+            .Index;
+
+        for (int i = 0; i < titles.Length; i++)
+        {
+            if (i == maxLengthIndex)
+            {
+                _excelExtensions.AutoFitMergedColumns(worksheet, titles[i],
+                    i + 1, ReportDateColumn,
+                    OverallEquipmentEfficiencyColumn);
+                continue;
+            }
+
+            worksheet.Cells[i + 1, ReportDateColumn, i + 1, OverallEquipmentEfficiencyColumn].Merge = true;
+            worksheet.Cells[i + 1, ReportDateColumn].Value = titles[i];
+        }
+
+        using (var rangeHeaders =
+               worksheet.Cells[TitleRow, ReportDateColumn, titles.Length, OverallEquipmentEfficiencyColumn])
+        {
+            rangeHeaders.Style.Font.Bold = true;
+
+            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            
+            rangeHeaders.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        }
+
+        worksheet.Cells[TitleRow, ReportDateColumn, TitleRow, OverallEquipmentEfficiencyColumn]
+            .Style.Border.Top.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[titles.Length, ReportDateColumn, titles.Length, OverallEquipmentEfficiencyColumn]
+            .Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
     }
 }

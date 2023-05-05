@@ -63,7 +63,7 @@ public static class DependencyInjection
             WelderOperationReportService
         >();
         services.AddScoped<
-            IExcelFileService<List<EquipmentEfficiencyReportDto>>,
+            IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>,
             EquipmentEfficiencyReportService
         >();
 
