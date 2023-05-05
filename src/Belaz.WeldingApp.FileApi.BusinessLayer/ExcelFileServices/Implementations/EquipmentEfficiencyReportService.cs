@@ -62,9 +62,6 @@ public class EquipmentEfficiencyReportService
         worksheet.Cells[_headerStartRow, ReportDateColumn].Value = "Дата";
         worksheet.Cells[_headerStartRow, OverallEquipmentEfficiencyColumn].Value = "OEE";
 
-        /*worksheet.Column(ReportDateColumn).Width = ColumnWidth;
-        worksheet.Column(OverallEquipmentEfficiencyColumn).Width = ColumnWidth;*/
-
         using (
             var rangeHeaders = worksheet.Cells[
                 _headerStartRow,

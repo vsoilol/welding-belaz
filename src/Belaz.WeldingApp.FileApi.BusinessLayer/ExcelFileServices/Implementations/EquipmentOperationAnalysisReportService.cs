@@ -1,4 +1,5 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
@@ -8,12 +9,15 @@ using OfficeOpenXml.Style;
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 
 public class EquipmentOperationAnalysisReportService
-    : IExcelFileService<List<EquipmentOperationTimeWithShiftDto>>
+    : IExcelFileService<DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>>
 {
     private const int ColumnWidth = 20;
-    private const int HeaderStartRow = 1;
-    private const int HeaderEndRow = 2;
-    private const int DataStartRow = 3;
+    
+    private const int TitleRow = 1;
+    private const int HeaderStartRow = 2;
+    private const int HeaderEndRow = 3;
+    private const int DataStartRow = 4;
+    
     private const int StateColumn = 1;
     private const int OffTimeMinutesColumn = 2;
     private const int OffTimePercentageColumn = 3;
@@ -24,6 +28,7 @@ public class EquipmentOperationAnalysisReportService
     private const int DowntimeMinutesColumn = 8;
     private const int DowntimePercentageColumn = 9;
     private const int TotalMinutesColumn = 10;
+    
     private const string OffStateName = "Св. аппарат ВЫКЛЮЧЕН";
     private const string OnStateName = "Св. аппарат ВКЛЮЧЕН";
     private const string WeldingStateName = "СВАРКА";
@@ -40,7 +45,7 @@ public class EquipmentOperationAnalysisReportService
     }
 
     public async Task<DocumentDto> GenerateReportAsync(
-        List<EquipmentOperationTimeWithShiftDto> data
+        DocumentInfo<List<EquipmentOperationTimeWithShiftDto>> data
     )
     {
         var content = new MemoryStream();
@@ -48,8 +53,10 @@ public class EquipmentOperationAnalysisReportService
         using (var package = new ExcelPackage(content))
         {
             var worksheet = package.Workbook.Worksheets.Add("Анализ работы оборудования");
+            
+            CreateHeader(worksheet, data.TitleText);
 
-            CreateTable(worksheet, data);
+            CreateTable(worksheet, data.Data);
 
             await package.SaveAsync();
         }
@@ -140,28 +147,28 @@ public class EquipmentOperationAnalysisReportService
         _excelExtensions.AutoFitMergedColumns(
             worksheet,
             OffStateName,
-            StateColumn,
+            HeaderStartRow,
             OffTimeMinutesColumn,
             OffTimePercentageColumn
         );
         _excelExtensions.AutoFitMergedColumns(
             worksheet,
             OnStateName,
-            StateColumn,
+            HeaderStartRow,
             OnTimeMinutesColumn,
             OnTimePercentageColumn
         );
         _excelExtensions.AutoFitMergedColumns(
             worksheet,
             WeldingStateName,
-            StateColumn,
+            HeaderStartRow,
             WorkTimeMinutesColumn,
             WorkTimePercentageColumn
         );
         _excelExtensions.AutoFitMergedColumns(
             worksheet,
             DowntimeStateName,
-            StateColumn,
+            HeaderStartRow,
             DowntimeMinutesColumn,
             DowntimePercentageColumn
         );
@@ -214,5 +221,29 @@ public class EquipmentOperationAnalysisReportService
         worksheet.Cells[row, StateColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
         worksheet.Cells[row, StateColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
         worksheet.Cells[row, StateColumn].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+    }
+    
+    private void CreateHeader(ExcelWorksheet worksheet, string[] titles)
+    {
+        using (var rangeHeaders =
+               worksheet.Cells[TitleRow, StateColumn, TitleRow, TotalMinutesColumn])
+        {
+            rangeHeaders.Merge = true;
+            rangeHeaders.Style.Font.Bold = true;
+            rangeHeaders.Style.WrapText = true;
+
+            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            rangeHeaders.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        }
+
+        worksheet.Cells[TitleRow, StateColumn].Value = string.Join("\n", titles);
+
+        var textRow = worksheet.Row(TitleRow);
+        textRow.Height = 15 * titles.Length;
     }
 }
