@@ -1,31 +1,37 @@
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelReportModels;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
-using OxyPlot.Axes;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 
-public class EquipmentDowntimeReportService : IExcelFileService<List<EquipmentDowntimeDto>>
+public class EquipmentDowntimeReportService : IExcelFileService<DocumentInfo<List<EquipmentDowntimeDto>>>
 {
-    public async Task<DocumentDto> GenerateReportAsync(List<EquipmentDowntimeDto> data)
+    private const int TitleRow = 1;
+    private const int HeaderStartRow = 2;
+    private const int DataStartRow = 3;
+
+    private const int TextInfoColumn = 1;
+    private const int DataColumn = 2;
+    private const int DataPercentageColumn = DataColumn + 1;
+
+    public async Task<DocumentDto> GenerateReportAsync(DocumentInfo<List<EquipmentDowntimeDto>> data)
     {
-        var tableReportModels = GetReportModels(data);
+        var tableReportModels = GetReportModels(data.Data);
 
         var content = new MemoryStream();
 
         using (var package = new ExcelPackage(content))
         {
             var worksheet = package.Workbook.Worksheets.Add("Отчет о простоях оборудования");
+            
+            CreateHeader(worksheet, data.TitleText);
 
             CreateTable(worksheet, tableReportModels);
 
@@ -71,14 +77,14 @@ public class EquipmentDowntimeReportService : IExcelFileService<List<EquipmentDo
 
     private void CreateTable(ExcelWorksheet worksheet, List<TableReportModel> tableReportModels)
     {
-        worksheet.Cells[1, 1].Value = "Причина простоя оборудования";
-        worksheet.Cells[1, 2].Value = "Время, мин";
-        worksheet.Cells[1, 3].Value = "%";
+        worksheet.Cells[HeaderStartRow, TextInfoColumn].Value = "Причина простоя оборудования";
+        worksheet.Cells[HeaderStartRow, DataColumn].Value = "Время, мин";
+        worksheet.Cells[HeaderStartRow, DataPercentageColumn].Value = "%";
 
-        worksheet.Column(2).Width = 22;
-        worksheet.Column(3).Width = 22;
+        worksheet.Column(DataColumn).Width = 22;
+        worksheet.Column(DataPercentageColumn).Width = 22;
 
-        using (var rangeHeaders = worksheet.Cells[1, 1, 1, 3])
+        using (var rangeHeaders = worksheet.Cells[HeaderStartRow, TextInfoColumn, HeaderStartRow, DataPercentageColumn])
         {
             rangeHeaders.Style.Font.Bold = true;
             rangeHeaders.Style.WrapText = true;
@@ -92,23 +98,22 @@ public class EquipmentDowntimeReportService : IExcelFileService<List<EquipmentDo
             rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
         }
 
-        var range = worksheet.Cells[2, 1].LoadFromCollection(tableReportModels, false);
+        var range = worksheet.Cells[DataStartRow, TextInfoColumn]
+            .LoadFromCollection(tableReportModels, false);
 
         range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Top.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Right.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Left.Style = ExcelBorderStyle.Thin;
 
-        worksheet.Column(1).AutoFit();
+        worksheet.Column(TextInfoColumn).AutoFit();
 
-        using (var rangeData = worksheet.Cells[2, 2, tableReportModels.Count + 1, 3])
+        using (var rangeData = worksheet.Cells[DataStartRow, DataColumn, tableReportModels.Count + HeaderStartRow,
+                   DataPercentageColumn])
         {
             rangeData.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             rangeData.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-        }
 
-        using (var rangeData = worksheet.Cells[2, 3, tableReportModels.Count + 1, 3])
-        {
             rangeData.Style.Numberformat.Format = "#,##0.00";
         }
     }
@@ -117,13 +122,13 @@ public class EquipmentDowntimeReportService : IExcelFileService<List<EquipmentDo
     {
         var histogram = worksheet.Drawings.AddBarChart("Histogram", eBarChartType.ColumnClustered);
 
-        histogram.SetPosition(tableReportModels.Count + 2, 0, 0, 0);
+        histogram.SetPosition(tableReportModels.Count + DataStartRow, 0, 0, 0);
         histogram.SetSize(1000, 500);
         histogram.GapWidth = 40;
 
         var histogramSeries = histogram.Series.Add(
-            worksheet.Cells[2, 2, tableReportModels.Count, 2],
-            worksheet.Cells[2, 1, tableReportModels.Count, 1]
+            worksheet.Cells[DataStartRow, DataColumn, tableReportModels.Count + HeaderStartRow - 1, DataColumn],
+            worksheet.Cells[DataStartRow, TextInfoColumn, tableReportModels.Count + HeaderStartRow - 1, TextInfoColumn]
         );
 
         histogramSeries.DataLabel.ShowValue = true;
@@ -138,5 +143,29 @@ public class EquipmentDowntimeReportService : IExcelFileService<List<EquipmentDo
         histogram.YAxis.MajorTickMark = eAxisTickMark.Out;
         histogram.YAxis.MinorTickMark = eAxisTickMark.None;
         histogram.YAxis.MajorGridlines.Fill.Color = Color.Gray;
+    }
+    
+    private void CreateHeader(ExcelWorksheet worksheet, string[] titles)
+    {
+        using (var rangeHeaders =
+               worksheet.Cells[TitleRow, TextInfoColumn, TitleRow, DataPercentageColumn])
+        {
+            rangeHeaders.Merge = true;
+            rangeHeaders.Style.Font.Bold = true;
+            rangeHeaders.Style.WrapText = true;
+
+            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            rangeHeaders.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        }
+
+        worksheet.Cells[TitleRow, TextInfoColumn].Value = string.Join("\n", titles);
+
+        var textRow = worksheet.Row(TitleRow);
+        textRow.Height = 15 * titles.Length;
     }
 }

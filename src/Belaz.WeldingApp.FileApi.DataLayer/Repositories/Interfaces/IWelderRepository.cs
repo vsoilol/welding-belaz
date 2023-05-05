@@ -32,4 +32,6 @@ public interface IWelderRepository
         DateTime startDate,
         DateTime endDate
     );
+    
+    Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id);
 }

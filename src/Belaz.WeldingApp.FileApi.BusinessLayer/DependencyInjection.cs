@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -40,29 +41,29 @@ public static class DependencyInjection
         >();
 
         services.AddScoped<
-            IExcelFileService<List<WeldPassageDeviationsDto>>,
+            IExcelFileService<DocumentInfo<List<WeldPassageDeviationsDto>>>,
             DeviationsReportService
         >();
-        services.AddScoped<IExcelFileService<SeamAmountDto>, SeamAmountReportService>();
+        services.AddScoped<IExcelFileService<DocumentInfo<SeamAmountDto>>, SeamAmountReportService>();
         services.AddScoped<IExcelExtensions, ExcelExtensions>();
         services.AddScoped<
-            IExcelFileService<EquipmentOperationTimeDto>,
+            IExcelFileService<DocumentInfo<EquipmentOperationTimeDto>>,
             EquipmentOperationReportService
         >();
         services.AddScoped<
-            IExcelFileService<List<EquipmentDowntimeDto>>,
+            IExcelFileService<DocumentInfo<List<EquipmentDowntimeDto>>>,
             EquipmentDowntimeReportService
         >();
         services.AddScoped<
-            IExcelFileService<List<EquipmentOperationTimeWithShiftDto>>,
+            IExcelFileService<DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>>,
             EquipmentOperationAnalysisReportService
         >();
         services.AddScoped<
-            IExcelFileService<WelderOperationTimeDto>,
+            IExcelFileService<DocumentInfo<WelderOperationTimeDto>>,
             WelderOperationReportService
         >();
         services.AddScoped<
-            IExcelFileService<List<EquipmentEfficiencyReportDto>>,
+            IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>,
             EquipmentEfficiencyReportService
         >();
 

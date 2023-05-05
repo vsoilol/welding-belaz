@@ -1,5 +1,6 @@
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelEquipmentOperationAnalysisReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -21,26 +22,30 @@ internal class ExcelEquipmentOperationAnalysisReportService
     private const int WeekMinutes = 10080;
 
     private readonly IValidationService _validationService;
-    private readonly IExcelFileService<
-        List<EquipmentOperationTimeWithShiftDto>
-    > _excelEquipmentOperationAnalysisReportService;
+
+    private readonly IExcelFileService<DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>>
+        _excelEquipmentOperationAnalysisReportService;
+
     private readonly ICalendarRepository _calendarRepository;
     private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
+    private readonly IWorkshopRepository _workshopRepository;
+    private readonly IProductionAreaRepository _productionAreaRepository;
 
     public ExcelEquipmentOperationAnalysisReportService(
         IValidationService validationService,
-        IExcelFileService<
-            List<EquipmentOperationTimeWithShiftDto>
-        > excelEquipmentOperationAnalysisReportService,
+        IExcelFileService<DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>>
+            excelEquipmentOperationAnalysisReportService,
         ICalendarRepository calendarRepository,
-        IWeldingEquipmentRepository weldingEquipmentRepository
-    )
+        IWeldingEquipmentRepository weldingEquipmentRepository, IWorkshopRepository workshopRepository,
+        IProductionAreaRepository productionAreaRepository)
     {
         _validationService = validationService;
         _excelEquipmentOperationAnalysisReportService =
             excelEquipmentOperationAnalysisReportService;
         _calendarRepository = calendarRepository;
         _weldingEquipmentRepository = weldingEquipmentRepository;
+        _workshopRepository = workshopRepository;
+        _productionAreaRepository = productionAreaRepository;
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentOperationAnalysisReportAsync(
@@ -75,7 +80,17 @@ internal class ExcelEquipmentOperationAnalysisReportService
             return new Result<DocumentDto>(exception);
         }
 
-        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(data);
+        var result = new DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>
+        {
+            Data = data,
+            TitleText = new []
+            {
+                "Отчёт в разрезе завода",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(result);
     }
 
     public async Task<
@@ -114,7 +129,19 @@ internal class ExcelEquipmentOperationAnalysisReportService
             return new Result<DocumentDto>(exception);
         }
 
-        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(data);
+        var productionArea = await _productionAreaRepository.GetBriefInfoByIdAsync(request.ProductionAreaId);
+        
+        var result = new DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>
+        {
+            Data = data,
+            TitleText = new []
+            {
+                $"Отчёт в разрезе производственного участка: {productionArea.Number} {productionArea.Name}",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(result);
     }
 
     public async Task<
@@ -152,8 +179,20 @@ internal class ExcelEquipmentOperationAnalysisReportService
             var exception = new ListIsEmptyException();
             return new Result<DocumentDto>(exception);
         }
+        
+        var workshop = await _workshopRepository.GetBriefInfoByIdAsync(request.WorkshopId);
 
-        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(data);
+        var result = new DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>
+        {
+            Data = data,
+            TitleText = new[]
+            {
+                $"Отчёт в разрезе цеха: {workshop.Number} {workshop.Name}",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentOperationAnalysisReportService.GenerateReportAsync(result);
     }
 
     private async Task<
@@ -509,6 +548,7 @@ internal class ExcelEquipmentOperationAnalysisReportService
         {
             dateTime = dateTime.AddDays(dateTime.DayOfWeek < dayOfWeek ? 1 : -1);
         }
+
         return dateTime;
     }
 

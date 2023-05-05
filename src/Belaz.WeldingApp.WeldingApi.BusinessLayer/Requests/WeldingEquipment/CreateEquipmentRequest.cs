@@ -51,7 +51,7 @@ public class CreateEquipmentRequest
     /// Дата очередной аттестации
     /// Формат dd.mm.yyyy
     /// </summary>
-    public string NextAttestationDate { get; set; } = null!;
+    public string? NextAttestationDate { get; set; }
 
     /// <summary>
     /// Процесс (способ) сварки

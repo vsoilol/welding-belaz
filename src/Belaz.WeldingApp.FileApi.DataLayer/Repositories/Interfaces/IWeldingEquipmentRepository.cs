@@ -56,4 +56,6 @@ public interface IWeldingEquipmentRepository
         DateTime startDate,
         DateTime endDate
     );
+    
+    Task<WeldingEquipmentBriefDto> GetBriefInfoByIdAsync(Guid id);
 }

@@ -1,4 +1,5 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelEquipmentEfficiencyReport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -16,26 +17,33 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyReportService
 {
     private readonly IValidationService _validationService;
-    private readonly IExcelFileService<
-        List<EquipmentEfficiencyReportDto>
-    > _excelEquipmentEfficiencyReportService;
+
+    private readonly IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>
+        _excelEquipmentEfficiencyReportService;
+
     private readonly ICalendarRepository _calendarRepository;
     private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
     private readonly IProductAccountRepository _productAccountRepository;
+    private readonly IProductionAreaRepository _productionAreaRepository;
+    private readonly IWorkplaceRepository _workplaceRepository;
+    private readonly IWorkshopRepository _workshopRepository;
 
     public ExcelEquipmentEfficiencyReportService(
         IValidationService validationService,
-        IExcelFileService<List<EquipmentEfficiencyReportDto>> excelEquipmentEfficiencyReportService,
+        IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>> excelEquipmentEfficiencyReportService,
         ICalendarRepository calendarRepository,
         IWeldingEquipmentRepository weldingEquipmentRepository,
-        IProductAccountRepository productAccountRepository
-    )
+        IProductAccountRepository productAccountRepository, IWorkshopRepository workshopRepository,
+        IWorkplaceRepository workplaceRepository, IProductionAreaRepository productionAreaRepository)
     {
         _validationService = validationService;
         _excelEquipmentEfficiencyReportService = excelEquipmentEfficiencyReportService;
         _calendarRepository = calendarRepository;
         _weldingEquipmentRepository = weldingEquipmentRepository;
         _productAccountRepository = productAccountRepository;
+        _workshopRepository = workshopRepository;
+        _workplaceRepository = workplaceRepository;
+        _productionAreaRepository = productionAreaRepository;
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportAsync(
@@ -83,7 +91,17 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
             request.Quality
         );
 
-        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(data);
+        var result = new DocumentInfo<List<EquipmentEfficiencyReportDto>>
+        {
+            Data = data,
+            TitleText = new[]
+            {
+                "Отчёт в разрезе завода",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(result);
     }
 
     public async Task<
@@ -135,7 +153,19 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
             request.Quality
         );
 
-        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(data);
+        var productionArea = await _productionAreaRepository.GetBriefInfoByIdAsync(request.ProductionAreaId);
+
+        var result = new DocumentInfo<List<EquipmentEfficiencyReportDto>>
+        {
+            Data = data,
+            TitleText = new[]
+            {
+                $"Отчёт в разрезе производственного участка: {productionArea.Number} {productionArea.Name}",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(result);
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportByWorkplaceAsync(
@@ -185,7 +215,19 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
             request.Quality
         );
 
-        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(data);
+        var workplace = await _workplaceRepository.GetBriefInfoByIdAsync(request.WorkplaceId);
+
+        var result = new DocumentInfo<List<EquipmentEfficiencyReportDto>>
+        {
+            Data = data,
+            TitleText = new[]
+            {
+                $"Отчёт в разрезе рабочего места: {workplace.Number}",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(result);
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportByWorkshopAsync(
@@ -235,7 +277,19 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
             request.Quality
         );
 
-        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(data);
+        var workshop = await _workshopRepository.GetBriefInfoByIdAsync(request.WorkshopId);
+
+        var result = new DocumentInfo<List<EquipmentEfficiencyReportDto>>
+        {
+            Data = data,
+            TitleText = new[]
+            {
+                $"Отчёт в разрезе цеха: {workshop.Number} {workshop.Name}",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(result);
     }
 
     private List<EquipmentEfficiencyReportDto> GetEquipmentEfficiencyReportInfo(
