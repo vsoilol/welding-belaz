@@ -48,9 +48,12 @@ public class CreateEquipmentRequestValidator : AbstractValidator<CreateEquipment
 
         RuleFor(model => model.ManufacturerName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.NextAttestationDate)
-            .Cascade(CascadeMode.Stop)
-            .SetValidator(new DateValidatorFor<CreateEquipmentRequest>());
+        When(_ => _.NextAttestationDate is not null, () =>
+        {
+            RuleFor(model => model.NextAttestationDate!)
+                .Cascade(CascadeMode.Stop)
+                .SetValidator(new DateValidatorFor<CreateEquipmentRequest>());
+        });
 
         RuleFor(model => model.WeldingProcess).Cascade(CascadeMode.Stop).NotEmpty();
 

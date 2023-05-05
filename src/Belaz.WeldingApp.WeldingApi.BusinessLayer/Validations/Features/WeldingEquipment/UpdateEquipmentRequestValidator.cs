@@ -55,9 +55,12 @@ public class UpdateEquipmentRequestValidator : AbstractValidator<UpdateEquipment
 
         RuleFor(model => model.ManufacturerName).Cascade(CascadeMode.Stop).NotEmpty();
 
-        RuleFor(model => model.NextAttestationDate)
-            .Cascade(CascadeMode.Stop)
-            .SetValidator(new DateValidatorFor<UpdateEquipmentRequest>());
+        When(_ => _.NextAttestationDate is not null, () =>
+        {
+            RuleFor(model => model.NextAttestationDate!)
+                .Cascade(CascadeMode.Stop)
+                .SetValidator(new DateValidatorFor<UpdateEquipmentRequest>());
+        });
 
         RuleFor(model => model.WeldingProcess).Cascade(CascadeMode.Stop).NotEmpty();
 
