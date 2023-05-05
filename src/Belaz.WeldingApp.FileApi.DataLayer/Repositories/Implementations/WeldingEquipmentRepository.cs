@@ -218,4 +218,11 @@ internal class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
+
+    public Task<WeldingEquipmentBriefDto> GetBriefInfoByIdAsync(Guid id)
+    {
+        return _context.WeldingEquipments.Where(_ => _.Id == id)
+            .ProjectTo<WeldingEquipmentBriefDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
+    }
 }

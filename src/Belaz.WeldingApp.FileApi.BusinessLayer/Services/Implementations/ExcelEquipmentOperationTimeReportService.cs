@@ -1,4 +1,5 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -13,12 +14,15 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 public class ExcelEquipmentOperationTimeReportService : IExcelEquipmentOperationTimeReportService
 {
     private readonly IValidationService _validationService;
-    private readonly IExcelFileService<EquipmentOperationTimeDto> _excelEquipmentOperationTimeReportService;
+
+    private readonly IExcelFileService<DocumentInfo<EquipmentOperationTimeDto>>
+        _excelEquipmentOperationTimeReportService;
+
     private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
 
     public ExcelEquipmentOperationTimeReportService(
         IValidationService validationService,
-        IExcelFileService<EquipmentOperationTimeDto> excelEquipmentOperationTimeReportService,
+        IExcelFileService<DocumentInfo<EquipmentOperationTimeDto>> excelEquipmentOperationTimeReportService,
         IWeldingEquipmentRepository weldingEquipmentRepository
     )
     {
@@ -48,12 +52,18 @@ public class ExcelEquipmentOperationTimeReportService : IExcelEquipmentOperation
                 dateEnd
             );
 
-        if (data is null)
-        {
-            var exception = new ListIsEmptyException();
-            return new Result<DocumentDto>(exception);
-        }
+        var weldingEquipment = await _weldingEquipmentRepository.GetBriefInfoByIdAsync(request.WeldingEquipmentId);
 
-        return await _excelEquipmentOperationTimeReportService.GenerateReportAsync(data);
+        var result = new DocumentInfo<EquipmentOperationTimeDto>
+        {
+            Data = data,
+            TitleText = new []
+            {
+                $"Для оборудования: {weldingEquipment.FactoryNumber} {weldingEquipment.Name}",
+                $"За период {request.StartDate} - {request.EndDate}"
+            }
+        };
+
+        return await _excelEquipmentOperationTimeReportService.GenerateReportAsync(result);
     }
 }

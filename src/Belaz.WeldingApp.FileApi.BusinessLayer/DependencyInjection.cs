@@ -47,7 +47,7 @@ public static class DependencyInjection
         services.AddScoped<IExcelFileService<SeamAmountDto>, SeamAmountReportService>();
         services.AddScoped<IExcelExtensions, ExcelExtensions>();
         services.AddScoped<
-            IExcelFileService<EquipmentOperationTimeDto>,
+            IExcelFileService<DocumentInfo<EquipmentOperationTimeDto>>,
             EquipmentOperationReportService
         >();
         services.AddScoped<
