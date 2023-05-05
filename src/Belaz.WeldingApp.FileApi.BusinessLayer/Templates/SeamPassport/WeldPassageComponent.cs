@@ -95,9 +95,9 @@ public class WeldPassageComponent : IComponent
                     {
                         ensuringAccessText = DocumentExtensions.GetYesOrNoByCondition(
                             WeldPassageInfo.PreheatingTemperature
-                                <= WeldPassageInstructionInfo.PreheatingTemperatureMax
-                                && WeldPassageInfo.PreheatingTemperature
-                                    >= WeldPassageInstructionInfo.PreheatingTemperatureMin
+                            <= WeldPassageInstructionInfo.PreheatingTemperatureMax
+                            && WeldPassageInfo.PreheatingTemperature
+                            >= WeldPassageInstructionInfo.PreheatingTemperatureMin
                         );
                     }
 
@@ -110,7 +110,7 @@ public class WeldPassageComponent : IComponent
                     table
                         .Cell()
                         .Element(BlockCenter)
-                        .Text(WeldPassageInfo.PreheatingTemperature.ToString())
+                        .Text(DocumentExtensions.CheckValueForEmptyOrNull(WeldPassageInfo.PreheatingTemperature))
                         .Style(Typography.Italic);
 
                     table
@@ -121,6 +121,7 @@ public class WeldPassageComponent : IComponent
 
                     static IContainer BlockCenter(IContainer container) =>
                         Table.BlockCenter(container);
+
                     static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
                 });
         });
