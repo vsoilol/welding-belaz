@@ -93,6 +93,18 @@ public class EquipmentEfficiencyReportService
         //     .Style
         //     .Numberformat
         //     .Format = "#,##0.00";
+
+        using (
+            var rangeData = worksheet.Cells[
+                DataStartRow,
+                OverallEquipmentEfficiencyColumn,
+                data.Count + 1,
+                OverallEquipmentEfficiencyColumn
+            ]
+        )
+        {
+            rangeData.Style.Numberformat.Format = "#,###0.000";
+        }
     }
 
     private void CreateChart(ExcelWorksheet worksheet, List<EquipmentEfficiencyReportDto> data)

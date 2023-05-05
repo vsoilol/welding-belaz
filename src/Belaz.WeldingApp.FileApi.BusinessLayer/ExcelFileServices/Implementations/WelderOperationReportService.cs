@@ -145,9 +145,9 @@ public class WelderOperationReportService : IExcelFileService<WelderOperationTim
         using (
             var rangeData = worksheet.Cells[
                 DataStartRow,
-                PercentageColumn,
+                TimeColumn,
                 tableReportModels.Count + 1,
-                PercentageColumn
+                TimeColumn
             ]
         )
         {
