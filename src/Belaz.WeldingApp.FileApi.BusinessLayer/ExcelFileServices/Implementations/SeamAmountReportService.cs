@@ -1,5 +1,6 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelReportModels;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
@@ -9,8 +10,16 @@ using OfficeOpenXml.Style;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 
-public class SeamAmountReportService : IExcelFileService<SeamAmountDto>
+public class SeamAmountReportService : IExcelFileService<DocumentInfo<SeamAmountDto>>
 {
+    private const int TitleRow = 1;
+    private const int HeaderStartRow = 2;
+    private const int DataStartRow = 3;
+
+    private const int TextInfoColumn = 1;
+    private const int DataColumn = 2;
+    private const int DataPercentageColumn = DataColumn + 1;
+
     private readonly IExcelExtensions _excelExtensions;
 
     public SeamAmountReportService(IExcelExtensions excelExtensions)
@@ -18,15 +27,17 @@ public class SeamAmountReportService : IExcelFileService<SeamAmountDto>
         _excelExtensions = excelExtensions;
     }
 
-    public async Task<DocumentDto> GenerateReportAsync(SeamAmountDto data)
+    public async Task<DocumentDto> GenerateReportAsync(DocumentInfo<SeamAmountDto> data)
     {
-        var tableReportModels = GetReportModels(data);
+        var tableReportModels = GetReportModels(data.Data);
 
         var content = new MemoryStream();
 
         using (var package = new ExcelPackage(content))
         {
             var worksheet = package.Workbook.Worksheets.Add("Отчет о выполненных операциях (швах)");
+            
+            CreateHeader(worksheet, data.TitleText);
 
             CreateTable(worksheet, tableReportModels);
 
@@ -108,14 +119,14 @@ public class SeamAmountReportService : IExcelFileService<SeamAmountDto>
 
     private void CreateTable(ExcelWorksheet worksheet, List<TableReportModel> tableReportModels)
     {
-        worksheet.Cells[1, 1].Value = "Наименование параметра";
-        worksheet.Cells[1, 2].Value = "Количество швов";
-        worksheet.Cells[1, 3].Value = "% швов";
+        worksheet.Cells[HeaderStartRow, TextInfoColumn].Value = "Наименование параметра";
+        worksheet.Cells[HeaderStartRow, DataColumn].Value = "Количество швов";
+        worksheet.Cells[HeaderStartRow, DataPercentageColumn].Value = "% швов";
 
-        worksheet.Column(2).Width = 22;
-        worksheet.Column(3).Width = 22;
+        worksheet.Column(DataColumn).Width = 22;
+        worksheet.Column(DataPercentageColumn).Width = 22;
 
-        using (var rangeHeaders = worksheet.Cells[1, 1, 1, 3])
+        using (var rangeHeaders = worksheet.Cells[HeaderStartRow, TextInfoColumn, HeaderStartRow, DataPercentageColumn])
         {
             rangeHeaders.Style.Font.Bold = true;
             rangeHeaders.Style.WrapText = true;
@@ -129,22 +140,25 @@ public class SeamAmountReportService : IExcelFileService<SeamAmountDto>
             rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
         }
 
-        var range = worksheet.Cells[2, 1].LoadFromCollection(tableReportModels, false);
+        var range = worksheet.Cells[DataStartRow, TextInfoColumn].LoadFromCollection(tableReportModels, false);
 
         range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Top.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Right.Style = ExcelBorderStyle.Thin;
         range.Style.Border.Left.Style = ExcelBorderStyle.Thin;
 
-        worksheet.Column(1).AutoFit();
+        worksheet.Column(TextInfoColumn).AutoFit();
 
-        using (var rangeData = worksheet.Cells[2, 2, tableReportModels.Count + 1, 3])
+        using (var rangeData = worksheet.Cells[DataStartRow, DataColumn, tableReportModels.Count + HeaderStartRow,
+                   DataPercentageColumn])
         {
             rangeData.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             rangeData.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
         }
 
-        using (var rangeData = worksheet.Cells[2, 3, tableReportModels.Count + 1, 3])
+        using (var rangeData =
+               worksheet.Cells[DataStartRow, DataPercentageColumn, tableReportModels.Count + HeaderStartRow,
+                   DataPercentageColumn])
         {
             rangeData.Style.Numberformat.Format = "#,##0.00";
         }
@@ -156,20 +170,44 @@ public class SeamAmountReportService : IExcelFileService<SeamAmountDto>
             worksheet,
             tableReportModels,
             "Chart1",
-            tableReportModels.Count + 2,
+            tableReportModels.Count + DataStartRow,
             0,
-            worksheet.Cells[4, 3, 6, 3],
-            worksheet.Cells[4, 1, 6, 1]
+            worksheet.Cells[DataStartRow + 2, DataPercentageColumn, DataStartRow + 4, DataPercentageColumn],
+            worksheet.Cells[DataStartRow + 2, TextInfoColumn, DataStartRow + 4, TextInfoColumn]
         );
 
         _excelExtensions.CreatePie3DExcelChart(
             worksheet,
             tableReportModels,
             "Chart2",
-            tableReportModels.Count + 2,
+            tableReportModels.Count + DataStartRow,
             2,
-            worksheet.Cells[7, 3, 8, 3],
-            worksheet.Cells[7, 1, 8, 1]
+            worksheet.Cells[DataStartRow + 5, DataPercentageColumn, DataStartRow + 6, DataPercentageColumn],
+            worksheet.Cells[DataStartRow + 5, TextInfoColumn, DataStartRow + 6, TextInfoColumn]
         );
+    }
+    
+    private void CreateHeader(ExcelWorksheet worksheet, string[] titles)
+    {
+        using (var rangeHeaders =
+               worksheet.Cells[TitleRow, TextInfoColumn, TitleRow, DataPercentageColumn])
+        {
+            rangeHeaders.Merge = true;
+            rangeHeaders.Style.Font.Bold = true;
+            rangeHeaders.Style.WrapText = true;
+
+            rangeHeaders.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            rangeHeaders.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+            rangeHeaders.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            rangeHeaders.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        }
+
+        worksheet.Cells[TitleRow, TextInfoColumn].Value = string.Join("\n", titles);
+
+        var textRow = worksheet.Row(TitleRow);
+        textRow.Height = 15 * titles.Length;
     }
 }
