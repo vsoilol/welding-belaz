@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
@@ -40,7 +41,7 @@ public static class DependencyInjection
         >();
 
         services.AddScoped<
-            IExcelFileService<List<WeldPassageDeviationsDto>>,
+            IExcelFileService<DocumentInfo<List<WeldPassageDeviationsDto>>>,
             DeviationsReportService
         >();
         services.AddScoped<IExcelFileService<SeamAmountDto>, SeamAmountReportService>();

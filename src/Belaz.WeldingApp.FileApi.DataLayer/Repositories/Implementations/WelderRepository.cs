@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using Belaz.WeldingApp.Common.Enums;
@@ -43,6 +44,14 @@ internal class WelderRepository : IWelderRepository
         );
 
         return result;
+    }
+
+    public Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id)
+    {
+        return _context.Welders.Where(_ => _.Id == id)
+            .Select(_ => _.UserInfo)
+            .ProjectTo<UserFullNameDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
     }
 
     public async Task<WelderOperationTimeDto?> GetWelderOperationTimeInfoByProductionAreaIdAndDatePeriodAsync(

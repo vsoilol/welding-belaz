@@ -25,10 +25,24 @@ public class RecordWithoutTaskRequestValidator : AbstractValidator<RecordWithout
             .NotEmpty()
             .SetValidator(new SqlIdValidatorFor<RecordWithoutTaskRequest, Welder>(context));
 
-        RuleFor(model => model.StartDateTime).Cascade(CascadeMode.Stop).NotEmpty();
+        RuleFor(model => model.StartDateTime)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
 
-        RuleForEach(model => model.Amperages).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
+        RuleForEach(model => model.Amperages)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(0);
 
-        RuleForEach(model => model.Voltages).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
+        /*RuleFor(model => model.Amperages.Length)
+            .Cascade(CascadeMode.Stop)
+            .Equal(model => model.Voltages.Length);
+
+        RuleFor(model => model.Voltages.Length)
+            .Cascade(CascadeMode.Stop)
+            .Equal(model => model.Amperages.Length);*/
+
+        RuleForEach(model => model.Voltages)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(0);
     }
 }
