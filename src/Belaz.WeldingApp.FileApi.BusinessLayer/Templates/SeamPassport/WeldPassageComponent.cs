@@ -460,6 +460,38 @@ public class WeldPassageComponent : IComponent
                 return time;
             })
             .ToArray();
+        
+        var startTime = times.First();
+        var endTime = times.Last();
+
+        var seconds = (int)Math.Round(endTime.Subtract(startTime).TotalSeconds);
+
+        var minValueTime = TimeSpanAxis.ToDouble(startTime);
+        var maxValueTime = TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(1)));
+
+        var step = Math.Round((maxValueTime - minValueTime) / (double)28, 2);
+        
+        if (max is not null && min is not null)
+        {
+            var maxLine = GetStraightLine(
+                $"Максимум, {measurementUnit}",
+                OxyColors.Blue,
+                startTime,
+                endTime,
+                (double)max
+            );
+
+            var minLine = GetStraightLine(
+                $"Минимум, {measurementUnit}",
+                OxyColors.Green,
+                startTime,
+                endTime,
+                (double)min
+            );
+
+            model.Series.Add(maxLine);
+            model.Series.Add(minLine);
+        }
 
         for (int i = 0; i < values.Length; i++)
         {
@@ -496,16 +528,6 @@ public class WeldPassageComponent : IComponent
             }
         );
 
-        var startTime = times.First();
-        var endTime = times.Last();
-
-        var seconds = (int)Math.Round(endTime.Subtract(startTime).TotalSeconds);
-
-        var minValueTime = TimeSpanAxis.ToDouble(startTime);
-        var maxValueTime = TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(1)));
-
-        var step = Math.Round((maxValueTime - minValueTime) / (double)28, 2);
-
         model.Axes.Add(
             new TimeSpanAxis()
             {
@@ -523,28 +545,6 @@ public class WeldPassageComponent : IComponent
                 MajorGridlineThickness = 1,
             }
         );
-
-        if (max is not null && min is not null)
-        {
-            var maxLine = GetStraightLine(
-                $"Максимум, {measurementUnit}",
-                OxyColors.Blue,
-                startTime,
-                endTime,
-                (double)max
-            );
-
-            var minLine = GetStraightLine(
-                $"Минимум, {measurementUnit}",
-                OxyColors.Green,
-                startTime,
-                endTime,
-                (double)min
-            );
-
-            model.Series.Add(maxLine);
-            model.Series.Add(minLine);
-        }
 
         using var stream = new MemoryStream();
         var exporterPng = new PngExporter
