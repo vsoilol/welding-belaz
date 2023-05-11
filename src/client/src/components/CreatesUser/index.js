@@ -19,7 +19,7 @@ import Input from "components/shared/Input";
 import api from "services/api";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
+import Paper from "@material-ui/core/Paper";
 
 const CreatesUser = ({
 
@@ -77,25 +77,80 @@ const CreatesUser = ({
   async function fetchEventLog() {
     try {
       const response = await api.get(`/eventLog`);
-      setaleventLog(response.data)
-      /* const newArray = response.data.reduce((acc, curr) => {
+      const result = response.data.reduce((acc, curr) => {
         const userIndex = acc.findIndex((item) => item.user.id === curr.user.id);
         if (userIndex === -1) {
           acc.push({
             user: curr.user,
-            data: [{...curr}]
+            data: [curr],
           });
         } else {
-          acc[userIndex].data.push({...curr});
+          acc[userIndex].data.push(curr);
         }
         return acc;
-      }, []); */
+      }, []);
+      setaleventLog(result)
     } catch (error) {
       console.log(error);
     }
   }
 
+  const renderRowChildren = (rowData) => { 
+    return (
+      rowData.data && (
+        <TableContainer component={Paper}>
+          <MaterialTable aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }} 
+                  align="center"
+                >
+                  Дата
+                </TableCell>
 
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Время
+                </TableCell>
+                <TableCell
+                  style={{
+                    borderBottom: 0,
+                  }}
+                  align="center"
+                >
+                  Действие
+                </TableCell>
+                
+              </TableRow> 
+            </TableHead>
+            {rowData?.data?.map(info =>
+              <TableBody>
+                <TableRow>
+                  <TableCell align="center" component="th" scope="row">
+                    {info?.date ?? "-"}
+                  </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    {info?.time ?? "-"}
+                  </TableCell>
+                  <TableCell align="center">
+                    {info?.information ?? "-"}
+                  </TableCell>       
+                </TableRow>
+              </TableBody>
+            )}
+            
+          </MaterialTable>
+        </TableContainer>
+      )
+    );
+  };
   const ChangePanelId = (event, newValue) => {
     setpanelId(newValue)
   };
@@ -155,7 +210,7 @@ const CreatesUser = ({
       title: "Изменение логина и пароля",
       render: (rowData) => {
         if (rowData.isEmailConfirmed) {
-          return <div className={styles.btnTools} onClick={(e) => { setisModalChangeLoginOpen(true);setModalData(rowData); }} >Измененить</div>
+          return <div className={styles.btnTools} onClick={(e) => { setisModalChangeLoginOpen(true); setModalData(rowData); }} >Измененить</div>
         } else {
           return <span>-</span>
         }
@@ -197,7 +252,7 @@ const CreatesUser = ({
     {
       title: "Отчество ", field: "user.lastName",
     },
-    {
+    /* {
       title: "Дата ", field: "date",
     },
     {
@@ -205,7 +260,7 @@ const CreatesUser = ({
     },
     {
       title: "Действие ", field: "information",
-    },
+    }, */
   ]
 
   function ConfirmationEmail(params) {
@@ -255,17 +310,17 @@ const CreatesUser = ({
 
 
   function ChangeLoginPass(params) {
-    api.post(`auth/user-credentials`,{
+    api.post(`auth/user-credentials`, {
       "userName": params.login,
       "password": params.password,
       "userId": params.id
     })
-      .then((response) => { 
+      .then((response) => {
         setisModalComplitChangLogPassOpen(true)
       })
-      .catch((error) => { 
+      .catch((error) => {
         setisModalComplitChangLogPassErrOpen(true)
-      }); 
+      });
   }
 
   return (
@@ -342,7 +397,7 @@ const CreatesUser = ({
                 columns={coleventLog}
                 value={0}
                 data={aleventLog}
-
+                renderRowChildren={renderRowChildren}
               />
             </TabPanel>
           )
@@ -503,16 +558,16 @@ const CreatesUser = ({
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    if (values === "" || /^[A-Za-z0-9-]+$/.test(e.target.value)) {
+                    if (values === "" || /^[^а-яА-ЯёЁ]+$/.test(e.target.value)) {
                       handleChange(e);
                     }
-                  }} 
+                  }}
                   style={{ height: 40, width: 462 }}
                   value={values.login}
                   name="login"
-                  placeholder="login "
+                  placeholder="login"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -636,7 +691,7 @@ const CreatesUser = ({
       </ModalWindow>
 
 
-      {/**/} 
+      {/**/}
       <ModalWindow
         isOpen={isModalComplitChangLogPassOpen}
         headerText=""
@@ -677,7 +732,7 @@ const CreatesUser = ({
             </form>
           )}
         </Formik>
-      </ModalWindow> 
+      </ModalWindow>
       <ModalWindow
         isOpen={isModalComplitChangLogPassErrOpen}
         headerText="Ошибка"
@@ -704,7 +759,7 @@ const CreatesUser = ({
             <form onSubmit={handleSubmit}>
 
               <div>
-              <h4 style={{ padding: "35px 40px" }}>Произошла ошибка, перепроверьте введенные данные </h4>
+                <h4 style={{ padding: "35px 40px" }}>Произошла ошибка, перепроверьте введенные данные </h4>
 
                 <div className={styles.row}>
                   <Button

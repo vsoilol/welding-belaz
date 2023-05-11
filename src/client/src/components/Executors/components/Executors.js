@@ -18,7 +18,7 @@ import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import imgcalendar from "assets/icons/calendar.png";
 import deleteIcon from "assets/icons/delete.png";
-
+import api from "services/api";
 const useStyles = makeStyles(() => ({
   rowStyle: {
     padding: 10,
@@ -452,7 +452,7 @@ export const ExecutorsTable = ({
   const optArea = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
   const optequipment = equipment?.map((item) => {
@@ -604,7 +604,13 @@ export const ExecutorsTable = ({
                   icon: "add",
                   tooltip: "Добавить пользователя",
                   isFreeAction: true,
-                  onClick: () => { setIsModalOpen(true); setValuetOpenModal(0) },
+                  onClick: () => { 
+                    setIsModalOpen(true); 
+                    setValuetOpenModal(0);
+                    api.post(`/eventLog`,{
+                      "information": "Открыл модальное окно добавления пользователя "
+                    }) 
+                  },
                 },
                 {
                   icon: "edit",
@@ -617,6 +623,9 @@ export const ExecutorsTable = ({
                     setValueWorkshop(rowData.workshop?.id)
                     setValuetArea(rowData.productionArea.id)
                     setValuetEquipment(rowData.weldingEquipment?.id)
+                    api.post(`/eventLog`,{
+                      "information": "Открыл модальное окно редактирования пользователя"
+                    }) 
                   },
                 },
               ]
