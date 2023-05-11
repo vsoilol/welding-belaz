@@ -25,7 +25,7 @@ import deleteIcon from "assets/icons/delete.png";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
+import api from "services/api";
 
 const dateOptions = {
   day: "numeric",
@@ -412,7 +412,7 @@ export const Equipment = ({
   const optArea = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
 
@@ -582,7 +582,13 @@ export const Equipment = ({
                     icon: "add",
                     tooltip: "Добавить оборудование",
                     isFreeAction: true,
-                    onClick: () => { setIsModalNumb(0); setIsModalOpen(true) },
+                    onClick: () => { 
+                      setIsModalNumb(0); 
+                      setIsModalOpen(true) 
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно добавления оборудования "
+                      }) 
+                    },
                   },
                   {
                     icon: "edit",
@@ -595,6 +601,9 @@ export const Equipment = ({
                       setValuetPosts(rowData.post?.id)
                       setvalueWorkshop(rowData?.workshop?.id)
                       setvalueoptArea(rowData?.productionArea?.id)
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно редактирования оборудования "
+                      }) 
                     },
                   },
                 ]

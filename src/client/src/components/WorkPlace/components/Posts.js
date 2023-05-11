@@ -341,7 +341,7 @@ export const Posts = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
 
@@ -545,6 +545,9 @@ export const Posts = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValuetWorkPlace("")
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно добавления поста"
+                          })
                         },
                       },
                       {
@@ -555,6 +558,9 @@ export const Posts = ({
                           setIsModalOpen(true);
                           setIsModalNumb(2)
                           setValuetPosts(rowData.productionArea.id)
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно редактирования поста"
+                          })
                         },
                       },
                     ]

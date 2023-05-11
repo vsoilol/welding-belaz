@@ -67,8 +67,7 @@ export const CreatingTask = ({
     ////Работа со списком дат сущ.плана  
     const [valueAllDate, setValueAllDate] = useState([]);
     const [valueChioseDate, setvalueChioseDate] = useState(null);
-    useEffect(() => {
-
+    useEffect(() => { 
         fetchData();
     }, []);
     async function fetchData() {
@@ -79,12 +78,12 @@ export const CreatingTask = ({
             console.log(error);
         }
     }
-    useEffect(() => {
+    /* useEffect(() => {
         if (valueAllDate.length > 0) {
             setvalueChioseDate(valueAllDate[0]);
             GetProductionbyDate(valueAllDate[0])
         }
-    }, [valueAllDate]);
+    }, [valueAllDate]); */
 
     ////Получение информации о производимой продукции по дате
     function GetProductionbyDate(date) {
@@ -179,7 +178,13 @@ export const CreatingTask = ({
         {
             title: "Закрерить оборудование",
             render: (rowData) => {
-                return <p className={styles.Fix} onClick={e => { setvalueChoiseWelder(true); setProductAccountId(rowData?.id) }}>Закрерить</p>;
+                return <p className={styles.Fix} onClick={e => { 
+                    setvalueChoiseWelder(true); 
+                    setProductAccountId(rowData?.id) 
+                    api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно закререпления оборудования"
+                    })
+                }}>Закрерить</p>;
             },
         },
 
@@ -203,7 +208,7 @@ export const CreatingTask = ({
 
 
     ///Создание плана 
-    function CreatePlan() {
+    async function CreatePlan() {
         const normalizedDate = dateCratePlan.replace(/^(\d{2}).(\d{2}).(\d{4})$/, '$3-$2-$1');
         if (valueAllDate.includes(new Date(normalizedDate).toLocaleDateString('ru-RU'))) {
             setEditExistingPlanDateModal(true);
@@ -215,14 +220,21 @@ export const CreatingTask = ({
                 "newDate": new Date(dateCratePlan).toLocaleDateString('ru-RU'),
                 "productionAreaId": productionAreaId,
             })
-                .then((response) => {
-                    GetProductionbyDate(valueChioseDate)
-                    fetchData()
+                .then(async (response) => { 
+                      fetchData();  
+                      console.log(new Date(normalizedDate).toLocaleDateString('ru-RU'))
+                      setvalueChioseDate(new Date(normalizedDate).toLocaleDateString('ru-RU'));
+                      setvalueDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
+                      GetProductionbyDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
+
+                      api.post(`/eventLog`,{
+                        "information": `Создание плана на ${new Date(normalizedDate).toLocaleDateString('ru-RU')}`
+                      })
                 })
                 .catch((error) => { });
         }
-    }
-
+      }
+      
 
 
     //Изменение ввода выработки и брака
@@ -325,7 +337,12 @@ export const CreatingTask = ({
             "masterId": masterId,
         })
             .then((response) => {
-                window.location.reload();
+                api.post(`/eventLog`,{
+                    "information": `Нажал кнопку "Создать задание"`
+                })
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
             })
             .catch((error) => { });
     }
@@ -378,7 +395,7 @@ export const CreatingTask = ({
                         value={valueChioseDate}
                         width="380px"
                         placeholder="Дата"
-                        onChange={(event) => {
+                        onChange={(event) => { 
                             setvalueChioseDate(event.value);
                             setvalueDate(event.label)
                             GetProductionbyDate(event.label)
@@ -443,6 +460,10 @@ export const CreatingTask = ({
                                     setprodQuantities(rowData?.amountFromPlan)
                                     setmanufacProducts(rowData?.amountManufactured)
                                     setacceptedProducts(rowData?.amountAccept)
+
+                                    api.post(`/eventLog`,{
+                                        "information": "Открыл модальное окно редактирования плана"
+                                    })
                                 },
                             },
                         ]

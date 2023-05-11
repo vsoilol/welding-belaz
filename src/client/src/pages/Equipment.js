@@ -5,7 +5,7 @@ import { HeaderLayout } from "layouts/Header";
 export const EquipmentPage = props => {
   return (
     <div>
-      <HeaderLayout>
+      <HeaderLayout >
         <Equipment {...props} />
       </HeaderLayout>
 

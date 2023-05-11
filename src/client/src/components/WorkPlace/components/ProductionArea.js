@@ -556,6 +556,10 @@ export const ProductionArea = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValuetWorkPlace("")
+
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно добавления производственого участка"
+                          })
                         },
                       },
                       {
@@ -566,6 +570,10 @@ export const ProductionArea = ({
                           setIsModalOpen(true);
                           setIsModalNumb(1)
                           setValueProdArea(rowData.workshop.id)
+
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно редактирования производственого участка"
+                          })
                         },
                       },
                     ]

@@ -290,7 +290,7 @@ export const Place = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
   //select Рабочие места 
@@ -514,6 +514,9 @@ export const Place = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValuetWorkPlace("")
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно добавления рабочего места "
+                          })
                         },
                       },
                       {
@@ -528,6 +531,10 @@ export const Place = ({
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
                           setValuetWorkPlace(rowData.workplace?.id)
+
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно редактирования рабочего места "
+                          })
                         },
                       },
                     ]
