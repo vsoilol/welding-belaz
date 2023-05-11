@@ -207,7 +207,7 @@ export const Seam = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
   //select Рабочие места 
@@ -351,6 +351,9 @@ export const Seam = ({
                     onClick: () => {
                       setIsModalOpen(true);
                       setIsModalNumb(15);
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно добавления шва"
+                      })
                     },
                   },
                   {
@@ -366,8 +369,10 @@ export const Seam = ({
                       setproductValue(rowData?.product?.id)
                       setknotValue(rowData?.knot?.id)
                       setdetail(rowData?.detail?.id)
-                      settechnologicalProcess(rowData?.technologicalProcess?.id)
-                      console.log(rowData)
+                      settechnologicalProcess(rowData?.technologicalProcess?.id) 
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно редактирования шва "
+                      })
                     },
                   },
                 ]

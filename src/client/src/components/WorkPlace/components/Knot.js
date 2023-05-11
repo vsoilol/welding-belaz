@@ -557,7 +557,7 @@ export const Knot = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
   //select Рабочие места 
@@ -925,6 +925,10 @@ export const Knot = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValuetWorkPlace("")
+
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно добавления узла"
+                          })
                         },
                       },
                       {
@@ -940,6 +944,10 @@ export const Knot = ({
                           setValuetWorkPlace(rowData.workplace?.id)
 
                           setvaluetProduct(rowData?.mainProduct?.id)
+
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно редактирования узла"
+                          })
                         },
                       },
                     ]

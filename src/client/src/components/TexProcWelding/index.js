@@ -1017,6 +1017,10 @@ export const TexProcWelding = ({
                         number: "",
                         pdmSystemFileLink: ""
                       });
+
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно добавления технологического процесса"
+                      })
                     },
                   },
                   {
@@ -1027,6 +1031,9 @@ export const TexProcWelding = ({
                       setisModalpProcOpen(true);
                       setmodalDataNumb(1)
                       setidProc(rowData?.id)
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно редактирования технологического процесса"
+                      })
                     },
                   },
                 ]
@@ -1061,6 +1068,9 @@ export const TexProcWelding = ({
                       setIsModalOpen(true);
                       setIsModalOpenNumb(0);
                       setValuetVkladka(1)
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно добавления технологической инструкции"
+                      })
                     },
                   },
                   {
@@ -1076,6 +1086,9 @@ export const TexProcWelding = ({
                       setidPassages(rowData.id);
                       setvalueNameInst(rowData.name);
                       setpassagesCnange(rowData.weldPassageInstructions)
+                      api.post(`/eventLog`,{
+                        "information": "Открыл модальное окно редактирования технологической инструкции"
+                      })
                     },
                   },
                 ]

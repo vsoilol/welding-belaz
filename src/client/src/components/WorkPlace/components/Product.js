@@ -553,7 +553,7 @@ export const Product = ({
   const optPosts = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
   //select Рабочие места 
@@ -878,7 +878,9 @@ export const Product = ({
                           setValuetTechProc("")
                           setValuetPosts("")
                           setValueWorkplace("")
-
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно добавления изделия"
+                          })
                         },
                       },
                       {
@@ -887,14 +889,15 @@ export const Product = ({
                         onClick: (event, rowData) => {
                           setModalData(rowData);
                           setIsModalOpen(true);
-                          setIsModalNumb(4)
-
-                          console.log(rowData)
+                          setIsModalNumb(4) 
 
                           setValueProdArea(rowData.workshop?.id)
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
                           setValueWorkplace(rowData.workplace?.id)
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно редактирования изделия"
+                          })
                         },
                       },
                     ]

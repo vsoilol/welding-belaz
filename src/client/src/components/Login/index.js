@@ -10,13 +10,11 @@ import { useHistory } from "react-router-dom";
 const initialValues = { email: "", password: "" };
 
 const Main = ({ logIn, isRequesting, requestType, error }) => {
+
   const isTablet = useContext(TabletContext);
   const [showError, setShowError] = useState(false);
   const history = useHistory();
-
-
   const [indexForm, setindexForm] = useState(0);
-
 
   useEffect(() => {
     if (requestType === "LOGIN_FAILURE") {
@@ -34,7 +32,7 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
               logIn(values);
               history.push("/");
             }}
-            validationSchema={loginValidation}
+            /* validationSchema={loginValidation} */
           >
             {({
               handleSubmit,
@@ -52,20 +50,20 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
                     width={isTablet ? "300px" : "360px"}
                     onChange={(e) => {
                       setShowError(false);
-                      handleChange(e);
+                      handleChange(e); 
                     }}
                     value={values.email}
                     invalid={
                       showError
-                        ? true
-                        : touched.email && Boolean(errors.email)
+                        /* ? true
+                        : touched.email && Boolean(errors.email) */
                     }
-                    error={showError ? error : errors.email}
+                    /* error={showError ? error : errors.email} */
                     name="email"
                     placeholder="Введите email"
                     onBlur={handleBlur}
                     disabled={isRequesting}
-                    type="user"
+                    type="text"
                   />
 
                   <Field
@@ -90,7 +88,8 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
 
 
                   <Button
-                    disabled={!(isValid && dirty) || isRequesting}
+                   /*  disabled={!(isValid && dirty)   || isRequesting} */
+                    disabled={!dirty}
                     isRequesting={isRequesting}
                     width={isTablet ? "275px" : "200px"}
                     className={styles.button}
@@ -103,8 +102,7 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
             }}
           </Formik>
 
-          <a className={styles.refChange} href="/new-password" >Изменить пароль</a>
-          {/* <a className={styles.refChange} href="/creates-user" >Панель админа</a> */}
+          {/* <a className={styles.refChange} href="/new-password" >Изменить пароль</a>  */}
         </div>
       </div>
     </div>
