@@ -16,7 +16,7 @@ import Button from "components/shared/Button";
 import Select from "components/shared/Select";
 import Input from "components/shared/Input";
 import api from "services/api";
-
+import Paper from "@material-ui/core/Paper";
 export const Reports = ({
   loadWorkshop,
   loadArea,
@@ -69,12 +69,12 @@ export const Reports = ({
     WorkplaceId: modalData?.WorkplaceId ?? "",
     WeldingEquipmentId: modalData?.WeldingEquipmentId ?? "",
 
-    cutType: modalData?.cutType ?? "", 
+    cutType: modalData?.cutType ?? "",
   });
 
   const [accessibility, setaccessibility] = useState("");
-  const [efficiency, setefficiency] =  useState("");
-  const [quality, setquality] =  useState("");
+  const [efficiency, setefficiency] = useState("");
+  const [quality, setquality] = useState("");
 
   ////Select
   const executorsOptions = executors?.map((item) => {
@@ -92,7 +92,7 @@ export const Reports = ({
   const areaOptions = area?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} №${item.number}`,
+      label: `№${item.number} ${item.name} `,
     };
   });
   const productOptions = product?.map((item) => {
@@ -148,74 +148,77 @@ export const Reports = ({
 
   ////!Select
   const reports = [
-     {
-       id: 0,
-       name: "Отчет об отклонениях от нормативных параметров режимов сварки по цеху"
-     },
-     {
-       id: 1,
-       name: "Отчет об отклонениях от нормативных параметров режимов сварки по производственному участку"
-     },
-     {
-       id: 2,
-       name: "Отчет об отклонениях от нормативных параметров режимов сварки по исполнителю"
-     },
-     {
-       id: 3,
-       name: "Отчет об отклонениях от нормативных параметров режимов сварки по рабочему месту"
-     },
-     {
-       id: 4,
-       name: "Отчет о простоях оборудования за период "
-     },
-     {
-       id: 5,
-       name: "Отчет работе оборудования за период  "
-     },
-     {
-       id: 6,
-       name: "Отчет о выполненных операциях по цеху  "
-     },
-     {
-       id: 7,
-       name: "Отчет о выполненных операциях по исполнителю  "
-     },
-     {
-       id: 8,
-       name: "Отчет о выполненных операциях по рабочему месту  "
-     },
-     {
-       id: 9,
-       name: "Отчет о выполненных операциях по производственному участку  "
-     },
-     {
-       id: 10,
-       name: "Отчет о работе сварщиков по цеху"
-     },
-     {
-       id: 11,
-       name: "Отчет о работе сварщиков по производственному участку"
-     },
-     {
-       id: 12,
-       name: "Отчет о работе сварщиков по исполнителю"
-     },
-     {
-       id: 13,
-       name: "Отчет о работе сварщиков по рабочему месту"
-     },
-     {
-       id: 14,
-       name: "Отчет о работе сварщиков для завода"
-     },
-     {
-       id: 15,
-       name: "Отчет об отклонениях от нормативных параметров режимов сварки для завода"
-     },
-     {
-       id: 16,
-       name: "Отчет о выполненных операциях (швах) для завода"
-     }, 
+    {
+      id: 0,
+      name: "Отчет об отклонениях от нормативных параметров режимов сварки по цеху"
+    },
+    {
+      id: 1,
+      name: "Отчет об отклонениях от нормативных параметров режимов сварки по производственному участку"
+    },
+    {
+      id: 2,
+      name: "Отчет об отклонениях от нормативных параметров режимов сварки по исполнителю"
+    },
+    {
+      id: 3,
+      name: "Отчет об отклонениях от нормативных параметров режимов сварки по рабочему месту"
+    },
+    {
+      id: 4,
+      name: "Отчет о простоях оборудования за период ",
+      tableData: null
+    },
+    {
+      id: 5,
+      name: "Отчет работе оборудования за период  ",
+      tableData: null
+    },
+    {
+      id: 6,
+      name: "Отчет о выполненных операциях по цеху  "
+    },
+    {
+      id: 7,
+      name: "Отчет о выполненных операциях по исполнителю  "
+    },
+    {
+      id: 8,
+      name: "Отчет о выполненных операциях по рабочему месту  "
+    },
+    {
+      id: 9,
+      name: "Отчет о выполненных операциях по производственному участку  "
+    },
+    {
+      id: 10,
+      name: "Отчет о работе сварщиков по цеху"
+    },
+    {
+      id: 11,
+      name: "Отчет о работе сварщиков по производственному участку"
+    },
+    {
+      id: 12,
+      name: "Отчет о работе сварщиков по исполнителю"
+    },
+    {
+      id: 13,
+      name: "Отчет о работе сварщиков по рабочему месту"
+    },
+    {
+      id: 14,
+      name: "Отчет о работе сварщиков для завода"
+    },
+    {
+      id: 15,
+      name: "Отчет об отклонениях от нормативных параметров режимов сварки для завода"
+    },
+    {
+      id: 16,
+      name: "Отчет о выполненных операциях (швах) для завода"
+    },
+
     {
       id: 17,
       name: "Отчет об анализе работы оборудования для завода"
@@ -245,6 +248,7 @@ export const Reports = ({
       name: "Отчет об эффективности использования оборудования  по производственному участку"
     },
   ]
+ 
   const colinstructions = [
     {
       title: "Наименование",
@@ -254,8 +258,12 @@ export const Reports = ({
       title: "", render: (rowData) => {
         return (
           <span className={styles.ReportsSpan} onClick={e => {
+            e.preventDefault();
             setIsModalOpen(true);
-            setidReports(rowData?.id);
+            setidReports(rowData?.id); 
+            api.post(`/eventLog`,{
+                "information": `Сгенерировал ${rowData.name}`
+            })
           }}> Сгенерировать </span>
         )
       }
@@ -432,8 +440,8 @@ export const Reports = ({
         <div>
           <div className={styles.row}>
             <Input
-              onChange={(event) => { 
-                setaccessibility( event.target.value)
+              onChange={(event) => {
+                setaccessibility(event.target.value)
               }}
               style={{ height: 40, width: 562 }}
               value={accessibility}
@@ -441,7 +449,7 @@ export const Reports = ({
               placeholder="Доступность "
               type="number"
               min="0"
-              step="1" 
+              step="1"
               autoComplete="off"
             />
           </div>
@@ -451,12 +459,12 @@ export const Reports = ({
                 setefficiency(event.target.value)
               }}
               style={{ height: 40, width: 562 }}
-              value={efficiency }
+              value={efficiency}
               name="efficiency "
               placeholder="Производительность "
               type="number"
               min="0"
-              step="1" 
+              step="1"
               autoComplete="off"
             />
           </div>
@@ -466,12 +474,12 @@ export const Reports = ({
                 setquality(event.target.value)
               }}
               style={{ height: 40, width: 562 }}
-              value={quality }
+              value={quality}
               name="quality "
               placeholder="Качество "
               type="number"
               min="0"
-              step="1" 
+              step="1"
               autoComplete="off"
             />
           </div>
@@ -682,7 +690,7 @@ export const Reports = ({
     if (idReports === 20) {
       return (
         <div>
-          <AccesEfficQuality /> 
+          <AccesEfficQuality />
           <StartDateEndDate />
         </div>
 
@@ -691,7 +699,7 @@ export const Reports = ({
     if (idReports === 21) {
       return (
         <div>
-          <AccesEfficQuality /> 
+          <AccesEfficQuality />
           <WorkplaceId />
           <StartDateEndDate />
         </div>
@@ -701,7 +709,7 @@ export const Reports = ({
     if (idReports === 22) {
       return (
         <div>
-          <AccesEfficQuality /> 
+          <AccesEfficQuality />
           <WorkshopId />
           <StartDateEndDate />
         </div>
@@ -711,7 +719,7 @@ export const Reports = ({
     if (idReports === 23) {
       return (
         <div>
-          <AccesEfficQuality /> 
+          <AccesEfficQuality />
           <ProductionAreaId />
           <StartDateEndDate />
         </div>
@@ -764,14 +772,14 @@ export const Reports = ({
       endpoint = `excelEquipmentOperationAnalysisReport?WorkshopId=${initialValues.workshopId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&CutType=${initialValues.cutType}`;
     } else if (idReports === 19) {
       endpoint = `excelEquipmentOperationAnalysisReport?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&CutType=${initialValues.cutType}`;
-    }else if (idReports === 20) {
-      endpoint = `excelEquipmentEfficiencyReport?StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility??null}&Efficiency=${efficiency??null}&Quality=${quality??null}`;
-    }else if (idReports === 21) {
-      endpoint = `excelEquipmentEfficiencyReport?WorkplaceId=${initialValues.WorkplaceId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility??null}&Efficiency=${efficiency??null}&Quality=${quality??null}`;
-    }else if (idReports === 22) {
-      endpoint = `excelEquipmentEfficiencyReport?WorkshopId=${initialValues.workshopId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility??null}&Efficiency=${efficiency??null}&Quality=${quality??null}`;
-    }else if (idReports === 23) {
-      endpoint = `excelEquipmentEfficiencyReport?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility??null}&Efficiency=${efficiency??null}&Quality=${quality??null}`;
+    } else if (idReports === 20) {
+      endpoint = `excelEquipmentEfficiencyReport?StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
+    } else if (idReports === 21) {
+      endpoint = `excelEquipmentEfficiencyReport?WorkplaceId=${initialValues.WorkplaceId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
+    } else if (idReports === 22) {
+      endpoint = `excelEquipmentEfficiencyReport?WorkshopId=${initialValues.workshopId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
+    } else if (idReports === 23) {
+      endpoint = `excelEquipmentEfficiencyReport?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
     }
 
     try {
@@ -781,8 +789,8 @@ export const Reports = ({
       }
       if (res.status === 200) {
         window.open(res.request.responseURL);
-      } 
-    } catch (error) { 
+      }
+    } catch (error) {
       setisModalErrOpen(true)
     }
   }
@@ -807,15 +815,14 @@ export const Reports = ({
 
       <div className={styles.tableWrapper}>
         <TabPanel
-          style={{ minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
           className="TableTech"
         >
           <Table
             title="Выберите отчет"
             columns={colinstructions}
             value={0}
-            data={reports}
-
+            data={reports} 
           />
         </TabPanel>
 
@@ -908,7 +915,7 @@ export const Reports = ({
             )}
           </Formik>
         </ModalWindow>
- 
+
 
         {/*Ошибка*/}
         <ModalWindow

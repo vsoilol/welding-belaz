@@ -19,8 +19,7 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styles from "components/WorkPlace/styles.module.css";
-
-
+ 
 
 import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
@@ -497,6 +496,9 @@ export const Workshop = ({
                         onClick: () => {
                           setIsModalOpen(true);
                           setIsModalNumb(8)
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно добавления цеха "
+                          }) 
                         },
                       },
                       {
@@ -506,6 +508,9 @@ export const Workshop = ({
                           setModalData(rowData);
                           setIsModalOpen(true);
                           setIsModalNumb(0);
+                          api.post(`/eventLog`,{
+                            "information": "Открыл модальное окно редактирования цеха "
+                          }) 
                         },
                       },
                     ]
