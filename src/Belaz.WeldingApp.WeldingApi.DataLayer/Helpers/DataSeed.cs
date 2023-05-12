@@ -14,6 +14,13 @@ public class DataSeed
 {
     public static async Task SeedSampleDataAsync(ApplicationContext context)
     {
+        var admin = UserGenerator.GenerateAdmin();
+        if (!(await context.Users.AnyAsync(_ => _.UserName == admin.UserName)))
+        {
+            context.Users.Add(admin);
+            await context.SaveChangesAsync();
+        }
+
         if (!context.DowntimeReasons.Any())
         {
             await AddDowntimeReasons(context);
@@ -21,12 +28,17 @@ public class DataSeed
 
         if (!context.Workshops.Any())
         {
-            await AddProduction(context);
+            var workshops = WorkshopGenerator.GenerateWorkshops();
+            context.Workshops.AddRange(workshops);
+            await context.SaveChangesAsync();
         }
 
         if (!context.WeldingEquipments.Any())
         {
-            await AddWeldingEquipmentsAsync(context);
+            var workplace = await context.Workplaces.ToListAsync();
+            var weldingEquipments = WeldingEquipmentGenerator.GenerateWeldingEquipments(workplace);
+            context.WeldingEquipments.AddRange(weldingEquipments);
+            await context.SaveChangesAsync();
         }
 
         if (!context.Calendars.Any())
@@ -38,49 +50,128 @@ public class DataSeed
 
         if (!context.Inspectors.Any())
         {
-            await AddInspectors(context);
+            var inspectors = InspectorGenerator.GenerateInspectors();
+            context.Inspectors.AddRange(inspectors);
+            await context.SaveChangesAsync();
         }
 
         if (!context.Masters.Any())
         {
-            await AddMasters(context);
+            var weldingEquipments06 = await context.WeldingEquipments
+                .Where(
+                    _ => _.Workplaces.Any(workplace => workplace.ProductionArea!.IdFromSystem == "06")
+                )
+                .ToListAsync();
+
+            var masters = MasterGenerator.GenerateMasters(weldingEquipments06);
+            context.Masters.AddRange(masters);
+            await context.SaveChangesAsync();
         }
 
         if (!context.Welders.Any())
         {
-            await AddWelders(context);
-        }
+            var weldingEquipments = await context.WeldingEquipments.ToListAsync();
 
-        if (!context.Chiefs.Any())
-        {
-            await AddChief(context);
+            var welders = WelderGenerator.GenerateWelders(weldingEquipments);
+            context.Welders.AddRange(welders);
+            await context.SaveChangesAsync();
         }
 
         if (!context.TechnologicalProcesses.Any())
         {
-            await AddTechnologicalProcesses(context);
+            var technologicalProcesses = TechnologicalProcessGenerator.GenerateTechnologicalProcesses();
+            context.TechnologicalProcesses.AddRange(technologicalProcesses);
+            await context.SaveChangesAsync();
         }
 
         if (!context.TechnologicalInstructions.Any())
         {
-            await AddTechnologicalInstruction(context);
+            var technologicalInstructions = TechnologicalInstructionGenerator.GenerateTechnologicalInstructions();
+            context.TechnologicalInstructions.AddRange(technologicalInstructions);
+            await context.SaveChangesAsync();
         }
 
         if (!context.Products.Any())
         {
-            await AddProducts(context);
+            var products = ProductGenerator.GenerateProducts();
+            context.Products.AddRange(products);
+            await context.SaveChangesAsync();
+
+            var productInside = ProductGenerator.GenerateProductInside();
+            context.ProductInsides.AddRange(productInside);
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.Seams.Any())
+        {
+            var seams = SeamGenerator.GenerateSeams();
+            context.Seams.AddRange(seams);
+            await context.SaveChangesAsync();
         }
 
         if (!context.ProductAccounts.Any())
         {
-            //await AddProductAccounts(context);
+            var productAccounts =
+                await AddWeldingEquipmentToProductAccounts(context, ProductAccountGenerator.GenerateProductAccounts());
+            context.ProductAccounts.AddRange(productAccounts);
+            await context.SaveChangesAsync();
+
+            var productResults = ProductAccountGenerator.GenerateProductResults();
+            context.ProductResults.AddRange(productResults);
+            await context.SaveChangesAsync();
+            
+            var seamAccount = SeamAccountGenerator.GenerateSeamAccounts();
+            context.SeamAccounts.AddRange(seamAccount);
+            await context.SaveChangesAsync();
+            
+            var seamResults = SeamAccountGenerator.GenerateSeamResults();
+            context.SeamResults.AddRange(seamResults);
+            await context.SaveChangesAsync();
         }
 
+        if (!context.WeldingEquipmentConditionTimes.Any())
+        {
+            var conditionTimes = WeldingEquipmentConditionTimeGenerator.GenerateWeldingEquipmentConditionTimes();
+            context.WeldingEquipmentConditionTimes.AddRange(conditionTimes);
+            await context.SaveChangesAsync();
+        }
+        
+        if (!context.WeldingRecords.Any())
+        {
+            var weldingRecords = WeldingRecordGenerator.GenerateWeldingRecords();
+            context.WeldingRecords.AddRange(weldingRecords);
+            await context.SaveChangesAsync();
+        }
+        
         if (!context.WeldingTasks.Any())
         {
-            //await AddWeldingTasks(context);
-            //await GenerateTaskByProductAccounts(context);
+            var weldingTasks = WeldingTaskGenerator.GenerateWeldingTasks();
+            context.WeldingTasks.AddRange(weldingTasks);
+            await context.SaveChangesAsync();
         }
+        
+        if (!context.WeldPassages.Any())
+        {
+            var weldPassages = WeldPassageGenerator.GenerateWeldPassages();
+            context.WeldPassages.AddRange(weldPassages);
+            await context.SaveChangesAsync();
+        }
+    }
+
+    private static async Task<List<ProductAccount>> AddWeldingEquipmentToProductAccounts(ApplicationContext context,
+        List<ProductAccount> productAccounts)
+    {
+        foreach (var productAccount in productAccounts)
+        {
+            var weldingEquipmentIds = productAccount.WeldingEquipments.Select(_ => _.Id);
+            var weldingEquipments = await context.WeldingEquipments
+                .Where(equipment => weldingEquipmentIds.Any(id => id == equipment.Id))
+                .ToListAsync();
+
+            productAccount.WeldingEquipments = weldingEquipments;
+        }
+
+        return productAccounts;
     }
 
     private static async Task GenerateTaskByProductAccounts(ApplicationContext context)
@@ -229,706 +320,6 @@ public class DataSeed
         };
 
         await context.DowntimeReasons.AddRangeAsync(downtimeReasons);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddProduction(ApplicationContext context)
-    {
-        var workshops = new List<Workshop>
-        {
-            new Workshop
-            {
-                Name = "Сварочный цех",
-                IdFromSystem = "050",
-                Number = 50,
-                ProductionAreas = new List<ProductionArea>
-                {
-                    new ProductionArea
-                    {
-                        Name = "Сборка, сварка рам к/с г/п 120-130 т.",
-                        Number = 6,
-                        IdFromSystem = "06",
-                        Workplaces = new List<Workplace>
-                        {
-                            new Workplace { Number = 3600, IdFromSystem = "3600" },
-                            new Workplace { Number = 3610, IdFromSystem = "3610" },
-                            new Workplace { Number = 3690, IdFromSystem = "3690" },
-                            new Workplace { Number = 3550, IdFromSystem = "3550" },
-                            new Workplace { Number = 3510, IdFromSystem = "3510" },
-                            new Workplace { Number = 3500, IdFromSystem = "3500" },
-                        }
-                    }
-                }
-            }
-        };
-
-        context.Workshops.AddRange(workshops);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddWeldingEquipmentsAsync(ApplicationContext context)
-    {
-        var workplace3610 = (
-            await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3610")
-        )!;
-
-        var workplace3500 = (
-            await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3500")
-        )!;
-
-        var workplace3600 = (
-            await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3600")
-        )!;
-
-        var workplace3690 = (
-            await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3690")
-        )!;
-
-        var workplace3550 = (
-            await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3550")
-        )!;
-
-        var workplace3510 = (
-            await context.Workplaces.FirstOrDefaultAsync(_ => _.IdFromSystem == "3510")
-        )!;
-
-        var weldingEquipments = new List<WeldingEquipment>
-        {
-            new WeldingEquipment
-            {
-                IdFromSystem = "49141",
-                Name = "Полуавтомат сварочный",
-                Marking = "GLC556-C",
-                FactoryNumber = "49141",
-                CommissioningDate = new DateTime(2005, 1, 28),
-                GroupNumber = "3.11",
-                ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка",
-                RfidTag = "93:57:D8:0B",
-                WeldingCurrentMin = 80,
-                WeldingCurrentMax = 550,
-                ArcVoltageMin = 18,
-                ArcVoltageMax = 41.5,
-                LoadDuration = 100,
-                IdleVoltage = 70,
-                Workplaces = new List<Workplace>
-                {
-                    workplace3500,
-                    workplace3550,
-                    workplace3690,
-                    workplace3610
-                }
-            },
-            new WeldingEquipment
-            {
-                IdFromSystem = "49286",
-                Name = "Полуавтомат сварочный",
-                Marking = "GLC556-C",
-                FactoryNumber = "49286",
-                CommissioningDate = new DateTime(2010, 7, 29),
-                GroupNumber = "3.11",
-                ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка",
-                RfidTag = "35:4E:AC:A5",
-                WeldingCurrentMin = 80,
-                WeldingCurrentMax = 550,
-                ArcVoltageMin = 18,
-                ArcVoltageMax = 41.5,
-                LoadDuration = 100,
-                IdleVoltage = 70,
-                Workplaces = new List<Workplace> { workplace3500, workplace3510 }
-            },
-            new WeldingEquipment
-            {
-                IdFromSystem = "49232",
-                Name = "Полуавтомат сварочный",
-                Marking = "GLC556-C",
-                FactoryNumber = "49232",
-                CommissioningDate = new DateTime(2008, 10, 31),
-                GroupNumber = "3.11",
-                ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка",
-                RfidTag = "03:3D:93:0D",
-                WeldingCurrentMin = 80,
-                WeldingCurrentMax = 550,
-                ArcVoltageMin = 18,
-                ArcVoltageMax = 41.5,
-                LoadDuration = 100,
-                IdleVoltage = 70,
-                Workplaces = new List<Workplace> { workplace3610, workplace3600 }
-            },
-            new WeldingEquipment
-            {
-                IdFromSystem = "49283",
-                Name = "Полуавтомат сварочный",
-                Marking = "GLC556-C",
-                FactoryNumber = "49283",
-                CommissioningDate = new DateTime(2008, 10, 31),
-                GroupNumber = "3.11",
-                ManufacturerName = "CLOOS",
-                WeldingProcess = "Полуавтоматическая сварка",
-                RfidTag = "A6:F1:CF:48",
-                WeldingCurrentMin = 10,
-                WeldingCurrentMax = 500,
-                ArcVoltageMin = 14.5,
-                ArcVoltageMax = 39,
-                LoadDuration = 100,
-                IdleVoltage = 70,
-                Workplaces = new List<Workplace>
-                {
-                    workplace3500,
-                    workplace3550,
-                    workplace3690,
-                    workplace3610
-                }
-            }
-        };
-
-        await context.WeldingEquipments.AddRangeAsync(weldingEquipments);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddInspectors(ApplicationContext context)
-    {
-        var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "06"
-        );
-
-        var inspectors = new List<Inspector>
-        {
-            new Inspector
-            {
-                IdFromSystem = "249550",
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "49550",
-                    MiddleName = "Грук",
-                    FirstName = "Екатерина",
-                    LastName = "Сергеевна",
-                    Position = "Контролер сварочных работ",
-                    ProductionArea = productionArea6,
-                    Role = Role.Inspector
-                }
-            },
-            new Inspector
-            {
-                IdFromSystem = "219379",
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "19379",
-                    MiddleName = "Шабалинская",
-                    FirstName = "Мария",
-                    LastName = "Николаевна",
-                    Position = "Контролер сварочных работ",
-                    ProductionArea = productionArea6,
-                    Role = Role.Inspector
-                }
-            }
-        };
-
-        context.Inspectors.AddRange(inspectors);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddMasters(ApplicationContext context)
-    {
-        var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "06"
-        );
-
-        var weldingEquipments06 = await context.WeldingEquipments
-            .Where(
-                _ => _.Workplaces.Any(workplace => workplace.ProductionArea!.IdFromSystem == "06")
-            )
-            .ToListAsync();
-
-        var masters = new List<Master>
-        {
-            new Master
-            {
-                IdFromSystem = "614962",
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "14962",
-                    MiddleName = "Алёксов",
-                    FirstName = "Геннадий",
-                    LastName = "Александрович",
-                    Position = "Мастер производственного участка",
-                    ProductionArea = productionArea6,
-                    Role = Role.Master
-                },
-            },
-            new Master
-            {
-                IdFromSystem = "610422",
-                WeldingEquipments = weldingEquipments06,
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "10422",
-                    MiddleName = "Беляцкий",
-                    FirstName = "Сергей",
-                    LastName = "Николаевич",
-                    Position = "Мастер производственного участка",
-                    ProductionArea = productionArea6,
-                    Role = Role.Master
-                },
-            }
-        };
-
-        context.Masters.AddRange(masters);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddWelders(ApplicationContext context)
-    {
-        var productionArea6 = await context.ProductionAreas.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "06"
-        );
-
-        var weldingEquipment49141 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49141")
-        )!;
-        var weldingEquipment49283 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49283")
-        )!;
-        var weldingEquipment49286 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49286")
-        )!;
-        var weldingEquipment49232 = (
-            await context.WeldingEquipments.FirstOrDefaultAsync(_ => _.IdFromSystem == "49232")
-        )!;
-
-        var welders = new List<Welder>
-        {
-            new Welder
-            {
-                IdFromSystem = "150882",
-                WeldingEquipments = new List<WeldingEquipment>
-                {
-                    weldingEquipment49141,
-                    weldingEquipment49283
-                },
-                UserInfo = new UserData
-                {
-                    RfidTag = "17:CD:7F:5A",
-                    ServiceNumber = "50882",
-                    MiddleName = "Буландо",
-                    FirstName = "Юрий",
-                    LastName = "Сергеевич",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            },
-            new Welder
-            {
-                IdFromSystem = "146164",
-                WeldingEquipments = new List<WeldingEquipment>
-                {
-                    weldingEquipment49141,
-                    weldingEquipment49283
-                },
-                UserInfo = new UserData
-                {
-                    RfidTag = "27:45:7E:B4",
-                    ServiceNumber = "46164",
-                    MiddleName = "Михейчик",
-                    FirstName = "Александр",
-                    LastName = "Васильевич",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            },
-            new Welder
-            {
-                IdFromSystem = "121267",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49232 },
-                UserInfo = new UserData
-                {
-                    RfidTag = "B7:5A:79:B5",
-                    ServiceNumber = "21267",
-                    MiddleName = "Казинец",
-                    FirstName = "Василий",
-                    LastName = "Владимирович",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            },
-            new Welder
-            {
-                IdFromSystem = "117390",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49232 },
-                UserInfo = new UserData
-                {
-                    RfidTag = "67:5A:70:B4",
-                    ServiceNumber = "17390",
-                    MiddleName = "Казачёнок",
-                    FirstName = "Сергей",
-                    LastName = "Анатольевич",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            },
-            new Welder
-            {
-                IdFromSystem = "132695",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49286 },
-                UserInfo = new UserData
-                {
-                    RfidTag = "D7:95:55:B4",
-                    ServiceNumber = "32695",
-                    MiddleName = "Виторский",
-                    FirstName = "Владимир",
-                    LastName = "Францевич",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            },
-            new Welder
-            {
-                IdFromSystem = "122575",
-                WeldingEquipments = new List<WeldingEquipment> { weldingEquipment49286 },
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "22575",
-                    RfidTag = "67:CD:7E:5A",
-                    MiddleName = "Костюкевич",
-                    FirstName = "Максим",
-                    LastName = "Александрович",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            },
-            new Welder
-            {
-                IdFromSystem = "114729",
-                WeldingEquipments = new List<WeldingEquipment>
-                {
-                    weldingEquipment49141,
-                    weldingEquipment49283
-                },
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "14729",
-                    RfidTag = "D7:F1:7D:5A",
-                    MiddleName = "Казинец",
-                    FirstName = "Виталий",
-                    LastName = "Владимирович",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            },
-            new Welder
-            {
-                IdFromSystem = "150838",
-                WeldingEquipments = new List<WeldingEquipment>
-                {
-                    weldingEquipment49141,
-                    weldingEquipment49283
-                },
-                UserInfo = new UserData
-                {
-                    ServiceNumber = "50838",
-                    RfidTag = "97:17:60:B4",
-                    MiddleName = "Зубковский",
-                    FirstName = "Валерий",
-                    LastName = "Сергеевич",
-                    Position = "Электросварщик на автоматических и полуавтоматических машинах",
-                    ProductionArea = productionArea6,
-                    Role = Role.Welder
-                }
-            }
-        };
-
-        context.Welders.AddRange(welders);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddChief(ApplicationContext context)
-    {
-        var workshop = (await context.Workshops.FirstOrDefaultAsync())!;
-
-        var chief = new Chief
-        {
-            Workshop = workshop,
-            UserInfo = new UserData
-            {
-                CertificateValidityPeriod = new DateTime(2025, 2, 2),
-                FirstName = "Имя начальника цеха",
-                LastName = "Отчество начальника цеха",
-                MiddleName = "Фамилия начальника цеха",
-                UserName = "UserName",
-                Email = "Email",
-                PasswordHash = "PasswordHash",
-                Position = "Должность 1",
-                ServiceNumber = "Табельный номер  1",
-                RfidTag = "RFID метка начальника цеха 1",
-                Role = Role.Chief
-            },
-        };
-
-        await context.Chiefs.AddAsync(chief);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddProducts(ApplicationContext context)
-    {
-        var productionArea6 = (
-            await context.ProductionAreas.FirstOrDefaultAsync(_ => _.IdFromSystem == "06")
-        )!;
-
-        var technologicalProcess3330041 = await context.TechnologicalProcesses.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "3330041"
-        );
-
-        var technologicalProcess3291137 = await context.TechnologicalProcesses.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "3291137"
-        );
-
-        var technologicalProcess2868425 = await context.TechnologicalProcesses.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "2868425"
-        );
-
-        var technologicalInstruction18 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "18"
-            );
-        var technologicalInstruction39 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "39"
-            );
-        var technologicalInstruction52 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "52"
-            );
-        var technologicalInstruction54 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "54"
-            );
-        var technologicalInstruction55 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "55"
-            );
-        var technologicalInstruction56 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "56"
-            );
-        var technologicalInstruction57 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "57"
-            );
-        var technologicalInstruction58 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "58"
-            );
-        var technologicalInstruction1 = await context.TechnologicalInstructions.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "1"
-        );
-        var technologicalInstruction2 = await context.TechnologicalInstructions.FirstOrDefaultAsync(
-            _ => _.IdFromSystem == "2"
-        );
-        var technologicalInstruction48 =
-            await context.TechnologicalInstructions.FirstOrDefaultAsync(
-                _ => _.IdFromSystem == "48"
-            );
-
-        var product1 = new Product
-        {
-            IdFromSystem = "4536492774",
-            Number = "7513D-2800010-20",
-            Name = "Рама",
-            ProductType = ProductType.Product,
-            ProductionArea = productionArea6,
-            ManufacturingTime = 10,
-            TechnologicalProcess = technologicalProcess3330041,
-            Seams = new List<Seam>
-            {
-                new()
-                {
-                    Number = 39,
-                    Length = 280,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction39,
-                },
-                new()
-                {
-                    Number = 55,
-                    Length = 400,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction55,
-                },
-                new()
-                {
-                    Number = 57,
-                    Length = 400,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction57,
-                },
-                new()
-                {
-                    Number = 58,
-                    Length = 900,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction58,
-                },
-                new()
-                {
-                    Number = 18,
-                    Length = 4000,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction18,
-                },
-                new()
-                {
-                    Number = 54,
-                    Length = 400,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction54,
-                }
-            },
-            ProductInsides = new List<ProductInside>
-            {
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        Number = "75131-2801300-20",
-                        Name = "Поперечина рамы задняя",
-                        TechnologicalProcess = technologicalProcess3330041,
-                        ProductType = ProductType.Knot,
-                        ManufacturingTime = 20,
-                        ProductionArea = productionArea6,
-                        Seams = new List<Seam>
-                        {
-                            new()
-                            {
-                                Number = 1,
-                                Length = 1900,
-                                ProductionArea = productionArea6,
-                                TechnologicalInstruction = technologicalInstruction1,
-                            },
-                            new()
-                            {
-                                Number = 2,
-                                Length = 1880,
-                                ProductionArea = productionArea6,
-                                TechnologicalInstruction = technologicalInstruction2,
-                            },
-                            new()
-                            {
-                                Number = 52,
-                                Length = 1200,
-                                ProductionArea = productionArea6,
-                                TechnologicalInstruction = technologicalInstruction52,
-                            }
-                        },
-                    }
-                },
-            },
-        };
-
-        var product2 = new Product
-        {
-            IdFromSystem = "4536479362",
-            Number = "75131-2800010-70",
-            Name = "Рама",
-            ManufacturingTime = 11,
-            ProductType = ProductType.Product,
-            ProductionArea = productionArea6,
-            TechnologicalProcess = technologicalProcess3291137,
-            Seams = new List<Seam>
-            {
-                new()
-                {
-                    Number = 39,
-                    Length = 280,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction39,
-                },
-                new()
-                {
-                    Number = 55,
-                    Length = 400,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction55,
-                },
-                new()
-                {
-                    Number = 57,
-                    Length = 400,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction57,
-                },
-                new()
-                {
-                    Number = 58,
-                    Length = 900,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction58,
-                },
-                new()
-                {
-                    Number = 18,
-                    Length = 4000,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction18,
-                },
-                new()
-                {
-                    Number = 54,
-                    Length = 400,
-                    ProductionArea = productionArea6,
-                    TechnologicalInstruction = technologicalInstruction54,
-                }
-            },
-            ProductInsides = new List<ProductInside>
-            {
-                new()
-                {
-                    InsideProduct = new Product
-                    {
-                        Number = "75131-2801300-20",
-                        Name = "Поперечина рамы задняя",
-                        ManufacturingTime = 41,
-                        TechnologicalProcess = technologicalProcess3291137,
-                        ProductType = ProductType.Knot,
-                        ProductionArea = productionArea6,
-                        Seams = new List<Seam>
-                        {
-                            new()
-                            {
-                                Number = 1,
-                                Length = 1900,
-                                ProductionArea = productionArea6,
-                                TechnologicalInstruction = technologicalInstruction1,
-                            },
-                            new()
-                            {
-                                Number = 2,
-                                Length = 1880,
-                                ProductionArea = productionArea6,
-                                TechnologicalInstruction = technologicalInstruction2,
-                            },
-                            new()
-                            {
-                                Number = 52,
-                                Length = 1200,
-                                ProductionArea = productionArea6,
-                                TechnologicalInstruction = technologicalInstruction52,
-                            }
-                        },
-                    }
-                },
-            },
-        };
-
-        await context.Products.AddRangeAsync(product1, product2);
         await context.SaveChangesAsync();
     }
 
@@ -2563,341 +1954,6 @@ public class DataSeed
 
         context.WeldingTasks.AddRange(tasks);
 
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddTechnologicalProcesses(ApplicationContext context)
-    {
-        var technologicalProcesses = new List<TechnologicalProcess>
-        {
-            new TechnologicalProcess
-            {
-                IdFromSystem = "2868425",
-                Name = "Поперечина рамы задняя",
-                Number = "75131-2801300-20"
-            },
-            new TechnologicalProcess
-            {
-                IdFromSystem = "3330041",
-                Name = "Рама",
-                Number = "7513D-2800010-20"
-            },
-            new TechnologicalProcess
-            {
-                IdFromSystem = "3291137",
-                Name = "Рама",
-                Number = "75131-2800010-70"
-            }
-        };
-
-        await context.TechnologicalProcesses.AddRangeAsync(technologicalProcesses);
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task AddTechnologicalInstruction(ApplicationContext context)
-    {
-        var technologicalInstructions = new List<TechnologicalInstruction>
-        {
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "18",
-                Name = "Инструкция 18",
-                Number = 18,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "39",
-                Name = "Инструкция 39",
-                Number = 39,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "52",
-                Name = "Инструкция 52",
-                Number = 52,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "54",
-                Name = "Инструкция 54",
-                Number = 54,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "55",
-                Name = "Инструкция 55",
-                Number = 55,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "56",
-                Name = "Инструкция 56",
-                Number = 56,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "57",
-                Name = "Инструкция 57",
-                Number = 57,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "58",
-                Name = "Инструкция 58",
-                Number = 58,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "1",
-                Name = "Инструкция 1",
-                Number = 1,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "2",
-                Name = "Инструкция 2",
-                Number = 2,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-            new TechnologicalInstruction
-            {
-                IdFromSystem = "48",
-                Name = "Инструкция 48",
-                Number = 48,
-                WeldPassageInstructions = new List<WeldPassageInstruction>
-                {
-                    new()
-                    {
-                        Name = "Корневой",
-                        Number = 1,
-                        WeldingCurrentMin = 200,
-                        WeldingCurrentMax = 270,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    },
-                    new()
-                    {
-                        Name = "Заполняющий",
-                        Number = 2,
-                        WeldingCurrentMin = 270,
-                        WeldingCurrentMax = 310,
-                        ArcVoltageMin = 23,
-                        ArcVoltageMax = 26
-                    }
-                }
-            },
-        };
-
-        context.TechnologicalInstructions.AddRange(technologicalInstructions);
         await context.SaveChangesAsync();
     }
 }
