@@ -1,0 +1,26 @@
+.mainContent {
+  height: 100%;
+}
+
+.hiddenOverflow {
+  overflow-y: hidden;
+}
+
+.visibleOverflow {
+  overflow-y: auto;
+}
+.templateWrapper {
+  height: 100%;
+}
+
+.mainWrapper {
+  margin-top: 50px;
+  min-height: calc(100% - 270px);
+  background-color: #f7f7f7;
+}
+
+@media print {
+  .mainWrapper {
+    margin-top: 0;
+  }
+}

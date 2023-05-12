@@ -1,0 +1,33 @@
+.marker {
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.active {
+  background-image: url("../../assets/icons/marker.png");
+}
+
+.off {
+  background-image: url("../../assets/icons/marker-gray.png");
+}
+
+.idle {
+  background-image: url("../../assets/icons/locationYellow.svg");
+}
+
+.mapboxgl-popup {
+  max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+}
+
+
+h3{
+  text-align: center;
+}

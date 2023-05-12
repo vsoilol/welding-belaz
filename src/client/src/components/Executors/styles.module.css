@@ -1,0 +1,86 @@
+.tableWrapper { 
+  margin-top: 80px; 
+}
+
+.innerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.Tabs{
+  width: 770px;
+}
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px;
+}
+
+.row:first-child {
+  margin-top: 30px;
+}
+
+.row:last-child {
+  margin-bottom: 30px;
+}
+.tableWrapper { 
+  max-width: 1400px;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+.AddEvent{
+  padding: 10px;
+  border-radius: 16px;
+  background-color: white;
+}
+
+.equipmentRefs{
+  color: #3f51b5;
+  border-bottom: 1px solid #3f51b5;
+  text-decoration: none;
+}
+
+.refCalendar{
+  font-size: 18px;
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin: 30px 0px;
+  padding: 12px 20px;
+  border-radius: 16px;
+  background-color: #3f51b5;
+  width: fit-content;
+}
+
+.imgcalendar{
+  width: 30px; 
+  cursor: pointer;
+}
+@media (max-width: 1440px) {
+  .tableWrapper {
+    margin-top: 40px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .tableWrapper {
+    margin-top: 0;
+  }
+}
+
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.deleteIcon{
+  cursor: pointer;
+  width: 20px;
+  position: relative;
+  top: 5px;
+}
