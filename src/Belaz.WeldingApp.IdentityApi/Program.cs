@@ -108,13 +108,13 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-using (var scope = app.Services.CreateScope())
+/*using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
     var context = services.GetRequiredService<ApplicationContext>();
     await DataSeed.SeedSampleDataAsync(context);
-}
+}*/
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
