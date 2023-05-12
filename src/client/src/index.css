@@ -1,0 +1,53 @@
+body {
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  height: calc(100% - 50px);
+}
+
+#root {
+  height: 100%;
+  background-color: #f7f7f7;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+@font-face {
+  font-family: "Muller Extra Bold";
+  src: url("assets/fonts/MullerDemo-ExtraBold.otf");
+}
+
+@font-face {
+  font-family: "Muller Thin";
+  src: url("assets/fonts/MullerDemo-Thin.otf");
+}
+
+@font-face {
+  font-family: "Muller Narrow Extra Bold";
+  src: url("assets/fonts/MullerNarrowDemo-ExtraBold.otf");
+}
+
+@font-face {
+  font-family: "Muller Narrow Extra Bold Italic";
+  src: url("assets/fonts/MullerNarrowDemo-ExtraBoldItalic.otf");
+}
+
+@font-face {
+  font-family: "Muller Narrow Light";
+  src: url("assets/fonts/MullerNarrowDemo-Light.otf");
+}
+
+@font-face {
+  font-family: "Muller Narrow Light Italic";
+  src: url("assets/fonts/MullerNarrowDemo-LightItalic.otf");
+}

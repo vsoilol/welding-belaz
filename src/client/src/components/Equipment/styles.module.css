@@ -1,0 +1,123 @@
+
+
+
+.tableWrapper {
+  margin-top: 80px;
+  width: 80%;
+}
+
+.innerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Fix{
+  color: blue;
+  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-bottom: 1px solid;
+}
+
+.text {
+  /* font-family: "Muller Thin"; */
+  font-size: 12px;
+  line-height: 20px;
+  margin: 0 20px 0 20px;
+  /* font-weight: 700; */
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px;
+}
+
+.row:first-child {
+  margin-top: 30px;
+}
+
+.row:last-child {
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  cursor: pointer;
+  display: block;
+  font-family: "Muller Extra Bold";
+  margin: 16px 40px 0 auto;
+  height: 36px;
+  width: 240px;
+  background-color: transparent;
+  border: 2px solid gray;
+}
+
+.button:hover {
+  text-decoration: underline;
+}
+.imgcalendar{
+  width: 30px; 
+  cursor: pointer;
+}
+@media (max-width: 1440px) {
+  .tableWrapper {
+    margin-top: 40px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .tableWrapper {
+    margin-top: 0;
+  }
+}
+
+
+.deleteIcon{
+  cursor: pointer;
+  width: 20px;
+  position: relative;
+  top: 5px;
+}
+
+
+
+
+.equipments{
+  width: fit-content;
+  max-height: 200px;
+  overflow-y: scroll;
+  margin: 0 auto;
+  padding: 0px 20px 0 0px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.equipments::-webkit-scrollbar {
+  width: 8px;               /* ширина scrollbar */
+}
+.equipments::-webkit-scrollbar-track {
+  background: white;        /* цвет дорожки */
+  border-radius: 50px;
+}
+.equipments::-webkit-scrollbar-thumb {
+  background-color: rgb(153, 150, 167);    /* цвет плашки */
+  border-radius: 20px;       /* закругления плашки */
+}
+.equipments span{
+  padding-left: 10px;
+  position: relative;
+  top: -3px; 
+}
+.equipments div{
+  padding: 5px 0px;
+}
+
+.titleSelects{
+  padding-left: 50px;
+}

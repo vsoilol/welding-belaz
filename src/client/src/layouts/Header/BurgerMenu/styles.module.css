@@ -1,0 +1,26 @@
+.burgerMenuContainer {
+  background-color: #ffffff;
+  padding-bottom: 18px;
+  z-index: -1;
+  height: calc(100% - 18px - 50px);
+  width: 100%;
+  position: fixed;
+  top: -140%;
+  display: flex;
+  flex-direction: column;
+  /* transition: top 0.25s cubic-bezier(0.645, 0.045, 0.355, 1); */
+  transition: top 0s cubic-bezier(0.645, 0.045, 0.355, 1);
+  align-items: center;
+  justify-content: center;
+}
+
+.burgerMenuOpenedContainer {
+  top: 50px;
+}
+
+.mobileMenuWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 40%;
+}
