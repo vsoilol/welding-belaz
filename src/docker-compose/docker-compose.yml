@@ -106,6 +106,7 @@ services:
       - "80:80"
     depends_on:
       - gateway-api
+      - belaz-client
         
   belaz-client:
     image: belaz-client
