@@ -69,7 +69,7 @@ public class EmailSender : IEmailSender
         {
             try
             {
-                await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, false);
+                await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.None);
 
                 //client.AuthenticationMechanisms.Remove("XOAUTH2");
                 await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
