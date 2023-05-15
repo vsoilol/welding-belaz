@@ -3,15 +3,9 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-ENV http_proxy http://temp:54321@192.168.100.5:3128
-ENV https_proxy http://temp:54321@192.168.100.5:3128
-
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Belaz.WeldingApp.ApiGateway/Belaz.WeldingApp.ApiGateway.csproj", "Belaz.WeldingApp.ApiGateway/"]
-
-ENV http_proxy http://temp:54321@192.168.100.5:3128
-ENV https_proxy http://temp:54321@192.168.100.5:3128
 
 RUN dotnet restore "Belaz.WeldingApp.ApiGateway/Belaz.WeldingApp.ApiGateway.csproj"
 COPY . .
