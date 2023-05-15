@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Configs;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Models;
 using Belaz.WeldingApp.IdentityApi.BusinessLayer.Services.Interfaces;
+using MailKit.Security;
 using MimeKit;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
@@ -44,7 +45,7 @@ public class EmailSender : IEmailSender
         {
             try
             {
-                client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
+                client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.StartTls);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
                 client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
                 client.Send(mailMessage);
@@ -69,7 +70,8 @@ public class EmailSender : IEmailSender
             try
             {
                 await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
+
+                //client.AuthenticationMechanisms.Remove("XOAUTH2");
                 await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
                 var data = await client.SendAsync(mailMessage);
             }

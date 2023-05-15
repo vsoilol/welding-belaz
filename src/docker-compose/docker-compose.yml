@@ -104,6 +104,8 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
+    depends_on:
+      - gateway-api
         
   belaz-client:
     image: belaz-client
