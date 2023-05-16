@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
@@ -35,6 +36,8 @@ public class RecordDto : IMapFrom<WeldingRecord>
     public MasterBriefDto Master { get; set; } = null!;
 
     public int? WeldingTaskNumber { get; set; }
+
+    public WeldingEquipmentBriefDto WeldingEquipment { get; set; } = null!;
 
     public void Mapping(Profile profile)
     {
