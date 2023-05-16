@@ -58,9 +58,9 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords }) => {
     {
       title: "Номер задания ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingTask?.number != null) {
+        if (rowData?.weldingTaskNumber != null) {
           return (
-            <a href="/tasks" target="_blank">{rowData.weldingTask?.number ?? "-"}</a>
+            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber ?? "-"}</a>
           );
         }
         else {
