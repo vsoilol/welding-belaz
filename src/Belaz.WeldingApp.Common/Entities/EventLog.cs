@@ -12,8 +12,8 @@ public class EventLog : Entity
     [Required]
     public DateTime DateTime { get; set; }
 
-    public Guid? UserId { get; set; }
+    public Guid UserId { get; set; }
 
     [ForeignKey(nameof(UserId))]
-    public UserData? User { get; set; }
+    public UserData User { get; set; } = null!;
 }
