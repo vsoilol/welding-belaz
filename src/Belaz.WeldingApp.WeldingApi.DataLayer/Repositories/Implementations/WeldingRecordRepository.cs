@@ -29,16 +29,15 @@ public class WeldingRecordRepository : IWeldingRecordRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<RecordDto>> GetAllAsync()
+    public Task<List<RecordDto>> GetAllAsync()
     {
-        var weldingRecords = await GetWeldingRecordsWithIncludesByFilter()
+        var weldingRecords = _context.WeldingRecords
             .OrderByDescending(_ => _.Date.Date)
-            .ThenByDescending(x => x.WeldingStartTime.TotalSeconds)
+            .ThenByDescending(x => x.WeldingStartTime.TotalSeconds);
+
+        return weldingRecords
+            .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
-
-        var mapWeldingRecords = _mapper.Map<List<RecordDto>>(weldingRecords);
-
-        return mapWeldingRecords;
     }
 
     private IQueryable<WeldingRecord> GetWeldingRecordsWithIncludesByFilter(
