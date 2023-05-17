@@ -3,7 +3,7 @@
 For /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%b-%%a-%%c)
 
 set database=weldingBelaz
-set port=5432
+set port=5434
 set username=postgres
 set pathToFolder=../../database/init-script.sql
 set fullPath=%pathToFolder%

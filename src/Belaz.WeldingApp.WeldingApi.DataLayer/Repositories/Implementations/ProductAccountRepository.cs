@@ -270,7 +270,7 @@ public class ProductAccountRepository : IProductAccountRepository
         await _context.SaveChangesAsync();
 
         var products = await _context.ProductionAreas
-            .Where(_ => _.Number == 6)
+            .Where(_ => _.Id == productionAreaId)
             .SelectMany(_ => _.Products)
             .Include(_ => _.Seams)
             .ToListAsync();
@@ -347,6 +347,7 @@ public class ProductAccountRepository : IProductAccountRepository
                     && _.Seam.Product.ProductionAreaId == productionAreaId
                     && _.ProductAccount.AmountFromPlan > 0
             )
+            .OrderBy(_ => _.ProductAccount.Number)
             .ToListAsync();
 
         var weldingTasks = new List<WeldingTask>();
