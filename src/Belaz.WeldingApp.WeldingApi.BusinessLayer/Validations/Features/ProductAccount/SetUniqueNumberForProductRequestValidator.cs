@@ -18,7 +18,8 @@ public class SetUniqueNumberForProductRequestValidator : AbstractValidator<SetUn
                     SetUniqueNumberForProductRequest,
                     Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
-            );
+            )
+            .SetAsyncValidator(new IsProductAccountContainProductPropertyValidator(context));
 
         RuleFor(model => model.UniqueNumber)
             .Cascade(CascadeMode.Stop)
