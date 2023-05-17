@@ -109,7 +109,7 @@ public class DataSeed
             await context.SaveChangesAsync();
         }
 
-        if (!context.ProductAccounts.Any())
+        /*if (!context.ProductAccounts.Any())
         {
             var productAccounts =
                 await AddWeldingEquipmentToProductAccounts(context, ProductAccountGenerator.GenerateProductAccounts());
@@ -155,7 +155,7 @@ public class DataSeed
             var weldPassages = WeldPassageGenerator.GenerateWeldPassages();
             context.WeldPassages.AddRange(weldPassages);
             await context.SaveChangesAsync();
-        }
+        }*/
     }
 
     private static async Task<List<ProductAccount>> AddWeldingEquipmentToProductAccounts(ApplicationContext context,
