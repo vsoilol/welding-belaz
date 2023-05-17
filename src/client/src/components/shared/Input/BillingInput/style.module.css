@@ -1,0 +1,23 @@
+.wrapper {
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.label {
+  color: hsl(0, 0%, 62%);
+  font-family: 'Muller Thin';
+  font-size: 11px;
+  letter-spacing: 0.25px;
+  line-height: 11px;
+  box-sizing: border-box;
+
+  position: absolute;
+  top: -5px;
+  left: 20px;
+  background-color: #ffffff;
+}
+
+.defaultInput:focus .label {
+  color: #7e7d7d;
+}

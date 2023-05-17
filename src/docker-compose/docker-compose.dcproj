@@ -11,4 +11,7 @@
   <ItemGroup>
     <None Include="docker-compose.yml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="docker-compose.prod.yml" />
+  </ItemGroup>
 </Project>
