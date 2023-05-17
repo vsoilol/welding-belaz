@@ -57,10 +57,7 @@ public class ProductAccountRepository : IProductAccountRepository
 
         var weldingTasks = _context.WeldingTasks.Where(_ => _.SeamAccount.ProductAccountId == id);
 
-        await weldingTasks.ForEachAsync(_ =>
-        {
-            _.InspectorId = inspector.Id;
-        });
+        await weldingTasks.ForEachAsync(_ => { _.InspectorId = inspector.Id; });
 
         var productResultAccept = productAccount.ProductResults.FirstOrDefault(
             _ => _.Status == ResultProductStatus.Accept
@@ -101,13 +98,125 @@ public class ProductAccountRepository : IProductAccountRepository
         return await GetByIdAsync(id);
     }
 
+    public async Task<ProductAccountDto> AddProductAccountAsync(Guid productId, DateTime date, int? uniqueNumber)
+    {
+        var maxProductAccountNumber = await _context.ProductAccounts
+            .Where(_ => _.DateFromPlan == date)
+            .Select(_ => _.Number)
+            .MaxAsync();
+
+        var seams = await _context.Seams
+            .Where(_ => _.ProductId == productId)
+            .ToListAsync();
+
+        var productResultStatus = new List<ProductResult>
+        {
+            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+            new() { Amount = 0, Status = ResultProductStatus.Accept },
+            new() { Amount = 0, Status = ResultProductStatus.Defective }
+        };
+
+        var seamAccounts = new List<SeamAccount>();
+
+        foreach (var seam in seams)
+        {
+            var seamResultStatus = new List<SeamResult>
+            {
+                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                new() { Amount = 0, Status = ResultProductStatus.Accept },
+                new() { Amount = 0, Status = ResultProductStatus.Defective }
+            };
+
+            var seamAccount = new SeamAccount
+            {
+                DateFromPlan = date,
+                Seam = seam,
+                SeamResults = seamResultStatus
+            };
+            seamAccounts.Add(seamAccount);
+        }
+
+        var newProductAccount = new ProductAccount
+        {
+            Number = maxProductAccountNumber + 1,
+            AmountFromPlan = uniqueNumber is null ? 0 : 1,
+            DateFromPlan = date,
+            ProductId = productId,
+            ProductResults = productResultStatus,
+            SeamAccounts = seamAccounts,
+            UniqueNumber = uniqueNumber
+        };
+
+        var entity = _context.ProductAccounts.Add(newProductAccount);
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(entity.Entity.Id);
+    }
+
+    public async Task<ProductAccountDto> SetUniqueNumberAsync(Guid productAccountId, int? uniqueNumber)
+    {
+        var productAccount = (await _context.ProductAccounts
+            .FirstOrDefaultAsync(_ => _.Id == productAccountId))!;
+
+        productAccount.UniqueNumber = uniqueNumber;
+
+        if (uniqueNumber is not null)
+        {
+            productAccount.AmountFromPlan = 1;   
+        }
+
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(productAccountId);
+    }
+
+    public async Task RemoveProductAccountAsync(Guid id)
+    {
+        var weldingTasks = await _context.WeldingTasks
+            .Where(_ => _.SeamAccount.ProductAccountId == id)
+            .ToListAsync();
+
+        _context.WeldingTasks.RemoveRange(weldingTasks);
+
+        var seamAccounts = await _context.SeamAccounts
+            .Where(_ => _.ProductAccountId == id)
+            .ToListAsync();
+
+        _context.SeamAccounts.RemoveRange(seamAccounts);
+
+        var productAccount = (await _context.ProductAccounts
+            .Include(_ => _.Product)
+            .FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        var date = productAccount.DateFromPlan;
+        var productionAreaId = productAccount.Product.ProductionAreaId;
+        
+        _context.ProductAccounts.Remove(productAccount!);
+        await _context.SaveChangesAsync();
+
+        var productAccounts = await _context.ProductAccounts.Where(_ =>
+            _.DateFromPlan == date && 
+            _.Product.ProductionAreaId == productionAreaId)
+            .OrderBy(_ => _.Number)
+            .ToListAsync();
+
+        for (var i = 0; i < productAccounts.Count; i++)
+        {
+            productAccounts[i].Number = i + 1;
+        }
+        
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<ProductAccountDto> ChangAmountFromPlanAsync(Guid id, int amountFromPlan)
     {
         var productAccount = (await _context.ProductAccounts.FirstOrDefaultAsync(_ => _.Id == id))!;
 
-        productAccount.AmountFromPlan = amountFromPlan;
-
-        await _context.SaveChangesAsync();
+        if (productAccount.UniqueNumber is null)
+        {
+            productAccount.AmountFromPlan = amountFromPlan;
+            await _context.SaveChangesAsync();
+        }
 
         return await GetByIdAsync(id);
     }
@@ -389,12 +498,12 @@ public class ProductAccountRepository : IProductAccountRepository
     public async Task<List<string>> GetAllDatesByProductionAreaAsync(Guid productionAreaId)
     {
         return (
-            await _context.ProductAccounts
-                .Select(_ => _.DateFromPlan.Date)
-                .Distinct()
-                .OrderBy(_ => _.Date)
-                .ToListAsync()
-        )
+                await _context.ProductAccounts
+                    .Select(_ => _.DateFromPlan.Date)
+                    .Distinct()
+                    .OrderBy(_ => _.Date)
+                    .ToListAsync()
+            )
             .Select(_ => _.ToDayInfoString())
             .ToList();
     }

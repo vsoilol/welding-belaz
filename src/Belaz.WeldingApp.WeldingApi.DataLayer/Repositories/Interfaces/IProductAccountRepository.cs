@@ -13,6 +13,12 @@ public interface IProductAccountRepository
     Task<ProductAccountDto> ChangAmountFromPlanAsync(Guid id, int amountFromPlan);
 
     Task<ProductAccountDto> ChangAcceptedAmountAsync(Guid id, Guid inspectorId, int acceptedAmount);
+    
+    Task<ProductAccountDto> AddProductAccountAsync(Guid productId, DateTime date, int? uniqueNumber);
+    
+    Task<ProductAccountDto> SetUniqueNumberAsync(Guid productAccountId, int? uniqueNumber);
+    
+    Task RemoveProductAccountAsync(Guid id);
 
     Task<ProductAccountDto> GetByIdAsync(Guid id);
 

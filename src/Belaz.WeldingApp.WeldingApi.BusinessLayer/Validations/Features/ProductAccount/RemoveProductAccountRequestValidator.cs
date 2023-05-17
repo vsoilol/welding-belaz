@@ -1,27 +1,21 @@
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
+﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.ProductAccount;
 
-public class ChangeProductAccountAmountRequestValidator
-    : AbstractValidator<ChangeProductAccountAmountRequest>
+public class RemoveProductAccountRequestValidator : AbstractValidator<RemoveProductAccountRequest>
 {
-    public ChangeProductAccountAmountRequestValidator(ApplicationContext context)
+    public RemoveProductAccountRequestValidator(ApplicationContext context)
     {
         RuleFor(model => model.Id)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<
-                    ChangeProductAccountAmountRequest,
+                    RemoveProductAccountRequest,
                     Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccount
                 >(context)
             );
-
-        RuleFor(model => model.Amount)
-            .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(0);
     }
 }

@@ -58,6 +58,8 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
     public UserFullNameDto? Inspector { get; set; }
 
     public List<WeldingEquipmentDto>? WeldingEquipments { get; set; }
+    
+    public int? UniqueNumber { get; set; }
 
     /// <summary>
     /// Есть ли отклонения
@@ -80,6 +82,10 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
             .ForMember(
                 dto => dto.WeldingEquipments,
                 opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.WeldingEquipments)
+            )
+            .ForMember(
+                dto => dto.UniqueNumber,
+                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.UniqueNumber)
             )
             .ForMember(
                 dto => dto.ManufacturedAmount,
