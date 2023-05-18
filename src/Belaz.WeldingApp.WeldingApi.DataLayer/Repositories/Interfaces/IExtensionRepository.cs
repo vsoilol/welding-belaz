@@ -4,8 +4,8 @@ namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 
 public interface IExtensionRepository
 {
-    IEnumerable<ProductStructureDto> GetProductStructuresByMainProductIds(
-        IReadOnlyCollection<Guid> mainProductIds,
+    ProductStructureDto GetProductStructureByMainProductId(
+        Guid mainProductId,
         IReadOnlyCollection<ProductInsideOnlyIdDto> productInsideIds,
         IReadOnlyCollection<ProductBriefDto> products);
 }

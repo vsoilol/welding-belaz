@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
@@ -24,6 +25,7 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
 
     //public SeamDto Seam { get; set; } = null!;
 
+    [JsonIgnore]
     public Guid MainProductId { get; set; }
 
     public ProductBriefDto Product { get; set; } = null!;

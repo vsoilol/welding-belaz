@@ -1,31 +1,34 @@
-﻿using Belaz.WeldingApp.Common.Enums;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
+using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
 
 public class ExtensionRepository : IExtensionRepository
 {
-    public IEnumerable<ProductStructureDto> GetProductStructuresByMainProductIds(
-        IReadOnlyCollection<Guid> mainProductIds,
-        IReadOnlyCollection<ProductInsideOnlyIdDto> productInsideIds,
+    private readonly ApplicationContext _context;
+    private readonly IMapper _mapper;
+
+    public ExtensionRepository(ApplicationContext context, IMapper mapper)
+    {
+        _context = context;
+        _mapper = mapper;
+    }
+
+    public ProductStructureDto GetProductStructureByMainProductId(Guid mainProductId, IReadOnlyCollection<ProductInsideOnlyIdDto> productInsideIds,
         IReadOnlyCollection<ProductBriefDto> products)
     {
-        var result = new List<ProductStructureDto>();
+        var mainProducts = GetMainProducts(mainProductId, productInsideIds, products);
 
-        foreach (var mainProductId in mainProductIds)
+        var result = new ProductStructureDto
         {
-            var mainProducts = GetMainProducts(mainProductId, productInsideIds, products);
-
-            var productStructure = new ProductStructureDto
-            {
-                MainProductId = mainProductId,
-                Product = mainProducts.Product!,
-                Detail = mainProducts.Detail,
-                Knot = mainProducts.Knot
-            };
-            result.Add(productStructure);
-        }
+            Product = mainProducts.Product!,
+            Detail = mainProducts.Detail,
+            Knot = mainProducts.Knot,
+        };
 
         return result;
     }
@@ -38,22 +41,22 @@ public class ExtensionRepository : IExtensionRepository
         )
     {
         var productChild = products.FirstOrDefault(_ => _.Id == productChildId)!;
-        
+
         var mainProduct = GetProductByTypeInHierarchy(
-            productChild, 
-            productInsideIds, 
+            productChild,
+            productInsideIds,
             products,
             ProductType.Product
         );
         var mainKnot = GetProductByTypeInHierarchy(
-            productChild, 
-            productInsideIds, 
+            productChild,
+            productInsideIds,
             products,
             ProductType.Knot
         );
         var mainDetail = GetProductByTypeInHierarchy(
-            productChild, 
-            productInsideIds, 
+            productChild,
+            productInsideIds,
             products,
             ProductType.Detail
         );
