@@ -18,6 +18,7 @@ public static class DependencyInjection
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+        services.AddScoped<IUploadFileService, UploadFileService>();
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IExcelDeviationReportService, ExcelDeviationReportService>();

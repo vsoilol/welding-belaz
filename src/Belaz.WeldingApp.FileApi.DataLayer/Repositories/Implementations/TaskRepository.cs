@@ -4,6 +4,7 @@ using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 using Belaz.WeldingApp.Common.Entities.ProductInfo;
+using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Implementations;

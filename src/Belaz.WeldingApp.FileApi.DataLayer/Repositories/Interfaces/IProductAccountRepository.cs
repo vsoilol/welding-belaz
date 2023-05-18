@@ -26,4 +26,10 @@ public interface IProductAccountRepository
         DateTime startDate,
         DateTime endDate
     );
+
+    Task UpdateAmountFromPlanAsync(Guid id, int amountFromPlan);
+    
+    Task<ProductAccountAmountFromPlanDto?> GetByProductIdAndDateAsync(Guid productId, DateTime date);
+    
+    Task AddOnlyByProductAndAmountFromPlanAsync(Guid productId, DateTime date, int amountFromPlan);
 }

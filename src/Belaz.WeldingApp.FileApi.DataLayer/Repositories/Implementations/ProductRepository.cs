@@ -23,4 +23,11 @@ internal class ProductRepository : IProductRepository
             .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!; 
     }
+
+    public Task<List<ProductBriefDto>> GetAllProductsAsync()
+    {
+        return _context.Products
+            .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
+            .ToListAsync(); 
+    }
 }
