@@ -249,6 +249,16 @@
       "DownstreamPathTemplate": "/api/excelEquipmentEfficiencyReport/byProductionArea",
       "ServiceName": "file",
       "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/uploadFile/product-account",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/uploadFile/product-account",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
     }
   ]
 }

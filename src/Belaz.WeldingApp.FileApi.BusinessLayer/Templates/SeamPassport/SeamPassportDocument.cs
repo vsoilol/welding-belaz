@@ -1,4 +1,5 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
+using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 using QuestPDF.Drawing;
 using QuestPDF.Fluent;

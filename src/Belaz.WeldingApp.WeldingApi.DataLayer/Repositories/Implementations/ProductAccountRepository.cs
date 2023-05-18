@@ -100,10 +100,19 @@ public class ProductAccountRepository : IProductAccountRepository
 
     public async Task<ProductAccountDto> AddProductAccountAsync(Guid productId, DateTime date, int? uniqueNumber)
     {
-        var maxProductAccountNumber = await _context.ProductAccounts
-            .Where(_ => _.DateFromPlan == date)
-            .Select(_ => _.Number)
-            .MaxAsync();
+        var product = (await _context.Products.FirstOrDefaultAsync(_ => _.Id == productId))!;
+
+        var maxProductAccountNumber = 0;
+
+        if (await _context.ProductAccounts.AnyAsync(_ => _.DateFromPlan == date &&
+                                                         _.Product.ProductionAreaId == product.ProductionAreaId))
+        {
+            maxProductAccountNumber = await _context.ProductAccounts
+                .Where(_ => _.DateFromPlan == date &&
+                            _.Product.ProductionAreaId == product.ProductionAreaId)
+                .Select(_ => _.Number)
+                .MaxAsync();
+        }
 
         var seams = await _context.Seams
             .Where(_ => _.ProductId == productId)
@@ -162,7 +171,7 @@ public class ProductAccountRepository : IProductAccountRepository
 
         if (uniqueNumber is not null)
         {
-            productAccount.AmountFromPlan = 1;   
+            productAccount.AmountFromPlan = 1;
         }
 
         await _context.SaveChangesAsync();
@@ -190,13 +199,13 @@ public class ProductAccountRepository : IProductAccountRepository
 
         var date = productAccount.DateFromPlan;
         var productionAreaId = productAccount.Product.ProductionAreaId;
-        
+
         _context.ProductAccounts.Remove(productAccount!);
         await _context.SaveChangesAsync();
 
         var productAccounts = await _context.ProductAccounts.Where(_ =>
-            _.DateFromPlan == date && 
-            _.Product.ProductionAreaId == productionAreaId)
+                _.DateFromPlan == date &&
+                _.Product.ProductionAreaId == productionAreaId)
             .OrderBy(_ => _.Number)
             .ToListAsync();
 
@@ -204,7 +213,7 @@ public class ProductAccountRepository : IProductAccountRepository
         {
             productAccounts[i].Number = i + 1;
         }
-        
+
         await _context.SaveChangesAsync();
     }
 
