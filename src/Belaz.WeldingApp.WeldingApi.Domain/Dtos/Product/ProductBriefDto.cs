@@ -9,7 +9,7 @@ public class ProductBriefDto : IMapFrom<Belaz.WeldingApp.Common.Entities.Product
 
     public string? IdFromSystem { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public string Number { get; set; } = null!;
 
