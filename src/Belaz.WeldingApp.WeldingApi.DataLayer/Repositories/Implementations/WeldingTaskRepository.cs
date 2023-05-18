@@ -66,12 +66,28 @@ public class WeldingTaskRepository : IWeldingTaskRepository
 
     public async Task<WeldingTaskDto> GetByIdAsync(Guid id)
     {
-        var weldingTask = await GetWeldingTasksWithIncludesByFilter(_ => _.Id == id)
+        var weldingTaskQuery = _context.WeldingTasks.Where(_ => _.Id == id);
+
+        var weldingTask = await weldingTaskQuery
+            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
-        var mapWeldingTask = _mapper.Map<WeldingTaskDto>(weldingTask);
+        var productInsideIds = await _context.ProductInsides
+            .ProjectTo<ProductInsideOnlyIdDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
 
-        return mapWeldingTask;
+        var products = await _context.Products
+            .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        var productStructure = _extensionRepository
+            .GetProductStructureByMainProductId(weldingTask.MainProductId, productInsideIds, products);
+
+        weldingTask.Product = productStructure.Product;
+        weldingTask.Detail = productStructure.Detail;
+        weldingTask.Knot = productStructure.Knot;
+
+        return weldingTask;
     }
 
     public async Task<List<WeldingTaskDto>> GetAllUncompletedTaskAsync()
