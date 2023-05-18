@@ -48,19 +48,39 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         var productInsideIds = await _context.ProductInsides
             .ProjectTo<ProductInsideOnlyIdDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
-        
+
         var products = await _context.Products
             .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
-        var mainProductIds = await weldingTasksQuery
-            .Select(_ => _.SeamAccount.Seam.ProductId)
+        var weldingTaskWithMainProductIds = await weldingTasksQuery
+            .Select(_ => new WeldingTaskWithMainProductIdsDto
+            {
+                WeldingTaskId = _.Id,
+                MainProductId = _.SeamAccount.Seam.ProductId
+            })
             .ToListAsync();
 
-        var productsStructure =
-            _extensionRepository.GetProductStructuresByMainProductIds(mainProductIds, productInsideIds, products);
+        var mainProductIds = weldingTaskWithMainProductIds.Select(_ => _.MainProductId).ToList();
 
-        foreach (var productStructure in productsStructure)
+        var productsStructure = _extensionRepository
+            .GetProductStructuresByMainProductIds(mainProductIds, productInsideIds, products)
+            .ToList();
+
+        foreach (var weldingTaskWithMainProductId in weldingTaskWithMainProductIds)
+        {
+            var productStructure = productsStructure
+                .FirstOrDefault(_ => _.MainProductId == weldingTaskWithMainProductId.MainProductId)!;
+            
+            var weldingTask = weldingTasks
+                .FirstOrDefault(_ => _.Id == weldingTaskWithMainProductId.WeldingTaskId)!;
+            
+            weldingTask.Product = productStructure.Product;
+            weldingTask.Detail = productStructure.Detail;
+            weldingTask.Knot = productStructure.Knot;
+        }
+
+        /*foreach (var productStructure in productsStructure)
         {
             var productWeldingTasks = weldingTasks
                 .Where(_ => _.MainProductId == productStructure.MainProductId);
@@ -71,8 +91,8 @@ public class WeldingTaskRepository : IWeldingTaskRepository
                 productWeldingTask.Detail = productStructure.Detail;
                 productWeldingTask.Knot = productStructure.Knot;
             }
-        }
-        
+        }*/
+
         return weldingTasks;
     }
 
