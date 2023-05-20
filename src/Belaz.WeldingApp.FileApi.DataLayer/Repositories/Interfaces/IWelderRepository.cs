@@ -1,3 +1,4 @@
+using Belaz.WeldingApp.Common.Entities.Users;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
@@ -34,4 +35,10 @@ public interface IWelderRepository
     );
     
     Task<UserFullNameDto> GetUserFullNameByIdAsync(Guid id);
+    
+    Task<WelderBriefDto?> GetByServiceNumberOrDefaultAsync(string serviceNumber);
+    
+    Task AddAsync(Welder welder);
+    
+    Task UpdateAsync(Welder welder);
 }

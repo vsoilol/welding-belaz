@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.Users;
 using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
@@ -52,6 +53,37 @@ internal class WelderRepository : IWelderRepository
             .Select(_ => _.UserInfo)
             .ProjectTo<UserFullNameDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
+    }
+
+    public Task<WelderBriefDto?> GetByServiceNumberOrDefaultAsync(string serviceNumber)
+    {
+        return _context.Welders
+            .Where(_ => _.UserInfo.ServiceNumber == serviceNumber)
+            .ProjectTo<WelderBriefDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
+    public Task AddAsync(Welder welder)
+    {
+        _context.Welders.Add(welder);
+        return _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(Welder welder)
+    {
+        var updatedWelder = (await _context.Welders
+            .Include(_ => _.UserInfo)
+            .FirstOrDefaultAsync(_ => _.Id == welder.Id))!;
+
+        updatedWelder.UserInfo.FirstName = welder.UserInfo.FirstName;
+        updatedWelder.UserInfo.LastName = welder.UserInfo.LastName;
+        updatedWelder.UserInfo.MiddleName = welder.UserInfo.MiddleName;
+        updatedWelder.UserInfo.Role = welder.UserInfo.Role;
+        updatedWelder.UserInfo.Position = welder.UserInfo.Position;
+        updatedWelder.UserInfo.ServiceNumber = welder.UserInfo.ServiceNumber;
+        updatedWelder.UserInfo.ProductionAreaId = welder.UserInfo.ProductionAreaId;
+
+        await _context.SaveChangesAsync();
     }
 
     public async Task<WelderOperationTimeDto?> GetWelderOperationTimeInfoByProductionAreaIdAndDatePeriodAsync(

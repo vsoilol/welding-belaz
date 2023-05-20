@@ -17,12 +17,25 @@ public static class ControllerExtensions
         );
     }
     
-    public static IActionResult ToEmptyOk<TResult>(this Result<TResult> result)
+    public static ActionResult ToEmptyOk<TResult>(this Result<TResult> result)
     {
-        return result.Match<IActionResult>(
+        return result.Match<ActionResult>(
             obj => new NoContentResult(),
             ex => CreateErrorResult(ex)
         );
+    }
+    
+    public static ActionResult<TResult> ToOk<TResult>(this Result<TResult> result)
+    {
+        return result.Match<ActionResult<TResult>>(
+            obj => CreateOkResult(obj),
+            ex => CreateErrorResult(ex)
+        );
+    }
+    
+    private static ActionResult CreateOkResult<TResult>(TResult obj)
+    {
+        return new OkObjectResult(obj);
     }
     
     private static FileContentResult CreateFileContentResult(DocumentDto document)
@@ -33,7 +46,7 @@ public static class ControllerExtensions
         };
     }
 
-    private static IActionResult CreateErrorResult(Exception exception)
+    private static ActionResult CreateErrorResult(Exception exception)
     {
         if (exception is ValidationException validationException)
         {
@@ -57,7 +70,7 @@ public static class ControllerExtensions
             return new NoContentResult();
         }
 
-        if (exception is UploadFileException)
+        if (exception is UploadFileException or IncorrectFileExtensionException)
         {
             var badRequestResult = new BadRequestResult
             {

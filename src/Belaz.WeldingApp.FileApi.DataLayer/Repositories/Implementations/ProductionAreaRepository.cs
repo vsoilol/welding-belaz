@@ -23,4 +23,12 @@ public class ProductionAreaRepository : IProductionAreaRepository
             .ProjectTo<ProductionAreaBriefDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
+
+    public Task<ProductionAreaBriefDto?> GetBriefInfoByNumberAndWorkshopNumberAsync(int number, int workshopNumber)
+    {
+        return _context.ProductionAreas
+            .Where(_ => _.Number == number && _.Workshop.Number == workshopNumber)
+            .ProjectTo<ProductionAreaBriefDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
 }
