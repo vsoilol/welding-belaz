@@ -23,4 +23,14 @@ public class WorkplaceRepository : IWorkplaceRepository
             .ProjectTo<WorkplaceBriefDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
+
+    public Task<WorkplaceBriefDto?> GetBriefInfoByNumberAsync(int number, int productionAreaNumber, int workshopNumber)
+    {
+        return _context.Workplaces
+            .Where(_ => _.Number == number &&
+                        _.ProductionArea!.Number == productionAreaNumber && 
+                        _.ProductionArea.Workshop.Number == workshopNumber)
+            .ProjectTo<WorkplaceBriefDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
 }

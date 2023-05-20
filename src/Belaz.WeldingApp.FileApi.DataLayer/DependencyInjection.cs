@@ -15,6 +15,8 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
 
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<IMasterRepository, MasterRepository>();
+        services.AddScoped<IInspectorRepository, InspectorRepository>();
         services.AddScoped<IWeldPassageRepository, WeldPassageRepository>();
         services.AddScoped<ISeamAccountRepository, SeamAccountRepository>();
         services.AddScoped<IWeldingEquipmentRepository, WeldingEquipmentRepository>();
