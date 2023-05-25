@@ -1063,10 +1063,10 @@ export const TexProcWelding = ({
                 ? <WeldingInputs />
                 : <CnangeWeldingInputs />
               }
-               {userRole === "Admin" || userRole === "Master"
+               {/* {userRole === "Admin" || userRole === "Master"
                 ? <Upload></Upload>
                 : null
-              }
+              } */}
 
             </form>
 
@@ -1148,10 +1148,10 @@ export const TexProcWelding = ({
                     onBlur={handleBlur}
                   />
                 </div>
-                {userRole === "Admin" || userRole === "Master"
+                {/* {userRole === "Admin" || userRole === "Master"
                   ? <Upload></Upload>
                   : null
-                }
+                } */}
                 <div className={styles.row}>
                   <Button
                     type="submit"

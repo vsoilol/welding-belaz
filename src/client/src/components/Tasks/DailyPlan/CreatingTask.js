@@ -129,7 +129,7 @@ export const CreatingTask = ({
         {
             title: "Номер изделия", field: "product.product.number",
         },
-        {
+        /* {
             title: "Уникальный номер", 
             field: "uniqueNumber",
             render: rowData => rowData?.uniqueNumber ? rowData?.uniqueNumber: '-',
@@ -137,7 +137,7 @@ export const CreatingTask = ({
                 const value = rowData?.uniqueNumber ? rowData?.uniqueNumber: '-';
                 return value.toLowerCase().includes(term.toLowerCase());
             },
-        },
+        }, */
         {
             title: "Количество из плана ", field: "amountFromPlan"
         },
@@ -592,7 +592,7 @@ export const CreatingTask = ({
                             {userRole === "Master" || userRole === "Admin"
                                 ? (
                                     <div>
-                                        {CheckIsProd
+                                        {/* {CheckIsProd
                                             ?<div>
                                                 <p>Изменение уникального номера  </p>
                                                 <div className={styles.row}>
@@ -616,7 +616,7 @@ export const CreatingTask = ({
                                                 </div>
                                             </div>
                                             :null
-                                        }
+                                        } */}
                                         <p>Изменение количества продукции из плана  </p>
                                         <div className={styles.row}>
                                             <Input

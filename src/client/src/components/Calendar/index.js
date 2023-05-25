@@ -57,32 +57,21 @@ export const Calendar = ({
   addDay,
   editDay,
 
-}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [isModalCreateCalendarOpen, setIsModalCreateCalendarOpen] = useState(false);
+}) => { 
   const [isModalAddWorkDayOpen, setIsModalAddWorkDayOpen] = useState(false);
   const [isModalEditWorkDayOpen, setIsModalEditWorkDayOpen] = useState(false);
   const [isModalAddShift, setIsModalAddShift] = useState(false);
-
-
-
-  const [isModalOpenIndex, setIsModalOpenIndex] = useState(false);
+ 
   const [modalData, setModalData] = useState(null);
   const dispatch = useDispatch();
   const [valueObj, setValueObj] = useState(0);
 
-  const [valueExecutors, setValueExecutors] = useState(null);
-  const [valueNameExecutors, setValueNameExecutors] = useState(null);
-  const [valueEquipment, setValueEquipment] = useState(null);
-  const [valueNameEquipment, setValueNameEquipment] = useState(null);
-  const [valueIsWorkingDay, setValueIsWorkingDay] = useState(null);
-
-  const [valueWorkData, setValueWorkData] = useState([]);
+  const [valueExecutors, setValueExecutors] = useState(null); 
+  const [valueEquipment, setValueEquipment] = useState(null); 
+ 
   const [valueWorkingShift, setValueWorkingShift] = useState([]);
 
-
-  const [valueIdEdditWorkingShift, setIdEdditWorkingShift] = useState(0);
+ 
 
 
   let date = new Date().getUTCFullYear()
@@ -140,7 +129,7 @@ export const Calendar = ({
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
 
- 
+
 
   ////////////////////////////////////////////////////////////////////
 
@@ -171,56 +160,7 @@ export const Calendar = ({
     },
   ]
 
-
-
-
-  const ObjSlects = [
-    {
-      id: 1,
-      name: "Оборудование "
-    },
-    {
-      id: 2,
-      name: "Сотрудник"
-    }
-  ]
-
-  const ObjSlectsisWorkingDay = [
-    {
-      bool: true,
-      name: "Рабочий день"
-    },
-    {
-      bool: false,
-      name: "Выходной"
-    }
-  ]
-  const optObs = ObjSlects?.map((item) => {
-    return {
-      value: item.id,
-      label: item.name,
-    };
-  });
-  const executorsOptions = executors?.map((item) => {
-    return {
-      value: item.id,
-      label: `${item.middleName} ${item.firstName} ${item.lastName}`,
-    };
-  });
-  const equipmentOptions = equipment[0]?.map((item) => {
-    return {
-      value: item.id,
-      label: `${item.name} ${item.factoryNumber}  `,
-    };
-  });
-
-
-  const WorkingDayOptions = ObjSlectsisWorkingDay?.map((item) => {
-    return {
-      value: item.bool,
-      label: item.name,
-    };
-  });
+ 
 
 
   let WorkingShiftOptions = calendar?.mainWorkingShifts?.map((item) => {
@@ -247,23 +187,23 @@ export const Calendar = ({
     params["workingShifts"] = SetworkingShifts(valueWorkingShift)
 
 
- 
+
     if (fun === "AddWorkDay") {
       const executorId = window.localStorage.getItem("executorId");
-      const equipmentId = window.localStorage.getItem("equipmentId"); 
+      const equipmentId = window.localStorage.getItem("equipmentId");
       if (executorId) {
         params.valueExecutors = executorId;
       } else if (equipmentId) {
         params.valueEquipment = equipmentId;
-      } 
+      }
       if (params.workingShifts?.number === 3) {
         params.number++;
-      } 
-      addDay(params);
+      }
+      /* addDay(params); */
     } else if (fun === "EditWorkDay") {
-      editDay(params);
+      /* editDay(params); */
     }
-  
+
   }
 
   function SetworkingShifts(valueWorkingShift) {
@@ -278,45 +218,13 @@ export const Calendar = ({
   function SetValOpenModalAddWorkDay() {
     setIsModalAddWorkDayOpen(true)
   }
-
-  function SetValIsModalEditWorkDayOpen() {
-    setIsModalEditWorkDayOpen(true)
-  }
+ 
 
 
   ////*****************//////////////////!!!!!  Calendar
 
-  const ArrayDays = calendar?.days??[];
- 
-  const resultArrayDays = ArrayDays?.map((Day) => {  
-    const [breakStartHour, breakStartMinute] = Day?.workingShifts?.[0]?.breakStart?.split(':') ?? [null, null];
+  const ArrayDays = calendar?.days ?? []; 
 
-    const [breakEndHour, breakEndMinute] = Day?.workingShifts?.[0].breakEnd.split(':')?? [null, null];
-
-    const [shiftStartHour, shiftStartMinute] = Day?.workingShifts?.[0].shiftStart.split(':')?? [null, null];
-    const [shiftEndHour, shiftEndMinute] = Day?.workingShifts?.[0].shiftEnd.split(':')?? [null, null];
-
-    let shiftStart = new Date(Day?.year, Day?.monthNumber-1, Day?.number, shiftStartHour, shiftStartMinute) ;
-    let shiftEnd = new Date(Day?.year, Day?.monthNumber-1, Day?.number, shiftEndHour,shiftEndMinute) ;
-    
-    let breakStart = new Date(Day?.year, Day?.monthNumber-1, Day?.number, breakStartHour, breakStartMinute) ;
-    let breakEnd = new Date(Day?.year, Day?.monthNumber-1, Day?.number, breakEndHour, breakEndMinute) ;
-     return{
-        title: `Смена ${Day?.workingShifts?.[0].number}`,
-        start: shiftStart,
-        end: breakStart,
-
-        shiftEnd:shiftEnd,
-        breakEnd:breakEnd,
-        breakStart:breakStart,
-
-        year:Day?.year,
-        shiftStart:Day?.workingShifts?.[0].breakStart,
-        shiftEnd:Day?.workingShifts?.[0].breakStart,
-
-    }
-  }); 
- 
 
   return (
     <div className={styles.innerWrapper}>
@@ -335,14 +243,14 @@ export const Calendar = ({
           <Calendars
             executors={executors}
             equipment={equipment}
-            resultArrayDays={resultArrayDays}
+            arrayDays={ArrayDays}
           >
           </Calendars>
         </div>
 
         <div className={styles.RowToolsBtns}>
           <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
-          <button onClick={setIsModalAddShift}>Создать рабочую смену</button>
+          {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
         </div>
 
 
@@ -395,54 +303,7 @@ export const Calendar = ({
                   />
                 </div>
 
-                {/* <div className={styles.row}>
-                  <Select
-                    name="valueObj"
-                    value={valueObj}
-                    width="380px"
-                    placeholder="Сварщик или обородование"
-                    onChange={(event) => {
-                      setValueObj(event.value)
-                    }}
-                    options={optObs}
-                  />
-                </div> */}
-
-
-                {/* {valueObj === 1
-                  ? (
-                    <div className={styles.row}>
-                      <Select
-                        name="valueEquipment"
-                        value={valueEquipment}
-                        width="380px"
-                        placeholder="Обородование"
-                        onChange={(event) => {
-                          setValueEquipment(event.value)
-                        }}
-                        options={equipmentOptions}
-                      />
-                    </div>
-
-                  )
-                  : (
-                    <div className={styles.row}>
-                      <Select
-                        name="valueExecutors"
-                        value={valueExecutors}
-                        width="380px"
-                        placeholder="Сотрудники"
-                        onChange={(event) => {
-                          setValueExecutors(event.value)
-                        }}
-                        options={executorsOptions}
-                      />
-                    </div>
-                  )
-                } */}
-
-
-
+                 
                 <div className={styles.row}>
 
 

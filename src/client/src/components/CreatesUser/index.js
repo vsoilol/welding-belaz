@@ -345,6 +345,9 @@ const CreatesUser = ({
 
       </Tabs>
 
+       {
+        
+       }
 
       <div className={styles.tableWrapper}>
         {panelId === 0

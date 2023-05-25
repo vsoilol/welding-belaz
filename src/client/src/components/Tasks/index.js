@@ -162,7 +162,8 @@ export const Tasks = ({
     };
   });
   const getDocument = (numberTask) => {
-    const number = combinedArray?.find(task => task.number === numberTask).id;
+    const number = tasks?.tasks.find(task => task.number === numberTask).id;
+    
     api.get(`/file/seamPassport/${number}`, {
       responseType: "arraybuffer",
       dataType: "blob",
@@ -176,13 +177,6 @@ export const Tasks = ({
       })
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
-
-
-  const combinedArray = tasks?.tasks?.concat(tasks.fullNames)
-    .sort((a, b) => new Date(a.weldingDate
-      .split('.')
-      .reverse()
-      .join('-')) - new Date(b.weldingDate.split('.').reverse().join('-'))).reverse();
 
 
   function comparisonDate(weldingDate) {
@@ -240,20 +234,20 @@ export const Tasks = ({
     },
     {
       title: "Наименование изделия",
-      field: "seam.product.name",
+      field: "product.name",
       customFilterAndSearch: (term, rowData) => {
-        return rowData?.seam?.product?.name?.toLowerCase().includes(term.toLowerCase()) ||
-          rowData?.seam?.product?.number?.toLowerCase().includes(term.toLowerCase())
+        return rowData?.product?.name?.toLowerCase().includes(term.toLowerCase()) ||
+          rowData?.product?.number?.toLowerCase().includes(term.toLowerCase())
       },
       render: (rowData) => {
-        if (rowData?.seam?.product) {
-          return <p>{rowData.seam.product.name} {rowData.seam.product.number}</p>
+        if (rowData?.product) {
+          return <p>{rowData.product.name} {rowData.product.number}</p>
         } else {
           return <p>-</p>
         }
       }
     },
-    {
+    /* {
       title: "Уникальный номер",
       field: "uniqueNumber",
       customFilterAndSearch: (term, rowData) => {
@@ -267,21 +261,21 @@ export const Tasks = ({
           return <p>-</p>
         }
       }
-    },
+    }, */
     {
       title: "Наименование узла",
-      field: "seam.knot.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.knot ?
-        <p>{`${rowData.seam.knot.name} ${rowData.seam.knot.number}`}</p> :
+      field: "knot.name",
+      customFilterAndSearch: (term, rowData) => rowData?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) => rowData?.knot ?
+        <p>{`${rowData.knot.name} ${rowData.knot.number}`}</p> :
         <p>-</p>
     },
     {
       title: "Наименование детали",
-      field: "seam.detail.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.detail ?
-        <p>{`${rowData.seam.detail.name} ${rowData.seam.detail.number}`}</p> :
+      field: "detail.name",
+      customFilterAndSearch: (term, rowData) => rowData?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) => rowData?.detail ?
+        <p>{`${rowData.detail.name} ${rowData.detail.number}`}</p> :
         <p>-</p>
     },
     {
@@ -356,7 +350,7 @@ export const Tasks = ({
       title: "№ задания»", field: "number",
     },
     {
-      title: "Номер шва", field: "seam.number",
+      title: "Номер шва", field: "seamNumber",
     },
     {
       title: "Количество швов", field: "manufacturedAmount",
@@ -382,7 +376,7 @@ export const Tasks = ({
     },
     {
       title: "Наименование изделия",
-      field: "seam.product.name",
+      field: "product.name",
       customFilterAndSearch: (term, rowData) => {
         return rowData?.seam?.product?.name?.toLowerCase().includes(term.toLowerCase()) ||
           rowData?.seam?.product?.number?.toLowerCase().includes(term.toLowerCase())
@@ -397,7 +391,7 @@ export const Tasks = ({
     },
     {
       title: "Наименование узла",
-      field: "seam.knot.name",
+      field: "knot.name",
       customFilterAndSearch: (term, rowData) => rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
       render: (rowData) => rowData?.seam?.knot ?
         <p>{`${rowData.seam.knot.name} ${rowData.seam.knot.number}`}</p> :
@@ -405,7 +399,7 @@ export const Tasks = ({
     },
     {
       title: "Наименование детали",
-      field: "seam.detail.name",
+      field: "detail.name",
       customFilterAndSearch: (term, rowData) => rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
       render: (rowData) => rowData?.seam?.detail ?
         <p>{`${rowData.seam.detail.name} ${rowData.seam.detail.number}`}</p> :
@@ -598,7 +592,7 @@ export const Tasks = ({
           <Table
             title="Сменные задания на сварку"
             columns={userRole === "Admin" || userRole === "Master" ? columns : columnsWelder}
-            data={combinedArray}
+            data={tasks?.tasks}
             isLoading={isRequesting}
             actions={
               userRole === "Admin" || userRole === "Master"

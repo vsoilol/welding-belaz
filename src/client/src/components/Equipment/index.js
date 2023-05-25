@@ -1152,10 +1152,10 @@ export const Equipment = ({
                     />
                   </div>
 
-                  {userRole === "Admin" || userRole === "Master"
+                  {/* {userRole === "Admin" || userRole === "Master"
                     ?<Upload ></Upload>
                     :null
-                  }
+                  } */}
                   <div className={styles.row}>
                     <Button
                       disabled={
