@@ -160,15 +160,19 @@ export const ProductionArea = ({
       },
     ],
     production_sites: [
-      {
+      (userRole === "Admin" || userRole === "Master") && {
         title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
+        render: (rowData) => (
+          <img
+            className={styles.deleteIcon}
+            src={deleteIcon}
+            onClick={() => {
+              setdeleteProdModal(true);
+              setidProduct(rowData?.id)
+            }}
+          />
+        ),
+      },      
       {
         title: "Наименование производственного участка ",
         field: "name",
@@ -203,7 +207,7 @@ export const ProductionArea = ({
           // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
         },
       },
-    ],
+    ].filter(column => column),
     posts: [
       {
         title: "Наименование поста ",

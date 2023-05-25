@@ -104,3 +104,20 @@ h1{
   overflow-x: hidden;
   height: 400px;
 }
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px;
+}
+
+.buttonXLS .XLS{
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  background-color: rgb(16, 121, 63) !important;
+  border-radius: 10px;
+}
+
+
+ 

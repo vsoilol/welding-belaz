@@ -39,8 +39,7 @@ import { Product } from "components/WorkPlace/components";
 import { Knot } from "components/WorkPlace/components";
 import { Detail } from "components/WorkPlace/components";
 import { Seam } from "components/WorkPlace/components";
-
-import { Weldingtask } from "components/WorkPlace/components";
+ 
 
 
 import deleteIcon from "assets/icons/delete.png";
@@ -222,8 +221,7 @@ export const WorkPlace = ({
           value_panel2={value_panel2}
           userRole={userRole}
           addWorkshop={addWorkshop}
-          editWorkshop={editWorkshop}
-
+          editWorkshop={editWorkshop} 
           deleteProduct={deleteProduct}
           deleteIcon={deleteIcon}
         />
@@ -247,7 +245,7 @@ export const WorkPlace = ({
           userRole={userRole}
           deleteProduct={deleteProduct}
           deleteIcon={deleteIcon}
-          addArea={addArea}
+          addArea={addArea} 
           editArea={editArea}
         />
       )
@@ -269,7 +267,7 @@ export const WorkPlace = ({
           userRole={userRole}
           deleteProduct={deleteProduct}
           deleteIcon={deleteIcon}
-          addPosts={addPosts}
+          addPosts={addPosts} 
           editPosts={editPosts}
         />
       )
@@ -290,7 +288,7 @@ export const WorkPlace = ({
           value_panel2={value_panel2}
           userRole={userRole}
           deleteProduct={deleteProduct}
-          deleteIcon={deleteIcon}
+          deleteIcon={deleteIcon} 
           addWorkplace={addWorkplace}
           editWorkplace={editWorkplace}
         />
@@ -312,7 +310,7 @@ export const WorkPlace = ({
           detail={detail}
           seam={seam}
           texprocwelding={texprocwelding}
-          value_panel={value_panel}
+          value_panel={value_panel} 
           value_panel2={value_panel2}
           userRole={userRole}
 
@@ -403,14 +401,9 @@ export const WorkPlace = ({
 
 
     else if (primaryPanel === 2  ) {
-      return (
-         <Weldingtask 
-         weldingtask={weldingtask}
-         executors={executors}
-         />
+      return (       null
       )
-    }
-
+    } 
 
     else {
       return (
@@ -457,7 +450,7 @@ export const WorkPlace = ({
             <Tab label="Рабочие места" />
           </Tabs>
         )
-        :<div></div>
+        :null
          
       }
       {workplaceValue === 1
@@ -477,11 +470,11 @@ export const WorkPlace = ({
             <Tab label="Сварные швы" />
           </Tabs>
         )
-        :<div></div>
+        :null
       }
        {workplaceValue === 2
-        ? <div></div>
-        : <div></div>
+        ? null
+        : null
       }
 
 

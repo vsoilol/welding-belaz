@@ -197,20 +197,24 @@ export const Tasks = ({
   }
 
   const columns = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true);
-          setidPlan(rowData?.id)
-        }}></img>
-      }
-    },
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteTaskModal(true);
+            setidPlan(rowData?.id)
+          }}
+        />
+      ),
+    },  
     {
       title: "№ задания»", field: "number",
     },
     {
-      title: "Номер шва", field: "seam.number",
+      title: "Номер шва", field: "seamNumber",
     },
     {
       title: "Количество швов", field: "manufacturedAmount",
@@ -244,6 +248,21 @@ export const Tasks = ({
       render: (rowData) => {
         if (rowData?.seam?.product) {
           return <p>{rowData.seam.product.name} {rowData.seam.product.number}</p>
+        } else {
+          return <p>-</p>
+        }
+      }
+    },
+    {
+      title: "Уникальный номер",
+      field: "uniqueNumber",
+      customFilterAndSearch: (term, rowData) => {
+        return rowData?.uniqueNumber?.toLowerCase().includes(term.toLowerCase()) ||
+          rowData?.uniqueNumber?.toLowerCase().includes(term.toLowerCase())
+      },
+      render: (rowData) => {
+        if (rowData?.uniqueNumber) {
+          return <p>{rowData?.uniqueNumber}</p>
         } else {
           return <p>-</p>
         }
@@ -331,7 +350,7 @@ export const Tasks = ({
       ),
       width: 54,
     },
-  ];
+  ].filter(column => column);
   const columnsWelder = [
     {
       title: "№ задания»", field: "number",
@@ -464,8 +483,7 @@ export const Tasks = ({
   };
   const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
   const [AmountManufactured, setAmountManufactured] = useState(0);
-  const [idPlan, setidPlan] = useState("");
-  const [valChioseMaster, setvalChioseMaster] = useState(masters[0]?.id);
+  const [idPlan, setidPlan] = useState(""); 
 
 
 
@@ -552,16 +570,22 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-      <Tabs
-        value={value_panel}
-        onChange={ChangePanels}
-        indicatorColor="primary"
-        textColor="primary"
-        aria-label="full width tabs example"
-      >
-        <Tab label="Сменные задания на сварку " />
-        <Tab label="Ежедневный план" />
-      </Tabs>
+      {userRole === "Admin" || userRole === "Master"
+        ? (
+          <Tabs
+            value={value_panel}
+            onChange={ChangePanels}
+            indicatorColor="primary"
+            textColor="primary"
+            aria-label="full width tabs example"
+          >
+            <Tab label="Сменные задания на сварку " />
+            <Tab label="Ежедневный план" />
+          </Tabs>
+        )
+        : null
+      }
+
 
       <div className={styles.tableWrapper}>
 
@@ -620,11 +644,7 @@ export const Tasks = ({
               loadTasks={loadTasks}
             />
           )
-          : (
-            <div className={styles.TableToFixed}>
-
-            </div>
-          )
+          : null
         }
 
         {/*Ввод выработки и брака*/}

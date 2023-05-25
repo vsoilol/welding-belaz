@@ -206,15 +206,19 @@ export const Place = ({
       },
     ],
     jobs_place: [
-      {
+      (userRole === "Admin" || userRole === "Master") && {
         title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
+        render: (rowData) => (
+          <img
+            className={styles.deleteIcon}
+            src={deleteIcon}
+            onClick={() => {
+              setdeleteProdModal(true);
+              setidProduct(rowData?.id)
+            }}
+          />
+        ),
+      }, 
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
@@ -264,7 +268,7 @@ export const Place = ({
           return <span>{rowData?.post?.number ?? "-"}</span>
         },
       },
-    ],
+    ].filter(column => column),
 
 
   };

@@ -450,7 +450,7 @@ span.obj {
   .loader {
     width: 8vw;
     height: 8vw;
-    border: 0.8vw solid white;
+    border: 0.8vw solid rgb(0, 0, 0);
     border-radius: 50%;
     display: inline-block;
     position: absolute;
@@ -474,7 +474,7 @@ span.obj {
      height: 11.4vw;
      border-radius: 50%;
      border: .8vw solid;
-     border-color: whitesmoke transparent;
+     border-color: rgb(0, 0, 0) transparent;
   }
  
   @keyframes rotation {

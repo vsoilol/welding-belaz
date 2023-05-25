@@ -1,76 +1,102 @@
+import React, { useState, useEffect, useRef } from "react";
+import "../Upload/styles.css";
+import Button from "components/shared/Button";
+import api from "services/api";
+import ModalWindow from "components/shared/ModalWindow";
+import { Formik } from "formik";
 
-import React, { useEffect } from "react";
-import     "../Upload/styles.css";
+export const Upload = (tool) => {
+  const [fileSelected, setFileSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [statusText, setStatusText] = useState("Подождите, файл загружается");
+  const fileInputRef = useRef(null);
+  const tools = {
+    0: {
+      url: "uploadFile/users",
+      message: "Файл пользователей успешно загружен"
+    },
+    1: {
+      url: "uploadFile/product-account",
+      message: "Файл плана успешно загружен"
+    },
+  }
+  const saveFileSelected = (e) => {
+    const file = e.target.files[0];
+    setFileSelected(file);
+    importFile(file);
+  };
+  const importFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      setLoading(true);
+      const response = await api.post(`${tools[tool.tool].url}`, formData);
+      setStatusText("Файл был успешно загружен");
+      setTimeout(() => {
+        setStatusText("Подождите, файл загружается");
+        setLoading(false);
+      }, 5000);
+      fileInputRef.current.value = null;
+    } catch (error) {
+      console.log(error);
+    } finally {
 
-export const Upload = () => {
+    }
+    setFileSelected(null);
+  };
 
-  setTimeout(() => { 
-
-      try {
-        document.querySelector(".btn").addEventListener("click",function () { 
-          document.querySelector("input").click();
-
-          document.getElementById('fileID')
-          .addEventListener('change', getFile)
-           
-      })
-      function getFile(event) {
-        const input = event.target
-        if ('files' in input && input.files.length > 0) {
-          placeFileContent(
-            document.getElementById('content-target'),
-            input.files[0])
-        }
-      }
-      
-      function placeFileContent(target, file) {
-        readFileContent(file).then(content => {
-          target.value = content;
-          document.getElementById('content-target').innerHTML = content
-
-          // // отправляем через xhr
-          // var xhr = new XMLHttpRequest();
-          // xhr.onload = function() {
-          //     console.log("Отправка завершена");
-          //     console.log(xhr);
-          // };
-          // xhr.open("post", "/fileUpload", true);
-          // xhr.send(formData);
-
-
-        }).catch(error => console.log(error))
-      }
-      
-      function readFileContent(file) {
-        const reader = new FileReader()
-        return new Promise((resolve, reject) => {
-          reader.onload = event => resolve(event.target.result)
-          reader.onerror = error => reject(error)
-          reader.readAsText(file)
-        })
-      }
-      } catch (error) {
-        
-      } 
-  }, 2000);
-
+  function handleButtonClick() {
+    fileInputRef.current.click();
+  }  
   return (
-    <div className="UploadContainer">
-      <h1>Загрузка файлов</h1>
+    <div className="buttonXLS">
+      <form>
+        <Button className="XLS" onClick={handleButtonClick}>
+          Загрузить файл
+        </Button>
+        <input
+          ref={fileInputRef}
+          hidden
+          accept=".xlsx, .dbf"
+          type="file"
+          onChange={saveFileSelected}
+        />
+      </form>
 
 
-      <div className="container">
-        <div className="card">  
 
-        <div className="drop_box"> 
-            <p>Поддерживаемые файлы: PDF, TEXT, DOC , DOCX</p>
-            <input type="file" hidden accept=".doc,.docx,.pdf,.txt" id="fileID"  ></input>
-            <button className="btn">Выберите Файл</button>
-          </div>
+      {loading
+        ? (
+          <ModalWindow
+            isOpen={loading}
+            headerText="Загрузка файла"
+            setIsOpen={(state) => {
+              setLoading(false)
+            }}
+            wrapperStyles={{ width: 420 }}
+          >
+            <Formik
+              enableReinitialize
+              onSubmit={(variables) => {
+                const { id, ...dataToSend } = variables;
+                setLoading(false)
+              }}
+            >
+              {({
+                handleSubmit,
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <div>
+                    <h4 style={{ padding: "35px 40px" }}>{statusText}</h4>
+                  </div>
+                </form>
+              )}
+            </Formik>
+          </ModalWindow>
+        )
+        :null
+      }
 
-          <p id="content-target"></p>
-        </div>
-      </div>
     </div>
   );
 };

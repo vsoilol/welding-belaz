@@ -22,7 +22,7 @@ import styles from "./styles.module.css";
 
 import deleteIcon from "assets/icons/delete.png";
 import api from "services/api";
-
+import {Upload} from "components/Upload/index";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
@@ -117,14 +117,18 @@ export const TexProcWelding = ({
   const [idProc, setidProc] = useState("");
   const [idInstr, setidInstr] = useState("");
   const columns = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteProcModal(true);
-          setidProc(rowData?.id)
-        }}></img>
-      }
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteProcModal(true);
+            setidProc(rowData?.id)
+          }}
+        />
+      ),
     },
     {
       title: "Наименование", field: "name",
@@ -173,16 +177,20 @@ export const TexProcWelding = ({
     // {
     //   title: "Количество проходов", field: "technologicalInstructions[0].seam.product.productType",
     // },
-  ]
+  ].filter(column => column)
   const colinstructions = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true);
-          setidInstr(rowData?.id)
-        }}></img>
-      }
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteTaskModal(true);
+            setidInstr(rowData?.id)
+          }}
+        />
+      ),
     },
     {
       title: "Наименование", field: "name",
@@ -243,7 +251,7 @@ export const TexProcWelding = ({
         </p>
       ),
     }
-  ]
+  ].filter(column => column)
   const renderRowChildren = (rowData) => {
     return (
       rowData?.weldPassageInstructions?.length > 0 && (
@@ -348,114 +356,6 @@ export const TexProcWelding = ({
     );
   };
 
-
-  const renderRowChildrenTexProc = (rowData) => {
-    return (
-      rowData && (
-        <TableContainer component={Paper}>
-          <MaterialTable aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Изделие
-                </TableCell>
-
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Сборочные узлы
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                  colSpan={2}
-                >
-                  <p
-                    style={{
-                      textAlign: "center",
-                    }}
-                  >Диапазоны допустимых значений контролируемых параметров </p>
-                  <p
-                    style={{
-                      textAlign: "center",
-                    }}
-                  >(сварочный ток, напряжение на дуге) </p>
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Швы
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Детали
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Размеры шва
-                </TableCell>
-                <TableCell
-                  style={{
-                    borderBottom: 0,
-                  }}
-                  align="center"
-                >
-                  Количество проходов
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell />
-                <TableCell />
-                <TableCell align="center">min</TableCell>
-                <TableCell align="center">max</TableCell>
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell align="center" component="th" scope="row">
-                  {rowData?.technologicalInstructions?.seam?.product?.name ?? "-"}
-                </TableCell>
-                <TableCell align="center" component="th" scope="row"> -   </TableCell>
-                <TableCell align="center" component="th" scope="row"> -   </TableCell>
-                <TableCell align="center" component="th" scope="row"> -   </TableCell>
-                <TableCell align="center" component="th">    -   </TableCell>
-
-                <TableCell align="center" component="th">     -  </TableCell>
-                <TableCell align="center" component="th">     -  </TableCell>
-                <TableCell align="center" component="th">     -  </TableCell>
-              </TableRow>
-            </TableBody>
-          </MaterialTable>
-        </TableContainer>
-      )
-    );
-  };
   //select Сварочный шов  
   const SeamOptions = seam?.map((item) => {
     return {
@@ -1018,7 +918,7 @@ export const TexProcWelding = ({
                         pdmSystemFileLink: ""
                       });
 
-                      api.post(`/eventLog`,{
+                      api.post(`/eventLog`, {
                         "information": "Открыл модальное окно добавления технологического процесса"
                       })
                     },
@@ -1031,7 +931,7 @@ export const TexProcWelding = ({
                       setisModalpProcOpen(true);
                       setmodalDataNumb(1)
                       setidProc(rowData?.id)
-                      api.post(`/eventLog`,{
+                      api.post(`/eventLog`, {
                         "information": "Открыл модальное окно редактирования технологического процесса"
                       })
                     },
@@ -1039,7 +939,6 @@ export const TexProcWelding = ({
                 ]
                 : []
             }
-            /* renderRowChildren={renderRowChildrenTexProc} */
             deleteAction={userRole === "admin" ? deleteEquipment : null}
           />
         </TabPanel>
@@ -1068,7 +967,7 @@ export const TexProcWelding = ({
                       setIsModalOpen(true);
                       setIsModalOpenNumb(0);
                       setValuetVkladka(1)
-                      api.post(`/eventLog`,{
+                      api.post(`/eventLog`, {
                         "information": "Открыл модальное окно добавления технологической инструкции"
                       })
                     },
@@ -1086,7 +985,7 @@ export const TexProcWelding = ({
                       setidPassages(rowData.id);
                       setvalueNameInst(rowData.name);
                       setpassagesCnange(rowData.weldPassageInstructions)
-                      api.post(`/eventLog`,{
+                      api.post(`/eventLog`, {
                         "information": "Открыл модальное окно редактирования технологической инструкции"
                       })
                     },
@@ -1159,12 +1058,15 @@ export const TexProcWelding = ({
                 />
               </div>
 
-
+             
               {isModalOpenNumb === 0
                 ? <WeldingInputs />
                 : <CnangeWeldingInputs />
               }
-
+               {userRole === "Admin" || userRole === "Master"
+                ? <Upload></Upload>
+                : null
+              }
 
             </form>
 
@@ -1230,12 +1132,12 @@ export const TexProcWelding = ({
                     name="number"
                     autoComplete="off"
                     placeholder="Номер технологического процесса"
-                    onBlur={handleBlur} 
+                    onBlur={handleBlur}
                   />
                 </div>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => { 
+                    onChange={(e) => {
                       handleChange(e);
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
@@ -1246,6 +1148,10 @@ export const TexProcWelding = ({
                     onBlur={handleBlur}
                   />
                 </div>
+                {userRole === "Admin" || userRole === "Master"
+                  ? <Upload></Upload>
+                  : null
+                }
                 <div className={styles.row}>
                   <Button
                     type="submit"

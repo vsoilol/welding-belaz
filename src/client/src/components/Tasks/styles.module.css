@@ -278,3 +278,16 @@ h3.ExistingPlan{
   font-weight: 700;
   padding-left: 0;
 }
+
+
+
+.RowToolsBTNS{
+  display: flex;
+}
+
+.RowToolsBTNS .Upload{
+  margin-left: 20px;
+  height: 40px;
+  position: relative;
+  top: 40px;
+}
