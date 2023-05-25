@@ -7,7 +7,6 @@ namespace Belaz.WeldingApp.Common.Entities.TaskInfo;
 
 public class WeldingTask : Entity
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Number { get; set; }
 
     public SeamStatus Status { get; set; } = SeamStatus.Accept;

@@ -33,7 +33,7 @@ public class RecordDto : IMapFrom<WeldingRecord>
 
     public WelderBriefDto Welder { get; set; } = null!;
 
-    public MasterBriefDto Master { get; set; } = null!;
+    public UserFullNameDto Master { get; set; } = null!;
 
     public int? WeldingTaskNumber { get; set; }
 
@@ -47,6 +47,12 @@ public class RecordDto : IMapFrom<WeldingRecord>
             .ForMember(
                 dto => dto.WeldingStart,
                 opt => opt.MapFrom(x => x.WeldingStartTime.ToHoursMinutesSecondsString())
+            )
+            .ForMember(
+                dto => dto.Master,
+                opt =>
+                    opt.MapFrom(x =>
+                        x.WeldPassage!.WeldingTask.Master!.UserInfo ?? x.Master!.UserInfo)
             )
             .ForMember(
                 dto => dto.WeldingDuration,

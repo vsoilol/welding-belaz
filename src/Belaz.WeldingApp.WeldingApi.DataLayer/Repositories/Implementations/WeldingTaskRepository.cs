@@ -40,6 +40,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         var weldingTasksQuery = _context.WeldingTasks;
 
         var weldingTasks = await weldingTasksQuery
+            .OrderByDescending(_ => _.Number)
             .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
