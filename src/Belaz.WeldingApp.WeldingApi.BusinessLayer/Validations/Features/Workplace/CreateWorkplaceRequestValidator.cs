@@ -10,7 +10,9 @@ public class CreateWorkplaceRequestValidator : AbstractValidator<CreateWorkplace
 {
     public CreateWorkplaceRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
+        RuleFor(model => model.Number)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(1);
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)

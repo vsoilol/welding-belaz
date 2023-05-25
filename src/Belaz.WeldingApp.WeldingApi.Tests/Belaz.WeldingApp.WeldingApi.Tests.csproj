@@ -11,6 +11,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="MockQueryable.Moq" Version="6.0.1" />
+    <PackageReference Include="Moq" Version="4.18.4" />
+    <PackageReference Include="Moq.EntityFrameworkCore" Version="6.0.1.4" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
@@ -18,10 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ControllerTests\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="ManagerTests\" />
-    <Folder Include="PresenterTests\" />
+    <ProjectReference Include="..\Belaz.WeldingApp.WeldingApi.BusinessLayer\Belaz.WeldingApp.WeldingApi.BusinessLayer.csproj" />
   </ItemGroup>
 
 </Project>
