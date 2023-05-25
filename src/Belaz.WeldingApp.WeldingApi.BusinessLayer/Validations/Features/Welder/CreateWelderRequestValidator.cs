@@ -19,15 +19,25 @@ public class CreateWelderRequestValidator : AbstractValidator<CreateWelderReques
                 >(context)
             );
 
-        RuleFor(model => model.FirstName).Cascade(CascadeMode.Stop).NotEmpty();
+        RuleFor(model => model.FirstName)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
 
-        RuleFor(model => model.LastName).Cascade(CascadeMode.Stop).NotEmpty();
+        RuleFor(model => model.LastName)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
 
-        RuleFor(model => model.MiddleName).Cascade(CascadeMode.Stop).NotEmpty();
+        RuleFor(model => model.MiddleName)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
 
-        RuleFor(model => model.ServiceNumber).Cascade(CascadeMode.Stop).NotEmpty();
+        RuleFor(model => model.ServiceNumber)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
 
-        RuleFor(model => model.Position).Cascade(CascadeMode.Stop).NotEmpty();
+        RuleFor(model => model.Position)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)
