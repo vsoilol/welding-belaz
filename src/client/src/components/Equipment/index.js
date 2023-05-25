@@ -22,7 +22,7 @@ import styles from "./styles.module.css";
 import imgcalendar from "assets/icons/calendar.png";
 import deleteIcon from "assets/icons/delete.png";
 
-
+import {Upload} from "components/Upload/index";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import api from "services/api";
@@ -146,15 +146,19 @@ export const Equipment = ({
 
 
   const columns = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true);
-          setweldingEquipmentId(rowData?.id)
-        }}></img>
-      }
-    },
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteTaskModal(true);
+            setweldingEquipmentId(rowData?.id)
+          }}
+        />
+      ),
+    }, 
     { title: "Наименование", field: "name" },
     { title: "Маркировка", field: "marking" },
     {
@@ -206,7 +210,7 @@ export const Equipment = ({
         return <img onClick={e => OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
       },
     }
-  ];
+  ].filter(column => column);
 
   const columns2 = [
     {
@@ -609,8 +613,7 @@ export const Equipment = ({
                 ]
                 : []
             }
-            renderRowChildren={renderRowChildren}
-            deleteAction={userRole === "admin" ? deleteEquipment : null}
+            renderRowChildren={renderRowChildren} 
           />
         </TabPanel>
         {/*Простои оборудования*/}
@@ -625,7 +628,7 @@ export const Equipment = ({
             data={equipment[1]}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin"
+              userRole === "Admin" || userRole === "Master"
                 ? [
                   {
                     icon: "add",
@@ -648,8 +651,7 @@ export const Equipment = ({
                   },
                 ]
                 : []
-            }
-            deleteAction={userRole === "admin" ? deleteEquipment : null}
+            } 
           />
         </TabPanel>
 
@@ -1150,7 +1152,10 @@ export const Equipment = ({
                     />
                   </div>
 
-
+                  {/* {userRole === "Admin" || userRole === "Master"
+                    ?<Upload ></Upload>
+                    :null
+                  } */}
                   <div className={styles.row}>
                     <Button
                       disabled={
@@ -1251,6 +1256,7 @@ export const Equipment = ({
                     />
                   </div>
 
+                  
 
 
                   <div className={styles.row}>

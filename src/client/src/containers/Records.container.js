@@ -6,6 +6,7 @@ const mapStateToProps = (state) => {
   return {
     records: state.records.records,
     isRequesting: state.records.isRequesting,
+    userRole: state.auth.user.role,
   };
 };
 

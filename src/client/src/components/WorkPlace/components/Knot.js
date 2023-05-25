@@ -158,138 +158,22 @@ export const Knot = ({
     }
 
   }
-
-  const columns = {
-    workshops: [
-      {
-        title: "Наименование цеха",
-        field: "name",
-      },
-      {
-        title: "Номер  цеха",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
-        },
-      },
-    ],
-    production_sites: [
-      {
-        title: "Наименование производственного участка ",
-        field: "name",
-      },
-      {
-        title: "Номер  производственного участка ",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
-            </div>
-          )
-
-          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
-        },
-      },
-    ],
-    posts: [
-      {
-        title: "Наименование поста ",
-        render: (rowData) => {
-          return <p>Пост {rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  поста ",
-        field: "number",
-      },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
-        },
-      },
-    ],
-    jobs_place: [
-      {
-        title: "Наименование рабочего места ",
-        render: (rowData) => {
-          return <p>Рабочее место {rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  рабочего места ",
-        field: "number",
-      },
-    ],
-
-    goods: [
-      {
-        title: "Наименование изделия ", field: "name"
-      },
-      {
-        title: "Номер  изделия ", field: "number"
-      },
-
-      {
-        title: "Номер  цеха ", field: "workshop.number"
-      },
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-
-      // {
-      //   title: "Закрерить сварщика",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix} onClick={e => {
-      //       setcreateTask(1);
-      //       setValuegoTo(2);
-      //       setvalueChoise(rowData.name)
-      //       setIdIzdelia(rowData.id)
-      //     }}>Закрерить</p>;
-      //   },
-      // },
-
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id); setDisplayFixed(rowData?.name) }}>Узел </p>
-              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
-            </div>
-          )
-        },
-      },
-    ],
+ 
+  const columns = {  
     node: [
-      {
+      (userRole === "Admin" || userRole === "Master") && {
         title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
+        render: (rowData) => (
+          <img
+            className={styles.deleteIcon}
+            src={deleteIcon}
+            onClick={() => {
+              setdeleteProdModal(true);
+              setidProduct(rowData?.id)
+            }}
+          />
+        ),
+      },    
       {
         title: "Наименование узла ", field: "name"
       },
@@ -302,33 +186,13 @@ export const Knot = ({
       },
       {
         title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
+      }, 
       {
         title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
       },
       {
         title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      // {
-      //   title: "Закрерить сварщика",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix} onClick={e => {
-      //       setcreateTask(1);
-      //       setValuegoTo(2);
-      //       setvalueChoise(rowData.name)
-      //       setIdIzdelia(rowData.id)
-      //     }}>Закрерить</p>;
-      //   },
-      // },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
+      }, 
       {
         title: "Перерейти к",
         render: (rowData) => {
@@ -341,129 +205,7 @@ export const Knot = ({
         },
       },
 
-    ],
-    details: [
-      {
-        title: "Наименование детали ", field: "name"
-      },
-      {
-        title: "Номер  детали ", field: "number"
-      },
-
-      {
-        title: "Номер  цеха ", field: "workshop.number"
-      },
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
-      {
-        title: "Наименование   технологического процесса  ", field: "technologicalProcess.name"
-      },
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      {
-        title: "Закрепить изделие",
-        render: (rowData) => {
-          return <p className={styles.Fix}>Закрепить</p>;
-        },
-      },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p onClick={e => setIsModalDisplayFix(true)} className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
-      {
-        title: "Перерейти к",
-        render: (rowData) => {
-          return (
-            <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы"); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
-            </div>
-          )
-        },
-      },
-    ],
-    welding_seam: [
-      {
-        title: "Наименование сварного шва ",
-        render: (rowData) => {
-          return <p>{rowData.number}</p>;
-        },
-      },
-      {
-        title: "Номер  сварного шва ", field: "number"
-      },
-
-      {
-        title: "Номер  цеха ", field: "workshop.number"
-      },
-      {
-        title: "Номер  производственного участка ", field: "productionArea.number"
-      },
-      // {
-      //   title: "Номер  рабочего места  ", field: "workplace.number"
-      // },
-
-      {
-        title: "Номер  технологического процесса  ", field: "technologicalProcess.number"
-      },
-      {
-        title: "Технологическая инструкция", field: "technologicalInstruction.name"
-      },
-      {
-        title: "Наименование изделия ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  изделия ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      {
-        title: "Наименование узла ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  узла ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      {
-        title: "Наименование детали ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.name ?? "-"}</span>
-        },
-      },
-      {
-        title: "Номер  детали ",
-        render: (rowData) => {
-          return <span>{rowData?.product?.mainProduct?.mainProduct?.mainProduct?.number ?? "-"}</span>
-        },
-      },
-      // {
-      //   title: "Закрепить задание",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix}>Закрепить</p>;
-      //   },
-      // },
-      // {
-      //   title: "Просмотреть закрепленные",
-      //   render: (rowData) => {
-      //     return <p className={styles.Fix}>Просмотреть</p>;
-      //   },
-      // },
-    ],
+    ].filter(column => column), 
   };
 
   const columnsFix = {
@@ -764,6 +506,8 @@ export const Knot = ({
     },
   ]
 
+  
+
 
   //Select выбор сотрудника
   const optExecutors = exec?.map((item) => {
@@ -894,9 +638,7 @@ export const Knot = ({
               </TabPanel>
             </div>
           )
-          : (
-            <div></div>
-          )
+          : null
         }
 
         {value_goTo === 0
@@ -956,9 +698,7 @@ export const Knot = ({
               />
             </TabPanel>
           )
-          : (
-            <div></div>
-          )
+          : null
         }
 
 
@@ -1024,9 +764,7 @@ export const Knot = ({
 
             </div>
           )
-          : (
-            <div></div>
-          )
+          : null
 
         }
 
@@ -1084,20 +822,7 @@ export const Knot = ({
                     onBlur={handleBlur}
                     autoComplete="off"
                   />
-                </div>
-
-                {/* <div className={styles.row}>
-                  <Select
-                    name="valueWorkplace"
-                    value={valueWorkplace}
-                    width="380px"
-                    placeholder="Рабочее место"
-                    onChange={(event) => {
-                      setValueWorkplace(event.value)
-                    }}
-                    options={workplaceIdOptions}
-                  />
-                </div> */}
+                </div> 
 
                 <div className={styles.row}>
                   <Select
@@ -1129,25 +854,14 @@ export const Knot = ({
                     onChange={(event) => setValuetTechProc(event.value)}
                     options={TechProc}
                   />
-                </div>
-
-                {/* <div className={styles.row}>
-                  <Select
-                    name="valuetTechProc"
-                    width="380px"
-                    value={valuetSeam}
-                    placeholder="Сварочный шов"
-                    onChange={(event) => setValuetSeam(event.value)}
-                    options={SeamOptions}
-                  />
-                </div> */}
+                </div> 
 
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
                     disabled={
-                      values.number == "" || values.name == "" /* || valuetSeam.length == 0 */
+                      values.number == "" || values.name == "" 
                     }
                   >
                     {modalData ? "Сохранить" : "Создать"}

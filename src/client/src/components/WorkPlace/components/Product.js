@@ -229,15 +229,19 @@ export const Product = ({
     ],
 
     goods: [
-      {
+      (userRole === "Admin" || userRole === "Master") && {
         title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
+        render: (rowData) => (
+          <img
+            className={styles.deleteIcon}
+            src={deleteIcon}
+            onClick={() => {
+              setdeleteProdModal(true);
+              setidProduct(rowData?.id)
+            }}
+          />
+        ),
+      },  
       {
         title: "Наименование изделия ", field: "name"
       },
@@ -285,7 +289,7 @@ export const Product = ({
           )
         },
       },
-    ],
+    ].filter(column => column),
     node: [
       {
         title: "Наименование узла ", field: "name"

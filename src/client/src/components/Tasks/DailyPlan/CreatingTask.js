@@ -12,8 +12,8 @@ import api from "services/api";
 import styles from "../styles.module.css";
 import errorActions from "store/error/actions";
 import { useDispatch } from "react-redux";
-
-
+import { Upload } from "components/Upload/index";
+import deleteIcon from "assets/icons/delete.png";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
@@ -48,26 +48,24 @@ export const CreatingTask = ({
     const [dateCratePlan, setdateCratePlan] = useState("");
     const [toDay, settoDay] = useState(new Date().toLocaleDateString('ru-RU'));
 
+    const [CheckIsProd,setCheckIsProd]=useState(false);
 
     const mastersOptions = masters?.map((item) => {
         return {
             value: item?.id,
             label: `${item?.middleName} ${item?.firstName}`,
         };
-    });
-
+    }); 
     const techsOptions = techs?.map((item) => {
         return {
             value: item?.id,
             label: `${item?.middleName} ${item?.firstName}`,
         };
-    });
-
-
+    }); 
     ////Работа со списком дат сущ.плана  
     const [valueAllDate, setValueAllDate] = useState([]);
     const [valueChioseDate, setvalueChioseDate] = useState(null);
-    useEffect(() => { 
+    useEffect(() => {
         fetchData();
     }, []);
     async function fetchData() {
@@ -78,12 +76,6 @@ export const CreatingTask = ({
             console.log(error);
         }
     }
-    /* useEffect(() => {
-        if (valueAllDate.length > 0) {
-            setvalueChioseDate(valueAllDate[0]);
-            GetProductionbyDate(valueAllDate[0])
-        }
-    }, [valueAllDate]); */
 
     ////Получение информации о производимой продукции по дате
     function GetProductionbyDate(date) {
@@ -96,11 +88,7 @@ export const CreatingTask = ({
                 setvalue_products(response.data);
             })
             .catch((error) => { });
-    }
-
-
-
-
+    } 
     const TabPanel = (props_panel) => {
         const { children, value, indPanel } = props_panel;
         return (
@@ -111,8 +99,21 @@ export const CreatingTask = ({
     };
     const [value_products, setvalue_products] = useState([]);
     const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
+    const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
     const columns = [
-
+        (userRole === "Admin" || userRole === "Master") && {
+            title: "Удаление",
+            render: (rowData) => (
+                <img
+                    className={styles.deleteIcon}
+                    src={deleteIcon}
+                    onClick={() => {
+                        setProductAccountId(rowData?.id)
+                        setdeleteRecordsModal(true);
+                    }}
+                />
+            ),
+        },
         {
             title: "Порядоковый номер ", field: "number"
         },
@@ -128,6 +129,15 @@ export const CreatingTask = ({
         {
             title: "Номер изделия", field: "product.product.number",
         },
+        /* {
+            title: "Уникальный номер", 
+            field: "uniqueNumber",
+            render: rowData => rowData?.uniqueNumber ? rowData?.uniqueNumber: '-',
+            customFilterAndSearch: (term, rowData) => {
+                const value = rowData?.uniqueNumber ? rowData?.uniqueNumber: '-';
+                return value.toLowerCase().includes(term.toLowerCase());
+            },
+        }, */
         {
             title: "Количество из плана ", field: "amountFromPlan"
         },
@@ -178,17 +188,16 @@ export const CreatingTask = ({
         {
             title: "Закрерить оборудование",
             render: (rowData) => {
-                return <p className={styles.Fix} onClick={e => { 
-                    setvalueChoiseWelder(true); 
-                    setProductAccountId(rowData?.id) 
-                    api.post(`/eventLog`,{
+                return <p className={styles.Fix} onClick={e => {
+                    setvalueChoiseWelder(true);
+                    setProductAccountId(rowData?.id)
+                    api.post(`/eventLog`, {
                         "information": "Открыл модальное окно закререпления оборудования"
                     })
                 }}>Закрерить</p>;
             },
         },
-
-    ]
+    ].filter(column => column);
 
 
     ////Редактирование данных плана
@@ -205,6 +214,7 @@ export const CreatingTask = ({
     const [manufacProducts, setmanufacProducts] = useState(0);
     const [acceptedProducts, setacceptedProducts] = useState(0);
     const [productreason, setproductreason] = useState("");
+    const [prodUniqueNumber , setprodUniqueNumber] = useState(0);
 
 
     ///Создание плана 
@@ -220,23 +230,20 @@ export const CreatingTask = ({
                 "newDate": new Date(dateCratePlan).toLocaleDateString('ru-RU'),
                 "productionAreaId": productionAreaId,
             })
-                .then(async (response) => { 
-                      fetchData();  
-                      console.log(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-                      setvalueChioseDate(new Date(normalizedDate).toLocaleDateString('ru-RU'));
-                      setvalueDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-                      GetProductionbyDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
+                .then(async (response) => {
+                    fetchData();
+                    console.log(new Date(normalizedDate).toLocaleDateString('ru-RU'))
+                    setvalueChioseDate(new Date(normalizedDate).toLocaleDateString('ru-RU'));
+                    setvalueDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
+                    GetProductionbyDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
 
-                      api.post(`/eventLog`,{
+                    api.post(`/eventLog`, {
                         "information": `Создание плана на ${new Date(normalizedDate).toLocaleDateString('ru-RU')}`
-                      })
+                    })
                 })
                 .catch((error) => { });
         }
-      }
-      
-
-
+    } 
     //Изменение ввода выработки и брака
     async function ChangeData() {
         try {
@@ -248,7 +255,12 @@ export const CreatingTask = ({
                         "amount": Number(prodQuantities)
                     });
                 }
-
+                if (CheckIsProd && prodUniqueNumber >= 0) {
+                    await api.put(`/productAccount/unique-number`, {
+                        "ProductAccountId ": idPlan,
+                        "UniqueNumber ": Number(CheckIsProd)
+                    });
+                } 
                 if (manufacProducts >= 0) {
                     await api.put(`/productAccount/manufacturedAmount`, {
                         "id": idPlan,
@@ -306,9 +318,7 @@ export const CreatingTask = ({
         else if (event.active === 1) {
             event.active = 0
         }
-    };
-
-
+    }; 
     ///Закрепление оборудования
     const [valueWelder, setvalueWelder] = useState("");
     async function FixoEquipment(valueWelder) {
@@ -322,10 +332,16 @@ export const CreatingTask = ({
         } catch (error) {
             console.error(error);
         }
-    }
-
-
-
+    } 
+    //Удаление записи в плане 
+    async function deleteRecords() {
+        try {
+            await api.remove(`/productAccount/${ProductAccountId}`);
+            GetProductionbyDate(valueChioseDate);
+        } catch (error) {
+            console.error(error);
+        }
+    } 
     ///Создать задание
     function CreateTask() {
         const masterId = userRole === "Admin" ? valChioseMaster : masters[0].id;
@@ -337,7 +353,7 @@ export const CreatingTask = ({
             "masterId": masterId,
         })
             .then((response) => {
-                api.post(`/eventLog`,{
+                api.post(`/eventLog`, {
                     "information": `Нажал кнопку "Создать задание"`
                 })
                 setTimeout(() => {
@@ -346,6 +362,8 @@ export const CreatingTask = ({
             })
             .catch((error) => { });
     }
+
+
     return (
         <div className={styles.TablePlan}>
             <h3>Ежедневный план</h3>
@@ -385,7 +403,7 @@ export const CreatingTask = ({
 
                     </div>
                 )
-                : <div></div>
+                : null
             }
             <div className={styles.RowTools}>
                 <div className={styles.toolsHead}>
@@ -395,7 +413,7 @@ export const CreatingTask = ({
                         value={valueChioseDate}
                         width="380px"
                         placeholder="Дата"
-                        onChange={(event) => { 
+                        onChange={(event) => {
                             setvalueChioseDate(event.value);
                             setvalueDate(event.label)
                             GetProductionbyDate(event.label)
@@ -431,15 +449,21 @@ export const CreatingTask = ({
 
 
             </div>
-            <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
-                dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
-                    ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
-                    : ''
-            }</button>
-            {userRole === "Master" || userRole === "Admin"
-                ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
-                : <div></div>
-            }
+            <div className={styles.RowToolsBTNS}>
+                <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
+                    dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
+                        ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
+                        : ''
+                }</button>
+                {userRole === "Master" || userRole === "Admin"
+                    ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
+                    : null
+                }
+                {userRole  === "Admin" || userRole === "Master"
+                    ? <div className={styles.Upload}><Upload tool={1}></Upload></div>
+                    : null
+                }
+            </div>
             <h3>План на <span>{valueChioseDate}</span></h3>
             {/* таблица плана  */}
             <TabPanel
@@ -452,18 +476,31 @@ export const CreatingTask = ({
                     actions={
                         [
                             {
+                                icon: "add",
+                                tooltip: "Добавить изделие",
+                                isFreeAction: true,
+                                onClick: () => { 
+                                  /* setIsModalOpen(true); 
+                                  setValuetOpenModal(0);
+                                  api.post(`/eventLog`,{
+                                    "information": "Открыл модальное окно добавления пользователя "
+                                  })  */
+                                },
+                              },
+                            {
                                 icon: "edit",
                                 tooltip: "Редактировать план",
                                 onClick: (event, rowData) => {
+                                    setCheckIsProd(rowData?.product?.product ? true : false); 
+                                    setprodUniqueNumber(rowData?.uniqueNumber!=null ? rowData?.uniqueNumber : "")
                                     setmodalchangeInfoproductAccount(true)
                                     setidPlan(rowData?.id)
                                     setprodQuantities(rowData?.amountFromPlan)
                                     setmanufacProducts(rowData?.amountManufactured)
-                                    setacceptedProducts(rowData?.amountAccept)
-
-                                    api.post(`/eventLog`,{
+                                    setacceptedProducts(rowData?.amountAccept)  
+                                    /* api.post(`/eventLog`, {
                                         "information": "Открыл модальное окно редактирования плана"
-                                    })
+                                    }) */
                                 },
                             },
                         ]
@@ -555,15 +592,45 @@ export const CreatingTask = ({
                             {userRole === "Master" || userRole === "Admin"
                                 ? (
                                     <div>
+                                        {/* {CheckIsProd
+                                            ?<div>
+                                                <p>Изменение уникального номера  </p>
+                                                <div className={styles.row}>
+                                                    <Input 
+                                                        onChange={(e) => {
+                                                            const re = /^[0-9]+([,.][0-9]*)?$/;
+                                                            if (e.target.value === '' || re.test(e.target.value)) {
+                                                                handleChange(e);
+                                                                setprodUniqueNumber(e.target.value)
+                                                            }
+                                                        }} 
+                                                        type="number"
+                                                        min="0"
+                                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                                                        value={prodUniqueNumber}
+                                                        name="prodUniqueNumber"
+                                                        placeholder="Уникальный номер"
+                                                        onBlur={handleBlur}
+                                                        autocomplete="off"
+                                                    /> 
+                                                </div>
+                                            </div>
+                                            :null
+                                        } */}
                                         <p>Изменение количества продукции из плана  </p>
                                         <div className={styles.row}>
                                             <Input
                                                 onChange={(e) => {
-                                                    handleChange(e);
-                                                    setprodQuantities(e.target.value)
-                                                }}
+                                                    const re = /^[0-9]+([,.][0-9]*)?$/;
+                                                    if (e.target.value === '' || re.test(e.target.value)) {
+                                                        handleChange(e);
+                                                        setprodQuantities(e.target.value)
+                                                    }
+                                                }} 
+                                                type="number"
+                                                min="0" 
                                                 style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={prodQuantities}
+                                                value={prodQuantities} 
                                                 name="prodQuantities"
                                                 placeholder="Количество забракованной продукции"
                                                 onBlur={handleBlur}
@@ -589,6 +656,8 @@ export const CreatingTask = ({
                                             />
                                         </div>
 
+                                        
+
                                         {userRole != "Admin"
                                             ? (
                                                 <div className={styles.row}>
@@ -602,12 +671,12 @@ export const CreatingTask = ({
                                                     </Button>
                                                 </div>
                                             )
-                                            : <div></div>
+                                            : null
                                         }
 
                                     </div>
                                 )
-                                : <div></div>
+                                : null
                             }
 
                             {userRole === "Inspector" || userRole === "Admin"
@@ -658,7 +727,7 @@ export const CreatingTask = ({
                                         </div>
                                     </div>
                                 )
-                                : <div></div>
+                                : null
                             }
 
 
@@ -678,6 +747,45 @@ export const CreatingTask = ({
                 wrapperStyles={{ width: 420 }}
             >
                 <h3 className={styles.ExistingPlan}>План на эту дату уже существует</h3>
+            </ModalWindow> 
+            {/*Удаление задания*/}
+            <ModalWindow
+                isOpen={deleteRecordsModal}
+                headerText="Удаление"
+                setIsOpen={(state) => {
+                    setdeleteRecordsModal(false)
+                }}
+                wrapperStyles={{ width: 420 }}
+            >
+                <Formik
+                    initialValues={initialValues}
+                    enableReinitialize
+                    onSubmit={(variables) => {
+                        const { id, ...dataToSend } = variables;
+                        setdeleteRecordsModal(false)
+                        deleteRecords()
+                    }}
+                >
+                    {({
+                        handleSubmit,
+                    }) => (
+                        <form onSubmit={handleSubmit}>
+
+                            <div>
+                                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span>  ? </h4>
+
+                                <div className={styles.row}>
+                                    <Button
+                                        type="submit"
+                                    >
+                                        Удалить
+                                    </Button>
+                                </div>
+
+                            </div>
+                        </form>
+                    )}
+                </Formik>
             </ModalWindow>
 
 

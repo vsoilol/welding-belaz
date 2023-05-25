@@ -113,15 +113,19 @@ export const Seam = ({
   const columns = {
 
     welding_seam: [
-      {
+      (userRole === "Admin" || userRole === "Master") && {
         title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
-            setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
+        render: (rowData) => (
+          <img
+            className={styles.deleteIcon}
+            src={deleteIcon}
+            onClick={() => {
+              setdeleteProdModal(true);
+              setidProduct(rowData?.id)
+            }}
+          />
+        ),
+      },     
       {
         title: "Наименование сварного шва ",
         render: (rowData) => {
@@ -196,7 +200,7 @@ export const Seam = ({
       //     return <p className={styles.Fix}>Просмотреть</p>;
       //   },
       // },
-    ],
+    ].filter(column => column),
   };
 
   const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.details);

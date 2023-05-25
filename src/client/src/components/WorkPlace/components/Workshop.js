@@ -99,15 +99,19 @@ export const Workshop = ({
 
   const columns = {
     workshops: [
-      {
+      (userRole === "Admin" || userRole === "Master") && {
         title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
+        render: (rowData) => (
+          <img
+            className={styles.deleteIcon}
+            src={deleteIcon}
+            onClick={() => {
+              setdeleteProdModal(true);
             setidProduct(rowData?.id)
-          }}></img>
-        }
-      },
+            }}
+          />
+        ),
+      }, 
       {
         title: "Наименование цеха",
         field: "name",
@@ -135,7 +139,7 @@ export const Workshop = ({
           return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
-    ],
+    ].filter(column => column),
     production_sites: [
       {
         title: "Наименование производственного участка ",
@@ -359,95 +363,7 @@ export const Workshop = ({
       setValuegoToHeadTable(columns[Object.keys(columns)[3]])
     }
     /////////////////
-    //Вывод деталей для изделий
-    if (param === 6) {
-      let detailNew = []
-      for (let index = 0; index < product.length; index++) {
-        if (product[index].id === id) {
-
-          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
-            if (product[index].insideProducts[index2].productType === 3) {
-              detailNew.push(product[index].insideProducts[index2])
-            }
-          }
-        }
-      }
-      setValuegoToBodyTable(detailNew)
-    }
-    //Вывод узлов для изделий
-    if (param === 5) {
-      let knotNew = []
-      for (let index = 0; index < product.length; index++) {
-        if (product[index].id === id) {
-          for (let index2 = 0; index2 < product[index].insideProducts.length; index2++) {
-            if (product[index].insideProducts[index2].productType === 2) {
-              knotNew.push(product[index].insideProducts[index2])
-            }
-          }
-        }
-      }
-      setValuegoToBodyTable(knotNew)
-    }
-    //Вывод швов для изделий
-    if (param === 7) {
-      let seamNew = []
-      for (let index = 0; index < product.length; index++) {
-        if (product[index].id === id) {
-          seamNew = product[index].seams
-        }
-      }
-      setValuegoToBodyTable(seamNew)
-    }
-    /////////////////
-    //Вывод деталей для узла
-    if (param === 10) {
-      let detailNew = []
-      for (let index = 0; index < knot.length; index++) {
-        if (knot[index].id === id) {
-
-          for (let index2 = 0; index2 < knot[index].insideProducts.length; index2++) {
-            if (knot[index].insideProducts[index2].productType === 3) {
-              detailNew.push(knot[index].insideProducts[index2])
-            }
-          }
-        }
-      }
-      setValuegoToHeadTable(columns[Object.keys(columns)[6]])
-      setValuegoToBodyTable(detailNew)
-    }
-    //Вывод швов для узла
-    if (param === 11) {
-      let seamNew = []
-      for (let index = 0; index < knot.length; index++) {
-        if (knot[index].id === id) {
-          seamNew = knot[index].seams
-        }
-      }
-      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
-      setValuegoToBodyTable(seamNew)
-    }
-    //Вывод швов для узла
-    if (param === 11) {
-      let seamNew = []
-      for (let index = 0; index < knot.length; index++) {
-        if (knot[index].id === id) {
-          seamNew = knot[index].seams
-        }
-      }
-      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
-      setValuegoToBodyTable(seamNew)
-    }
-    //Вывод швов для деталей
-    if (param === 12) {
-      let seamNew = []
-      for (let index = 0; index < detail.length; index++) {
-        if (detail[index].id === id) {
-          seamNew = detail[index].seams
-        }
-      }
-      setValuegoToHeadTable(columns[Object.keys(columns)[7]])
-      setValuegoToBodyTable(seamNew)
-    }
+    
   }
 
   const TabPanel = (props_panel) => {

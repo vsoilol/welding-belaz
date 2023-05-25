@@ -19,6 +19,10 @@ import TableBody from "@material-ui/core/TableBody";
 import imgcalendar from "assets/icons/calendar.png";
 import deleteIcon from "assets/icons/delete.png";
 import api from "services/api";
+
+
+import {Upload} from "components/Upload/index";
+
 const useStyles = makeStyles(() => ({
   rowStyle: {
     padding: 10,
@@ -36,7 +40,7 @@ export const ExecutorsTable = ({
   executors,
   isRequesting,
   type,
-  userRole,
+  userRole, 
 
   equipment,
   workshop,
@@ -84,17 +88,20 @@ export const ExecutorsTable = ({
     "workshopName",
     "productionAreaName",
     "workplaceNumber",
-  ];
-
+  ]; 
   const controllerColumns = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true); 
-          setidExecutor(rowData?.id)
-        }}></img>
-      }
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteTaskModal(true);
+            setidExecutor(rowData?.id);
+          }}
+        />
+      ),
     },
     {
       title: "RFID-метка",
@@ -154,18 +161,22 @@ export const ExecutorsTable = ({
         }
       },
     },
-  ];
+  ].filter(column => column);;
 
   const controllersColumns = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true); 
-          setidExecutor(rowData?.id)
-        }}></img>
-      }
-    },
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteTaskModal(true);
+            setidExecutor(rowData?.id);
+          }}
+        />
+      ),
+    }, 
     {
       title: "RFID-метка",
       render: (rowData) => {
@@ -212,7 +223,7 @@ export const ExecutorsTable = ({
       title: "Номер производственного участка",
       field: "productionArea.number",
     },
-  ];
+  ].filter(column => column);
 
 
 
@@ -259,15 +270,19 @@ export const ExecutorsTable = ({
   };
 
   const extraUserColumns = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteTaskModal(true);
-          setidExecutor(rowData?.id)
-        }}></img>
-      }
-    },
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteTaskModal(true);
+            setidExecutor(rowData?.id);
+          }}
+        />
+      ),
+    }, 
     {
       title: "RFID-метка",
       render: (rowData) => {
@@ -339,11 +354,11 @@ export const ExecutorsTable = ({
         return <img onClick={e => OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
       },
     }
-  ];
+  ].filter(column => column);
 
   const renderRowChildren = (rowData) => {
 
-    if (rowData.weldingEquipments.length > 0) {
+    if (rowData?.weldingEquipments?.length > 0) {
       return (
         <TableContainer component={Paper}>
 
@@ -768,6 +783,11 @@ export const ExecutorsTable = ({
               </div>
               <DisplaySelects select={type} />
 
+
+              {userRole === "Admin" || userRole === "Master"
+                ?<Upload tool={0}></Upload>
+                :null
+              }
 
               <div className={styles.row}>
                 <Button

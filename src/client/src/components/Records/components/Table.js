@@ -24,7 +24,7 @@ import {
   AreaChart,
   Area,
   ResponsiveContainer,
-  Layer
+  Layer, 
 } from "recharts";
 import styles from "../styles.module.css";
 
@@ -40,27 +40,31 @@ const StyleNewTable = {
 }
 
 
-export const RecordsTable = ({ records, isRequesting, deleteRecords }) => {
+export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
   const columns = [
-    {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
-      render: (rowData) => {
-        return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-          setdeleteRecordsModal(true);
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteRecordsModal(true);
           setidRecords(rowData?.id)
-        }}></img>
-      }
-    },
+          }}
+        />
+      ),
+    },   
     { title: "Дата", field: "date" },
     { title: "Время начала сварки", field: "weldingStart" },
     {
       title: "Номер задания ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingTaskNumber != null) {
+        if (rowData?.weldingTaskNumber  != null) {
           return (
-            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber ?? "-"}</a>
+            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber  ?? "-"}</a>
           );
         }
         else {
@@ -100,10 +104,8 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords }) => {
           <span>  {rowData.master?.lastName}  </span>
         </div>
       ),
-    },
-
-
-  ];
+    },  
+  ].filter(column => column);
   const renderRowChildren = (rowData) => {
     let time = rowData.startTime
     let Endtime = rowData.date

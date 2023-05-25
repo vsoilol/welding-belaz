@@ -195,14 +195,18 @@ export const Posts = ({
       },
     ],
     posts: [
-      {
+      (userRole === "Admin" || userRole === "Master") && {
         title: "Удаление",
-        render: (rowData) => {
-          return <img className={styles.deleteIcon} src={deleteIcon} onClick={() => {
-            setdeleteProdModal(true);
+        render: (rowData) => (
+          <img
+            className={styles.deleteIcon}
+            src={deleteIcon}
+            onClick={() => {
+              setdeleteProdModal(true);
             setidProduct(rowData?.id)
-          }}></img>
-        }
+            }}
+          />
+        ),
       },
       {
         title: "Наименование поста ",
@@ -246,7 +250,7 @@ export const Posts = ({
           return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
-    ],
+    ].filter(column => column),
     jobs_place: [
       {
         title: "Наименование рабочего места ",

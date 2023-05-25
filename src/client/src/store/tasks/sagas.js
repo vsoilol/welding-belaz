@@ -52,12 +52,12 @@ const {
 
 function* loadTasks() {
   try {
-    const { data } = yield call(api.get, `/WeldingTask/uncompleted`);
-    const tasks = yield call(api.get, `/WeldingTask/completed`);
+    //const { data } = yield call(api.get, `/WeldingTask/uncompleted`);
+    const { data } = yield call(api.get, `/WeldingTask`);
 
     let datas = {
       fullNames: data,
-      tasks: tasks.data
+      tasks: data
     }
     yield put(loadTasksSuccess(datas));
   } catch (error) {

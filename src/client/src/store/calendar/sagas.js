@@ -131,15 +131,7 @@ function* addCalendarmain({ payload }) {
 }
 function* editEditcalendar({ payload }) {
   try {
-    console.log({
-      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "year": 0
-    })
-    // const { data } = yield call(api.put, `/calendar`, {
-    //   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    //   "year": 0
-    // });  
-    // yield put(editEditcalendarSuccess(data));
+     
   } catch (error) {
     yield put(editEditcalendarFailure(error));
     yield put(setError(error.message));
@@ -147,65 +139,7 @@ function* editEditcalendar({ payload }) {
 }
 function* addCalendarwelder({ payload }) {
   try {
-    console.log({
-      "year": 0,
-      "welderId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "mainWorkingShift": [
-        {
-          "number": 0,
-          "shiftStart": "string",
-          "shiftEnd": "string",
-          "breakStart": "string",
-          "breakEnd": "string"
-        }
-      ],
-      "days": [
-        {
-          "monthNumber": 0,
-          "number": 0,
-          "isWorkingDay": true,
-          "workingShifts": [
-            {
-              "number": 0,
-              "shiftStart": "string",
-              "shiftEnd": "string",
-              "breakStart": "string",
-              "breakEnd": "string"
-            }
-          ]
-        }
-      ]
-    })
-
-    // const { data } = yield call(api.post, `/calendar/withWelder`, {
-    //   "year": 0,
-    //   "welderId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    //   "mainWorkingShift": [
-    //     {
-    //       "number": 0,
-    //       "shiftStart": "string",
-    //       "shiftEnd": "string",
-    //       "breakStart": "string",
-    //       "breakEnd": "string"
-    //     }
-    //   ],
-    //   "days": [
-    //     {
-    //       "monthNumber": 0,
-    //       "number": 0,
-    //       "isWorkingDay": true,
-    //       "workingShifts": [
-    //         {
-    //           "number": 0,
-    //           "shiftStart": "string",
-    //           "shiftEnd": "string",
-    //           "breakStart": "string",
-    //           "breakEnd": "string"
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // }); 
+    
     // yield put(addCalendarwelderSuccess(data)); 
   } catch (error) {
     yield put(addCalendarwelderFailure(error));
@@ -225,65 +159,7 @@ function* loadCalendarwelder() {
 }
 function* addCalendarequipment({ payload }) {
   try {
-    console.log({
-      "year": 0,
-      "weldingEquipmentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "mainWorkingShift": [
-        {
-          "number": 0,
-          "shiftStart": "string",
-          "shiftEnd": "string",
-          "breakStart": "string",
-          "breakEnd": "string"
-        }
-      ],
-      "days": [
-        {
-          "monthNumber": 0,
-          "number": 0,
-          "isWorkingDay": true,
-          "workingShifts": [
-            {
-              "number": 0,
-              "shiftStart": "string",
-              "shiftEnd": "string",
-              "breakStart": "string",
-              "breakEnd": "string"
-            }
-          ]
-        }
-      ]
-    })
-
-    // const { data } = yield call(api.post, `/calendar/withEquipment`, {
-    //   "year": 0,
-    //   "weldingEquipmentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    //   "mainWorkingShift": [
-    //     {
-    //       "number": 0,
-    //       "shiftStart": "string",
-    //       "shiftEnd": "string",
-    //       "breakStart": "string",
-    //       "breakEnd": "string"
-    //     }
-    //   ],
-    //   "days": [
-    //     {
-    //       "monthNumber": 0,
-    //       "number": 0,
-    //       "isWorkingDay": true,
-    //       "workingShifts": [
-    //         {
-    //           "number": 0,
-    //           "shiftStart": "string",
-    //           "shiftEnd": "string",
-    //           "breakStart": "string",
-    //           "breakEnd": "string"
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // }); 
+     
     // yield put(addCalendarwelderSuccess(data)); 
   } catch (error) {
     yield put(addCalendarwelderFailure(error));
@@ -300,45 +176,13 @@ function* loadCalendarequipment() {
     yield put(loadCalendarequipmentFailure(error));
     yield put(setError(error.message));
   }
-}
-///Executor
-// function* loadExecutors() {
-//   try {
-//     const { data } = yield call(api.get, `/welder`);  
-//     yield put(loadExecutorsSuccess(data)); 
-//   } catch (error) {
-//     yield put(loadExecutorsFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
-///Equipment
-// function* loadEquipment() { 
-//   try {
-//     const { data } = yield call(api.get, `/WeldingEquipment`);
-//     const downtime = yield call(api.get, `/WeldingEquipment/downtime`);
-//     let data_equipment = [data, downtime.data]
- 
-//     yield put(loadEquipmentSuccess(data_equipment)); 
-//   } catch (error) {
-//     yield put(loadEquipmentFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
+} 
 
 
 ///WorkingShift
 function* addShift({ payload }) {
   try {  
-
-    console.log({
-      "number": payload.shiftNumb,
-      "shiftStart": payload.shiftStart,
-      "shiftEnd": payload.shiftEnd,
-      "breakStart": payload.breakStart,
-      "breakEnd": payload.breakEnd,
-      "year": 2023,
-      "dayId": null
-    })
+ 
     const { data } = yield call(api.post, `/workingShift`, {
       "number": payload.shiftNumb,
       "shiftStart": payload.shiftStart,
@@ -359,22 +203,7 @@ function* addShift({ payload }) {
 function* editShift({ payload }) {
   try { 
    
-    // console.log({
-    //   "id": payload.daiID,
-    //   "monthNumber": payload.monthNumber,
-    //   "number": payload.number,
-    //   "isWorkingDay": true,
-    //   "year": 2023
-    // })
-    // const { data } = yield call(api.put, `/workingShift`, {
-    //   "id": payload.daiID,
-    //   "monthNumber": payload.monthNumber,
-    //   "number": payload.number,
-    //   "isWorkingDay": true,
-    //   "year": 2023
-    // });  
-    
-    // window.location.reload()
+     
     // yield put(editShiftSuccess(data));
   } catch (error) {
     yield put(editShiftFailure(error));
@@ -388,54 +217,10 @@ function* addDay({ payload }) {
   try {
 
     if (payload.calendarId == "") {
-      // const { data } = yield call(api.post, `/calendar/main`, {
-      //   "year": new Date(payload.workDay).getFullYear(),
-      //   "mainWorkingShift": [
-      //     {
-      //       "number": payload.WorkingShiftnumber,
-      //       "shiftStart": payload.shiftStart,
-      //       "shiftEnd": payload.shiftEnd,
-      //       "breakStart": payload.breakStart,
-      //       "breakEnd": payload.breakEnd
-      //     }
-      //   ],
-      //   "days": [
-      //     {
-      //       "monthNumber": payload.monthNumber,
-      //       "number": payload.number,
-      //       "isWorkingDay": payload.isWorkingDay,
-      //       "workingShifts": [
-      //         {
-      //           "number": payload.WorkingShiftnumber,
-      //           "shiftStart": payload.shiftStart,
-      //           "shiftEnd": payload.shiftEnd,
-      //           "breakStart": payload.breakStart,
-      //           "breakEnd": payload.breakEnd
-      //         }
-      //       ]
-
-      //     }
-      //   ]
-      // }); 
+   
     }
     else {
-      console.log({
-        "monthNumber": payload.monthNumber,
-        "number": payload.number,
-        "isWorkingDay": true,
-        "year": payload.year,
-        "weldingEquipmentId": payload.valueEquipment,
-        "welderId": payload.valueExecutors,
-        "workingShifts": [
-          {
-            "number": payload.workingShifts.number,
-            "shiftStart": payload.workingShifts.shiftStart,
-            "shiftEnd": payload.workingShifts.shiftEnd,
-            "breakStart": payload.workingShifts.breakStart,
-            "breakEnd": payload.workingShifts.breakEnd
-          }
-        ]
-      })
+       
       const { data } = yield call(api.post, `/day`, {
         "monthNumber": payload.monthNumber,
         "number": payload.number,
@@ -453,7 +238,7 @@ function* addDay({ payload }) {
           }
         ]
       });
-      window.location.reload()
+      /* window.location.reload() */
     }
     // yield put(addDaySuccess(data)); 
   } catch (error) {
@@ -475,7 +260,7 @@ function* editDay({ payload }) {
         "year": 2023
       });  
       
-      window.location.reload()
+      /* window.location.reload() */
     // yield put(editDaySuccess(data));
   } catch (error) {
     yield put(editDayFailure(error));
