@@ -11,6 +11,8 @@ public class ProductAccount : Entity
 
     public DateTime DateFromPlan { get; set; }
 
+    public int? UniqueNumber { get; set; }
+
     public List<ProductResult> ProductResults { get; set; } = null!;
 
     public Guid ProductId { get; set; }

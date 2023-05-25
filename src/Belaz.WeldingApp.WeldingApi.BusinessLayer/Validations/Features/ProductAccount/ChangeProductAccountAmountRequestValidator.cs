@@ -20,6 +20,8 @@ public class ChangeProductAccountAmountRequestValidator
                 >(context)
             );
 
-        RuleFor(model => model.Amount).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
+        RuleFor(model => model.Amount)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(0);
     }
 }

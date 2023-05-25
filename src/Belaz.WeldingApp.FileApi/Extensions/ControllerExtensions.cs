@@ -16,7 +16,28 @@ public static class ControllerExtensions
             exception => CreateErrorResult(exception)
         );
     }
-
+    
+    public static ActionResult ToEmptyOk<TResult>(this Result<TResult> result)
+    {
+        return result.Match<ActionResult>(
+            obj => new NoContentResult(),
+            ex => CreateErrorResult(ex)
+        );
+    }
+    
+    public static ActionResult<TResult> ToOk<TResult>(this Result<TResult> result)
+    {
+        return result.Match<ActionResult<TResult>>(
+            obj => CreateOkResult(obj),
+            ex => CreateErrorResult(ex)
+        );
+    }
+    
+    private static ActionResult CreateOkResult<TResult>(TResult obj)
+    {
+        return new OkObjectResult(obj);
+    }
+    
     private static FileContentResult CreateFileContentResult(DocumentDto document)
     {
         return new FileContentResult(document.Bytes, document.FileType)
@@ -25,7 +46,7 @@ public static class ControllerExtensions
         };
     }
 
-    private static IActionResult CreateErrorResult(Exception exception)
+    private static ActionResult CreateErrorResult(Exception exception)
     {
         if (exception is ValidationException validationException)
         {
@@ -47,6 +68,18 @@ public static class ControllerExtensions
         if (exception is ListIsEmptyException)
         {
             return new NoContentResult();
+        }
+
+        if (exception is UploadFileException or IncorrectFileExtensionException)
+        {
+            var badRequestResult = new BadRequestResult
+            {
+                Errors = exception.Message,
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Title = "Upload file exception"
+            };
+
+            return new BadRequestObjectResult(badRequestResult);
         }
 
         return new StatusCodeResult(500);

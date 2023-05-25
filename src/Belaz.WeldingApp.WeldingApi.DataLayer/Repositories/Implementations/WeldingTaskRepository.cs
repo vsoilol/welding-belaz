@@ -5,6 +5,7 @@ using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -13,11 +14,13 @@ public class WeldingTaskRepository : IWeldingTaskRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;
+    private readonly IExtensionRepository _extensionRepository;
 
-    public WeldingTaskRepository(ApplicationContext context, IMapper mapper)
+    public WeldingTaskRepository(ApplicationContext context, IMapper mapper, IExtensionRepository extensionRepository)
     {
         _context = context;
         _mapper = mapper;
+        _extensionRepository = extensionRepository;
     }
 
     public async Task<List<WeldingTaskDto>> GetAllCompletedTaskAsync()
@@ -34,21 +37,58 @@ public class WeldingTaskRepository : IWeldingTaskRepository
 
     public async Task<List<WeldingTaskDto>> GetAllAsync()
     {
-        var weldingTasks = await GetWeldingTasksWithIncludesByFilter().ToListAsync();
+        var weldingTasksQuery = _context.WeldingTasks;
 
-        var mapWeldingTasks = _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
+        var weldingTasks = await weldingTasksQuery
+            .OrderByDescending(_ => _.Number)
+            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
 
-        return mapWeldingTasks;
+        var productInsideIds = await _context.ProductInsides
+            .ProjectTo<ProductInsideOnlyIdDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        var products = await _context.Products
+            .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        foreach (var weldingTask in weldingTasks)
+        {
+            var productStructure = _extensionRepository
+                .GetProductStructureByMainProductId(weldingTask.MainProductId, productInsideIds, products);
+
+            weldingTask.Product = productStructure.Product;
+            weldingTask.Detail = productStructure.Detail;
+            weldingTask.Knot = productStructure.Knot;
+        }
+
+        return weldingTasks;
     }
 
     public async Task<WeldingTaskDto> GetByIdAsync(Guid id)
     {
-        var weldingTask = await GetWeldingTasksWithIncludesByFilter(_ => _.Id == id)
+        var weldingTaskQuery = _context.WeldingTasks.Where(_ => _.Id == id);
+
+        var weldingTask = await weldingTaskQuery
+            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
-        var mapWeldingTask = _mapper.Map<WeldingTaskDto>(weldingTask);
+        var productInsideIds = await _context.ProductInsides
+            .ProjectTo<ProductInsideOnlyIdDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
 
-        return mapWeldingTask;
+        var products = await _context.Products
+            .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        var productStructure = _extensionRepository
+            .GetProductStructureByMainProductId(weldingTask.MainProductId, productInsideIds, products);
+
+        weldingTask.Product = productStructure.Product;
+        weldingTask.Detail = productStructure.Detail;
+        weldingTask.Knot = productStructure.Knot;
+
+        return weldingTask;
     }
 
     public async Task<List<WeldingTaskDto>> GetAllUncompletedTaskAsync()

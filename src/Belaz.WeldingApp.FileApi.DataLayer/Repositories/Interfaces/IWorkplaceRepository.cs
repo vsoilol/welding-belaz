@@ -5,4 +5,6 @@ namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 public interface IWorkplaceRepository
 {
     Task<WorkplaceBriefDto> GetBriefInfoByIdAsync(Guid id);
+    
+    Task<WorkplaceBriefDto?> GetBriefInfoByNumberAsync(int number, int productionAreaNumber, int workshopNumber);
 }

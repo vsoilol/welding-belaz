@@ -11,73 +11,77 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer;
 
-public sealed class ApplicationContext : DbContext
+public class ApplicationContext : DbContext
 {
-    public DbSet<UserData> Users { get; set; } = null!;
+    public virtual DbSet<UserData> Users { get; set; } = null!;
 
-    public DbSet<Post> Posts { get; set; } = null!;
+    public virtual  DbSet<Post> Posts { get; set; } = null!;
 
-    public DbSet<ProductionArea> ProductionAreas { get; set; } = null!;
+    public virtual  DbSet<ProductionArea> ProductionAreas { get; set; } = null!;
 
-    public DbSet<Workplace> Workplaces { get; set; } = null!;
+    public virtual DbSet<Workplace> Workplaces { get; set; } = null!;
 
-    public DbSet<DowntimeReason> DowntimeReasons { get; set; } = null!;
+    public virtual DbSet<DowntimeReason> DowntimeReasons { get; set; } = null!;
 
-    public DbSet<Workshop> Workshops { get; set; } = null!;
+    public virtual  DbSet<Workshop> Workshops { get; set; } = null!;
 
-    public DbSet<Calendar> Calendars { get; set; } = null!;
+    public virtual DbSet<Calendar> Calendars { get; set; } = null!;
 
-    public DbSet<Day> Days { get; set; } = null!;
+    public virtual DbSet<Day> Days { get; set; } = null!;
 
-    public DbSet<WorkingShift> WorkingShifts { get; set; } = null!;
+    public virtual DbSet<WorkingShift> WorkingShifts { get; set; } = null!;
 
-    public DbSet<Chief> Chiefs { get; set; } = null!;
+    public virtual DbSet<Chief> Chiefs { get; set; } = null!;
 
-    public DbSet<Inspector> Inspectors { get; set; } = null!;
+    public virtual DbSet<Inspector> Inspectors { get; set; } = null!;
 
-    public DbSet<Master> Masters { get; set; } = null!;
+    public virtual DbSet<Master> Masters { get; set; } = null!;
 
-    public DbSet<Welder> Welders { get; set; } = null!;
+    public virtual DbSet<Welder> Welders { get; set; } = null!;
 
-    public DbSet<WeldingEquipment> WeldingEquipments { get; set; } = null!;
+    public virtual DbSet<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
-    public DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; } =
+    public virtual DbSet<WeldingEquipmentConditionTime> WeldingEquipmentConditionTimes { get; set; } =
         null!;
 
-    public DbSet<TechnologicalProcess> TechnologicalProcesses { get; set; } = null!;
+    public virtual DbSet<TechnologicalProcess> TechnologicalProcesses { get; set; } = null!;
 
-    public DbSet<TechnologicalInstruction> TechnologicalInstructions { get; set; } = null!;
+    public virtual DbSet<TechnologicalInstruction> TechnologicalInstructions { get; set; } = null!;
 
-    public DbSet<WeldingTask> WeldingTasks { get; set; } = null!;
+    public virtual DbSet<WeldingTask> WeldingTasks { get; set; } = null!;
 
-    public DbSet<EventLog> EventLogs { get; set; } = null!;
+    public virtual DbSet<EventLog> EventLogs { get; set; } = null!;
 
-    public DbSet<Product> Products { get; set; } = null!;
+    public virtual DbSet<Product> Products { get; set; } = null!;
 
-    public DbSet<ProductInside> ProductInsides { get; set; } = null!;
+    public virtual DbSet<ProductInside> ProductInsides { get; set; } = null!;
 
-    public DbSet<WeldPassage> WeldPassages { get; set; } = null!;
+    public virtual DbSet<WeldPassage> WeldPassages { get; set; } = null!;
 
-    public DbSet<Seam> Seams { get; set; } = null!;
+    public virtual DbSet<Seam> Seams { get; set; } = null!;
 
-    public DbSet<WeldPassageInstruction> WeldPassageInstructions { get; set; } = null!;
+    public virtual DbSet<WeldPassageInstruction> WeldPassageInstructions { get; set; } = null!;
 
-    public DbSet<ProductAccount> ProductAccounts { get; set; } = null!;
+    public virtual DbSet<ProductAccount> ProductAccounts { get; set; } = null!;
 
-    public DbSet<ProductResult> ProductResults { get; set; } = null!;
+    public virtual DbSet<ProductResult> ProductResults { get; set; } = null!;
 
-    public DbSet<WeldingRecord> WeldingRecords { get; set; } = null!;
+    public virtual DbSet<WeldingRecord> WeldingRecords { get; set; } = null!;
 
-    public DbSet<DefectiveReason> DefectiveReasons { get; set; } = null!;
+    public virtual DbSet<DefectiveReason> DefectiveReasons { get; set; } = null!;
 
-    public DbSet<SeamAccount> SeamAccounts { get; set; } = null!;
+    public virtual DbSet<SeamAccount> SeamAccounts { get; set; } = null!;
 
-    public DbSet<SeamResult> SeamResults { get; set; } = null!;
+    public virtual DbSet<SeamResult> SeamResults { get; set; } = null!;
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
     {
         Database.EnsureCreated();
+    }
+    
+    public ApplicationContext()
+    {
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

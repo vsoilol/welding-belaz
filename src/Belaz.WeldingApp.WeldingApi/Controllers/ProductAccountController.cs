@@ -146,4 +146,33 @@ public class ProductAccountController : ControllerBase
 
         return result.ToOk();
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> RemoveProductAccountAsync([FromRoute] Guid id)
+    {
+        var result = await _productAccountService.RemoveProductAccountAsync(
+            new RemoveProductAccountRequest
+            {
+                Id = id
+            });
+        return result.ToOk();
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> AddProductAccountAsync(
+        [FromBody] AddProductAccountRequest request)
+    {
+        var result = await _productAccountService.AddProductAccountAsync(request);
+        return result.ToOk();
+    }
+    
+    [HttpPut("unique-number")]
+    [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> SetUniqueNumberAsync(
+        [FromBody] SetUniqueNumberForProductRequest request)
+    {
+        var result = await _productAccountService.SetUniqueNumberAsync(request);
+        return result.ToOk();
+    }
 }

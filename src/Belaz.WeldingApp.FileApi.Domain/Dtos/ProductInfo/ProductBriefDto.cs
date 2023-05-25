@@ -6,6 +6,8 @@ namespace Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 
 public class ProductBriefDto : IMapFrom<Product>
 {
+    public Guid Id { get; set; }
+    
     public ProductType ProductType { get; set; }
     
     public string Name { get; set; } = null!;

@@ -1,4 +1,3 @@
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
@@ -203,5 +202,47 @@ public class ProductAccountService : IProductAccountService
             request.ProductAccountId,
             request.DefectiveReason
         );
+    }
+
+    public async Task<Result<ProductAccountDto>> AddProductAccountAsync(AddProductAccountRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<ProductAccountDto>(validationResult.Exception);
+        }
+
+        var date = request.Date.ToDateTime();
+
+        return await _productAccountRepository.AddProductAccountAsync(request.ProductId, date, request.UniqueNumber);
+    }
+
+    public async Task<Result<ProductAccountDto>> SetUniqueNumberAsync(SetUniqueNumberForProductRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<ProductAccountDto>(validationResult.Exception);
+        }
+
+        return await _productAccountRepository.SetUniqueNumberAsync(
+            request.ProductAccountId,
+            request.UniqueNumber
+        );
+    }
+
+    public async Task<Result<Unit>> RemoveProductAccountAsync(RemoveProductAccountRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _productAccountRepository.RemoveProductAccountAsync(request.Id);
+        return Unit.Default;
     }
 }
