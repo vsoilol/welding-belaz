@@ -190,33 +190,33 @@ public class WeldPassageComponent : IComponent
             table
                 .Cell()
                 .Element(BlockCenter)
-                .Text("Кратковременно, до 1 с.")
+                .Text("Кратковременно, до 5 с.")
                 .Style(Typography.Normal);
 
             table
                 .Cell()
                 .Element(BlockCenter)
-                .Text("Длительно, свыше 1 с.")
+                .Text("Длительно, свыше 5 с.")
                 .Style(Typography.Normal);
+
+            var shortTermDeviation = WeldPassageInfo.ShortTermDeviation is null
+                ? "-"
+                : String.Format("{0:0.##}", (double)WeldPassageInfo.ShortTermDeviation / 60);
 
             table
                 .Cell()
                 .Element(BlockCenter)
-                .Text(
-                    WeldPassageInfo.ShortTermDeviation is null
-                        ? "-"
-                        : String.Format("{0:0.##}", (double)WeldPassageInfo.ShortTermDeviation / 60)
-                )
+                .Text(shortTermDeviation)
                 .Style(Typography.Italic);
 
+            var longTermDeviation = WeldPassageInfo.LongTermDeviation is null
+                ? "-"
+                : String.Format("{0:0.##}", (double)WeldPassageInfo.LongTermDeviation / 60);
+
             table
                 .Cell()
                 .Element(BlockCenter)
-                .Text(
-                    WeldPassageInfo.LongTermDeviation is null
-                        ? "-"
-                        : String.Format("{0:0.##}", (double)WeldPassageInfo.LongTermDeviation / 60)
-                )
+                .Text(longTermDeviation)
                 .Style(Typography.Italic);
 
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
@@ -460,17 +460,17 @@ public class WeldPassageComponent : IComponent
                 return time;
             })
             .ToArray();
-        
+
         var startTime = times.First();
         var endTime = times.Last();
 
-        var seconds = (int)Math.Round(endTime.Subtract(startTime).TotalSeconds);
+        //var seconds = (int)Math.Round(endTime.Subtract(startTime).TotalSeconds);
 
         var minValueTime = TimeSpanAxis.ToDouble(startTime);
         var maxValueTime = TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(1)));
 
         var step = Math.Round((maxValueTime - minValueTime) / (double)28, 2);
-        
+
         if (max is not null && min is not null)
         {
             var maxLine = GetStraightLine(
