@@ -264,7 +264,7 @@ public class RegistarService : IRegistarService
     {
         record.MasterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(weldingEquipmentId);
 
-        var seconds = Math.Round(0.1 * valuesLength);
+        var seconds = 0.1 * valuesLength;
         var weldingEndTime = record.WeldingStartTime.Add(TimeSpan.FromSeconds(seconds));
 
         record.WeldingEndTime = weldingEndTime;
@@ -386,12 +386,12 @@ public class RegistarService : IRegistarService
                     continue;
             }
 
-            if (countSequential > 10)
+            if (countSequential > 50)
             {
                 result.LongCount += countSequential;
             }
 
-            if (countSequential != 0 && countSequential <= 10)
+            if (countSequential != 0 && countSequential <= 50)
             {
                 result.ShortCount += countSequential;
             }
