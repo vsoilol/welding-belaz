@@ -229,14 +229,14 @@ public class RegistarService : IRegistarService
         });
     }
 
-    private bool? IsProvideAllowance(double[] values, double? min, double? max)
+    private bool? IsProvideAllowance(int longCount, double? min, double? max)
     {
         if (min is null || max is null)
         {
             return null;
         }
 
-        var outOfAllowance = values.Count(x => x < min || x > max) >= 10;
+        var outOfAllowance = longCount > 0;
         return !outOfAllowance;
     }
 
@@ -345,12 +345,12 @@ public class RegistarService : IRegistarService
             ShortTermDeviation = shortTermDeviation,
             LongTermDeviation = longTermDeviation,
             IsEnsuringCurrentAllowance = IsProvideAllowance(
-                record.WeldingCurrentValues,
+                amperagesTermDeviation.LongCount,
                 weldPassageInstruction.WeldingCurrentMin,
                 weldPassageInstruction.WeldingCurrentMax
             ),
             IsEnsuringVoltageAllowance = IsProvideAllowance(
-                record.ArcVoltageValues,
+                voltagesTermDeviation.LongCount,
                 weldPassageInstruction.ArcVoltageMin,
                 weldPassageInstruction.ArcVoltageMax
             ),
