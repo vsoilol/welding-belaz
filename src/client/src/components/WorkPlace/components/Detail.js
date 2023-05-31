@@ -105,7 +105,7 @@ export const Detail = ({
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
     id: modalData?.id ?? "",
-
+    manufacturingTime:modalData?.manufacturingTime??""
   };
   /////Удоление
   const [deleteProdModal, setdeleteProdModal] = useState(false);
@@ -340,7 +340,9 @@ export const Detail = ({
       {
         title: "Номер  детали ", field: "number"
       },
-
+      {
+        title: "Норма времени на изготовление", field: "manufacturingTime"
+      },
       {
         title: "Номер  цеха ", field: "workshop.number"
       },
@@ -979,7 +981,22 @@ export const Detail = ({
                     autoComplete="off"
                   />
                 </div>
-
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^[\dA-Z-]+$/.test(value)) {
+                        handleChange(e);
+                      }
+                    }}
+                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    value={values.manufacturingTime}
+                    name="manufacturingTime"
+                    placeholder="Норма времени на изготовление"
+                    onBlur={handleBlur}
+                    autoComplete="off"
+                  />
+                </div>
                 {/* <div className={styles.row}>
                   <Select
                     name="valueWorkplace"
