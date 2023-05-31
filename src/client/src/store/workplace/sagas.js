@@ -352,6 +352,7 @@ function* addProduct(variables) {
           "workplaceId": variables.payload.workplaceId,
           "technologicalProcessId": variables.payload.technologicalProcessId,
           "seams":variables.payload.seams,
+          "manufacturingTime":variables.payload.manufacturingTime,
         });
         yield put(addProductSuccess(data));
         yield call(loadProduct);
@@ -381,6 +382,7 @@ function* editProduct(variables) {
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId,
       "seams":variables.payload.seams,
+      "manufacturingTime":variables.payload.manufacturingTime,
     });
     yield call(loadProduct);
     yield put(editProductSuccess(data));
