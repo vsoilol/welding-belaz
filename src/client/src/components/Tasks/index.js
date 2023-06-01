@@ -564,7 +564,7 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-      {userRole === "Admin" || userRole === "Master"
+      {userRole === "Admin" || userRole === "Master"|| userRole === "Inspector"
         ? (
           <Tabs
             value={value_panel}
@@ -595,7 +595,7 @@ export const Tasks = ({
             data={tasks?.tasks}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "Admin" || userRole === "Master"|| userRole === "Inspector"
                 ? [
                   {
                     icon: "edit",

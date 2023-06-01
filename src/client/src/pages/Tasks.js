@@ -5,7 +5,7 @@ import { HeaderLayout } from "layouts/Header";
 export const TasksPage = props => {
   return (
     <div>
-      <HeaderLayout>
+      <HeaderLayout {...props?.state?.auth?.user?.role??props?.userRole}>
         <Tasks {...props} />
       </HeaderLayout>
     </div>

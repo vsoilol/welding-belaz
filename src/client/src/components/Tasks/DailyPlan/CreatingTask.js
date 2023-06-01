@@ -450,11 +450,17 @@ export const CreatingTask = ({
 
             </div>
             <div className={styles.RowToolsBTNS}>
-                <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
-                    dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
-                        ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
-                        : ''
-                }</button>
+               {userRole === "Master" || userRole === "Admin"
+                    ?(
+                        <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
+                            dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
+                                ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
+                                : ''
+                        }</button>
+                    )
+                    : null
+                }
+                
                 {userRole === "Master" || userRole === "Admin"
                     ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
                     : null

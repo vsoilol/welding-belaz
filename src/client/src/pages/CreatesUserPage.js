@@ -5,7 +5,7 @@ import { HeaderLayout } from "layouts/Header";
 
 export const CreatesUserPage = (props) => { 
   return (
-    <HeaderLayout>
+    <HeaderLayout {...props?.state?.auth?.user?.role??props?.userRole}>
       <CreatesUser {...props} />
     </HeaderLayout>
   );

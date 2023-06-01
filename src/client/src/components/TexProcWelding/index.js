@@ -399,45 +399,27 @@ export const TexProcWelding = ({
 
   //Запрос на редактирование или добавление
   function SendData(variables) {
-    const filteredVariables = variables.filter(item => {
-      return Object.values(item).some(val => val !== '');
-    });
-
+    const filteredVariables = variables.filter(item => Object.values(item).some(val => val !== '')); 
+    const data = {
+      id: isModalOpenNumb === 1 ? idPassages : undefined,
+      number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
+      name: valueNameInst,
+      weldPassages: filteredVariables.map(item => ({
+        id: isModalOpenNumb === 1 ? item.id || null : null,
+        name: item.weldPassagesName,
+        number: item.weldPassagesNumber,
+        weldingCurrentMin: item.weldingCurrentMin,
+        weldingCurrentMax: item.weldingCurrentMax,
+        arcVoltageMin: item.arcVoltageMin,
+        arcVoltageMax: item.arcVoltageMax,
+        preheatingTemperatureMin: item.preheatingTemperatureMin || null,
+        preheatingTemperatureMax: item.preheatingTemperatureMax || null,
+      })),
+    };  
     if (isModalOpenNumb === 0) {
-      const data = {
-        number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
-        name: valueNameInst,
-        weldPassages: filteredVariables.map(item => ({
-          name: item.weldPassagesName,
-          number: item.weldPassagesNumber,
-          weldingCurrentMin: item.weldingCurrentMin,
-          weldingCurrentMax: item.weldingCurrentMax,
-          arcVoltageMin: item.arcVoltageMin,
-          arcVoltageMax: item.arcVoltageMax,
-          preheatingTemperatureMin: item.preheatingTemperatureMin,
-          preheatingTemperatureMax: item.preheatingTemperatureMax,
-        })),
-      };
       addInst(data);
-    }
-    if (isModalOpenNumb === 1) {
-      const data = {
-        id: idPassages,
-        number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
-        name: valueNameInst,
-        weldPassages: filteredVariables.map(item => ({
-          id: item.id || null,
-          name: item.weldPassagesName,
-          number: item.weldPassagesNumber,
-          weldingCurrentMin: item.weldingCurrentMin,
-          weldingCurrentMax: item.weldingCurrentMax,
-          arcVoltageMin: item.arcVoltageMin,
-          arcVoltageMax: item.arcVoltageMax,
-          preheatingTemperatureMin: item.preheatingTemperatureMin,
-          preheatingTemperatureMax: item.preheatingTemperatureMax,
-        })),
-      };
-      editInst(data)
+    } else if (isModalOpenNumb === 1) {
+      editInst(data);
     }
   }
 

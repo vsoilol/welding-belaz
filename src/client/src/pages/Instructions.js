@@ -5,7 +5,7 @@ import { HeaderLayout } from "layouts/Header";
 export const InstructionsPage = props => {
   return (
     <div>
-      <HeaderLayout>
+      <HeaderLayout {...props?.state?.auth?.user?.role??props?.userRole}>
         <Instructions {...props} />
       </HeaderLayout>
     </div>
