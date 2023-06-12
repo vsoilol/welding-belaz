@@ -8,6 +8,12 @@ public interface IWorkingShiftRepository
     Task<WorkingShiftDto> UpdateAsync(WorkingShift entity);
 
     Task<WorkingShiftDto> CreateAsync(WorkingShift entity, int? year);
+    
+    Task<List<WorkingShiftDto>> GetAllMainWorkingShiftsByYearAsync(int year);
+    
+    Task<List<WorkingShiftDto>> GetAllWorkingShiftsByWelderIdAndYearAsync(int year, Guid welderId);
+    
+    Task<List<WorkingShiftDto>> GetAllWorkingShiftsByEquipmentIdAndYearAsync(int year, Guid equipmentId);
 
     Task<WorkingShiftDto> GetByIdAsync(Guid id);
 }

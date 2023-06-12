@@ -41,4 +41,39 @@ public class WorkingShiftController : ControllerBase
         var result = await _workingShiftService.UpdateAsync(request);
         return result.ToOk();
     }
+
+    [HttpGet("{year}")]
+    [ProducesResponseType(typeof(List<WorkingShiftDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<WorkingShiftDto>>> GetAllMainWorkingShiftsByYearAsync(
+        [FromRoute] int year
+    )
+    {
+        var result = await _workingShiftService.GetAllMainWorkingShiftsByYearAsync(
+            new GetAllMainWorkingShiftsByYearRequest { Year = year }
+        );
+
+        return result.ToOk();
+    }
+
+    [HttpGet("byEquipment")]
+    [ProducesResponseType(typeof(List<WorkingShiftDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<WorkingShiftDto>>> GetAllWorkingShiftsByEquipmentIdAndYearAsync(
+        [FromQuery] GetAllWorkingShiftsByEquipmentIdAndYearRequest request
+    )
+    {
+        var result = await _workingShiftService.GetAllWorkingShiftsByEquipmentIdAndYearAsync(request);
+
+        return result.ToOk();
+    }
+    
+    [HttpGet("byWelder")]
+    [ProducesResponseType(typeof(List<WorkingShiftDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<WorkingShiftDto>>> GetAllWorkingShiftsByWelderIdAndYearAsync(
+        [FromQuery] GetAllWorkingShiftsByWelderIdAndYearRequest request
+    )
+    {
+        var result = await _workingShiftService.GetAllWorkingShiftsByWelderIdAndYearAsync(request);
+
+        return result.ToOk();
+    }
 }
