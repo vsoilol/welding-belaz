@@ -39,6 +39,11 @@ public class RecordDto : IMapFrom<WeldingRecord>
 
     public WeldingEquipmentBriefDto WeldingEquipment { get; set; } = null!;
 
+    /// <summary>
+    /// Есть ли отклонения
+    /// </summary>
+    public bool AreDeviations { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile
@@ -58,6 +63,23 @@ public class RecordDto : IMapFrom<WeldingRecord>
                 dto => dto.WeldingDuration,
                 opt => opt.MapFrom(x => x.WeldingEndTime.Subtract(x.WeldingStartTime).Seconds)
             )
-            .ForMember(dto => dto.WeldingTaskNumber, opt => opt.MapFrom(x => x.WeldPassage!.WeldingTask.Number));
+            .ForMember(dto => dto.WeldingTaskNumber,
+                opt =>
+                    opt.MapFrom(x => x.WeldPassage!.WeldingTask.Number))
+            .ForMember(
+                dto => dto.AreDeviations,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassage != null
+                                ? ((x.WeldPassage!.IsEnsuringCurrentAllowance != null
+                                    && !(bool)x.WeldPassage.IsEnsuringCurrentAllowance)
+                                   || (x.WeldPassage.IsEnsuringTemperatureAllowance != null
+                                       && !(bool)x.WeldPassage.IsEnsuringTemperatureAllowance)
+                                   || (x.WeldPassage.IsEnsuringVoltageAllowance != null
+                                       && !(bool)x.WeldPassage.IsEnsuringVoltageAllowance))
+                                : false
+                    )
+            );
     }
 }
