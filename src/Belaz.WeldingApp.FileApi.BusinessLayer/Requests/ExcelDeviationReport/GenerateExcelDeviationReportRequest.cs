@@ -2,7 +2,7 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Requests.ExcelDeviationReport;
 
 public class GenerateExcelDeviationReportRequest
 {
-    public Guid ProductId { get; set; }
+    public Guid? ProductId { get; set; }
 
     public Guid? SeamId { get; set; }
 

@@ -13,10 +13,10 @@ public class GenerateExcelDeviationReportRequestValidator
     {
         RuleFor(model => model.ProductId)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty()
             .SetValidator(
                 new SqlIdValidatorFor<GenerateExcelDeviationReportRequest, Product>(context)
-            );
+            )
+            .When(_ => _.ProductId is not null);
 
         RuleFor(model => model.SeamId)
             .Cascade(CascadeMode.Stop)
