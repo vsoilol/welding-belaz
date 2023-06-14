@@ -11,7 +11,7 @@ public interface IWeldPassageRepository
 {
     Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWorkshopAndDatePeriodAsync(
         Guid workshopId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -19,7 +19,7 @@ public interface IWeldPassageRepository
 
     Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByProductionAreaAndDatePeriodAsync(
         Guid productionAreaId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -27,7 +27,7 @@ public interface IWeldPassageRepository
 
     Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWelderAndDatePeriodAsync(
         Guid welderId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -35,14 +35,14 @@ public interface IWeldPassageRepository
 
     Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWorkplaceAndDatePeriodAsync(
         Guid workplaceId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
     );
 
     Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByDatePeriodAsync(
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate

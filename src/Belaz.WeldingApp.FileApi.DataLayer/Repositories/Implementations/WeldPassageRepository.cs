@@ -19,7 +19,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
     }
 
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByDatePeriodAsync(
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -34,7 +34,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
 
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByProductionAreaAndDatePeriodAsync(
         Guid productionAreaId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -59,7 +59,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
 
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWelderAndDatePeriodAsync(
         Guid welderId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -76,7 +76,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
 
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWorkplaceAndDatePeriodAsync(
         Guid workplaceId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -95,7 +95,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
 
     public Task<List<WeldPassageDeviationsDto>> GetAllDeviationsByWorkshopAndDatePeriodAsync(
         Guid workshopId,
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -119,7 +119,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
     }
 
     private IQueryable<WeldPassage> QueryWeldPassagesWithFilters(
-        Guid productId,
+        Guid? productId,
         Guid? seamId,
         DateTime startDate,
         DateTime endDate
@@ -131,7 +131,10 @@ internal class WeldPassageRepository : IWeldPassageRepository
                 && _.WeldingRecord.Date.Date >= startDate.Date
         );
 
-        query = query.Where(_ => _.WeldingTask.SeamAccount.Seam.ProductId == productId);
+        if (productId is not null)
+        {
+            query = query.Where(_ => _.WeldingTask.SeamAccount.Seam.ProductId == productId);   
+        }
 
         if (seamId is not null)
         {

@@ -16,6 +16,8 @@ public sealed class ApplicationContext : DbContext
     public DbSet<UserData> Users { get; set; } = null!;
 
     public DbSet<Post> Posts { get; set; } = null!;
+    
+    public DbSet<WeldingRecordLimit> WeldingRecordLimits { get; set; } = null!;
 
     public DbSet<ProductionArea> ProductionAreas { get; set; } = null!;
 

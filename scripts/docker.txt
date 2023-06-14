@@ -1,0 +1,1 @@
+docker exec -t belaz-postgres pg_dump -d bru -p 5432 -U bru --no-owner --clean > ~/db.sql - make backup from docker container

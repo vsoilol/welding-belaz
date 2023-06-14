@@ -119,11 +119,11 @@ public class DataSeed
             var productResults = ProductAccountGenerator.GenerateProductResults();
             context.ProductResults.AddRange(productResults);
             await context.SaveChangesAsync();
-            
+
             var seamAccount = SeamAccountGenerator.GenerateSeamAccounts();
             context.SeamAccounts.AddRange(seamAccount);
             await context.SaveChangesAsync();
-            
+
             var seamResults = SeamAccountGenerator.GenerateSeamResults();
             context.SeamResults.AddRange(seamResults);
             await context.SaveChangesAsync();
@@ -135,21 +135,44 @@ public class DataSeed
             context.WeldingEquipmentConditionTimes.AddRange(conditionTimes);
             await context.SaveChangesAsync();
         }
-        
+
+        if (!context.Workshops.Any())
+        {
+            var workshops = WorkshopGenerator.GenerateWorkshops();
+            context.Workshops.AddRange(workshops);
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.WeldingRecordLimits.Any())
+        {
+            var weldingRecordLimit = new WeldingRecordLimit
+            {
+                WeldingCurrentMin = 100,
+                WeldingCurrentMax = 200,
+                ArcVoltageMin = 20,
+                ArcVoltageMax = 40
+            };
+
+            context.WeldingRecordLimits.Add(weldingRecordLimit);
+            await context.SaveChangesAsync();
+        }
+
         if (!context.WeldingRecords.Any())
         {
+            var weldingRecordLimit = (await context.WeldingRecordLimits.FirstOrDefaultAsync())!;
             var weldingRecords = WeldingRecordGenerator.GenerateWeldingRecords();
+            weldingRecords.ForEach(_ => { _.WeldingRecordLimitId = weldingRecordLimit.Id; });
             context.WeldingRecords.AddRange(weldingRecords);
             await context.SaveChangesAsync();
         }
-        
+
         if (!context.WeldingTasks.Any())
         {
             var weldingTasks = WeldingTaskGenerator.GenerateWeldingTasks();
             context.WeldingTasks.AddRange(weldingTasks);
             await context.SaveChangesAsync();
         }
-        
+
         if (!context.WeldPassages.Any())
         {
             var weldPassages = WeldPassageGenerator.GenerateWeldPassages();

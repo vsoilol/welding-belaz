@@ -108,6 +108,33 @@ public class RegistarService : IRegistarService
         {
             var weldingRecord = _mapper.Map<WeldingRecord>(request);
 
+            var weldingRecordLimit = await _recordRepository.GetWeldingRecordLimitAsync();
+            
+            var amperagesTermDeviation = CalculateTermDeviation(
+                weldingRecord.WeldingCurrentValues,
+                weldingRecordLimit.WeldingCurrentMin,
+                weldingRecordLimit.WeldingCurrentMax
+            );
+            
+            var voltagesTermDeviation = CalculateTermDeviation(
+                weldingRecord.ArcVoltageValues,
+                weldingRecordLimit.ArcVoltageMin,
+                weldingRecordLimit.ArcVoltageMax
+            );
+
+            weldingRecord.IsEnsuringCurrentAllowance = IsProvideAllowance(
+                amperagesTermDeviation.LongCount,
+                weldingRecordLimit.WeldingCurrentMin,
+                weldingRecordLimit.WeldingCurrentMax
+            );
+            weldingRecord.IsEnsuringVoltageAllowance = IsProvideAllowance(
+                voltagesTermDeviation.LongCount,
+                weldingRecordLimit.ArcVoltageMin,
+                weldingRecordLimit.ArcVoltageMax
+            );
+            weldingRecord.ArcVoltageAverage = Math.Round(weldingRecord.ArcVoltageValues.Average(), 2);
+            weldingRecord.WeldingCurrentAverage = Math.Round(weldingRecord.WeldingCurrentValues.Average(), 2);
+
             await CreateWeldingRecordAsync(
                 weldingRecord,
                 request.WeldingEquipmentId,

@@ -7,7 +7,7 @@ public class TechnologicalInstructionDto : IMapFrom<TechnologicalInstruction>
 {
     public Guid Id { get; set; }
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 }

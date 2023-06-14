@@ -44,4 +44,23 @@ public class WeldingRecord : Entity
     public Master? Master { get; set; }
 
     public WeldPassage? WeldPassage { get; set; }
+
+    /// <summary>
+    /// Обеспечивает ли допуск для тока. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringCurrentAllowance { get; set; }
+
+    /// <summary>
+    /// Обеспечивает ли допуск для напряжения. True - обеспечивает, false - не обеспечивает
+    /// </summary>
+    public bool? IsEnsuringVoltageAllowance { get; set; }
+
+    public double WeldingCurrentAverage { get; set; }
+    
+    public double ArcVoltageAverage { get; set; }
+    
+    public Guid WeldingRecordLimitId { get; set; }
+
+    [ForeignKey(nameof(WeldingRecordLimitId))]
+    public WeldingRecordLimit WeldingRecordLimit { get; set; } = null!;
 }
