@@ -1,0 +1,1 @@
+psql -d weldingBelazOld -p 5434 -U postgres -f "C:\Data\Belaz\welding-belaz\scripts\init-script.sql" - run script

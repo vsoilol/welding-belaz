@@ -44,6 +44,26 @@ public class RecordDto : IMapFrom<WeldingRecord>
     /// </summary>
     public bool AreDeviations { get; set; }
 
+    /// <summary>
+    /// Сварочный ток min
+    /// </summary>
+    public double? WeldingCurrentMin { get; set; }
+
+    /// <summary>
+    /// Сварочный ток max
+    /// </summary>
+    public double? WeldingCurrentMax { get; set; }
+
+    /// <summary>
+    /// Напряжения на дуге min
+    /// </summary>
+    public double? ArcVoltageMin { get; set; }
+
+    /// <summary>
+    /// Напряжения на дуге max
+    /// </summary>
+    public double? ArcVoltageMax { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile
@@ -78,7 +98,57 @@ public class RecordDto : IMapFrom<WeldingRecord>
                                        && !(bool)x.WeldPassage.IsEnsuringTemperatureAllowance)
                                    || (x.WeldPassage.IsEnsuringVoltageAllowance != null
                                        && !(bool)x.WeldPassage.IsEnsuringVoltageAllowance))
-                                : false
+                                : ((x.IsEnsuringCurrentAllowance != null && !(bool)x.IsEnsuringCurrentAllowance)
+                                   ||
+                                   (x.IsEnsuringVoltageAllowance != null && !(bool)x.IsEnsuringVoltageAllowance))
+                    )
+            )
+            .ForMember(
+                dto => dto.WeldingCurrentMin,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassage != null
+                                ? x.WeldPassage.WeldingTask.SeamAccount.Seam
+                                    .TechnologicalInstruction!.WeldPassageInstructions
+                                    .FirstOrDefault(_ => _.Number == x.WeldPassage.Number)!.WeldingCurrentMin
+                                : x.WeldingRecordLimit.WeldingCurrentMin
+                    )
+            )
+            .ForMember(
+                dto => dto.WeldingCurrentMax,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassage != null
+                                ? x.WeldPassage.WeldingTask.SeamAccount.Seam
+                                    .TechnologicalInstruction!.WeldPassageInstructions
+                                    .FirstOrDefault(_ => _.Number == x.WeldPassage.Number)!.WeldingCurrentMax
+                                : x.WeldingRecordLimit.WeldingCurrentMax
+                    )
+            )
+            .ForMember(
+                dto => dto.ArcVoltageMin,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassage != null
+                                ? x.WeldPassage.WeldingTask.SeamAccount.Seam
+                                    .TechnologicalInstruction!.WeldPassageInstructions
+                                    .FirstOrDefault(_ => _.Number == x.WeldPassage.Number)!.ArcVoltageMin
+                                : x.WeldingRecordLimit.ArcVoltageMin
+                    )
+            )
+            .ForMember(
+                dto => dto.ArcVoltageMax,
+                opt =>
+                    opt.MapFrom(
+                        x =>
+                            x.WeldPassage != null
+                                ? x.WeldPassage.WeldingTask.SeamAccount.Seam
+                                    .TechnologicalInstruction!.WeldPassageInstructions
+                                    .FirstOrDefault(_ => _.Number == x.WeldPassage.Number)!.ArcVoltageMax
+                                : x.WeldingRecordLimit.ArcVoltageMax
                     )
             );
     }

@@ -7,7 +7,7 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.TechnologicalInstru
 public class CreateInstructionRequest
     : IMapTo<Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo.TechnologicalInstruction>
 {
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 

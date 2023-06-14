@@ -1,0 +1,1 @@
+scp bru@194.158.193.176:2642:~/welding-belaz/database/init-script.sql ./init-script.sql - копирование файлов от сервера на локальный ПК

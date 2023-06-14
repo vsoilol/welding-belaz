@@ -21,6 +21,8 @@ public class UserData : EntityWithRfidTag
 
     public bool IsEmailConfirmed { get; set; }
 
+    public bool IsFirstLogin { get; set; } = true;
+
     public string? PasswordHash { get; set; }
 
     public string? Position { get; set; }

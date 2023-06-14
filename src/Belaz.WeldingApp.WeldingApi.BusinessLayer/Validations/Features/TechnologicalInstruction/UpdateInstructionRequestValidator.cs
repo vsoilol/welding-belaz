@@ -20,9 +20,13 @@ public class UpdateInstructionRequestValidator : AbstractValidator<UpdateInstruc
                 >(context)
             );
 
-        RuleFor(model => model.Name).Cascade(CascadeMode.Stop).NotEmpty();
+        RuleFor(model => model.Name)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty();
 
-        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
+        RuleFor(model => model.Number)
+            .Cascade(CascadeMode.Stop)
+            .NotNull();
 
         RuleFor(model => model.WeldPassages).Cascade(CascadeMode.Stop).NotNull().NotEmpty();
 

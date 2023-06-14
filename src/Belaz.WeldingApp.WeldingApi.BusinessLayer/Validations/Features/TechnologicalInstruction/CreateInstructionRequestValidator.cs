@@ -17,7 +17,7 @@ public class CreateInstructionRequestValidator : AbstractValidator<CreateInstruc
 
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .NotNull();
         
         RuleFor(model => model.WeldPassages)
             .Cascade(CascadeMode.Stop)

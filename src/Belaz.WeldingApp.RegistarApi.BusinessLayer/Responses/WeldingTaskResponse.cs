@@ -47,7 +47,7 @@ public class WeldingTaskResponse : IMapFrom<WeldingTaskDto>
     public Guid TechnologicalInstructionId { get; set; }
 
     [JsonPropertyName("TechInstrN")]
-    public int TechnologicalInstructionNumber { get; set; }
+    public string TechnologicalInstructionNumber { get; set; } = null!;
 
     [JsonPropertyName("TechInstrT")]
     public string TechnologicalInstructionName { get; set; } = null!;

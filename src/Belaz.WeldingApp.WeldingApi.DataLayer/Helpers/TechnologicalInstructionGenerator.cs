@@ -13,7 +13,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("09c84b21-5f0c-4fae-9dac-ceb5abc1917e"),
                 Name = "Инструкция 2",
                 IdFromSystem = "2",
-                Number = 2,
+                Number = "2",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -43,7 +43,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("26693f0d-6c87-4210-8bb3-cee7fd394a08"),
                 Name = "Инструкция 48",
                 IdFromSystem = "48",
-                Number = 48,
+                Number = "48",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -73,7 +73,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("3fb871cf-9101-4eee-8ee8-cb1c6c03978c"),
                 Name = "Инструкция 54",
                 IdFromSystem = "54",
-                Number = 54,
+                Number = "54",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -103,7 +103,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("4b73a99f-0fb7-49fc-b930-521e67691895"),
                 Name = "Инструкция 39",
                 IdFromSystem = "39",
-                Number = 39,
+                Number = "39",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -133,7 +133,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("7ea73afd-78ac-4b39-ba12-a6816a764ec8"),
                 Name = "Инструкция 1",
                 IdFromSystem = "1",
-                Number = 1,
+                Number = "1",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -163,7 +163,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("8fd0d98d-6868-4412-9a66-78839fa644f1"),
                 Name = "Инструкция 18",
                 IdFromSystem = "18",
-                Number = 18,
+                Number = "18",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -193,7 +193,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("9398fa25-e906-406e-8e09-beb60975f75b"),
                 Name = "Инструкция 52",
                 IdFromSystem = "52",
-                Number = 52,
+                Number = "52",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -223,7 +223,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("aff9dccb-145d-4e42-8c34-8bb5579f522b"),
                 Name = "Инструкция 55",
                 IdFromSystem = "55",
-                Number = 55,
+                Number = "55",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -253,7 +253,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("c050ab9a-1195-42f5-a27d-343d2d8d8c4d"),
                 Name = "Инструкция 56",
                 IdFromSystem = "56",
-                Number = 56,
+                Number = "56",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -283,7 +283,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("d6068081-5eac-49bb-b6be-30f3aa5febf4"),
                 Name = "Инструкция 58",
                 IdFromSystem = "58",
-                Number = 58,
+                Number = "58",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
@@ -313,7 +313,7 @@ public class TechnologicalInstructionGenerator
                 Id = Guid.Parse("ff0d2b37-9a2c-4e85-993c-7979aab5aa0f"),
                 Name = "Инструкция 57",
                 IdFromSystem = "57",
-                Number = 57,
+                Number = "57",
                 WeldPassageInstructions = new List<WeldPassageInstruction>
                 {
                     new()
