@@ -23,9 +23,11 @@ export const Header = ({
     { name: "Производство", route: "/production" },
     { name: "Технологические процессы сборки и сварки", route: "/tex-proc-welding" },
     { name: "Записи", route: "/records" },
+    (userRole ==="Admin"|| userRole === "Master") && { name: "Сообщения", route: "/messages" },
     { name: "Задания", route: "/tasks" },
     { name: "Отчеты", route: "/reports" },
-    (userRole === "Admin") && { name: "Панель", route: "/creates-user" },
+    (userRole === "Admin") && { name: "Панель администратора", route: "/creates-user" },
+    
   ].filter(Boolean);
 
   const renderHeaderButtons = () => {

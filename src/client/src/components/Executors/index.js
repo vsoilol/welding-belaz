@@ -86,8 +86,10 @@ export const Executors = ({
     <div className={styles.innerWrapper}>
       <ToolTip
         title="Сотрудники"
-        toolTipText="Здесь Вы можете просмотреть профиль сотрудников, отчет о работе сварщика"
+        toolTipText="Здесь Вы можете просмотреть профиль сотрудников" /*, отчет о работе сварщика*/
         src={executorsImage}
+        workshop={workshop}
+        equipment={equipment}
       />
       <Tabs
         value={value}

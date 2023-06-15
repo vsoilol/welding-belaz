@@ -22,6 +22,19 @@
   padding: 8px 40px 0 0;
 }
 
+.row {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px;
+}
+
+.row:first-child {
+  margin-top: 30px;
+}
+
+.row:last-child {
+  margin-bottom: 30px;
+}
 .trapezoid {
   position: absolute;
   right: 0;
@@ -43,6 +56,23 @@
   font-family: "Muller Extra Bold";
   font-size: 32px;
   line-height: 35px;
+}
+
+button.buttonReport{  
+  background-color: rgb(16, 121, 63) !important;
+  border-radius: 10px;
+  border: 0;
+  padding: 10px 20px; 
+  width: -moz-fit-content; 
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  margin-top: 18px;
+  margin-right: 40px;
 }
 
 .tooltip {

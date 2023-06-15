@@ -3,9 +3,9 @@ import CreatesUser from "components/CreatesUser";
 import { HeaderLayout } from "layouts/Header";
 
 
-export const CreatesUserPage = (props) => { 
+export const CreatesUserPage = (props) => {  
   return (
-    <HeaderLayout {...props?.state?.auth?.user?.role??props?.userRole}>
+    <HeaderLayout  >
       <CreatesUser {...props} />
     </HeaderLayout>
   );

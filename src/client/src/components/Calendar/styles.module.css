@@ -82,7 +82,7 @@ span.obj{
   display: block;
   width: -moz-fit-content;
   width: fit-content;
-  margin: 100px auto;
+  margin: 100px 0;
   margin-bottom: 80px;
 } 
 .RowToolsBtns button{

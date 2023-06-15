@@ -15,26 +15,14 @@ export const Calendars = ({
 
   const localizer = momentLocalizer(moment);
   moment.locale('ru');
- 
-  console.log(arrayDays)
-  const events=[]   
 
-  const modalEventBodyRef = useRef(null); 
- 
-  const now = new Date();
-  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0); 
-
-  function dayWork(now) {
-    events.length = 0;
-    events.push(...Array.from({length: endOfMonth.getDate()}, (_, i) => ({
+  const events = []; 
+  /* events.push(...Array.from({length: endOfMonth.getDate()}, (_, i) => ({
       title: 'Смена 1',
       start: new Date(now.getFullYear(), now.getMonth(), i + 1, 7, 30),
       end: new Date(now.getFullYear(), now.getMonth(), i + 1, 16, 0)
-    }))); 
-  } 
-  dayWork(now);
-
+    })));  */
+  
   const messages = {
     today: 'Сегодня',
     previous: 'Назад',
@@ -43,24 +31,38 @@ export const Calendars = ({
     week: 'Неделя',
   }; 
  
-  const handleNavigate  = (date) =>{
-    dayWork(moment(date).toDate());
+  const handleNavigate  = (date) =>{ 
+    dayWork(new Date(moment(date).toDate()).getMonth()+1 , new Date(moment(date).toDate()).getFullYear()) 
   }
    
+
+  dayWork(new Date().getMonth()+1,new Date().getFullYear())
+
+  function dayWork(Month,Year) {
+    arrayDays.forEach(element => {
+      if(element.isWorkingDay){
+        console.log(element)
+      } 
+      /* element.isWorkingDay?console.log(element):null */
+    });
+    console.log(arrayDays) 
+    /* console.log(Month)
+    console.log(Year) */
+  }
   
   return (
     <div className={styles.calendar_wrapper}>   
       <Calendar
         localizer={localizer}
-        events={events}
+        events={[]/* events */}
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
         allDayAccessor="allDay"
         defaultView="month"
         selectable 
-        min={startOfMonth}
-        max={endOfMonth}
+        min={0/* 0startOfMonth */}
+        max={10/* endOfMonth */}
         views={['month', 'week']}
         messages={messages}
         weekdayFormat="dd"

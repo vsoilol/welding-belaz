@@ -113,7 +113,7 @@ export const Seam = ({
   const columns = {
 
     welding_seam: [
-      (userRole === "Admin" || userRole === "Master") && {
+      (userRole === "Admin" /* || userRole === "Master" */) && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -346,7 +346,7 @@ export const Seam = ({
             columns={columns.welding_seam}
             data={seam}
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "Admin" /* || userRole === "Master" */
                 ? [
                   {
                     icon: "add",

@@ -321,7 +321,7 @@ export const Detail = ({
 
     ],
     details: [
-      (userRole === "Admin" || userRole === "Master") && {
+      (userRole === "Admin" /* || userRole === "Master" */) && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -813,7 +813,7 @@ export const Detail = ({
                 columns={columns.details}
                 data={detail}
                 actions={
-                  userRole === "Admin" || userRole === "Master"
+                  userRole === "Admin" /* || userRole === "Master" */
                     ? [
                       {
                         icon: "add",

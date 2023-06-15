@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
     area: state.workplace.productionArea,
     seam: state.workplace.seam,
     product: state.workplace.product,
-
+    userRole: state.auth.user.role,
     workplace: state.workplace.workplace,
     executors: state.executors.executors,
     equipment: state.equipment.equipment,

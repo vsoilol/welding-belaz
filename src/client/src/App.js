@@ -10,13 +10,14 @@ import {
   LoginContainer, 
   TasksContainer,
   RecordsContainer,
-  ReportsContainer
+  ReportsContainer,
+  CreatesUserContainer,
+  MessagesContainer,
 } from "containers";
 import UploadContainer from "containers/Upload.container";
 import MobileContext from "context/MobileContext";
 import TabletContext from "context/TabletContext";
-import { NewPasswordPage } from "pages";
-import { CreatesUserPage } from "pages";
+import { NewPasswordPage } from "pages"; 
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Switch, withRouter } from "react-router-dom";
@@ -75,7 +76,7 @@ function App({ error, errorType, clearError }) {
                 allow={true}
                 path="/creates-user"
                 exact
-                component={CreatesUserPage}
+                component={CreatesUserContainer}
                 redirectTo="/"
               />
               <PrivateRoute
@@ -143,6 +144,20 @@ function App({ error, errorType, clearError }) {
                 path="/records"
                 exact
                 component={RecordsContainer}
+                redirectTo="/login"
+              />
+              <PrivateRoute
+                allow={isAuth}
+                path="/records"
+                exact
+                component={RecordsContainer}
+                redirectTo="/login"
+              />
+              <PrivateRoute
+                allow={isAuth}
+                path="/messages"
+                exact
+                component={MessagesContainer}
                 redirectTo="/login"
               />
               <PrivateRoute

@@ -67,8 +67,7 @@ export const Reports = ({
     productionAreaId: modalData?.productionAreaId ?? "",
     welderId: modalData?.welderId ?? "",
     WorkplaceId: modalData?.WorkplaceId ?? "",
-    WeldingEquipmentId: modalData?.WeldingEquipmentId ?? "",
-
+    WeldingEquipmentId: modalData?.WeldingEquipmentId ?? "", 
     cutType: modalData?.cutType ?? "",
   });
 
@@ -489,22 +488,18 @@ export const Reports = ({
     }
     if (idReports === 0) {
       return (
-        <div>
-
-
+        <div> 
           <WorkshopId />
           <Product />
           <SeamComp />
-          <StartDateEndDate />
-
+          <StartDateEndDate /> 
         </div>
 
       )
     }
     if (idReports === 1) {
       return (
-        <div>
-
+        <div> 
           <ProductionAreaId />
           <Product />
           <SeamComp />
@@ -579,8 +574,8 @@ export const Reports = ({
     if (idReports === 8) {
       return (
         <div>
-          <WorkshopId />
-
+          {/* <WorkshopId /> */}
+          <WorkplaceId />
           <StartDateEndDate />
         </div>
 
@@ -900,7 +895,7 @@ export const Reports = ({
               <form onSubmit={handleSubmit}>
 
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>В данный момент ничего нету </h4>
+                  <h4 style={{ padding: "35px 40px" }}>Данные по этому отчету отсутствуют. </h4>
 
                   <div className={styles.row}>
                     <Button

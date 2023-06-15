@@ -61,12 +61,12 @@ const ReactSelect = ({
   placeholder,
   isDisabled,
 }) => {
-  const getValue = options.filter((option) => {
+  const getValue = Array.isArray(options) ? options.filter((option) => {
     if (value instanceof Array) {
       return value.includes(option.value);
     }
     return option.value === value;
-  });
+  }) : [];
 
   return (
     <Select

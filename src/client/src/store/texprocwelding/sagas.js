@@ -63,6 +63,7 @@ function* loadInstructions() {
 function* addInst(variables) {
   try {
     const { data } = yield call(api.post, `/TechnologicalInstruction`, variables.payload);
+    console.log(variables.payload)
     yield put(addInstSuccess(variables.payload));
     yield call(loadInstructions); // выполнение функции loadInstructions
   } catch (error) {

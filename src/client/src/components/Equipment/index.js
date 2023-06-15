@@ -22,7 +22,7 @@ import styles from "./styles.module.css";
 import imgcalendar from "assets/icons/calendar.png";
 import deleteIcon from "assets/icons/delete.png";
 
-import {Upload} from "components/Upload/index";
+import { Upload } from "components/Upload/index";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import api from "services/api";
@@ -92,23 +92,21 @@ export const Equipment = ({
   //weldingEquipmentId
   const [weldingEquipmentId, setweldingEquipmentId] = useState(null);
 
-  const [deleteTaskModal, setdeleteTaskModal] = useState(false); 
+  const [deleteTaskModal, setdeleteTaskModal] = useState(false);
   const initialValues = {
     rfidTag: modalData?.rfidTag ?? "",
     name: modalData?.name ?? "",
     marking: modalData?.marking ?? "",
     factoryNumber: modalData?.factoryNumber ?? "",
-    commissioningDate: modalData?.commissioningDate ?? "",
     height: modalData?.height ?? "",
     width: modalData?.width ?? "",
     lenght: modalData?.lenght ?? "",
     groupNumber: modalData?.groupNumber ?? "",
     manufacturerName: modalData?.manufacturerName ?? "",
-
+ 
     nextAttestationDate: modalData?.nextAttestationDate ?? "",
-    commissioningDate: modalData?.commissioningDate ?? "",
-
-
+    commissioningDate:  modalData?.commissioningDate ?? "",
+   
     weldingProcess: modalData?.weldingProcess ?? "",
     idleVoltage: modalData?.idleVoltage ?? "",
     weldingCurrentMin: modalData?.weldingCurrentMin ?? "",
@@ -124,13 +122,7 @@ export const Equipment = ({
     Date: modalData?.Date ?? "",
 
   };
-
-  const formattedMasters = masters?.map((item) => {
-    return {
-      value: item.masterId,
-      label: `${item.surname} ${item.name}`,
-    };
-  });
+ 
 
   useEffect(() => {
     loadEquipment();
@@ -143,10 +135,10 @@ export const Equipment = ({
     loadWorkshop();
     loadArea();
   }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder, loadWorkshop, loadArea]);
-
+ 
 
   const columns = [
-    (userRole === "Admin" || userRole === "Master") && {
+    (userRole === "Admin" /* || userRole === "Master" */) && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -158,7 +150,7 @@ export const Equipment = ({
           }}
         />
       ),
-    }, 
+    },
     { title: "Наименование", field: "name" },
     { title: "Маркировка", field: "marking" },
     {
@@ -256,32 +248,7 @@ export const Equipment = ({
 
 
   }
-
-
-  function SetArea(params, field) {
-    if (field === "name") {
-      for (let index = 0; index < posts?.length; index++) {
-        if (posts[index]?.id === params) {
-          return posts[index].productionArea.name
-        }
-      }
-    }
-    if (field === "numb") {
-      for (let index = 0; index < posts?.length; index++) {
-        if (posts[index]?.id === params) {
-          return posts[index].productionArea.name
-        }
-      }
-    }
-
-
-  }
-  const requiredKeys = ["name", "nextInspectionDate"];
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
+  
   function OpenCalendar(rowData) {
     window.localStorage.removeItem("executorId")
     window.localStorage.setItem("equipment", `Оборудование: ${rowData.name}  `)
@@ -454,35 +421,35 @@ export const Equipment = ({
     };
   });
   function SendData(variables) {
-    variables["id"] = isEquipmentNumb
-    variables["postId"] = valuetPosts
-    variables["postNumber"] = valuetPostsNumber
-    variables["commissioningDate"] = new Date(variables.commissioningDate).toLocaleDateString('ru-RU', { dateStyle: 'short' })
-    variables["nextAttestationDate"] = new Date(variables.nextAttestationDate).toLocaleDateString('ru-RU', { dateStyle: 'short' })
+    let commissioningDate = variables.commissioningDate;
+    if (!isNaN(new Date(variables.commissioningDate))) {
+      commissioningDate = new Date(variables.commissioningDate).toLocaleDateString('ru-RU', { dateStyle: 'short' });
+    } 
+    variables.id = isEquipmentNumb;
+    variables.postId = valuetPosts;
+    variables.postNumber = valuetPostsNumber;
+    variables.commissioningDate = commissioningDate;
+    variables.nextAttestationDate = new Date(variables.nextAttestationDate).toLocaleDateString('ru-RU', { dateStyle: 'short' });
 
-    variables["workplaceIds"] = []
-    //Добавить Оборудование 
-    if (isModalNumb == 0) {
-      addEquipment(variables)
-    }
-    //Редактировать Оборудование
-    if (isModalNumb == 1) {
-      editEquipment(variables)
-    }
-    
+    variables.workplaceIds = [];
 
-    variables["downtimeReasonId"] = valueReason
-    variables["weldingEquipmentId"] = valuetEquipment
-    variables["Date"] = new Date(variables.Date).toLocaleDateString('ru-RU', { dateStyle: 'short' })
-    variables["idDownti"] = valueDownti
-
-    //Добавить простоя 
-    if (isModalNumb == 2) {
-      addDowntime(variables)
+    if (isModalNumb === 0) {
+      addEquipment(variables);
     }
-    //Редактировать простоя
-    if (isModalNumb == 3) {
-      editDowntime(variables)
+    if (isModalNumb === 1) {
+      editEquipment(variables);
+    }
+
+    variables.downtimeReasonId = valueReason;
+    variables.weldingEquipmentId = valuetEquipment;
+    variables.Date = new Date(variables.Date).toLocaleDateString('ru-RU', { dateStyle: 'short' });
+    variables.idDownti = valueDownti;
+
+    if (isModalNumb === 2) {
+      addDowntime(variables);
+    }
+    if (isModalNumb === 3) {
+      editDowntime(variables);
     }
   }
 
@@ -537,15 +504,17 @@ export const Equipment = ({
     else if (event.active === 1) {
       event.active = 0
     }
-  };
+  }; 
   ////////////////////////////////////////////////////////////////////
   return (
 
     <div className={styles.innerWrapper}>
       <ToolTip
         title="Оборудование"
-        toolTipText="Здесь Вы можете просмотреть оборудование, его технические характеристики, отчет о работе"
+        toolTipText="Здесь Вы можете просмотреть оборудование, его технические характеристики"/* , отчет о работе */
         src={equipmentImage}
+        workshop={workshop}
+        equipment={equipment}
       />
       {open ? (
         <Modal
@@ -580,24 +549,24 @@ export const Equipment = ({
             data={equipment[0]}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "Admin" /* || userRole === "Master" */
                 ? [
                   {
                     icon: "add",
                     tooltip: "Добавить оборудование",
                     isFreeAction: true,
-                    onClick: () => { 
-                      setIsModalNumb(0); 
-                      setIsModalOpen(true) 
-                      api.post(`/eventLog`,{
+                    onClick: () => {
+                      setIsModalNumb(0);
+                      setIsModalOpen(true)
+                      api.post(`/eventLog`, {
                         "information": "Открыл модальное окно добавления оборудования "
-                      }) 
+                      })
                     },
                   },
                   {
                     icon: "edit",
                     tooltip: "Редактировать оборудование",
-                    onClick: (event, rowData) => {
+                    onClick: (event, rowData) => { 
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(1);
@@ -605,15 +574,15 @@ export const Equipment = ({
                       setValuetPosts(rowData.post?.id)
                       setvalueWorkshop(rowData?.workshop?.id)
                       setvalueoptArea(rowData?.productionArea?.id)
-                      api.post(`/eventLog`,{
+                      api.post(`/eventLog`, {
                         "information": "Открыл модальное окно редактирования оборудования "
-                      }) 
+                      })
                     },
                   },
                 ]
                 : []
             }
-            renderRowChildren={renderRowChildren} 
+            renderRowChildren={renderRowChildren}
           />
         </TabPanel>
         {/*Простои оборудования*/}
@@ -628,7 +597,7 @@ export const Equipment = ({
             data={equipment[1]}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "Admin" /* || userRole === "Master" */
                 ? [
                   {
                     icon: "add",
@@ -643,7 +612,7 @@ export const Equipment = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(3);
-
+ 
                       setValueDownti(rowData.id)
                       setValuetEquipment(rowData.weldingEquipment.id)
                       findReason(rowData.downtimeReason)
@@ -651,7 +620,7 @@ export const Equipment = ({
                   },
                 ]
                 : []
-            } 
+            }
           />
         </TabPanel>
 
@@ -836,7 +805,7 @@ export const Equipment = ({
 
                     <Input
                       onChange={(e) => {
-                        if (value === "" ||/^[A-Za-z0-9-]+$/.test(e.target.value)) {
+                        if (value === "" || /^[A-Za-z0-9-]+$/.test(e.target.value)) {
                           handleChange(e);
                         }
                       }}
@@ -1082,7 +1051,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0" 
+                      min="0"
                       value={values.weldingCurrentMin}
                       name={`weldingCurrentMin`}
                       placeholder="min"
@@ -1102,7 +1071,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0" 
+                      min="0"
                       value={values.weldingCurrentMax}
                       name={`weldingCurrentMax`}
                       placeholder="max"
@@ -1125,7 +1094,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0" 
+                      min="0"
                       value={values.arcVoltageMin}
                       name={`arcVoltageMin`}
                       placeholder="min"
@@ -1144,7 +1113,7 @@ export const Equipment = ({
                         paddingLeft: 20,
                       }}
                       type="number"
-                      min="0" 
+                      min="0"
                       value={values.arcVoltageMax}
                       name={`arcVoltageMax`}
                       placeholder="max"
@@ -1161,7 +1130,7 @@ export const Equipment = ({
                       disabled={
                         values.name == "" || values.marking == "" || values.rfidTag == "" || values.factoryNumber == "" ||
                         values.nextAttestationDate == "" || values.commissioningDate == "" || values.weldingProcess == "" || values.idleVoltage == "" ||
-                        values.loadPercentage == "" || values.manufacturerName == "" || values.height == ""  || values.width == "" || values.lenght == "" ||
+                        values.loadPercentage == "" || values.manufacturerName == "" || values.height == "" || values.width == "" || values.lenght == "" ||
                         values.weldingCurrentMin == "" || values.weldingCurrentMax == "" || values.arcVoltageMin == "" || values.arcVoltageMax == ""
                       }
                       type="submit"
@@ -1256,7 +1225,7 @@ export const Equipment = ({
                     />
                   </div>
 
-                  
+
 
 
                   <div className={styles.row}>

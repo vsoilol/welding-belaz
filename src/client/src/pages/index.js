@@ -5,4 +5,4 @@ export { InstructionsPage } from "./Instructions";
 export { LoginPage } from "./LoginPage";
 export { RecordsPage } from "./RecordsPage";
 export { NewPasswordPage } from "./NewPasswordPage";
-export { CreatesUserPage } from "./CreatesUserPage";
+export { CreatesUserPage } from "./CreatesUserPage"; 

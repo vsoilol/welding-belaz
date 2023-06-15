@@ -105,29 +105,13 @@ export const Calendar = ({
   ];
 
   useEffect(() => {
-    loadCalendaryear(date);
-    loadExecutors();
-    loadEquipment();
+    /* loadCalendaryear(date); */
+   /*  loadExecutors();
+    loadEquipment(); */
     (window.localStorage.getItem("executorId")) ? loadDayByWelder(window.localStorage.getItem("executorId")) : loadDayByEquipment(window.localStorage.getItem("equipmentId"))
   }, [loadCalendaryear, loadExecutors, loadEquipment]);
 
-
-  const getDocument = (activeId) => {
-    api
-      .get(`/reports/passportReport/${activeId}`, {
-        responseType: "arraybuffer",
-        dataType: "blob",
-      })
-      .then((response) => {
-        const file = new Blob([response["data"]], {
-          type: "application/pdf",
-        });
-
-        const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
-      })
-      .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
-  };
+ 
 
 
 
@@ -240,6 +224,11 @@ export const Calendar = ({
 
         <div class="calendar-wrapper">
           <h2>Производственный календарь </h2>
+
+          <div className={styles.RowToolsBtns}>
+            <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
+            {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
+          </div>
           <Calendars
             executors={executors}
             equipment={equipment}
@@ -248,10 +237,7 @@ export const Calendar = ({
           </Calendars>
         </div>
 
-        <div className={styles.RowToolsBtns}>
-          <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
-          {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
-        </div>
+        
 
 
         {/*Добавить рабочий день*/}

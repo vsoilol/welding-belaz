@@ -41,11 +41,11 @@ const StyleNewTable = {
 }
 
 
-export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole }) => {
+export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
   const columns = [
-    (userRole === "Admin" /*|| userRole === "Master"*/) && {
+    (userRole === "Admin" || userRole === "Master") && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -53,19 +53,19 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
           src={deleteIcon}
           onClick={() => {
             setdeleteRecordsModal(true);
-            setidRecords(rowData?.id)
+          setidRecords(rowData?.id)
           }}
         />
       ),
-    },
+    },   
     { title: "Дата", field: "date" },
     { title: "Время начала сварки", field: "weldingStart" },
     {
       title: "Номер задания ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingTaskNumber != null) {
+        if (rowData?.weldingTaskNumber  != null) {
           return (
-            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber ?? "-"}</a>
+            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber  ?? "-"}</a>
           );
         }
         else {
@@ -105,7 +105,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
           <span>  {rowData.master?.lastName}  </span>
         </div>
       ),
-    },
+    },  
   ].filter(column => column);
   const renderRowChildren = (rowData) => {
     console.log(rowData)
@@ -264,13 +264,14 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
   return (
     <div className={styles.tableWrapper}>
       <Table
-        title="Записи"
+        title="Сообщения"
         actions={[]}
         columns={columns}
         renderRowChildren={renderRowChildren}
-        data={records}
+        data={records.filter(obj => obj.areDeviations === true)}
         isLoading={isRequesting}
         deleteAction={null}
+        messags={true}
       />
       {/*Удаление записи*/}
       <ModalWindow

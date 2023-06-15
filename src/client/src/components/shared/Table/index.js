@@ -12,10 +12,11 @@ export const Table = ({
   editAction,
   deleteAction,
   isLoading,
+  messags
 }) => {
   const isMobile = useContext(MobileContext);
   const rowStyle = rowData => ({ 
-    backgroundColor: rowData?.areDeviations ? "rgb(249 81 81)" : "white", 
+    backgroundColor: rowData?.areDeviations && !messags ? "rgb(249 81 81)" : "white", 
   });
   return (
     <MaterialTable
