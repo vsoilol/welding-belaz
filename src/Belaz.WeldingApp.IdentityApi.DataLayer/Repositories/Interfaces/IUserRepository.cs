@@ -24,4 +24,6 @@ public interface IUserRepository
     Task UpdateConfirmEmailTokenAsync(Guid id, string token);
     
     Task<bool> CheckConfirmEmailTokenValidAsync(Guid id, string token);
+    
+    Task MarkUserAsAlreadyLoggedInAsync(Guid id);
 }

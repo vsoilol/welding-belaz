@@ -119,6 +119,11 @@ internal class AuthService : IAuthService
             return new Result<AuthSuccessResponse>(new LoginFailedException("User/password combination is wrong"));
         }
 
+        if (userData.IsFirstLogin)
+        {
+            await _userRepository.MarkUserAsAlreadyLoggedInAsync(userData.Id);
+        }
+
         return _tokenService.GenerateAuthenticationResultForUser(userData);
     }
 

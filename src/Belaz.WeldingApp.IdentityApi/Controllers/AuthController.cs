@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
 
     [AuthorizeRoles(Role.Admin)]
     [HttpPost("user-credentials")]
-    [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> ChangeUserCredentialsAsync([FromBody] ChangeUserCredentialsRequest request)
     {
