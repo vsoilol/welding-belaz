@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+﻿using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 
@@ -9,4 +10,8 @@ public interface IWeldingRecordRepository
     Task<List<RecordDto>> GetAllWithDeviationsAsync();
     
     Task DeleteAsync(Guid id);
+
+    Task<WeldingRecordLimitDto> UpdateWeldingRecordLimitAsync(WeldingRecordLimit entity);
+    
+    Task<WeldingRecordLimitDto> GetWeldingRecordLimitAsync();
 }

@@ -25,9 +25,13 @@ public class UpdateWeldPassageInstructionRequestValidator
 
         RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
 
-        RuleFor(model => model.WeldingCurrentMin).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(0);
+        RuleFor(model => model.WeldingCurrentMin)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(0);
 
-        RuleFor(model => model.WeldingCurrentMax).Cascade(CascadeMode.Stop).GreaterThan(0);
+        RuleFor(model => model.WeldingCurrentMax)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThan(0);
 
         RuleFor(model => model.ArcVoltageMin)
             .Cascade(CascadeMode.Stop)
@@ -43,9 +47,13 @@ public class UpdateWeldPassageInstructionRequestValidator
             _ => _.ArcVoltageMin is null || _.ArcVoltageMax is null,
             () =>
             {
-                RuleFor(model => model.ArcVoltageMin).Cascade(CascadeMode.Stop).Null();
+                RuleFor(model => model.ArcVoltageMin)
+                    .Cascade(CascadeMode.Stop)
+                    .Null();
 
-                RuleFor(model => model.ArcVoltageMax).Cascade(CascadeMode.Stop).Null();
+                RuleFor(model => model.ArcVoltageMax)
+                    .Cascade(CascadeMode.Stop)
+                    .Null();
             }
         );
 
@@ -53,9 +61,13 @@ public class UpdateWeldPassageInstructionRequestValidator
             _ => _.PreheatingTemperatureMin is null || _.PreheatingTemperatureMax is null,
             () =>
             {
-                RuleFor(model => model.PreheatingTemperatureMin).Cascade(CascadeMode.Stop).Null();
+                RuleFor(model => model.PreheatingTemperatureMin)
+                    .Cascade(CascadeMode.Stop)
+                    .Null();
 
-                RuleFor(model => model.PreheatingTemperatureMax).Cascade(CascadeMode.Stop).Null();
+                RuleFor(model => model.PreheatingTemperatureMax)
+                    .Cascade(CascadeMode.Stop)
+                    .Null();
             }
         );
 

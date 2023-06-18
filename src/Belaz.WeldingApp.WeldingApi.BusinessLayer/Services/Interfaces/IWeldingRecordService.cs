@@ -12,4 +12,8 @@ public interface IWeldingRecordService
     Task<List<RecordDto>> GetAllWithDeviationsAsync();
 
     Task<Result<Unit>> DeleteAsync(DeleteWeldingRecordRequest request);
+    
+    Task<Result<WeldingRecordLimitDto>> UpdateWeldingRecordLimitAsync(UpdateWeldingRecordLimitRequest request);
+    
+    Task<WeldingRecordLimitDto> GetWeldingRecordLimitAsync();
 }

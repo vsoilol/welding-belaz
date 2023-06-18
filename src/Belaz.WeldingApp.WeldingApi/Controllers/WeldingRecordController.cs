@@ -29,7 +29,7 @@ public class WeldingRecordController : ControllerBase
     {
         return await _weldingRecordService.GetAllAsync();
     }
-    
+
     [HttpGet("with-deviations")]
     [ProducesResponseType(typeof(IEnumerable<RecordDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RecordDto>>> GetAllWithDeviationsAsync()
@@ -43,6 +43,22 @@ public class WeldingRecordController : ControllerBase
         var result = await _weldingRecordService.DeleteAsync(
             new DeleteWeldingRecordRequest { Id = id }
         );
+        return result.ToOk();
+    }
+
+    [HttpGet("limits")]
+    [ProducesResponseType(typeof(WeldingRecordLimitDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingRecordLimitDto>> GetWeldingRecordLimitAsync()
+    {
+        return await _weldingRecordService.GetWeldingRecordLimitAsync();
+    }
+
+    [HttpPut("limits")]
+    [ProducesResponseType(typeof(WeldingRecordLimitDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingRecordLimitDto>> UpdateWeldingRecordLimitAsync(
+        [FromBody] UpdateWeldingRecordLimitRequest request)
+    {
+        var result = await _weldingRecordService.UpdateWeldingRecordLimitAsync(request);
         return result.ToOk();
     }
 }
