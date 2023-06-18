@@ -34,7 +34,7 @@ public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<Eq
 
         using (var package = new ExcelPackage(content))
         {
-            var worksheet = package.Workbook.Worksheets.Add("Отчет работе оборудования за период");
+            var worksheet = package.Workbook.Worksheets.Add("Отчет о работе оборудования за период");
             
             CreateHeader(worksheet, data.TitleText);
 
@@ -48,7 +48,7 @@ public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<Eq
         return new DocumentDto
         {
             Bytes = content.ToArray(),
-            FileName = "Отчет работе оборудования за период.xlsx",
+            FileName = "Отчет о работе оборудования за период.xlsx",
             FileType = FileTypes.ExcelType
         };
     }
