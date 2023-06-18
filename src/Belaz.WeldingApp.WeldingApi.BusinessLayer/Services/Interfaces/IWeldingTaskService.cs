@@ -29,4 +29,7 @@ public interface IWeldingTaskService
 
     Task<Result<WeldingMaterialInfoDto?>>
         GetWeldingMaterialInfoByDateAsync(GetWeldingMaterialInfoByDateRequest request);
+
+    Task<Result<WeldingMaterialInfoDto>> UpdateWeldingMaterialInfoByDateAsync(
+        UpdateWeldingMaterialInfoByDateRequest request);
 }

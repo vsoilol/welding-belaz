@@ -118,7 +118,8 @@ public class WeldingTaskService : IWeldingTaskService
         );
     }
 
-    public async Task<Result<WeldingMaterialInfoDto?>> GetWeldingMaterialInfoByDateAsync(GetWeldingMaterialInfoByDateRequest request)
+    public async Task<Result<WeldingMaterialInfoDto?>> GetWeldingMaterialInfoByDateAsync(
+        GetWeldingMaterialInfoByDateRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -126,9 +127,25 @@ public class WeldingTaskService : IWeldingTaskService
         {
             return new Result<WeldingMaterialInfoDto?>(validationResult.Exception);
         }
-        
+
         var date = request.Date.ToDateTime();
 
         return await _weldingTaskRepository.GetWeldingMaterialInfoByDateAsync(date);
+    }
+
+    public async Task<Result<WeldingMaterialInfoDto>> UpdateWeldingMaterialInfoByDateAsync(
+        UpdateWeldingMaterialInfoByDateRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<WeldingMaterialInfoDto>(validationResult.Exception);
+        }
+
+        var date = request.Date.ToDateTime();
+
+        return await _weldingTaskRepository
+            .UpdateWeldingMaterialInfoByDateAsync(date, request.WeldingMaterial, request.WeldingMaterialBatchNumber);
     }
 }

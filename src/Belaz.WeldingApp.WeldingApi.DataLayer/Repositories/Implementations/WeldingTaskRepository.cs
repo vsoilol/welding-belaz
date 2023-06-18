@@ -189,8 +189,30 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .Where(_ => _.WeldingDate.Date == date.Date)
             .ProjectTo<WeldingMaterialInfoDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
-        
+
         return weldingMaterialInfo;
+    }
+
+    public async Task<WeldingMaterialInfoDto> UpdateWeldingMaterialInfoByDateAsync(DateTime date,
+        string? weldingMaterial, string? weldingMaterialBatchNumber)
+    {
+        var weldingTasks = await _context.WeldingTasks
+            .Where(_ => _.WeldingDate.Date == date.Date)
+            .ToListAsync();
+
+        foreach (var weldingTask in weldingTasks)
+        {
+            weldingTask.WeldingMaterial = weldingMaterial;
+            weldingTask.WeldingMaterialBatchNumber = weldingMaterialBatchNumber;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return new WeldingMaterialInfoDto
+        {
+            WeldingMaterial = weldingMaterial,
+            WeldingMaterialBatchNumber = weldingMaterialBatchNumber
+        };
     }
 
     private IQueryable<WeldingTask> GetWeldingTasksWithIncludesByFilter(
