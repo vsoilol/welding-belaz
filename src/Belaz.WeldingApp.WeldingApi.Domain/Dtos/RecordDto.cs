@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
@@ -36,6 +35,8 @@ public class RecordDto : IMapFrom<WeldingRecord>
     public UserFullNameDto Master { get; set; } = null!;
 
     public int? WeldingTaskNumber { get; set; }
+    
+    public int? SeamNumber { get; set; }
 
     public WeldingEquipmentBriefDto WeldingEquipment { get; set; } = null!;
 
@@ -63,6 +64,10 @@ public class RecordDto : IMapFrom<WeldingRecord>
     /// Напряжения на дуге max
     /// </summary>
     public double? ArcVoltageMax { get; set; }
+    
+    public double WeldingCurrentAverage { get; set; }
+    
+    public double ArcVoltageAverage { get; set; }
 
     public void Mapping(Profile profile)
     {
@@ -86,6 +91,9 @@ public class RecordDto : IMapFrom<WeldingRecord>
             .ForMember(dto => dto.WeldingTaskNumber,
                 opt =>
                     opt.MapFrom(x => x.WeldPassage!.WeldingTask.Number))
+            .ForMember(dto => dto.SeamNumber,
+                opt =>
+                    opt.MapFrom(x => x.WeldPassage!.WeldingTask.SeamAccount.Seam.Number))
             .ForMember(
                 dto => dto.AreDeviations,
                 opt =>
