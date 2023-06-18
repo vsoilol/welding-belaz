@@ -14,4 +14,6 @@ public interface IWeldingRecordRepository
     Task<WeldingRecordLimitDto> UpdateWeldingRecordLimitAsync(WeldingRecordLimit entity);
     
     Task<WeldingRecordLimitDto> GetWeldingRecordLimitAsync();
+    
+    Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate);
 }

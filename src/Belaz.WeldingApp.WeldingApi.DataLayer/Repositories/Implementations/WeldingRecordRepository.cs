@@ -81,6 +81,18 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate)
+    {
+        var weldingRecords = _context.WeldingRecords
+            .OrderByDescending(_ => _.Date.Date)
+            .ThenByDescending(x => x.WeldingStartTime.TotalSeconds)
+            .Where(_ => _.Date.Date >= startDate.Date && _.Date.Date <= endDate.Date);
+
+        return weldingRecords
+            .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<List<RecordDto>> GetAllAsync()
     {
         var weldingRecords = _context.WeldingRecords

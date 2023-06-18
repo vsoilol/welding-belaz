@@ -1204,6 +1204,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/weldingRecord/period",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/weldingRecord/period",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/weldingRecord/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [

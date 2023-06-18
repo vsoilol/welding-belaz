@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Extensions;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingRecord;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using LanguageExt;
 using LanguageExt.Common;
 
@@ -24,6 +24,22 @@ public class WeldingRecordService : IWeldingRecordService
         _weldingRecordRepository = weldingRecordRepository;
         _validationService = validationService;
         _mapper = mapper;
+    }
+
+    public async Task<Result<List<RecordDto>>> GetRecordsByDatePeriodAsync(GetRecordsByDatePeriodRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<RecordDto>>(validationResult.Exception);
+        }
+
+        var startDate = request.StartDate.ToDateTime();
+        var endDate = request.EndDate.ToDateTime();
+
+        var result = await _weldingRecordRepository.GetRecordsByDatePeriodAsync(startDate, endDate);
+        return result;
     }
 
     public Task<List<RecordDto>> GetAllWithDeviationsAsync()

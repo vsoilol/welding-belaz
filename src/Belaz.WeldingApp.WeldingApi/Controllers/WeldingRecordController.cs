@@ -61,4 +61,13 @@ public class WeldingRecordController : ControllerBase
         var result = await _weldingRecordService.UpdateWeldingRecordLimitAsync(request);
         return result.ToOk();
     }
+
+    [HttpGet("period")]
+    [ProducesResponseType(typeof(List<RecordDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<RecordDto>>> GetRecordsByDatePeriodAsync(
+        [FromQuery] GetRecordsByDatePeriodRequest request)
+    {
+        var result = await _weldingRecordService.GetRecordsByDatePeriodAsync(request);
+        return result.ToOk();
+    }
 }
