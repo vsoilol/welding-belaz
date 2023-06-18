@@ -391,12 +391,17 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
 
         foreach (var workingShift in workingShifts)
         {
-            if (workingShift.ShiftEnd.Hours == 0)
-            {
-                workingShift.ShiftEnd = new TimeSpan(24, workingShift.ShiftEnd.Minutes, 0);
-            }
+            var breakEnd = workingShift.BreakEnd!.Value.Hours == 0
+                ? new TimeSpan(24, workingShift.BreakEnd!.Value.Minutes, 0)
+                : workingShift.BreakEnd!.Value;
+            var workingShiftEnd = workingShift.ShiftEnd.Hours == 0
+                ? new TimeSpan(24, workingShift.ShiftEnd.Minutes, 0)
+                : workingShift.ShiftEnd;
 
-            minutes += (workingShift.ShiftEnd - workingShift.ShiftStart).TotalMinutes;
+            var mainBreakDuration = breakEnd - workingShift.BreakStart!.Value;
+            var workingShiftDuration = workingShiftEnd - workingShift.ShiftStart;
+
+            minutes += (workingShiftDuration - mainBreakDuration).TotalMinutes;
         }
 
         return minutes;
