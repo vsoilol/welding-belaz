@@ -29,6 +29,13 @@ public class WeldingRecordController : ControllerBase
     {
         return await _weldingRecordService.GetAllAsync();
     }
+    
+    [HttpGet("with-deviations")]
+    [ProducesResponseType(typeof(IEnumerable<RecordDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<RecordDto>>> GetAllWithDeviationsAsync()
+    {
+        return await _weldingRecordService.GetAllWithDeviationsAsync();
+    }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
