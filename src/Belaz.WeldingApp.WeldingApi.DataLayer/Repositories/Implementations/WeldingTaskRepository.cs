@@ -183,6 +183,16 @@ public class WeldingTaskRepository : IWeldingTaskRepository
         return await GetByIdAsync(id);
     }
 
+    public async Task<WeldingMaterialInfoDto?> GetWeldingMaterialInfoByDateAsync(DateTime date)
+    {
+        var weldingMaterialInfo = await _context.WeldingTasks
+            .Where(_ => _.WeldingDate.Date == date.Date)
+            .ProjectTo<WeldingMaterialInfoDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+        
+        return weldingMaterialInfo;
+    }
+
     private IQueryable<WeldingTask> GetWeldingTasksWithIncludesByFilter(
         Expression<Func<WeldingTask, bool>>? filter = null
     )

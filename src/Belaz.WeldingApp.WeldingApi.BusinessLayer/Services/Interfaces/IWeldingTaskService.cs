@@ -26,4 +26,7 @@ public interface IWeldingTaskService
     Task<Result<WeldingTaskDto>> ChangeWeldingTaskSeamAmountAsync(
         ChangeWeldingSeamAmountRequest request
     );
+
+    Task<Result<WeldingMaterialInfoDto?>>
+        GetWeldingMaterialInfoByDateAsync(GetWeldingMaterialInfoByDateRequest request);
 }

@@ -23,4 +23,6 @@ public interface IWeldingTaskRepository
     Task<WeldingTaskDto> ChangeWeldingTaskDateAsync(Guid id, DateTime date);
 
     Task<WeldingTaskDto> ChangeWeldingTaskSeamAmountAsync(Guid id, int seamAmount);
+    
+    Task<WeldingMaterialInfoDto?> GetWeldingMaterialInfoByDateAsync(DateTime date);
 }

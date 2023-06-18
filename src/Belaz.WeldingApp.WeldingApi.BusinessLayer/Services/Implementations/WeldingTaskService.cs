@@ -117,4 +117,18 @@ public class WeldingTaskService : IWeldingTaskService
             request.SeamAmount
         );
     }
+
+    public async Task<Result<WeldingMaterialInfoDto?>> GetWeldingMaterialInfoByDateAsync(GetWeldingMaterialInfoByDateRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<WeldingMaterialInfoDto?>(validationResult.Exception);
+        }
+        
+        var date = request.Date.ToDateTime();
+
+        return await _weldingTaskRepository.GetWeldingMaterialInfoByDateAsync(date);
+    }
 }
