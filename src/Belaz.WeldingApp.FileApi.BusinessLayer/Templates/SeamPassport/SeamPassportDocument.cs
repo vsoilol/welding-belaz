@@ -722,7 +722,7 @@ public class SeamPassportDocument : IDocument
             table
                 .Cell()
                 .Element(BlockLeft)
-                .Text(Task.Seam.DefectiveReason ?? "-")
+                .Text(Task.DefectiveReason ?? "-")
                 .Style(Typography.Italic);
 
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);

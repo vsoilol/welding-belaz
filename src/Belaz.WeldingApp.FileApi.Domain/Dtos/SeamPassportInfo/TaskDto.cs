@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.Production;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
@@ -59,6 +60,8 @@ public class TaskDto : IMapFrom<WeldingTask>
 
     public List<Workplace> Workplaces { get; set; } = null!;
 
+    public string? DefectiveReason { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile
@@ -81,8 +84,18 @@ public class TaskDto : IMapFrom<WeldingTask>
             .ForMember(
                 dto => dto.Workplaces,
                 opt =>
-                    opt.MapFrom(x => x.WeldPassages.First()
-                        .WeldingRecord.WeldingEquipment.Workplaces)
+                    opt.MapFrom(x => x.WeldPassages.Any()
+                        ? x.WeldPassages.First()
+                            .WeldingRecord.WeldingEquipment.Workplaces
+                        : new List<Workplace>())
+            )
+            .ForMember(
+                dto => dto.DefectiveReason,
+                opt =>
+                    opt.MapFrom(x => x.SeamAccount
+                        .ProductAccount.ProductResults
+                        .First(_ => _.Status == ResultProductStatus.Defective)
+                        .Reason)
             )
             .ForMember(
                 dto => dto.WeldPassages,
