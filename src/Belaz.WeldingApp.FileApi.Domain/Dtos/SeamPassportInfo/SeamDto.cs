@@ -24,6 +24,8 @@ public class SeamDto : IMapFrom<Seam>
     public WorkshopBriefDto Workshop { get; set; } = null!;
 
     public TechnologicalInstructionBriefDto TechnologicalInstruction { get; set; } = null!;
+    
+    public TechnologicalProcessBriefDto TechnologicalProcess { get; set; } = null!;
 
     public void Mapping(Profile profile)
     {
@@ -33,6 +35,11 @@ public class SeamDto : IMapFrom<Seam>
             .ForMember(dto => dto.Detail, opt => opt.Ignore())
             .ForMember(dto => dto.Knot, opt => opt.Ignore())
             .ForMember(dto => dto.DefectiveReason, opt => opt.Ignore())
-            .ForMember(dto => dto.Workshop, opt => opt.MapFrom(x => x.ProductionArea!.Workshop));
+            .ForMember(dto => dto.Workshop, 
+                opt => 
+                opt.MapFrom(x => x.ProductionArea!.Workshop))
+            .ForMember(dto => dto.TechnologicalProcess, 
+                opt => 
+                    opt.MapFrom(x => x.Product.TechnologicalProcess));
     }
 }

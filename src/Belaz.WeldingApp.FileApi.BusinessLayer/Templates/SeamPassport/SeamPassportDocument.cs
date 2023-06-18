@@ -147,6 +147,25 @@ public class SeamPassportDocument : IDocument
                 .Text($"{Task.Seam.ProductionArea.Name} №{Task.Seam.ProductionArea.Number}")
                 .Style(Typography.Italic);
 
+            var workplacesText = Task.Workplaces.Any()
+                ? string.Join(", ", Task.Workplaces.Select(_ => $"№ {_.Number}"))
+                : "-";
+
+            table
+                .Cell()
+                .Row(5)
+                .Column(1)
+                .Element(BlockLeft)
+                .Text("Номера рабочих мест")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Row(5)
+                .Column(2)
+                .Element(BlockLeft)
+                .Text(workplacesText)
+                .Style(Typography.Italic);
+
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
@@ -401,15 +420,34 @@ public class SeamPassportDocument : IDocument
             table
                 .Cell()
                 .Column(1)
+                .Row(1)
                 .Element(BlockLeft)
                 .Text("Инструкция на технологический процесс сварки")
                 .Style(Typography.Normal);
             table
                 .Cell()
                 .Column(2)
+                .Row(1)
                 .Element(BlockLeft)
                 .Text(
                     $"{Task.Seam.TechnologicalInstruction.Name} №{Task.Seam.TechnologicalInstruction.Number}"
+                )
+                .Style(Typography.Italic);
+
+            table
+                .Cell()
+                .Column(1)
+                .Row(2)
+                .Element(BlockLeft)
+                .Text("Технологический процесс")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Column(2)
+                .Row(2)
+                .Element(BlockLeft)
+                .Text(
+                    $"{Task.Seam.TechnologicalProcess.Name} №{Task.Seam.TechnologicalProcess.Number}"
                 )
                 .Style(Typography.Italic);
 
@@ -482,9 +520,10 @@ public class SeamPassportDocument : IDocument
                     });
 
                     foreach (
-                        var weldPassageInstructions in Task.Seam.TechnologicalInstruction.WeldPassageInstructions.OrderBy(
-                            _ => _.Number
-                        )
+                        var weldPassageInstructions in Task.Seam.TechnologicalInstruction.WeldPassageInstructions
+                            .OrderBy(
+                                _ => _.Number
+                            )
                     )
                     {
                         table
