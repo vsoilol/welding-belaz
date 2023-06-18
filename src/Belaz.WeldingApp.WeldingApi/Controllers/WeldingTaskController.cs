@@ -92,4 +92,26 @@ public class WeldingTaskController : ControllerBase
         var result = await _weldingTaskService.ChangeWeldingTaskSeamAmountAsync(request);
         return result.ToOk();
     }
+
+    [HttpGet("welding-material/{date}")]
+    [ProducesResponseType(typeof(WeldingMaterialInfoDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingMaterialInfoDto?>> GetWeldingMaterialInfoByDateAsync([FromRoute] string date)
+    {
+        var result = await _weldingTaskService.GetWeldingMaterialInfoByDateAsync(
+            new GetWeldingMaterialInfoByDateRequest
+                { Date = date }
+        );
+
+        return result.ToOk();
+    }
+
+    [HttpPut("welding-material")]
+    [ProducesResponseType(typeof(WeldingMaterialInfoDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingMaterialInfoDto>> UpdateWeldingMaterialInfoByDateAsync(
+        [FromBody] UpdateWeldingMaterialInfoByDateRequest request)
+    {
+        var result = await _weldingTaskService.UpdateWeldingMaterialInfoByDateAsync(request);
+
+        return result.ToOk();
+    }
 }

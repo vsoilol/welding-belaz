@@ -83,7 +83,7 @@ internal class ExcelEquipmentOperationAnalysisReportService
         var result = new DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>
         {
             Data = data,
-            TitleText = new []
+            TitleText = new[]
             {
                 "Отчёт в разрезе завода",
                 $"За период {request.StartDate} - {request.EndDate}"
@@ -130,11 +130,11 @@ internal class ExcelEquipmentOperationAnalysisReportService
         }
 
         var productionArea = await _productionAreaRepository.GetBriefInfoByIdAsync(request.ProductionAreaId);
-        
+
         var result = new DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>
         {
             Data = data,
-            TitleText = new []
+            TitleText = new[]
             {
                 $"Отчёт в разрезе производственного участка: {productionArea.Number} {productionArea.Name}",
                 $"За период {request.StartDate} - {request.EndDate}"
@@ -179,7 +179,7 @@ internal class ExcelEquipmentOperationAnalysisReportService
             var exception = new ListIsEmptyException();
             return new Result<DocumentDto>(exception);
         }
-        
+
         var workshop = await _workshopRepository.GetBriefInfoByIdAsync(request.WorkshopId);
 
         var result = new DocumentInfo<List<EquipmentOperationTimeWithShiftDto>>
@@ -439,7 +439,7 @@ internal class ExcelEquipmentOperationAnalysisReportService
                 _ => _.Number == workingShift.Number
             );
 
-            return dayWorkingShift!.ShiftEnd - dayWorkingShift.ShiftStart;
+            return CalculateWorkingShiftDuration(dayWorkingShift!);
         }
 
         if (IsWeekend(day))
@@ -447,12 +447,22 @@ internal class ExcelEquipmentOperationAnalysisReportService
             return TimeSpan.Zero;
         }
 
-        if (workingShift.ShiftEnd.Hours == 0)
-        {
-            return new TimeSpan(24, workingShift.ShiftEnd.Minutes, 0) - workingShift.ShiftStart;
-        }
+        return CalculateWorkingShiftDuration(workingShift);
+    }
 
-        return workingShift.ShiftEnd - workingShift.ShiftStart;
+    private TimeSpan CalculateWorkingShiftDuration(WorkingShiftDto workingShift)
+    {
+        var breakEnd = workingShift.BreakEnd!.Value.Hours == 0
+            ? new TimeSpan(24, workingShift.BreakEnd!.Value.Minutes, 0)
+            : workingShift.BreakEnd!.Value;
+        var workingShiftEnd = workingShift.ShiftEnd.Hours == 0
+            ? new TimeSpan(24, workingShift.ShiftEnd.Minutes, 0)
+            : workingShift.ShiftEnd;
+
+        var mainBreakDuration = breakEnd - workingShift.BreakStart!.Value;
+        var workingShiftDuration = workingShiftEnd - workingShift.ShiftStart;
+
+        return workingShiftDuration - mainBreakDuration;
     }
 
     private int? GetWorkingShiftNumberForConditionTime(

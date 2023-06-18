@@ -133,4 +133,13 @@ internal class UserRepository : IUserRepository
 
         return true;
     }
+
+    public async Task MarkUserAsAlreadyLoggedInAsync(Guid id)
+    {
+        var user = (await _context.Users.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        user.IsFirstLogin = false;
+        
+        await _context.SaveChangesAsync();
+    }
 }

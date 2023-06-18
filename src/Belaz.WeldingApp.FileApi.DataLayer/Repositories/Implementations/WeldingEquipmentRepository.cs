@@ -117,7 +117,7 @@ internal class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .Select(g => new { Condition = g.Key, Time = g.Sum(w => w.Time) })
             .ToListAsync();
 
-        var allMinutes = endDate.Date.Subtract(startDate.Date).TotalMinutes;
+        var allMinutes = endDate.Date.Subtract(startDate.Date).TotalMinutes + 1440;
 
         var onTimeMinutes =
             conditionTimeGroups.FirstOrDefault(g => g.Condition == Condition.On)?.Time ?? 0;
