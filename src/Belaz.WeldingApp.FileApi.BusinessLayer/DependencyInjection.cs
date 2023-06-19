@@ -67,6 +67,11 @@ public static class DependencyInjection
             IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>,
             EquipmentEfficiencyReportService
         >();
+        
+        services.AddScoped<
+            IExcelFileService<List<ProductAccountInfoExcelModel>>,
+            ProductAccountInfoExcelFileService
+        >();
 
         return services;
     }

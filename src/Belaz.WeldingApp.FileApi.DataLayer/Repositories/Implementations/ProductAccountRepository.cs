@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.Common.Entities.ProductInfo;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 using Microsoft.EntityFrameworkCore;
 
@@ -115,6 +116,14 @@ public class ProductAccountRepository : IProductAccountRepository
 
         _context.ProductAccounts.Add(newProductAccount);
         await _context.SaveChangesAsync();
+    }
+
+    public Task<List<ProductAccountDto>> GetAllProductAccountsAsync()
+    {
+        return _context.ProductAccounts
+            .OrderByDescending(_ => _.DateFromPlan)
+            .ProjectTo<ProductAccountDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public Task<List<ProductAccountBriefDto>> GetProductAccountBriefsByDatePeriodAndWorkplaceAsync(

@@ -1,4 +1,5 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
@@ -17,16 +18,21 @@ public class FileService : IFileService
     private readonly ITaskRepository _taskRepository;
     private readonly IWebHostEnvironment _environment;
     private readonly IValidationService _validationService;
+    private readonly IProductAccountRepository _productAccountRepository;
+    private readonly IExcelFileService<List<ProductAccountInfoExcelModel>> _productAccountInfoExcelFileService;
 
     public FileService(
         ITaskRepository taskRepository,
         IWebHostEnvironment environment,
-        IValidationService validationService
-    )
+        IValidationService validationService,
+        IProductAccountRepository productAccountRepository,
+        IExcelFileService<List<ProductAccountInfoExcelModel>> productAccountInfoExcelFileService)
     {
         _taskRepository = taskRepository;
         _environment = environment;
         _validationService = validationService;
+        _productAccountRepository = productAccountRepository;
+        _productAccountInfoExcelFileService = productAccountInfoExcelFileService;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -60,5 +66,33 @@ public class FileService : IFileService
         };
 
         return result;
+    }
+
+    public async Task<Result<DocumentDto>> GenerateProductAccountInfoExcelFileAsync()
+    {
+        var data = await _productAccountRepository.GetAllProductAccountsAsync();
+        
+        var excelDataModel = new List<ProductAccountInfoExcelModel>();
+
+        foreach (var productAccount in data)
+        {
+            string[] parts = productAccount.Product.Number.Split(new[] { '-' }, 3);
+            
+            excelDataModel.Add(new ProductAccountInfoExcelModel
+            {
+                ProductIndex = parts.ElementAtOrDefault(0) ?? "-",
+                DetailNumber = parts.ElementAtOrDefault(1) ?? "-",
+                Suffix = parts.ElementAtOrDefault(2) ?? "-",
+                Date = productAccount.DateFromPlan,
+                AmountFromPlan = productAccount.AmountFromPlan,
+                AmountAccept = productAccount.AmountAccept,
+                AmountDefective = productAccount.AmountDefective,
+                AmountManufactured = productAccount.AmountManufactured,
+                Workshop = productAccount.Workshop.Number.ToString(),
+                ProductionArea = productAccount.ProductionArea.Number.ToString()
+            });
+        }
+
+        return await _productAccountInfoExcelFileService.GenerateReportAsync(excelDataModel);
     }
 }

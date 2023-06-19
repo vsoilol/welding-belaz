@@ -25,4 +25,12 @@ public class FileController : ControllerBase
 
         return result.ToFile();
     }
+    
+    [HttpGet("product-account-report")]
+    public async Task<IActionResult> GenerateProductAccountInfoExcelFileAsync()
+    {
+        var result = await _fileService.GenerateProductAccountInfoExcelFileAsync();
+
+        return result.ToFile();
+    }
 }
