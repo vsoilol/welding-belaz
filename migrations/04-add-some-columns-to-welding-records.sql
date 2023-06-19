@@ -108,6 +108,19 @@ $$
             FETCH NEXT FROM welding_record_cursor INTO welding_record_row;
             EXIT WHEN NOT FOUND;
 
+            SELECT ROUND(AVG(value)::numeric, 2)
+            INTO arc_voltage_average
+            FROM unnest(welding_record_row."ArcVoltageValues") AS value;
+
+            SELECT ROUND(AVG(value)::numeric, 2)
+            INTO welding_current_average
+            FROM unnest(welding_record_row."WeldingCurrentValues") AS value;
+
+            UPDATE "WeldingRecords"
+            SET "ArcVoltageAverage"     = arc_voltage_average,
+                "WeldingCurrentAverage" = welding_current_average
+            WHERE "Id" = welding_record_row."Id";
+
             IF EXISTS(SELECT 1 FROM "WeldPassages" WHERE "WeldingRecordId" = welding_record_row."Id") THEN
                 CONTINUE;
             END IF;
@@ -140,20 +153,9 @@ $$
                 is_ensuring_voltage_allowance := TRUE;
             END IF;
 
-            SELECT ROUND(AVG(value)::numeric, 2)
-            INTO arc_voltage_average
-            FROM unnest(welding_record_row."ArcVoltageValues") AS value;
-
-            SELECT ROUND(AVG(value)::numeric, 2)
-            INTO welding_current_average
-            FROM unnest(welding_record_row."WeldingCurrentValues") AS value;
-
-
             UPDATE "WeldingRecords"
             SET "IsEnsuringCurrentAllowance" = is_ensuring_current_allowance,
-                "IsEnsuringVoltageAllowance" = is_ensuring_voltage_allowance,
-                "ArcVoltageAverage"          = arc_voltage_average,
-                "WeldingCurrentAverage"      = welding_current_average
+                "IsEnsuringVoltageAllowance" = is_ensuring_voltage_allowance
             WHERE "Id" = welding_record_row."Id";
         END LOOP;
 

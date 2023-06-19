@@ -132,8 +132,6 @@ public class RegistarService : IRegistarService
                 weldingRecordLimit.ArcVoltageMin,
                 weldingRecordLimit.ArcVoltageMax
             );
-            weldingRecord.ArcVoltageAverage = Math.Round(weldingRecord.ArcVoltageValues.Average(), 2);
-            weldingRecord.WeldingCurrentAverage = Math.Round(weldingRecord.WeldingCurrentValues.Average(), 2);
 
             await CreateWeldingRecordAsync(
                 weldingRecord,
@@ -290,6 +288,9 @@ public class RegistarService : IRegistarService
     )
     {
         record.MasterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(weldingEquipmentId);
+        
+        record.ArcVoltageAverage = Math.Round(record.ArcVoltageValues.Average(), 2);
+        record.WeldingCurrentAverage = Math.Round(record.WeldingCurrentValues.Average(), 2);
 
         var seconds = 0.1 * valuesLength;
         var weldingEndTime = record.WeldingStartTime.Add(TimeSpan.FromSeconds(seconds));
