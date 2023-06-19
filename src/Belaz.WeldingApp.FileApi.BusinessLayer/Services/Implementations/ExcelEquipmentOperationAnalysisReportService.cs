@@ -71,7 +71,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
             conditionTimes,
             request.CutType,
             dateStart,
-            dateEnd
+            dateEnd,
+            request.WorkingShiftNumber
         );
 
         if (!data.Any())
@@ -120,7 +121,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
             conditionTimes,
             request.CutType,
             dateStart,
-            dateEnd
+            dateEnd,
+            request.WorkingShiftNumber
         );
 
         if (!data.Any())
@@ -171,7 +173,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
             conditionTimes,
             request.CutType,
             dateStart,
-            dateEnd
+            dateEnd,
+            request.WorkingShiftNumber
         );
 
         if (!data.Any())
@@ -201,7 +204,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
         List<ConditionTimeDto> conditionTimes,
         CutType cutType,
         DateTime dateStart,
-        DateTime dateEnd
+        DateTime dateEnd,
+        int? chosenWorkingShiftNumber
     )
     {
         var data = new List<EquipmentOperationTimeWithShiftDto>();
@@ -212,7 +216,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
                 data = await GetEquipmentOperationTimeForWorkingShiftAsync(
                     dateStart,
                     dateEnd,
-                    conditionTimes
+                    conditionTimes,
+                    chosenWorkingShiftNumber
                 );
                 break;
             case CutType.Day:
@@ -360,7 +365,8 @@ internal class ExcelEquipmentOperationAnalysisReportService
     > GetEquipmentOperationTimeForWorkingShiftAsync(
         DateTime startDate,
         DateTime endDate,
-        List<ConditionTimeDto> conditionTimes
+        List<ConditionTimeDto> conditionTimes,
+        int? chosenWorkingShiftNumber
     )
     {
         var calendar = await GetCalendarAsync(startDate);
@@ -395,7 +401,14 @@ internal class ExcelEquipmentOperationAnalysisReportService
 
         var result = new List<EquipmentOperationTimeWithShiftDto>();
 
-        foreach (var kvp in workingShiftConditionTimeMap.OrderBy(_ => _.Key))
+        var keyValuePairWorkingShiftConditionTime = chosenWorkingShiftNumber.HasValue
+            ? workingShiftConditionTimeMap
+                .Where(_ => _.Key == chosenWorkingShiftNumber.Value)
+                .OrderBy(_ => _.Key)
+            : workingShiftConditionTimeMap
+                .OrderBy(_ => _.Key);
+
+        foreach (var kvp in keyValuePairWorkingShiftConditionTime)
         {
             var workingShiftConditionTimes = kvp.Value;
 

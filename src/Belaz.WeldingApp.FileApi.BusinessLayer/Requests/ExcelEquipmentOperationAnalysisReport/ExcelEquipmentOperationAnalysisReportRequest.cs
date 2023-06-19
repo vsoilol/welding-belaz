@@ -9,4 +9,6 @@ public class ExcelEquipmentOperationAnalysisReportRequest
     public string EndDate { get; set; } = null!;
 
     public CutType CutType { get; set; }
+    
+    public int? WorkingShiftNumber { get; set; }
 }
