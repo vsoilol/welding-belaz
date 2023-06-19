@@ -11,6 +11,16 @@
       "SwaggerKey": "file"
     },
     {
+      "UpstreamPathTemplate": "/api/file/product-account-report",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/file/product-account-report",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
       "UpstreamPathTemplate": "/api/excelDeviationReport/byWorkshop",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
