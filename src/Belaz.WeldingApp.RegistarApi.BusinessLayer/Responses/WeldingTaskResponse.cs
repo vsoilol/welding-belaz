@@ -7,71 +7,50 @@ namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Responses;
 
 public class WeldingTaskResponse : IMapFrom<WeldingTaskDto>
 {
-    [JsonPropertyName("tID")]
-    public Guid WeldingTaskId { get; set; }
+    [JsonPropertyName("tID")] public Guid WeldingTaskId { get; set; }
 
-    [JsonPropertyName("EplID")]
-    public Guid WelderId { get; set; }
+    [JsonPropertyName("EplID")] public Guid WelderId { get; set; }
 
-    [JsonPropertyName("EqpID")]
-    public Guid EquipmentId { get; set; }
+    [JsonPropertyName("EqpID")] public Guid EquipmentId { get; set; }
 
-    [JsonPropertyName("ProdID")]
-    public Guid ProductId { get; set; }
+    [JsonPropertyName("ProdID")] public Guid ProductId { get; set; }
 
-    [JsonPropertyName("ProdT")]
-    public string ProductName { get; set; } = null!;
+    [JsonPropertyName("ProdT")] public string ProductName { get; set; } = null!;
 
-    [JsonPropertyName("AsmID")]
-    public Guid? KnotId { get; set; }
+    [JsonPropertyName("AsmID")] public Guid? KnotId { get; set; }
 
-    [JsonPropertyName("AsmT")]
-    public string? KnotName { get; set; }
+    [JsonPropertyName("AsmT")] public string? KnotName { get; set; }
 
-    [JsonPropertyName("DtlID")]
-    public Guid? DetailId { get; set; }
+    [JsonPropertyName("DtlID")] public Guid? DetailId { get; set; }
 
-    [JsonPropertyName("DtlT")]
-    public string? DetailName { get; set; }
+    [JsonPropertyName("DtlT")] public string? DetailName { get; set; }
 
-    [JsonPropertyName("TechProcID")]
-    public Guid TechnologicalProcessId { get; set; }
+    [JsonPropertyName("TechProcID")] public Guid TechnologicalProcessId { get; set; }
 
-    [JsonPropertyName("TechProcN")]
-    public string TechnologicalProcessNumber { get; set; } = null!;
+    [JsonPropertyName("TechProcN")] public string TechnologicalProcessNumber { get; set; } = null!;
 
-    [JsonPropertyName("TechProcT")]
-    public string TechnologicalProcessName { get; set; } = null!;
+    [JsonPropertyName("TechProcT")] public string TechnologicalProcessName { get; set; } = null!;
 
-    [JsonPropertyName("TechInstID")]
-    public Guid TechnologicalInstructionId { get; set; }
+    [JsonPropertyName("TechInstID")] public Guid TechnologicalInstructionId { get; set; }
 
-    [JsonPropertyName("TechInstrN")]
-    public string TechnologicalInstructionNumber { get; set; } = null!;
+    [JsonPropertyName("TechInstrN")] public int TechnologicalInstructionNumber { get; set; }
 
-    [JsonPropertyName("TechInstrT")]
-    public string TechnologicalInstructionName { get; set; } = null!;
+    [JsonPropertyName("TechInstrT")] public string TechnologicalInstructionName { get; set; } = null!;
 
-    [JsonPropertyName("WeldID")]
-    public Guid SeamId { get; set; }
+    [JsonPropertyName("WeldID")] public Guid SeamId { get; set; }
 
-    [JsonPropertyName("WeldN")]
-    public int SeamNumber { get; set; }
+    [JsonPropertyName("WeldN")] public int SeamNumber { get; set; }
 
-    [JsonPropertyName("L")]
-    public int SeamLength { get; set; }
+    [JsonPropertyName("L")] public int SeamLength { get; set; }
 
     [JsonPropertyName("passages")]
     public List<WeldPassageInstructionResponse> WeldPassageInstructions { get; set; } = null!;
 
-    [JsonPropertyName("ProdN")]
-    public string ProductNumber { get; set; } = null!;
+    [JsonPropertyName("ProdN")] public string ProductNumber { get; set; } = null!;
 
-    [JsonPropertyName("AsmN")]
-    public string? KnotNumber { get; set; }
+    [JsonPropertyName("AsmN")] public string? KnotNumber { get; set; }
 
-    [JsonPropertyName("DtlN")]
-    public string? DetailNumber { get; set; }
+    [JsonPropertyName("DtlN")] public string? DetailNumber { get; set; }
 
     public void Mapping(Profile profile)
     {
@@ -92,11 +71,13 @@ public class WeldingTaskResponse : IMapFrom<WeldingTaskDto>
             )
             .ForMember(
                 dto => dto.TechnologicalProcessName,
-                opt => opt.MapFrom(x => x.TechnologicalProcess.Name)
+                opt => opt
+                    .MapFrom(x => x.TechnologicalProcess.Name)
             )
             .ForMember(
                 dto => dto.TechnologicalProcessNumber,
-                opt => opt.MapFrom(x => x.TechnologicalProcess.Number)
+                opt => opt
+                    .MapFrom(x => x.TechnologicalProcess.Number)
             )
             .ForMember(
                 dto => dto.TechnologicalInstructionId,
@@ -108,7 +89,9 @@ public class WeldingTaskResponse : IMapFrom<WeldingTaskDto>
             )
             .ForMember(
                 dto => dto.TechnologicalInstructionNumber,
-                opt => opt.MapFrom(x => x.TechnologicalInstruction.Number)
+                opt => opt
+                    .MapFrom(x => int
+                        .Parse(new string(x.TechnologicalInstruction.Number.Where(char.IsDigit).ToArray())))
             )
             .ForMember(dto => dto.SeamId, opt => opt.MapFrom(x => x.Seam.Id))
             .ForMember(dto => dto.SeamNumber, opt => opt.MapFrom(x => x.Seam.Number))
