@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { ExecutorsPage } from "pages/ExecutorsPage";
 import Actions from "store/executors/actions";
+import Actions2 from "store/workplace/actions";
 
 const mapStateToProps = (state) => { 
   return {
@@ -16,6 +17,9 @@ const mapStateToProps = (state) => {
     workshop: state.workplace.workshop,
     ///Производственные участки 
     area: state.workplace.productionArea,
+
+    workplace: state.workplace.workplace,
+
 
     state:state
   };
@@ -42,6 +46,7 @@ const mapDispatchToProps = {
   loadWorkshop: Actions.Creators.loadWorkshopRequest,
    ///Производственные участки 
   loadArea: Actions.Creators.loadAreaRequest,
+  loadPlace: Actions2.Creators.loadWorkplaceRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExecutorsPage);

@@ -1,7 +1,7 @@
 
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import styles from "./styles.module.css";
-import MobileContext from "context/MobileContext"; 
+import MobileContext from "context/MobileContext";
 import { Table } from "components/shared/Table";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
@@ -17,12 +17,12 @@ import Input from "components/shared/Input";
 import api from "services/api";
 import Paper from "@material-ui/core/Paper";
 
-const ToolTip = ({ title, src, toolTipText, button, workshop, equipment}) => {
+const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
   const isMobile = useContext(MobileContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setmodalData] = useState(null);
-  const [idReports, setidReports] = useState(title === "Сотрудники"?10:5);
+  const [idReports, setidReports] = useState(title === "Сотрудники" ? 10 : 5);
   const [isModalNothinOpen, setisModalNothinOpen] = useState(false);
   const [isModalErrOpen, setisModalErrOpen] = useState(false);
   const [initialValues, setInitialValues] = useState({
@@ -44,7 +44,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment}) => {
       value: item.id,
       label: item.name,
     };
-  });   
+  });
   const equipmentOptions = equipment && Array.isArray(equipment[0]) && equipment[0].map((item) => {
     return {
       value: item.id,
@@ -153,9 +153,9 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment}) => {
     let endpoint;
     if (idReports === 5) {
       endpoint = `excelEquipmentOperationTimeReport?weldingEquipmentId=${initialValues.WeldingEquipmentId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    }  else if (idReports === 10) {
+    } else if (idReports === 10) {
       endpoint = `excelWelderOperationReport/byWorkshop?WorkshopId=${initialValues.workshopId}&StartDate=${initialValues.startDate}&EndDate=${initialValues.endDate}`;
-    }  
+    }
 
     try {
       const res = await api.get(endpoint);
@@ -185,7 +185,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment}) => {
           )}
           {!isMobile && button}
 
-          {title === "Сотрудники" || title === "Оборудование"
+          {/* {title === "Сотрудники" || title === "Оборудование"
             ? <button className={styles.buttonReport} onClick={
               (e)=>{
                 setIsModalOpen(true)
@@ -193,7 +193,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment}) => {
               }
             }> Отчет о работе</button>
             : null
-          }
+          } */}
 
         </div>
       </div>
@@ -246,90 +246,90 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment}) => {
       </ModalWindow>
       {/*Формирование отчёта*/}
       <ModalWindow
-          isOpen={isModalNothinOpen}
-          headerText=""
-          setIsOpen={(state) => {
+        isOpen={isModalNothinOpen}
+        headerText=""
+        setIsOpen={(state) => {
+          setisModalNothinOpen(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
             setisModalNothinOpen(false)
           }}
-          wrapperStyles={{ width: 420 }}
         >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setisModalNothinOpen(false)
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
 
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Данные по этому отчету отсутствуют. </h4>
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Данные по этому отчету отсутствуют. </h4>
 
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Закрыть
-                    </Button>
-                  </div>
-
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Закрыть
+                  </Button>
                 </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
+
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
 
 
-        {/*Ошибка*/}
-        <ModalWindow
-          isOpen={isModalErrOpen}
-          headerText="Ошибка"
-          setIsOpen={(state) => {
+      {/*Ошибка*/}
+      <ModalWindow
+        isOpen={isModalErrOpen}
+        headerText="Ошибка"
+        setIsOpen={(state) => {
+          setisModalErrOpen(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
             setisModalErrOpen(false)
           }}
-          wrapperStyles={{ width: 420 }}
         >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setisModalErrOpen(false)
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
 
-                <div>
-                  <h4 style={{ padding: "35px 40px" }}>Произошла ошибка, перепроверьте введенные данные </h4>
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Произошла ошибка, перепроверьте введенные данные </h4>
 
-                  <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Закрыть
-                    </Button>
-                  </div>
-
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Закрыть
+                  </Button>
                 </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
+
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
 
 
     </div>

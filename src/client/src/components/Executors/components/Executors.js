@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
     padding: 10,
     border: "1px solid red",
   },
-})); 
+}));
 export const ExecutorsTable = ({
   addExecutor,
   deleteExecutor,
@@ -38,10 +38,13 @@ export const ExecutorsTable = ({
   executors,
   isRequesting,
   type,
-  userRole, 
+  userRole,
   equipment,
   workshop,
   area,
+  workplace,
+  value
+
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -53,6 +56,9 @@ export const ExecutorsTable = ({
   const [valuetEquipment, setValuetEquipment] = useState();
   const [valuetOpenModal, setValuetOpenModal] = useState();
   const [valuetOpenVkladka, setValuetOpenVkladka] = useState(0);
+
+  const [valueWorkplace, setvalueWorkplace] = useState(0);
+
 
   const classes = useStyles();
   const initialValues = {
@@ -146,23 +152,23 @@ export const ExecutorsTable = ({
       title: "Номер производственного участка",
       field: "productionArea.number",
     },
-    
-{
-  title: "Закреплённое оборудование (ссылка)",
-  render: (rowData) => {
-  if (rowData?.weldingEquipments && rowData?.weldingEquipments.length !== 0) {
-  return (
-  rowData.weldingEquipments.map((equipment) => (
-  <div key={equipment.id}>
-  <a className={styles.equipmentRefs} href="/equipment">
-  {equipment.factoryNumber || "-"}
-  </a>
-  </div>
-  ))
-  );
-  }
-  },
-  }
+
+    {
+      title: "Закреплённое оборудование (ссылка)",
+      render: (rowData) => {
+        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length !== 0) {
+          return (
+            rowData.weldingEquipments.map((equipment) => (
+              <div key={equipment.id}>
+                <a className={styles.equipmentRefs} href="/equipment">
+                  {equipment.factoryNumber || "-"}
+                </a>
+              </div>
+            ))
+          );
+        }
+      },
+    }
   ].filter(column => column);;
 
   const controllersColumns = [
@@ -226,7 +232,6 @@ export const ExecutorsTable = ({
       field: "productionArea.number",
     },
   ].filter(column => column);
-
 
 
   function ReturnWorkshop(Area) {
@@ -478,11 +483,20 @@ export const ExecutorsTable = ({
       label: item.name,
     };
   });
+
+  const optWorkPlase = workplace?.map((item) => {
+    return {
+      value: item.id,
+      label: `Рабочее место №${item.number}`,
+    };
+  });
+
   //Запрос на редактирование или добавление
-  function SendData(variables) { 
+  function SendData(variables) {
     variables["productionAreaId"] = valuetArea
     variables["weldingEquipmentId"] = valuetEquipment
-    variables["workshopId"] = valueWorkshopa 
+    variables["workshopId"] = valueWorkshopa
+    variables["workplaceId"] = valueWorkplace
     //Добавить  
     if (valuetOpenModal === 0) {
       addExecutor(variables)
@@ -527,7 +541,7 @@ export const ExecutorsTable = ({
                     setModalData(rowData);
                     setIsModalOpen(true);
                     setValuetOpenModal(1);
-
+                    setvalueWorkplace(rowData?.workplace?.id)
                     setValueWorkshop(rowData.workshop?.id)
                     setValuetArea(rowData.productionArea.id)
                     setValuetEquipment(rowData.weldingEquipment?.id)
@@ -696,6 +710,25 @@ export const ExecutorsTable = ({
                   options={optworkshop}
                 />
               </div>
+
+              {value === 1
+                ? (
+                  <div className={styles.row}>
+                    <Select
+                      name="valueWorkplace"
+                      value={valueWorkplace}
+                      width="380px"
+                      placeholder="Рабочее место"
+                      onChange={(event) => {
+                        setvalueWorkplace(event.value)
+                      }}
+                      options={optWorkPlase}
+                    />
+                  </div>
+                )
+                : null
+              }
+
 
 
               {userRole === "Admin" /* || userRole === "Master" */

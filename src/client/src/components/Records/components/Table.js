@@ -44,6 +44,8 @@ const StyleNewTable = {
 export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole }) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
+  console.clear()
+  console.log(records)
   const columns = [
     (userRole === "Admin" /*|| userRole === "Master"*/) && {
       title: "Удаление",
@@ -58,6 +60,12 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
         />
       ),
     },
+    { title: "Номер шва", field: "seamNumber" },
+    { title: "Длительность сварки", field: "weldingDuration" }, 
+    {  title: "Сварочный ток (среднее)",  field: "weldingCurrentAverage",  },
+    {  title: "Напряжение на дуге (среднее)",   field: "arcVoltageAverage",  },
+
+
     { title: "Дата", field: "date" },
     { title: "Время начала сварки", field: "weldingStart" },
     {

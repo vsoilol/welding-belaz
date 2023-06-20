@@ -3,7 +3,7 @@
 
 .tableWrapper {
   margin-top: 80px;
-  width: 90%;
+  width: calc(100vw - 100px);
 }
 
 .innerWrapper {

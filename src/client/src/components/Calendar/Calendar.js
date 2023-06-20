@@ -41,11 +41,11 @@ export const Calendars = ({
   function dayWork(Month,Year) {
     arrayDays.forEach(element => {
       if(element.isWorkingDay){
-        console.log(element)
+        /* console.log(element) */
       } 
       /* element.isWorkingDay?console.log(element):null */
     });
-    console.log(arrayDays) 
+    /* console.log(arrayDays)  */
     /* console.log(Month)
     console.log(Year) */
   }

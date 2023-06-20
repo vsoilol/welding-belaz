@@ -220,6 +220,7 @@ function* addDay({ payload }) {
    
     }
     else {
+      console.log(payload)
        
       const { data } = yield call(api.post, `/day`, {
         "monthNumber": payload.monthNumber,
@@ -230,7 +231,7 @@ function* addDay({ payload }) {
         "welderId": payload.valueExecutors,
         "workingShifts": [
           {
-            "number": payload.workingShifts.number,
+            "number": payload.number,
             "shiftStart": payload.workingShifts.shiftStart,
             "shiftEnd": payload.workingShifts.shiftEnd,
             "breakStart": payload.workingShifts.breakStart,
