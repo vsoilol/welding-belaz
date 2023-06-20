@@ -9,5 +9,6 @@ public enum Role
     Inspector = 4, // Контролёр
     Chief = 5, // Руководитель цеха
     UkkRepresentative = 6, // Представитель УКК
-    PlantManager = 7 // Руководитель завода
+    PlantManager = 7, // Руководитель завода
+    Technologist = 8
 }
