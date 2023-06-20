@@ -20,25 +20,19 @@ public class TechnologicalProcessRepository : ITechnologicalProcessRepository
         _mapper = mapper;
     }
 
-    public async Task<TechnologicalProcessDto> GetByIdAsync(Guid id)
+    public Task<TechnologicalProcessDto> GetByIdAsync(Guid id)
     {
-        var technologicalProcess = await FilterTechnologicalProcesses(_ => _.Id == id)
-            .FirstOrDefaultAsync();
-
-        var mapTechnologicalProcess = _mapper.Map<TechnologicalProcessDto>(technologicalProcess);
-
-        return mapTechnologicalProcess;
+        return _context.TechnologicalProcesses
+            .Where(_ => _.Id == id)
+            .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
     }
 
-    public async Task<List<TechnologicalProcessDto>> GetAllAsync()
+    public Task<List<TechnologicalProcessDto>> GetAllAsync()
     {
-        var technologicalProcesses = await FilterTechnologicalProcesses().ToListAsync();
-
-        var mapTechnologicalProcesses = _mapper.Map<List<TechnologicalProcessDto>>(
-            technologicalProcesses
-        );
-
-        return mapTechnologicalProcesses;
+        return _context.TechnologicalProcesses
+            .ProjectTo<TechnologicalProcessDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
     }
 
     public async Task<TechnologicalProcessDto> CreateAsync(TechnologicalProcess entity)
@@ -76,45 +70,28 @@ public class TechnologicalProcessRepository : ITechnologicalProcessRepository
         await _context.SaveChangesAsync();
     }
 
-    private IQueryable<TechnologicalProcess> FilterTechnologicalProcesses(
-        Expression<Func<TechnologicalProcess, bool>> filter
+    private IQueryable<TechnologicalProcess> GetTechnologicalProcessesIncludesByFilter(
+        Expression<Func<TechnologicalProcess, bool>>? filter = null
     )
     {
-        var technologicalProcesses = _context.TechnologicalProcesses
+        IQueryable<TechnologicalProcess> technologicalProcesses = _context.TechnologicalProcesses
             .Include(_ => _.Products)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
+            .ThenInclude(_ => _.ProductMain!.MainProduct.ProductMain!.MainProduct)
             .Include(_ => _.Products)
             .ThenInclude(_ => _.ProductInsides)
             .ThenInclude(_ => _.InsideProduct)
             .Include(_ => _.Products)
             .ThenInclude(_ => _.Seams)
             .Include(_ => _.Products)
-            .ThenInclude(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop)
-            .Where(filter);
-
-        return technologicalProcesses;
-    }
-
-    private IQueryable<TechnologicalProcess> FilterTechnologicalProcesses()
-    {
-        var technologicalProcesses = _context.TechnologicalProcesses
-            .Include(_ => _.Products)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .ThenInclude(_ => _.ProductMain)
-            .ThenInclude(_ => _!.MainProduct)
-            .Include(_ => _.Products)
-            .ThenInclude(_ => _.ProductInsides)
-            .ThenInclude(_ => _.InsideProduct)
+            .ThenInclude(_ => _.ProductionArea.Workshop)
             .Include(_ => _.Products)
             .ThenInclude(_ => _.Seams)
-            .Include(_ => _.Products)
-            .ThenInclude(_ => _.ProductionArea)
-            .ThenInclude(_ => _.Workshop);
+            .ThenInclude(_ => _.ProductionArea!.Workshop);
+
+        if (filter is not null)
+        {
+            technologicalProcesses = technologicalProcesses.Where(filter);
+        }
 
         return technologicalProcesses;
     }
