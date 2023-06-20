@@ -15,5 +15,5 @@ public interface IWeldingRecordRepository
     
     Task<WeldingRecordLimitDto> GetWeldingRecordLimitAsync();
     
-    Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate);
+    Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber);
 }

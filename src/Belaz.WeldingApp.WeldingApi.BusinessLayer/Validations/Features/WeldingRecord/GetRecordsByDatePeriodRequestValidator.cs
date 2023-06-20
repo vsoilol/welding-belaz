@@ -16,6 +16,11 @@ public class GetRecordsByDatePeriodRequestValidator : AbstractValidator<GetRecor
         RuleFor(model => model.EndDate)
             .Cascade(CascadeMode.Stop)
             .SetValidator(new DateValidatorFor<GetRecordsByDatePeriodRequest>());
+        
+        RuleFor(model => model.SeamNumber)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(1)
+            .When(_ => _.SeamNumber is not null);
 
         RuleFor(model => model)
             .Cascade(CascadeMode.Stop)
