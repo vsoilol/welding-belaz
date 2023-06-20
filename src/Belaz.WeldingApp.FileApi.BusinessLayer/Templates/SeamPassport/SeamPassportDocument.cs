@@ -11,11 +11,13 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 public class SeamPassportDocument : IDocument
 {
     private readonly string _fontsPath;
+    private readonly int? _sequenceNumber;
 
-    public SeamPassportDocument(TaskDto task, string fontsPath)
+    public SeamPassportDocument(TaskDto task, string fontsPath, int? sequenceNumber)
     {
         Task = task;
         _fontsPath = fontsPath;
+        _sequenceNumber = sequenceNumber;
     }
 
     public TaskDto Task { get; }
@@ -75,7 +77,14 @@ public class SeamPassportDocument : IDocument
                 .Item()
                 .Column(row =>
                 {
-                    foreach (var weldPassage in Task.WeldPassages.OrderBy(_ => _.Number))
+                    IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages.OrderBy(_ => _.Number);
+
+                    if (_sequenceNumber.HasValue)
+                    {
+                        weldPassages = weldPassages.Where(_ => _.SequenceNumber == _sequenceNumber);
+                    }
+                    
+                    foreach (var weldPassage in weldPassages)
                     {
                         var weldPassageInstruction =
                             Task.Seam.TechnologicalInstruction.WeldPassageInstructions.FirstOrDefault(
@@ -165,6 +174,24 @@ public class SeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text(workplacesText)
                 .Style(Typography.Italic);
+
+            if (_sequenceNumber.HasValue)
+            {
+                table
+                    .Cell()
+                    .Row(6)
+                    .Column(1)
+                    .Element(BlockLeft)
+                    .Text("Порядковый номер")
+                    .Style(Typography.Normal);
+                table
+                    .Cell()
+                    .Row(6)
+                    .Column(2)
+                    .Element(BlockLeft)
+                    .Text(_sequenceNumber.Value.ToString())
+                    .Style(Typography.Italic);
+            }
 
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);

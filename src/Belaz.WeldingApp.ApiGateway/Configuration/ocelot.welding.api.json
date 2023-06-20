@@ -1190,6 +1190,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/weldingRecord/set-sequence-number",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "POST"
+      ],
+      "DownstreamPathTemplate": "/api/weldingRecord/set-sequence-number",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/weldingRecord/limits",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [

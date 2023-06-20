@@ -10,6 +10,8 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 public class RecordDto : IMapFrom<WeldingRecord>
 {
     public Guid Id { get; set; }
+    
+    public int? SequenceNumber { get; set; }
 
     public string Date { get; set; } = null!;
 

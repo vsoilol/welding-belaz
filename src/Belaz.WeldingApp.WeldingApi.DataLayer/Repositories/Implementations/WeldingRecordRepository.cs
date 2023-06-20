@@ -100,6 +100,21 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .ToListAsync();
     }
 
+    public async Task SetSequenceNumberToWeldingRecordsAsync(List<Guid> weldingRecordIds, int sequenceNumber)
+    {
+        var weldingRecords = await _context
+            .WeldingRecords
+            .Where(weldingRecord => weldingRecordIds.Any(_ => _ == weldingRecord.Id))
+            .ToListAsync();
+
+        foreach (var weldingRecord in weldingRecords)
+        {
+            weldingRecord.SequenceNumber = sequenceNumber;
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
     public Task<List<RecordDto>> GetAllAsync()
     {
         var weldingRecords = _context.WeldingRecords

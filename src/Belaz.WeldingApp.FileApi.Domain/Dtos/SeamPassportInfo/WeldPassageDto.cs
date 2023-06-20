@@ -8,6 +8,8 @@ public class WeldPassageDto : IMapFrom<WeldPassage>
 {
     public int Number { get; set; }
 
+    public int? SequenceNumber { get; set; }
+
     public string Name { get; set; } = null!;
 
     /// <summary>
@@ -80,7 +82,12 @@ public class WeldPassageDto : IMapFrom<WeldPassage>
             )
             .ForMember(
                 dto => dto.WeldingEndTime,
-                opt => opt.MapFrom(x => x.WeldingRecord.WeldingEndTime)
+                opt => opt
+                    .MapFrom(x => x.WeldingRecord.WeldingEndTime)
+            ).ForMember(
+                dto => dto.SequenceNumber,
+                opt => opt
+                    .MapFrom(x => x.WeldingRecord.SequenceNumber)
             );
     }
 }
