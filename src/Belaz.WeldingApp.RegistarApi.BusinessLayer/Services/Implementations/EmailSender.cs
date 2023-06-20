@@ -3,6 +3,7 @@ using Belaz.WeldingApp.RegistarApi.BusinessLayer.Models;
 using Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 
 namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Implementations;
@@ -98,14 +99,15 @@ public class EmailSender : IEmailSender
         {
             try
             {
-                client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
+                client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.StartTls);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
                 client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
                 client.Send(mailMessage);
             }
             catch
             {
-                // ignored
+                //log an error message or throw an exception or both.
+                throw;
             }
             finally
             {
@@ -114,21 +116,23 @@ public class EmailSender : IEmailSender
             }
         }
     }
-
+    
     private async Task SendAsync(MimeMessage mailMessage)
     {
         using (var client = new SmtpClient())
         {
             try
             {
-                await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.None);
+
+                //client.AuthenticationMechanisms.Remove("XOAUTH2");
                 await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
                 var data = await client.SendAsync(mailMessage);
             }
-            catch (Exception exception)
+            catch(Exception exception)
             {
-                // ignored
+                //log an error message or throw an exception, or both.
+                throw;
             }
             finally
             {
