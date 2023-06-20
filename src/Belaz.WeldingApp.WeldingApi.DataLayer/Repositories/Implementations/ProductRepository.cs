@@ -198,7 +198,11 @@ public class ProductRepository : IProductRepository
             .ThenInclude(pi => pi.InsideProduct)
             .Include(s => s.Seams)
             .Include(s => s.ProductionArea.Workshop)
-            .Include(s => s.TechnologicalProcess);
+            .Include(s => s.TechnologicalProcess)
+            .Include(s => s.Seams)
+            .ThenInclude(_ => _.ProductionArea!.Workshop)
+            .Include(s => s.Seams)
+            .ThenInclude(_ => _.TechnologicalInstruction);
 
         if (filter != null)
         {
