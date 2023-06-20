@@ -1,12 +1,12 @@
 ﻿{
   "Routes": [
     {
-      "UpstreamPathTemplate": "/api/file/seamPassport/{taskId}",
+      "UpstreamPathTemplate": "/api/file/seamPassport",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
         "GET"
       ],
-      "DownstreamPathTemplate": "/api/file/seamPassport/{taskId}",
+      "DownstreamPathTemplate": "/api/file/seamPassport",
       "ServiceName": "file",
       "SwaggerKey": "file"
     },

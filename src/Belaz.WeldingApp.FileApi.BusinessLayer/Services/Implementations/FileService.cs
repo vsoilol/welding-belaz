@@ -49,7 +49,7 @@ public class FileService : IFileService
         var task = await _taskRepository.GetByIdAsync(request.TaskId);
 
         var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
-        var document = new SeamPassportDocument(task, fontsPath);
+        var document = new SeamPassportDocument(task, fontsPath, request.SequenceNumber);
 
         byte[] bytes;
         using (var stream = new MemoryStream())
