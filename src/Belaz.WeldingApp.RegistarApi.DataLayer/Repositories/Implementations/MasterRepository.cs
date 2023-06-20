@@ -19,4 +19,21 @@ public class MasterRepository : IMasterRepository
 
         return weldingEquipment.MasterId;
     }
+
+    public async Task<Guid?> GetMasterIdByWeldingTaskIdAsync(Guid weldingTaskId)
+    {
+        var weldingTask = (await _context.WeldingTasks
+            .FirstOrDefaultAsync(_ => _.Id == weldingTaskId))!;
+
+        return weldingTask.MasterId;
+    }
+
+    public async Task<string?> GetMasterEmailByIdAsync(Guid id)
+    {
+        var master = (await _context.Masters
+            .Include(_ => _.UserInfo)
+            .FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        return master.UserInfo.Email;
+    }
 }

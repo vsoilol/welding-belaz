@@ -24,4 +24,12 @@ public class WelderRepository : IWelderRepository
             .ProjectTo<WelderDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
+
+    public Task<WelderDto> GetByIdAsync(Guid id)
+    {
+        return _context.Welders
+            .Where(_ => _.Id == id)
+            .ProjectTo<WelderDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
+    }
 }

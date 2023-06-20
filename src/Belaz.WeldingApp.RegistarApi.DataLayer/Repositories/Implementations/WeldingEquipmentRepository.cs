@@ -26,6 +26,14 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public Task<WeldingEquipmentDto> GetByIdAsync(Guid id)
+    {
+        return _context.WeldingEquipments
+            .Where(_ => _.Id == id)
+            .ProjectTo<WeldingEquipmentDto>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync()!;
+    }
+
     public async Task AddWeldingEquipmentConditionTimeAsync(
         WeldingEquipmentConditionTime conditionTime
     )
