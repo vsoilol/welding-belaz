@@ -52,7 +52,7 @@ public class EmailSender : IEmailSender
             ? $"{ampereText} и {voltageText}"
             : ampereText ?? voltageText;
 
-        string link = Environment.GetEnvironmentVariable("REAL_API") ?? "http://weldingcontrol.bru.by:4001";
+        string link = Environment.GetEnvironmentVariable("REAL_API") ?? "http://192.168.126.161";
         var masterEmail = await _masterRepository.GetMasterEmailByIdAsync(masterId);
 
         if (masterEmail is null)
