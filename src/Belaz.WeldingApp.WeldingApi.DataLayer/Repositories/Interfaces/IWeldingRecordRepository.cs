@@ -16,4 +16,6 @@ public interface IWeldingRecordRepository
     Task<WeldingRecordLimitDto> GetWeldingRecordLimitAsync();
     
     Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber);
+    
+    Task SetSequenceNumberToWeldingRecordsAsync(List<Guid> weldingRecordIds, int sequenceNumber);
 }

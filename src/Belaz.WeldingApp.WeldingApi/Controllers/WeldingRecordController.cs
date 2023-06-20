@@ -70,4 +70,12 @@ public class WeldingRecordController : ControllerBase
         var result = await _weldingRecordService.GetRecordsByDatePeriodAsync(request);
         return result.ToOk();
     }
+
+    [HttpPost("set-sequence-number")]
+    public async Task<ActionResult<Unit>> SetSequenceNumberToWeldingRecordsAsync(
+        [FromBody] SetSequenceNumberToWeldingRecordsRequest request)
+    {
+        var result = await _weldingRecordService.SetSequenceNumberToWeldingRecordsAsync(request);
+        return result.ToOk();
+    }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "WeldingRecords" ADD "SequenceNumber" INTEGER;

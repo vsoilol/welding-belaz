@@ -59,6 +59,8 @@ public class WeldingRecord : Entity
     
     public double ArcVoltageAverage { get; set; }
     
+    public int? SequenceNumber { get; set; }
+    
     public Guid WeldingRecordLimitId { get; set; }
 
     [ForeignKey(nameof(WeldingRecordLimitId))]
