@@ -52,6 +52,7 @@ internal class TokenService : ITokenService
             UserId = user.Id,
             ExpirationDate = tokenDescriptor.Expires.Value.ToString("MM/dd/yyyy HH:mm:ss"),
             Token = tokenHandler.CreateEncodedJwt(tokenDescriptor),
+            IsFirstLogin = user.IsFirstLogin
         };
     }
 }

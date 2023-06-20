@@ -27,6 +27,8 @@ public class RegistarService : IRegistarService
     private readonly IWeldPassageRepository _weldPassageRepository;
     private readonly IWeldPassageInstructionRepository _weldPassageInstructionRepository;
     private readonly IMarkEstimateService _markEstimateService;
+    private readonly IEmailSender _emailSender;
+    private readonly ISeamRepository _seamRepository;
 
     public RegistarService(
         IValidationService validationService,
@@ -38,8 +40,7 @@ public class RegistarService : IRegistarService
         IWeldingTaskRepository weldingTaskRepository,
         IWeldPassageRepository weldPassageRepository,
         IWeldPassageInstructionRepository weldPassageInstructionRepository,
-        IMarkEstimateService markEstimateService
-    )
+        IMarkEstimateService markEstimateService, IEmailSender emailSender, ISeamRepository seamRepository)
     {
         _validationService = validationService;
         _mapper = mapper;
@@ -51,6 +52,8 @@ public class RegistarService : IRegistarService
         _weldPassageRepository = weldPassageRepository;
         _weldPassageInstructionRepository = weldPassageInstructionRepository;
         _markEstimateService = markEstimateService;
+        _emailSender = emailSender;
+        _seamRepository = seamRepository;
     }
 
     public async Task<Result<WelderWithEquipmentResponse>> GetWelderWithEquipmentAsync(
@@ -107,6 +110,45 @@ public class RegistarService : IRegistarService
         return await validationResult.ToDataResult(async () =>
         {
             var weldingRecord = _mapper.Map<WeldingRecord>(request);
+
+            var weldingRecordLimit = await _recordRepository.GetWeldingRecordLimitAsync();
+
+            var amperagesTermDeviation = CalculateTermDeviation(
+                weldingRecord.WeldingCurrentValues,
+                weldingRecordLimit.WeldingCurrentMin,
+                weldingRecordLimit.WeldingCurrentMax
+            );
+
+            var voltagesTermDeviation = CalculateTermDeviation(
+                weldingRecord.ArcVoltageValues,
+                weldingRecordLimit.ArcVoltageMin,
+                weldingRecordLimit.ArcVoltageMax
+            );
+
+            weldingRecord.IsEnsuringCurrentAllowance = IsProvideAllowance(
+                amperagesTermDeviation.LongCount,
+                weldingRecordLimit.WeldingCurrentMin,
+                weldingRecordLimit.WeldingCurrentMax
+            );
+            weldingRecord.IsEnsuringVoltageAllowance = IsProvideAllowance(
+                voltagesTermDeviation.LongCount,
+                weldingRecordLimit.ArcVoltageMin,
+                weldingRecordLimit.ArcVoltageMax
+            );
+
+            var masterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(request.WeldingEquipmentId);
+
+            if (masterId.HasValue && (weldingRecord.IsEnsuringCurrentAllowance.HasValue
+                                      || weldingRecord.IsEnsuringVoltageAllowance.HasValue))
+            {
+                await _emailSender.SendDeviationRecordEmailAsync(
+                    weldingRecord.IsEnsuringVoltageAllowance,
+                    weldingRecord.IsEnsuringCurrentAllowance,
+                    masterId.Value,
+                    request.WelderId,
+                    request.WeldingEquipmentId,
+                    null);
+            }
 
             await CreateWeldingRecordAsync(
                 weldingRecord,
@@ -264,6 +306,9 @@ public class RegistarService : IRegistarService
     {
         record.MasterId = await _masterRepository.GetMasterIdByEquipmentIdAsync(weldingEquipmentId);
 
+        record.ArcVoltageAverage = Math.Round(record.ArcVoltageValues.Average(), 2);
+        record.WeldingCurrentAverage = Math.Round(record.WeldingCurrentValues.Average(), 2);
+
         var seconds = 0.1 * valuesLength;
         var weldingEndTime = record.WeldingStartTime.Add(TimeSpan.FromSeconds(seconds));
 
@@ -360,6 +405,21 @@ public class RegistarService : IRegistarService
                 weldPassageInstruction.PreheatingTemperatureMax
             )
         };
+
+        var masterId = await _masterRepository.GetMasterIdByWeldingTaskIdAsync(taskId);
+        var seamId = await _seamRepository.GetSeamIdByWeldingTaskIdAsync(taskId);
+        
+        if (masterId.HasValue && (weldPassage.IsEnsuringCurrentAllowance.HasValue
+                                  || weldPassage.IsEnsuringVoltageAllowance.HasValue))
+        {
+            await _emailSender.SendDeviationRecordEmailAsync(
+                weldPassage.IsEnsuringVoltageAllowance,
+                weldPassage.IsEnsuringCurrentAllowance,
+                masterId.Value,
+                record.WelderId,
+                record.WeldingEquipmentId,
+                seamId);
+        }
 
         await _weldPassageRepository.CreateAsync(weldPassage);
     }

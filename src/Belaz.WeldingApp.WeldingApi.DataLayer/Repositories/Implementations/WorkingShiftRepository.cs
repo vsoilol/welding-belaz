@@ -48,6 +48,33 @@ public class WorkingShiftRepository : IWorkingShiftRepository
         return await GetByIdAsync(newWorkingShift.Id);
     }
 
+    public Task<List<WorkingShiftDto>> GetAllMainWorkingShiftsByYearAsync(int year)
+    {
+        return _context.WorkingShifts
+            .Where(_ => _.Calendar!.IsMain && _.Calendar.Year == year)
+            .OrderBy(_ => _.Number)
+            .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<WorkingShiftDto>> GetAllWorkingShiftsByWelderIdAndYearAsync(int year, Guid welderId)
+    {
+        return _context.WorkingShifts
+            .Where(_ => _.Calendar!.WelderId == welderId && _.Calendar.Year == year)
+            .OrderBy(_ => _.Number)
+            .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public Task<List<WorkingShiftDto>> GetAllWorkingShiftsByEquipmentIdAndYearAsync(int year, Guid equipmentId)
+    {
+        return _context.WorkingShifts
+            .Where(_ => _.Calendar!.WeldingEquipmentId == equipmentId && _.Calendar.Year == year)
+            .OrderBy(_ => _.Number)
+            .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<WorkingShiftDto> GetByIdAsync(Guid id)
     {
         return _context.WorkingShifts

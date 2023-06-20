@@ -7,5 +7,5 @@ public class TechnologicalInstructionBriefDto
 {
     public string Name { get; set; } = null!;
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 }

@@ -1,0 +1,9 @@
+liquibase `
+	--referenceUrl=jdbc:postgresql://localhost:5434/weldingBelaz `
+	--referenceUsername=postgres `
+	--referencePassword=1111 `
+	--url=jdbc:postgresql://localhost:5434/weldingBelazOld `
+	--username=postgres `
+	--password=1111 `
+	diffChangeLog `
+	--changeLogFile=migration.sql

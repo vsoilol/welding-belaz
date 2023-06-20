@@ -74,6 +74,7 @@ services:
       dockerfile: ./Belaz.WeldingApp.RegistarApi/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
+      REAL_API: "http://weldingcontrol.bru.by:4001"
     ports:
       - "5013:80"
     volumes:

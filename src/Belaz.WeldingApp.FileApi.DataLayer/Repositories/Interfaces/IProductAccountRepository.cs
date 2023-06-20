@@ -1,3 +1,4 @@
+using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 
 namespace Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
@@ -32,4 +33,6 @@ public interface IProductAccountRepository
     Task<ProductAccountAmountFromPlanDto?> GetByProductIdAndDateAsync(Guid productId, DateTime date);
     
     Task AddOnlyByProductAndAmountFromPlanAsync(Guid productId, DateTime date, int amountFromPlan);
+    
+    Task<List<ProductAccountDto>> GetAllProductAccountsAsync();
 }

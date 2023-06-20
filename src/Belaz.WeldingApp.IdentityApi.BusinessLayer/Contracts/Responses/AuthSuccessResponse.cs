@@ -7,4 +7,6 @@ public class AuthSuccessResponse
     public Guid UserId { get; set; }
 
     public string ExpirationDate { get; set; } = null!;
+
+    public bool IsFirstLogin { get; set; }
 }

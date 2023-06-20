@@ -6,8 +6,8 @@ function recordWithoutTask(callback) {
 
     const postData = JSON.stringify({
         RegID: "string",
-        EqpID: "b6c05a58-4d68-4591-af21-e334aba53e94",
-        EplID: "da16dc46-5955-4cbf-ab57-f6aaeaf77e94",
+        EqpID: "5f8a0d82-9648-4b94-9b9b-60888960210c",
+        EplID: "04ad8b7d-7c32-432e-95b2-df9291291d66",
         SDT: isoString,
         Amp: [
             115.8, 135.4, 87.8, 150.0, 103.0, 133.1, 122.6, 122.9, 146.9, 122.2, 146.9, 124.6, 117.5, 134.4, 106.0,

@@ -56,4 +56,42 @@ public class WorkingShiftService : IWorkingShiftService
 
         return await _workingShiftRepository.UpdateAsync(workingShift);
     }
+
+    public async Task<Result<List<WorkingShiftDto>>> GetAllMainWorkingShiftsByYearAsync(GetAllMainWorkingShiftsByYearRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<WorkingShiftDto>>(validationResult.Exception);
+        }
+
+        return await _workingShiftRepository.GetAllMainWorkingShiftsByYearAsync(request.Year);
+    }
+
+    public async Task<Result<List<WorkingShiftDto>>> GetAllWorkingShiftsByEquipmentIdAndYearAsync(GetAllWorkingShiftsByEquipmentIdAndYearRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<WorkingShiftDto>>(validationResult.Exception);
+        }
+
+        return await _workingShiftRepository
+            .GetAllWorkingShiftsByEquipmentIdAndYearAsync(request.Year, request.EquipmentId);
+    }
+
+    public async Task<Result<List<WorkingShiftDto>>> GetAllWorkingShiftsByWelderIdAndYearAsync(GetAllWorkingShiftsByWelderIdAndYearRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<List<WorkingShiftDto>>(validationResult.Exception);
+        }
+
+        return await _workingShiftRepository
+            .GetAllWorkingShiftsByWelderIdAndYearAsync(request.Year, request.WelderId);
+    }
 }

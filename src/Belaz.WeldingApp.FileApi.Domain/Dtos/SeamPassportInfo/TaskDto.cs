@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Belaz.WeldingApp.Common.Entities.Production;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
@@ -56,6 +58,10 @@ public class TaskDto : IMapFrom<WeldingTask>
 
     public List<WeldPassageDto> WeldPassages { get; set; } = null!;
 
+    public List<Workplace> Workplaces { get; set; } = null!;
+
+    public string? DefectiveReason { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile
@@ -67,10 +73,29 @@ public class TaskDto : IMapFrom<WeldingTask>
             .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
             .ForMember(dto => dto.Seam, opt => opt.MapFrom(x => x.SeamAccount.Seam))
             .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
-            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master!.UserInfo))
+            .ForMember(dto => dto.Master,
+                opt =>
+                    opt.MapFrom(x => x.Master!.UserInfo))
             .ForMember(
                 dto => dto.WeldingEquipment,
-                opt => opt.MapFrom(x => x.WeldPassages.First().WeldingRecord.WeldingEquipment)
+                opt =>
+                    opt.MapFrom(x => x.WeldPassages.First().WeldingRecord.WeldingEquipment)
+            )
+            .ForMember(
+                dto => dto.Workplaces,
+                opt =>
+                    opt.MapFrom(x => x.WeldPassages.Any()
+                        ? x.WeldPassages.First()
+                            .WeldingRecord.WeldingEquipment.Workplaces
+                        : new List<Workplace>())
+            )
+            .ForMember(
+                dto => dto.DefectiveReason,
+                opt =>
+                    opt.MapFrom(x => x.SeamAccount
+                        .ProductAccount.ProductResults
+                        .First(_ => _.Status == ResultProductStatus.Defective)
+                        .Reason)
             )
             .ForMember(
                 dto => dto.WeldPassages,

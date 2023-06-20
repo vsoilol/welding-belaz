@@ -8,6 +8,14 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 public interface IWeldingRecordService
 {
     Task<List<RecordDto>> GetAllAsync();
+    
+    Task<Result<List<RecordDto>>> GetRecordsByDatePeriodAsync(GetRecordsByDatePeriodRequest request);
+
+    Task<List<RecordDto>> GetAllWithDeviationsAsync();
 
     Task<Result<Unit>> DeleteAsync(DeleteWeldingRecordRequest request);
+    
+    Task<Result<WeldingRecordLimitDto>> UpdateWeldingRecordLimitAsync(UpdateWeldingRecordLimitRequest request);
+    
+    Task<WeldingRecordLimitDto> GetWeldingRecordLimitAsync();
 }

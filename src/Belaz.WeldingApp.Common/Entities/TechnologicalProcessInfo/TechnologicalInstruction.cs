@@ -4,7 +4,7 @@ namespace Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo;
 
 public class TechnologicalInstruction : Entity
 {
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 

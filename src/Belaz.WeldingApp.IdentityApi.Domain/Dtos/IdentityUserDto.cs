@@ -17,6 +17,8 @@ public class IdentityUserDto : IMapFrom<UserData>
     public string MiddleName { get; set; } = null!;
 
     public string? UserName { get; set; }
+    
+    public bool IsFirstLogin { get; set; }
 
     public string Email { get; set; } = null!;
 

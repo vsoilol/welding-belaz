@@ -175,7 +175,7 @@ public class ExcelDeviationReportService : IExcelDeviationReportService
         Guid additionalId,
         Func<
             Guid,
-            Guid,
+            Guid?,
             Guid?,
             DateTime,
             DateTime,
@@ -218,9 +218,14 @@ public class ExcelDeviationReportService : IExcelDeviationReportService
         return await _excelDeviationReportService.GenerateReportAsync(result);
     }
 
-    private async Task<string> GetProductAndSeamTitleInfoAsync(Guid productId, Guid? seamId)
+    private async Task<string> GetProductAndSeamTitleInfoAsync(Guid? productId, Guid? seamId)
     {
-        var product = await _productRepository.GetBriefInfoByIdAsync(productId);
+        if (productId is null)
+        {
+            return "Для всех изделий, узлов и деталей";
+        }
+        
+        var product = await _productRepository.GetBriefInfoByIdAsync((Guid)productId);
 
         if (seamId is not null)
         {

@@ -6,6 +6,8 @@ namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 public interface IWeldingEquipmentRepository
 {
     Task<WeldingEquipmentDto> GetByRfidTagAsync(string rfidTag);
+    
+    Task<WeldingEquipmentDto> GetByIdAsync(Guid id);
 
     Task AddWeldingEquipmentConditionTimeAsync(WeldingEquipmentConditionTime conditionTime);
 

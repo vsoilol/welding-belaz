@@ -17,5 +17,5 @@ public class TechnologicalProcessDto
 
     public string? PdmSystemFileLink { get; set; }
 
-    public List<ProductDto> Products { get; set; } = null!;
+    //public List<ProductDto> Products { get; set; } = null!;
 }

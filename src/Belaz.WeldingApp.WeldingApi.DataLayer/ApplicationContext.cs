@@ -28,6 +28,8 @@ public class ApplicationContext : DbContext
     public virtual DbSet<Calendar> Calendars { get; set; } = null!;
 
     public virtual DbSet<Day> Days { get; set; } = null!;
+    
+    public virtual DbSet<WeldingRecordLimit> WeldingRecordLimits { get; set; } = null!;
 
     public virtual DbSet<WorkingShift> WorkingShifts { get; set; } = null!;
 

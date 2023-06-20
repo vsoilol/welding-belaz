@@ -1,0 +1,2 @@
+scp -P 2642 bru@194.158.193.176:~/backup.sql ./backup.sql				- копирование файлов от сервера на локальный ПК
+scp svaradmin@192.168.126.161:~/backup.sql C:/Data/Belaz/backup.sql		- copy from belaz server to local PC

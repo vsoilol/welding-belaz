@@ -93,7 +93,7 @@ public class DayService : IDayService
             return new BaseResultRequest<List<DayDto>>(result);
         }
 
-        var data = await _dayRepository.GetAllByWelderIdAsync(request.EquipmentId);
+        var data = await _dayRepository.GetAllByEquipmentIdAsync(request.EquipmentId);
         var equipment = await _weldingEquipmentRepository.GetBriefInfoByIdAsync(request.EquipmentId);
 
         var message = $"Получение всех дней для сварочного оборудования {equipment.FactoryNumber}";
