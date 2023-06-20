@@ -68,7 +68,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             record.IsEnsuringVoltageAllowance = CalculateIsEnsuringValue(record.ArcVoltageValues,
                 entity.ArcVoltageMin, entity.ArcVoltageMax);
         }
-        
+
         await _context.SaveChangesAsync();
 
         return _mapper.Map<WeldingRecordLimitDto>(weldingRecordLimit);
@@ -81,12 +81,19 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate)
+    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber)
     {
         var weldingRecords = _context.WeldingRecords
             .OrderByDescending(_ => _.Date.Date)
             .ThenByDescending(x => x.WeldingStartTime.TotalSeconds)
-            .Where(_ => _.Date.Date >= startDate.Date && _.Date.Date <= endDate.Date);
+            .Where(_ => _.Date.Date >= startDate.Date
+                        && _.Date.Date <= endDate.Date);
+
+        if (seamNumber is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.Number == seamNumber);
+        }
 
         return weldingRecords
             .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
@@ -103,14 +110,14 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
-    
+
     private bool? CalculateIsEnsuringValue(double[] values, double? min, double? max)
     {
         if (min is null || max is null)
         {
             return null;
         }
-        
+
         var countSequential = 0;
         var longCount = 0;
 

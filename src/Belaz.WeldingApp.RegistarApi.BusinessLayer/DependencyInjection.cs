@@ -19,6 +19,8 @@ public static class DependencyInjection
 
         services.AddScoped<IRegistarService, RegistarService>();
         services.AddScoped<IMarkEstimateService, MarkEstimateService>();
+        
+        services.AddScoped<IEmailSender, EmailSender>();
 
         return services;
     }
