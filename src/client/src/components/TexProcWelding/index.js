@@ -70,6 +70,9 @@ export const TexProcWelding = ({
   const [valuetSeam, setValuetSeam] = useState(0);
   const [valuetVkladka, setValuetVkladka] = useState(0);
 
+  const [valuetNumberInstr, setvaluetNumberInstr] = useState("");
+
+
 
   const [idPassages, setidPassages] = useState(0);
 
@@ -117,7 +120,7 @@ export const TexProcWelding = ({
   const [idProc, setidProc] = useState("");
   const [idInstr, setidInstr] = useState("");
   const columns = [
-    (userRole === "Admin" || userRole === "Master") && {
+    (userRole === "Admin" /* || userRole === "Master" */) && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -143,43 +146,10 @@ export const TexProcWelding = ({
           {rowData?.pdmSystemFileLink ?? "-"}
         </a>
       ),
-    },
-    // {
-    //   title: "Изделие", field: "technologicalInstructions[0].seam.product.name",
-    // },
-    // {
-    //   title: "Сборочные узлы",
-    //   // render: (rowData) => { 
-    //   //   console.log(rowData)
-    //   //   return ( 
-    //   //     <span>Сборочный узел {rowData?.technologicalInstructions[0]?.seam?.number}</span>
-    //   //   );
-    //   // } 
-    // },
-    // {
-    //   title: "Детали", field: "technologicalInstructions[0].seam.product.name",
-    // },
-    // {
-    //   title: "Швы", field: "technologicalInstructions[0].seam.product.productType",
-    // },
-    // {
-    //   title: "Диапазоны допустимых значений контролируемых параметров (сварочный ток, напряжение на дуге)",
-    //   // render: (rowData) => (
-    //   //   <span>
-    //   //     {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMin} 
-    //   //     - {rowData?.technologicalInstructions[0]?.weldPassageInstructions[0]?.arcVoltageMax}
-    //   //     </span>
-    //   // ),
-    // },
-    // {
-    //   title: "Размеры шва", field: "technologicalInstructions[0].seam.product.productType",
-    // },
-    // {
-    //   title: "Количество проходов", field: "technologicalInstructions[0].seam.product.productType",
-    // },
+    }, 
   ].filter(column => column)
   const colinstructions = [
-    (userRole === "Admin" || userRole === "Master") && {
+    (userRole === "Admin" /* || userRole === "Master" */) && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -371,18 +341,12 @@ export const TexProcWelding = ({
       label: item.number,
     };
   });
-
-  const requiredKeys = ["name", "nextInspectionDate"];
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
+ 
 
 
 
 
-  const [value_panel, setValue] = useState(0);
-  const [valueTexProcOptions, setvalueTexProcOptions] = useState(0);
+  const [value_panel, setValue] = useState(0); 
   const [valueNameInst, setvalueNameInst] = useState("");
   const ChangePanels = (event, newValue) => {
     setValue(newValue);
@@ -398,46 +362,29 @@ export const TexProcWelding = ({
   };
 
   //Запрос на редактирование или добавление
-  function SendData(variables) {
-    const filteredVariables = variables.filter(item => {
-      return Object.values(item).some(val => val !== '');
-    });
-
+  function SendData(variables) { 
+    const filteredVariables = variables.filter(item => Object.values(item).some(val => val !== '')); 
+    const data = {
+      id: isModalOpenNumb === 1 ? idPassages : undefined,
+      number: valuetNumberInstr,
+      name: valueNameInst,
+      seams:valuetSeam,
+      weldPassages: filteredVariables.map(item => ({
+        id: isModalOpenNumb === 1 ? item.id || null : null,
+        name: item.weldPassagesName,
+        number: item.weldPassagesNumber,
+        weldingCurrentMin: item.weldingCurrentMin,
+        weldingCurrentMax: item.weldingCurrentMax,
+        arcVoltageMin: item.arcVoltageMin,
+        arcVoltageMax: item.arcVoltageMax,
+        preheatingTemperatureMin: item.preheatingTemperatureMin || null,
+        preheatingTemperatureMax: item.preheatingTemperatureMax || null,
+      })),
+    };  
     if (isModalOpenNumb === 0) {
-      const data = {
-        number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
-        name: valueNameInst,
-        weldPassages: filteredVariables.map(item => ({
-          name: item.weldPassagesName,
-          number: item.weldPassagesNumber,
-          weldingCurrentMin: item.weldingCurrentMin,
-          weldingCurrentMax: item.weldingCurrentMax,
-          arcVoltageMin: item.arcVoltageMin,
-          arcVoltageMax: item.arcVoltageMax,
-          preheatingTemperatureMin: item.preheatingTemperatureMin,
-          preheatingTemperatureMax: item.preheatingTemperatureMax,
-        })),
-      };
       addInst(data);
-    }
-    if (isModalOpenNumb === 1) {
-      const data = {
-        id: idPassages,
-        number: seam.find(obj => obj.id === valuetSeam)?.technologicalInstruction?.number,
-        name: valueNameInst,
-        weldPassages: filteredVariables.map(item => ({
-          id: item.id || null,
-          name: item.weldPassagesName,
-          number: item.weldPassagesNumber,
-          weldingCurrentMin: item.weldingCurrentMin,
-          weldingCurrentMax: item.weldingCurrentMax,
-          arcVoltageMin: item.arcVoltageMin,
-          arcVoltageMax: item.arcVoltageMax,
-          preheatingTemperatureMin: item.preheatingTemperatureMin,
-          preheatingTemperatureMax: item.preheatingTemperatureMax,
-        })),
-      };
-      editInst(data)
+    } else if (isModalOpenNumb === 1) {
+      editInst(data);
     }
   }
 
@@ -506,10 +453,7 @@ export const TexProcWelding = ({
                   handleChange(e.target.name, e.target.value, index);
                 }}
                 style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                value={passage.weldPassagesNumber}
-                type="number"
-                min="0"
-                step="1"
+                value={passage.weldPassagesNumber} 
                 name="weldPassagesNumber"
                 placeholder="Номер прохода"
                 autoComplete="off"
@@ -621,7 +565,7 @@ export const TexProcWelding = ({
         <div className={styles.row}>
           <Button
             type="submit"
-            onClick={() => SendData(passages)}
+            onClick={() => {SendData(passages);setIsModalOpen(false)}}
           >
             {modalData ? "Сохранить" : "Создать"}
           </Button>
@@ -696,10 +640,7 @@ export const TexProcWelding = ({
                   handleChange(e.target.name, e.target.value, index);
                 }}
                 style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                value={passage.weldPassagesNumber}
-                type="number"
-                min="0"
-                step="1"
+                value={passage.weldPassagesNumber} 
                 name="weldPassagesNumber"
                 placeholder="Номер прохода"
                 autoComplete="off"
@@ -883,11 +824,7 @@ export const TexProcWelding = ({
         <Tab label="Технологические инструкции" />
       </Tabs>
 
-      <div className={styles.tableWrapper}>
-
-
-
-
+      <div className={styles.tableWrapper}> 
         {/*Технологические процессы сборки и сварки */}
         <TabPanel
           value={value_panel}
@@ -941,8 +878,7 @@ export const TexProcWelding = ({
             }
             deleteAction={userRole === "admin" ? deleteEquipment : null}
           />
-        </TabPanel>
-
+        </TabPanel> 
         {/*Технологические инструкции*/}
         <TabPanel
           value={value_panel}
@@ -957,7 +893,7 @@ export const TexProcWelding = ({
             data={instructions}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "Admin" /* || userRole === "Master" */
                 ? [
                   {
                     icon: "add",
@@ -1022,8 +958,7 @@ export const TexProcWelding = ({
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
             setIsModalOpen(false);
-            setModalData(null);
-
+            setModalData(null); 
           }}
         >
           {({
@@ -1048,6 +983,19 @@ export const TexProcWelding = ({
                 />
               </div>
               <div className={styles.row}>
+                <Input
+                  onChange={(e) => {
+                    setvaluetNumberInstr(e.target.value);
+                  }}
+                  style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                  value={valuetNumberInstr}
+                  name="name"
+                  autocomplete="off"
+                  placeholder="Номер"
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className={styles.row}>
                 <Select
                   name="valuetTechProc"
                   width="380px"
@@ -1062,11 +1010,7 @@ export const TexProcWelding = ({
               {isModalOpenNumb === 0
                 ? <WeldingInputs />
                 : <CnangeWeldingInputs />
-              }
-               {/* {userRole === "Admin" || userRole === "Master"
-                ? <Upload></Upload>
-                : null
-              } */}
+              } 
 
             </form>
 
@@ -1122,10 +1066,7 @@ export const TexProcWelding = ({
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
-                      const pattern = /^[0-9-]*$/; // задаем шаблон для вводимых символов
-                      if (pattern.test(e.target.value)) { // проверяем соответствие вводимых символов шаблону
-                        handleChange(e);
-                      }
+                      handleChange(e);
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
@@ -1147,11 +1088,7 @@ export const TexProcWelding = ({
                     placeholder="Ссылка на PDF-файл "
                     onBlur={handleBlur}
                   />
-                </div>
-                {/* {userRole === "Admin" || userRole === "Master"
-                  ? <Upload></Upload>
-                  : null
-                } */}
+                </div> 
                 <div className={styles.row}>
                   <Button
                     type="submit"
@@ -1167,7 +1104,7 @@ export const TexProcWelding = ({
       </ModalWindow>
 
 
-      {/*Удаление задания*/}
+      {/*Удаление инструкции*/}
       <ModalWindow
         isOpen={deleteTaskModal}
         headerText="Удаление"

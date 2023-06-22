@@ -11,25 +11,24 @@ import BurgerMenu from "../BurgerMenu";
 import ProfileButton from "../ProfileButton";
 import styles from "./styles.module.css";
 
-export const Header = () => {
+export const Header = ({
+  userRole
+}) => {
   const isTablet = useContext(TabletContext);
   const [isMobileMenuOpened, setIsMobileMenuOpened] = useState(false);
- 
+   
   const menuItems = [
-    
-    
-    { name: "Сотрудники", route: "/" },   
+    { name: "Сотрудники", route: "/" },
     { name: "Оборудование", route: "/equipment" },
-
-    { name: "Производство", route: "/production" },  
-    { name: "Технологические процессы сборки и сварки", route: "/tex-proc-welding" },  
+    { name: "Производство", route: "/production" },
+    { name: "Технологические процессы сборки и сварки", route: "/tex-proc-welding" },
+    { name: "Записи", route: "/records" },
+    { name: "Календарь", route: "/proiz-calendar" },
+    { name: "Задания", route: "/tasks" },
+    { name: "Отчеты", route: "/reports" },
+    (userRole === "Admin") && { name: "Панель администратора", route: "/creates-user" },
     
-    { name: "Записи", route: "/records" }, 
-    { name: "Задания", route: "/tasks" }, 
-    { name: "Отчеты", route: "/reports" }, 
-    { name: "Панель", route: "/creates-user" }, 
-    
-  ];
+  ].filter(Boolean);
 
   const renderHeaderButtons = () => {
     return menuItems?.map((item) => {

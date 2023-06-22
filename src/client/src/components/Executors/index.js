@@ -32,6 +32,8 @@ export const Executors = ({
   equipment,
   workshop,
   area, 
+  workplace,
+  loadPlace
 }) => {
   const [value, setValue] = useState(0);
 
@@ -42,7 +44,8 @@ export const Executors = ({
     loadEquipment();
     loadWorkshop();
     loadArea();
-  }, [loadExecutors, loadTechs, loadMasters,loadEquipment,loadWorkshop,loadArea]);
+    loadPlace();
+  }, [loadExecutors, loadTechs, loadMasters,loadEquipment,loadWorkshop,loadArea,loadPlace]);
 
   const handleChange = (event, newValue) => {
     localStorage.removeItem("VkladkaExecutors")
@@ -86,8 +89,10 @@ export const Executors = ({
     <div className={styles.innerWrapper}>
       <ToolTip
         title="Сотрудники"
-        toolTipText="Здесь Вы можете просмотреть профиль сотрудников, отчет о работе сварщика"
+        toolTipText="Здесь Вы можете просмотреть профиль сотрудников" /*, отчет о работе сварщика*/
         src={executorsImage}
+        workshop={workshop}
+        equipment={equipment}
       />
       <Tabs
         value={value}
@@ -118,9 +123,10 @@ export const Executors = ({
           editMaster={editMaster}
           executors={masters} 
 
+          value={value}
           equipment={equipment}
           workshop={workshop}
-          area={area}
+          area={area} 
         />
       </TabPanel>
       <TabPanel
@@ -138,7 +144,9 @@ export const Executors = ({
           deleteExecutor={deleteExecutor}
           editExecutor={editExecutor}
           executors={executors} 
+          workplace={workplace}
 
+          value={value}
           equipment={equipment}
           workshop={workshop}
           area={area}
@@ -158,8 +166,8 @@ export const Executors = ({
           addExecutor={addTech}
           deleteExecutor={deleteTech}
           editTech={editTech}
-          executors={techs}
-
+          executors={techs} 
+          value={value}
           equipment={equipment}
           workshop={workshop}
           area={area}

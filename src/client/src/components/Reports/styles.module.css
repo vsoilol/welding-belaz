@@ -1,8 +1,8 @@
 .tableWrapper {
   margin: 0 auto;
-  margin-top: 80px;
+  margin-top: 130px;
   margin-bottom: 80px;
-  width: calc(95% - 80px); 
+  width: calc(100vw - 100px);
   background-color: white;
 }
 

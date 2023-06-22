@@ -106,28 +106,12 @@ export const Calendar = ({
 
   useEffect(() => {
     loadCalendaryear(date);
-    loadExecutors();
-    loadEquipment();
+   /*  loadExecutors();
+    loadEquipment(); */
     (window.localStorage.getItem("executorId")) ? loadDayByWelder(window.localStorage.getItem("executorId")) : loadDayByEquipment(window.localStorage.getItem("equipmentId"))
   }, [loadCalendaryear, loadExecutors, loadEquipment]);
 
-
-  const getDocument = (activeId) => {
-    api
-      .get(`/reports/passportReport/${activeId}`, {
-        responseType: "arraybuffer",
-        dataType: "blob",
-      })
-      .then((response) => {
-        const file = new Blob([response["data"]], {
-          type: "application/pdf",
-        });
-
-        const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
-      })
-      .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
-  };
+ 
 
 
 
@@ -171,40 +155,36 @@ export const Calendar = ({
   })
 
 
-
-  function SendData(params, fun) {
-    params["valueObj"] = valueObj
-    params["valueExecutors"] = valueExecutors
-    params["valueEquipment"] = valueEquipment
-    params["shiftDay"] = new Date(params.shiftDay).toLocaleDateString()
-
-
-    params["monthNumber"] = new Date(params.workDay).getUTCMonth() + 1;
-    params["number"] = new Date(params.workDay).getUTCDate();
-    params["year"] = new Date(params.workDay).getFullYear();
-
-    params["WorkingShiftnumber"] = valueWorkingShift
-    params["workingShifts"] = SetworkingShifts(valueWorkingShift)
-
-
-
-    if (fun === "AddWorkDay") {
-      const executorId = window.localStorage.getItem("executorId");
-      const equipmentId = window.localStorage.getItem("equipmentId");
-      if (executorId) {
-        params.valueExecutors = executorId;
-      } else if (equipmentId) {
-        params.valueEquipment = equipmentId;
-      }
-      if (params.workingShifts?.number === 3) {
-        params.number++;
-      }
-      /* addDay(params); */
-    } else if (fun === "EditWorkDay") {
-      /* editDay(params); */
+  function SendData(params) {
+    const { shiftDay, workDay, valueWorkingShift } = params;
+  
+    params.valueObj = valueObj;
+    params.valueExecutors = valueExecutors;
+    params.valueEquipment = valueEquipment;
+    params.shiftDay = new Date(shiftDay).toLocaleDateString();
+  
+    params.monthNumber = new Date(workDay).getUTCMonth() + 1;
+    params.number = new Date(workDay).getUTCDate();
+    params.year = new Date(workDay).getFullYear();
+  
+    params.WorkingShiftnumber = valueWorkingShift;
+    params.workingShifts = SetworkingShifts(valueWorkingShift);
+  
+    const executorId = window.localStorage.getItem("executorId");
+    const equipmentId = window.localStorage.getItem("equipmentId");
+    if (executorId) {
+      params.valueExecutors = executorId;
+    } else if (equipmentId) {
+      params.valueEquipment = equipmentId;
     }
-
-  }
+  
+    if (params.workingShifts?.number === 3) {
+      params.number++;
+    }
+  
+    addDay(params);
+     /* editDay(params); */
+  } 
 
   function SetworkingShifts(valueWorkingShift) {
     for (let index = 0; index < calendar.mainWorkingShifts.length; index++) {
@@ -240,6 +220,11 @@ export const Calendar = ({
 
         <div class="calendar-wrapper">
           <h2>Производственный календарь </h2>
+
+          <div className={styles.RowToolsBtns}>
+            <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
+            {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
+          </div>
           <Calendars
             executors={executors}
             equipment={equipment}
@@ -248,10 +233,7 @@ export const Calendar = ({
           </Calendars>
         </div>
 
-        <div className={styles.RowToolsBtns}>
-          <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
-          {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
-        </div>
+        
 
 
         {/*Добавить рабочий день*/}
@@ -271,7 +253,7 @@ export const Calendar = ({
               const { id, ...dataToSend } = variables;
               setIsModalAddWorkDayOpen(false);
               setModalData(null);
-              SendData(variables, "AddWorkDay")
+              SendData(variables)
             }}
           >
             {({

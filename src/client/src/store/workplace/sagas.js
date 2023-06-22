@@ -352,6 +352,7 @@ function* addProduct(variables) {
           "workplaceId": variables.payload.workplaceId,
           "technologicalProcessId": variables.payload.technologicalProcessId,
           "seams":variables.payload.seams,
+          "manufacturingTime":variables.payload.manufacturingTime,
         });
         yield put(addProductSuccess(data));
         yield call(loadProduct);
@@ -381,6 +382,7 @@ function* editProduct(variables) {
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId,
       "seams":variables.payload.seams,
+      "manufacturingTime":variables.payload.manufacturingTime,
     });
     yield call(loadProduct);
     yield put(editProductSuccess(data));
@@ -435,7 +437,9 @@ function* addKnot(variables) {
           "isControlSubject": false,
           "productionAreaId": variables.payload.productionAreaId,  
           "technologicalProcessId": variables.payload.technologicalProcessId,
-          "mainProductId": variables.payload.mainProductId
+          "mainProductId": variables.payload.mainProductId,
+          "manufacturingTime":variables.payload.manufacturingTime,
+          
         });
         yield call(loadKnot);
         yield put(addKnotSuccess(data));
@@ -464,7 +468,8 @@ function* editKnot(variables) {
       "isControlSubject": false,
       "productionAreaId": variables.payload.productionAreaId,  
       "technologicalProcessId": variables.payload.technologicalProcessId,
-      "mainProductId": variables.payload.mainProductId
+      "mainProductId": variables.payload.mainProductId,
+      "manufacturingTime":variables.payload.manufacturingTime,
     });
     yield call(loadKnot);
     yield put(editKnotSuccess(data));
@@ -511,6 +516,7 @@ function* addDetail(variables) {
           "productionAreaId": variables.payload.productionAreaId, 
           "technologicalProcessId": variables.payload.technologicalProcessId,  
           "mainProductId": variables.payload.mainProductId,  
+          "manufacturingTime":variables.payload.manufacturingTime,
         });
         yield call(loadDetail);
         yield put(addDetailSuccess(data));
@@ -541,6 +547,7 @@ function* editDetail(variables) {
       "workplaceId": variables.payload.workplaceId,
       "technologicalProcessId": variables.payload.technologicalProcessId, 
       "mainProductId": variables.payload.mainProductId,  
+      "manufacturingTime":variables.payload.manufacturingTime,
     });
     yield put(editDetailSuccess(data));
     yield call(loadDetail);

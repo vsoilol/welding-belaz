@@ -24,16 +24,16 @@ const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
 }; 
 
 const editEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => { 
-  window.location.reload()
+  /* window.location.reload() */
   return {
     ...state,
     isRequesting: false,
-    equipment: state.equipment[0].map((item,index) => item.id === equipment.id?state.equipment[index]=equipment:item)
+    equipment
   } 
 };
 
 const deleteEquipmentSuccess = (state = INITIAL_STATE, { machineId }) => {
-  window.location.reload()
+  /* window.location.reload() */
   return {
     ...state,
     isRequesting: false,
@@ -42,7 +42,7 @@ const deleteEquipmentSuccess = (state = INITIAL_STATE, { machineId }) => {
 };
 
 const addEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => { 
-  window.location.reload()
+  /* window.location.reload() */
   return {
     ...state,
     isRequesting: false,

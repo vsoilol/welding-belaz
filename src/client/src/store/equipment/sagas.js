@@ -79,13 +79,13 @@ function* addEquipment({ payload }) {
       "name": payload.name,
       "marking": payload.marking,
       "factoryNumber": `${payload.factoryNumber}`,
-      "commissioningDate": new Date(payload.commissioningDate).toLocaleDateString(),
+      "commissioningDate": payload.commissioningDate,
       "height": Number(payload.height),
       "width": Number(payload.width),
       "lenght": Number(payload.lenght),
       "groupNumber": String(payload.groupNumber),
       "manufacturerName": payload.manufacturerName,
-      "nextAttestationDate": new Date(payload.nextAttestationDate).toLocaleDateString(),
+      "nextAttestationDate": payload.nextAttestationDate,
       "weldingProcess": payload.weldingProcess,
       "idleVoltage": Number(payload.idleVoltage),
       "weldingCurrentMin": Number(payload.weldingCurrentMin),
@@ -95,7 +95,10 @@ function* addEquipment({ payload }) {
       "postId": payload.postId,
       "workplaceIds": payload.workplaceIds
     }); 
-    yield put(addEquipmentSuccess(data));
+    yield put(addEquipmentSuccess(payload)); 
+    /* yield call(loadEquipment);   */
+    window.location.reload()
+    /* yield put(addEquipmentSuccess(data)); */
   } catch (error) {
     yield put(addEquipmentFailure(error));
     yield put(setError(error.message));
@@ -127,8 +130,9 @@ function* editEquipment({ payload }) {
       "arcVoltageMax": Number(payload.arcVoltageMax),
       "postId": payload.postId,
       "workplaceIds": payload.workplaceIds
-    }); 
+    });  
     yield put(editEquipmentSuccess(data));
+    yield call(loadEquipment);  
   } catch (error) {
     yield put(editEquipmentFailure(error));
     yield put(setError(error.message));
@@ -139,7 +143,7 @@ function* deleteEquipment({ payload }) {
   try { 
     const { data } = yield call(api.remove, `/WeldingEquipment/${payload}`);  
     yield put(deleteEquipmentSuccess(data));
-    
+    yield call(loadEquipment);  
   } catch (error) {
     yield put(deleteEquipmentFailure(error));
     yield put(setError(error.message));
@@ -155,10 +159,10 @@ function* addDowntime({ payload }) {
       "downtimeReasonId":  payload.downtimeReasonId,
       "date":  payload.Date,
       "startConditionTime":  payload.timeStates,
-      "time": payload.time
-    }); 
-    window.location.reload()
-    // yield put(addDowntimeSuccess(data)); 
+      "time": 10
+    });  
+    yield put(addDowntimeSuccess(data)); 
+    yield call(loadDowntime);  
   } catch (error) {
     yield put(addDowntimeFailure(error));
     yield put(setError(error.message));
@@ -173,10 +177,11 @@ function* editDowntime({ payload }) {
       "downtimeReasonId": payload.downtimeReasonId,
       "date":   payload.Date,
       "startConditionTime":  payload.timeStates,
-      "time":  payload.time,
+      "time":  10
     }); 
-    window.location.reload()
-    // yield put(editDowntimeSuccess(data));
+    
+    yield put(editDowntimeSuccess(data));
+    yield call(loadDowntime);  
   } catch (error) {
     yield put(editDowntimeFailure(error));
     yield put(setError(error.message));

@@ -1,13 +1,13 @@
 import React from "react";
-import { Equipment } from "components";
+import { Production_calendar } from "components";
 import { HeaderLayout } from "layouts/Header";
 
-export const EquipmentPage = props => {  
+export const ProductionCalendar = props => {
   return (
     <div>
       <HeaderLayout {...props?.state?.auth?.user?.role??props?.userRole}>
-        <Equipment {...props} />
-      </HeaderLayout> 
+        <Production_calendar {...props} />
+      </HeaderLayout>
     </div>
   );
 };

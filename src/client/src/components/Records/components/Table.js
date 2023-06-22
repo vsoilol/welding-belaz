@@ -11,6 +11,9 @@ import React, { useEffect, useState } from "react";
 import ModalWindow from "components/shared/ModalWindow";
 import { Formik } from "formik";
 import Button from "components/shared/Button";
+import Input from "components/shared/Input";
+
+
 
 import {
   LineChart,
@@ -23,8 +26,9 @@ import {
   Brush,
   AreaChart,
   Area,
+  ReferenceLine,
   ResponsiveContainer,
-  Layer, 
+  Layer,
 } from "recharts";
 import styles from "../styles.module.css";
 
@@ -40,11 +44,15 @@ const StyleNewTable = {
 }
 
 
-export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) => {
+export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole }) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
+
+
+  const [dateStart, setdateEnd] = useState("");
+
   const columns = [
-    (userRole === "Admin" || userRole === "Master") && {
+    (userRole === "Admin" /*|| userRole === "Master"*/) && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -52,19 +60,26 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) 
           src={deleteIcon}
           onClick={() => {
             setdeleteRecordsModal(true);
-          setidRecords(rowData?.id)
+            setidRecords(rowData?.id)
           }}
         />
       ),
-    },   
+    },
     { title: "Дата", field: "date" },
+    { title: "Номер шва", field: "seamNumber" },
+    { title: "Длительность сварки", field: "weldingDuration" },
+    { title: "Сварочный ток (среднее)", field: "weldingCurrentAverage", },
+    { title: "Напряжение на дуге (среднее)", field: "arcVoltageAverage", },
+
+
+
     { title: "Время начала сварки", field: "weldingStart" },
     {
       title: "Номер задания ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingTaskNumber  != null) {
+        if (rowData?.weldingTaskNumber != null) {
           return (
-            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber  ?? "-"}</a>
+            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber ?? "-"}</a>
           );
         }
         else {
@@ -90,8 +105,8 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) 
     {
       title: "Оборудование ( номер )", render: (rowData) => (
         <div>
-          <span> {rowData.weldingEquipment?.marking}  </span>
           <span> {rowData.weldingEquipment?.factoryNumber}</span>
+          <span> {rowData.weldingEquipment?.marking}  </span>
         </div>
       ),
     },
@@ -104,7 +119,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) 
           <span>  {rowData.master?.lastName}  </span>
         </div>
       ),
-    },  
+    },
   ].filter(column => column);
   const renderRowChildren = (rowData) => {
     let time = rowData.startTime
@@ -165,6 +180,24 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) 
                 fill="#8884d8"
                 dot={false}
               />
+              {rowData.weldingCurrentMin !== undefined && (
+                <ReferenceLine
+                  y={rowData.weldingCurrentMin}
+                  stroke="red"
+                  strokeDasharray="3 3"
+                  label="минимальная сила тока"
+                  strokeWidth={2}
+                />
+              )}
+              {rowData.weldingCurrentMax !== undefined && (
+                <ReferenceLine
+                  y={rowData.weldingCurrentMax}
+                  stroke="green"
+                  strokeDasharray="3 3"
+                  label="максимальная сила тока"
+                  strokeWidth={2}
+                />
+              )}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -206,6 +239,24 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) 
                 fill="#82ca9d"
                 dot={false}
               />
+              {rowData.arcVoltageMin !== undefined && (
+                <ReferenceLine
+                  y={rowData.arcVoltageMin}
+                  stroke="red"
+                  strokeDasharray="3 3"
+                  label="минимальное напряжение"
+                  strokeWidth={2}
+                />
+              )}
+              {rowData.arcVoltageMax !== undefined && (
+                <ReferenceLine
+                  y={rowData.arcVoltageMax}
+                  stroke="green"
+                  strokeDasharray="3 3"
+                  label="максимальное напряжение"
+                  strokeWidth={2}
+                />
+              )}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -225,6 +276,50 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords ,userRole}) 
 
   return (
     <div className={styles.tableWrapper}>
+
+     {/*  <div className={styles.tools}>
+
+        <div>
+          <label></label>
+          <Input
+            onChange={(e) => {
+              setdateEnd(e.target.value)
+            }}
+            width="200"
+            style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+            value={dateStart}
+            name="dateStart"
+            placeholder="Дата"
+            type="text"
+            onFocus={(e) => {
+              e.currentTarget.type = "date";
+            }}
+            autocomplete="off"
+          />
+        </div>
+        <div>
+          <label></label>
+          <Input
+            onChange={(e) => {
+              setdateEnd(e.target.value)
+            }}
+            width="200"
+            style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+            value={dateStart}
+            name="dateStart"
+            placeholder="Дата"
+            type="text"
+            onFocus={(e) => {
+              e.currentTarget.type = "date";
+            }}
+            autocomplete="off"
+          />
+        </div>
+
+
+
+      </div> */}
+
       <Table
         title="Записи"
         actions={[]}

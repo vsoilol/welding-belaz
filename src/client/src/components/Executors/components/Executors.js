@@ -21,7 +21,7 @@ import deleteIcon from "assets/icons/delete.png";
 import api from "services/api";
 
 
-import {Upload} from "components/Upload/index";
+import { Upload } from "components/Upload/index";
 
 const useStyles = makeStyles(() => ({
   rowStyle: {
@@ -29,8 +29,6 @@ const useStyles = makeStyles(() => ({
     border: "1px solid red",
   },
 }));
-
-
 export const ExecutorsTable = ({
   addExecutor,
   deleteExecutor,
@@ -40,11 +38,13 @@ export const ExecutorsTable = ({
   executors,
   isRequesting,
   type,
-  userRole, 
-
+  userRole,
   equipment,
   workshop,
   area,
+  workplace,
+  value
+
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -56,6 +56,9 @@ export const ExecutorsTable = ({
   const [valuetEquipment, setValuetEquipment] = useState();
   const [valuetOpenModal, setValuetOpenModal] = useState();
   const [valuetOpenVkladka, setValuetOpenVkladka] = useState(0);
+
+  const [valueWorkplace, setvalueWorkplace] = useState(0);
+
 
   const classes = useStyles();
   const initialValues = {
@@ -88,9 +91,9 @@ export const ExecutorsTable = ({
     "workshopName",
     "productionAreaName",
     "workplaceNumber",
-  ]; 
+  ];
   const controllerColumns = [
-    (userRole === "Admin" || userRole === "Master") && {
+    (userRole === "Admin" /* || userRole === "Master" */) && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -149,22 +152,27 @@ export const ExecutorsTable = ({
       title: "Номер производственного участка",
       field: "productionArea.number",
     },
+
     {
-      title: "Закреплённое оборудование ( ссылка )",
+      title: "Закреплённое оборудование (ссылка)",
       render: (rowData) => {
-        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
+        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length !== 0) {
           return (
-            rowData.weldingEquipments?.map(equipments =>
-              <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
-            )
-          )
+            rowData.weldingEquipments.map((equipment) => (
+              <div key={equipment.id}>
+                <a className={styles.equipmentRefs} href="/equipment">
+                  {equipment.factoryNumber || "-"}
+                </a>
+              </div>
+            ))
+          );
         }
       },
-    },
+    }
   ].filter(column => column);;
 
   const controllersColumns = [
-    (userRole === "Admin" || userRole === "Master") && {
+    (userRole === "Admin"/*  || userRole === "Master" */) && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -176,7 +184,7 @@ export const ExecutorsTable = ({
           }}
         />
       ),
-    }, 
+    },
     {
       title: "RFID-метка",
       render: (rowData) => {
@@ -226,7 +234,6 @@ export const ExecutorsTable = ({
   ].filter(column => column);
 
 
-
   function ReturnWorkshop(Area) {
     if (area != undefined) {
       for (let index = 0; index < area.length; index++) {
@@ -270,7 +277,7 @@ export const ExecutorsTable = ({
   };
 
   const extraUserColumns = [
-    (userRole === "Admin" || userRole === "Master") && {
+    (userRole === "Admin" /* || userRole === "Master" */) && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -282,7 +289,7 @@ export const ExecutorsTable = ({
           }}
         />
       ),
-    }, 
+    },
     {
       title: "RFID-метка",
       render: (rowData) => {
@@ -451,8 +458,8 @@ export const ExecutorsTable = ({
   };
 
   function OpenCalendar(rowData) {
-    window.localStorage.setItem("executorId", rowData.id) 
-    window.localStorage.removeItem("equipment") 
+    window.localStorage.setItem("executorId", rowData.id)
+    window.localStorage.removeItem("equipment")
     setTimeout(() => {
       window.location.href = "/calendar"
     }, 500);
@@ -476,13 +483,20 @@ export const ExecutorsTable = ({
       label: item.name,
     };
   });
+
+  const optWorkPlase = workplace?.map((item) => {
+    return {
+      value: item.id,
+      label: `Рабочее место №${item.number}`,
+    };
+  });
+
   //Запрос на редактирование или добавление
   function SendData(variables) {
-
     variables["productionAreaId"] = valuetArea
     variables["weldingEquipmentId"] = valuetEquipment
     variables["workshopId"] = valueWorkshopa
-
+    variables["workplaceId"] = valueWorkplace
     //Добавить  
     if (valuetOpenModal === 0) {
       addExecutor(variables)
@@ -498,114 +512,7 @@ export const ExecutorsTable = ({
       editTech(variables)
     }
   }
-  function DisplaySelects(params) {
 
-    if (params.select === "master") {
-      return (
-        <div>
-
-          <div className={styles.row}>
-            <Select
-              name="valuetArea"
-              width="380px"
-              value={valuetArea}
-              placeholder="Производственные участки"
-              onChange={(event) => setValuetArea(event.value)}
-              options={optArea}
-            />
-          </div>
-          <div className={styles.row}>
-            <Select
-              name="valueWorkshopa"
-              value={valueWorkshopa}
-              width="380px"
-              placeholder="Цех"
-              onChange={(event) => {
-                setValueWorkshop(event.value)
-              }}
-              options={optworkshop}
-            />
-          </div>
-          {/* <div className={styles.row}>
-            <Select
-              name="valuetEquipment"
-              width="380px"
-              value={valuetEquipment}
-              placeholder="Оборудование"
-              onChange={(event) => setValuetEquipment(event.value)}
-              options={optequipment}
-            />
-          </div> */}
-        </div>
-      )
-    }
-    if (params.select === "executor") {
-      return (
-        <div>
-          <div className={styles.row}>
-            <Select
-              name="valuetArea"
-              width="380px"
-              value={valuetArea}
-              placeholder="Производственные участки"
-              onChange={(event) => setValuetArea(event.value)}
-              options={optArea}
-            />
-          </div>
-          {/* <div className={styles.row}>
-            <Select
-              name="valuetEquipment"
-              width="380px"
-              value={valuetEquipment}
-              placeholder="Оборудование"
-              onChange={(event) => setValuetEquipment(event.value)}
-              options={optequipment}
-            />
-          </div> */}
-          <div className={styles.row}>
-            <Select
-              name="valueWorkshopa"
-              value={valueWorkshopa}
-              width="380px"
-              placeholder="Цех"
-              onChange={(event) => {
-                setValueWorkshop(event.value)
-              }}
-              options={optworkshop}
-            />
-          </div>
-        </div>
-      )
-    }
-    if (params.select === "controller") {
-      return (
-        <div>
-          <div className={styles.row}>
-            <Select
-              name="valuetArea"
-              width="380px"
-              value={valuetArea}
-              placeholder="Производственные участки"
-              onChange={(event) => setValuetArea(event.value)}
-              options={optArea}
-            />
-          </div>
-          <div className={styles.row}>
-            <Select
-              name="valueWorkshopa"
-              value={valueWorkshopa}
-              width="380px"
-              placeholder="Цех"
-              onChange={(event) => {
-                setValueWorkshop(event.value)
-              }}
-              options={optworkshop}
-            />
-          </div>
-        </div>
-      )
-    }
-  }
   return (
     <>
       <div className={styles.tableWrapper}>
@@ -613,18 +520,18 @@ export const ExecutorsTable = ({
           title="Сотрудники"
           isLoading={isRequesting}
           actions={
-            userRole === "Admin" || userRole === "Master"
+            userRole === "Admin" /* || userRole === "Master" */
               ? [
                 {
                   icon: "add",
                   tooltip: "Добавить пользователя",
                   isFreeAction: true,
-                  onClick: () => { 
-                    setIsModalOpen(true); 
+                  onClick: () => {
+                    setIsModalOpen(true);
                     setValuetOpenModal(0);
-                    api.post(`/eventLog`,{
+                    api.post(`/eventLog`, {
                       "information": "Открыл модальное окно добавления пользователя "
-                    }) 
+                    })
                   },
                 },
                 {
@@ -634,18 +541,18 @@ export const ExecutorsTable = ({
                     setModalData(rowData);
                     setIsModalOpen(true);
                     setValuetOpenModal(1);
-
+                    setvalueWorkplace(rowData?.workplace?.id)
                     setValueWorkshop(rowData.workshop?.id)
                     setValuetArea(rowData.productionArea.id)
                     setValuetEquipment(rowData.weldingEquipment?.id)
-                    api.post(`/eventLog`,{
+                    api.post(`/eventLog`, {
                       "information": "Открыл модальное окно редактирования пользователя"
-                    }) 
+                    })
                   },
                 },
               ]
               : []
-          } 
+          }
           renderRowChildren={renderRowChildren}
           rowStyle={classes.rowStyle}
           columns={type === "executor" ? extraUserColumns : controllerColumns}
@@ -706,7 +613,7 @@ export const ExecutorsTable = ({
                   value={values.middleName}
                   name="middleName"
                   placeholder="Фамилия"
-                  onBlur={handleBlur} 
+                  onBlur={handleBlur}
                   autocomplete="off"
                 />
 
@@ -722,7 +629,7 @@ export const ExecutorsTable = ({
                   value={values.firstName}
                   name="firstName"
                   placeholder="Имя"
-                  onBlur={handleBlur} 
+                  onBlur={handleBlur}
                   autocomplete="off"
                 />
                 <Input
@@ -734,7 +641,7 @@ export const ExecutorsTable = ({
                   style={{ height: 40, padding: "0 20px 0 30px" }}
                   value={values.lastName}
                   name="lastName"
-                  placeholder="Отчество" 
+                  placeholder="Отчество"
                   onBlur={handleBlur}
                   autocomplete="off"
                 />
@@ -764,7 +671,7 @@ export const ExecutorsTable = ({
                   name="position"
                   placeholder="Должность"
                   onBlur={handleBlur}
-                  autoComplete="off" 
+                  autoComplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -781,12 +688,52 @@ export const ExecutorsTable = ({
                   autoComplete="off"
                 />
               </div>
-              <DisplaySelects select={type} />
+              <div className={styles.row}>
+                <Select
+                  name="valuetArea"
+                  width="380px"
+                  value={valuetArea}
+                  placeholder="Производственные участки"
+                  onChange={(event) => setValuetArea(event.value)}
+                  options={optArea}
+                />
+              </div>
+              <div className={styles.row}>
+                <Select
+                  name="valueWorkshopa"
+                  value={valueWorkshopa}
+                  width="380px"
+                  placeholder="Цех"
+                  onChange={(event) => {
+                    setValueWorkshop(event.value)
+                  }}
+                  options={optworkshop}
+                />
+              </div>
+
+              {value === 1
+                ? (
+                  <div className={styles.row}>
+                    <Select
+                      name="valueWorkplace"
+                      value={valueWorkplace}
+                      width="380px"
+                      placeholder="Рабочее место"
+                      onChange={(event) => {
+                        setvalueWorkplace(event.value)
+                      }}
+                      options={optWorkPlase}
+                    />
+                  </div>
+                )
+                : null
+              }
 
 
-              {userRole === "Admin" || userRole === "Master"
-                ?<Upload tool={0}></Upload>
-                :null
+
+              {userRole === "Admin" /* || userRole === "Master" */
+                ? <Upload tool={0}></Upload>
+                : null
               }
 
               <div className={styles.row}>
@@ -818,7 +765,7 @@ export const ExecutorsTable = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setdeleteTaskModal(false) 
+            setdeleteTaskModal(false)
             deleteExecutor(idExecutor)
           }}
         >

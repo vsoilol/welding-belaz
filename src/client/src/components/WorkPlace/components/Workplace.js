@@ -206,7 +206,7 @@ export const Place = ({
       },
     ],
     jobs_place: [
-      (userRole === "Admin" || userRole === "Master") && {
+      (userRole === "Admin" /* || userRole === "Master" */) && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -504,7 +504,7 @@ export const Place = ({
                 className="workshops"
                 data={workplace}
                 actions={
-                  userRole === "Admin" || userRole === "Master"
+                  userRole === "Admin" /* || userRole === "Master" */
                     ? [
                       {
                         icon: "add",

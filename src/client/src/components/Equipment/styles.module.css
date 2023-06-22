@@ -2,8 +2,9 @@
 
 
 .tableWrapper {
+  margin: 0 auto;
   margin-top: 80px;
-  width: 80%;
+  width: calc(100vw - 100px);
 }
 
 .innerWrapper {
@@ -68,7 +69,7 @@
 @media (max-width: 1440px) {
   .tableWrapper {
     margin-top: 40px;
-    width: 100%;
+    width: calc(100vw - 100px);
   }
 }
 

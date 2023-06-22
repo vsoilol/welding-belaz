@@ -363,6 +363,17 @@ export const CreatingTask = ({
             .catch((error) => { });
     }
 
+    async function getDetProd(){ 
+        try {
+            const res = await api.get("/file/product-account-report"); 
+            if (res.status === 200) {
+              window.open(res.request.responseURL);
+            }
+          } catch (error) {
+            
+          } 
+    }
+
 
     return (
         <div className={styles.TablePlan}>
@@ -450,17 +461,33 @@ export const CreatingTask = ({
 
             </div>
             <div className={styles.RowToolsBTNS}>
-                <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
-                    dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
-                        ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
-                        : ''
-                }</button>
+               {userRole === "Master" || userRole === "Admin"
+                    ?(
+                        <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
+                            dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
+                                ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
+                                : ''
+                        }</button>
+                    )
+                    : null
+                }
+                
                 {userRole === "Master" || userRole === "Admin"
                     ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
                     : null
                 }
                 {userRole  === "Admin" || userRole === "Master"
                     ? <div className={styles.Upload}><Upload tool={1}></Upload></div>
+                    : null
+                }
+            </div>
+            <div  className={styles.sectionGet}> 
+                 
+                {userRole  === "Admin" || userRole === "Master"
+                    ? <div className={styles.Upload}>
+                       <label>Получение данных об изготовленных изделиях, узлах и деталях </label>    
+                       <button className={styles.getDate} onClick={(e)=>{getDetProd()}}>Получить</button>
+                    </div>
                     : null
                 }
             </div>

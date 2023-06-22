@@ -161,10 +161,10 @@ export const Tasks = ({
       label: item?.otkName,
     };
   });
-  const getDocument = (numberTask) => {
+  const getDocument = (numberTask,seamNumber) => {
     const number = tasks?.tasks.find(task => task.number === numberTask).id;
     
-    api.get(`/file/seamPassport/${number}`, {
+    api.get(`file/seamPassport?TaskId=${number}&SequenceNumber=${seamNumber??null}`, {
       responseType: "arraybuffer",
       dataType: "blob",
     })
@@ -336,7 +336,7 @@ export const Tasks = ({
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => getDocument(rowData?.number)}
+          onClick={() => getDocument(rowData?.number , rowData?.seamNumber)}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -564,7 +564,7 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-      {userRole === "Admin" || userRole === "Master"
+      {userRole === "Admin" || userRole === "Master"|| userRole === "Inspector"
         ? (
           <Tabs
             value={value_panel}
@@ -595,7 +595,7 @@ export const Tasks = ({
             data={tasks?.tasks}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === "Admin" || userRole === "Master"|| userRole === "Inspector"
                 ? [
                   {
                     icon: "edit",
