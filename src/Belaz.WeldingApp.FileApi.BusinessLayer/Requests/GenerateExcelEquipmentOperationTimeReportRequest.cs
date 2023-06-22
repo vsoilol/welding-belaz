@@ -7,4 +7,6 @@ public class GenerateExcelEquipmentOperationTimeReportRequest
     public string StartDate { get; set; } = null!;
 
     public string EndDate { get; set; } = null!;
+
+    public bool WithBreak { get; set; }
 }

@@ -2,7 +2,7 @@ namespace Belaz.WeldingApp.FileApi.Domain.Dtos;
 
 public class EquipmentOperationTimeWithShiftDto
 {
-    public string CutInfo { get; set; } = null!;
+    public string? CutInfo { get; set; }
 
     public double OnTimeMinutes { get; set; }
 

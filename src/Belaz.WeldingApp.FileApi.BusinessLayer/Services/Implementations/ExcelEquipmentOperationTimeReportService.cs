@@ -15,20 +15,24 @@ public class ExcelEquipmentOperationTimeReportService : IExcelEquipmentOperation
 {
     private readonly IValidationService _validationService;
 
-    private readonly IExcelFileService<DocumentInfo<EquipmentOperationTimeDto>>
+    private readonly IExcelFileService<DocumentInfo<EquipmentOperationTimeWithShiftDto>>
         _excelEquipmentOperationTimeReportService;
 
     private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
+    private readonly ICalendarService _calendarService;
+    private readonly IEquipmentConditionTimeService _conditionTimeService;
 
     public ExcelEquipmentOperationTimeReportService(
         IValidationService validationService,
-        IExcelFileService<DocumentInfo<EquipmentOperationTimeDto>> excelEquipmentOperationTimeReportService,
-        IWeldingEquipmentRepository weldingEquipmentRepository
-    )
+        IExcelFileService<DocumentInfo<EquipmentOperationTimeWithShiftDto>> excelEquipmentOperationTimeReportService,
+        IWeldingEquipmentRepository weldingEquipmentRepository, ICalendarService calendarService,
+        IEquipmentConditionTimeService conditionTimeService)
     {
         _validationService = validationService;
         _excelEquipmentOperationTimeReportService = excelEquipmentOperationTimeReportService;
         _weldingEquipmentRepository = weldingEquipmentRepository;
+        _calendarService = calendarService;
+        _conditionTimeService = conditionTimeService;
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentOperationTimeReportAsync(
@@ -45,19 +49,25 @@ public class ExcelEquipmentOperationTimeReportService : IExcelEquipmentOperation
         var dateStart = request.StartDate.ToDateTime();
         var dateEnd = request.EndDate.ToDateTime();
 
-        var data =
-            await _weldingEquipmentRepository.GetEquipmentOperationTimeByIdAndDatePeriodAsync(
+        var conditionTimes = await _weldingEquipmentRepository
+            .GetEquipmentConditionTimeByIdAndDatePeriodAsync(
                 request.WeldingEquipmentId,
                 dateStart,
-                dateEnd
-            );
+                dateEnd);
+
+        var allMinutes = await _calendarService
+            .CalculateAllTimeMinutesByPeriodForEquipmentAsync(dateStart, dateEnd, request.WeldingEquipmentId,
+                request.WithBreak);
+
+        var data = _conditionTimeService
+            .CalculateConditionTime(conditionTimes, allMinutes);
 
         var weldingEquipment = await _weldingEquipmentRepository.GetBriefInfoByIdAsync(request.WeldingEquipmentId);
 
-        var result = new DocumentInfo<EquipmentOperationTimeDto>
+        var result = new DocumentInfo<EquipmentOperationTimeWithShiftDto>
         {
             Data = data,
-            TitleText = new []
+            TitleText = new[]
             {
                 $"Для оборудования: {weldingEquipment.FactoryNumber} {weldingEquipment.Name}",
                 $"За период {request.StartDate} - {request.EndDate}"

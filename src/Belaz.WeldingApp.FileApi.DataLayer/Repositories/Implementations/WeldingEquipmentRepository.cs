@@ -79,6 +79,17 @@ internal class WeldingEquipmentRepository : IWeldingEquipmentRepository
             .ToListAsync();
     }
 
+    public Task<List<ConditionTimeDto>> GetEquipmentConditionTimeByIdAndDatePeriodAsync(Guid id, DateTime startDate, DateTime endDate)
+    {
+        var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
+            w => w.WeldingEquipmentId == id && w.Date >= startDate && w.Date <= endDate
+        );
+        
+        return conditionTimesQuery
+            .ProjectTo<ConditionTimeDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<List<EquipmentDowntimeDto>> GetDownTimeInfoByIdAndDatePeriodAsync(
         Guid id,
         DateTime startDate,

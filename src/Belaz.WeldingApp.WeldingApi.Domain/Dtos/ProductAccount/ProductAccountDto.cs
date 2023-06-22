@@ -15,7 +15,7 @@ public class ProductAccountDto
 
     public int AmountFromPlan { get; set; }
 
-    public ProductDto Product { get; set; } = null!;
+    public ProductForProductAccountDto Product { get; set; } = null!;
     
     public int? UniqueNumber { get; set; }
 
