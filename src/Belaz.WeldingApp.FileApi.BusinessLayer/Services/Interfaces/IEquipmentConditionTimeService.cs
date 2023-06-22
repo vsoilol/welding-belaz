@@ -24,6 +24,6 @@ public interface IEquipmentConditionTimeService
     EquipmentOperationTimeWithShiftDto CalculateConditionTime(
         List<ConditionTimeDto> conditionTimes,
         double allMinutes,
-        string text
+        string? text = null
     );
 }

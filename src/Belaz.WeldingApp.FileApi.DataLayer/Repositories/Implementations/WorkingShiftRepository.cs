@@ -42,9 +42,7 @@ public class WorkingShiftRepository : IWorkingShiftRepository
                 .ToListAsync();
         }
 
-        return await workingShifts
-            .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        return await GetWorkingShiftsByDatePeriodAsync(startDate, endDate);
     }
 
     public async Task<List<WorkingShiftDto>> GetWorkingShiftsByDatePeriodForEquipmentAsync(DateTime startDate,
@@ -60,9 +58,7 @@ public class WorkingShiftRepository : IWorkingShiftRepository
                 .ToListAsync();
         }
 
-        return await workingShifts
-            .ProjectTo<WorkingShiftDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        return await GetWorkingShiftsByDatePeriodAsync(startDate, endDate);
     }
 
     private IQueryable<WorkingShift> GetWorkingShiftsByPeriod(DateTime startDate, DateTime endDate)

@@ -41,9 +41,7 @@ public class DayRepository : IDayRepository
                 .ToListAsync();
         }
 
-        return await days
-            .ProjectTo<DayDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        return await GetAllDaysByDatePeriodAsync(startDate, endDate);
     }
 
     public async Task<List<DayDto>> GetAllDaysByDatePeriodForEquipmentAsync(DateTime startDate,
@@ -58,9 +56,7 @@ public class DayRepository : IDayRepository
                 .ToListAsync();
         }
 
-        return await days
-            .ProjectTo<DayDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+        return await GetAllDaysByDatePeriodAsync(startDate, endDate);
     }
 
     private IQueryable<Day> GetDaysByPeriod(DateTime startDate, DateTime endDate)
