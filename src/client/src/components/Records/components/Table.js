@@ -11,6 +11,9 @@ import React, { useEffect, useState } from "react";
 import ModalWindow from "components/shared/ModalWindow";
 import { Formik } from "formik";
 import Button from "components/shared/Button";
+import Input from "components/shared/Input";
+
+
 
 import {
   LineChart,
@@ -44,8 +47,10 @@ const StyleNewTable = {
 export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole }) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
-  console.clear()
-  console.log(records)
+
+
+  const [dateStart, setdateEnd] = useState("");
+
   const columns = [
     (userRole === "Admin" /*|| userRole === "Master"*/) && {
       title: "Удаление",
@@ -60,13 +65,14 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
         />
       ),
     },
-    { title: "Номер шва", field: "seamNumber" },
-    { title: "Длительность сварки", field: "weldingDuration" }, 
-    {  title: "Сварочный ток (среднее)",  field: "weldingCurrentAverage",  },
-    {  title: "Напряжение на дуге (среднее)",   field: "arcVoltageAverage",  },
-
-
     { title: "Дата", field: "date" },
+    { title: "Номер шва", field: "seamNumber" },
+    { title: "Длительность сварки", field: "weldingDuration" },
+    { title: "Сварочный ток (среднее)", field: "weldingCurrentAverage", },
+    { title: "Напряжение на дуге (среднее)", field: "arcVoltageAverage", },
+
+
+
     { title: "Время начала сварки", field: "weldingStart" },
     {
       title: "Номер задания ( ссылка )",
@@ -99,8 +105,8 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
     {
       title: "Оборудование ( номер )", render: (rowData) => (
         <div>
-          <span> {rowData.weldingEquipment?.marking}  </span>
           <span> {rowData.weldingEquipment?.factoryNumber}</span>
+          <span> {rowData.weldingEquipment?.marking}  </span>
         </div>
       ),
     },
@@ -116,7 +122,6 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
     },
   ].filter(column => column);
   const renderRowChildren = (rowData) => {
-    console.log(rowData)
     let time = rowData.startTime
     let Endtime = rowData.date
     let dateObject = new Date(time);
@@ -271,6 +276,50 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
 
   return (
     <div className={styles.tableWrapper}>
+
+     {/*  <div className={styles.tools}>
+
+        <div>
+          <label></label>
+          <Input
+            onChange={(e) => {
+              setdateEnd(e.target.value)
+            }}
+            width="200"
+            style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+            value={dateStart}
+            name="dateStart"
+            placeholder="Дата"
+            type="text"
+            onFocus={(e) => {
+              e.currentTarget.type = "date";
+            }}
+            autocomplete="off"
+          />
+        </div>
+        <div>
+          <label></label>
+          <Input
+            onChange={(e) => {
+              setdateEnd(e.target.value)
+            }}
+            width="200"
+            style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+            value={dateStart}
+            name="dateStart"
+            placeholder="Дата"
+            type="text"
+            onFocus={(e) => {
+              e.currentTarget.type = "date";
+            }}
+            autocomplete="off"
+          />
+        </div>
+
+
+
+      </div> */}
+
       <Table
         title="Записи"
         actions={[]}

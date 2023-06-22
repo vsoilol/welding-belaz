@@ -12,7 +12,7 @@ import {
   RecordsContainer,
   ReportsContainer,
   CreatesUserContainer,
-  MessagesContainer,
+  ProductionCalendarContainer,
 } from "containers";
 import UploadContainer from "containers/Upload.container";
 import MobileContext from "context/MobileContext";
@@ -155,9 +155,9 @@ function App({ error, errorType, clearError }) {
               />
               <PrivateRoute
                 allow={isAuth}
-                path="/messages"
+                path="/proiz-calendar"
                 exact
-                component={MessagesContainer}
+                component={ProductionCalendarContainer}
                 redirectTo="/login"
               />
               <PrivateRoute

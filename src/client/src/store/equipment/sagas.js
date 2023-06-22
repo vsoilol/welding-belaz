@@ -159,7 +159,7 @@ function* addDowntime({ payload }) {
       "downtimeReasonId":  payload.downtimeReasonId,
       "date":  payload.Date,
       "startConditionTime":  payload.timeStates,
-      "time": payload.time
+      "time": 10
     });  
     yield put(addDowntimeSuccess(data)); 
     yield call(loadDowntime);  
@@ -177,7 +177,7 @@ function* editDowntime({ payload }) {
       "downtimeReasonId": payload.downtimeReasonId,
       "date":   payload.Date,
       "startConditionTime":  payload.timeStates,
-      "time":  payload.time,
+      "time":  10
     }); 
     
     yield put(editDowntimeSuccess(data));

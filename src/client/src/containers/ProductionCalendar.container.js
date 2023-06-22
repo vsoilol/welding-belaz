@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { MessagesPage } from "pages/MessagesPage";
+import { ProductionCalendar } from "pages/ProductionCalendarPage";
 import Actions from "store/records/actions";
 
 const mapStateToProps = (state) => {
@@ -15,4 +15,4 @@ const mapDispatchToProps = {
   deleteRecords:Actions.Creators.deleteRecordsRequest,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MessagesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductionCalendar);

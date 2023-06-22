@@ -363,6 +363,17 @@ export const CreatingTask = ({
             .catch((error) => { });
     }
 
+    async function getDetProd(){ 
+        try {
+            const res = await api.get("/file/product-account-report"); 
+            if (res.status === 200) {
+              window.open(res.request.responseURL);
+            }
+          } catch (error) {
+            
+          } 
+    }
+
 
     return (
         <div className={styles.TablePlan}>
@@ -467,6 +478,16 @@ export const CreatingTask = ({
                 }
                 {userRole  === "Admin" || userRole === "Master"
                     ? <div className={styles.Upload}><Upload tool={1}></Upload></div>
+                    : null
+                }
+            </div>
+            <div  className={styles.sectionGet}> 
+                 
+                {userRole  === "Admin" || userRole === "Master"
+                    ? <div className={styles.Upload}>
+                       <label>Получение данных об изготовленных изделиях, узлах и деталях </label>    
+                       <button className={styles.getDate} onClick={(e)=>{getDetProd()}}>Получить</button>
+                    </div>
                     : null
                 }
             </div>

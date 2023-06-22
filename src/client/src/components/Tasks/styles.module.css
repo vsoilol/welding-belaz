@@ -291,3 +291,28 @@ h3.ExistingPlan{
   position: relative;
   top: 40px;
 }
+
+
+
+.sectionGet{
+  padding-left: 20px;
+  margin-top: 15px;
+}
+.getDate{
+  margin: 20px 0px; 
+  padding: 8px 25px;
+  background-color: transparent;
+  border: 1px solid #dadada;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  outline: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: block;
+  border-radius: 8px;
+  transition: 0.3s;
+  font-weight: 600;
+  /* margin-left: calc(100% - 160px); */
+}
+.getDate:hover{
+  background-color: whitesmoke;
+}

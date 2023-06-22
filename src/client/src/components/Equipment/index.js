@@ -417,7 +417,7 @@ export const Equipment = ({
   const optequipment = equipment[0]?.map((item) => {
     return {
       value: item.id,
-      label: item.name,
+      label: `${item.name} ${item.factoryNumber}`,
     };
   });
   function SendData(variables) {

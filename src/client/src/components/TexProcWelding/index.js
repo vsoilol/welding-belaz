@@ -362,8 +362,7 @@ export const TexProcWelding = ({
   };
 
   //Запрос на редактирование или добавление
-  function SendData(variables) {
-    console.log(variables)
+  function SendData(variables) { 
     const filteredVariables = variables.filter(item => Object.values(item).some(val => val !== '')); 
     const data = {
       id: isModalOpenNumb === 1 ? idPassages : undefined,
@@ -566,7 +565,7 @@ export const TexProcWelding = ({
         <div className={styles.row}>
           <Button
             type="submit"
-            onClick={() => SendData(passages)}
+            onClick={() => {SendData(passages);setIsModalOpen(false)}}
           >
             {modalData ? "Сохранить" : "Создать"}
           </Button>
@@ -959,8 +958,7 @@ export const TexProcWelding = ({
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
             setIsModalOpen(false);
-            setModalData(null);
-
+            setModalData(null); 
           }}
         >
           {({

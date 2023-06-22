@@ -76,6 +76,7 @@ export const Reports = ({
     WorkplaceId: modalData?.WorkplaceId ?? "",
     WeldingEquipmentId: modalData?.WeldingEquipmentId ?? "",
     cutType: modalData?.cutType ?? "",
+    smena: modalData?.smena ?? "",
   });
 
   const [accessibility, setaccessibility] = useState("");
@@ -101,18 +102,21 @@ export const Reports = ({
       label: `№${item.number} ${item.name} `,
     };
   });
-  const productOptions = product?.map((item) => {
-    return {
+  const productOptions = [
+    { value: null, label: "Не выбрано" },
+    ...(product?.map((item) => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
-    };
-  });
-  const seamOptions = seam?.map((item) => {
-    return {
+    })) || []),
+  ]
+  const seamOptions = [
+    { value: null, label: "Не выбрано" },
+    ...(seam?.map((item) => ({
       value: item.id,
       label: `Cварочный шов ${item.number}`,
-    };
-  });
+    })) || []),
+  ]
+  
   const workplaceOptions = workplace?.map((item) => {
     return {
       value: item.id,
@@ -284,18 +288,52 @@ export const Reports = ({
     {/*cutType*/ }
     function CutType() {
       return (
-        <div className={styles.row}>
-          <Select
-            name="cutType"
-            value={initialValues.cutType}
-            width="380px"
-            placeholder="Тип разреза "
-            onChange={(event) => {
-              handleChange("cutType", event.value)
-            }}
-            options={cutTypeOptions}
-          />
+        <div>
+          <div className={styles.row}>
+            <Select
+              name="cutType"
+              value={initialValues.cutType}
+              width="380px"
+              placeholder="Тип разреза "
+              onChange={(event) => {
+                handleChange("cutType", event.value)
+              }}
+              options={cutTypeOptions}
+            />
+
+          </div>
+
+          {initialValues.cutType === 1
+            ? (
+              <div className={styles.row}>
+                <Input
+                  onChange={(event) => {
+                    handleChange("smena", event.target.value)
+                  }}
+                  style={{
+                    width: 380,
+                    height: 40,
+                    padding: "0px 0px 0px 20px"
+                  }}
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={initialValues.smena}
+                  name={`smena`}
+                  placeholder="Номер смены"
+                  autocomplete="off"
+                />
+              </div>
+            )
+            : null
+          }
+
+
+
         </div>
+
+
+
       )
     }
     {/*Seam*/ }
@@ -664,16 +702,21 @@ export const Reports = ({
 
   async function SendData(variables) {
     let startDate = new Date(variables.startDate).toLocaleDateString('ru-RU', { dateStyle: 'short' })
-    let endDate = new Date(variables.endDate).toLocaleDateString('ru-RU', { dateStyle: 'short' }) 
-    let endpoint;
+    let endDate = new Date(variables.endDate).toLocaleDateString('ru-RU', { dateStyle: 'short' })
+    let endpoint; 
+ 
+    const seamId = variables.seamId !== null ? variables.seamId : '';
+    const productId = variables.productId !== null ? variables.productId : '';
+
+
     if (idReports === 0) {
-      endpoint = `excelDeviationReport/byWorkshop?WorkshopId=${initialValues.workshopId}&ProductId=${initialValues.productId}&SeamId=${initialValues.seamId}&StartDate=${startDate}&EndDate=${endDate}`;
+      endpoint = `excelDeviationReport/byWorkshop?WorkshopId=${initialValues.workshopId}&ProductId=${productId}&SeamId=${seamId}&StartDate=${startDate}&EndDate=${endDate}`;
     } else if (idReports === 1) {
-      endpoint = `excelDeviationReport/byProductionArea?ProductionAreaId=${initialValues.productionAreaId}&ProductId=${initialValues.productId}&SeamId=${initialValues.seamId}&StartDate=${startDate}&EndDate=${endDate}`;
+      endpoint = `excelDeviationReport/byProductionArea?ProductionAreaId=${initialValues.productionAreaId}&ProductId=${productId}&SeamId=${seamId}&StartDate=${startDate}&EndDate=${endDate}`;
     } else if (idReports === 2) {
       endpoint = `excelDeviationReport/byWelder?WelderId=${initialValues.welderId}&ProductId=${initialValues.productId}&SeamId=${initialValues.seamId}&StartDate=${startDate}&EndDate=${endDate}`;
     } else if (idReports === 3) {
-      endpoint = `excelDeviationReport/byWorkplace?WorkplaceId=${initialValues.WorkplaceId}&ProductId=${initialValues.productId}&SeamId=${initialValues.seamId}&StartDate=${startDate}&EndDate=${endDate}`;
+      endpoint = `excelDeviationReport/byWorkplace?WorkplaceId=${initialValues.WorkplaceId}&ProductId=${productId}&SeamId=${seamId}&StartDate=${startDate}&EndDate=${endDate}`;
     } else if (idReports === 4) {
       endpoint = `excelEquipmentDowntimeReport?weldingEquipmentId=${initialValues.WeldingEquipmentId}&StartDate=${startDate}&EndDate=${endDate}`;
     } else if (idReports === 5) {
@@ -701,11 +744,11 @@ export const Reports = ({
     } else if (idReports === 16) {
       endpoint = `excelSeamAmountReport?StartDate=${startDate}&EndDate=${endDate}`;
     } else if (idReports === 17) {
-      endpoint = `excelEquipmentOperationAnalysisReport?StartDate=${startDate}&EndDate=${endDate}&CutType=${initialValues.cutType}`;
+      endpoint = `excelEquipmentOperationAnalysisReport?StartDate=${startDate}&EndDate=${endDate}&CutType=${initialValues.cutType}&WorkingShiftNumber=${variables.smena}`;
     } else if (idReports === 18) {
-      endpoint = `excelEquipmentOperationAnalysisReport?WorkshopId=${initialValues.workshopId}&StartDate=${startDate}&EndDate=${endDate}&CutType=${initialValues.cutType}`;
+      endpoint = `excelEquipmentOperationAnalysisReport?WorkshopId=${initialValues.workshopId}&StartDate=${startDate}&EndDate=${endDate}&CutType=${initialValues.cutType}&WorkingShiftNumber=${variables.smena}`;
     } else if (idReports === 19) {
-      endpoint = `excelEquipmentOperationAnalysisReport?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${startDate}&EndDate=${endDate}&CutType=${initialValues.cutType}`;
+      endpoint = `excelEquipmentOperationAnalysisReport?ProductionAreaId=${initialValues.productionAreaId}&StartDate=${startDate}&EndDate=${endDate}&CutType=${initialValues.cutType}&WorkingShiftNumber=${variables.smena}`;
     } else if (idReports === 20) {
       endpoint = `excelEquipmentEfficiencyReport?StartDate=${startDate}&EndDate=${endDate}&Accessibility=${accessibility ?? null}&Efficiency=${efficiency ?? null}&Quality=${quality ?? null}`;
     } else if (idReports === 21) {
@@ -784,7 +827,7 @@ export const Reports = ({
             {({
               handleSubmit,
               handleChange,
-              values, 
+              values,
               setFieldValue,
               handleBlur,
             }) => (
@@ -795,7 +838,7 @@ export const Reports = ({
 
                   <div className={styles.row}>
                     <Input
-                       onChange={(e) => {
+                      onChange={(e) => {
                         handleChange(e);
                       }}
                       width="200"
@@ -812,7 +855,7 @@ export const Reports = ({
                     />
 
                     <Input
-                       onChange={(e) => {
+                      onChange={(e) => {
                         handleChange(e);
                       }}
                       width="200"
