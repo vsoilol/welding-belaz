@@ -82,6 +82,21 @@ public class WeldingRecordService : IWeldingRecordService
         return _weldingRecordRepository.GetWeldingRecordLimitAsync();
     }
 
+    public async Task<Result<Unit>> SetSequenceNumberToWeldingRecordsAsync(
+        SetSequenceNumberToWeldingRecordsRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _weldingRecordRepository.SetSequenceNumberToWeldingRecordsAsync(request.WeldingRecordIds,
+            request.SequenceNumber);
+        return Unit.Default;
+    }
+
     public Task<List<RecordDto>> GetAllAsync()
     {
         return _weldingRecordRepository.GetAllAsync();

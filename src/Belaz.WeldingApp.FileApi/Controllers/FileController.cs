@@ -16,16 +16,14 @@ public class FileController : ControllerBase
         _fileService = fileService;
     }
 
-    [HttpGet("seamPassport/{taskId}")]
-    public async Task<IActionResult> GetSeamPassportAsync([FromRoute] Guid taskId)
+    [HttpGet("seamPassport")]
+    public async Task<IActionResult> GetSeamPassportAsync([FromQuery] GenerateSeamPassportByTaskIdRequest request)
     {
-        var result = await _fileService.GenerateSeamPassportByTaskIdAsync(
-            new GenerateSeamPassportByTaskIdRequest { TaskId = taskId }
-        );
+        var result = await _fileService.GenerateSeamPassportByTaskIdAsync(request);
 
         return result.ToFile();
     }
-    
+
     [HttpGet("product-account-report")]
     public async Task<IActionResult> GenerateProductAccountInfoExcelFileAsync()
     {

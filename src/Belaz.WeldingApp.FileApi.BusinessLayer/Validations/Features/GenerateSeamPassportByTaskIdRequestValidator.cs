@@ -17,5 +17,9 @@ public class GenerateSeamPassportByTaskIdRequestValidator
             .SetValidator(
                 new SqlIdValidatorFor<GenerateSeamPassportByTaskIdRequest, WeldingTask>(context)
             );
+        
+        RuleFor(model => model.SequenceNumber)
+            .Cascade(CascadeMode.Stop)
+            .GreaterThanOrEqualTo(1);
     }
 }
