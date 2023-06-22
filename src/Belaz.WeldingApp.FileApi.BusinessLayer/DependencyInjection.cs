@@ -21,6 +21,9 @@ public static class DependencyInjection
         services.AddScoped<IUploadFileService, UploadFileService>();
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<ICalendarService, CalendarService>();
+        services.AddScoped<IEquipmentConditionTimeService, EquipmentConditionTimeService>();
+        
         services.AddScoped<IExcelDeviationReportService, ExcelDeviationReportService>();
         services.AddScoped<IExcelSeamAmountReportService, ExcelSeamAmountReportService>();
         services.AddScoped<

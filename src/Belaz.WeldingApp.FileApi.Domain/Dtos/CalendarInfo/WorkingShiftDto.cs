@@ -1,3 +1,4 @@
+using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.FileApi.Domain.Mappings;
 
@@ -14,4 +15,17 @@ public class WorkingShiftDto : IMapFrom<WorkingShift>
     public TimeSpan? BreakStart { get; set; }
 
     public TimeSpan? BreakEnd { get; set; }
+
+    public int Year { get; set; }
+
+    public void Mapping(Profile profile)
+    {
+        profile
+            .CreateMap<WorkingShift, WorkingShiftDto>()
+            .ForMember(
+                dto => dto.Year,
+                opt =>
+                    opt.MapFrom(x => x.Calendar == null ? x.Day!.Calendar.Year : x.Calendar.Year)
+            );
+    }
 }
