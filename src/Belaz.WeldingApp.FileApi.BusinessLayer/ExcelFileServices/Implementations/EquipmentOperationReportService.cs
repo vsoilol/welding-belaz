@@ -9,7 +9,8 @@ using OfficeOpenXml.Style;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.ExcelFileServices.Implementations;
 
-public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<EquipmentOperationTimeDto>>
+public class EquipmentOperationReportService 
+    : IExcelFileService<DocumentInfo<EquipmentOperationTimeWithShiftDto>>
 {
     private const int TitleRow = 1;
     private const int HeaderStartRow = 2;
@@ -26,7 +27,7 @@ public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<Eq
         _excelExtensions = excelExtensions;
     }
 
-    public async Task<DocumentDto> GenerateReportAsync(DocumentInfo<EquipmentOperationTimeDto> data)
+    public async Task<DocumentDto> GenerateReportAsync(DocumentInfo<EquipmentOperationTimeWithShiftDto> data)
     {
         var tableReportModels = GetReportModels(data.Data);
 
@@ -35,7 +36,7 @@ public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<Eq
         using (var package = new ExcelPackage(content))
         {
             var worksheet = package.Workbook.Worksheets.Add("Отчет о работе оборудования за период");
-            
+
             CreateHeader(worksheet, data.TitleText);
 
             CreateTable(worksheet, tableReportModels);
@@ -53,7 +54,7 @@ public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<Eq
         };
     }
 
-    private List<TableReportModel> GetReportModels(EquipmentOperationTimeDto data)
+    private List<TableReportModel> GetReportModels(EquipmentOperationTimeWithShiftDto data)
     {
         var allTime =
             data.OffTimeMinutes + data.OnTimeMinutes + data.WorkTimeMinutes + data.DowntimeMinutes;
@@ -63,32 +64,32 @@ public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<Eq
             new()
             {
                 Parameter = "Сварочный аппарат ВЫКЛЮЧЕН",
-                Value = data.OffTimeMinutes,
+                Value = allTime == 0.0 ? 0.0 : data.OffTimeMinutes,
                 ValuePercentages = MathExtension.CalculatePercentage(allTime, data.OffTimeMinutes)
             },
             new()
             {
                 Parameter = "Сварочный аппарат ВКЛЮЧЕН",
-                Value = data.OnTimeMinutes,
+                Value = allTime == 0.0 ? 0.0 : data.OnTimeMinutes,
                 ValuePercentages = MathExtension.CalculatePercentage(allTime, data.OnTimeMinutes)
             },
             new()
             {
                 Parameter = "СВАРКА",
-                Value = data.WorkTimeMinutes,
+                Value = allTime == 0.0 ? 0.0 : data.WorkTimeMinutes,
                 ValuePercentages = MathExtension.CalculatePercentage(allTime, data.WorkTimeMinutes)
             },
             new()
             {
                 Parameter = "Вынужденный простой",
-                Value = data.DowntimeMinutes,
+                Value = allTime == 0.0 ? 0.0 : data.DowntimeMinutes,
                 ValuePercentages = MathExtension.CalculatePercentage(allTime, data.DowntimeMinutes)
             },
             new()
             {
                 Parameter = "Общий фонд рабочего времени",
                 Value = allTime,
-                ValuePercentages = 100
+                ValuePercentages = allTime == 0.0 ? 0.0 : 100
             }
         };
     }
@@ -149,7 +150,7 @@ public class EquipmentOperationReportService : IExcelFileService<DocumentInfo<Eq
             worksheet.Cells[DataStartRow, TextInfoColumn, tableReportModels.Count + HeaderStartRow - 1, TextInfoColumn]
         );
     }
-    
+
     private void CreateHeader(ExcelWorksheet worksheet, string[] titles)
     {
         using (var rangeHeaders =

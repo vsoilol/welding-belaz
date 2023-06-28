@@ -10,6 +10,12 @@ public interface IWeldingEquipmentRepository
         DateTime startDate,
         DateTime endDate
     );
+    
+    Task<List<ConditionTimeDto>> GetEquipmentConditionTimeByIdAndDatePeriodAsync(
+        Guid id,
+        DateTime startDate,
+        DateTime endDate
+    );
 
     Task<List<EquipmentDowntimeDto>> GetDownTimeInfoByIdAndDatePeriodAsync(
         Guid id,

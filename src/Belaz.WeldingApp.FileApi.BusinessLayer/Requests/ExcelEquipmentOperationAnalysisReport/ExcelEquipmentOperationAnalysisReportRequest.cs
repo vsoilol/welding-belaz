@@ -11,4 +11,6 @@ public class ExcelEquipmentOperationAnalysisReportRequest
     public CutType CutType { get; set; }
     
     public int? WorkingShiftNumber { get; set; }
+    
+    public bool WithBreak { get; set; }
 }

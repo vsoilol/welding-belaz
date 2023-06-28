@@ -683,6 +683,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/WeldingTask/welding-material/{date}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/WeldingTask/welding-material/{date}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/WeldingTask/{date}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
