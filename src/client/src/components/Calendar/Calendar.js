@@ -1,75 +1,138 @@
-import React, { useState, useRef, useEffect , useCallback} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ru';
-
-import "./styleCalendar.css";
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import Input from "components/shared/Input";
 import styles from "./styles.module.css";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import Select from "components/shared/Select";
+import api from "services/api";
 
-export const Calendars = ({
-  executors,
-  equipment,
-  arrayDays,
-}) => {
 
-  const localizer = momentLocalizer(moment);
-  moment.locale('ru');
+const localizer = momentLocalizer(moment);
 
-  const events = []; 
-  /* events.push(...Array.from({length: endOfMonth.getDate()}, (_, i) => ({
-      title: 'Смена 1',
-      start: new Date(now.getFullYear(), now.getMonth(), i + 1, 7, 30),
-      end: new Date(now.getFullYear(), now.getMonth(), i + 1, 16, 0)
-    })));  */
-  
+const Calendars = ({ valueWorkDays, WorkingShiftOptions , executorObj ,  equipmentObj ,   loadDayByWelder , loadDayByEquipment}) => {
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const [changedate, setchangedate] = useState("");
+  const [valueWorkingShift, setvalueWorkingShift] = useState(null);
+  const [valuechange, setvaluechange] = useState(false);
+
+
+  const handleSelectEvent = (event) => {
+    setSelectedEvent(event);
+  };
+ 
+  function changeDay(selectedEvent) { 
+    const data = {
+      "id": selectedEvent.id,
+      "monthNumber": new Date(changedate).getMonth(),
+      "number": new Date(changedate).getDate(),
+      "isWorkingDay": true
+    }
+    api.put("day",data).then(()=>{
+      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
+      setSelectedEvent(false)
+    })
+  }
+
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
   const messages = {
     today: 'Сегодня',
     previous: 'Назад',
     next: 'Вперед',
-    month: 'Месяц',
-    week: 'Неделя',
-  }; 
- 
-  const handleNavigate  = (date) =>{ 
-    dayWork(new Date(moment(date).toDate()).getMonth()+1 , new Date(moment(date).toDate()).getFullYear()) 
-  }
-   
+  };
 
-  dayWork(new Date().getMonth()+1,new Date().getFullYear())
-
-  function dayWork(Month,Year) {
-    arrayDays.forEach(element => {
-      if(element.isWorkingDay){
-        /* console.log(element) */
-      } 
-      /* element.isWorkingDay?console.log(element):null */
-    });
-    /* console.log(arrayDays)  */
-    /* console.log(Month)
-    console.log(Year) */
-  }
-  
+  const events = [];
+  for (let index = 0; index < valueWorkDays.length; index++) {
+    events.push({
+      id:valueWorkDays[index].id,
+      title: `Смена ${valueWorkDays[index].workingShifts[0].number}`,
+      start: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftStart[0]}${valueWorkDays[index].workingShifts[0].shiftStart[1]} `, `${valueWorkDays[index].workingShifts[0].shiftStart[3]}${valueWorkDays[index].workingShifts[0].shiftStart[4]} `),
+      end: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftEnd[0]}${valueWorkDays[index].workingShifts[0].shiftEnd[1]} `, `${valueWorkDays[index].workingShifts[0].shiftEnd[3]}${valueWorkDays[index].workingShifts[0].shiftEnd[4]} `),
+    })
+  } 
   return (
-    <div className={styles.calendar_wrapper}>   
+    <div className={styles.calendar_wrapper}>
       <Calendar
         localizer={localizer}
-        events={[]/* events */}
+        events={events}
         startAccessor="start"
         endAccessor="end"
-        titleAccessor="title"
-        allDayAccessor="allDay"
-        defaultView="month"
-        selectable 
-        min={0/* 0startOfMonth */}
-        max={10/* endOfMonth */}
-        views={['month', 'week']}
+        selectable
+        onSelectEvent={handleSelectEvent}
+        min={startOfMonth}
+        max={endOfMonth}
+        views={['month']}
         messages={messages}
-        weekdayFormat="dd"
-        dayHeaderFormat="ddd"
-        toolbar={['month', 'week']} 
-        onNavigate={handleNavigate}
-      /> 
-    </div>
+      />
+      {selectedEvent && (
+        <div>
+          <div className={styles.hints} >
+            <h2>{selectedEvent.title}</h2>
+            <p>Начало: {selectedEvent.start.toLocaleString()}</p>
+            <p>Конец: {selectedEvent.end.toLocaleString()}</p>
+
+
+            {valuechange
+              ? (
+                <div>
+                  <label>Редактирование</label>
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        setchangedate(e.target.value);
+                      }}
+                      width="380"
+                      style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                      value={changedate}
+                      name="changedate"
+                      placeholder="Дата рабочего дня"
+                      type="text"
+                      onFocus={(e) => {
+                        e.currentTarget.type = "date";
+                      }}
+                      autocomplete="off"
+                    />
+                  </div>
+                  {/* <div className={styles.row}>
+                    <Select
+                      name="valueWorkingShift"
+                      value={valueWorkingShift}
+                      width="380px"
+                      placeholder="Смена"
+                      onChange={(event) => {
+                        setvalueWorkingShift(event.value)
+                      }}
+                      options={WorkingShiftOptions}
+                    />
+                  </div> */}
+                  <button className={styles.save} onClick={() => changeDay(selectedEvent)}>Сохранить</button>
+
+                </div>
+              )
+              : null
+            }
+
+
+
+            {!valuechange
+              ? <button onClick={() => setvaluechange(true)}>Редактировать</button>
+              : null
+            }
+
+
+          </div>
+          <div className={styles.hintsBg} onClick={() => {setSelectedEvent(false);setvaluechange(false)}}></div>
+        </div>
+
+      )
+      }
+    </div >
   );
 };
+
+export default Calendars;

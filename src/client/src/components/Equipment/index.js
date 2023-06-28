@@ -250,9 +250,8 @@ export const Equipment = ({
   }
   
   function OpenCalendar(rowData) {
-    window.localStorage.removeItem("executorId")
-    window.localStorage.setItem("equipment", `Оборудование: ${rowData.name}  `)
-    window.localStorage.setItem("equipmentId", rowData.id)
+    window.localStorage.removeItem("executor")
+    window.localStorage.setItem("equipment", JSON.stringify(rowData)) 
     setTimeout(() => {
       window.location.href = "/calendar"
     }, 500);
@@ -597,7 +596,7 @@ export const Equipment = ({
             data={equipment[1]}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" /* || userRole === "Master" */
+              userRole === "Admin" || userRole === "Master"
                 ? [
                   {
                     icon: "add",

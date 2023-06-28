@@ -166,9 +166,9 @@ export const TexProcWelding = ({
       title: "Наименование", field: "name",
     },
     {
-      title: "Номер технологического процесса", field: "number",
+      title: "Номер", field: "number",
     },
-    {
+    /* {
       title: "Шов",
       render: (rowData) => {
         if (rowData?.seams[0]?.number) {
@@ -186,7 +186,7 @@ export const TexProcWelding = ({
           )
         }
       }
-    },
+    }, */
     {
       title: "Наименование прохода",
       field: "weldPassageInstructions[0].name",

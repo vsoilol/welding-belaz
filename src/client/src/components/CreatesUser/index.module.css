@@ -42,6 +42,12 @@
   flex-direction: column;
   align-items: center;
 }
+.deleteIcon{
+  cursor: pointer;
+  width: 20px;
+  position: relative;
+  top: 5px;
+}
 
 .paragraph {
   margin: 40px 0 70px 0;

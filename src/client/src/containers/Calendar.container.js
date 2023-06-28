@@ -7,7 +7,8 @@ const mapStateToProps = (state) => {
     executors: state.executors.executors, 
     equipment: state.equipment.equipment, 
     calendar:state.calendar.calendaryear,
-    days:state.calendar.day
+    days:state.calendar.day,
+    userRole: state.auth.user.role, 
   };
 };
 const mapDispatchToProps = {

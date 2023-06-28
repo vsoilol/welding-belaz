@@ -29,7 +29,7 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
           <Formik
             initialValues={initialValues}
             onSubmit={(values) => {
-              logIn(values);
+              logIn(values); 
               history.push("/");
             }}
             /* validationSchema={loginValidation} */
