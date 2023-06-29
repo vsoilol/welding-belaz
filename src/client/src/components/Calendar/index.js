@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { Calendars } from "../Calendar/Calendar";
+import Calendars from "../Calendar/Calendar";
 import "../Calendar/styleCalendar.css";
 import imgSmena from "assets/icons/Smena.png";
 import imgEdit from "assets/icons/pen.png";
@@ -36,6 +36,7 @@ export const Calendar = ({
 
   executors,
   loadExecutors,
+  userRole,
 
   equipment,
   loadEquipment,
@@ -52,44 +53,32 @@ export const Calendar = ({
   addShift,
   editShift,
   ///Day
-  loadDayByWelder,
-  loadDayByEquipment,
+  /*  loadDayByWelder,
+   loadDayByEquipment, */
   addDay,
   editDay,
 
-}) => { 
+}) => {
   const [isModalAddWorkDayOpen, setIsModalAddWorkDayOpen] = useState(false);
   const [isModalEditWorkDayOpen, setIsModalEditWorkDayOpen] = useState(false);
   const [isModalAddShift, setIsModalAddShift] = useState(false);
- 
-  const [modalData, setModalData] = useState(null);
-  const dispatch = useDispatch();
-  const [valueObj, setValueObj] = useState(0);
 
-  const [valueExecutors, setValueExecutors] = useState(null); 
-  const [valueEquipment, setValueEquipment] = useState(null); 
- 
+
+
+  const [modalData, setModalData] = useState(null);
+
   const [valueWorkingShift, setValueWorkingShift] = useState([]);
 
- 
+
 
 
   let date = new Date().getUTCFullYear()
 
   const initialValues = {
     shiftDay: modalData?.shiftDay ?? "",
-
-    year: modalData?.year ?? "",
     calendarId: calendar?.id ?? "",
     workDay: modalData?.workDay ?? "",
-
-    shiftStart: modalData?.shiftStart ?? "",
-    shiftEnd: modalData?.shiftEnd ?? "",
-    breakStart: modalData?.breakStart ?? "",
-    breakEnd: modalData?.breakEnd ?? "",
-    shiftNumb: modalData?.shiftNumb ?? "",
   };
-
 
 
 
@@ -104,47 +93,81 @@ export const Calendar = ({
     "instructionId",
   ];
 
+
+  const [valueWorkDays, setvalueWorkDays] = useState([]);
+
+  const executorObj = JSON.parse(window.localStorage.getItem("executor"))
+  const equipmentObj = JSON.parse(window.localStorage.getItem("equipment"))
+
   useEffect(() => {
     loadCalendaryear(date);
-   /*  loadExecutors();
+    /* loadExecutors();
     loadEquipment(); */
-    (window.localStorage.getItem("executorId")) ? loadDayByWelder(window.localStorage.getItem("executorId")) : loadDayByEquipment(window.localStorage.getItem("equipmentId"))
-  }, [loadCalendaryear, loadExecutors, loadEquipment]);
-
- 
+    executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
+  }, [loadCalendaryear]);
 
 
+  function loadDayByWelder(id) {
+    api.get(`/day/byWelder/${id}`)
+      .then((res) => { setvalueWorkDays(res.data) })
+  }
+  function loadDayByEquipment(id) {
+    api.get(`/day/byEquipment/${id}`)
+      .then((res) => { setvalueWorkDays(res.data) })
+  }
 
-  ////////////////////////////////////////////////////////////////////
 
 
-  const [value_panel, setValue] = useState(0);
-  const ChangePanels = (event, newValue) => {
-    setValue(newValue);
-  };
-  const TabPanel = (props_panel) => {
-    const { children, value, indPanel } = props_panel;
 
-    return (
-      <div hidden={value !== indPanel}  >
-        {children}
-      </div>
-    );
-  };
 
-  ////////////////////////////////////////////////////////////////////
-  const welder = [
+
+  const ObjSlects = [
     {
-      title: "День",
-      field: "day",
+      id: 1,
+      name: "Оборудование "
     },
     {
-      title: "Смена",
-      field: "alter",
-    },
+      id: 2,
+      name: "Сотрудник"
+    }
   ]
 
- 
+  const ObjSlectsisWorkingDay = [
+    {
+      bool: true,
+      name: "Рабочий день"
+    },
+    {
+      bool: false,
+      name: "Выходной"
+    }
+  ]
+  const optObs = ObjSlects?.map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  const executorsOptions = executors?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.middleName} ${item.firstName} ${item.lastName}`,
+    };
+  });
+  const equipmentOptions = equipment[0]?.map((item) => {
+    return {
+      value: item.id,
+      label: `${item.name} ${item.factoryNumber}  `,
+    };
+  });
+
+
+  const WorkingDayOptions = ObjSlectsisWorkingDay?.map((item) => {
+    return {
+      value: item.bool,
+      label: item.name,
+    };
+  });
 
 
   let WorkingShiftOptions = calendar?.mainWorkingShifts?.map((item) => {
@@ -155,44 +178,30 @@ export const Calendar = ({
   })
 
 
-  function SendData(params) {
-    const { shiftDay, workDay, valueWorkingShift } = params;
-  
-    params.valueObj = valueObj;
-    params.valueExecutors = valueExecutors;
-    params.valueEquipment = valueEquipment;
-    params.shiftDay = new Date(shiftDay).toLocaleDateString();
-  
-    params.monthNumber = new Date(workDay).getUTCMonth() + 1;
-    params.number = new Date(workDay).getUTCDate();
-    params.year = new Date(workDay).getFullYear();
-  
-    params.WorkingShiftnumber = valueWorkingShift;
-    params.workingShifts = SetworkingShifts(valueWorkingShift);
-  
-    const executorId = window.localStorage.getItem("executorId");
-    const equipmentId = window.localStorage.getItem("equipmentId");
-    if (executorId) {
-      params.valueExecutors = executorId;
-    } else if (equipmentId) {
-      params.valueEquipment = equipmentId;
-    }
-  
-    if (params.workingShifts?.number === 3) {
-      params.number++;
-    }
-  
-    addDay(params);
-     /* editDay(params); */
-  } 
 
-  function SetworkingShifts(valueWorkingShift) {
-    for (let index = 0; index < calendar.mainWorkingShifts.length; index++) {
-      if (calendar.mainWorkingShifts[index].number === valueWorkingShift) {
-        return calendar.mainWorkingShifts[index]
-      }
-    }
+  function SendData(params) {
+    let smena = calendar?.mainWorkingShifts.find(elem=>elem.number === valueWorkingShift)  
+    const data = {
+      "monthNumber": new Date(params.workDay).getMonth(),
+      "number": new Date(params.workDay).getDate(),
+      "isWorkingDay": true,
+      "year": new Date(params.workDay).getFullYear(),
+      "weldingEquipmentId": equipmentObj?.id??null,
+      "welderId": executorObj?.id??null,
+      "workingShifts": [
+        {
+          "number": smena.number,
+          "shiftStart":smena.shiftStart,
+          "shiftEnd": smena.shiftEnd,
+          "breakStart": smena.breakStart,
+          "breakEnd": smena.breakEnd,
+        }
+      ]
+    }  
+
+    api.post("day",data).then(()=>executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
   }
+
 
 
   function SetValOpenModalAddWorkDay() {
@@ -200,10 +209,6 @@ export const Calendar = ({
   }
  
 
-
-  ////*****************//////////////////!!!!!  Calendar
-
-  const ArrayDays = calendar?.days ?? []; 
 
 
   return (
@@ -219,21 +224,37 @@ export const Calendar = ({
 
 
         <div class="calendar-wrapper">
-          <h2>Производственный календарь </h2>
-
-          <div className={styles.RowToolsBtns}>
+          {executorObj
+            ? <h2>Сварщик: {executorObj.middleName} {executorObj.firstName} {executorObj.lastName}</h2>
+            : <h2>Оборудование: {equipmentObj.name} №{equipmentObj.factoryNumber}</h2>
+          }
+          {userRole === "Admin" || userRole === "Master"
+            ?(
+              <div className={styles.RowToolsBtns}>
             <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
             {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
           </div>
-          <Calendars
-            executors={executors}
-            equipment={equipment}
-            arrayDays={ArrayDays}
-          >
-          </Calendars>
+            )
+            :null
+          }
+           
+          {valueWorkDays
+            ? (
+              <Calendars
+                valueWorkDays={valueWorkDays}
+                WorkingShiftOptions={WorkingShiftOptions}
+                executorObj={executorObj}
+                equipmentObj={equipmentObj}
+                loadDayByWelder={loadDayByWelder}
+                loadDayByEquipment={loadDayByEquipment}
+              />
+            )
+            : null
+          }
+
         </div>
 
-        
+       
 
 
         {/*Добавить рабочий день*/}
@@ -285,10 +306,55 @@ export const Calendar = ({
                   />
                 </div>
 
-                 
+                {/*  <div className={styles.row}>
+                    <Select
+                      name="valueObj"
+                      value={valueObj}
+                      width="380px"
+                      placeholder="Сварщик или обородование"
+                      onChange={(event) => {
+                        setValueObj(event.value)
+                      }}
+                      options={optObs}
+                    />
+                  </div>
+                */}
+
+                {/* {valueObj === 1
+                  ? (
+                    <div className={styles.row}>
+                      <Select
+                        name="valueEquipment"
+                        value={valueEquipment}
+                        width="380px"
+                        placeholder="Обородование"
+                        onChange={(event) => {
+                          setValueEquipment(event.value)
+                        }}
+                        options={equipmentOptions}
+                      />
+                    </div>
+
+                  )
+                  : (
+                    <div className={styles.row}>
+                      <Select
+                        name="valueExecutors"
+                        value={valueExecutors}
+                        width="380px"
+                        placeholder="Сотрудники"
+                        onChange={(event) => {
+                          setValueExecutors(event.value)
+                        }}
+                        options={executorsOptions}
+                      />
+                    </div>
+                  )
+                } */}
+
+
+
                 <div className={styles.row}>
-
-
                   <Select
                     name="valueWorkingShift"
                     value={valueWorkingShift}

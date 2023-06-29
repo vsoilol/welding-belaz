@@ -122,7 +122,7 @@ const loadDayByWelderSuccess = (state = INITIAL_STATE, { day }) => {
   return {
     ...state,
     isRequesting: false,
-    day,
+    days: day
   };
 };
 

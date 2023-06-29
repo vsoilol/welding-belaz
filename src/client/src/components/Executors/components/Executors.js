@@ -20,7 +20,6 @@ import imgcalendar from "assets/icons/calendar.png";
 import deleteIcon from "assets/icons/delete.png";
 import api from "services/api";
 
-
 import { Upload } from "components/Upload/index";
 
 const useStyles = makeStyles(() => ({
@@ -60,6 +59,10 @@ export const ExecutorsTable = ({
   const [valueWorkplace, setvalueWorkplace] = useState(0);
 
 
+  /*newPassword */
+  const [valuemodalPass, setvaluemodalPass] = useState(false);
+
+
   const classes = useStyles();
   const initialValues = {
     id: modalData?.id ?? "",
@@ -80,6 +83,13 @@ export const ExecutorsTable = ({
         currentCondition: "",
       },
     ],
+  };
+
+
+  const initialValuesPass = {
+    oldPass: "",
+    newPass: "",
+
   };
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
   const [idExecutor, setidExecutor] = useState("");
@@ -458,7 +468,7 @@ export const ExecutorsTable = ({
   };
 
   function OpenCalendar(rowData) {
-    window.localStorage.setItem("executorId", rowData.id)
+    window.localStorage.setItem("executor", JSON.stringify(rowData))
     window.localStorage.removeItem("equipment")
     setTimeout(() => {
       window.location.href = "/calendar"
@@ -511,6 +521,21 @@ export const ExecutorsTable = ({
     if (valuetOpenModal === 1 && type === "controller") {
       editTech(variables)
     }
+  }
+
+
+
+
+  function changePasswod(params) {
+    api.post(`/auth/change-password`, {
+      "oldPassword": params.oldPass,
+      "newPassword": params.newPass,
+      "confirmNewPassword": params.newPass,
+    })
+      .then((response) => {
+
+      })
+      .catch((error) => { });
   }
 
   return (
@@ -794,6 +819,78 @@ export const ExecutorsTable = ({
           )}
         </Formik>
       </ModalWindow>
+
+
+
+      {/*Поменять пароль*/}
+      <ModalWindow
+        isOpen={valuemodalPass}
+        headerText="Поменять пароль"
+        setIsOpen={(state) => {
+          setvaluemodalPass(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={initialValuesPass}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setvaluemodalPass(false)
+            changePasswod(variables)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, width: 562 }}
+                    value={values.oldPass}
+                    name="oldPass"
+                    placeholder="Старый пароль"
+                    onBlur={handleBlur}
+                    autocomplete="off"
+                  />
+                </div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    style={{ height: 40, width: 562 }}
+                    value={values.newPass}
+                    name="newPass"
+                    placeholder="Новый пароль"
+                    onBlur={handleBlur}
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Изменить
+                  </Button>
+                </div>
+
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+
     </>
   );
 };

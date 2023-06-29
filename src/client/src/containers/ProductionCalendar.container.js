@@ -1,18 +1,37 @@
 import { connect } from "react-redux";
 import { ProductionCalendar } from "pages/ProductionCalendarPage";
-import Actions from "store/records/actions";
+import Actions from "store/calendar/actions";  
 
 const mapStateToProps = (state) => {
   return {
-    records: state.records.records,
-    isRequesting: state.records.isRequesting,
-    userRole: state.auth.user.role,
+    executors: state.executors.executors, 
+    equipment: state.equipment.equipment, 
+    calendar:state.calendar.calendaryear,
+    days:state.calendar.day,
+    userRole: state.auth.user.role, 
   };
 };
 
 const mapDispatchToProps = {
-  loadRecords: Actions.Creators.loadRecordsRequest,
-  deleteRecords:Actions.Creators.deleteRecordsRequest,
+  loadExecutors:Actions.Creators.loadExecutorsRequest, 
+  loadEquipment:Actions.Creators.loadEquipmentRequest,  
+  ///Calendar
+  loadCalendaryear: Actions.Creators.loadCalendaryearRequest, 
+  addCalendarmain: Actions.Creators.addCalendarmainRequest, 
+  editEditcalendar: Actions.Creators.editEditcalendarRequest, 
+  addCalendarwelder: Actions.Creators.addCalendarwelderRequest,  
+  loadCalendarwelder: Actions.Creators.loadCalendarwelderRequest, 
+  addCalendarequipment:Actions.Creators.addCalendarequipmentRequest, 
+  loadCalendarequipment: Actions.Creators.loadCalendarequipmentRequest, 
+
+  ///WorkingShift
+  addShift:Actions.Creators.addShiftRequest, 
+  editShift:Actions.Creators.editShiftRequest, 
+  ///Day
+  loadDayByWelder:Actions.Creators.loadDaybywelderRequest, 
+  loadDayByEquipment:Actions.Creators.loadDayequiRequest, 
+  addDay:Actions.Creators.addDayRequest, 
+  editDay:Actions.Creators.editDayRequest, 
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductionCalendar);

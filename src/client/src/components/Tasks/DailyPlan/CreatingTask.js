@@ -48,25 +48,25 @@ export const CreatingTask = ({
     const [dateCratePlan, setdateCratePlan] = useState("");
     const [toDay, settoDay] = useState(new Date().toLocaleDateString('ru-RU'));
 
-    const [CheckIsProd,setCheckIsProd]=useState(false);
+    const [CheckIsProd, setCheckIsProd] = useState(false);
 
     const mastersOptions = masters?.map((item) => {
         return {
             value: item?.id,
             label: `${item?.middleName} ${item?.firstName}`,
         };
-    }); 
+    });
     const techsOptions = techs?.map((item) => {
         return {
             value: item?.id,
             label: `${item?.middleName} ${item?.firstName}`,
         };
-    }); 
+    });
     ////Работа со списком дат сущ.плана  
     const [valueAllDate, setValueAllDate] = useState([]);
     const [valueChioseDate, setvalueChioseDate] = useState(null);
     useEffect(() => {
-        fetchData();
+        fetchData();  
     }, []);
     async function fetchData() {
         try {
@@ -88,7 +88,7 @@ export const CreatingTask = ({
                 setvalue_products(response.data);
             })
             .catch((error) => { });
-    } 
+    }
     const TabPanel = (props_panel) => {
         const { children, value, indPanel } = props_panel;
         return (
@@ -214,7 +214,7 @@ export const CreatingTask = ({
     const [manufacProducts, setmanufacProducts] = useState(0);
     const [acceptedProducts, setacceptedProducts] = useState(0);
     const [productreason, setproductreason] = useState("");
-    const [prodUniqueNumber , setprodUniqueNumber] = useState(0);
+    const [prodUniqueNumber, setprodUniqueNumber] = useState(0);
 
 
     ///Создание плана 
@@ -243,7 +243,7 @@ export const CreatingTask = ({
                 })
                 .catch((error) => { });
         }
-    } 
+    }
     //Изменение ввода выработки и брака
     async function ChangeData() {
         try {
@@ -260,7 +260,7 @@ export const CreatingTask = ({
                         "ProductAccountId ": idPlan,
                         "UniqueNumber ": Number(CheckIsProd)
                     });
-                } 
+                }
                 if (manufacProducts >= 0) {
                     await api.put(`/productAccount/manufacturedAmount`, {
                         "id": idPlan,
@@ -318,7 +318,7 @@ export const CreatingTask = ({
         else if (event.active === 1) {
             event.active = 0
         }
-    }; 
+    };
     ///Закрепление оборудования
     const [valueWelder, setvalueWelder] = useState("");
     async function FixoEquipment(valueWelder) {
@@ -332,7 +332,7 @@ export const CreatingTask = ({
         } catch (error) {
             console.error(error);
         }
-    } 
+    }
     //Удаление записи в плане 
     async function deleteRecords() {
         try {
@@ -341,7 +341,7 @@ export const CreatingTask = ({
         } catch (error) {
             console.error(error);
         }
-    } 
+    }
     ///Создать задание
     function CreateTask() {
         const masterId = userRole === "Admin" ? valChioseMaster : masters[0].id;
@@ -363,15 +363,38 @@ export const CreatingTask = ({
             .catch((error) => { });
     }
 
-    async function getDetProd(){ 
+    async function getDetProd() {
         try {
-            const res = await api.get("/file/product-account-report"); 
+            const res = await api.get("/file/product-account-report");
             if (res.status === 200) {
-              window.open(res.request.responseURL);
+                window.open(res.request.responseURL);
             }
-          } catch (error) {
-            
-          } 
+        } catch (error) {
+
+        }
+    } 
+
+
+
+    const [modalAddMAterial, setmodalAddMAterial] = useState(false);
+    const [modalExistsDate, setmodalExistsDate] = useState(false);
+    const valueAddMaterial = {
+        date: "",
+        weldingMaterial: "",
+        weldingMaterialBatchNumber: "",
+    };
+    function setMaterial(variables) { 
+        api.put(`/WeldingTask/welding-material`, {
+            "date": new Date(variables.date).toLocaleDateString('ru-RU', { dateStyle: 'short' }),
+            "weldingMaterial": variables.weldingMaterial,
+            "weldingMaterialBatchNumber": `${variables.weldingMaterialBatchNumber??null}`,
+        })
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                setmodalExistsDate(true)
+             });
     }
 
 
@@ -461,8 +484,8 @@ export const CreatingTask = ({
 
             </div>
             <div className={styles.RowToolsBTNS}>
-               {userRole === "Master" || userRole === "Admin"
-                    ?(
+                {userRole === "Master" || userRole === "Admin"
+                    ? (
                         <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
                             dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
                                 ? new Date(dateCratePlan).toLocaleDateString('ru-RU')
@@ -471,26 +494,38 @@ export const CreatingTask = ({
                     )
                     : null
                 }
-                
+
                 {userRole === "Master" || userRole === "Admin"
                     ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
                     : null
                 }
-                {userRole  === "Admin" || userRole === "Master"
+                {userRole === "Admin" || userRole === "Master"
                     ? <div className={styles.Upload}><Upload tool={1}></Upload></div>
                     : null
                 }
             </div>
-            <div  className={styles.sectionGet}> 
-                 
-                {userRole  === "Admin" || userRole === "Master"
+            <div className={styles.sectionGet}>
+
+                {userRole === "Admin" || userRole === "Master"
                     ? <div className={styles.Upload}>
-                       <label>Получение данных об изготовленных изделиях, узлах и деталях </label>    
-                       <button className={styles.getDate} onClick={(e)=>{getDetProd()}}>Получить</button>
+                        <label>Получение данных об изготовленных изделиях, узлах и деталях </label>
+                        <button className={styles.getDate} onClick={(e) => { getDetProd() }}>Получить</button>
                     </div>
                     : null
                 }
             </div>
+            <div className={styles.sectionGet}>
+
+                {userRole === "Admin" || userRole === "Master"
+                    ? <div className={styles.Upload}>
+                        <label>Добавление сварочных материалов </label>
+
+                        <button className={styles.addMater} onClick={(e) => { setmodalAddMAterial(true) }}>Добавить</button>
+                    </div>
+                    : null
+                }
+            </div>
+
             <h3>План на <span>{valueChioseDate}</span></h3>
             {/* таблица плана  */}
             <TabPanel
@@ -506,25 +541,25 @@ export const CreatingTask = ({
                                 icon: "add",
                                 tooltip: "Добавить изделие",
                                 isFreeAction: true,
-                                onClick: () => { 
-                                  /* setIsModalOpen(true); 
-                                  setValuetOpenModal(0);
-                                  api.post(`/eventLog`,{
-                                    "information": "Открыл модальное окно добавления пользователя "
-                                  })  */
+                                onClick: () => {
+                                    /* setIsModalOpen(true); 
+                                    setValuetOpenModal(0);
+                                    api.post(`/eventLog`,{
+                                      "information": "Открыл модальное окно добавления пользователя "
+                                    })  */
                                 },
-                              },
+                            },
                             {
                                 icon: "edit",
                                 tooltip: "Редактировать план",
                                 onClick: (event, rowData) => {
-                                    setCheckIsProd(rowData?.product?.product ? true : false); 
-                                    setprodUniqueNumber(rowData?.uniqueNumber!=null ? rowData?.uniqueNumber : "")
+                                    setCheckIsProd(rowData?.product?.product ? true : false);
+                                    setprodUniqueNumber(rowData?.uniqueNumber != null ? rowData?.uniqueNumber : "")
                                     setmodalchangeInfoproductAccount(true)
                                     setidPlan(rowData?.id)
                                     setprodQuantities(rowData?.amountFromPlan)
                                     setmanufacProducts(rowData?.amountManufactured)
-                                    setacceptedProducts(rowData?.amountAccept)  
+                                    setacceptedProducts(rowData?.amountAccept)
                                     /* api.post(`/eventLog`, {
                                         "information": "Открыл модальное окно редактирования плана"
                                     }) */
@@ -535,6 +570,102 @@ export const CreatingTask = ({
                     }
                 />
             </TabPanel>
+
+            {/*Добавление сварочных материалов*/}
+            <ModalWindow
+                isOpen={modalAddMAterial}
+                headerText="Добавление сварочных материалов "
+                setIsOpen={(state) => {
+                    setmodalAddMAterial(false)
+                }}
+                wrapperStyles={{ width: 420 }}
+            >
+                <Formik
+                    initialValues={valueAddMaterial}
+                    enableReinitialize
+                    onSubmit={(variables) => {
+                        const { id, ...dataToSend } = variables;
+                        setmodalAddMAterial(false)
+                        setMaterial(variables)
+                    }}
+                >
+                    {({
+                        handleSubmit,
+                        handleChange,
+                        values,
+                        setFieldValue,
+                        handleBlur,
+                    }) => (
+                        <form onSubmit={handleSubmit}>
+
+                            <div className={styles.row}>
+                                <Input
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                    }}
+                                    width="200"
+                                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                                    value={values.date}
+                                    name="date"
+                                    placeholder="Дата  "
+                                    type="text"
+                                    onFocus={(e) => {
+                                        e.currentTarget.type = "date";
+                                    }}
+                                    onBlur={handleBlur}
+                                    autocomplete="off"
+                                />
+                            </div>
+                            <div className={styles.row}>
+                                <Input
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                    }}
+                                    style={{
+                                        width: 380,
+                                        height: 40,
+                                    }}
+                                    value={values.weldingMaterial}
+                                    name={`weldingMaterial`}
+                                    placeholder="Наименование сварочного материала "
+                                    autocomplete="off"
+                                />
+                            </div>
+                            <div className={styles.row}>
+                                <Input
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                    }}
+                                    style={{
+                                        width: 380,
+                                        height: 40, 
+                                    }}
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value={values.weldingMaterialBatchNumber}
+                                    name={`weldingMaterialBatchNumber`}
+                                    placeholder="Номер партии сварочного материала "
+                                    autocomplete="off"
+                                />
+                            </div>
+
+                            <div className={styles.row}>
+                                <Button
+                                    disabled={
+                                        values.shiftNumb == ""
+                                    }
+                                    type="submit"
+                                >
+                                    Закрепить
+                                </Button>
+                            </div>
+                        </form>
+                    )}
+                </Formik>
+            </ModalWindow>
+
+
             {/*Закрерить оборудования*/}
             <ModalWindow
                 isOpen={valueChoiseWelder}
@@ -588,6 +719,7 @@ export const CreatingTask = ({
                     )}
                 </Formik>
             </ModalWindow>
+
             {/*Ввод выработки и брака*/}
             <ModalWindow
                 isOpen={modalchangeInfoproductAccount}
@@ -653,11 +785,11 @@ export const CreatingTask = ({
                                                         handleChange(e);
                                                         setprodQuantities(e.target.value)
                                                     }
-                                                }} 
+                                                }}
                                                 type="number"
-                                                min="0" 
+                                                min="0"
                                                 style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                value={prodQuantities} 
+                                                value={prodQuantities}
                                                 name="prodQuantities"
                                                 placeholder="Количество забракованной продукции"
                                                 onBlur={handleBlur}
@@ -683,7 +815,7 @@ export const CreatingTask = ({
                                             />
                                         </div>
 
-                                        
+
 
                                         {userRole != "Admin"
                                             ? (
@@ -774,7 +906,18 @@ export const CreatingTask = ({
                 wrapperStyles={{ width: 420 }}
             >
                 <h3 className={styles.ExistingPlan}>План на эту дату уже существует</h3>
-            </ModalWindow> 
+            </ModalWindow>
+            {/*Модалка если задания на дату нету*/}
+            <ModalWindow
+                isOpen={modalExistsDate}
+                headerText=""
+                setIsOpen={(state) => {
+                    setmodalExistsDate(false)
+                }}
+                wrapperStyles={{ width: 420 }}
+            >
+                <h3 className={styles.ExistingPlan}>Задач на эту дату не существует</h3>
+            </ModalWindow>
             {/*Удаление задания*/}
             <ModalWindow
                 isOpen={deleteRecordsModal}

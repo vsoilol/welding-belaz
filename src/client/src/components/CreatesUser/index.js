@@ -20,6 +20,8 @@ import api from "services/api";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Paper from "@material-ui/core/Paper";
+import deleteIcon from "assets/icons/delete.png";
+import { Upload } from "components/Upload/index";
 
 const CreatesUser = ({
 
@@ -44,6 +46,8 @@ const CreatesUser = ({
   const [isModalErrOpen, setisModalErrOpen] = useState(false);
   const [isModalComplitChangLogPassOpen, setisModalComplitChangLogPassOpen] = useState(false);
   const [isModalComplitChangLogPassErrOpen, setisModalComplitChangLogPassErrOpen] = useState(false);
+  const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
+  const [idUser, setidUser] = useState("");
 
 
   const initialValues = {
@@ -168,6 +172,19 @@ const CreatesUser = ({
 
   const colUsers = [
     {
+      title: "Удаление",
+      render: (rowData) => (
+        <img
+          className={styles.deleteIcon}
+          src={deleteIcon}
+          onClick={() => {
+            setdeleteRecordsModal(true);
+            setidUser(rowData?.id)
+          }}
+        />
+      ),
+    },
+    {
       title: "Фамилия ", field: "middleName",
 
     },
@@ -204,6 +221,7 @@ const CreatesUser = ({
         5: "Руководитель цеха",
         6: "Представитель УКК",
         7: "Руководитель завода",
+        8: "Технолог",
       },
     },
     {
@@ -234,6 +252,7 @@ const CreatesUser = ({
     { id: 5, name: "Руководитель цеха" },
     { id: 6, name: "Представитель УКК" },
     { id: 7, name: "Руководитель завода" },
+    { id: 8, name: "Технолог" },
   ].map((item) => {
     return {
       value: item.id,
@@ -321,6 +340,12 @@ const CreatesUser = ({
       .catch((error) => {
         setisModalComplitChangLogPassErrOpen(true)
       });
+  }
+
+  function deleteUser(idUser) {
+    api.remove(`/users/${idUser}`)
+      .then((response) => { fetchUsers() })
+      .catch((error) => { });
   }
 
   return (
@@ -514,7 +539,7 @@ const CreatesUser = ({
                 />
               </div>
 
-
+              <Upload ></Upload>
               <div className={styles.row}>
                 <Button
                   disabled={
@@ -769,6 +794,51 @@ const CreatesUser = ({
                     type="submit"
                   >
                     Закрыть
+                  </Button>
+                </div>
+
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
+
+
+      {/*Удаление */}
+      <ModalWindow
+        isOpen={deleteRecordsModal}
+        headerText="Удаление"
+        setIsOpen={(state) => {
+          setdeleteRecordsModal(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={{}}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setdeleteRecordsModal(false)
+            deleteUser(idUser)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
+
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> пользователя ? </h4>
+
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Удалить
                   </Button>
                 </div>
 

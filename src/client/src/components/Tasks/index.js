@@ -595,7 +595,7 @@ export const Tasks = ({
             data={tasks?.tasks}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master"|| userRole === "Inspector"
+              userRole === "Admin" || userRole === "Master" 
                 ? [
                   {
                     icon: "edit",
