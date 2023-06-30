@@ -230,4 +230,23 @@ public class CalendarService : ICalendarService
 
         return new BaseResultRequest<int[]>(allYears, message);
     }
+
+    public async Task<BaseResultRequest<CalendarDto>> CreateMainCalendarByYearAsync(
+        CreateMainCalendarByYearRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<CalendarDto>(validationResult.Exception);
+            return new BaseResultRequest<CalendarDto>(result);
+        }
+
+        var newCalendar = await _calendarRepository.CreateMainCalendarByYearAsync(request.OldYear, request.NewYear);
+
+        var message =
+            $"Создание нового производственного календаря на {request.NewYear}, на основе существующего за {request.OldYear}";
+
+        return new BaseResultRequest<CalendarDto>(newCalendar, message);
+    }
 }

@@ -26,4 +26,6 @@ public interface ICalendarRepository
     Task<int[]> GetAllExistedYearByWelderIdAsync(Guid welderId);
     
     Task<int[]> GetAllExistedYearByEquipmentIdAsync(Guid weldingEquipmentId);
+    
+    Task<CalendarDto> CreateMainCalendarByYearAsync(int oldYear, int newYear);
 }
