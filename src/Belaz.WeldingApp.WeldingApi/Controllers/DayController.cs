@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Contracts;
+using LanguageExt;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -28,9 +29,9 @@ public class DayController : ControllerBase
     public async Task<ActionResult<DayDto>> CreateAsync([FromBody] CreateDayWithYearRequest request)
     {
         var result = await _dayService.CreateAsync(request);
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
-        
+
         return result.Result.ToOk();
     }
 
@@ -39,9 +40,9 @@ public class DayController : ControllerBase
     public async Task<ActionResult<DayDto>> UpdateAsync([FromBody] UpdateDayRequest request)
     {
         var result = await _dayService.UpdateAsync(request);
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
-        
+
         return result.Result.ToOk();
     }
 
@@ -50,7 +51,7 @@ public class DayController : ControllerBase
     public async Task<ActionResult<IEnumerable<DayDto>>> GetAllMainAsync()
     {
         var result = await _dayService.GetAllMainAsync();
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result;
@@ -63,9 +64,9 @@ public class DayController : ControllerBase
         var result = await _dayService.GetAllByWelderIdAsync(
             new GetDaysByWelderIdRequest { WelderId = welderId }
         );
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
-        
+
         return result.Result.ToOk();
     }
 
@@ -78,9 +79,21 @@ public class DayController : ControllerBase
         var result = await _dayService.GetAllByEquipmentIdAsync(
             new GetDaysByEquipmentIdRequest { EquipmentId = equipmentId }
         );
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
-        
+
+        return result.Result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteDayAsync([FromRoute] Guid id)
+    {
+        var result = await _dayService.DeleteDayAsync(
+            new DeleteDayRequest { Id = id }
+        );
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
         return result.Result.ToOk();
     }
 }

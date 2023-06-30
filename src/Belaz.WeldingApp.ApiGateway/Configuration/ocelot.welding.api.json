@@ -1015,6 +1015,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/day/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/day/{id}",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/day/main",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
@@ -1064,6 +1078,20 @@
         "PUT"
       ],
       "DownstreamPathTemplate": "/api/workingShift",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/workingShift/{id}",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/workingShift/{id}",
       "ServiceName": "welding",
       "SwaggerKey": "welding",
       "AuthenticationOptions": {

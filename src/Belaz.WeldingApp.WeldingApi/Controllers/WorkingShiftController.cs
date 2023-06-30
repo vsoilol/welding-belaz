@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Belaz.WeldingApp.Common.Attributes;
 using Belaz.WeldingApp.Common.Enums;
+using LanguageExt;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -65,7 +66,7 @@ public class WorkingShiftController : ControllerBase
 
         return result.ToOk();
     }
-    
+
     [HttpGet("byWelder")]
     [ProducesResponseType(typeof(List<WorkingShiftDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<WorkingShiftDto>>> GetAllWorkingShiftsByWelderIdAndYearAsync(
@@ -73,6 +74,16 @@ public class WorkingShiftController : ControllerBase
     )
     {
         var result = await _workingShiftService.GetAllWorkingShiftsByWelderIdAndYearAsync(request);
+
+        return result.ToOk();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> DeleteWorkingShiftAsync([FromRoute] Guid id)
+    {
+        var result = await _workingShiftService.DeleteWorkingShiftAsync(
+            new DeleteWorkingShiftRequest() { Id = id }
+        );
 
         return result.ToOk();
     }

@@ -107,4 +107,14 @@ public class DayRepository : IDayRepository
             .ProjectTo<DayDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
+
+    public async Task DeleteByIdAsync(Guid id)
+    {
+        var deletedDay = (await _context.Days
+            .Include(_ => _.WorkingShifts)
+            .FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        _context.Days.Remove(deletedDay);
+        await _context.SaveChangesAsync();
+    }
 }

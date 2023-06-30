@@ -8,6 +8,7 @@ using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.WeldingApi.Domain.Models;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -116,5 +117,23 @@ public class DayService : IDayService
         var message = $"Обновление информации о дне {data.Number}.{data.MonthNumber}.{data.Year}";
 
         return new BaseResultRequest<DayDto>(data, message);
+    }
+
+    public async Task<BaseResultRequest<Unit>> DeleteDayAsync(DeleteDayRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<Unit>(validationResult.Exception);
+            return new BaseResultRequest<Unit>(result);
+        }
+
+        var day = await _dayRepository.GetByIdAsync(request.Id);
+        await _dayRepository.DeleteByIdAsync(request.Id);
+
+        var message = $"Удаление дня {day.Number}.{day.MonthNumber}.{day.Year}";
+
+        return new BaseResultRequest<Unit>(Unit.Default, message);
     }
 }
