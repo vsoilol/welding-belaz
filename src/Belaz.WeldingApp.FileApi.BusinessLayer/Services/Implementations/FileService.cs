@@ -2,6 +2,7 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.BasedSeamPassport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
@@ -68,16 +69,53 @@ public class FileService : IFileService
         return result;
     }
 
+    public async Task<Result<DocumentDto>> GenerateBasedSeamPassportByTaskIdAsync(
+        GenerateBasedSeamPassportByTaskIdRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var task = await _taskRepository.GetByIdAsync(request.TaskId);
+
+        var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
+
+        var document =
+            new BasedSeamPassportDocument(task, fontsPath,
+                request.SequenceNumber,
+                request.AverageIntervalSeconds,
+                request.SecondsToIgnoreBetweenGraphs);
+
+        byte[] bytes;
+        using (var stream = new MemoryStream())
+        {
+            document.GeneratePdf(stream);
+            bytes = stream.ToArray();
+        }
+
+        var result = new DocumentDto
+        {
+            FileName = $"Паспорт Шва №{task.Seam.Number}.pdf",
+            FileType = FileTypes.PdfType,
+            Bytes = bytes
+        };
+
+        return result;
+    }
+
     public async Task<Result<DocumentDto>> GenerateProductAccountInfoExcelFileAsync()
     {
         var data = await _productAccountRepository.GetAllProductAccountsAsync();
-        
+
         var excelDataModel = new List<ProductAccountInfoExcelModel>();
 
         foreach (var productAccount in data)
         {
             string[] parts = productAccount.Product.Number.Split(new[] { '-' }, 3);
-            
+
             excelDataModel.Add(new ProductAccountInfoExcelModel
             {
                 ProductIndex = parts.ElementAtOrDefault(0) ?? "-",

@@ -24,6 +24,15 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
+    [HttpGet("based-seam-passport")]
+    public async Task<IActionResult> GenerateBasedSeamPassportAsync(
+        [FromQuery] GenerateBasedSeamPassportByTaskIdRequest request)
+    {
+        var result = await _fileService.GenerateBasedSeamPassportByTaskIdAsync(request);
+
+        return result.ToFile();
+    }
+
     [HttpGet("product-account-report")]
     public async Task<IActionResult> GenerateProductAccountInfoExcelFileAsync()
     {

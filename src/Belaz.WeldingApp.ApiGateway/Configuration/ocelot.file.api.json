@@ -11,6 +11,16 @@
       "SwaggerKey": "file"
     },
     {
+      "UpstreamPathTemplate": "/api/file/based-seam-passport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/file/based-seam-passport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
       "UpstreamPathTemplate": "/api/file/product-account-report",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
