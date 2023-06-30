@@ -13,10 +13,10 @@ public class CreateMainCalendarByYearRequestValidator : AbstractValidator<Create
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetAsyncValidator(new MainCalendarIsAlreadyExistValidatorFor(context));
-        
+
         RuleFor(model => model.OldYear)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .SetAsyncValidator(new MainCalendarIsNotExistValidatorFor(context));
+            .SetAsyncValidator(new MainCalendarIsNotExistValidatorFor<CreateMainCalendarByYearRequest>(context));
     }
 }

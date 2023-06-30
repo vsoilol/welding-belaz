@@ -249,4 +249,44 @@ public class CalendarService : ICalendarService
 
         return new BaseResultRequest<CalendarDto>(newCalendar, message);
     }
+
+    public async Task<BaseResultRequest<CalendarDto>> CreateWelderCalendarBasedOnMainAsync(CreateWelderCalendarBasedOnMainRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<CalendarDto>(validationResult.Exception);
+            return new BaseResultRequest<CalendarDto>(result);
+        }
+        
+        var newCalendar = await _calendarRepository
+            .CreateWelderCalendarBasedOnMainAsync(request.Year, request.WelderId);
+        
+        var welder = await _welderRepository.GetUserFullNameByIdAsync(request.WelderId);
+        var message = $"Создание календаря на основе общезаводского за {request.Year} для " +
+                      $"сварщика {welder.MiddleName} {welder.FirstName} {welder.LastName}.";
+        
+        return new BaseResultRequest<CalendarDto>(newCalendar, message);
+    }
+
+    public async Task<BaseResultRequest<CalendarDto>> CreateEquipmentCalendarBasedOnMainAsync(CreateEquipmentCalendarBasedOnMainRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<CalendarDto>(validationResult.Exception);
+            return new BaseResultRequest<CalendarDto>(result);
+        }
+        
+        var newCalendar = await _calendarRepository
+            .CreateEquipmentCalendarBasedOnMainAsync(request.Year, request.EquipmentId);
+        
+        var equipment = await _weldingEquipmentRepository.GetBriefInfoByIdAsync(request.EquipmentId);
+        var message = $"Создание календаря на основе общезаводского за {request.Year} для " +
+                      $"сварочного оборудования {equipment.FactoryNumber}.";
+        
+        return new BaseResultRequest<CalendarDto>(newCalendar, message);
+    }
 }
