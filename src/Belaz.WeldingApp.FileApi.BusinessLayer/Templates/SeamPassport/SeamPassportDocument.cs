@@ -1,4 +1,5 @@
-﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
+﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.BasedSeamPassport;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 using QuestPDF.Drawing;
@@ -72,18 +73,25 @@ public class SeamPassportDocument : IDocument
             column.Item().Element(ComposeWeldPassageInstructionsTable);
             column.Item().Element(ComposeAdditionalInfoTable);
             column.Item().Element(ComposeInspectorTable);
+            
+            IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages.OrderBy(_ => _.Number);
+
+            if (_sequenceNumber.HasValue)
+            {
+                weldPassages = weldPassages.Where(_ => _.SequenceNumber == _sequenceNumber);
+            }
+            
+            column.Item()
+                .Component(
+                    new BasedWeldPassageComponent(weldPassages.ToList(), 
+                        5,
+                        60)
+                );
 
             column
                 .Item()
                 .Column(row =>
                 {
-                    IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages.OrderBy(_ => _.Number);
-
-                    if (_sequenceNumber.HasValue)
-                    {
-                        weldPassages = weldPassages.Where(_ => _.SequenceNumber == _sequenceNumber);
-                    }
-                    
                     foreach (var weldPassage in weldPassages)
                     {
                         var weldPassageInstruction =
