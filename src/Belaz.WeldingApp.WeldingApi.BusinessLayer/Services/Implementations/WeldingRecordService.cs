@@ -39,7 +39,11 @@ public class WeldingRecordService : IWeldingRecordService
         var endDate = request.EndDate.ToDateTime();
 
         var result = await _weldingRecordRepository
-            .GetRecordsByDatePeriodAsync(startDate, endDate, request.SeamNumber);
+            .GetRecordsByDatePeriodAsync(startDate, endDate, request.SeamNumber,
+                request.WeldingTaskNumber,
+                request.WelderId,
+                request.MasterId,
+                request.EquipmentId);
         return result;
     }
 

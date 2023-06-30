@@ -10,7 +10,7 @@ namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 public class RecordDto : IMapFrom<WeldingRecord>
 {
     public Guid Id { get; set; }
-    
+
     public int? SequenceNumber { get; set; }
 
     public string Date { get; set; } = null!;
@@ -37,7 +37,7 @@ public class RecordDto : IMapFrom<WeldingRecord>
     public UserFullNameDto Master { get; set; } = null!;
 
     public int? WeldingTaskNumber { get; set; }
-    
+
     public int? SeamNumber { get; set; }
 
     public WeldingEquipmentBriefDto WeldingEquipment { get; set; } = null!;
@@ -66,16 +66,17 @@ public class RecordDto : IMapFrom<WeldingRecord>
     /// Напряжения на дуге max
     /// </summary>
     public double? ArcVoltageMax { get; set; }
-    
+
     public double WeldingCurrentAverage { get; set; }
-    
+
     public double ArcVoltageAverage { get; set; }
 
     public void Mapping(Profile profile)
     {
         profile
             .CreateMap<WeldingRecord, RecordDto>()
-            .ForMember(dto => dto.Date, opt => opt.MapFrom(x => x.Date.ToDayInfoString()))
+            .ForMember(dto => dto.Date, opt => 
+                opt.MapFrom(x => x.Date.ToDayInfoString()))
             .ForMember(
                 dto => dto.WeldingStart,
                 opt => opt.MapFrom(x => x.WeldingStartTime.ToHoursMinutesSecondsString())

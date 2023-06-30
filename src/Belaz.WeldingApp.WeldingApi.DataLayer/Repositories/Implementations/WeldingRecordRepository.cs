@@ -81,6 +81,53 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber,
+        int? weldingTaskNumber,
+        Guid? welderId, Guid? masterId, Guid? equipmentId)
+    {
+        var weldingRecords = _context.WeldingRecords
+            .OrderByDescending(_ => _.Date.Date)
+            .ThenByDescending(x => x.WeldingStartTime.TotalSeconds)
+            .Where(_ => _.Date.Date >= startDate.Date
+                        && _.Date.Date <= endDate.Date);
+
+        if (seamNumber is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WeldPassage!.WeldingTask.SeamAccount.Seam.Number == seamNumber);
+        }
+
+        if (weldingTaskNumber is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WeldPassage!.WeldingTask.Number == weldingTaskNumber);
+        }
+
+        if (welderId is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WelderId == welderId);
+        }
+
+        if (masterId is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WeldPassage!.WeldingTask.MasterId != null
+                    ? _.WeldPassage!.WeldingTask.MasterId == masterId
+                    : _.MasterId == masterId);
+        }
+
+        if (equipmentId is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WeldingEquipmentId == equipmentId);
+        }
+
+        return weldingRecords
+            .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber)
     {
         var weldingRecords = _context.WeldingRecords
