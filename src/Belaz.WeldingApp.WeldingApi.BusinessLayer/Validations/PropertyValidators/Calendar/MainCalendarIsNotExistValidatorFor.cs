@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Calendar;
 
-public class MainCalendarIsNotExistValidatorFor : AsyncPropertyValidator<CreateMainCalendarByYearRequest, int>
+public class MainCalendarIsNotExistValidatorFor<T> : AsyncPropertyValidator<T, int>
 {
     private readonly ApplicationContext _context;
 
@@ -15,17 +15,16 @@ public class MainCalendarIsNotExistValidatorFor : AsyncPropertyValidator<CreateM
         _context = context;
     }
 
-    public override async Task<bool> IsValidAsync(ValidationContext<CreateMainCalendarByYearRequest> context, int value,
-        CancellationToken cancellation)
+    public override string Name => "MainCalendarIsNotExistValidatorFor";
+
+    protected override string GetDefaultMessageTemplate(string errorCode)
+        => "Year is not exist";
+
+    public override async Task<bool> IsValidAsync(ValidationContext<T> context, int value, CancellationToken cancellation)
     {
         var isExist = await _context.Calendars.AnyAsync(_ => _.Year == value && _.IsMain,
             cancellation);
 
         return isExist;
     }
-
-    public override string Name => "MainCalendarIsNotExistValidatorFor";
-
-    protected override string GetDefaultMessageTemplate(string errorCode)
-        => "Year is not exist";
 }

@@ -164,4 +164,28 @@ public class CalendarController : ControllerBase
 
         return result.Result.ToOk();
     }
+    
+    [HttpPost("based-on-main/welder")]
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto>> CreateWelderCalendarBasedOnMainAsync(
+        [FromQuery] CreateWelderCalendarBasedOnMainRequest request)
+    {
+        var result = await _calendarService.CreateWelderCalendarBasedOnMainAsync(request);
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
+    }
+    
+    [HttpPost("based-on-main/equipment")]
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto>> CreateEquipmentCalendarBasedOnMainAsync(
+        [FromQuery] CreateEquipmentCalendarBasedOnMainRequest request)
+    {
+        var result = await _calendarService.CreateEquipmentCalendarBasedOnMainAsync(request);
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
+    }
 }

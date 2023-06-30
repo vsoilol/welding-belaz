@@ -154,6 +154,80 @@ public class CalendarRepository : ICalendarRepository
         return await GetByIdAsync(entity.Id);
     }
 
+    public async Task<CalendarDto> CreateWelderCalendarBasedOnMainAsync(int year, Guid welderId)
+    {
+        var existedCalendar = (await _context.Calendars
+            .Include(_ => _.Days!)
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .FirstOrDefaultAsync(_ => _.IsMain && _.Year == year))!;
+
+        var newCalendar = new Calendar
+        {
+            Year = year,
+            IsMain = false,
+            WelderId = welderId,
+            Days = new List<Day>()
+        };
+
+        foreach (var day in existedCalendar.Days)
+        {
+            var newDay = new Day
+            {
+                MonthNumber = day.MonthNumber,
+                Number = day.Number,
+                IsWorkingDay = day.IsWorkingDay,
+                WorkingShifts = CreateNewWorkingShifts(day.WorkingShifts),
+            };
+
+            newCalendar.Days.Add(newDay);
+        }
+
+        newCalendar.MainWorkingShifts = CreateNewWorkingShifts(existedCalendar.MainWorkingShifts);
+
+        var entity = _context.Calendars.Add(newCalendar).Entity;
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(entity.Id);
+    }
+
+    public async Task<CalendarDto> CreateEquipmentCalendarBasedOnMainAsync(int year, Guid equipmentId)
+    {
+        var existedCalendar = (await _context.Calendars
+            .Include(_ => _.Days!)
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .FirstOrDefaultAsync(_ => _.IsMain && _.Year == year))!;
+
+        var newCalendar = new Calendar
+        {
+            Year = year,
+            IsMain = false,
+            WeldingEquipmentId = equipmentId,
+            Days = new List<Day>()
+        };
+
+        foreach (var day in existedCalendar.Days)
+        {
+            var newDay = new Day
+            {
+                MonthNumber = day.MonthNumber,
+                Number = day.Number,
+                IsWorkingDay = day.IsWorkingDay,
+                WorkingShifts = CreateNewWorkingShifts(day.WorkingShifts),
+            };
+
+            newCalendar.Days.Add(newDay);
+        }
+
+        newCalendar.MainWorkingShifts = CreateNewWorkingShifts(existedCalendar.MainWorkingShifts);
+
+        var entity = _context.Calendars.Add(newCalendar).Entity;
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(entity.Id);
+    }
+
     private List<WorkingShift> CreateNewWorkingShifts(List<WorkingShift>? workingShifts)
     {
         var newWorkingShifts = new List<WorkingShift>();

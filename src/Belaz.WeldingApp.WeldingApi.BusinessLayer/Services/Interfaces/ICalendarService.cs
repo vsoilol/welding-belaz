@@ -28,4 +28,10 @@ public interface ICalendarService
     Task<BaseResultRequest<int[]>> GetAllExistedYearByEquipmentIdAsync(GetAllExistedYearByEquipmentIdRequest request);
 
     Task<BaseResultRequest<CalendarDto>> CreateMainCalendarByYearAsync(CreateMainCalendarByYearRequest request);
+
+    Task<BaseResultRequest<CalendarDto>> CreateWelderCalendarBasedOnMainAsync(
+        CreateWelderCalendarBasedOnMainRequest request);
+
+    Task<BaseResultRequest<CalendarDto>> CreateEquipmentCalendarBasedOnMainAsync(
+        CreateEquipmentCalendarBasedOnMainRequest request);
 }
