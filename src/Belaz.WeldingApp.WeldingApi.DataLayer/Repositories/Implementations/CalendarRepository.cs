@@ -90,4 +90,31 @@ public class CalendarRepository : ICalendarRepository
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync()!;
     }
+
+    public Task<int[]> GetAllExistedMainYearAsync()
+    {
+        return _context.Calendars
+            .Where(_ => _.IsMain)
+            .Select(_ => _.Year)
+            .Distinct()
+            .ToArrayAsync();
+    }
+
+    public Task<int[]> GetAllExistedYearByWelderIdAsync(Guid welderId)
+    {
+        return _context.Calendars
+            .Where(_ => _.WelderId == welderId)
+            .Select(_ => _.Year)
+            .Distinct()
+            .ToArrayAsync();
+    }
+
+    public Task<int[]> GetAllExistedYearByEquipmentIdAsync(Guid weldingEquipmentId)
+    {
+        return _context.Calendars
+            .Where(_ => _.WeldingEquipmentId == weldingEquipmentId)
+            .Select(_ => _.Year)
+            .Distinct()
+            .ToArrayAsync();
+    }
 }

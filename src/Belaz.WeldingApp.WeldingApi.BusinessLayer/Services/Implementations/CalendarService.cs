@@ -181,4 +181,53 @@ public class CalendarService : ICalendarService
 
         return new BaseResultRequest<CalendarDto?>(data, message);
     }
+
+    public async Task<BaseRequest<int[]>> GetAllExistedMainYearAsync()
+    {
+        var allYears = await _calendarRepository.GetAllExistedMainYearAsync();
+
+        var message = "Получение всех лет календаря для производственного календаря.";
+
+        return new BaseRequest<int[]>(allYears, message);
+    }
+
+    public async Task<BaseResultRequest<int[]>> GetAllExistedYearByWelderIdAsync(
+        GetAllExistedYearByWelderIdRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<int[]>(validationResult.Exception);
+            return new BaseResultRequest<int[]>(result);
+        }
+
+        var allYears = await _calendarRepository.GetAllExistedYearByWelderIdAsync(request.WelderId);
+
+        var welder = await _welderRepository.GetUserFullNameByIdAsync(request.WelderId);
+        var message = $"Получение всех лет календаря для " +
+                      $"сварщика {welder.MiddleName} {welder.FirstName} {welder.LastName}.";
+
+        return new BaseResultRequest<int[]>(allYears, message);
+    }
+
+    public async Task<BaseResultRequest<int[]>> GetAllExistedYearByEquipmentIdAsync(
+        GetAllExistedYearByEquipmentIdRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<int[]>(validationResult.Exception);
+            return new BaseResultRequest<int[]>(result);
+        }
+
+        var allYears = await _calendarRepository.GetAllExistedYearByEquipmentIdAsync(request.EquipmentId);
+
+        var equipment = await _weldingEquipmentRepository.GetBriefInfoByIdAsync(request.EquipmentId);
+        var message = $"Получение всех лет календаря для " +
+                      $"сварочного оборудования {equipment.FactoryNumber}.";
+
+        return new BaseResultRequest<int[]>(allYears, message);
+    }
 }

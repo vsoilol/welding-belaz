@@ -20,4 +20,10 @@ public interface ICalendarRepository
     Task<CalendarDto?> GetByEquipmentIdAndYearAsync(Guid weldingEquipmentId, int year);
 
     Task<CalendarDto> GetByIdAsync(Guid id);
+
+    Task<int[]> GetAllExistedMainYearAsync();
+    
+    Task<int[]> GetAllExistedYearByWelderIdAsync(Guid welderId);
+    
+    Task<int[]> GetAllExistedYearByEquipmentIdAsync(Guid weldingEquipmentId);
 }
