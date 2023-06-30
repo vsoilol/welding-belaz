@@ -18,5 +18,8 @@ public interface IWeldingRecordRepository
     Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber,
         int? weldingTaskNumber, Guid? welderId, Guid? masterId, Guid? equipmentId);
 
+    Task<List<WeldingRecord>> GetRecordsByDateAsync(DateTime date, TimeSpan? startTime, TimeSpan? endTime, Guid? welderId,
+        Guid? equipmentId);
+
     Task SetSequenceNumberToWeldingRecordsAsync(List<Guid> weldingRecordIds, int sequenceNumber);
 }

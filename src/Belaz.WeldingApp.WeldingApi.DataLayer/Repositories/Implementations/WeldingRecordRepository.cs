@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
@@ -126,6 +125,36 @@ public class WeldingRecordRepository : IWeldingRecordRepository
         return weldingRecords
             .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+    }
+
+    public Task<List<WeldingRecord>> GetRecordsByDateAsync(DateTime date, TimeSpan? startTime, TimeSpan? endTime,
+        Guid? welderId, Guid? equipmentId)
+    {
+        var weldingRecords = _context.WeldingRecords
+            .OrderByDescending(_ => _.Date.Date)
+            .ThenByDescending(x => x.WeldingStartTime.TotalSeconds)
+            .Where(_ => _.Date.Date == date.Date);
+
+        if (startTime is not null && endTime is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WeldingStartTime.TotalSeconds >= startTime.Value.TotalSeconds
+                            && _.WeldingEndTime.TotalSeconds <= endTime.Value.TotalSeconds);
+        }
+
+        if (welderId is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WelderId == welderId);
+        }
+
+        if (equipmentId is not null)
+        {
+            weldingRecords = weldingRecords
+                .Where(_ => _.WeldingEquipmentId == equipmentId);
+        }
+
+        return weldingRecords.ToListAsync();
     }
 
     public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber)
