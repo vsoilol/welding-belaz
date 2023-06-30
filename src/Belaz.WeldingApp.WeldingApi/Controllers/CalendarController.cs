@@ -137,7 +137,7 @@ public class CalendarController : ControllerBase
 
         return result.Result.ToOk();
     }
-    
+
     [HttpGet("years/byWelder/{welderId}")]
     [ProducesResponseType(typeof(int[]), StatusCodes.Status200OK)]
     public async Task<ActionResult<int[]>> GetAllExistedYearByWelderIdAsync([FromRoute] Guid welderId)
@@ -147,6 +147,18 @@ public class CalendarController : ControllerBase
             {
                 WelderId = welderId
             });
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
+    }
+
+    [HttpPost("based-on-main")]
+    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<CalendarDto>> CreateMainCalendarByYearAsync(
+        [FromQuery] CreateMainCalendarByYearRequest request)
+    {
+        var result = await _calendarService.CreateMainCalendarByYearAsync(request);
 
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
