@@ -28,7 +28,7 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateAsync(request, true);
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result.ToOk();
@@ -41,7 +41,7 @@ public class CalendarController : ControllerBase
         var result = await _calendarService.GetMainCalendarByYearAsync(
             new GetMainCalendarByYearRequest { Year = year }
         );
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result.ToOk();
@@ -54,7 +54,7 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.UpdateAsync(request);
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result.ToOk();
@@ -67,7 +67,7 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateForWelderAsync(request);
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result.ToOk();
@@ -80,7 +80,7 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.GetByWelderIdAndYearAsync(request);
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result.ToOk();
@@ -93,7 +93,7 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.CreateForEquipmentAsync(request);
-        
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result.ToOk();
@@ -106,7 +106,48 @@ public class CalendarController : ControllerBase
     )
     {
         var result = await _calendarService.GetByEquipmentIdAndYearAsync(request);
-        
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
+    }
+
+    [HttpGet("years")]
+    [ProducesResponseType(typeof(int[]), StatusCodes.Status200OK)]
+    public async Task<ActionResult<int[]>> GetAllExistedMainYearAsync()
+    {
+        var result = await _calendarService.GetAllExistedMainYearAsync();
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result;
+    }
+
+    [HttpGet("years/byEquipment/{equipmentId}")]
+    [ProducesResponseType(typeof(int[]), StatusCodes.Status200OK)]
+    public async Task<ActionResult<int[]>> GetAllExistedYearByEquipmentIdAsync([FromRoute] Guid equipmentId)
+    {
+        var result = await _calendarService.GetAllExistedYearByEquipmentIdAsync(
+            new GetAllExistedYearByEquipmentIdRequest
+            {
+                EquipmentId = equipmentId
+            });
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
+    }
+    
+    [HttpGet("years/byWelder/{welderId}")]
+    [ProducesResponseType(typeof(int[]), StatusCodes.Status200OK)]
+    public async Task<ActionResult<int[]>> GetAllExistedYearByWelderIdAsync([FromRoute] Guid welderId)
+    {
+        var result = await _calendarService.GetAllExistedYearByWelderIdAsync(
+            new GetAllExistedYearByWelderIdRequest()
+            {
+                WelderId = welderId
+            });
+
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
 
         return result.Result.ToOk();
