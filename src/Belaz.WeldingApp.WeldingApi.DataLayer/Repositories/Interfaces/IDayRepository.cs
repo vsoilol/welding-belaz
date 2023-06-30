@@ -16,4 +16,6 @@ public interface IDayRepository
     Task<DayDto> CreateAsync(Day day, int year, Guid? weldingEquipmentId, Guid? welderId);
 
     Task<DayDto> GetByIdAsync(Guid id);
+    
+    Task DeleteByIdAsync(Guid id);
 }
