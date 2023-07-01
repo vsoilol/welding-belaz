@@ -80,13 +80,6 @@ public class SeamPassportDocument : IDocument
             {
                 weldPassages = weldPassages.Where(_ => _.SequenceNumber == _sequenceNumber);
             }
-            
-            column.Item()
-                .Component(
-                    new BasedWeldPassageComponent(weldPassages.ToList(), 
-                        5,
-                        60)
-                );
 
             column
                 .Item()
