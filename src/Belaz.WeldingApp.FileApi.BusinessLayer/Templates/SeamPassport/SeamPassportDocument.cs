@@ -73,7 +73,7 @@ public class SeamPassportDocument : IDocument
             column.Item().Element(ComposeWeldPassageInstructionsTable);
             column.Item().Element(ComposeAdditionalInfoTable);
             column.Item().Element(ComposeInspectorTable);
-            
+
             IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages.OrderBy(_ => _.Number);
 
             if (_sequenceNumber.HasValue)
@@ -157,8 +157,8 @@ public class SeamPassportDocument : IDocument
                 .Text($"{Task.Seam.ProductionArea.Name} №{Task.Seam.ProductionArea.Number}")
                 .Style(Typography.Italic);
 
-            var workplacesText = Task.Workplaces.Any()
-                ? string.Join(", ", Task.Workplaces.Select(_ => $"№ {_.Number}"))
+            var workplaceText = Task.Workplace is not null
+                ? $"№ {Task.Workplace.Number}"
                 : "-";
 
             table
@@ -166,14 +166,14 @@ public class SeamPassportDocument : IDocument
                 .Row(5)
                 .Column(1)
                 .Element(BlockLeft)
-                .Text("Номера рабочих мест")
+                .Text("Номер рабочего места")
                 .Style(Typography.Normal);
             table
                 .Cell()
                 .Row(5)
                 .Column(2)
                 .Element(BlockLeft)
-                .Text(workplacesText)
+                .Text(workplaceText)
                 .Style(Typography.Italic);
 
             if (_sequenceNumber.HasValue)
