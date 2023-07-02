@@ -61,7 +61,7 @@ public class FileService : IFileService
 
         var result = new DocumentDto
         {
-            FileName = $"Паспорт Шва №{task.Seam.Number}.pdf",
+            FileName = $"Подробный Паспорт Шва №{task.Seam.Number}.pdf",
             FileType = FileTypes.PdfType,
             Bytes = bytes
         };
@@ -98,7 +98,7 @@ public class FileService : IFileService
 
         var result = new DocumentDto
         {
-            FileName = $"Паспорт Шва №{task.Seam.Number}.pdf",
+            FileName = $"Краткий Паспорт Шва №{task.Seam.Number}.pdf",
             FileType = FileTypes.PdfType,
             Bytes = bytes
         };

@@ -1,6 +1,7 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
+using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -77,20 +78,49 @@ public class BasedSeamPassportDocument : IDocument
             column.Item().Element(ComposeWeldPassageInstructionsTable);
             column.Item().Element(ComposeAdditionalInfoTable);
             column.Item().Element(ComposeInspectorTable);
+            
 
-            IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages.OrderBy(_ => _.Number);
+            IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages
+                .OrderBy(_ => _.Number);
 
             if (_sequenceNumber.HasValue)
             {
-                weldPassages = weldPassages.Where(_ => _.SequenceNumber == _sequenceNumber);
+                weldPassages = weldPassages
+                    .Where(_ => _.SequenceNumber == _sequenceNumber.Value);
             }
+            
+            column.Item().Element(_ => ComposeWeldPassageInfoTables(_, weldPassages.ToList()));
 
             column.Item()
                 .Component(
-                    new BasedWeldPassageComponent(weldPassages.ToList(), 
+                    new BasedWeldPassageComponent(weldPassages.ToList(),
                         _averageIntervalSeconds,
-                        _secondsToIgnoreBetweenGraphs)
+                        _secondsToIgnoreBetweenGraphs,
+                        null,
+                        null)
                 );
+
+            // var weldPassagesByNumber = weldPassages.GroupBy(_ => _.Number);
+            //
+            // foreach (var group in weldPassagesByNumber)
+            // {
+            //     var number = group.Key; // The common number for the group
+            //     var values = group.ToList();
+            //
+            //     var weldPassageInstruction =
+            //         Task.Seam.TechnologicalInstruction.WeldPassageInstructions.FirstOrDefault(
+            //             _ => _.Number == number
+            //         )!;
+            //
+            //     column.Item()
+            //         .Component(
+            //             new BasedWeldPassageComponent(values,
+            //                 _averageIntervalSeconds,
+            //                 _secondsToIgnoreBetweenGraphs,
+            //                 weldPassageInstruction,
+            //                 number)
+            //         );
+            // }
         });
     }
 
@@ -150,8 +180,8 @@ public class BasedSeamPassportDocument : IDocument
                 .Text($"{Task.Seam.ProductionArea.Name} №{Task.Seam.ProductionArea.Number}")
                 .Style(Typography.Italic);
 
-            var workplacesText = Task.Workplaces.Any()
-                ? string.Join(", ", Task.Workplaces.Select(_ => $"№ {_.Number}"))
+            var workplaceText = Task.Workplace is not null
+                ? $"№ {Task.Workplace.Number}"
                 : "-";
 
             table
@@ -159,14 +189,14 @@ public class BasedSeamPassportDocument : IDocument
                 .Row(5)
                 .Column(1)
                 .Element(BlockLeft)
-                .Text("Номера рабочих мест")
+                .Text("Номер рабочего места")
                 .Style(Typography.Normal);
             table
                 .Cell()
                 .Row(5)
                 .Column(2)
                 .Element(BlockLeft)
-                .Text(workplacesText)
+                .Text(workplaceText)
                 .Style(Typography.Italic);
 
             if (_sequenceNumber.HasValue)
@@ -745,6 +775,85 @@ public class BasedSeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text(Task.DefectiveReason ?? "-")
                 .Style(Typography.Italic);
+
+            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
+        });
+    }
+    
+    private void ComposeWeldPassageInfoTables(IContainer container, IReadOnlyList<WeldPassageDto> weldPassages)
+    {
+        container.Table(table =>
+        {
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+            });
+
+            var firstWeldPassage = weldPassages[0];
+            var lastWeldPassage = weldPassages[^1];
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Наименование параметра")
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Значение")
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Время начала сварки")
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(firstWeldPassage.WeldingStartTime.ToHoursMinutesSecondsString())
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Время окончания сварки")
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(lastWeldPassage.WeldingEndTime.ToHoursMinutesSecondsString())
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Суммарное время сварки, мин")
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text($"{(lastWeldPassage.WeldingEndTime - firstWeldPassage.WeldingStartTime).TotalMinutes:0.00}")
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Суммарное время длительного (свыше 5 с.) выхода параметров за пределы допустимых значений, мин")
+                .Style(Typography.Normal);
+
+            var sumLongTermDeviation = weldPassages.Sum(_ => _.LongTermDeviation);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(sumLongTermDeviation.HasValue ? $"{sumLongTermDeviation.Value:0.00}" : "0.00")
+                .Style(Typography.Normal);
 
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
