@@ -4,6 +4,7 @@ using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Models;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
+using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Legends;
@@ -18,20 +19,27 @@ public class BasedWeldPassageComponent : IComponent
 {
     private readonly double _averageIntervalSeconds;
     private readonly double _secondsToIgnoreBetweenGraphs;
+    private readonly int? _weldPassageNumber;
 
-    private Values recordValues;
-    private TimeSpan startWeldingTime;
-    private TimeSpan endWeldingTime;
+    private Values _recordValues;
+    private TimeSpan _startWeldingTime;
+    private TimeSpan _endWeldingTime;
 
     public List<WeldPassageDto> WeldPassages { get; }
 
+    public WeldPassageInstructionDto? Instruction { get; }
+
     public BasedWeldPassageComponent(List<WeldPassageDto> weldPassage,
         double? averageIntervalSeconds,
-        double? secondsToIgnoreBetweenGraphs)
+        double? secondsToIgnoreBetweenGraphs,
+        WeldPassageInstructionDto? instruction,
+        int? weldPassageNumber)
     {
         WeldPassages = weldPassage;
+        Instruction = instruction;
+        _weldPassageNumber = weldPassageNumber;
         _averageIntervalSeconds = averageIntervalSeconds ?? 5;
-        _secondsToIgnoreBetweenGraphs = secondsToIgnoreBetweenGraphs ?? 0;
+        _secondsToIgnoreBetweenGraphs = secondsToIgnoreBetweenGraphs ?? 60;
     }
 
     public void Compose(IContainer container)
@@ -40,10 +48,10 @@ public class BasedWeldPassageComponent : IComponent
         {
             column.Spacing(10);
 
-            recordValues = GetAllRecordsInOne();
-            startWeldingTime = WeldPassages.First().WeldingStartTime;
-            endWeldingTime = WeldPassages.Last().WeldingEndTime;
-            
+            _recordValues = GetAllRecordsInOne();
+            _startWeldingTime = WeldPassages.First().WeldingStartTime;
+            _endWeldingTime = WeldPassages.Last().WeldingEndTime;
+
             column.Item().Element(ComposeCurrencyAndVoltageTable);
             column.Item().Element(ComposeCharts);
         });
@@ -57,19 +65,177 @@ public class BasedWeldPassageComponent : IComponent
 
             var weldingCurrentChartImageBytes = GetArcVoltageChartImageByte(
                 "А",
-                $"Показания сварочного тока",
+                $"Показания сварочного тока{(_weldPassageNumber.HasValue ? $" для слоя №{_weldPassageNumber}" : "")}",
                 "Показания силы тока",
-                recordValues.WeldingCurrentValues
+                _recordValues.WeldingCurrentValues,
+                Instruction?.WeldingCurrentMin ?? null,
+                Instruction?.WeldingCurrentMax ?? null
             );
             column.Item().AlignCenter().Image(weldingCurrentChartImageBytes);
 
+            // var weldingCurrentDeviations = WeldPassages
+            //     .SelectMany(_ =>
+            //         CalculateTermDeviation(
+            //             _.WeldingStartTime,
+            //             _.WeldingCurrentValues,
+            //             Instruction?.WeldingCurrentMin ?? null,
+            //             Instruction?.WeldingCurrentMax ?? null))
+            //     .ToList();
+
+            // foreach (var weldingCurrentDeviation in weldingCurrentDeviations)
+            // {
+            //     column.Item().Element(_ => ComposeDeviationValuesTable(_, weldingCurrentDeviation));
+            //     column.Spacing(10);
+            // }
+
             var arcVoltageChartImageBytes = GetArcVoltageChartImageByte(
                 "В",
-                $"Показания напряжения на дуге",
+                $"Показания напряжения на дуге{(_weldPassageNumber.HasValue ? $" для слоя №{_weldPassageNumber}" : "")}",
                 "Показания напряжения",
-                recordValues.ArcVoltageValues
+                _recordValues.ArcVoltageValues,
+                Instruction?.ArcVoltageMin ?? null,
+                Instruction?.ArcVoltageMax ?? null
             );
             column.Item().AlignCenter().Image(arcVoltageChartImageBytes);
+
+            // var arcVoltageDeviations = WeldPassages
+            //     .SelectMany(_ =>
+            //         CalculateTermDeviation(
+            //             _.WeldingStartTime,
+            //             _.ArcVoltageValues,
+            //             Instruction?.ArcVoltageMin ?? null,
+            //             Instruction?.ArcVoltageMax ?? null))
+            //     .ToList();
+
+            // foreach (var arcVoltageDeviation in arcVoltageDeviations)
+            // {
+            //     column.Item().Element(_ => ComposeDeviationValuesTable(_, arcVoltageDeviation));
+            //     column.Spacing(10);
+            // }
+        });
+    }
+
+    private void ComposeDeviationValuesTable(IContainer container, WeldingDeviationValues deviationValue)
+    {
+        var columnsAmount = 19;
+
+        container.Table(table =>
+        {
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn(2.5f);
+
+                for (var i = 0; i < columnsAmount - 1; i++)
+                {
+                    columns.RelativeColumn();
+                }
+            });
+
+            table
+                .Cell()
+                .ColumnSpan(5)
+                .Element(BlockCenter)
+                .Text("Время начала")
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .ColumnSpan(4)
+                .Element(BlockCenter)
+                .Text(deviationValue.DeviationStart.ToHoursMinutesSecondsString())
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .ColumnSpan(6)
+                .Element(BlockCenter)
+                .Text("Время окончания")
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .ColumnSpan(4)
+                .Element(BlockCenter)
+                .Text(deviationValue.DeviationEnd.ToHoursMinutesSecondsString())
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .ColumnSpan(5)
+                .Element(BlockCenter)
+                .Text("Минимальное значение")
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .ColumnSpan(4)
+                .Element(BlockCenter)
+                .Text(deviationValue.MinInstruction.ToString(CultureInfo.InvariantCulture))
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .ColumnSpan(6)
+                .Element(BlockCenter)
+                .Text("Максимальное значение")
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .ColumnSpan(4)
+                .Element(BlockCenter)
+                .Text(deviationValue.MaxInstruction.ToString(CultureInfo.InvariantCulture))
+                .Style(Typography.Normal);
+
+            var groupSize = columnsAmount - 1;
+
+            var deviationValueSet = GetDeviationValueSets(groupSize,
+                deviationValue.Values,
+                deviationValue.DeviationValues);
+
+            foreach (var groupedArray in deviationValueSet)
+            {
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text("Значение")
+                    .Style(Typography.Normal);
+
+                for (int i = 0; i < groupSize; i++)
+                {
+                    var valueString = i > groupedArray.Values.Length - 1
+                        ? "-"
+                        : groupedArray.Values[i].ToString(CultureInfo.InvariantCulture);
+
+                    table
+                        .Cell()
+                        .Element(BlockLeft)
+                        .Text(valueString)
+                        .Style(Typography.Normal);
+                }
+
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text("Отклонение")
+                    .Style(Typography.Normal);
+
+                for (int i = 0; i < groupSize; i++)
+                {
+                    var valueString = i > groupedArray.DeviationValues.Length - 1
+                        ? "-"
+                        : groupedArray.DeviationValues[i].ToString(CultureInfo.InvariantCulture);
+
+                    table
+                        .Cell()
+                        .Element(BlockLeft)
+                        .Text(valueString)
+                        .Style(Typography.Normal);
+                }
+            }
+
+            static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
+            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
     }
 
@@ -79,7 +245,8 @@ public class BasedWeldPassageComponent : IComponent
         {
             table.ColumnsDefinition(columns =>
             {
-                columns.RelativeColumn(1.3f);
+                columns.RelativeColumn(1.5f);
+                columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
                 columns.RelativeColumn();
@@ -101,6 +268,13 @@ public class BasedWeldPassageComponent : IComponent
                     .Text("Значение")
                     .Style(Typography.Normal);
 
+                table
+                    .Cell()
+                    .RowSpan(2)
+                    .Element(BlockLeft)
+                    .Text("Обеспечение допуска")
+                    .Style(Typography.Normal);
+
                 table.Cell().Element(BlockLeft).Text("Минимальное").Style(Typography.Normal);
 
                 table.Cell().Element(BlockLeft).Text("Максимальное").Style(Typography.Normal);
@@ -116,6 +290,62 @@ public class BasedWeldPassageComponent : IComponent
                     .ToArray());
 
                 var estimation = CalculateAverageEstimation(WeldPassages);
+
+                var ensuringAccessVoltageText = WeldPassages
+                    .All(_ => !_.IsEnsuringVoltageAllowance.HasValue)
+                    ? "-"
+                    : WeldPassages.All(_ =>
+                        _.IsEnsuringVoltageAllowance.HasValue && _.IsEnsuringVoltageAllowance.Value)
+                        ? "Да"
+                        : "Нет";
+
+                var ensuringAccessCurrentText = WeldPassages
+                    .All(_ => !_.IsEnsuringCurrentAllowance.HasValue)
+                    ? "-"
+                    : WeldPassages.All(_ =>
+                        _.IsEnsuringCurrentAllowance.HasValue && _.IsEnsuringCurrentAllowance.Value)
+                        ? "Да"
+                        : "Нет";
+
+                var hasTemperatureValues = WeldPassages.Any(_ => _.IsEnsuringTemperatureAllowance.HasValue);
+
+                var ensuringAccessTemperatureText = !hasTemperatureValues
+                    ? "-"
+                    : WeldPassages.All(_ =>
+                        _.IsEnsuringTemperatureAllowance.HasValue && _.IsEnsuringTemperatureAllowance.Value)
+                        ? "Да"
+                        : "Нет";
+
+
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text("Температура предварительного нагрева, ◦С")
+                    .Style(Typography.Normal);
+
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text(hasTemperatureValues ? $"{WeldPassages.Min(_ => _.PreheatingTemperature):0.00}" : "-")
+                    .Style(Typography.Italic);
+
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text(hasTemperatureValues ? $"{WeldPassages.Max(_ => _.PreheatingTemperature):0.00}" : "-")
+                    .Style(Typography.Italic);
+
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text(hasTemperatureValues ? $"{WeldPassages.Average(_ => _.PreheatingTemperature):0.00}" : "-")
+                    .Style(Typography.ItalicBold);
+
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text(ensuringAccessTemperatureText)
+                    .Style(GetEnsuringAccessTextStyle(ensuringAccessTemperatureText));
 
                 table
                     .Cell()
@@ -144,6 +374,12 @@ public class BasedWeldPassageComponent : IComponent
                 table
                     .Cell()
                     .Element(BlockLeft)
+                    .Text(ensuringAccessCurrentText)
+                    .Style(GetEnsuringAccessTextStyle(ensuringAccessCurrentText));
+
+                table
+                    .Cell()
+                    .Element(BlockLeft)
                     .Text("Напряжение на дуге, В")
                     .Style(Typography.Normal);
 
@@ -165,17 +401,31 @@ public class BasedWeldPassageComponent : IComponent
                     .Text(voltageParameterResult.Average.ToString(CultureInfo.InvariantCulture))
                     .Style(Typography.ItalicBold);
 
-                table.Cell().Element(BlockLeft).Text("Оценка").Style(Typography.Bold);
+                table
+                    .Cell()
+                    .Element(BlockLeft)
+                    .Text(ensuringAccessVoltageText)
+                    .Style(GetEnsuringAccessTextStyle(ensuringAccessVoltageText));
 
-                table.Cell().Element(BlockLeft).Text("-").Style(Typography.Normal);
+                table.Cell().Element(BlockLeft)
+                    .Text("Оценка")
+                    .Style(Typography.Bold);
 
-                table.Cell().Element(BlockLeft).Text("-").Style(Typography.Normal);
+                table.Cell().Element(BlockLeft)
+                    .Text($"{WeldPassages.Min(_ => _.Estimation):0.00}")
+                    .Style(Typography.Normal);
+
+                table.Cell().Element(BlockLeft)
+                    .Text($"{WeldPassages.Max(_ => _.Estimation):0.00}")
+                    .Style(Typography.Normal);
 
                 table
                     .Cell()
                     .Element(BlockLeft)
-                    .Text(DocumentExtensions.CheckValueForNull(Math.Round(estimation, 2)))
+                    .Text($"{estimation:0.00}")
                     .Style(Typography.ItalicBold);
+
+                table.Cell().Element(BlockLeft).Text("-").Style(Typography.Normal);
             });
 
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
@@ -201,7 +451,9 @@ public class BasedWeldPassageComponent : IComponent
         string measurementUnit,
         string title,
         string mainPlotTitle,
-        double[] values
+        double[] values,
+        double? min,
+        double? max
     )
     {
         var model = new PlotModel
@@ -230,7 +482,7 @@ public class BasedWeldPassageComponent : IComponent
             StrokeThickness = 2,
         };
 
-        var weldingStartTimeTemp = startWeldingTime;
+        var weldingStartTimeTemp = _startWeldingTime;
         var times = values
             .Select(x =>
             {
@@ -241,10 +493,32 @@ public class BasedWeldPassageComponent : IComponent
             })
             .ToArray();
 
-        var minValueTime = TimeSpanAxis.ToDouble(startWeldingTime);
-        var maxValueTime = TimeSpanAxis.ToDouble(endWeldingTime);
+        var minValueTime = TimeSpanAxis.ToDouble(_startWeldingTime);
+        var maxValueTime = TimeSpanAxis.ToDouble(_endWeldingTime);
 
         var step = Math.Round((maxValueTime - minValueTime) / (double)28, 2);
+
+        if (max is not null && min is not null)
+        {
+            var maxLine = GetStraightLine(
+                $"Максимум, {measurementUnit}",
+                OxyColors.Blue,
+                _startWeldingTime,
+                _endWeldingTime,
+                (double)max
+            );
+
+            var minLine = GetStraightLine(
+                $"Минимум, {measurementUnit}",
+                OxyColors.Green,
+                _startWeldingTime,
+                _endWeldingTime,
+                (double)min
+            );
+
+            model.Series.Add(maxLine);
+            model.Series.Add(minLine);
+        }
 
         for (int i = 0; i < values.Length; i++)
         {
@@ -254,9 +528,10 @@ public class BasedWeldPassageComponent : IComponent
         model.Series.Add(main);
 
         var minValue = values.Min();
-        var maximumAxes = values.Max() + 10;
+        var maximumAxes =
+            (values.Max() + 10 < max) && max is not null ? (double)max + 10 : values.Max() + 10;
 
-        var minimumAxes = minValue - 10;
+        var minimumAxes = min < minValue && min is not null ? (double)min - 10 : minValue - 10;
 
         var valuesDifference = maximumAxes - minimumAxes;
         var leftAxesStep = 10;
@@ -395,5 +670,155 @@ public class BasedWeldPassageComponent : IComponent
         }
 
         return totalEstimationMultiplyNormalizeTime / totalNormalizeTime;
+    }
+
+    private List<WeldingDeviationValues> CalculateTermDeviation(TimeSpan weldingStart,
+        double[] values,
+        double? min,
+        double? max)
+    {
+        if (min is null || max is null)
+        {
+            return new List<WeldingDeviationValues>();
+        }
+
+        int countSequential = 0;
+
+        var weldingDeviationValues = new List<WeldingDeviationValues>();
+
+        for (var i = 0; i < values.Length; i++)
+        {
+            if (values[i] < min || values[i] > max)
+            {
+                countSequential++;
+
+                if (i != values.Length - 1)
+                    continue;
+            }
+
+            if (countSequential > 50)
+            {
+                var endIndex = i - 1;
+                var startIndex = endIndex - countSequential + 1;
+
+                var startTime = weldingStart.Add(TimeSpan.FromSeconds(startIndex * 0.1));
+                var endTime = startTime.Add(TimeSpan.FromSeconds(countSequential * 0.1));
+
+                var resultValues = values
+                    .Skip(startIndex)
+                    .Take(countSequential)
+                    .ToArray();
+
+                var deviationValues = new double[resultValues.Length];
+
+                for (var j = 0; j < resultValues.Length; j++)
+                {
+                    if (resultValues[j] > max)
+                    {
+                        deviationValues[j] = resultValues[j] - max.Value;
+                        continue;
+                    }
+
+                    if (resultValues[j] < min)
+                    {
+                        deviationValues[j] = resultValues[j] - min.Value;
+                    }
+                }
+
+                weldingDeviationValues.Add(new WeldingDeviationValues
+                {
+                    DeviationEnd = endTime,
+                    DeviationStart = startTime,
+                    Values = resultValues,
+                    DeviationValues = deviationValues,
+                    MinInstruction = min.Value,
+                    MaxInstruction = max.Value,
+                });
+            }
+
+            countSequential = 0;
+        }
+
+        return weldingDeviationValues;
+    }
+
+    private List<DeviationValueSet> GetDeviationValueSets(int groupSize, double[] weldingValues,
+        double[] weldingDeviationValues)
+    {
+        var groupsAmount = weldingValues.Length / groupSize;
+        var deviationValueSet = new List<DeviationValueSet>();
+
+        for (int i = 0; i < groupsAmount; i++)
+        {
+            if (i != groupsAmount - 1)
+            {
+                var values = weldingValues
+                    .Skip(i * groupSize)
+                    .Take(groupSize);
+                var deviationValues = weldingDeviationValues
+                    .Skip(i * groupSize)
+                    .Take(groupSize);
+
+                deviationValueSet.Add(new DeviationValueSet(values.ToArray(), deviationValues.ToArray()));
+                continue;
+            }
+
+            var lastValues = weldingValues
+                .Skip(i * groupSize)
+                .ToArray();
+            var lastDeviationValues = weldingDeviationValues
+                .Skip(i * groupSize)
+                .ToArray();
+
+            if (lastValues.Length() > groupSize)
+            {
+                deviationValueSet.Add(new DeviationValueSet(lastValues
+                        .Take(groupSize)
+                        .ToArray(),
+                    lastDeviationValues
+                        .Take(groupSize)
+                        .ToArray()));
+
+                deviationValueSet.Add(new DeviationValueSet(lastValues
+                        .Skip(groupSize)
+                        .ToArray(),
+                    lastDeviationValues
+                        .Skip(groupSize)
+                        .ToArray()));
+                continue;
+            }
+
+            deviationValueSet.Add(new DeviationValueSet(lastValues, lastDeviationValues));
+        }
+
+        return deviationValueSet;
+    }
+
+    private LineSeries GetStraightLine(
+        string title,
+        OxyColor color,
+        TimeSpan startTime,
+        TimeSpan endTime,
+        double value
+    )
+    {
+        var line = new LineSeries()
+        {
+            Title = title,
+            Color = color,
+            StrokeThickness = 2,
+        };
+
+        line.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(startTime), value));
+        line.Points.Add(
+            new DataPoint(TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(2))), value)
+        );
+
+        return line;
+    }
+
+    private TextStyle GetEnsuringAccessTextStyle(string ensuringAccess)
+    {
+        return ensuringAccess == "Да" ? Typography.Italic : Typography.ItalicBold;
     }
 }
