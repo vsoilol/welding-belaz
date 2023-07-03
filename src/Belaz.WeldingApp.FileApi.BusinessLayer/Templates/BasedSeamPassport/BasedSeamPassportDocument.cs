@@ -96,7 +96,7 @@ public class BasedSeamPassportDocument : IDocument
                     new BasedWeldPassageComponent(weldPassages.ToList(),
                         _averageIntervalSeconds,
                         _secondsToIgnoreBetweenGraphs,
-                        null,
+                        Task.Seam.TechnologicalInstruction.WeldPassageInstructions,
                         null)
                 );
 
@@ -148,7 +148,10 @@ public class BasedSeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text("Наименование предприятия / организации")
                 .Style(Typography.Normal);
-            table.Cell().Row(2).Column(2).Element(BlockLeft).Text("-").Style(Typography.Italic);
+            
+            table.Cell().Row(2).Column(2).Element(BlockLeft)
+                .Text("ОАО «БЕЛАЗ» - управляющая компания холдинга «БЕЛАЗ-ХОЛДИНГ»")
+                .Style(Typography.Italic);
 
             table
                 .Cell()
@@ -344,21 +347,6 @@ public class BasedSeamPassportDocument : IDocument
 
             table
                 .Cell()
-                .Row(2)
-                .Column(1)
-                .Element(BlockLeft)
-                .Text("Срок действия удостоверения руководителя сварочных работ (мастера)")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Row(2)
-                .Column(2)
-                .Element(BlockLeft)
-                .Text(Task.Master.CertificateValidityPeriod ?? "-")
-                .Style(Typography.Italic);
-
-            table
-                .Cell()
                 .Row(3)
                 .Column(1)
                 .Element(BlockLeft)
@@ -374,21 +362,6 @@ public class BasedSeamPassportDocument : IDocument
                         ? "-"
                         : $"{Task.Welder.MiddleName} {Task.Welder.FirstName} {Task.Welder.LastName}"
                 )
-                .Style(Typography.Italic);
-
-            table
-                .Cell()
-                .Row(4)
-                .Column(1)
-                .Element(BlockLeft)
-                .Text("Срок действия удостоверения")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Row(4)
-                .Column(2)
-                .Element(BlockLeft)
-                .Text(Task.Welder?.CertificateValidityPeriod ?? "-")
                 .Style(Typography.Italic);
 
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
@@ -658,69 +631,25 @@ public class BasedSeamPassportDocument : IDocument
                 columns.RelativeColumn();
             });
 
-            table.Cell().Element(BlockLeft).Text("Основной материал").Style(Typography.Normal);
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text(Task.BasicMaterial ?? "-")
-                .Style(Typography.Italic);
-
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text("№ сертификата (партии) основного материала")
+            table.Cell().Element(BlockLeft)
+                .Text("Наименование сварочного материала")
                 .Style(Typography.Normal);
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text(
-                    Task.MainMaterialBatchNumber is null ? "-" : $"№ {Task.MainMaterialBatchNumber}"
-                )
-                .Style(Typography.Italic);
-
-            table.Cell().Element(BlockLeft).Text("Сварочные материалы").Style(Typography.Normal);
+            
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text(Task.WeldingMaterial ?? "-")
+                .Style(Typography.Italic);
+
+            table.Cell().Element(BlockLeft)
+                .Text("Номер партии сварочного материала")
+                .Style(Typography.Normal);
+            
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(Task.WeldingMaterialBatchNumber ?? "-")
                 .Style(Typography.ItalicBold);
-
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text("№ сертификата (партии) св. материала")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text(
-                    Task.WeldingMaterialBatchNumber is null
-                        ? "-"
-                        : $"№ {Task.WeldingMaterialBatchNumber}"
-                )
-                .Style(Typography.Italic);
-
-            table.Cell().Element(BlockLeft).Text("Защитный газ").Style(Typography.Normal);
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text(Task.ProtectiveGas ?? "-")
-                .Style(Typography.Italic);
-
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text("№ сертификата (партии) на защитный газ")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text(
-                    Task.ProtectiveGasBatchNumber is not null
-                        ? $"№ {Task.ProtectiveGasBatchNumber}"
-                        : "-"
-                )
-                .Style(Typography.Italic);
 
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
@@ -745,17 +674,6 @@ public class BasedSeamPassportDocument : IDocument
                         ? "-"
                         : $"{Task.Inspector.MiddleName} {Task.Inspector.FirstName} {Task.Inspector.LastName}"
                 )
-                .Style(Typography.Italic);
-
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text("Срок действия удостоверения")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Element(BlockLeft)
-                .Text(Task.Inspector?.CertificateValidityPeriod ?? "-")
                 .Style(Typography.Italic);
 
             table
