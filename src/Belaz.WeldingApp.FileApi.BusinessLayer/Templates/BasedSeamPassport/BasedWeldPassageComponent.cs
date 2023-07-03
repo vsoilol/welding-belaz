@@ -27,16 +27,16 @@ public class BasedWeldPassageComponent : IComponent
 
     public List<WeldPassageDto> WeldPassages { get; }
 
-    public WeldPassageInstructionDto? Instruction { get; }
+    public List<WeldPassageInstructionDto> Instructions { get; }
 
     public BasedWeldPassageComponent(List<WeldPassageDto> weldPassage,
         double? averageIntervalSeconds,
         double? secondsToIgnoreBetweenGraphs,
-        WeldPassageInstructionDto? instruction,
+        List<WeldPassageInstructionDto> instructions,
         int? weldPassageNumber)
     {
         WeldPassages = weldPassage;
-        Instruction = instruction;
+        Instructions = instructions;
         _weldPassageNumber = weldPassageNumber;
         _averageIntervalSeconds = averageIntervalSeconds ?? 5;
         _secondsToIgnoreBetweenGraphs = secondsToIgnoreBetweenGraphs ?? 60;
@@ -68,8 +68,15 @@ public class BasedWeldPassageComponent : IComponent
                 $"Показания сварочного тока{(_weldPassageNumber.HasValue ? $" для слоя №{_weldPassageNumber}" : "")}",
                 "Показания силы тока",
                 _recordValues.WeldingCurrentValues,
-                Instruction?.WeldingCurrentMin ?? null,
-                Instruction?.WeldingCurrentMax ?? null
+                Instructions
+                    .Select((_, index) => new WeldPassageLineInfo
+                    {
+                        WeldPassageNumber = _.Number,
+                        Min = _.WeldingCurrentMin,
+                        Max = _.WeldingCurrentMax,
+                        MinColor = WeldPassageLineInfo.Colors[index * 2],
+                        MaxColor = WeldPassageLineInfo.Colors[index * 2 + 1],
+                    }).ToList()
             );
             column.Item().AlignCenter().Image(weldingCurrentChartImageBytes);
 
@@ -93,8 +100,15 @@ public class BasedWeldPassageComponent : IComponent
                 $"Показания напряжения на дуге{(_weldPassageNumber.HasValue ? $" для слоя №{_weldPassageNumber}" : "")}",
                 "Показания напряжения",
                 _recordValues.ArcVoltageValues,
-                Instruction?.ArcVoltageMin ?? null,
-                Instruction?.ArcVoltageMax ?? null
+                Instructions
+                    .Select((_, index) => new WeldPassageLineInfo
+                    {
+                        WeldPassageNumber = _.Number,
+                        Min = _.ArcVoltageMin,
+                        Max = _.ArcVoltageMax,
+                        MinColor = WeldPassageLineInfo.Colors[index * 2],
+                        MaxColor = WeldPassageLineInfo.Colors[index * 2 + 1],
+                    }).ToList()
             );
             column.Item().AlignCenter().Image(arcVoltageChartImageBytes);
 
@@ -452,8 +466,9 @@ public class BasedWeldPassageComponent : IComponent
         string title,
         string mainPlotTitle,
         double[] values,
-        double? min,
-        double? max
+        IReadOnlyList<WeldPassageLineInfo> weldPassageLineInfos
+        // double? min,
+        //     double? max
     )
     {
         var model = new PlotModel
@@ -498,27 +513,34 @@ public class BasedWeldPassageComponent : IComponent
 
         var step = Math.Round((maxValueTime - minValueTime) / (double)28, 2);
 
-        if (max is not null && min is not null)
+        foreach (var weldPassageLine in weldPassageLineInfos)
         {
-            var maxLine = GetStraightLine(
-                $"Максимум, {measurementUnit}",
-                OxyColors.Blue,
-                _startWeldingTime,
-                _endWeldingTime,
-                (double)max
-            );
-
+            if (weldPassageLine.Max is null || weldPassageLine.Min is null)
+            {
+                continue;
+            }
+            
             var minLine = GetStraightLine(
-                $"Минимум, {measurementUnit}",
-                OxyColors.Green,
+                $"Минимум для слоя №{weldPassageLine.WeldPassageNumber}, {measurementUnit}",
+                weldPassageLine.MinColor,
                 _startWeldingTime,
                 _endWeldingTime,
-                (double)min
+                (double)weldPassageLine.Min
             );
 
-            model.Series.Add(maxLine);
+            var maxLine = GetStraightLine(
+                $"Максимум для слоя №{weldPassageLine.WeldPassageNumber}, {measurementUnit}",
+                weldPassageLine.MaxColor,
+                _startWeldingTime,
+                _endWeldingTime,
+                (double)weldPassageLine.Max
+            );
+
             model.Series.Add(minLine);
+            model.Series.Add(maxLine);
+            
         }
+
 
         for (int i = 0; i < values.Length; i++)
         {
@@ -527,11 +549,18 @@ public class BasedWeldPassageComponent : IComponent
 
         model.Series.Add(main);
 
+        var max = weldPassageLineInfos.Any(_ => _.Max.HasValue)
+            ? weldPassageLineInfos.Max(_ => _.Max)
+            : null;
+        var min = weldPassageLineInfos.Any(_ => _.Min.HasValue)
+            ? weldPassageLineInfos.Max(_ => _.Min)
+            : null;
+
         var minValue = values.Min();
         var maximumAxes =
-            (values.Max() + 10 < max) && max is not null ? (double)max + 10 : values.Max() + 10;
+            (values.Max() + 10 < max) && max.HasValue ? (double)max + 10 : values.Max() + 10;
 
-        var minimumAxes = min < minValue && min is not null ? (double)min - 10 : minValue - 10;
+        var minimumAxes = min < minValue && min.HasValue ? (double)min - 10 : minValue - 10;
 
         var valuesDifference = maximumAxes - minimumAxes;
         var leftAxesStep = 10;
