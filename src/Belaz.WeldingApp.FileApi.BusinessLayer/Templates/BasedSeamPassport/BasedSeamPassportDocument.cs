@@ -78,7 +78,7 @@ public class BasedSeamPassportDocument : IDocument
             column.Item().Element(ComposeWeldPassageInstructionsTable);
             column.Item().Element(ComposeAdditionalInfoTable);
             column.Item().Element(ComposeInspectorTable);
-            
+
 
             IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages
                 .OrderBy(_ => _.Number);
@@ -88,7 +88,7 @@ public class BasedSeamPassportDocument : IDocument
                 weldPassages = weldPassages
                     .Where(_ => _.SequenceNumber == _sequenceNumber.Value);
             }
-            
+
             column.Item().Element(_ => ComposeWeldPassageInfoTables(_, weldPassages.ToList()));
 
             column.Item()
@@ -148,7 +148,7 @@ public class BasedSeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text("Наименование предприятия / организации")
                 .Style(Typography.Normal);
-            
+
             table.Cell().Row(2).Column(2).Element(BlockLeft)
                 .Text("ОАО «БЕЛАЗ» - управляющая компания холдинга «БЕЛАЗ-ХОЛДИНГ»")
                 .Style(Typography.Italic);
@@ -202,23 +202,8 @@ public class BasedSeamPassportDocument : IDocument
                 .Text(workplaceText)
                 .Style(Typography.Italic);
 
-            if (_sequenceNumber.HasValue)
-            {
-                table
-                    .Cell()
-                    .Row(6)
-                    .Column(1)
-                    .Element(BlockLeft)
-                    .Text("Порядковый номер")
-                    .Style(Typography.Normal);
-                table
-                    .Cell()
-                    .Row(6)
-                    .Column(2)
-                    .Element(BlockLeft)
-                    .Text(_sequenceNumber.Value.ToString())
-                    .Style(Typography.Italic);
-            }
+            
+
 
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
@@ -270,10 +255,25 @@ public class BasedSeamPassportDocument : IDocument
                 .Style(Typography.Normal);
             var productInfo = GetProductInfo(Task.Seam.Product);
             table.Cell().Column(2).Element(BlockLeft).Text(productInfo).Style(Typography.Italic);
-
+            
             table
                 .Cell()
                 .Row(2)
+                .Column(1)
+                .Element(BlockLeft)
+                .Text("Порядковый номер изделия")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Row(2)
+                .Column(2)
+                .Element(BlockLeft)
+                .Text(_sequenceNumber.HasValue ? _sequenceNumber.Value.ToString() : "-")
+                .Style(Typography.Italic);
+
+            table
+                .Cell()
+                .Row(3)
                 .Column(1)
                 .Element(BlockLeft)
                 .Text("Наименование узла")
@@ -281,7 +281,7 @@ public class BasedSeamPassportDocument : IDocument
             var knotInfo = GetProductInfo(Task.Seam.Knot);
             table
                 .Cell()
-                .Row(2)
+                .Row(3)
                 .Column(2)
                 .Element(BlockLeft)
                 .Text(knotInfo)
@@ -289,7 +289,7 @@ public class BasedSeamPassportDocument : IDocument
 
             table
                 .Cell()
-                .Row(3)
+                .Row(4)
                 .Column(1)
                 .Element(BlockLeft)
                 .Text("Наименование детали")
@@ -297,7 +297,7 @@ public class BasedSeamPassportDocument : IDocument
             var detailInfo = GetProductInfo(Task.Seam.Detail);
             table
                 .Cell()
-                .Row(3)
+                .Row(4)
                 .Column(2)
                 .Element(BlockLeft)
                 .Text(detailInfo)
@@ -305,14 +305,14 @@ public class BasedSeamPassportDocument : IDocument
 
             table
                 .Cell()
-                .Row(4)
+                .Row(5)
                 .Column(1)
                 .Element(BlockLeft)
                 .Text("Номер сварного шва")
                 .Style(Typography.Normal);
             table
                 .Cell()
-                .Row(4)
+                .Row(5)
                 .Column(2)
                 .Element(BlockLeft)
                 .Text($"№{Task.Seam.Number}")
@@ -634,7 +634,7 @@ public class BasedSeamPassportDocument : IDocument
             table.Cell().Element(BlockLeft)
                 .Text("Наименование сварочного материала")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
@@ -644,7 +644,7 @@ public class BasedSeamPassportDocument : IDocument
             table.Cell().Element(BlockLeft)
                 .Text("Номер партии сварочного материала")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
@@ -697,7 +697,7 @@ public class BasedSeamPassportDocument : IDocument
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
     }
-    
+
     private void ComposeWeldPassageInfoTables(IContainer container, IReadOnlyList<WeldPassageDto> weldPassages)
     {
         container.Table(table =>
@@ -716,49 +716,49 @@ public class BasedSeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text("Наименование параметра")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text("Значение")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text("Время начала сварки")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text(firstWeldPassage.WeldingStartTime.ToHoursMinutesSecondsString())
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text("Время окончания сварки")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text(lastWeldPassage.WeldingEndTime.ToHoursMinutesSecondsString())
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text("Суммарное время сварки, мин")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
                 .Text($"{(lastWeldPassage.WeldingEndTime - firstWeldPassage.WeldingStartTime).TotalMinutes:0.00}")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
@@ -766,7 +766,7 @@ public class BasedSeamPassportDocument : IDocument
                 .Style(Typography.Normal);
 
             var sumLongTermDeviation = weldPassages.Sum(_ => _.LongTermDeviation);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)

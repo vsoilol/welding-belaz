@@ -4,17 +4,7 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Models;
 
 public class WeldPassageLineInfo
 {
-    public double? Min { get; set; }
-    
-    public double? Max { get; set; }
-
-    public int WeldPassageNumber { get; set; }
-
-    public OxyColor MinColor { get; set; }
-    
-    public OxyColor MaxColor { get; set; }
-
-    public static OxyColor[] Colors = new OxyColor[]
+    public static readonly OxyColor[] Colors =
     {
         OxyColors.Blue,
         OxyColors.Green,
@@ -27,4 +17,29 @@ public class WeldPassageLineInfo
         OxyColors.Magenta,
         OxyColors.DarkOrange,
     };
+
+    public double? Min { get; }
+
+    public double? Max { get; }
+
+    public int WeldPassageNumber { get; }
+
+    public OxyColor MinColor { get; }
+
+    public OxyColor MaxColor { get; }
+
+    public TimeSpan StartTime { get; }
+
+    public TimeSpan EndTime { get; }
+
+    public WeldPassageLineInfo(int weldPassageNumber, double? min, double? max, TimeSpan startTime, TimeSpan endTime)
+    {
+        WeldPassageNumber = weldPassageNumber;
+        Min = min;
+        Max = max;
+        StartTime = startTime;
+        EndTime = endTime;
+        MinColor = Colors[(weldPassageNumber - 1) * 2];
+        MaxColor = Colors[(weldPassageNumber - 1) * 2 + 1];
+    }
 }

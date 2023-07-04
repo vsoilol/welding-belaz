@@ -48,9 +48,10 @@ public class BasedWeldPassageComponent : IComponent
         {
             column.Spacing(10);
 
-            _recordValues = GetAllRecordsInOne();
             _startWeldingTime = WeldPassages.First().WeldingStartTime;
             _endWeldingTime = WeldPassages.Last().WeldingEndTime;
+            _recordValues = GetAllRecordsInOne();
+
 
             column.Item().Element(ComposeCurrencyAndVoltageTable);
             column.Item().Element(ComposeCharts);
@@ -63,20 +64,14 @@ public class BasedWeldPassageComponent : IComponent
         {
             column.Spacing(2);
 
+            var weldPassageLineInfo = GetWeldPassageLineInfos(_recordValues, Instructions);
+
             var weldingCurrentChartImageBytes = GetArcVoltageChartImageByte(
                 "А",
                 $"Показания сварочного тока{(_weldPassageNumber.HasValue ? $" для слоя №{_weldPassageNumber}" : "")}",
                 "Показания силы тока",
-                _recordValues.WeldingCurrentValues,
-                Instructions
-                    .Select((_, index) => new WeldPassageLineInfo
-                    {
-                        WeldPassageNumber = _.Number,
-                        Min = _.WeldingCurrentMin,
-                        Max = _.WeldingCurrentMax,
-                        MinColor = WeldPassageLineInfo.Colors[index * 2],
-                        MaxColor = WeldPassageLineInfo.Colors[index * 2 + 1],
-                    }).ToList()
+                _recordValues.WeldingCurrentValues.Select(_ => _.Value).ToArray(),
+                weldPassageLineInfo.amperages.ToList()
             );
             column.Item().AlignCenter().Image(weldingCurrentChartImageBytes);
 
@@ -99,16 +94,8 @@ public class BasedWeldPassageComponent : IComponent
                 "В",
                 $"Показания напряжения на дуге{(_weldPassageNumber.HasValue ? $" для слоя №{_weldPassageNumber}" : "")}",
                 "Показания напряжения",
-                _recordValues.ArcVoltageValues,
-                Instructions
-                    .Select((_, index) => new WeldPassageLineInfo
-                    {
-                        WeldPassageNumber = _.Number,
-                        Min = _.ArcVoltageMin,
-                        Max = _.ArcVoltageMax,
-                        MinColor = WeldPassageLineInfo.Colors[index * 2],
-                        MaxColor = WeldPassageLineInfo.Colors[index * 2 + 1],
-                    }).ToList()
+                _recordValues.ArcVoltageValues.Select(_ => _.Value).ToArray(),
+                weldPassageLineInfo.voltages.ToList()
             );
             column.Item().AlignCenter().Image(arcVoltageChartImageBytes);
 
@@ -497,13 +484,15 @@ public class BasedWeldPassageComponent : IComponent
             StrokeThickness = 2,
         };
 
+        var secondPerValue = (_endWeldingTime - _startWeldingTime).TotalSeconds / values.Length();
+
         var weldingStartTimeTemp = _startWeldingTime;
         var times = values
             .Select(x =>
             {
                 var time = weldingStartTimeTemp;
                 weldingStartTimeTemp = weldingStartTimeTemp
-                    .Add(TimeSpan.FromSeconds(_averageIntervalSeconds));
+                    .Add(TimeSpan.FromSeconds(secondPerValue));
                 return time;
             })
             .ToArray();
@@ -513,34 +502,10 @@ public class BasedWeldPassageComponent : IComponent
 
         var step = Math.Round((maxValueTime - minValueTime) / (double)28, 2);
 
-        foreach (var weldPassageLine in weldPassageLineInfos)
-        {
-            if (weldPassageLine.Max is null || weldPassageLine.Min is null)
-            {
-                continue;
-            }
-            
-            var minLine = GetStraightLine(
-                $"Минимум для слоя №{weldPassageLine.WeldPassageNumber}, {measurementUnit}",
-                weldPassageLine.MinColor,
-                _startWeldingTime,
-                _endWeldingTime,
-                (double)weldPassageLine.Min
-            );
-
-            var maxLine = GetStraightLine(
-                $"Максимум для слоя №{weldPassageLine.WeldPassageNumber}, {measurementUnit}",
-                weldPassageLine.MaxColor,
-                _startWeldingTime,
-                _endWeldingTime,
-                (double)weldPassageLine.Max
-            );
-
-            model.Series.Add(minLine);
-            model.Series.Add(maxLine);
-            
-        }
-
+        var displayTitleMap = weldPassageLineInfos
+            .Select(_ => _.WeldPassageNumber)
+            .Distinct()
+            .ToDictionary(x => x, _ => true);
 
         for (int i = 0; i < values.Length; i++)
         {
@@ -548,6 +513,42 @@ public class BasedWeldPassageComponent : IComponent
         }
 
         model.Series.Add(main);
+        
+        foreach (var weldPassageLine in weldPassageLineInfos)
+        {
+            if (weldPassageLine.Max is null || weldPassageLine.Min is null)
+            {
+                continue;
+            }
+
+            var isTitleDisplay = displayTitleMap[weldPassageLine.WeldPassageNumber];
+
+            var minLine = GetStraightLine(
+                $"Минимум для слоя №{weldPassageLine.WeldPassageNumber}, {measurementUnit}",
+                weldPassageLine.MinColor,
+                weldPassageLine.StartTime,
+                weldPassageLine.EndTime,
+                weldPassageLine.Min.Value,
+                isTitleDisplay
+            );
+
+            var maxLine = GetStraightLine(
+                $"Максимум для слоя №{weldPassageLine.WeldPassageNumber}, {measurementUnit}",
+                weldPassageLine.MaxColor,
+                weldPassageLine.StartTime,
+                weldPassageLine.EndTime,
+                weldPassageLine.Max.Value,
+                isTitleDisplay
+            );
+
+            if (isTitleDisplay)
+            {
+                displayTitleMap[weldPassageLine.WeldPassageNumber] = false;
+            }
+
+            model.Series.Add(minLine);
+            model.Series.Add(maxLine);
+        }
 
         var max = weldPassageLineInfos.Any(_ => _.Max.HasValue)
             ? weldPassageLineInfos.Max(_ => _.Max)
@@ -620,8 +621,8 @@ public class BasedWeldPassageComponent : IComponent
     {
         var valuesLenght = WeldPassages.Count;
 
-        var resultAmperages = new List<double>();
-        var resultVoltages = new List<double>();
+        var resultAmperages = new List<WeldingValue>();
+        var resultVoltages = new List<WeldingValue>();
 
         for (var i = 0; i < valuesLenght; i++)
         {
@@ -632,8 +633,8 @@ public class BasedWeldPassageComponent : IComponent
                 .GetAveragedValues(WeldPassages[i].ArcVoltageValues, 0.1,
                     _averageIntervalSeconds);
 
-            resultAmperages.AddRange(amperages);
-            resultVoltages.AddRange(voltages);
+            resultAmperages.AddRange(amperages.Select(_ => new WeldingValue(_, WeldPassages[i].Number)));
+            resultVoltages.AddRange(voltages.Select(_ => new WeldingValue(_, WeldPassages[i].Number)));
 
             if (i >= valuesLenght - 2)
             {
@@ -654,9 +655,13 @@ public class BasedWeldPassageComponent : IComponent
 
             var zeroValues = Enumerable.Repeat(0.0, valuesAmount).ToArray();
 
-            resultAmperages.AddRange(zeroValues);
-            resultVoltages.AddRange(zeroValues);
+            resultAmperages.AddRange(zeroValues.Select(_ => new WeldingValue(_)));
+            resultVoltages.AddRange(zeroValues.Select(_ => new WeldingValue(_)));
         }
+
+        var secondPerValue = (_endWeldingTime - _startWeldingTime).TotalSeconds / resultAmperages.Length();
+        var endTimeResu = _startWeldingTime.Add(TimeSpan.FromSeconds(secondPerValue * resultAmperages.Length()));
+        var endTimeResusdfdsf = _startWeldingTime.Add(TimeSpan.FromSeconds(secondPerValue * 3375));
 
         return new Values
         {
@@ -823,24 +828,104 @@ public class BasedWeldPassageComponent : IComponent
         return deviationValueSet;
     }
 
+    private (IReadOnlyCollection<WeldPassageLineInfo> amperages, IReadOnlyCollection<WeldPassageLineInfo> voltages)
+        GetWeldPassageLineInfos(
+            Values weldingValues,
+            IList<WeldPassageInstructionDto> instructions)
+    {
+        var amperagesResult = new List<WeldPassageLineInfo>();
+        var voltagesResult = new List<WeldPassageLineInfo>();
+
+        var asasd = weldingValues.WeldingCurrentValues
+            .Select((_, i) => new { WeldPassageNumber = _.WeldPassageNumber, Value = _.Value, Index = i });
+
+        var weldPassageWithIndex = weldingValues.WeldingCurrentValues
+            .Select((_, index) => new { Index = index, WeldPassageNumber = _.WeldPassageNumber })
+            .Where(_ => _.WeldPassageNumber.HasValue)
+            .Select(_ => new WeldPassageNumberWithIndex(_.WeldPassageNumber!.Value, _.Index))
+            .ToArray();
+
+        var valueLength = weldPassageWithIndex.Length();
+        var secondPerValue = (_endWeldingTime - _startWeldingTime).TotalSeconds /
+                             weldingValues.WeldingCurrentValues.Length();
+
+        var firstWeldPassageNumberWithIndex = weldPassageWithIndex.First();
+
+        var lastWeldPassageNumberWithIndex = weldPassageWithIndex.Last();
+
+        var startTime = _startWeldingTime;
+        var lastIndex = firstWeldPassageNumberWithIndex.Index;
+
+        var lastWeldPassageNumber = firstWeldPassageNumberWithIndex.WeldPassageNumber;
+
+        for (var i = firstWeldPassageNumberWithIndex.Index; i < valueLength; i++)
+        {
+            if (lastWeldPassageNumber == weldPassageWithIndex[i].WeldPassageNumber)
+            {
+                continue;
+            }
+
+            var instruction = instructions.FirstOrDefault(_ => _.Number == lastWeldPassageNumber)!;
+            var endTime = _startWeldingTime.Add(TimeSpan
+                .FromSeconds((weldPassageWithIndex[i - 1].Index + 1) * secondPerValue));
+
+            amperagesResult.Add(new WeldPassageLineInfo(lastWeldPassageNumber,
+                instruction.WeldingCurrentMin,
+                instruction.WeldingCurrentMax,
+                startTime, endTime));
+
+            voltagesResult.Add(new WeldPassageLineInfo(lastWeldPassageNumber,
+                instruction.ArcVoltageMin,
+                instruction.ArcVoltageMax,
+                startTime, endTime));
+
+            startTime = _startWeldingTime.Add(TimeSpan
+                .FromSeconds((weldPassageWithIndex[i].Index + 1) * secondPerValue));
+            lastWeldPassageNumber = weldPassageWithIndex[i].WeldPassageNumber;
+        }
+
+        if (lastWeldPassageNumber == lastWeldPassageNumberWithIndex.WeldPassageNumber)
+        {
+            var instruction = instructions.FirstOrDefault(_ => _.Number == lastWeldPassageNumber)!;
+            var endTime = _endWeldingTime;
+
+            amperagesResult.Add(new WeldPassageLineInfo(lastWeldPassageNumber,
+                instruction.WeldingCurrentMin,
+                instruction.WeldingCurrentMax,
+                startTime, endTime));
+
+            voltagesResult.Add(new WeldPassageLineInfo(lastWeldPassageNumber,
+                instruction.ArcVoltageMin,
+                instruction.ArcVoltageMax,
+                startTime, endTime));
+        }
+
+        return (amperagesResult, voltagesResult);
+    }
+
     private LineSeries GetStraightLine(
         string title,
         OxyColor color,
         TimeSpan startTime,
         TimeSpan endTime,
-        double value
+        double value,
+        bool isTitleDisplay
     )
     {
-        var line = new LineSeries()
+        var line = new LineSeries
         {
-            Title = title,
+            Title = isTitleDisplay ? title : null,
             Color = color,
             StrokeThickness = 2,
         };
 
-        line.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(startTime), value));
+        var lineStartTime = startTime.Add(TimeSpan.FromMinutes(-1));
+        var lineEndTime = endTime.Add(TimeSpan.FromMinutes(1));
+
+        line.Points.Add(new DataPoint(
+            TimeSpanAxis.ToDouble(lineStartTime <= _startWeldingTime ? _startWeldingTime : lineStartTime), value));
         line.Points.Add(
-            new DataPoint(TimeSpanAxis.ToDouble(endTime.Add(TimeSpan.FromSeconds(2))), value)
+            new DataPoint(TimeSpanAxis.ToDouble(lineEndTime >= _endWeldingTime ? _endWeldingTime : lineEndTime), value)
         );
 
         return line;
