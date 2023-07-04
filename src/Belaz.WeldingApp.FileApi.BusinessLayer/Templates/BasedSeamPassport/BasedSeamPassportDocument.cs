@@ -255,10 +255,25 @@ public class BasedSeamPassportDocument : IDocument
                 .Style(Typography.Normal);
             var productInfo = GetProductInfo(Task.Seam.Product);
             table.Cell().Column(2).Element(BlockLeft).Text(productInfo).Style(Typography.Italic);
-
+            
             table
                 .Cell()
                 .Row(2)
+                .Column(1)
+                .Element(BlockLeft)
+                .Text("Порядковый номер изделия")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Row(2)
+                .Column(2)
+                .Element(BlockLeft)
+                .Text(_sequenceNumber.HasValue ? _sequenceNumber.Value.ToString() : "-")
+                .Style(Typography.Italic);
+
+            table
+                .Cell()
+                .Row(3)
                 .Column(1)
                 .Element(BlockLeft)
                 .Text("Наименование узла")
@@ -266,7 +281,7 @@ public class BasedSeamPassportDocument : IDocument
             var knotInfo = GetProductInfo(Task.Seam.Knot);
             table
                 .Cell()
-                .Row(2)
+                .Row(3)
                 .Column(2)
                 .Element(BlockLeft)
                 .Text(knotInfo)
@@ -274,7 +289,7 @@ public class BasedSeamPassportDocument : IDocument
 
             table
                 .Cell()
-                .Row(3)
+                .Row(4)
                 .Column(1)
                 .Element(BlockLeft)
                 .Text("Наименование детали")
@@ -282,7 +297,7 @@ public class BasedSeamPassportDocument : IDocument
             var detailInfo = GetProductInfo(Task.Seam.Detail);
             table
                 .Cell()
-                .Row(3)
+                .Row(4)
                 .Column(2)
                 .Element(BlockLeft)
                 .Text(detailInfo)
@@ -290,32 +305,17 @@ public class BasedSeamPassportDocument : IDocument
 
             table
                 .Cell()
-                .Row(4)
+                .Row(5)
                 .Column(1)
                 .Element(BlockLeft)
                 .Text("Номер сварного шва")
                 .Style(Typography.Normal);
             table
                 .Cell()
-                .Row(4)
+                .Row(5)
                 .Column(2)
                 .Element(BlockLeft)
                 .Text($"№{Task.Seam.Number}")
-                .Style(Typography.Italic);
-            
-            table
-                .Cell()
-                .Row(5)
-                .Column(1)
-                .Element(BlockLeft)
-                .Text("Порядковый номер изделия")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Row(5)
-                .Column(2)
-                .Element(BlockLeft)
-                .Text(_sequenceNumber.HasValue ? _sequenceNumber.Value.ToString() : "-")
                 .Style(Typography.Italic);
 
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
