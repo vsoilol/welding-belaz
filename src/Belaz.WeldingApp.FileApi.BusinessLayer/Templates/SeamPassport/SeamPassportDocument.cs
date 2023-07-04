@@ -125,7 +125,7 @@ public class SeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text("Наименование предприятия / организации")
                 .Style(Typography.Normal);
-            
+
             table.Cell().Row(2).Column(2).Element(BlockLeft)
                 .Text("ОАО «БЕЛАЗ» - управляющая компания холдинга «БЕЛАЗ-ХОЛДИНГ»")
                 .Style(Typography.Italic);
@@ -178,24 +178,6 @@ public class SeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text(workplaceText)
                 .Style(Typography.Italic);
-
-            if (_sequenceNumber.HasValue)
-            {
-                table
-                    .Cell()
-                    .Row(6)
-                    .Column(1)
-                    .Element(BlockLeft)
-                    .Text("Порядковый номер")
-                    .Style(Typography.Normal);
-                table
-                    .Cell()
-                    .Row(6)
-                    .Column(2)
-                    .Element(BlockLeft)
-                    .Text(_sequenceNumber.Value.ToString())
-                    .Style(Typography.Italic);
-            }
 
             static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
@@ -294,6 +276,21 @@ public class SeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text($"№{Task.Seam.Number}")
                 .Style(Typography.Italic);
+            
+            table
+                .Cell()
+                .Row(5)
+                .Column(1)
+                .Element(BlockLeft)
+                .Text("Порядковый номер изделия")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Row(5)
+                .Column(2)
+                .Element(BlockLeft)
+                .Text(_sequenceNumber.HasValue ? _sequenceNumber.Value.ToString() : "-")
+                .Style(Typography.Italic);
 
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
@@ -329,7 +326,7 @@ public class SeamPassportDocument : IDocument
                 .Element(BlockLeft)
                 .Text("Сварщик")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Row(3)
@@ -612,7 +609,7 @@ public class SeamPassportDocument : IDocument
             table.Cell().Element(BlockLeft)
                 .Text("Наименование сварочного материала")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
@@ -622,7 +619,7 @@ public class SeamPassportDocument : IDocument
             table.Cell().Element(BlockLeft)
                 .Text("Номер партии сварочного материала")
                 .Style(Typography.Normal);
-            
+
             table
                 .Cell()
                 .Element(BlockLeft)
