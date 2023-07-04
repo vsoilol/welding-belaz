@@ -49,6 +49,8 @@ public static class ControllerExtensions
                     Title = "Validation Error",
                     Errors = validationErrors
                 });
+            case NoDataException noDataException:
+                return new NoContentResult();
         }
 
         return new BadRequestObjectResult(new BadRequestResult

@@ -5,6 +5,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+using Belaz.WeldingApp.WeldingApi.Domain.Exceptions;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using LanguageExt;
 using LanguageExt.Common;
@@ -116,6 +117,11 @@ public class WeldingRecordService : IWeldingRecordService
 
         var records = await _weldingRecordRepository
             .GetRecordsByDateAsync(date, startTime, endTime, request.WelderId, request.EquipmentId);
+
+        if (!records.Any())
+        {
+            return new Result<RecordBriefDto>(new NoDataException());
+        }
 
         var recordValues = GetAllRecordsInOne(records);
 
