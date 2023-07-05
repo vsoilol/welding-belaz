@@ -89,16 +89,20 @@ public class BasedSeamPassportDocument : IDocument
                     .Where(_ => _.SequenceNumber == _sequenceNumber.Value);
             }
 
-            column.Item().Element(_ => ComposeWeldPassageInfoTables(_, weldPassages.ToList()));
+            var weldPassageDtos = weldPassages as WeldPassageDto[] ?? weldPassages.ToArray();
+            if (weldPassageDtos.Any())
+            {
+                column.Item().Element(_ => ComposeWeldPassageInfoTables(_, weldPassageDtos.ToList()));
 
-            column.Item()
-                .Component(
-                    new BasedWeldPassageComponent(weldPassages.ToList(),
-                        _averageIntervalSeconds,
-                        _secondsToIgnoreBetweenGraphs,
-                        Task.Seam.TechnologicalInstruction.WeldPassageInstructions,
-                        null)
-                );
+                column.Item()
+                    .Component(
+                        new BasedWeldPassageComponent(weldPassageDtos.ToList(),
+                            _averageIntervalSeconds,
+                            _secondsToIgnoreBetweenGraphs,
+                            Task.Seam.TechnologicalInstruction.WeldPassageInstructions,
+                            null)
+                    );
+            }
 
             // var weldPassagesByNumber = weldPassages.GroupBy(_ => _.Number);
             //
