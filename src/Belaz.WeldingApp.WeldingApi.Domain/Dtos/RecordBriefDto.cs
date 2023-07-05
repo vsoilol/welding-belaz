@@ -2,6 +2,10 @@
 
 public class RecordBriefDto
 {
+    public string WeldingStartTime { get; set; } = null!;
+    
+    public string WeldingEndTime { get; set; } = null!;
+    
     /// <summary>
     /// Значения сварочного тока
     /// </summary>
