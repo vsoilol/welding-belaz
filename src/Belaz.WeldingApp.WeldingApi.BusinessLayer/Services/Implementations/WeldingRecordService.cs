@@ -135,6 +135,8 @@ public class WeldingRecordService : IWeldingRecordService
 
         return new Result<RecordBriefDto>(new RecordBriefDto
         {
+            WeldingStartTime = records.First().WeldingStartTime.ToHoursMinutesString(),
+            WeldingEndTime = records.Last().WeldingEndTime.ToHoursMinutesString(),
             ArcVoltageValues = recordValues.ArcVoltageValues,
             WeldingCurrentValues = recordValues.WeldingCurrentValues,
             WeldingCurrentMin = currencyParameterResult.Min,
