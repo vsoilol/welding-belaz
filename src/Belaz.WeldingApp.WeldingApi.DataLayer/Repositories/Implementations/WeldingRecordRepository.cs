@@ -131,8 +131,8 @@ public class WeldingRecordRepository : IWeldingRecordRepository
         Guid? welderId, Guid? equipmentId)
     {
         var weldingRecords = _context.WeldingRecords
-            .OrderByDescending(_ => _.Date.Date)
-            .ThenByDescending(x => x.WeldingStartTime.TotalSeconds)
+            .OrderBy(_ => _.Date.Date)
+            .ThenBy(x => x.WeldingStartTime.TotalSeconds)
             .Where(_ => _.Date.Date == date.Date);
 
         if (startTime is not null && endTime is not null)
