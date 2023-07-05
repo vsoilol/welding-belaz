@@ -70,7 +70,7 @@ services:
     depends_on:
       - belaz-postgres
       - welding-api
-      
+  
   registar-api:
     image: welding-app/registar-api
     restart: on-failure
@@ -80,6 +80,7 @@ services:
     user: "1001:1001"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker.Production"
+      REAL_API: "http://weldingcontrol.bru.by:4001"
     ports:
       - "5013:80"
     volumes:
@@ -88,7 +89,7 @@ services:
     depends_on:
       - belaz-postgres
       - welding-api
-        
+  
   gateway-api:
     image: welding-app/gateway-api
     build:
@@ -112,7 +113,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "4001:80"
-        
+  
   belaz-client:
     image: belaz-client
     build:
