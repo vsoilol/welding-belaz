@@ -10,6 +10,9 @@ export { default as TasksContainer } from "./Tasks.container";
 
 export { default as RecordsContainer } from "./Records.container";
 
+export { default as ModesContainer } from "./Modes.container";
+
+
 export { default as ReportsContainer } from "./Reports.container"; 
 
 export { default as CreatesUserContainer } from "./CreatesUser.container"; 
@@ -17,7 +20,6 @@ export { default as CreatesUserContainer } from "./CreatesUser.container";
 export { default as ProductionCalendarContainer } from "./ProductionCalendar.container"; 
 
 
- 
 
 
 

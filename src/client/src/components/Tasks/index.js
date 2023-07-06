@@ -71,23 +71,14 @@ export const Tasks = ({
   loadEquipment
 
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const dispatch = useDispatch();
 
-
-
-  const [production, setProduction] = useState(1);
-
-  const [welderValue, setwelderValue] = useState("");
-
-
-  ////Массивы продукции
-  const [productArray, setproductArray] = useState([]);
-
-  const [valueAreaId, setvalueAreaId] = useState(null);
-
-
+  const [modalDataPasport, setmodalDataPasport] = useState(false);
+  const [SequenceNumber, setSequenceNumber] = useState("");
+  const [NumberTask, setNumberTask] = useState(null);
+  
+  
   const formattedMasters = masters?.map((item) => {
     return {
       value: item.masterId,
@@ -161,10 +152,10 @@ export const Tasks = ({
       label: item?.otkName,
     };
   });
-  const getDocument = (numberTask,seamNumber) => {
-    const number = tasks?.tasks.find(task => task.number === numberTask).id;
-    
-    api.get(`file/seamPassport?TaskId=${number}&SequenceNumber=${seamNumber??null}`, {
+  const getDocument = () => {
+ 
+    const number = tasks?.tasks.find(task => task.number === NumberTask).id; 
+    api.get(`file/seamPassport?TaskId=${number}&SequenceNumber=${SequenceNumber ?? null}`, {
       responseType: "arraybuffer",
       dataType: "blob",
     })
@@ -174,21 +165,12 @@ export const Tasks = ({
         });
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
+        setSequenceNumber(null)
       })
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
 
 
-  function comparisonDate(weldingDate) {
-    const targetDate = new Date(weldingDate)
-    const now = new Date();
-
-    if (now <= targetDate) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   const columns = [
     (userRole === "Admin" || userRole === "Master") && {
@@ -203,7 +185,7 @@ export const Tasks = ({
           }}
         />
       ),
-    },  
+    },
     {
       title: "№ задания»", field: "number",
     },
@@ -333,10 +315,23 @@ export const Tasks = ({
     },
     {
       field: "url",
+      title: "Скачать краткий паспорт",
+      render: (rowData) => (
+        <div
+          onClick={() => { setgetFailebasedPassport(true); setBasedPassportId(rowData.id) }}
+          className={styles.downloadButton}
+        >
+          <SaveIcon />
+        </div>
+      ),
+      width: 54,
+    },
+    {
+      field: "url",
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => getDocument(rowData?.number , rowData?.seamNumber)}
+          onClick={() => {setmodalDataPasport(true) ; setNumberTask(rowData?.number)  } }
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -449,13 +444,13 @@ export const Tasks = ({
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => getDocument(rowData?.number)}
+          onClick={() => {setmodalDataPasport(true) ; setNumberTask(rowData?.number)} }
           className={styles.downloadButton}
         >
           <SaveIcon />
         </div>
       ),
-      width: 54,
+      width: 54
     },
   ];
 
@@ -477,7 +472,7 @@ export const Tasks = ({
   };
   const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
   const [AmountManufactured, setAmountManufactured] = useState(0);
-  const [idPlan, setidPlan] = useState(""); 
+  const [idPlan, setidPlan] = useState("");
 
 
 
@@ -538,6 +533,9 @@ export const Tasks = ({
   const [isChecked2, setIsChecked2] = useState(false);
   const [dateTask, setdateTask] = useState("");
 
+
+
+
   const handleCheckboxChange = (checkboxIndex) => {
     if (checkboxIndex === 1) {
       setIsChecked1(true);
@@ -556,6 +554,34 @@ export const Tasks = ({
       .then((response) => { loadTasks() })
       .catch((error) => { });
   }
+
+
+
+  const [getFailebasedPassport, setgetFailebasedPassport] = useState(false);
+  const [BasedPassportId, setBasedPassportId] = useState("");
+
+  const initialValuesbasedPassport = {
+    SequenceNumber: "",
+    AverageIntervalSeconds: "",
+    SecondsToIgnoreBetweenGraphs: "",
+  }
+
+  function GetFailebasedPassport(params) {
+    api.get(`file/based-seam-passport?TaskId=${BasedPassportId}&SequenceNumber=${params.SequenceNumber ?? ""}&AverageIntervalSeconds=${params.AverageIntervalSeconds ?? ""}&SecondsToIgnoreBetweenGraphs=${params.SecondsToIgnoreBetweenGraphs ?? ""}`,
+      {
+        responseType: "arraybuffer",
+        dataType: "blob",
+      })
+      .then((response) => {
+        const file = new Blob([response["data"]], {
+          type: "application/pdf",
+        });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
+      })
+      .catch((error) => { });
+
+  }
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -564,7 +590,7 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-      {userRole === "Admin" || userRole === "Master"|| userRole === "Inspector"
+      {userRole === "Admin" || userRole === "Master" || userRole === "Inspector"
         ? (
           <Tabs
             value={value_panel}
@@ -595,7 +621,7 @@ export const Tasks = ({
             data={tasks?.tasks}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master" 
+              userRole === "Admin" || userRole === "Master"
                 ? [
                   {
                     icon: "edit",
@@ -787,6 +813,151 @@ export const Tasks = ({
             )}
           </Formik>
         </ModalWindow>
+
+        {/*Получение паспорта */}
+        <ModalWindow
+          isOpen={getFailebasedPassport}
+          headerText="Получение паспорта"
+          setIsOpen={(state) => {
+            setgetFailebasedPassport(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValuesbasedPassport}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setgetFailebasedPassport(false)
+              GetFailebasedPassport(variables, id)
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
+
+                <div>
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      value={values.SequenceNumber}
+                      name="SequenceNumber"
+                      placeholder="Интервал времени в секундах"
+                      onBlur={handleBlur}
+                      autocomplete="off"
+                    />
+                  </div>
+
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      value={values.AverageIntervalSeconds}
+                      name="AverageIntervalSeconds"
+                      placeholder="Порядковый номер"
+                      onBlur={handleBlur}
+                      autocomplete="off"
+                    />
+                  </div>
+
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      value={values.SecondsToIgnoreBetweenGraphs}
+                      name="SecondsToIgnoreBetweenGraphs"
+                      placeholder="Интервал времени"
+                      onBlur={handleBlur}
+                      autocomplete="off"
+                    />
+                  </div>
+
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Получить
+                    </Button>
+                  </div>
+
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
+
+        {/*Получение паспорта */}
+        <ModalWindow
+          isOpen={modalDataPasport}
+          headerText="Получение паспорта"
+          setIsOpen={(state) => {
+            setmodalDataPasport(false)
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValuesbasedPassport}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setmodalDataPasport(false)
+              getDocument()
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
+
+                <div>
+                   
+
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        setSequenceNumber(e.target.value);
+                      }}
+                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      value={SequenceNumber}
+                      name="SequenceNumber"
+                      placeholder="Порядковый номер"
+                      onBlur={handleBlur}
+                      autocomplete="off"
+                    />
+                  </div>
+
+                  
+
+                  <div className={styles.row}>
+                    <Button
+                      type="submit"
+                    >
+                      Получить
+                    </Button>
+                  </div>
+
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
+
       </div>
     </div>
   );

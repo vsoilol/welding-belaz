@@ -13,7 +13,7 @@ import { Formik } from "formik";
 import Button from "components/shared/Button";
 import Input from "components/shared/Input";
 
-
+import api from "services/api";
 
 import {
   LineChart,
@@ -44,13 +44,32 @@ const StyleNewTable = {
 }
 
 
-export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole }) => {
+export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole , loadRecords }) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
 
+  const [updatedRecords, setUpdatedRecords] = useState(records);
 
-  const [dateStart, setdateEnd] = useState("");
 
+
+  const [dateStart, setdateStart] = useState("");
+  const [dateEnd, setdataEnd] = useState("");
+
+
+
+  const [valueDisplay, setvalueDisplay] = useState(false);
+  const [arrayIdRecords, setarrayIdRecords] = useState([]);
+
+  const handleCheckboxChange = (id) => {
+    if (arrayIdRecords.includes(id)) {
+      // Если id уже есть в массиве, удаляем его
+      setarrayIdRecords(arrayIdRecords.filter((itemId) => itemId !== id));
+    } else {
+      // Если id отсутствует в массиве, добавляем его
+      setarrayIdRecords([...arrayIdRecords, id]);
+    }
+    
+  }; 
   const columns = [
     (userRole === "Admin" /*|| userRole === "Master"*/) && {
       title: "Удаление",
@@ -65,14 +84,23 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
         />
       ),
     },
+    (valueDisplay) && {
+      title: "Выбор",
+      render: (rowData) => (
+        <input
+          type="checkbox"
+          value={rowData.id}
+          checked={arrayIdRecords.includes(rowData.id)}
+          onChange={() => handleCheckboxChange(rowData.id)}
+        />
+      ),
+    },
+    { title: "Порядковый номер", field: "sequenceNumber" },
     { title: "Дата", field: "date" },
     { title: "Номер шва", field: "seamNumber" },
     { title: "Длительность сварки", field: "weldingDuration" },
     { title: "Сварочный ток (среднее)", field: "weldingCurrentAverage", },
     { title: "Напряжение на дуге (среднее)", field: "arcVoltageAverage", },
-
-
-
     { title: "Время начала сварки", field: "weldingStart" },
     {
       title: "Номер задания ( ссылка )",
@@ -87,11 +115,8 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
             <p>{`  -   `} </p>
           );
         }
-
-
       }
     },
-
     {
       title: "Сварщик", render: (rowData) => (
         <div>
@@ -101,7 +126,6 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
         </div>
       ),
     },
-
     {
       title: "Оборудование ( номер )", render: (rowData) => (
         <div>
@@ -110,7 +134,6 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
         </div>
       ),
     },
-
     {
       title: "Руководитель сварочных работ (мастер): ", render: (rowData) => (
         <div>
@@ -274,58 +297,186 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole })
     );
   };
 
+
+
+
+
+  ////Отобразить с отклонениями / без отклонений
+  const [selectedOption, setSelectedOption] = useState('all');
+  function handleOptionChange(option) {
+    setSelectedOption(option);
+    handleShowRecords(option)
+  };
+
+  function handleShowRecords(option) {
+    if (option === 'withViolations') {
+      setUpdatedRecords(records.filter((item) => item.areDeviations === true))
+    } else if (option === 'withoutViolations') {
+      setUpdatedRecords(records.filter((item) => item.areDeviations === false))
+    } else {
+      setUpdatedRecords(records)
+    }
+  };
+
+  function showRecordsPeriod() {  
+
+    let StartDate = new Date(dateStart).toLocaleDateString('ru-RU', { dateStyle: 'short' })
+    let EndDate =  new Date(dateEnd).toLocaleDateString('ru-RU', { dateStyle: 'short' })  
+    api.get(`weldingRecord/period?StartDate=${StartDate}&EndDate=${EndDate}&SeamNumber=&WeldingTaskNumber=&WelderId=&MasterId=&EquipmentId=` ).then((response) => { 
+      setSelectedOption("Period")
+      setUpdatedRecords(response.data) 
+    })
+      .catch((error) => { }); 
+     
+  }
+
+
+  const [serialnumber, setserialnumber] = useState("");
+
+
+  function Setserialnumber() {
+
+    api.post(`/weldingRecord/set-sequence-number`,{
+      "weldingRecordIds": arrayIdRecords,
+      "sequenceNumber": Number(serialnumber)
+    }).then((response) => { 
+      loadRecords()
+      setvalueDisplay(false)
+    })
+      .catch((error) => { }); 
+  }
+
   return (
     <div className={styles.tableWrapper}>
 
-     {/*  <div className={styles.tools}>
+      <div className={styles.tools}>
 
-        <div>
-          <label></label>
-          <Input
-            onChange={(e) => {
-              setdateEnd(e.target.value)
-            }}
-            width="200"
-            style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-            value={dateStart}
-            name="dateStart"
-            placeholder="Дата"
-            type="text"
-            onFocus={(e) => {
-              e.currentTarget.type = "date";
-            }}
-            autocomplete="off"
-          />
+        <div className={styles.datePeriod}>
+          <label>Вывод записей за период </label>
+          <div className={`${styles.period}`}>
+            <label>Начало </label> <br></br>
+            <Input
+              onChange={(e) => {
+                setdateStart(e.target.value)
+              }}
+              width="200"
+              style={{ height: 40, padding: "0 20px 0 30px", width: 200 }}
+              value={dateStart}
+              name="dateStart"
+              placeholder="Дата"
+              type="text"
+              onFocus={(e) => {
+                e.currentTarget.type = "date";
+              }}
+              autocomplete="off"
+            />
+            <br></br>
+            <br></br>
+            <label>Конец </label> <br></br>
+            <Input
+              onChange={(e) => {
+                setdataEnd(e.target.value)
+              }}
+              width="200"
+              style={{ height: 40, padding: "0 20px 0 30px", width: 200 }}
+              value={dateEnd}
+              name="dateEnd"
+              placeholder="Дата"
+              type="text"
+              onFocus={(e) => {
+                e.currentTarget.type = "date";
+              }}
+              autocomplete="off"
+            />
+
+          </div>
+          <button className={styles.sort} onClick={showRecordsPeriod}>Отобразить</button>
         </div>
-        <div>
-          <label></label>
-          <Input
-            onChange={(e) => {
-              setdateEnd(e.target.value)
-            }}
-            width="200"
-            style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-            value={dateStart}
-            name="dateStart"
-            placeholder="Дата"
-            type="text"
-            onFocus={(e) => {
-              e.currentTarget.type = "date";
-            }}
-            autocomplete="off"
-          />
+
+        <div className={styles.datePeriod}>
+          <label>Вывод записей  <br></br>без нарушений / с нарушениями </label>
+          <div className={styles.period}>
+            <label className={styles.labelradio}>
+              <input
+                type="radio"
+                value="withViolations"
+                checked={selectedOption === 'withViolations'}
+                onChange={() => handleOptionChange('withViolations')}
+              />
+              С нарушениями
+            </label>
+            <label className={styles.labelradio}>
+              <input
+                type="radio"
+                value="withoutViolations"
+                checked={selectedOption === 'withoutViolations'}
+                onChange={() => handleOptionChange('withoutViolations')}
+              />
+              Без нарушений
+            </label>
+            <label className={styles.labelradio}>
+              <input
+                type="radio"
+                value="all"
+                checked={selectedOption === 'all'}
+                onChange={() => handleOptionChange('all')}
+              />
+              Все записи
+            </label>
+          </div>
         </div>
 
 
+        <div className={styles.datePeriod}>
+          <label>Установить порядковый <br></br>номер для записей </label>
+          {valueDisplay
+            ? (
+              <div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      setserialnumber(e.target.value);
+                    }}
+                    style={{
+                      width: 150,
+                      height: 40,
+                      padding: "0px 0px 0px 20px"
+                    }}
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={serialnumber}
+                    name={`serialnumber`}
+                    placeholder="Порядковый номер "
+                    autocomplete="off"
+                  />
+                </div>
+                <button className={styles.sort} onClick={()=>{Setserialnumber()}} >
+                  Установить
+                </button>
+              </div>
 
-      </div> */}
+            )
+            : null
+
+          }
+
+          <div className={styles.period}>
+            <button className={styles.sort} onClick={(e) => { setvalueDisplay(!valueDisplay) }} >
+               {!valueDisplay?"Установить":"Отменить"} 
+            </button>
+          </div>
+        </div>
+
+
+      </div>
 
       <Table
         title="Записи"
         actions={[]}
         columns={columns}
         renderRowChildren={renderRowChildren}
-        data={records}
+        data={selectedOption === "all" ? records : updatedRecords}
         isLoading={isRequesting}
         deleteAction={null}
       />

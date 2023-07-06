@@ -86,11 +86,7 @@ export const ExecutorsTable = ({
   };
 
 
-  const initialValuesPass = {
-    oldPass: "",
-    newPass: "",
-
-  };
+   
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
   const [idExecutor, setidExecutor] = useState("");
   const requiredKeys = [
@@ -524,20 +520,7 @@ export const ExecutorsTable = ({
   }
 
 
-
-
-  function changePasswod(params) {
-    api.post(`/auth/change-password`, {
-      "oldPassword": params.oldPass,
-      "newPassword": params.newPass,
-      "confirmNewPassword": params.newPass,
-    })
-      .then((response) => {
-
-      })
-      .catch((error) => { });
-  }
-
+ 
   return (
     <>
       <div className={styles.tableWrapper}>
@@ -822,74 +805,7 @@ export const ExecutorsTable = ({
 
 
 
-      {/*Поменять пароль*/}
-      <ModalWindow
-        isOpen={valuemodalPass}
-        headerText="Поменять пароль"
-        setIsOpen={(state) => {
-          setvaluemodalPass(false)
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={initialValuesPass}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setvaluemodalPass(false)
-            changePasswod(variables)
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <form onSubmit={handleSubmit}>
-
-              <div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, width: 562 }}
-                    value={values.oldPass}
-                    name="oldPass"
-                    placeholder="Старый пароль"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ height: 40, width: 562 }}
-                    value={values.newPass}
-                    name="newPass"
-                    placeholder="Новый пароль"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-
-                <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Изменить
-                  </Button>
-                </div>
-
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
+     
 
     </>
   );

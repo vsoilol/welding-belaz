@@ -23,6 +23,7 @@ export const Header = ({
     { name: "Производство", route: "/production" },
     { name: "Технологические процессы сборки и сварки", route: "/tex-proc-welding" },
     { name: "Записи", route: "/records" },
+    (userRole === "Admin" || userRole === "Master") && { name: "Режимы сварки", route: "/welding-modes" },
     { name: "Календарь", route: "/proiz-calendar" },
     { name: "Задания", route: "/tasks" },
     { name: "Отчеты", route: "/reports" },

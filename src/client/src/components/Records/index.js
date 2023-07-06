@@ -8,8 +8,7 @@ export const Records = ({ records, loadRecords, isRequesting, deleteRecords , us
   useEffect(() => {
     loadRecords();
   }, [loadRecords]);
-
-  console.log(userRole)
+ 
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -23,6 +22,7 @@ export const Records = ({ records, loadRecords, isRequesting, deleteRecords , us
         records={records}
         userRole={userRole}
         deleteRecords={deleteRecords}
+        loadRecords={loadRecords}
       />
     </div>
   );

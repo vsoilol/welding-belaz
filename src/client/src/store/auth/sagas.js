@@ -15,12 +15,13 @@ const {
 } = errorActions;
 
 function* logIn({ payload }) {
-  try {
-    //   /account/login
+  try {  
     const { data } = yield call(api.post, `/auth/login`, {
       userName: payload.email,
       password: payload.password,
     });
+
+    localStorage.setItem("isFirstLogin",data.isFirstLogin) 
     yield put(logInSuccess(data));
 
     auth.setToken(data.token);
