@@ -85,7 +85,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
         var query = QueryWeldPassagesWithFilters(productId, seamId, startDate, endDate);
 
         query = query.Where(
-            wp => wp.WeldingRecord.WeldingEquipment.Workplaces.Any(wp => wp.Id == workplaceId)
+            wp => wp.WeldingRecord.Welder.WorkplaceId == workplaceId
         );
 
         return query
@@ -133,7 +133,7 @@ internal class WeldPassageRepository : IWeldPassageRepository
 
         if (productId is not null)
         {
-            query = query.Where(_ => _.WeldingTask.SeamAccount.Seam.ProductId == productId);   
+            query = query.Where(_ => _.WeldingTask.SeamAccount.Seam.ProductId == productId);
         }
 
         if (seamId is not null)

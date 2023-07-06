@@ -16,4 +16,6 @@ public interface IWorkingShiftRepository
     Task<List<WorkingShiftDto>> GetAllWorkingShiftsByEquipmentIdAndYearAsync(int year, Guid equipmentId);
 
     Task<WorkingShiftDto> GetByIdAsync(Guid id);
+    
+    Task DeleteByIdAsync(Guid id);
 }

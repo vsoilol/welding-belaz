@@ -83,6 +83,14 @@ public class WorkingShiftRepository : IWorkingShiftRepository
             .FirstOrDefaultAsync()!;
     }
 
+    public async Task DeleteByIdAsync(Guid id)
+    {
+        var deletedShift = (await _context.WorkingShifts.FirstOrDefaultAsync(_ => _.Id == id))!;
+
+        _context.WorkingShifts.Remove(deletedShift);
+        await _context.SaveChangesAsync();
+    }
+
     private async Task CreateCalendarIfNotExit(WorkingShift entity, int year)
     {
         var calendar = await _context.Calendars

@@ -66,18 +66,8 @@ internal class SeamAccountRepository : ISeamAccountRepository
     {
         var query = QuerySeamAccountsWithFilters(startDate, endDate);
 
-        query = query.Where(
-            _ =>
-                _.WeldingTasks.Any(
-                    wt =>
-                        wt.WeldPassages.Any(
-                            wp =>
-                                wp.WeldingRecord.WeldingEquipment.Workplaces.Any(
-                                    workplace => workplace.Id == workplaceId
-                                )
-                        )
-                )
-        );
+        query = query.Where(_ => _.WeldingTasks
+            .Any(wt => wt.Welder!.WorkplaceId == workplaceId));
 
         if (!(await query.AnyAsync()))
         {

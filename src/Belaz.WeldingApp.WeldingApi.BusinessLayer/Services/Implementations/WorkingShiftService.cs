@@ -6,6 +6,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -57,7 +58,8 @@ public class WorkingShiftService : IWorkingShiftService
         return await _workingShiftRepository.UpdateAsync(workingShift);
     }
 
-    public async Task<Result<List<WorkingShiftDto>>> GetAllMainWorkingShiftsByYearAsync(GetAllMainWorkingShiftsByYearRequest request)
+    public async Task<Result<List<WorkingShiftDto>>> GetAllMainWorkingShiftsByYearAsync(
+        GetAllMainWorkingShiftsByYearRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -69,7 +71,8 @@ public class WorkingShiftService : IWorkingShiftService
         return await _workingShiftRepository.GetAllMainWorkingShiftsByYearAsync(request.Year);
     }
 
-    public async Task<Result<List<WorkingShiftDto>>> GetAllWorkingShiftsByEquipmentIdAndYearAsync(GetAllWorkingShiftsByEquipmentIdAndYearRequest request)
+    public async Task<Result<List<WorkingShiftDto>>> GetAllWorkingShiftsByEquipmentIdAndYearAsync(
+        GetAllWorkingShiftsByEquipmentIdAndYearRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -82,7 +85,8 @@ public class WorkingShiftService : IWorkingShiftService
             .GetAllWorkingShiftsByEquipmentIdAndYearAsync(request.Year, request.EquipmentId);
     }
 
-    public async Task<Result<List<WorkingShiftDto>>> GetAllWorkingShiftsByWelderIdAndYearAsync(GetAllWorkingShiftsByWelderIdAndYearRequest request)
+    public async Task<Result<List<WorkingShiftDto>>> GetAllWorkingShiftsByWelderIdAndYearAsync(
+        GetAllWorkingShiftsByWelderIdAndYearRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
@@ -93,5 +97,18 @@ public class WorkingShiftService : IWorkingShiftService
 
         return await _workingShiftRepository
             .GetAllWorkingShiftsByWelderIdAndYearAsync(request.Year, request.WelderId);
+    }
+
+    public async Task<Result<Unit>> DeleteWorkingShiftAsync(DeleteWorkingShiftRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        await _workingShiftRepository.DeleteByIdAsync(request.Id);
+        return Unit.Default;
     }
 }

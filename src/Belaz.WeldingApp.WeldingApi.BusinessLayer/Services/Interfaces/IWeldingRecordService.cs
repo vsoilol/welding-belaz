@@ -20,4 +20,6 @@ public interface IWeldingRecordService
     Task<WeldingRecordLimitDto> GetWeldingRecordLimitAsync();
 
     Task<Result<Unit>> SetSequenceNumberToWeldingRecordsAsync(SetSequenceNumberToWeldingRecordsRequest request);
+
+    Task<Result<RecordBriefDto>> GetRecordValuesByDateAsync(GetRecordValuesByDateRequest request);
 }

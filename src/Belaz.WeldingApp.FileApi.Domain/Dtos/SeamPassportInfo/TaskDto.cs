@@ -58,7 +58,7 @@ public class TaskDto : IMapFrom<WeldingTask>
 
     public List<WeldPassageDto> WeldPassages { get; set; } = null!;
 
-    public List<Workplace> Workplaces { get; set; } = null!;
+    public Workplace? Workplace { get; set; }
 
     public string? DefectiveReason { get; set; }
 
@@ -82,12 +82,9 @@ public class TaskDto : IMapFrom<WeldingTask>
                     opt.MapFrom(x => x.WeldPassages.First().WeldingRecord.WeldingEquipment)
             )
             .ForMember(
-                dto => dto.Workplaces,
+                dto => dto.Workplace,
                 opt =>
-                    opt.MapFrom(x => x.WeldPassages.Any()
-                        ? x.WeldPassages.First()
-                            .WeldingRecord.WeldingEquipment.Workplaces
-                        : new List<Workplace>())
+                    opt.MapFrom(x => x.Welder!.Workplace)
             )
             .ForMember(
                 dto => dto.DefectiveReason,

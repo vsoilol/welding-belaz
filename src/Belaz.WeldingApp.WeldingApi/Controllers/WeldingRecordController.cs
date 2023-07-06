@@ -78,4 +78,13 @@ public class WeldingRecordController : ControllerBase
         var result = await _weldingRecordService.SetSequenceNumberToWeldingRecordsAsync(request);
         return result.ToOk();
     }
+    
+    [HttpGet("full")]
+    [ProducesResponseType(typeof(RecordBriefDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<RecordBriefDto>> GetRecordValuesByDateAsync(
+        [FromQuery] GetRecordValuesByDateRequest request)
+    {
+        var result = await _weldingRecordService.GetRecordValuesByDateAsync(request);
+        return result.ToOk();
+    }
 }

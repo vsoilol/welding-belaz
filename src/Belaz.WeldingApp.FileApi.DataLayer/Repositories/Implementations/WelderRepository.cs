@@ -157,7 +157,7 @@ internal class WelderRepository : IWelderRepository
     {
         var conditionTimesQuery = _context.WeldingEquipmentConditionTimes.Where(
             w =>
-                w.WeldingEquipment.Workplaces.Any(wp => wp.Id == workplaceId)
+                w.Welder.WorkplaceId == workplaceId
                 && w.Date >= startDate
                 && w.Date <= endDate
         );
