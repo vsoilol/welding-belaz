@@ -6,6 +6,8 @@ import ToolTip from "components/shared/ToolTip";
 import { ExecutorsTable } from "components/Executors/components";
 import { executorsImage } from "assets/pics";
 
+import { ChangePassword } from "components/change-password";
+
 export const Executors = ({
   loadExecutors,
   addExecutor,
@@ -31,7 +33,7 @@ export const Executors = ({
   loadArea,
   equipment,
   workshop,
-  area, 
+  area,
   workplace,
   loadPlace
 }) => {
@@ -45,21 +47,22 @@ export const Executors = ({
     loadWorkshop();
     loadArea();
     loadPlace();
-  }, [loadExecutors, loadTechs, loadMasters,loadEquipment,loadWorkshop,loadArea,loadPlace]);
+  }, [loadExecutors, loadTechs, loadMasters, loadEquipment, loadWorkshop, loadArea, loadPlace]);
 
+ 
   const handleChange = (event, newValue) => {
     localStorage.removeItem("VkladkaExecutors")
     setValue(newValue);
   };
 
 
-  if (Object.keys(user).length>4) {    
-     localStorage.setItem("USERID",user.id)  
-     localStorage.setItem("USER_productionAreaId",user.productionAreaId)  
+  if (Object.keys(user).length > 4) {
+    localStorage.setItem("USERID", user.id)
+    localStorage.setItem("USER_productionAreaId", user.productionAreaId)
   }
- 
 
- 
+
+
   const a11yProps = (index) => {
     return {
       id: `full-width-tab-${index}`,
@@ -69,9 +72,9 @@ export const Executors = ({
 
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
-    if (localStorage.getItem("VkladkaExecutors")!=null) {  
-      setValue(Number(localStorage.getItem("VkladkaExecutors"))) 
-    } 
+    if (localStorage.getItem("VkladkaExecutors") != null) {
+      setValue(Number(localStorage.getItem("VkladkaExecutors")))
+    }
     return (
       <div
         role="tabpanel"
@@ -87,6 +90,13 @@ export const Executors = ({
 
   return (
     <div className={styles.innerWrapper}>
+
+      {localStorage.getItem("isFirstLogin")==="true"
+        ?<ChangePassword></ChangePassword>
+        :null
+      }
+      
+
       <ToolTip
         title="Сотрудники"
         toolTipText="Здесь Вы можете просмотреть профиль сотрудников" /*, отчет о работе сварщика*/
@@ -121,12 +131,12 @@ export const Executors = ({
           addExecutor={addMaster}
           deleteExecutor={deleteMaster}
           editMaster={editMaster}
-          executors={masters} 
+          executors={masters}
 
           value={value}
           equipment={equipment}
           workshop={workshop}
-          area={area} 
+          area={area}
         />
       </TabPanel>
       <TabPanel
@@ -143,7 +153,7 @@ export const Executors = ({
           addExecutor={addExecutor}
           deleteExecutor={deleteExecutor}
           editExecutor={editExecutor}
-          executors={executors} 
+          executors={executors}
           workplace={workplace}
 
           value={value}
@@ -166,7 +176,7 @@ export const Executors = ({
           addExecutor={addTech}
           deleteExecutor={deleteTech}
           editTech={editTech}
-          executors={techs} 
+          executors={techs}
           value={value}
           equipment={equipment}
           workshop={workshop}

@@ -10,6 +10,7 @@ import {
   LoginContainer, 
   TasksContainer,
   RecordsContainer,
+  ModesContainer,
   ReportsContainer,
   CreatesUserContainer,
   ProductionCalendarContainer,
@@ -144,6 +145,13 @@ function App({ error, errorType, clearError }) {
                 path="/records"
                 exact
                 component={RecordsContainer}
+                redirectTo="/login"
+              />
+              <PrivateRoute
+                allow={isAuth}
+                path="/welding-modes"
+                exact
+                component={ModesContainer}
                 redirectTo="/login"
               />
               <PrivateRoute
