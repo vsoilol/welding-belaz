@@ -567,7 +567,7 @@ export const Tasks = ({
   }
 
   function GetFailebasedPassport(params) {
-    api.get(`file/based-seam-passport?TaskId=${BasedPassportId}&SequenceNumber=${params.SequenceNumber ?? ""}&AverageIntervalSeconds=${params.AverageIntervalSeconds ?? ""}&SecondsToIgnoreBetweenGraphs=${params.SecondsToIgnoreBetweenGraphs ?? ""}`,
+    api.get(`file/based-seam-passport?TaskId=${BasedPassportId}&SequenceNumber=${params.SequenceNumber ?? ""}&AverageIntervalSeconds=&SecondsToIgnoreBetweenGraphs=`,
       {
         responseType: "arraybuffer",
         dataType: "blob",
@@ -842,6 +842,7 @@ export const Tasks = ({
               <form onSubmit={handleSubmit}>
 
                 <div>
+      
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
@@ -850,40 +851,13 @@ export const Tasks = ({
                       style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
                       value={values.SequenceNumber}
                       name="SequenceNumber"
-                      placeholder="Интервал времени в секундах"
-                      onBlur={handleBlur}
-                      autocomplete="off"
-                    />
-                  </div>
-
-                  <div className={styles.row}>
-                    <Input
-                      onChange={(e) => {
-                        handleChange(e);
-                      }}
-                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                      value={values.AverageIntervalSeconds}
-                      name="AverageIntervalSeconds"
                       placeholder="Порядковый номер"
                       onBlur={handleBlur}
                       autocomplete="off"
                     />
                   </div>
 
-                  <div className={styles.row}>
-                    <Input
-                      onChange={(e) => {
-                        handleChange(e);
-                      }}
-                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                      value={values.SecondsToIgnoreBetweenGraphs}
-                      name="SecondsToIgnoreBetweenGraphs"
-                      placeholder="Интервал времени"
-                      onBlur={handleBlur}
-                      autocomplete="off"
-                    />
-                  </div>
-
+                  
                   <div className={styles.row}>
                     <Button
                       type="submit"
