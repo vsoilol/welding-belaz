@@ -43,5 +43,20 @@ public class GetRecordValuesByDateRequestValidator : AbstractValidator<GetRecord
                 >(context)
             )
             .When(_ => _.EquipmentId is not null);
+        
+        
+        When(
+            _ => _.WelderId is null && _.EquipmentId is null,
+            () =>
+            {
+                RuleFor(model => model.WelderId)
+                    .Cascade(CascadeMode.Stop)
+                    .NotNull();
+
+                RuleFor(model => model.EquipmentId)
+                    .Cascade(CascadeMode.Stop)
+                    .NotNull();
+            }
+        );
     }
 }
