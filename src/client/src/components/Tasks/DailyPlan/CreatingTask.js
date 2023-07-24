@@ -281,7 +281,7 @@ export const CreatingTask = ({
                             "productAccountId": ProductAccountId,
                             "defectiveReason": productreason
                         });
-                    }
+                    } 
 
                 } else {
                     if (acceptedProducts >= 0 && techs[0] && techs[0].id) {
@@ -560,6 +560,7 @@ export const CreatingTask = ({
                                     setprodQuantities(rowData?.amountFromPlan)
                                     setmanufacProducts(rowData?.amountManufactured)
                                     setacceptedProducts(rowData?.amountAccept)
+                                    setProductAccountId(rowData?.id)
                                     /* api.post(`/eventLog`, {
                                         "information": "Открыл модальное окно редактирования плана"
                                     }) */

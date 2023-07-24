@@ -462,7 +462,7 @@ export const Tasks = ({
 
 
   const renderRowChildren = (rowData) => {
- 
+
     return (
       <TableContainer >
         <MaterialTable aria-label="simple table">
@@ -558,7 +558,7 @@ export const Tasks = ({
               <TableCell align="center">
                 {rowData?.inspector?.middleName && rowData?.inspector?.firstName && rowData?.inspector?.lastName ? `${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}` : "-"}
               </TableCell>
- 
+
 
             </TableRow>
           </TableBody>
@@ -667,6 +667,8 @@ export const Tasks = ({
       .catch((error) => { });
   }
 
+  
+ 
 
 
   const [getFailebasedPassport, setgetFailebasedPassport] = useState(false);
@@ -690,11 +692,16 @@ export const Tasks = ({
         });
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
-        params.SequenceNumber=null
+        params.SequenceNumber = null
       })
       .catch((error) => { });
 
   }
+
+
+  const [serchOnserialnumber, setserchOnserialnumber] = useState("");
+
+
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -721,7 +728,32 @@ export const Tasks = ({
 
 
       <div className={styles.tableWrapper}>
-
+        <div className={styles.datePeriod}>
+          <label>Поиск задания по <br></br>порядковому номеру изделия</label>
+          <div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  setserchOnserialnumber(e.target.value);
+                }}
+                style={{
+                  width: 280,
+                  height: 40, 
+                }}
+                type="number"
+                min="0"
+                step="1"
+                value={serchOnserialnumber}
+                name={`serchOnserialnumber`}
+                placeholder="Порядковый номер "
+                autocomplete="off"
+              />
+            </div>
+            <button className={styles.sort} onClick={() => { /* FindTask()  */}} >
+              Найти
+            </button>
+          </div>
+        </div>
         {/*Сменные задания на сварку*/}
         <TabPanel
           value={value_panel}
@@ -1076,3 +1108,4 @@ export const Tasks = ({
     </div>
   );
 };
+

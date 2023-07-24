@@ -103,7 +103,9 @@ span.obj {
   transition: 0.3s;
   font-weight: 600;
 }
-
+.rowTool{ 
+  margin: 16px;
+}
 .RowToolsBtns button:hover {
   background-color: whitesmoke;
 }

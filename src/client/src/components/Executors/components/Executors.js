@@ -358,7 +358,7 @@ export const ExecutorsTable = ({
       title: "Номер рабочего места",
       field: "workplaceNumber",
       render: (rowData) => {
-        return <p>{renderValue(rowData.workplaceNumber)}</p>;
+        return <p>{renderValue(rowData?.workplace?.number??"-")}</p>;
       },
     },
     {
