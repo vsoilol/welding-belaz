@@ -307,6 +307,9 @@ h3.ExistingPlan{
   top: 40px;
 }
 
+label{
+  text-align: left !important;
+}
 
 
 .sectionGet{

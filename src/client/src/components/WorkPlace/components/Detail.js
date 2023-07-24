@@ -105,7 +105,7 @@ export const Detail = ({
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
     id: modalData?.id ?? "",
-    manufacturingTime:modalData?.manufacturingTime??""
+    manufacturingTime: modalData?.manufacturingTime ?? ""
   };
   /////Удоление
   const [deleteProdModal, setdeleteProdModal] = useState(false);
@@ -333,7 +333,7 @@ export const Detail = ({
             }}
           />
         ),
-      },  
+      },
       {
         title: "Наименование детали ", field: "name"
       },
@@ -827,7 +827,7 @@ export const Detail = ({
                           setValuetPosts("")
                           setValuetWorkPlace("")
 
-                          api.post(`/eventLog`,{
+                          api.post(`/eventLog`, {
                             "information": "Открыл модальное окно добавления детали"
                           })
                         },
@@ -843,7 +843,7 @@ export const Detail = ({
                           setValuetTechProc(rowData.technologicalProcess?.id)
                           setValuetPosts(rowData.productionArea?.id)
                           setValuetWorkPlace(rowData.workplace?.id)
-                          api.post(`/eventLog`,{
+                          api.post(`/eventLog`, {
                             "information": "Открыл модальное окно редактирования детали"
                           })
                         },
@@ -969,7 +969,7 @@ export const Detail = ({
                   <Input
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (/^[\dA-Z-]+$/.test(value)) {
+                      if (/^[\dA-Za-z-]+$/.test(value)) {
                         handleChange(e);
                       }
                     }}

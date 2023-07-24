@@ -45,13 +45,14 @@ p {
 .form {
   display: flex;
   flex-direction: column;
-}  
+}
+
 .button {
   cursor: pointer;
   display: block;
   font-family: "Muller Extra Bold";
   margin: 16px 40px 0 auto;
-  height: 36px;
+  height: 136px;
   width: 240px;
   background-color: transparent;
   border: 2px solid gray;
@@ -68,24 +69,28 @@ p {
   align-items: center;
   flex-direction: column;
 }
+
 .tableWrapper {
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   background-color: white;
-} 
+}
 
-span.obj{
+span.obj {
   display: block;
   font-size: 20px;
   margin-top: 15px;
 }
-.RowToolsBtns{
+
+.RowToolsBtns {
   display: block;
-  width: -moz-fit-content;
+  gap: 20px;
   width: fit-content;
   margin: 100px 0;
   margin-bottom: 80px;
-} 
-.RowToolsBtns button{
+  align-items: center;
+}
+
+.RowToolsBtns button {
   margin: 0px 15px;
   padding: 10px;
   background-color: transparent;
@@ -94,13 +99,23 @@ span.obj{
   outline: none;
   font-size: 18px;
   cursor: pointer;
-  border-radius: 8px ;
+  border-radius: 8px;
   transition: 0.3s;
   font-weight: 600;
 }
-.RowToolsBtns button:hover{
+
+.RowToolsBtns button:hover {
   background-color: whitesmoke;
 }
+
+.Create {
+  margin-top: 50px;
+}
+
+.Create button {
+  margin: 10px 0px;
+}
+
 @media (max-width: 1440px) {
   .tableWrapper {
     margin-top: 40px;
@@ -113,11 +128,12 @@ span.obj{
     margin-top: 0;
   }
 }
+
 .calendar_wrapper {
   height: 750px;
 }
 
-.hints{ 
+.hints {
   margin-top: 47px;
   padding: 20px;
   border-radius: 10px;
@@ -129,27 +145,29 @@ span.obj{
   top: calc(50% - 240px);
   left: calc(50% - 150px);
 }
-.hintsBg{
+
+.hintsBg {
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(0, 0, 0 , 0.75);
+  background-color: rgb(0, 0, 0, 0.75);
   z-index: 8;
 }
-.calendar-wrapper .hints h2{
+
+.calendar-wrapper .hints h2 {
   margin-bottom: 10px !important;
 }
 
 
-.hints p{
+.hints p {
   margin-left: 0;
   font-size: 14px;
 }
 
 
-.hints button{
+.hints button {
   margin: 10px 0;
   padding: 10px;
   background-color: #b5d8f2;
@@ -161,18 +179,19 @@ span.obj{
   outline: none;
   font-size: 18px;
   cursor: pointer;
-  border-radius: 8px ;
+  border-radius: 8px;
   transition: 0.3s;
   font-weight: 600;
 }
 
-label{
+label {
   margin-top: 20px;
   display: block;
   font-weight: 700;
 
 }
-.hints button.save{
+
+.hints button.save {
   color: white;
   background-color: rgb(16, 121, 63) !important;
 }

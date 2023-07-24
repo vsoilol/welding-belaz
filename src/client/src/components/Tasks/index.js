@@ -19,6 +19,12 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { array } from "yup";
 
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import MaterialTable from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
 
 import deleteIcon from "assets/icons/delete.png";
 
@@ -77,8 +83,8 @@ export const Tasks = ({
   const [modalDataPasport, setmodalDataPasport] = useState(false);
   const [SequenceNumber, setSequenceNumber] = useState("");
   const [NumberTask, setNumberTask] = useState(null);
-  
-  
+
+
   const formattedMasters = masters?.map((item) => {
     return {
       value: item.masterId,
@@ -153,9 +159,9 @@ export const Tasks = ({
     };
   });
   const getDocument = () => {
- 
-    const number = tasks?.tasks.find(task => task.number === NumberTask).id; 
-    api.get(`file/seamPassport?TaskId=${number}&SequenceNumber=${SequenceNumber ?? null}`, {
+
+    const number = tasks?.tasks.find(task => task.number === NumberTask).id;
+    api.get(`file/seamPassport?TaskId=${number}&SequenceNumber=${SequenceNumber ?? ""}`, {
       responseType: "arraybuffer",
       dataType: "blob",
     })
@@ -214,7 +220,7 @@ export const Tasks = ({
         return statusString.toLowerCase().includes(term.toLowerCase());
       },
     },
-    {
+    /* {
       title: "Наименование изделия",
       field: "product.name",
       customFilterAndSearch: (term, rowData) => {
@@ -228,7 +234,7 @@ export const Tasks = ({
           return <p>-</p>
         }
       }
-    },
+    }, */
     /* {
       title: "Уникальный номер",
       field: "uniqueNumber",
@@ -244,7 +250,7 @@ export const Tasks = ({
         }
       }
     }, */
-    {
+    /* {
       title: "Наименование узла",
       field: "knot.name",
       customFilterAndSearch: (term, rowData) => rowData?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
@@ -259,8 +265,8 @@ export const Tasks = ({
       render: (rowData) => rowData?.detail ?
         <p>{`${rowData.detail.name} ${rowData.detail.number}`}</p> :
         <p>-</p>
-    },
-    {
+    }, */
+    /* {
       title: "Оборудование  ( инвентарный номер )",
       field: "weldingEquipments.factoryNumber",
       customFilterAndSearch: (term, rowData) => rowData?.weldingEquipments?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
@@ -312,7 +318,7 @@ export const Tasks = ({
       render: (rowData) => rowData?.inspector ?
         <p>{`${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}`}</p> :
         <p>-</p>
-    },
+    }, */
     {
       field: "url",
       title: "Скачать краткий паспорт",
@@ -331,7 +337,7 @@ export const Tasks = ({
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => {setmodalDataPasport(true) ; setNumberTask(rowData?.number)  } }
+          onClick={() => { setmodalDataPasport(true); setNumberTask(rowData?.number) }}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -444,7 +450,7 @@ export const Tasks = ({
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => {setmodalDataPasport(true) ; setNumberTask(rowData?.number)} }
+          onClick={() => { setmodalDataPasport(true); setNumberTask(rowData?.number) }}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -454,6 +460,112 @@ export const Tasks = ({
     },
   ];
 
+
+  const renderRowChildren = (rowData) => {
+ 
+    return (
+      <TableContainer >
+        <MaterialTable aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell
+                style={{
+                  borderBottom: 0,
+                }}
+                align="center"
+              >
+                Наименование изделия
+              </TableCell>
+              <TableCell
+                style={{
+                  borderBottom: 0,
+                }}
+                align="center"
+              >
+                Наименование узла
+              </TableCell>
+              <TableCell
+                style={{
+                  borderBottom: 0,
+                }}
+                align="center"
+              >
+                Наименование детали
+              </TableCell>
+
+
+              <TableCell
+                style={{
+                  borderBottom: 0,
+                }}
+                align="center"
+              >
+                Оборудование  ( инвентарный номер )
+              </TableCell>
+              <TableCell
+                style={{
+                  borderBottom: 0,
+                }}
+                align="center"
+              >
+                Исполнитель
+              </TableCell>
+              <TableCell
+                style={{
+                  borderBottom: 0,
+                }}
+                align="center"
+              >
+                Руководитель сварочных работ
+              </TableCell>
+              <TableCell
+                style={{
+                  borderBottom: 0,
+                }}
+                align="center"
+              >
+                Контролер
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow  >
+              <TableCell align="center">
+                {rowData?.product?.name ?? "-"}
+              </TableCell>
+              <TableCell align="center">
+                {rowData?.knot?.name && rowData?.knot?.number ? `${rowData?.knot?.name} ${rowData?.knot?.number}` : "-"}
+              </TableCell>
+              <TableCell align="center">
+                {rowData?.detail?.name && rowData?.detail?.number ? `${rowData.detail.name} ${rowData.detail.number}` : "-"}
+              </TableCell>
+              <TableCell align="center">
+                {rowData?.weldingEquipments.map(equipment => (
+                  <li key={equipment.factoryNumber}>
+                    {`${equipment.name} ${equipment.factoryNumber}`}
+                  </li>
+                ))}
+              </TableCell>
+
+              <TableCell align="center">
+                {rowData?.welder?.middleName && rowData?.welder?.firstName && rowData?.welder?.lastName ? `${rowData.welder.middleName} ${rowData.welder.firstName} ${rowData.welder.lastName}` : "-"}
+              </TableCell>
+
+              <TableCell align="center">
+                {rowData?.master?.middleName && rowData?.master?.firstName && rowData?.master?.lastName ? `${rowData.master.middleName} ${rowData.master.firstName} ${rowData.master.lastName}` : "-"}
+              </TableCell>
+
+              <TableCell align="center">
+                {rowData?.inspector?.middleName && rowData?.inspector?.firstName && rowData?.inspector?.lastName ? `${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}` : "-"}
+              </TableCell>
+ 
+
+            </TableRow>
+          </TableBody>
+        </MaterialTable>
+      </TableContainer>
+    );
+  };
 
 
 
@@ -578,6 +690,7 @@ export const Tasks = ({
         });
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL);
+        params.SequenceNumber=null
       })
       .catch((error) => { });
 
@@ -644,6 +757,7 @@ export const Tasks = ({
                 ]
                 : []
             }
+            renderRowChildren={renderRowChildren}
           />
         </TabPanel>
 
@@ -814,7 +928,7 @@ export const Tasks = ({
           </Formik>
         </ModalWindow>
 
-        {/*Получение паспорта */}
+        {/*Получение краткого паспорта */}
         <ModalWindow
           isOpen={getFailebasedPassport}
           headerText="Получение паспорта"
@@ -842,8 +956,7 @@ export const Tasks = ({
               <form onSubmit={handleSubmit}>
 
                 <div>
-      
-                  <div className={styles.row}>
+                  {/* <div className={styles.row}>
                     <Input
                       onChange={(e) => {
                         handleChange(e);
@@ -851,13 +964,40 @@ export const Tasks = ({
                       style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
                       value={values.SequenceNumber}
                       name="SequenceNumber"
+                      placeholder="Интервал времени в секундах"
+                      onBlur={handleBlur}
+                      autocomplete="off"
+                    />
+                  </div> */}
+
+                  <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      value={values.AverageIntervalSeconds}
+                      name="AverageIntervalSeconds"
                       placeholder="Порядковый номер"
                       onBlur={handleBlur}
                       autocomplete="off"
                     />
                   </div>
 
-                  
+                  {/* <div className={styles.row}>
+                    <Input
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      value={values.SecondsToIgnoreBetweenGraphs}
+                      name="SecondsToIgnoreBetweenGraphs"
+                      placeholder="Интервал времени"
+                      onBlur={handleBlur}
+                      autocomplete="off"
+                    />
+                  </div> */}
+
                   <div className={styles.row}>
                     <Button
                       type="submit"
@@ -900,7 +1040,7 @@ export const Tasks = ({
               <form onSubmit={handleSubmit}>
 
                 <div>
-                   
+
 
                   <div className={styles.row}>
                     <Input
@@ -916,7 +1056,7 @@ export const Tasks = ({
                     />
                   </div>
 
-                  
+
 
                   <div className={styles.row}>
                     <Button

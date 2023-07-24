@@ -255,12 +255,12 @@ export const CreatingTask = ({
                         "amount": Number(prodQuantities)
                     });
                 }
-                if (CheckIsProd && prodUniqueNumber >= 0) {
+                /* if (CheckIsProd && prodUniqueNumber >= 0) {
                     await api.put(`/productAccount/unique-number`, {
                         "ProductAccountId ": idPlan,
                         "UniqueNumber ": Number(CheckIsProd)
                     });
-                }
+                } */
                 if (manufacProducts >= 0) {
                     await api.put(`/productAccount/manufacturedAmount`, {
                         "id": idPlan,
