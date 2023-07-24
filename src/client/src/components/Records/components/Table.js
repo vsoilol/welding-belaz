@@ -349,7 +349,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
 
   function FindTask() { 
     if (serchOnserialnumber) {
-      let ListTask = records.filter((item) => item.weldingTaskNumber === Number(serchOnserialnumber));
+      let ListTask = records.filter((item) => item.sequenceNumber === Number(serchOnserialnumber));
       setSelectedOption("task")
       setUpdatedRecords(ListTask)   
     }
