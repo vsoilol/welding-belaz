@@ -1,19 +1,10 @@
-// const api = {
-//   url: process.env.REACT_APP_API_URI,
-//   suffix: "",
-//   timeout: 200000,
-//   getBaseUrl() {
-//     return new URL(this.suffix, this.url).toString();
-//   }
-// };
-
 const api = {
   url: process.env.REACT_APP_API_URI,
   suffix: "",
   timeout: 200000,
   getBaseUrl() {
-    return this.url.toString();
-  },
+    return new URL(this.suffix, this.url).toString();
+  }
 };
 
 Object.freeze(api);

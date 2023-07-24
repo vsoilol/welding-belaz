@@ -61,7 +61,9 @@ export const Equipment = ({
   assignWelders,
   assignMaster,
 
-  loadArea,
+  loadArea, 
+  workplace,
+  loadworkplace,
   workshop,
   area,
 }) => {
@@ -122,7 +124,7 @@ export const Equipment = ({
     Date: modalData?.Date ?? "",
 
   };
- 
+  const [valueWorkplace, setvalueWorkplace] = useState(0);
 
   useEffect(() => {
     loadEquipment();
@@ -134,7 +136,8 @@ export const Equipment = ({
 
     loadWorkshop();
     loadArea();
-  }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder, loadWorkshop, loadArea]);
+    loadworkplace();
+  }, [loadEquipment, loadMasters, loadPosts, loadDowntime, loadWorkshop, loadWelder, loadWorkshop, loadArea,loadworkplace]);
  
 
   const columns = [
@@ -178,7 +181,7 @@ export const Equipment = ({
     {
       title: "Номер производственного участка", field: "productionArea.number"
     },
-    {
+    /* {
       title: "Наименование   поста ",
       render: (rowData) => {
         return <span>{DetArea(rowData.post, "name") ?? "-"}</span>
@@ -189,7 +192,7 @@ export const Equipment = ({
       render: (rowData) => {
         return <span>{DetArea(rowData.post, "numb") ?? "-"}</span>
       },
-    },
+    }, */
     /* {
       title: "Закрерить сотрудников",
       render: (rowData) => {
@@ -430,7 +433,7 @@ export const Equipment = ({
     variables.commissioningDate = commissioningDate;
     variables.nextAttestationDate = new Date(variables.nextAttestationDate).toLocaleDateString('ru-RU', { dateStyle: 'short' });
 
-    variables.workplaceIds = [];
+    variables.workplaceIds = [valueWorkplace]; 
 
     if (isModalNumb === 0) {
       addEquipment(variables);
@@ -504,6 +507,14 @@ export const Equipment = ({
       event.active = 0
     }
   }; 
+
+
+  const optWorkPlase = workplace?.map((item) => {
+    return {
+      value: item.id,
+      label: `Рабочее место №${item.number}`,
+    };
+  });
   ////////////////////////////////////////////////////////////////////
   return (
 
@@ -573,6 +584,7 @@ export const Equipment = ({
                       setValuetPosts(rowData.post?.id)
                       setvalueWorkshop(rowData?.workshop?.id)
                       setvalueoptArea(rowData?.productionArea?.id)
+                      setvalueWorkplace(rowData?.workplaces[0]?.id)
                       api.post(`/eventLog`, {
                         "information": "Открыл модальное окно редактирования оборудования "
                       })
@@ -743,7 +755,7 @@ export const Equipment = ({
                 handleBlur,
               }) => (
                 <form onSubmit={handleSubmit}>
-                  <div className={styles.row}>
+                  {/* <div className={styles.row}>
                     <Select
                       name="postId"
                       value={valuetPosts}
@@ -754,9 +766,19 @@ export const Equipment = ({
                         setValuetPostsNumber(event.label)
                       }}
                       options={optPosts}
+                    /> 
+                  </div> */}
+                  <div className={styles.row}>
+                    <Select
+                      name="valueWorkplace"
+                      value={valueWorkplace}
+                      width="380px"
+                      placeholder="Рабочее место"
+                      onChange={(event) => {
+                        setvalueWorkplace(event.value)
+                      }}
+                      options={optWorkPlase}
                     />
-
-
                   </div>
 
                   <div className={styles.row}>
