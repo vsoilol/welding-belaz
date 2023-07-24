@@ -561,6 +561,8 @@ export const CreatingTask = ({
                                     setmanufacProducts(rowData?.amountManufactured)
                                     setacceptedProducts(rowData?.amountAccept)
                                     setProductAccountId(rowData?.id)
+ 
+                                    setproductreason(rowData?.defectiveReason??"")
                                     /* api.post(`/eventLog`, {
                                         "information": "Открыл модальное окно редактирования плана"
                                     }) */

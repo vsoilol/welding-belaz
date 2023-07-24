@@ -47,21 +47,15 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentO
     next: 'Вперед',
   };
 
-  const events = [];
-  const eventTitlesSet = new Set(); 
+  const events = []; 
   for (let index = 0; index < valueWorkDays.length; index++) {
-    const eventTitle = `Смена ${valueWorkDays[index].workingShifts[0].number}`;
-  
-    if (!eventTitlesSet.has(eventTitle)) {
-      eventTitlesSet.add(eventTitle);
-  
+    const eventTitle = `Смена ${valueWorkDays[index].workingShifts[0].number}`;  
       events.push({
         id: valueWorkDays[index].id,
         title: eventTitle,
         start: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftStart[0]}${valueWorkDays[index].workingShifts[0].shiftStart[1]} `, `${valueWorkDays[index].workingShifts[0].shiftStart[3]}${valueWorkDays[index].workingShifts[0].shiftStart[4]} `),
         end: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftEnd[0]}${valueWorkDays[index].workingShifts[0].shiftEnd[1]} `, `${valueWorkDays[index].workingShifts[0].shiftEnd[3]}${valueWorkDays[index].workingShifts[0].shiftEnd[4]} `),
-      });
-    }
+      }); 
   }
 
 
