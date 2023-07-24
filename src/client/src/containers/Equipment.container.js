@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
     equipment: state.equipment.equipment,
     masters: state.executors.masters,
     welder: state.executors.executors,
+    workplace: state.workplace.workplace,
     isRequesting:
       state?.equipment?.isRequesting || state?.masters?.isRequesting,
     userRole: state.auth.user.role,
@@ -45,6 +46,7 @@ const mapDispatchToProps = {
 
  
   loadArea: Actionsworkplace.Creators.loadAreaRequest,
+  loadworkplace: Actionsworkplace.Creators.loadWorkplaceRequest,
 
 };
 

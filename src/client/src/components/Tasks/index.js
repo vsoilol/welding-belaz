@@ -727,33 +727,7 @@ export const Tasks = ({
       }
 
 
-      <div className={styles.tableWrapper}>
-        <div className={styles.datePeriod}>
-          <label>Поиск задания по <br></br>порядковому номеру изделия</label>
-          <div>
-            <div className={styles.row}>
-              <Input
-                onChange={(e) => {
-                  setserchOnserialnumber(e.target.value);
-                }}
-                style={{
-                  width: 280,
-                  height: 40, 
-                }}
-                type="number"
-                min="0"
-                step="1"
-                value={serchOnserialnumber}
-                name={`serchOnserialnumber`}
-                placeholder="Порядковый номер "
-                autocomplete="off"
-              />
-            </div>
-            <button className={styles.sort} onClick={() => { /* FindTask()  */}} >
-              Найти
-            </button>
-          </div>
-        </div>
+      <div className={styles.tableWrapper}> 
         {/*Сменные задания на сварку*/}
         <TabPanel
           value={value_panel}
@@ -1108,4 +1082,3 @@ export const Tasks = ({
     </div>
   );
 };
-
