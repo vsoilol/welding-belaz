@@ -44,7 +44,7 @@ const StyleNewTable = {
 }
 
 
-export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole , loadRecords }) => {
+export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, loadRecords }) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
 
@@ -68,8 +68,8 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole , 
       // Если id отсутствует в массиве, добавляем его
       setarrayIdRecords([...arrayIdRecords, id]);
     }
-    
-  }; 
+
+  };
   const columns = [
     (userRole === "Admin" /*|| userRole === "Master"*/) && {
       title: "Удаление",
@@ -95,7 +95,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole , 
         />
       ),
     },
-    { title: "Порядковый номер", field: "sequenceNumber" },
+    { title: "Порядковый номер изделия", field: "sequenceNumber" },
     { title: "Дата", field: "date" },
     { title: "Номер шва", field: "seamNumber" },
     { title: "Длительность сварки", field: "weldingDuration" },
@@ -318,32 +318,45 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole , 
     }
   };
 
-  function showRecordsPeriod() {  
+  function showRecordsPeriod() {
 
     let StartDate = new Date(dateStart).toLocaleDateString('ru-RU', { dateStyle: 'short' })
-    let EndDate =  new Date(dateEnd).toLocaleDateString('ru-RU', { dateStyle: 'short' })  
-    api.get(`weldingRecord/period?StartDate=${StartDate}&EndDate=${EndDate}&SeamNumber=&WeldingTaskNumber=&WelderId=&MasterId=&EquipmentId=` ).then((response) => { 
+    let EndDate = new Date(dateEnd).toLocaleDateString('ru-RU', { dateStyle: 'short' })
+    api.get(`weldingRecord/period?StartDate=${StartDate}&EndDate=${EndDate}&SeamNumber=&WeldingTaskNumber=&WelderId=&MasterId=&EquipmentId=`).then((response) => {
       setSelectedOption("Period")
-      setUpdatedRecords(response.data) 
+      setUpdatedRecords(response.data)
     })
-      .catch((error) => { }); 
-     
+      .catch((error) => { });
+
   }
 
 
   const [serialnumber, setserialnumber] = useState("");
+  const [serchOnserialnumber, setserchOnserialnumber] = useState("");
 
 
   function Setserialnumber() {
 
-    api.post(`/weldingRecord/set-sequence-number`,{
+    api.post(`/weldingRecord/set-sequence-number`, {
       "weldingRecordIds": arrayIdRecords,
       "sequenceNumber": Number(serialnumber)
-    }).then((response) => { 
+    }).then((response) => {
       loadRecords()
       setvalueDisplay(false)
     })
-      .catch((error) => { }); 
+      .catch((error) => { });
+  }
+
+  function FindTask() { 
+    if (serchOnserialnumber) {
+      let ListTask = records.filter((item) => item.weldingTaskNumber === Number(serchOnserialnumber));
+      setSelectedOption("task")
+      setUpdatedRecords(ListTask)   
+    }
+    else{
+      setSelectedOption("all") 
+    }
+    
   }
 
   return (
@@ -468,6 +481,34 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole , 
           </div>
         </div>
 
+        <div className={styles.datePeriod}>
+          <label>Поиск задания по <br></br>порядковому номеру изделия</label>
+          <div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      setserchOnserialnumber(e.target.value);
+                    }}
+                    style={{
+                      width: 150,
+                      height: 40,
+                      padding: "0px 0px 0px 20px"
+                    }}
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={serchOnserialnumber}
+                    name={`serchOnserialnumber`}
+                    placeholder="Порядковый номер "
+                    autocomplete="off"
+                  />
+                </div>
+                <button className={styles.sort} onClick={()=>{FindTask()}} >
+                  Найти
+                </button>
+              </div>
+        </div>
+    
 
       </div>
 
@@ -480,49 +521,49 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole , 
         isLoading={isRequesting}
         deleteAction={null}
       />
-      {/*Удаление записи*/}
-      <ModalWindow
-        isOpen={deleteRecordsModal}
-        headerText="Удаление"
-        setIsOpen={(state) => {
-          setdeleteRecordsModal(false)
-        }}
-        wrapperStyles={{ width: 420 }}
-      >
-        <Formik
-          initialValues={{}}
-          enableReinitialize
-          onSubmit={(variables) => {
-            const { id, ...dataToSend } = variables;
-            setdeleteRecordsModal(false)
-            deleteRecords(idRecords)
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
-            <form onSubmit={handleSubmit}>
+      {/*Удаление записи*/ }
+  <ModalWindow
+    isOpen={deleteRecordsModal}
+    headerText="Удаление"
+    setIsOpen={(state) => {
+      setdeleteRecordsModal(false)
+    }}
+    wrapperStyles={{ width: 420 }}
+  >
+    <Formik
+      initialValues={{}}
+      enableReinitialize
+      onSubmit={(variables) => {
+        const { id, ...dataToSend } = variables;
+        setdeleteRecordsModal(false)
+        deleteRecords(idRecords)
+      }}
+    >
+      {({
+        handleSubmit,
+        handleChange,
+        values,
+        setFieldValue,
+        handleBlur,
+      }) => (
+        <form onSubmit={handleSubmit}>
 
-              <div>
-                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> запись ? </h4>
+          <div>
+            <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> запись ? </h4>
 
-                <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Удалить
-                  </Button>
-                </div>
+            <div className={styles.row}>
+              <Button
+                type="submit"
+              >
+                Удалить
+              </Button>
+            </div>
 
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
-    </div>
+          </div>
+        </form>
+      )}
+    </Formik>
+  </ModalWindow>
+    </div >
   );
 };

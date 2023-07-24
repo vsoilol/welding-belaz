@@ -45,21 +45,38 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions }) => {
 
 
   function getDays(now) {
-    setevents([])
-    let events = []
+    setevents([]);
+    let events = [];
     for (let i = new Date(now.getFullYear(), now.getMonth(), 1).getDate(); i <= new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(); i++) {
       const existingDay = valueWorkDays?.find(day => day.number === i && day.monthNumber === now.getMonth() + 1);
       if (!existingDay) {
-        const shift = WorkingShiftOptions.find(elem => elem.number === 1);
-        events.push({
-          id: `event-${i}`,
-          title: `Смена 1`,
-          start: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift?.shiftStart?.substring(0, 2)), parseInt(shift?.shiftStart?.substring(3, 5))),
-          end: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift?.shiftEnd?.substring(0, 2)), parseInt(shift?.shiftEnd?.substring(3, 5))),
-        });
+        const shift1 = WorkingShiftOptions.find(elem => elem.number === 1);
+        const shift2 = WorkingShiftOptions.find(elem => elem.number === 2);
+        const shift3 = WorkingShiftOptions.find(elem => elem.number === 3);
+  
+        events.push(
+          {
+            id: `event-${i}-1`,
+            title: `Смена 1`,
+            start: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift1?.shiftStart?.substring(0, 2)), parseInt(shift1?.shiftStart?.substring(3, 5))),
+            end: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift1?.shiftEnd?.substring(0, 2)), parseInt(shift1?.shiftEnd?.substring(3, 5))),
+          },
+          {
+            id: `event-${i}-2`,
+            title: `Смена 2`,
+            start: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift2?.shiftStart?.substring(0, 2)), parseInt(shift2?.shiftStart?.substring(3, 5))),
+            end: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift2?.shiftEnd?.substring(0, 2)), parseInt(shift2?.shiftEnd?.substring(3, 5))),
+          },
+          {
+            id: `event-${i}-3`,
+            title: `Смена 3`,
+            start: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift3?.shiftStart?.substring(0, 2)), parseInt(shift3?.shiftStart?.substring(3, 5))),
+            end: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift3?.shiftEnd?.substring(0, 2)), parseInt(shift3?.shiftEnd?.substring(3, 5))),
+          }
+        );
       }
     }
-    setevents(events)
+    setevents(events);
   }
 
 

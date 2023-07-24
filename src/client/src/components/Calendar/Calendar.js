@@ -11,7 +11,7 @@ import api from "services/api";
 
 const localizer = momentLocalizer(moment);
 
-const Calendars = ({ valueWorkDays, WorkingShiftOptions , executorObj ,  equipmentObj ,   loadDayByWelder , loadDayByEquipment}) => {
+const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentObj, loadDayByWelder, loadDayByEquipment }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const [changedate, setchangedate] = useState("");
@@ -22,17 +22,18 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions , executorObj ,  equipme
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
   };
- 
-  function changeDay(selectedEvent) { 
+
+  function changeDay(selectedEvent) {
     const data = {
       "id": selectedEvent.id,
       "monthNumber": new Date(changedate).getMonth(),
       "number": new Date(changedate).getDate(),
       "isWorkingDay": true
     }
-    api.put("day",data).then(()=>{
+    api.put("day", data).then(() => {
       executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
       setSelectedEvent(false)
+      setvaluechange(false)
     })
   }
 
@@ -47,14 +48,30 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions , executorObj ,  equipme
   };
 
   const events = [];
+  const eventTitlesSet = new Set(); 
   for (let index = 0; index < valueWorkDays.length; index++) {
-    events.push({
-      id:valueWorkDays[index].id,
-      title: `Смена ${valueWorkDays[index].workingShifts[0].number}`,
-      start: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftStart[0]}${valueWorkDays[index].workingShifts[0].shiftStart[1]} `, `${valueWorkDays[index].workingShifts[0].shiftStart[3]}${valueWorkDays[index].workingShifts[0].shiftStart[4]} `),
-      end: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftEnd[0]}${valueWorkDays[index].workingShifts[0].shiftEnd[1]} `, `${valueWorkDays[index].workingShifts[0].shiftEnd[3]}${valueWorkDays[index].workingShifts[0].shiftEnd[4]} `),
-    })
-  } 
+    const eventTitle = `Смена ${valueWorkDays[index].workingShifts[0].number}`;
+  
+    if (!eventTitlesSet.has(eventTitle)) {
+      eventTitlesSet.add(eventTitle);
+  
+      events.push({
+        id: valueWorkDays[index].id,
+        title: eventTitle,
+        start: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftStart[0]}${valueWorkDays[index].workingShifts[0].shiftStart[1]} `, `${valueWorkDays[index].workingShifts[0].shiftStart[3]}${valueWorkDays[index].workingShifts[0].shiftStart[4]} `),
+        end: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftEnd[0]}${valueWorkDays[index].workingShifts[0].shiftEnd[1]} `, `${valueWorkDays[index].workingShifts[0].shiftEnd[3]}${valueWorkDays[index].workingShifts[0].shiftEnd[4]} `),
+      });
+    }
+  }
+
+
+  function removeDay(changedateID) { 
+     api.remove(`day/${changedateID}`).then(()=>{
+      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
+  
+     })
+  }
+
   return (
     <div className={styles.calendar_wrapper}>
       <Calendar
@@ -120,13 +137,17 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions , executorObj ,  equipme
 
 
             {!valuechange
-              ? <button onClick={() => setvaluechange(true)}>Редактировать</button>
+              ?
+              <div>
+                <button onClick={() => setvaluechange(true)}>Редактировать</button>
+                <button onClick={() => {removeDay(selectedEvent.id);setSelectedEvent(false);}}>Удалить</button>
+              </div>
               : null
             }
 
 
           </div>
-          <div className={styles.hintsBg} onClick={() => {setSelectedEvent(false);setvaluechange(false)}}></div>
+          <div className={styles.hintsBg} onClick={() => { setSelectedEvent(false); setvaluechange(false) }}></div>
         </div>
 
       )

@@ -813,7 +813,7 @@ export const Knot = ({
                   <Input
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (/^[\dA-Z-]+$/.test(value)) {
+                      if (/^[\dA-Za-z-]+$/.test(value)) {
                         handleChange(e);
                       }
                     }}

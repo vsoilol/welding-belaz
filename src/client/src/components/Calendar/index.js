@@ -63,6 +63,7 @@ export const Calendar = ({
   const [isModalEditWorkDayOpen, setIsModalEditWorkDayOpen] = useState(false);
   const [isModalAddShift, setIsModalAddShift] = useState(false);
 
+  const [isModalAddWekend, setValOpenModalAddWekend] = useState(false);
 
 
   const [modalData, setModalData] = useState(null);
@@ -180,26 +181,26 @@ export const Calendar = ({
 
 
   function SendData(params) {
-    let smena = calendar?.mainWorkingShifts.find(elem=>elem.number === valueWorkingShift)  
+    let smena = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift)
     const data = {
       "monthNumber": new Date(params.workDay).getMonth(),
       "number": new Date(params.workDay).getDate(),
       "isWorkingDay": true,
       "year": new Date(params.workDay).getFullYear(),
-      "weldingEquipmentId": equipmentObj?.id??null,
-      "welderId": executorObj?.id??null,
+      "weldingEquipmentId": equipmentObj?.id ?? null,
+      "welderId": executorObj?.id ?? null,
       "workingShifts": [
         {
           "number": smena.number,
-          "shiftStart":smena.shiftStart,
+          "shiftStart": smena.shiftStart,
           "shiftEnd": smena.shiftEnd,
           "breakStart": smena.breakStart,
           "breakEnd": smena.breakEnd,
         }
       ]
-    }  
+    }
 
-    api.post("day",data).then(()=>executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
+    api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
   }
 
 
@@ -207,9 +208,35 @@ export const Calendar = ({
   function SetValOpenModalAddWorkDay() {
     setIsModalAddWorkDayOpen(true)
   }
- 
+
+  function sendWekend(params) {
+    const data = {
+      "monthNumber": new Date(params.workDay).getMonth() + 1,
+      "number": new Date(params.workDay).getDate(),
+      "isWorkingDay": false,
+      "year": new Date(params.workDay).getFullYear(),
+      "weldingEquipmentId": null,
+      "welderId": null,
+      "workingShifts": null
+    }
+    api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
+  }
 
 
+  function CreateCalendar() {
+    if (executorObj) {
+      api.post(`/calendar/based-on-main/welder?Year=2023&WelderId=${executorObj.id}`)
+        .then(() => {
+          loadDayByWelder(executorObj.id)
+        })
+    }
+    else {
+      api.post(`/calendar/based-on-main/equipment?Year=2023&EquipmentId=${equipmentObj.id}`)
+        .then(() => {
+          loadDayByEquipment(equipmentObj.id)
+        })
+    }
+  }
 
   return (
     <div className={styles.innerWrapper}>
@@ -229,15 +256,20 @@ export const Calendar = ({
             : <h2>Оборудование: {equipmentObj.name} №{equipmentObj.factoryNumber}</h2>
           }
           {userRole === "Admin" || userRole === "Master"
-            ?(
+            ? (
               <div className={styles.RowToolsBtns}>
-            <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
-            {/* <button onClick={setIsModalAddShift}>Создать рабочую смену</button> */}
-          </div>
+                <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
+                <button onClick={setValOpenModalAddWekend}>Добавить выходной день</button>
+                {/* <div className={styles.Create}>
+                  <label>Создание календаря на основе общезаводского</label>
+                  <button onClick={() => { CreateCalendar() }}>Создать</button>
+                </div> */}
+
+              </div>
             )
-            :null
+            : null
           }
-           
+
           {valueWorkDays
             ? (
               <Calendars
@@ -254,7 +286,7 @@ export const Calendar = ({
 
         </div>
 
-       
+
 
 
         {/*Добавить рабочий день*/}
@@ -560,6 +592,71 @@ export const Calendar = ({
         </ModalWindow>
 
 
+
+        {/*Добавить выходной день*/}
+        <ModalWindow
+          isOpen={isModalAddWekend}
+          headerText="Добавить выходной день"
+          setIsOpen={(state) => {
+            setValOpenModalAddWekend(state);
+            setModalData(null);
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setValOpenModalAddWekend(false);
+              setModalData(null);
+              sendWekend(variables)
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
+
+
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                    width="200"
+                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                    value={values.workDay}
+                    name="workDay"
+                    placeholder="Дата  дня"
+                    type="text"
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                    }}
+                    autocomplete="off"
+                    onBlur={handleBlur}
+                  />
+                </div>
+
+
+                <div className={styles.row}>
+                  <Button
+                    disabled={
+                      values.workDay == ""
+                    }
+                    type="submit"
+                  >
+                    {modalData ? "Сохранить" : "Создать"}
+                  </Button>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
 
 
       </div>

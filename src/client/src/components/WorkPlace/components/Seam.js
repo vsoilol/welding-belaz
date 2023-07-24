@@ -430,7 +430,10 @@ export const Seam = ({
                 <div className={styles.row}>
                   <Input
                     onChange={(e) => {
-                      handleChange(e);
+                      const value = e.target.value;
+                      if (/^[\dA-Za-z-]+$/.test(value)) {
+                        handleChange(e);
+                      }
                     }}
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.number}
