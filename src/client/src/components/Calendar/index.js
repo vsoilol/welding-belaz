@@ -222,22 +222,59 @@ export const Calendar = ({
     api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
   }
 
+ 
 
-  function CreateCalendar() {
-    if (executorObj) {
-      api.post(`/calendar/based-on-main/welder?Year=2023&WelderId=${executorObj.id}`)
-        .then(() => {
-          loadDayByWelder(executorObj.id)
-        })
+  const [valuetypeToolsShift, settypeToolsShift] = useState(-1);
+  const typeToolsOptions = [
+    { id: 1, name: "Добавить смену" },
+    { id: 2, name: "Удалить смену" },
+    { id: 3, name: "Редактировать смену" },
+  ].map((item) => {
+    return {
+      value: item.id,
+      label: item.name,
+    };
+  });
+  function ajaxAddShift(variables) {
+    if (valuetypeToolsShift === 1) {
+      const data = {
+        "number": Number(variables.shiftNumb),
+        "shiftStart": variables.shiftStart,
+        "shiftEnd": variables.shiftEnd,
+        "breakStart": variables.breakStart,
+        "breakEnd": variables.breakEnd,
+        "year": 2023,
+        "dayId": null
+      }
+      api.post("/workingShift", data).then(() => {
+        loadCalendaryear(date)
+      })
     }
-    else {
-      api.post(`/calendar/based-on-main/equipment?Year=2023&EquipmentId=${equipmentObj.id}`)
-        .then(() => {
-          loadDayByEquipment(equipmentObj.id)
-        })
+
+    
+    if (valuetypeToolsShift === 2) { 
+      
+      let smenaId = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id 
+      api.remove(`/workingShift/${smenaId}`).then(() => {
+        loadCalendaryear(date)
+      })
+    }
+
+    if (valuetypeToolsShift === 3) {
+      const data = {
+        "id": calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id,
+        "number": Number(variables.shiftNumb),
+        "shiftStart": variables.shiftStart,
+        "shiftEnd": variables.shiftEnd,
+        "breakStart": variables.breakStart,
+        "breakEnd": variables.breakEnd,
+      }
+      api.put("/workingShift", data).then(() => {
+        loadCalendaryear(date)
+      })
     }
   }
-
+ 
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -260,6 +297,7 @@ export const Calendar = ({
               <div className={styles.RowToolsBtns}>
                 <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
                 <button onClick={setValOpenModalAddWekend}>Добавить выходной день</button>
+                <button onClick={() => { setIsModalAddShift(true); }}>Рабочие смены</button>
                 {/* <div className={styles.Create}>
                   <label>Создание календаря на основе общезаводского</label>
                   <button onClick={() => { CreateCalendar() }}>Создать</button>
@@ -279,6 +317,7 @@ export const Calendar = ({
                 equipmentObj={equipmentObj}
                 loadDayByWelder={loadDayByWelder}
                 loadDayByEquipment={loadDayByEquipment}
+                calendar={calendar}
               />
             )
             : null
@@ -476,121 +515,6 @@ export const Calendar = ({
           </Formik>
         </ModalWindow>
 
-        {/*Добавить рабочую смену*/}
-        <ModalWindow
-          isOpen={isModalAddShift}
-          headerText="Добавить рабочую смену"
-          setIsOpen={(state) => {
-            setIsModalAddShift(state);
-            setModalData(null);
-          }}
-          wrapperStyles={{ width: 420 }}
-        >
-          <Formik
-            initialValues={initialValues}
-            enableReinitialize
-            onSubmit={(variables) => {
-              const { id, ...dataToSend } = variables;
-              setIsModalAddShift(false);
-              setModalData(null);
-            }}
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              values,
-              setFieldValue,
-              handleBlur,
-            }) => (
-              <form onSubmit={handleSubmit}>
-
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                    value={values.shiftNumb}
-                    name="shiftNumb"
-                    placeholder="Номер смены"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.shiftStart}
-                    name="shiftStart"
-                    placeholder="Начало работы"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.shiftEnd}
-                    name="shiftEnd"
-                    placeholder="Конец работы"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.breakStart}
-                    name="breakStart"
-                    placeholder="Начало перерыва"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-
-                  <Input
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
-                    width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
-                    value={values.breakEnd}
-                    name="breakEnd"
-                    placeholder="Конец перерыва"
-                    onBlur={handleBlur}
-                    autocomplete="off"
-                  />
-                </div>
-                <div className={styles.row}>
-                  <Button
-                    disabled={
-                      values.shiftNumb == "" ||
-                      values.shiftStart == "" ||
-                      values.shiftEnd == "" ||
-                      values.breakStart == "" ||
-                      values.breakEnd == ""
-                    }
-                    type="submit"
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
-                  </Button>
-                </div>
-              </form>
-            )}
-          </Formik>
-        </ModalWindow>
-
 
 
         {/*Добавить выходной день*/}
@@ -658,6 +582,273 @@ export const Calendar = ({
           </Formik>
         </ModalWindow>
 
+
+        {/*Добавить рабочую смену*/}
+        <ModalWindow
+          isOpen={isModalAddShift}
+          headerText="Добавить рабочую смену"
+          setIsOpen={(state) => {
+            setIsModalAddShift(state);
+            setModalData(null);
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={(variables) => {
+              const { id, ...dataToSend } = variables;
+              setIsModalAddShift(false);
+              setModalData(null);
+              ajaxAddShift(variables)
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              setFieldValue,
+              handleBlur,
+            }) => (
+              <form onSubmit={handleSubmit}>
+
+
+                <div className={styles.rowTool}>
+                  <label>Выберите действие</label>
+                  <br></br>
+                  <Select
+                    name="selectRole"
+                    width="380px"
+                    value={valuetypeToolsShift}
+                    placeholder="Действие"
+                    onChange={(event) => { settypeToolsShift(event.value); }}
+                    options={typeToolsOptions}
+                  />
+                </div>
+                {valuetypeToolsShift === 1
+                  ? (
+                    <div>
+                      <div className={styles.row}>
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                          value={values.shiftNumb}
+                          name="shiftNumb"
+                          placeholder="Номер смены"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+
+                      </div>
+                      <div className={styles.row}>
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.shiftStart}
+                          name="shiftStart"
+                          placeholder="Начало работы"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.shiftEnd}
+                          name="shiftEnd"
+                          placeholder="Конец работы"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+                      </div>
+                      <div className={styles.row}>
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.breakStart}
+                          name="breakStart"
+                          placeholder="Начало перерыва"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.breakEnd}
+                          name="breakEnd"
+                          placeholder="Конец перерыва"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+                      </div>
+                      <div className={styles.row}>
+                        <Button
+                          disabled={
+                            values.shiftNumb == "" ||
+                            values.shiftStart == "" ||
+                            values.shiftEnd == "" ||
+                            values.breakStart == "" ||
+                            values.breakEnd == ""
+                          }
+                          type="submit"
+                        >
+                          {modalData ? "Сохранить" : "Создать"}
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                  : null
+                }
+
+                {valuetypeToolsShift === 2
+                  ? (
+                    <div>
+                      <div className={styles.row}>
+                        <Select
+                          name="valueWorkingShift"
+                          value={valueWorkingShift}
+                          width="380px"
+                          placeholder="Смена"
+                          onChange={(event) => {
+                            setValueWorkingShift(event.value)
+                          }}
+                          options={WorkingShiftOptions}
+                        />
+                      </div>
+                      <div className={styles.row}>
+                        <Button
+                          type="submit"
+                        >
+                          Удалить
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                  : null
+                }
+
+                {valuetypeToolsShift === 3
+                  ? (
+                    <div>
+                      <div className={styles.row}>
+                        <Select
+                          name="valueWorkingShift"
+                          value={valueWorkingShift}
+                          width="380px"
+                          placeholder="Смена"
+                          onChange={(event) => {
+                            setValueWorkingShift(event.value)
+                          }}
+                          options={WorkingShiftOptions}
+                        />
+                      </div>
+                      <div className={styles.row}>
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                          value={values.shiftNumb}
+                          name="shiftNumb"
+                          placeholder="Номер смены"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+
+                      </div>
+                      <div className={styles.row}>
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.shiftStart}
+                          name="shiftStart"
+                          placeholder="Начало работы"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.shiftEnd}
+                          name="shiftEnd"
+                          placeholder="Конец работы"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+                      </div>
+                      <div className={styles.row}>
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.breakStart}
+                          name="breakStart"
+                          placeholder="Начало перерыва"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+
+                        <Input
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          width="200"
+                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          value={values.breakEnd}
+                          name="breakEnd"
+                          placeholder="Конец перерыва"
+                          onBlur={handleBlur}
+                          autocomplete="off"
+                        />
+                      </div>
+                      <div className={styles.row}>
+                        <Button
+                          disabled={
+                            values.shiftNumb == "" ||
+                            values.shiftStart == "" ||
+                            values.shiftEnd == "" ||
+                            values.breakStart == "" ||
+                            values.breakEnd == ""
+                          }
+                          type="submit"
+                        >
+                          Сохранить
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                  : null
+                }
+
+
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
 
       </div>
     </div>

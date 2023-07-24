@@ -49,6 +49,7 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions }) => {
     let events = [];
     for (let i = new Date(now.getFullYear(), now.getMonth(), 1).getDate(); i <= new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(); i++) {
       const existingDay = valueWorkDays?.find(day => day.number === i && day.monthNumber === now.getMonth() + 1);
+     
       if (!existingDay) {
         const shift1 = WorkingShiftOptions.find(elem => elem.number === 1);
         const shift2 = WorkingShiftOptions.find(elem => elem.number === 2);
