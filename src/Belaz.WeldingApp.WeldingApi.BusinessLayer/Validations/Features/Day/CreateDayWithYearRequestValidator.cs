@@ -1,14 +1,15 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Day;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.WorkingShift;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Day;
+using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Features.Day;
 
 public class CreateDayWithYearRequestValidator : AbstractValidator<CreateDayWithYearRequest>
 {
-    public CreateDayWithYearRequestValidator()
+    public CreateDayWithYearRequestValidator(ApplicationContext context)
     {
         RuleFor(model => model.MonthNumber)
             .Cascade(CascadeMode.Stop)
@@ -63,5 +64,10 @@ public class CreateDayWithYearRequestValidator : AbstractValidator<CreateDayWith
                     .Cascade(CascadeMode.Stop)
                     .Null();
             });
+        
+        RuleFor(model => model)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .SetAsyncValidator(new DayAlreadyExistValidatorForCreate(context));
     }
 }
