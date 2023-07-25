@@ -550,7 +550,10 @@ export const ExecutorsTable = ({
                     setIsModalOpen(true);
                     setValuetOpenModal(1);
                     setvalueWorkplace(rowData?.workplace?.id)
-                    setValueWorkshop(rowData.workshop?.id)
+
+                    console.log(rowData)
+
+                    setValueWorkshop(rowData?.workshop?.id)
                     setValuetArea(rowData.productionArea.id)
                     setValuetEquipment(rowData.weldingEquipment?.id)
                     api.post(`/eventLog`, {

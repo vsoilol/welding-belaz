@@ -218,8 +218,12 @@ export const Calendar = ({
       "weldingEquipmentId": null,
       "welderId": null,
       "workingShifts": null
-    }
-    api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
+    } 
+    const idDay = valueWorkDays.find(day => day.number === data.number && day.monthNumber === data.monthNumber - 1)?.id;
+    api.remove(`day/${idDay}`).then(()=>{ 
+      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
+    }) 
+    /* api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)) */
   }
 
  

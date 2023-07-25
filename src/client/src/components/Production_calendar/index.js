@@ -196,7 +196,7 @@ export const Production_calendar = ({
   function SendData(params) {
     let smena = valueWorkDays.mainWorkingShifts.find(elem => elem.number === valueWorkingShift)
     const data = {
-      "monthNumber": new Date(params.workDay).getMonth(),
+      "monthNumber": new Date(params.workDay).getMonth()+1,
       "number": new Date(params.workDay).getDate(),
       "isWorkingDay": true,
       "year": new Date(params.workDay).getFullYear(),
@@ -319,6 +319,7 @@ export const Production_calendar = ({
           {valueWorkDays.days
             ? (
               <Calendars
+              loadCalendarYear={loadCalendarYear}
                 valueWorkDays={valueWorkDays.days}
                 WorkingShiftOptions={valueWorkShift}
               />
