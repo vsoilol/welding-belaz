@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.Users;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
@@ -25,6 +26,8 @@ public class InspectorDto : IMapFrom<Inspector>
     /// Табельный номер
     /// </summary>
     public string? ServiceNumber { get; set; }
+    
+    public WorkshopBriefDto Workshop { get; set; } = null!;
 
     public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
 
@@ -40,6 +43,11 @@ public class InspectorDto : IMapFrom<Inspector>
             .ForMember(
                 dto => dto.ProductionArea,
                 opt => opt.MapFrom(x => x.UserInfo.ProductionArea)
+            )
+            .ForMember(
+                dto => dto.Workshop,
+                opt => opt
+                    .MapFrom(x => x.UserInfo.ProductionArea!.Workshop)
             )
             .ForMember(dto => dto.ServiceNumber, opt => opt.MapFrom(x => x.UserInfo.ServiceNumber));
     }
