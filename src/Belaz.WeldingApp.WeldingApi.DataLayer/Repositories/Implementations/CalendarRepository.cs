@@ -57,7 +57,6 @@ public class CalendarRepository : ICalendarRepository
     {
         return _context.Calendars
             .Where(_ => _.IsMain == true && _.Year == year)
-            .OrderByDescending(_ => _.Year)
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
     }
