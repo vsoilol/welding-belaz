@@ -47,18 +47,18 @@ public class CalendarController : ControllerBase
         return result.Result.ToOk();
     }
 
-    [HttpPut]
-    [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
-    public async Task<ActionResult<CalendarDto>> UpdateAsync(
-        [FromBody] UpdateCalendarRequest request
-    )
-    {
-        var result = await _calendarService.UpdateAsync(request);
-
-        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
-
-        return result.Result.ToOk();
-    }
+    // [HttpPut]
+    // [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
+    // public async Task<ActionResult<CalendarDto>> UpdateAsync(
+    //     [FromBody] UpdateCalendarRequest request
+    // )
+    // {
+    //     var result = await _calendarService.UpdateAsync(request);
+    //
+    //     HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+    //
+    //     return result.Result.ToOk();
+    // }
 
     [HttpPost("withWelder")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
