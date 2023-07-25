@@ -14,4 +14,14 @@ public class CalendarDto : IMapFrom<Calendar>
     public IReadOnlyCollection<DayDto>? Days { get; set; }
 
     public IReadOnlyCollection<WorkingShiftDto> MainWorkingShifts { get; set; } = null!;
+    
+    public void Mapping(Profile profile)
+    {
+        profile
+            .CreateMap<Calendar, CalendarDto>()
+            .ForMember(dto => dto.Days, opt => 
+                opt.MapFrom(x => x.Days!.OrderBy(_ => _.MonthNumber).ThenBy(_ => _.Number)))
+            .ForMember(dto => dto.MainWorkingShifts, opt => 
+                opt.MapFrom(x => x.MainWorkingShifts.OrderBy(_ => _.Number)));
+    }
 }

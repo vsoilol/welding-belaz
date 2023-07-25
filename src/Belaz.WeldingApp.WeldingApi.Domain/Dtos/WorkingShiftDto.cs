@@ -25,7 +25,8 @@ public class WorkingShiftDto : IMapFrom<WorkingShift>
             .CreateMap<WorkingShift, WorkingShiftDto>()
             .ForMember(
                 dto => dto.ShiftStart,
-                opt => opt.MapFrom(x => x.ShiftStart.ToHoursMinutesString())
+                opt => 
+                    opt.MapFrom(x => x.ShiftStart.ToHoursMinutesString())
             )
             .ForMember(
                 dto => dto.ShiftEnd,

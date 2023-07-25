@@ -4,7 +4,8 @@
       "UpstreamPathTemplate": "/api/detail/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/detail/{id}",
       "ServiceName": "welding",
@@ -62,7 +63,8 @@
       "UpstreamPathTemplate": "/api/knot/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/knot/{id}",
       "ServiceName": "welding",
@@ -106,7 +108,8 @@
       "UpstreamPathTemplate": "/api/product/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/product/{id}",
       "ServiceName": "welding",
@@ -348,7 +351,9 @@
       "UpstreamPathTemplate": "/api/seam/defective",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST", "PUT"
+        "GET",
+        "POST",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/seam/defective",
       "ServiceName": "welding",
@@ -418,7 +423,8 @@
       "UpstreamPathTemplate": "/api/seam/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/seam/{id}",
       "ServiceName": "welding",
@@ -432,7 +438,8 @@
       "UpstreamPathTemplate": "/api/post/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/post/{id}",
       "ServiceName": "welding",
@@ -462,7 +469,8 @@
       "UpstreamPathTemplate": "/api/ProductionArea/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/ProductionArea/{id}",
       "ServiceName": "welding",
@@ -492,7 +500,8 @@
       "UpstreamPathTemplate": "/api/Workplace/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/Workplace/{id}",
       "ServiceName": "welding",
@@ -522,7 +531,8 @@
       "UpstreamPathTemplate": "/api/Workshop/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/Workshop/{id}",
       "ServiceName": "welding",
@@ -552,7 +562,8 @@
       "UpstreamPathTemplate": "/api/TechnologicalProcess/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "DELETE"
+        "GET",
+        "DELETE"
       ],
       "DownstreamPathTemplate": "/api/TechnologicalProcess/{id}",
       "ServiceName": "welding",
@@ -1003,8 +1014,7 @@
       "UpstreamPathTemplate": "/api/day",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST",
-        "PUT"
+        "POST"
       ],
       "DownstreamPathTemplate": "/api/day",
       "ServiceName": "welding",
@@ -1347,7 +1357,8 @@
       "UpstreamPathTemplate": "/api/weldingRecord/limits",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "PUT"
+        "GET",
+        "PUT"
       ],
       "DownstreamPathTemplate": "/api/weldingRecord/limits",
       "ServiceName": "welding",
@@ -1585,7 +1596,8 @@
       "UpstreamPathTemplate": "/api/eventLog",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "GET", "POST"
+        "GET",
+        "POST"
       ],
       "DownstreamPathTemplate": "/api/eventLog",
       "ServiceName": "welding",

@@ -22,6 +22,9 @@ public class DayDto : IMapFrom<Day>
     {
         profile
             .CreateMap<Day, DayDto>()
-            .ForMember(dto => dto.Year, opt => opt.MapFrom(x => x.Calendar.Year));
+            .ForMember(dto => dto.Year, opt =>
+                opt.MapFrom(x => x.Calendar.Year))
+            .ForMember(dto => dto.WorkingShifts, opt =>
+                opt.MapFrom(x => x.WorkingShifts!.OrderBy(_ => _.Number)));
     }
 }
