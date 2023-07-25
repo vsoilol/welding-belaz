@@ -534,7 +534,8 @@ public class ProductAccountRepository : IProductAccountRepository
     {
         var productAccountDefectiveResult = (
             await _context.ProductResults.FirstOrDefaultAsync(
-                _ => _.ProductAccountId == productAccountId
+                _ => _.ProductAccountId == productAccountId && 
+                     _.Status == ResultProductStatus.Defective
             )
         )!;
 
