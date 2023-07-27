@@ -23,18 +23,11 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentO
     setSelectedEvent(event);
   };
 
-  function changeDay(selectedEvent) {
-    const data = {
-      "id": selectedEvent.id,
-      "monthNumber": new Date(changedate).getMonth(),
-      "number": new Date(changedate).getDate(),
-      "isWorkingDay": true
-    }
-    api.put("day", data).then(() => {
-      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
-      setSelectedEvent(false)
-      setvaluechange(false)
-    })
+  async function changeDay(selectedEvent) {
+     
+   /*  console.log(selectedEvent)
+    console.log(changedate) */
+    
   }
 
   const now = new Date();
@@ -47,23 +40,46 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentO
     next: 'Вперед',
   };
 
-  const events = []; 
+  const events = [];
+  const addedShiftsPerDay = {}; // Объект для отслеживания добавленных смен за каждый день
+
   for (let index = 0; index < valueWorkDays.length; index++) {
-    const eventTitle = `Смена ${valueWorkDays[index].workingShifts[0].number}`;  
-      events.push({
-        id: valueWorkDays[index].id,
-        title: eventTitle,
-        start: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftStart[0]}${valueWorkDays[index].workingShifts[0].shiftStart[1]} `, `${valueWorkDays[index].workingShifts[0].shiftStart[3]}${valueWorkDays[index].workingShifts[0].shiftStart[4]} `),
-        end: new Date(2023, valueWorkDays[index].monthNumber, valueWorkDays[index].number, `${valueWorkDays[index].workingShifts[0].shiftEnd[0]}${valueWorkDays[index].workingShifts[0].shiftEnd[1]} `, `${valueWorkDays[index].workingShifts[0].shiftEnd[3]}${valueWorkDays[index].workingShifts[0].shiftEnd[4]} `),
-      }); 
+    const dayNumber = valueWorkDays[index].number; 
+    for (let index2 = 0; index2 < valueWorkDays[index].workingShifts.length; index2++) {
+      const workingShift = valueWorkDays[index].workingShifts[index2];
+      const shiftNumber = workingShift.number;
+      const eventTitle = `Смена ${shiftNumber}`; 
+      // Проверяем, добавлена ли уже смена с данным номером за текущий день
+      if (!addedShiftsPerDay[dayNumber] || !addedShiftsPerDay[dayNumber][shiftNumber]) {
+        events.push({
+          id: valueWorkDays[index].id,
+          title: eventTitle,
+          start: new Date(2023, valueWorkDays[index].monthNumber, dayNumber, `${workingShift.shiftStart[0]}${workingShift.shiftStart[1]} `, `${workingShift.shiftStart[3]}${workingShift.shiftStart[4]} `),
+          end: new Date(2023, valueWorkDays[index].monthNumber, dayNumber, `${workingShift.shiftEnd[0]}${workingShift.shiftEnd[1]} `, `${workingShift.shiftEnd[3]}${workingShift.shiftEnd[4]} `),
+        }); 
+        // Помечаем смену с данным номером за текущий день как добавленную
+        if (!addedShiftsPerDay[dayNumber]) {
+          addedShiftsPerDay[dayNumber] = {};
+        }
+        addedShiftsPerDay[dayNumber][shiftNumber] = true;
+      }
+    }
   }
 
 
-  function removeDay(changedateID) { 
-     api.remove(`day/${changedateID}`).then(()=>{
-      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
-  
-     })
+  //Удаление смены в рабочем дне 
+  async function removeDay(changedateID) { 
+    let data = valueWorkDays.find((day) => day.id === changedateID.id); 
+    const smenaIndex = data?.workingShifts.findIndex((smena) => smena.number === Number(changedateID.title.replace(/[^\w\s!?]/g, '')));
+    if (smenaIndex !== -1) {
+      data.workingShifts.splice(smenaIndex, 1);
+    } 
+    data.weldingEquipmentId = equipmentObj?.id ?? null;
+    data.welderId = executorObj?.id ?? null; 
+    delete data.id; 
+    await api.remove(`day/${changedateID.id}`);
+    await api.post("day", data); 
+    executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id);
   }
 
   return (
@@ -133,8 +149,8 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentO
             {!valuechange
               ?
               <div>
-                <button onClick={() => setvaluechange(true)}>Редактировать</button>
-                <button onClick={() => {removeDay(selectedEvent.id);setSelectedEvent(false);}}>Удалить</button>
+                {/* <button onClick={() => setvaluechange(true)}>Редактировать</button> */}
+                <button onClick={() => {removeDay(selectedEvent);setSelectedEvent(false);}}>Удалить</button>
               </div>
               : null
             }

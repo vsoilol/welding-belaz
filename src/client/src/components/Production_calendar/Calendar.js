@@ -49,7 +49,9 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions , loadCalendarYear}) => 
     let events = [];
     for (let i = new Date(now.getFullYear(), now.getMonth(), 1).getDate(); i <= new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(); i++) {
       const existingDay = valueWorkDays?.find(day => day.number === i && day.monthNumber === now.getMonth() + 1); 
-      if (!existingDay) {
+      const isWorkDay = valueWorkDays?.find(day => day.number === i && day.monthNumber === now.getMonth() + 1)?.isWorkingDay; 
+ 
+      if (!existingDay && !isWorkDay) {
         const shift1 = WorkingShiftOptions.find(elem => elem.number === 1);
         const shift2 = WorkingShiftOptions.find(elem => elem.number === 2);
         const shift3 = WorkingShiftOptions.find(elem => elem.number === 3); 
@@ -76,7 +78,7 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions , loadCalendarYear}) => 
       } else {
         events.push(
           {
-            id: existingDay.id,  
+            id: existingDay?.id,  
             title: `Выходной день`,
             start: new Date(now.getFullYear(), now.getMonth(), i),
             end: new Date(now.getFullYear(), now.getMonth(), i),
@@ -104,6 +106,24 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions , loadCalendarYear}) => 
     getDays(date)
   }
 
+
+  
+  //Удаление смены в рабочем дне 
+  async function removeDay(changedateID) { 
+    let data = valueWorkDays.find((day) => day.id === changedateID.id);
+    console.log(changedateID) 
+    const smenaIndex = data?.workingShifts.findIndex((smena) => smena.number === Number(changedateID.title.replace(/[^\w\s!?]/g, '')));
+    if (smenaIndex !== -1) {
+      data.workingShifts.splice(smenaIndex, 1);
+    } 
+    data.weldingEquipmentId = null;
+    data.welderId = null; 
+    delete data.id; 
+    await api.remove(`day/${changedateID.id}`);
+    await api.post("day", data); 
+    loadCalendarYear()
+  }
+
   return (
     <div className={styles.calendar_wrapper}>
       <Calendar
@@ -129,6 +149,10 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions , loadCalendarYear}) => 
             {selectedEvent.title === "Выходной день" && (
               <button onClick={() => setWorkDay(selectedEvent)}>Сделать рабочим</button>
             )}
+            {/* {selectedEvent.title.includes("Смена") && (
+              <button onClick={() => {removeDay(selectedEvent);setSelectedEvent(false);}}>Удалить</button>
+            )} */}
+            
           </div>
           <div className={styles.hintsBg} onClick={() => { setSelectedEvent(false); setvaluechange(false) }}></div>
         </div>

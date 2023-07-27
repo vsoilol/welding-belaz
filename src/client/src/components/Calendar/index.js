@@ -180,27 +180,53 @@ export const Calendar = ({
 
 
 
-  function SendData(params) {
-    let smena = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift)
-    const data = {
-      "monthNumber": new Date(params.workDay).getMonth(),
-      "number": new Date(params.workDay).getDate(),
-      "isWorkingDay": true,
-      "year": new Date(params.workDay).getFullYear(),
-      "weldingEquipmentId": equipmentObj?.id ?? null,
-      "welderId": executorObj?.id ?? null,
-      "workingShifts": [
-        {
+  async function SendData(params) {
+    let smena = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift);
+    let data; // Объявляем переменную data здесь, чтобы она была видна в catch
+  
+    try {
+      data = {
+        "monthNumber": new Date(params.workDay).getMonth(),
+        "number": new Date(params.workDay).getDate(),
+        "isWorkingDay": true,
+        "year": new Date(params.workDay).getFullYear(),
+        "weldingEquipmentId": equipmentObj?.id ?? null,
+        "welderId": executorObj?.id ?? null,
+        "workingShifts": [
+          {
+            "number": smena.number,
+            "shiftStart": smena.shiftStart,
+            "shiftEnd": smena.shiftEnd,
+            "breakStart": smena.breakStart,
+            "breakEnd": smena.breakEnd,
+          }
+        ]
+      };
+  
+      await api.post("day", data);
+      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id);
+    } catch (error) {
+      // Обработка ошибки 400
+      if (error.response && error.response.status === 400 && error.response.data.errors[""] === "Day already exist") {
+        
+        const datady = {
           "number": smena.number,
           "shiftStart": smena.shiftStart,
           "shiftEnd": smena.shiftEnd,
           "breakStart": smena.breakStart,
           "breakEnd": smena.breakEnd,
+          "year": null,
+          "dayId": valueWorkDays.find((day) => day.number === data.number).id
         }
-      ]
+        api.post("/workingShift", datady).then(() => {
+          executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id);
+        }) 
+        
+      } else {
+        // Обработка других ошибок
+        console.log("Произошла ошибка при выполнении запроса:", error);
+      }
     }
-
-    api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
   }
 
 
@@ -218,15 +244,15 @@ export const Calendar = ({
       "weldingEquipmentId": null,
       "welderId": null,
       "workingShifts": null
-    } 
+    }
     const idDay = valueWorkDays.find(day => day.number === data.number && day.monthNumber === data.monthNumber - 1)?.id;
-    api.remove(`day/${idDay}`).then(()=>{ 
+    api.remove(`day/${idDay}`).then(() => {
       executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
-    }) 
+    })
     /* api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)) */
   }
 
- 
+
 
   const [valuetypeToolsShift, settypeToolsShift] = useState(-1);
   const typeToolsOptions = [
@@ -255,10 +281,10 @@ export const Calendar = ({
       })
     }
 
-    
-    if (valuetypeToolsShift === 2) { 
-      
-      let smenaId = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id 
+
+    if (valuetypeToolsShift === 2) {
+
+      let smenaId = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id
       api.remove(`/workingShift/${smenaId}`).then(() => {
         loadCalendaryear(date)
       })
@@ -278,7 +304,7 @@ export const Calendar = ({
       })
     }
   }
- 
+
   return (
     <div className={styles.innerWrapper}>
       <ToolTip

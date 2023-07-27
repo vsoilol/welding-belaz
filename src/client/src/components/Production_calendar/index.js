@@ -193,28 +193,20 @@ export const Production_calendar = ({
 
 
 
-  function SendData(params) {
+  async function SendData(params) {
     let smena = valueWorkDays.mainWorkingShifts.find(elem => elem.number === valueWorkingShift)
-    const data = {
-      "monthNumber": new Date(params.workDay).getMonth()+1,
-      "number": new Date(params.workDay).getDate(),
-      "isWorkingDay": true,
-      "year": new Date(params.workDay).getFullYear(),
-      "weldingEquipmentId": valueObj === 1 ? valueEquipment : null,
-      "welderId": valueObj === 2 ? valueExecutors : null,
-      "workingShifts": [
-        {
-          "number": smena.number,
-          "shiftStart": smena.shiftStart,
-          "shiftEnd": smena.shiftEnd,
-          "breakStart": smena.breakStart,
-          "breakEnd": smena.breakEnd,
-        }
-      ]
+    const datady = {
+      "number": smena.number,
+      "shiftStart": smena.shiftStart,
+      "shiftEnd": smena.shiftEnd,
+      "breakStart": smena.breakStart,
+      "breakEnd": smena.breakEnd,
+      "year": null,
+      "dayId": valueWorkDays.days.find((day) => day.number === new Date(params.workDay).getDate()).id
     }
-    api.post("day", data).then(() => {
-      loadCalendarYear()
-    })
+    
+    await api.post("/workingShift", datady)  
+    loadCalendarYear() 
   }
 
 
