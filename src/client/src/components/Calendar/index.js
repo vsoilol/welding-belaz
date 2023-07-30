@@ -100,13 +100,32 @@ export const Calendar = ({
   const executorObj = JSON.parse(window.localStorage.getItem("executor"))
   const equipmentObj = JSON.parse(window.localStorage.getItem("equipment"))
 
-  useEffect(() => {
-    loadCalendaryear(date);
-    /* loadExecutors();
-    loadEquipment(); */
+
+
+  ////CalendarCalendarCalendar 
+  const [valueCalendar, setvalueCalendar] = useState([]);
+
+
+  useEffect(() => {  
+    executorObj ?  loadCalendarByWelder(executorObj.id): loadCalendarByEquipment(equipmentObj.id)
     executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
   }, [loadCalendaryear]);
 
+  
+  function loadCalendarByWelder(id) {
+    api.get(`/calendar/byWelder?WelderId=${id}&Year=2023`)
+      .then((res) => {  
+        setvalueWorkDays(res.data) 
+        setvalueCalendar(res.data)
+      })
+  } 
+  function loadCalendarByEquipment(id) {
+    api.get(`/calendar/byEquipment?WeldingEquipmentId=${id}&Year=2023`)
+      .then((res) => {  
+        setvalueWorkDays(res.data) 
+        setvalueCalendar(res.data)
+      })
+  }
 
   function loadDayByWelder(id) {
     api.get(`/day/byWelder/${id}`)
@@ -171,7 +190,7 @@ export const Calendar = ({
   });
 
 
-  let WorkingShiftOptions = calendar?.mainWorkingShifts?.map((item) => {
+  let WorkingShiftOptions = valueCalendar?.mainWorkingShifts?.map((item) => {
     return {
       value: item.number,
       label: `Смена ${item.number}`,
@@ -180,27 +199,78 @@ export const Calendar = ({
 
 
 
-  function SendData(params) {
-    let smena = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift)
+  async function SendData(params) { 
+    let smena = valueCalendar?.mainWorkingShifts?.find(
+      (elem) => elem.number === valueWorkingShift
+    );
+  
     const data = {
-      "monthNumber": new Date(params.workDay).getMonth(),
-      "number": new Date(params.workDay).getDate(),
-      "isWorkingDay": true,
-      "year": new Date(params.workDay).getFullYear(),
+      monthNumber: new Date(params.workDay).getMonth() + 1,
+      number: new Date(params.workDay).getDate(),
+      isWorkingDay: true,
+      year: new Date(params.workDay).getFullYear(),
       "weldingEquipmentId": equipmentObj?.id ?? null,
       "welderId": executorObj?.id ?? null,
-      "workingShifts": [
+    };
+  
+    const existingDay = valueWorkDays.find(
+      (day) =>
+        day.number === new Date(params.workDay).getDate() &&
+        day.monthNumber === new Date(params.workDay).getMonth() + 1
+    );
+  
+  
+    if (existingDay) {
+      const shiftExists = existingDay.workingShifts.some(
+        (shift) => shift.number === smena.number
+      ); 
+      if (!shiftExists) {
+        const dayId = existingDay.id;
+        const existingShifts = existingDay.workingShifts;
+       
+        await api.remove(`day/${dayId}`);
+        data.workingShifts = [
+          ...existingShifts,
+          {
+            id: smena.id,
+            number: smena.number,
+            shiftStart: smena.shiftStart,
+            shiftEnd: smena.shiftEnd,
+            breakStart: smena.breakStart,
+            breakEnd: smena.breakEnd,
+          },
+        ];
+      } else {
+        data.workingShifts = existingDay.workingShifts;
+      }
+    } else {
+      data.workingShifts = [
         {
-          "number": smena.number,
-          "shiftStart": smena.shiftStart,
-          "shiftEnd": smena.shiftEnd,
-          "breakStart": smena.breakStart,
-          "breakEnd": smena.breakEnd,
-        }
-      ]
+          id: smena.id,
+          number: smena.number,
+          shiftStart: smena.shiftStart,
+          shiftEnd: smena.shiftEnd,
+          breakStart: smena.breakStart,
+          breakEnd: smena.breakEnd,
+        },
+      ];
     }
-
-    api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id))
+  
+    // Добавим проверку для valueEquipment или valueExecutors
+    const hasValueEquipmentOrExecutors = equipmentObj || executorObj;
+    if (
+      !existingDay ||
+      !existingDay.workingShifts.some((shift) => shift.number === smena.number) ||
+      hasValueEquipmentOrExecutors
+    ) {
+      try {
+        await api.post("day", data);
+        executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
+      } catch (error) {
+        // Обработка других ошибок
+        console.log("Произошла ошибка при выполнении запроса:", error);
+      }
+    }
   }
 
 
@@ -208,25 +278,29 @@ export const Calendar = ({
   function SetValOpenModalAddWorkDay() {
     setIsModalAddWorkDayOpen(true)
   }
+ 
 
-  function sendWekend(params) {
+  async function sendWekend(params) {
+
+    const dayId = valueWorkDays?.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+ 
+    if (dayId) {
+      await api.remove(`day/${dayId}`)
+    }
     const data = {
       "monthNumber": new Date(params.workDay).getMonth() + 1,
       "number": new Date(params.workDay).getDate(),
       "isWorkingDay": false,
       "year": new Date(params.workDay).getFullYear(),
-      "weldingEquipmentId": null,
-      "welderId": null,
+      "weldingEquipmentId": equipmentObj?.id ?? null,
+      "welderId": executorObj?.id ?? null,
       "workingShifts": null
-    } 
-    const idDay = valueWorkDays.find(day => day.number === data.number && day.monthNumber === data.monthNumber - 1)?.id;
-    api.remove(`day/${idDay}`).then(()=>{ 
-      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
-    }) 
-    /* api.post("day", data).then(() => executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)) */
+    }
+    await api.post("day", data)
+    executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
   }
 
- 
+
 
   const [valuetypeToolsShift, settypeToolsShift] = useState(-1);
   const typeToolsOptions = [
@@ -255,10 +329,10 @@ export const Calendar = ({
       })
     }
 
-    
-    if (valuetypeToolsShift === 2) { 
-      
-      let smenaId = calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id 
+
+    if (valuetypeToolsShift === 2) {
+
+      let smenaId = valueCalendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id
       api.remove(`/workingShift/${smenaId}`).then(() => {
         loadCalendaryear(date)
       })
@@ -266,7 +340,7 @@ export const Calendar = ({
 
     if (valuetypeToolsShift === 3) {
       const data = {
-        "id": calendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id,
+        "id": valueCalendar?.mainWorkingShifts.find(elem => elem.number === valueWorkingShift).id,
         "number": Number(variables.shiftNumb),
         "shiftStart": variables.shiftStart,
         "shiftEnd": variables.shiftEnd,
@@ -278,7 +352,22 @@ export const Calendar = ({
       })
     }
   }
- 
+
+
+  //Создать календарь на основе общезаводского 
+  async function CreateCalendar() {
+    try {
+      if (executorObj) {
+        await api.post(`calendar/based-on-main/welder?Year=2023&WelderId=${executorObj.id}`);
+      } else if (equipmentObj) {
+        await api.post(`calendar/based-on-main/equipment?Year=2023&EquipmentId=${equipmentObj.id}`);
+      } else {
+        throw new Error('Не выбран работник (welder) или оборудование (equipment).');
+      }
+      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
+    } catch (error) { 
+    }
+  }
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -302,10 +391,10 @@ export const Calendar = ({
                 <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
                 <button onClick={setValOpenModalAddWekend}>Добавить выходной день</button>
                 <button onClick={() => { setIsModalAddShift(true); }}>Рабочие смены</button>
-                {/* <div className={styles.Create}>
+                <div className={styles.Create}>
                   <label>Создание календаря на основе общезаводского</label>
                   <button onClick={() => { CreateCalendar() }}>Создать</button>
-                </div> */}
+                </div>
 
               </div>
             )
@@ -321,7 +410,7 @@ export const Calendar = ({
                 equipmentObj={equipmentObj}
                 loadDayByWelder={loadDayByWelder}
                 loadDayByEquipment={loadDayByEquipment}
-                calendar={calendar}
+                calendar={valueCalendar}
               />
             )
             : null

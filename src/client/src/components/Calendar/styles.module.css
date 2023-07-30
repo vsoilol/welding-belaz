@@ -82,12 +82,15 @@ span.obj {
 }
 
 .RowToolsBtns {
-  display: block;
+  display: flex;
+  grid-gap: 20px;
+  grid-gap: 20px;
   gap: 20px;
+  width: -moz-fit-content;
   width: fit-content;
-  margin: 100px 0;
+  margin: 40px 0;
   margin-bottom: 80px;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .RowToolsBtns button {
@@ -109,10 +112,7 @@ span.obj {
 .RowToolsBtns button:hover {
   background-color: whitesmoke;
 }
-
-.Create {
-  margin-top: 50px;
-}
+ 
 
 .Create button {
   margin: 10px 0px;
@@ -196,4 +196,39 @@ label {
 .hints button.save {
   color: white;
   background-color: rgb(16, 121, 63) !important;
+}
+
+
+.calendar-wrapper {
+  width: calc(100% - 120px);
+  margin: 30px auto 50px auto;
+  border-radius: 5px;
+  background: #fff;
+  height: 1350px;
+  margin-bottom: 100px;
+}
+
+
+.hints p{
+  margin-left: 0;
+}
+
+.hints p.par{
+  font-weight: 600;
+}
+.hints .rowInputs{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.hints input{
+  width: calc(100% - 40px);
+  padding: 10px 20px;
+  border-radius: 25px;
+  outline: none;
+  border: 2px solid #e8e8e8;
+  font-family: 'Muller Narrow Light';
+    font-size: 14px;
+    line-height: 14px;
+    color: #000000;
 }
