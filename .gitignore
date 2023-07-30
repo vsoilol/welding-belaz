@@ -353,3 +353,4 @@ DockerData
 src/docker-compose/docker-storage
 src/Belaz.WeldingApp.ApiGateway/ocelot.json
 *.tar
+src/.vscode

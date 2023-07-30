@@ -21,10 +21,5 @@ public class CreateWelderCalendarBasedOnMainRequestValidator : AbstractValidator
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .SetAsyncValidator(new MainCalendarIsNotExistValidatorFor<CreateWelderCalendarBasedOnMainRequest>(context));
-
-        RuleFor(model => model)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetAsyncValidator(new WelderCalendarAlreadyExistValidatorFor(context));
     }
 }
