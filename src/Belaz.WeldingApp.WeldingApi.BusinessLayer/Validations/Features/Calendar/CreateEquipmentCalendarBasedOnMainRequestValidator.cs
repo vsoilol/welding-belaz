@@ -23,11 +23,5 @@ public class CreateEquipmentCalendarBasedOnMainRequestValidator
             .NotEmpty()
             .SetAsyncValidator(
                 new MainCalendarIsNotExistValidatorFor<CreateEquipmentCalendarBasedOnMainRequest>(context));
-
-
-        RuleFor(model => model)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .SetAsyncValidator(new EquipmentCalendarAlreadyExistValidatorFor(context));
     }
 }
