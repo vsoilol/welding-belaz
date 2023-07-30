@@ -193,24 +193,80 @@ export const Production_calendar = ({
 
 
 
+  ///Добавляем рабочий день , рабочие смены 
   async function SendData(params) {
-    let smena = valueWorkDays.mainWorkingShifts.find(elem => elem.number === valueWorkingShift)
-    const datady = {
-      "number": smena.number,
-      "shiftStart": smena.shiftStart,
-      "shiftEnd": smena.shiftEnd,
-      "breakStart": smena.breakStart,
-      "breakEnd": smena.breakEnd,
-      "year": null,
-      "dayId": valueWorkDays.days.find((day) => day.number === new Date(params.workDay).getDate()).id
+    let smena = valueWorkDays.mainWorkingShifts.find(
+      (elem) => elem.number === valueWorkingShift
+    );
+  
+    const data = {
+      monthNumber: new Date(params.workDay).getMonth() + 1,
+      number: new Date(params.workDay).getDate(),
+      isWorkingDay: true,
+      year: new Date(params.workDay).getFullYear(),
+      weldingEquipmentId: valueObj === 2 ? null : valueEquipment || null,
+      welderId: valueObj === 1 ? null : valueExecutors || null,
+    };
+  
+    const existingDay = valueWorkDays.days.find(
+      (day) =>
+        day.number === new Date(params.workDay).getDate() &&
+        day.monthNumber === new Date(params.workDay).getMonth() + 1
+    );
+  
+    if (existingDay) {
+      const shiftExists = existingDay.workingShifts.some(
+        (shift) => shift.number === smena.number
+      );
+  
+      if (!shiftExists) {
+        const dayId = existingDay.id;
+        const existingShifts = existingDay.workingShifts;
+        await api.remove(`day/${dayId}`);
+        data.workingShifts = [
+          ...existingShifts,
+          {
+            id: smena.id,
+            number: smena.number,
+            shiftStart: smena.shiftStart,
+            shiftEnd: smena.shiftEnd,
+            breakStart: smena.breakStart,
+            breakEnd: smena.breakEnd,
+          },
+        ];
+      } else {
+        data.workingShifts = existingDay.workingShifts;
+      }
+    } else {
+      data.workingShifts = [
+        {
+          id: smena.id,
+          number: smena.number,
+          shiftStart: smena.shiftStart,
+          shiftEnd: smena.shiftEnd,
+          breakStart: smena.breakStart,
+          breakEnd: smena.breakEnd,
+        },
+      ];
     }
-    
-    await api.post("/workingShift", datady)  
-    loadCalendarYear() 
+  
+    // Добавим проверку для valueEquipment или valueExecutors
+      const hasValueEquipmentOrExecutors = valueEquipment || valueExecutors;
+      if (!existingDay || !existingDay.workingShifts.some((shift) => shift.number === smena.number) || hasValueEquipmentOrExecutors) {
+        await api.post("day", data); 
+      }
+  
+    loadCalendarYear();
   }
 
 
-  function sendWekend(params) {
+  async function sendWekend(params) {
+
+    const dayId = valueWorkDays?.days?.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+
+    if (dayId) {
+      await api.remove(`day/${dayId}`)
+    }
     const data = {
       "monthNumber": new Date(params.workDay).getMonth() + 1,
       "number": new Date(params.workDay).getDate(),
@@ -220,7 +276,8 @@ export const Production_calendar = ({
       "welderId": null,
       "workingShifts": null
     }
-    api.post("day", data).then(() => { loadCalendarYear() })
+    await api.post("day", data)
+    loadCalendarYear()
   }
 
 
@@ -311,7 +368,7 @@ export const Production_calendar = ({
           {valueWorkDays.days
             ? (
               <Calendars
-              loadCalendarYear={loadCalendarYear}
+                loadCalendarYear={loadCalendarYear}
                 valueWorkDays={valueWorkDays.days}
                 WorkingShiftOptions={valueWorkShift}
               />
@@ -373,7 +430,7 @@ export const Production_calendar = ({
                   />
                 </div>
 
-                <div className={styles.row}>
+                {/* <div className={styles.row}>
                   <Select
                     name="valueObj"
                     value={valueObj}
@@ -394,7 +451,7 @@ export const Production_calendar = ({
                         name="valueEquipment"
                         value={valueEquipment}
                         width="380px"
-                        placeholder="Обородование"
+                        placeholder="Оборудование"
                         onChange={(event) => {
                           setValueEquipment(event.value)
                         }}
@@ -417,7 +474,7 @@ export const Production_calendar = ({
                       />
                     </div>
                   )
-                }
+                } */}
 
 
 
@@ -772,9 +829,9 @@ export const Production_calendar = ({
                       </div>
                     </div>
                   )
-                  :null
+                  : null
                 }
-              
+
 
               </form>
             )}

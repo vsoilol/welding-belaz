@@ -8,27 +8,130 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Select from "components/shared/Select";
 import api from "services/api";
 
-
 const localizer = momentLocalizer(moment);
 
-const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentObj, loadDayByWelder, loadDayByEquipment }) => {
+const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWelder, loadDayByEquipment, executorObj, equipmentObj }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
-
   const [changedate, setchangedate] = useState("");
   const [valueWorkingShift, setvalueWorkingShift] = useState(null);
   const [valuechange, setvaluechange] = useState(false);
-
+  const [events, setevents] = useState([]);
+  const [SelectDateChange, setSelectDateChange] = useState(new Date());
 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
   };
 
-  async function changeDay(selectedEvent) {
-     
-   /*  console.log(selectedEvent)
-    console.log(changedate) */
-    
+  useEffect(() => {
+    if (WorkingShiftOptions) {
+      getDays(SelectDateChange);
+    }
+  }, [WorkingShiftOptions, SelectDateChange, valueWorkDays]);
+
+ 
+
+  function getDays(now) {
+
+    setevents([]);
+    let events = [];
+    const numDaysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+
+    if (valueWorkDays?.days ? valueWorkDays.days.length : valueWorkDays?.length >= 100) {
+      for (let i = 1; i <= numDaysInMonth; i++) {
+        const day = valueWorkDays?.days
+          ? valueWorkDays.days.find((day) => day.number === i && day.monthNumber === now.getMonth() + 1)
+          : valueWorkDays.find((day) => day.number === i && day.monthNumber === now.getMonth() + 1);
+
+        if (!day) {
+          if (calendar.mainWorkingShifts.length >= 3) {
+            events.push(
+              {
+                title: `Смена 1`,
+                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+              },
+              {
+                title: `Смена 2`,
+                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+              },
+              {
+                title: `Смена 3`,
+                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+              }
+            );
+          }
+          if (calendar.mainWorkingShifts.length === 2) {
+            events.push(
+              {
+                title: `Смена 1`,
+                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+              },
+              {
+                title: `Смена 2`,
+                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+              }
+            );
+          }
+          if (calendar.mainWorkingShifts.length === 1) {
+            events.push(
+              {
+                title: `Смена 1`,
+                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+              }
+            );
+          }
+        } else {
+          if (day.isWorkingDay) {
+            const maxShiftsToShow = Math.min(3, day.workingShifts.length);
+            for (let j = 0; j < maxShiftsToShow; j++) {
+              const shift = day.workingShifts[j];
+              if (shift && shift.shiftStart && shift.shiftEnd) {
+                events.push({
+                  id: shift.id,
+                  title: `Смена ${shift.number}`,
+                  start: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.shiftStart.split(':')[0]), parseInt(shift.shiftStart.split(':')[1])),
+                  end: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.shiftEnd.split(':')[0]), parseInt(shift.shiftEnd.split(':')[1])),
+                  breakStart: shift.breakStart ? new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.breakStart.split(':')[0]), parseInt(shift.breakStart.split(':')[1])) : null,
+                  breakEnd: shift.breakEnd ? new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.breakEnd.split(':')[0]), parseInt(shift.breakEnd.split(':')[1])) : null,
+                });
+              }
+            }
+          } else {
+            events.push({
+              id: day.id,
+              title: 'Выходной день',
+              start: new Date(now.getFullYear(), now.getMonth(), i),
+              end: new Date(now.getFullYear(), now.getMonth(), i + 1),
+            });
+          }
+        }
+      }
+    }
+
+    setevents(events);
   }
+
+
+
+
 
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -40,46 +143,103 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentO
     next: 'Вперед',
   };
 
-  const events = [];
-  const addedShiftsPerDay = {}; // Объект для отслеживания добавленных смен за каждый день
+  //Удаление смены в рабочем дне 
+  async function removeDay(changedateID) {
 
-  for (let index = 0; index < valueWorkDays.length; index++) {
-    const dayNumber = valueWorkDays[index].number; 
-    for (let index2 = 0; index2 < valueWorkDays[index].workingShifts.length; index2++) {
-      const workingShift = valueWorkDays[index].workingShifts[index2];
-      const shiftNumber = workingShift.number;
-      const eventTitle = `Смена ${shiftNumber}`; 
-      // Проверяем, добавлена ли уже смена с данным номером за текущий день
-      if (!addedShiftsPerDay[dayNumber] || !addedShiftsPerDay[dayNumber][shiftNumber]) {
-        events.push({
-          id: valueWorkDays[index].id,
-          title: eventTitle,
-          start: new Date(2023, valueWorkDays[index].monthNumber, dayNumber, `${workingShift.shiftStart[0]}${workingShift.shiftStart[1]} `, `${workingShift.shiftStart[3]}${workingShift.shiftStart[4]} `),
-          end: new Date(2023, valueWorkDays[index].monthNumber, dayNumber, `${workingShift.shiftEnd[0]}${workingShift.shiftEnd[1]} `, `${workingShift.shiftEnd[3]}${workingShift.shiftEnd[4]} `),
-        }); 
-        // Помечаем смену с данным номером за текущий день как добавленную
-        if (!addedShiftsPerDay[dayNumber]) {
-          addedShiftsPerDay[dayNumber] = {};
-        }
-        addedShiftsPerDay[dayNumber][shiftNumber] = true;
+    const Day = valueWorkDays?.days
+      ? valueWorkDays.days.find(
+        (day) =>
+          day.number === new Date(changedateID.start).getDate() &&
+          day.monthNumber === new Date(changedateID.start).getMonth() + 1
+      )
+      : valueWorkDays.find(
+        (day) =>
+          day.number === new Date(changedateID.start).getDate() &&
+          day.monthNumber === new Date(changedateID.start).getMonth() + 1
+      );
+    if (!Day || !Day.workingShifts.some((shift) => shift.number === Number(changedateID.title.replace(/[^\w\s!?]/g, '')))) {
+      const numberToRemove = Number(changedateID.title.replace(/[^\w\s!?]/g, ''));
+      const filteredWorkingShiftOptions = calendar.mainWorkingShifts.filter(
+        (shift) => shift.number !== numberToRemove
+      );
+      const data = {
+        monthNumber: new Date(changedateID.start).getMonth() + 1,
+        number: new Date(changedateID.start).getDate(),
+        isWorkingDay: true,
+        year: new Date(changedateID.start).getFullYear(),
+        "weldingEquipmentId": equipmentObj?.id ?? null,
+        "welderId": executorObj?.id ?? null,
+        workingShifts: filteredWorkingShiftOptions,
+      };
+      await api.post("day", data);
+    } else {
+      const idSmenRemove = Day.workingShifts.find((elem) => elem.number === Number(changedateID.title.replace(/[^\w\s!?]/g, '')))?.id;
+
+      if (idSmenRemove) {
+        await api.remove(`/workingShift/${idSmenRemove}`);
+      }
+      if (Day.workingShifts.length === 1) {
+        const dayId = Day.id;
+        await api.remove(`day/${dayId}`);
+        const data = {
+          monthNumber: new Date(changedateID.start).getMonth() + 1,
+          number: new Date(changedateID.start).getDate(),
+          isWorkingDay: false,
+          year: new Date(changedateID.start).getFullYear(),
+          "weldingEquipmentId": equipmentObj?.id ?? null,
+          "welderId": executorObj?.id ?? null,
+          workingShifts: null
+        };
+        await api.post("day", data);
       }
     }
+    executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
   }
 
 
-  //Удаление смены в рабочем дне 
-  async function removeDay(changedateID) { 
-    let data = valueWorkDays.find((day) => day.id === changedateID.id); 
-    const smenaIndex = data?.workingShifts.findIndex((smena) => smena.number === Number(changedateID.title.replace(/[^\w\s!?]/g, '')));
-    if (smenaIndex !== -1) {
-      data.workingShifts.splice(smenaIndex, 1);
-    } 
-    data.weldingEquipmentId = equipmentObj?.id ?? null;
-    data.welderId = executorObj?.id ?? null; 
-    delete data.id; 
-    await api.remove(`day/${changedateID.id}`);
-    await api.post("day", data); 
-    executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id);
+
+
+
+  function handleMonthChange(date) {
+    getDays(date);
+    setSelectDateChange(date);
+  }
+
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [breakStart, setBreakStart] = useState('');
+  const [breakEnd, setBreakEnd] = useState('');
+
+  const handleStartTimeChange = (e) => {
+    setStartTime(e.target.value);
+  };
+
+  const handleEndTimeChange = (e) => {
+    setEndTime(e.target.value);
+  };
+
+  const handleBreakStartChange = (e) => {
+    setBreakStart(e.target.value);
+  };
+
+  const handleBreakEndChange = (e) => {
+    setBreakEnd(e.target.value);
+  };
+
+
+  function saveChangeShift(selectedEvent) {
+    const data = {
+      "id": selectedEvent.id,
+      "number": Number(selectedEvent.title.replace(/[^\w\s!?]/g, '')),
+      "shiftStart": startTime,
+      "shiftEnd": endTime,
+      "breakStart": breakStart,
+      "breakEnd": breakEnd,
+    }
+    api.put("/workingShift", data).then(() => {
+      executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
+      setSelectedEvent(false);
+    })
   }
 
   return (
@@ -91,78 +251,70 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, executorObj, equipmentO
         endAccessor="end"
         selectable
         onSelectEvent={handleSelectEvent}
+        onNavigate={handleMonthChange}
         min={startOfMonth}
         max={endOfMonth}
         views={['month']}
         messages={messages}
       />
+
       {selectedEvent && (
         <div>
-          <div className={styles.hints} >
+          <div className={styles.hints}>
             <h2>{selectedEvent.title}</h2>
             <p>Начало: {selectedEvent.start.toLocaleString()}</p>
             <p>Конец: {selectedEvent.end.toLocaleString()}</p>
+            {selectedEvent.breakStart && selectedEvent.breakEnd && (
+              <p>
+                Перерыв: <br></br> {selectedEvent.breakStart.toLocaleString()} - {selectedEvent.breakEnd.toLocaleString()}
+              </p>
+            )}
 
-
-            {valuechange
-              ? (
-                <div>
-                  <label>Редактирование</label>
-                  <div className={styles.row}>
-                    <Input
-                      onChange={(e) => {
-                        setchangedate(e.target.value);
-                      }}
-                      width="380"
-                      style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                      value={changedate}
-                      name="changedate"
-                      placeholder="Дата рабочего дня"
-                      type="text"
-                      onFocus={(e) => {
-                        e.currentTarget.type = "date";
-                      }}
-                      autocomplete="off"
-                    />
-                  </div>
-                  {/* <div className={styles.row}>
-                    <Select
-                      name="valueWorkingShift"
-                      value={valueWorkingShift}
-                      width="380px"
-                      placeholder="Смена"
-                      onChange={(event) => {
-                        setvalueWorkingShift(event.value)
-                      }}
-                      options={WorkingShiftOptions}
-                    />
-                  </div> */}
-                  <button className={styles.save} onClick={() => changeDay(selectedEvent)}>Сохранить</button>
-
-                </div>
-              )
-              : null
-            }
-
-
-
-            {!valuechange
-              ?
+            {!selectedEvent.title.includes("Выходной день") && !valuechange && (
               <div>
-                {/* <button onClick={() => setvaluechange(true)}>Редактировать</button> */}
-                <button onClick={() => {removeDay(selectedEvent);setSelectedEvent(false);}}>Удалить</button>
+                <p className={styles.par}>Редактировать смену:</p>
+                <div className={styles.rowInputs}>
+                  <input
+                    type='text'
+                    placeholder='Начало'
+                    value={startTime}
+                    onChange={handleStartTimeChange}
+                  />
+                  <input
+                    type='text'
+                    placeholder='Конец'
+                    value={endTime}
+                    onChange={handleEndTimeChange}
+                  />
+                </div>
+                <p className={styles.par}>Перерыв:</p>
+                <div className={styles.rowInputs}>
+                  <input
+                    type='text'
+                    placeholder='Начало'
+                    value={breakStart}
+                    onChange={handleBreakStartChange}
+                  />
+                  <input
+                    type='text'
+                    placeholder='Конец'
+                    value={breakEnd}
+                    onChange={handleBreakEndChange}
+                  />
+                </div>
+                <button onClick={() => { saveChangeShift(selectedEvent) }}>Изменить</button>
               </div>
-              : null
-            }
-
-
+            )}
+            {!selectedEvent.title.includes("Выходной день") && !valuechange && (
+              <div>
+                <button onClick={() => { removeDay(selectedEvent); setSelectedEvent(false); }}>Удалить</button>
+              </div>
+            )}
           </div>
           <div className={styles.hintsBg} onClick={() => { setSelectedEvent(false); setvaluechange(false) }}></div>
         </div>
-
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 };
 

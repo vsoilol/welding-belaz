@@ -504,3 +504,22 @@ span.obj {
   .hints p{
     margin-left: 0;
   }
+
+  .hints p.par{
+    font-weight: 600;
+  }
+  .hints .rowInputs{
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 15px;
+  }
+
+
+  .calendar-wrapper {
+    width: calc(100% - 120px);
+    margin: 30px auto 50px auto;
+    border-radius: 5px;
+    background: #fff;
+    height: 1350px;
+    margin-bottom: 100px;
+}

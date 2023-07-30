@@ -120,16 +120,17 @@ span.obj{
 }
 
 .hints{ 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   margin-top: 47px;
   padding: 20px;
   border-radius: 10px;
   border: 2px solid gray;
-  position: fixed;
   background: white;
   z-index: 10;
   width: 300px;
-  top: calc(50% - 150px);
-  left: calc(50% - 150px);
 }
 .hintsBg{
   position: fixed;
@@ -177,4 +178,54 @@ label{
 .hints button.save{
   color: white;
   background-color: rgb(16, 121, 63) !important;
+}
+
+
+
+.hints p{
+  margin-left: 0;
+}
+
+.hints p.par{
+  font-weight: 600;
+}
+.hints .rowInputs{
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 15px;
+}
+
+
+.calendar-wrapper {
+  width: calc(100% - 120px);
+  margin: 30px auto 50px auto;
+  border-radius: 5px;
+  background: #fff;
+  height: 1350px;
+  margin-bottom: 100px;
+}
+
+
+.hints p{
+  margin-left: 0;
+}
+
+.hints p.par{
+  font-weight: 600;
+}
+.hints .rowInputs{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.hints input{
+  width: calc(100% - 40px);
+  padding: 10px 20px;
+  border-radius: 25px;
+  outline: none;
+  border: 2px solid #e8e8e8;
+  font-family: 'Muller Narrow Light';
+    font-size: 14px;
+    line-height: 14px;
+    color: #000000;
 }
