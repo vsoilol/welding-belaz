@@ -155,6 +155,17 @@ public class CalendarRepository : ICalendarRepository
 
     public async Task<CalendarDto> CreateWelderCalendarBasedOnMainAsync(int year, Guid welderId)
     {
+        var existedWelderCalendar = await _context.Calendars
+            .Include(_ => _.Days!)
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .FirstOrDefaultAsync(_ => _.Year == year && _.WelderId == welderId);
+
+        if (existedWelderCalendar is not null)
+        {
+            _context.Calendars.Remove(existedWelderCalendar);
+        }
+
         var existedCalendar = (await _context.Calendars
             .Include(_ => _.Days!)
             .ThenInclude(_ => _.WorkingShifts)
@@ -192,6 +203,17 @@ public class CalendarRepository : ICalendarRepository
 
     public async Task<CalendarDto> CreateEquipmentCalendarBasedOnMainAsync(int year, Guid equipmentId)
     {
+        var existedEquipmentCalendar = await _context.Calendars
+            .Include(_ => _.Days!)
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .FirstOrDefaultAsync(_ => _.Year == year && _.WeldingEquipmentId == equipmentId);
+
+        if (existedEquipmentCalendar is not null)
+        {
+            _context.Calendars.Remove(existedEquipmentCalendar);
+        }
+        
         var existedCalendar = (await _context.Calendars
             .Include(_ => _.Days!)
             .ThenInclude(_ => _.WorkingShifts)
