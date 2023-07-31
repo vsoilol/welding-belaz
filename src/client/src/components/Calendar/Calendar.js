@@ -52,7 +52,7 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
             : valueWorkDays.find((day) => day.number === i && day.monthNumber === now.getMonth() + 1);
 
           if (!day) {
-            if (calendar.mainWorkingShifts.length >= 3) {
+            if (calendar && Array.isArray(calendar.mainWorkingShifts) && calendar.mainWorkingShifts.length >= 3) { 
               events.push(
                 {
                   title: `Смена 1`,
@@ -77,7 +77,7 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
                 }
               );
             }
-            if (calendar.mainWorkingShifts.length === 2) {
+            if (calendar && Array.isArray(calendar.mainWorkingShifts) && calendar.mainWorkingShifts.length ===2) {
               events.push(
                 {
                   title: `Смена 1`,
@@ -95,7 +95,7 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
                 }
               );
             }
-            if (calendar.mainWorkingShifts.length === 1) {
+            if (calendar && Array.isArray(calendar.mainWorkingShifts) && calendar.mainWorkingShifts.length ===1) {
               events.push(
                 {
                   title: `Смена 1`,

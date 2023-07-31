@@ -262,7 +262,11 @@ export const Production_calendar = ({
 
   async function sendWekend(params) {
 
-    const dayId = valueWorkDays?.days?.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+    const dayId = valueWorkDays?.days 
+    ? valueWorkDays?.days.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+    :valueWorkDays?.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+    
+    console.log(dayId)
 
     if (dayId) {
       await api.remove(`day/${dayId}`)

@@ -121,11 +121,17 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, loadCalendarYear }) => 
 
   //Удаление смены в рабочем дне 
   async function removeDay(changedateID) {
-    const Day = valueWorkDays.find(
-      (day) =>
-        day.number === new Date(changedateID.start).getDate() &&
-        day.monthNumber === new Date(changedateID.start).getMonth() + 1
-    );
+    const Day = valueWorkDays?.days
+      ? valueWorkDays.days.find(
+        (day) =>
+          day.number === new Date(changedateID.start).getDate() &&
+          day.monthNumber === new Date(changedateID.start).getMonth() + 1
+      )
+      : valueWorkDays.find(
+        (day) =>
+          day.number === new Date(changedateID.start).getDate() &&
+          day.monthNumber === new Date(changedateID.start).getMonth() + 1
+      );
 
     if (!Day || !Day.workingShifts.some((shift) => shift.number === Number(changedateID.title.replace(/[^\w\s!?]/g, '')))) {
       const numberToRemove = Number(changedateID.title.replace(/[^\w\s!?]/g, ''));
