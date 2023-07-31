@@ -28,7 +28,10 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
     }
   }, [WorkingShiftOptions, SelectDateChange, valueWorkDays]);
 
- 
+
+
+
+
 
   function getDays(now) {
 
@@ -37,93 +40,158 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
     const numDaysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
 
-    if (valueWorkDays?.days ? valueWorkDays.days.length : valueWorkDays?.length >= 100) {
-      for (let i = 1; i <= numDaysInMonth; i++) {
-        const day = valueWorkDays?.days
-          ? valueWorkDays.days.find((day) => day.number === i && day.monthNumber === now.getMonth() + 1)
-          : valueWorkDays.find((day) => day.number === i && day.monthNumber === now.getMonth() + 1);
+    const dayWelder = Array.isArray(valueWorkDays)
+      ? valueWorkDays.filter((day) => day.isWorkingDay === true)
+      : valueWorkDays?.days?.filter((day) => day.isWorkingDay === true);
 
-        if (!day) {
-          if (calendar.mainWorkingShifts.length >= 3) {
-            events.push(
-              {
-                title: `Смена 1`,
-                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-              },
-              {
-                title: `Смена 2`,
-                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-              },
-              {
-                title: `Смена 3`,
-                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-              }
-            );
-          }
-          if (calendar.mainWorkingShifts.length === 2) {
-            events.push(
-              {
-                title: `Смена 1`,
-                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-              },
-              {
-                title: `Смена 2`,
-                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-              }
-            );
-          }
-          if (calendar.mainWorkingShifts.length === 1) {
-            events.push(
-              {
-                title: `Смена 1`,
-                start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
-                breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-                breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
-              }
-            );
-          }
-        } else {
-          if (day.isWorkingDay) {
-            const maxShiftsToShow = Math.min(3, day.workingShifts.length);
-            for (let j = 0; j < maxShiftsToShow; j++) {
-              const shift = day.workingShifts[j];
-              if (shift && shift.shiftStart && shift.shiftEnd) {
-                events.push({
-                  id: shift.id,
-                  title: `Смена ${shift.number}`,
-                  start: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.shiftStart.split(':')[0]), parseInt(shift.shiftStart.split(':')[1])),
-                  end: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.shiftEnd.split(':')[0]), parseInt(shift.shiftEnd.split(':')[1])),
-                  breakStart: shift.breakStart ? new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.breakStart.split(':')[0]), parseInt(shift.breakStart.split(':')[1])) : null,
-                  breakEnd: shift.breakEnd ? new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.breakEnd.split(':')[0]), parseInt(shift.breakEnd.split(':')[1])) : null,
-                });
-              }
+    if (equipmentObj) {
+      if (valueWorkDays?.days ? valueWorkDays.days.length : valueWorkDays?.length >= 100) {
+        for (let i = 1; i <= numDaysInMonth; i++) {
+          const day = valueWorkDays?.days
+            ? valueWorkDays.days.find((day) => day.number === i && day.monthNumber === now.getMonth() + 1)
+            : valueWorkDays.find((day) => day.number === i && day.monthNumber === now.getMonth() + 1);
+
+          if (!day) {
+            if (calendar.mainWorkingShifts.length >= 3) {
+              events.push(
+                {
+                  title: `Смена 1`,
+                  start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                  breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                },
+                {
+                  title: `Смена 2`,
+                  start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                  breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                },
+                {
+                  title: `Смена 3`,
+                  start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                  breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                }
+              );
+            }
+            if (calendar.mainWorkingShifts.length === 2) {
+              events.push(
+                {
+                  title: `Смена 1`,
+                  start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                  breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                },
+                {
+                  title: `Смена 2`,
+                  start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                  breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                }
+              );
+            }
+            if (calendar.mainWorkingShifts.length === 1) {
+              events.push(
+                {
+                  title: `Смена 1`,
+                  start: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  end: new Date(now.getFullYear(), now.getMonth(), i, 0, 0),
+                  breakStart: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                  breakEnd: new Date(now.getFullYear(), now.getMonth(), i, breakStart, breakStart),
+                }
+              );
             }
           } else {
-            events.push({
-              id: day.id,
-              title: 'Выходной день',
-              start: new Date(now.getFullYear(), now.getMonth(), i),
-              end: new Date(now.getFullYear(), now.getMonth(), i + 1),
-            });
+            if (day.isWorkingDay) {
+              const maxShiftsToShow = Math.min(3, day.workingShifts.length);
+              for (let j = 0; j < maxShiftsToShow; j++) {
+                const shift = day.workingShifts[j];
+                if (shift && shift.shiftStart && shift.shiftEnd) {
+                  events.push({
+                    id: shift.id,
+                    title: `Смена ${shift.number}`,
+                    start: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.shiftStart.split(':')[0]), parseInt(shift.shiftStart.split(':')[1])),
+                    end: new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.shiftEnd.split(':')[0]), parseInt(shift.shiftEnd.split(':')[1])),
+                    breakStart: shift.breakStart ? new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.breakStart.split(':')[0]), parseInt(shift.breakStart.split(':')[1])) : null,
+                    breakEnd: shift.breakEnd ? new Date(now.getFullYear(), now.getMonth(), i, parseInt(shift.breakEnd.split(':')[0]), parseInt(shift.breakEnd.split(':')[1])) : null,
+                  });
+                }
+              }
+            } else {
+              events.push({
+                id: day.id,
+                title: 'Выходной день',
+                start: new Date(now.getFullYear(), now.getMonth(), i),
+                end: new Date(now.getFullYear(), now.getMonth(), i + 1),
+              });
+            }
           }
         }
       }
+    }
+
+
+    if (executorObj) {
+
+      for (let index = 0; index < dayWelder.length; index++) {
+        if (dayWelder[index].isWorkingDay) {
+          const maxShiftsToShow = Math.min(3, dayWelder[index].workingShifts.length);
+          for (let j = 0; j < maxShiftsToShow; j++) {
+            const shift = dayWelder[index].workingShifts[j];
+            if (shift && shift.shiftStart && shift.shiftEnd) {
+              events.push({
+                id: shift.id,
+                title: `Смена ${shift.number}`,
+                start: new Date(
+                  dayWelder[index].year,
+                  dayWelder[index].monthNumber - 1, // Months in JavaScript are zero-based (0-11)
+                  dayWelder[index].number,
+                  parseInt(shift.shiftStart.split(':')[0]),
+                  parseInt(shift.shiftStart.split(':')[1])
+                ),
+                end: new Date(
+                  dayWelder[index].year,
+                  dayWelder[index].monthNumber - 1,
+                  dayWelder[index].number,
+                  parseInt(shift.shiftEnd.split(':')[0]),
+                  parseInt(shift.shiftEnd.split(':')[1])
+                ),
+                breakStart: shift.breakStart
+                  ? new Date(
+                    dayWelder[index].year,
+                    dayWelder[index].monthNumber - 1,
+                    dayWelder[index].number,
+                    parseInt(shift.breakStart.split(':')[0]),
+                    parseInt(shift.breakStart.split(':')[1])
+                  )
+                  : null,
+                breakEnd: shift.breakEnd
+                  ? new Date(
+                    dayWelder[index].year,
+                    dayWelder[index].monthNumber - 1,
+                    dayWelder[index].number,
+                    parseInt(shift.breakEnd.split(':')[0]),
+                    parseInt(shift.breakEnd.split(':')[1])
+                  )
+                  : null,
+              });
+            }
+          }
+        } else {
+          events.dayWelder[index]({
+            id: dayWelder.id,
+            title: 'Выходной день',
+            start: new Date(dayWelder[index].year, dayWelder[index].monthNumber - 1, dayWelder[index].number),
+            end: new Date(dayWelder[index].year, dayWelder[index].monthNumber - 1, dayWelder[index].number + 1),
+          });
+        }
+      }
+
     }
 
     setevents(events);
@@ -227,6 +295,7 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
   };
 
 
+  ///Изменение времени рабочей смены в модальном окне 
   function saveChangeShift(selectedEvent) {
     const data = {
       "id": selectedEvent.id,
