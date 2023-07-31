@@ -23,7 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ICalendarService, CalendarService>();
         services.AddScoped<IEquipmentConditionTimeService, EquipmentConditionTimeService>();
-        
+
         services.AddScoped<IExcelDeviationReportService, ExcelDeviationReportService>();
         services.AddScoped<IExcelSeamAmountReportService, ExcelSeamAmountReportService>();
         services.AddScoped<
@@ -70,11 +70,13 @@ public static class DependencyInjection
             IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>,
             EquipmentEfficiencyReportService
         >();
-        
+
         services.AddScoped<
             IExcelFileService<List<ProductAccountInfoExcelModel>>,
             ProductAccountInfoExcelFileService
         >();
+
+        services.AddScoped<IUploadProductAccountFileService, UploadProductAccountFileService>();
 
         return services;
     }

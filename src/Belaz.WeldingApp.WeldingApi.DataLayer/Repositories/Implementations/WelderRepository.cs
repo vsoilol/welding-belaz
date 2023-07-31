@@ -84,10 +84,14 @@ public class WelderRepository : IWelderRepository
 
     public async Task DeleteAsync(Guid id)
     {
+        var deletedWelder = (await _context.Welders
+            .Include(_ => _.Calendars)
+            .FirstOrDefaultAsync(_ => _.Id == id))!;
         var deletedUser = (
             await _context.Users.FirstOrDefaultAsync(_ => _.Welders.Any(welder => welder.Id == id))
         )!;
 
+        _context.Welders.Remove(deletedWelder);
         _context.Users.Remove(deletedUser);
 
         await _context.SaveChangesAsync();

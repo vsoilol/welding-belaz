@@ -11,19 +11,23 @@ namespace Belaz.WeldingApp.FileApi.Controllers;
 public class UploadFileController : ControllerBase
 {
     private readonly IUploadFileService _uploadFileService;
+    private readonly IUploadProductAccountFileService _productAccountFileService;
 
-    public UploadFileController(IUploadFileService uploadFileService)
+    public UploadFileController(IUploadFileService uploadFileService,
+        IUploadProductAccountFileService productAccountFileService)
     {
         _uploadFileService = uploadFileService;
+        _productAccountFileService = productAccountFileService;
     }
 
     [HttpPost("product-account")]
     public async Task<IActionResult> UploadProductAccountDataAsync([FromForm] IFormFile file)
     {
-        var result = await _uploadFileService.UploadProductAccountDataAsync(file);
+        var result = await _productAccountFileService.UploadProductAccountDataDbfAsync(file);
+        //var result = await _uploadFileService.UploadProductAccountDataAsync(file);
         return result.ToEmptyOk();
     }
-    
+
     [HttpPost("users")]
     public async Task<ActionResult<Unit>> UploadUsersDataAsync([FromForm] IFormFile file)
     {

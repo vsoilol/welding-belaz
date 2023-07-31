@@ -187,7 +187,9 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
     public async Task DeleteAsync(Guid id)
     {
         var deletedWeldingEquipment = (
-            await _context.WeldingEquipments.FirstOrDefaultAsync(_ => _.Id == id)
+            await _context.WeldingEquipments
+                .Include(_ => _.Calendars)
+                .FirstOrDefaultAsync(_ => _.Id == id)
         )!;
 
         _context.WeldingEquipments.Remove(deletedWeldingEquipment);
