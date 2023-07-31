@@ -38,10 +38,10 @@ public class UploadFileService : IUploadFileService
 
     public UploadFileService(IProductRepository productRepository,
         IProductAccountRepository productAccountRepository,
-        IProductionAreaRepository productionAreaRepository, 
+        IProductionAreaRepository productionAreaRepository,
         IInspectorRepository inspectorRepository,
-        IWelderRepository welderRepository, 
-        IMasterRepository masterRepository, 
+        IWelderRepository welderRepository,
+        IMasterRepository masterRepository,
         IWorkplaceRepository workplaceRepository)
     {
         _productRepository = productRepository;
@@ -119,7 +119,7 @@ public class UploadFileService : IUploadFileService
                 {
                     continue;
                 }
-                
+
                 switch (user.Role)
                 {
                     case Role.Master:
@@ -166,6 +166,7 @@ public class UploadFileService : IUploadFileService
         }
 
         inspector.Id = existedInspector.Id;
+        inspector.UserInfo.ProductionAreaId = existedInspector.ProductionAreaId;
         await _inspectorRepository.UpdateAsync(inspector);
     }
 
@@ -219,6 +220,7 @@ public class UploadFileService : IUploadFileService
         }
 
         master.Id = existedMaster.Id;
+        master.UserInfo.ProductionAreaId = existedMaster.ProductionAreaId;
         await _masterRepository.UpdateAsync(master);
     }
 
