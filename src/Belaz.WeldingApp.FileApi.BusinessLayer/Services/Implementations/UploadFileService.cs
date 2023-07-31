@@ -204,8 +204,8 @@ public class UploadFileService : IUploadFileService
         {
             UserInfo = new UserData
             {
-                FirstName = user.FirstName,
-                MiddleName = user.SecondName,
+                FirstName = user.SecondName,
+                MiddleName = user.FirstName,
                 LastName = user.LastName,
                 Position = user.Position,
                 ServiceNumber = user.PersonNumber,
