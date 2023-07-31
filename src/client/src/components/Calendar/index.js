@@ -106,23 +106,23 @@ export const Calendar = ({
   const [valueCalendar, setvalueCalendar] = useState([]);
 
 
-  useEffect(() => {  
-    executorObj ?  loadCalendarByWelder(executorObj.id): loadCalendarByEquipment(equipmentObj.id)
+  useEffect(() => {
+    executorObj ? loadCalendarByWelder(executorObj.id) : loadCalendarByEquipment(equipmentObj.id)
     executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
   }, [loadCalendaryear]);
 
-  
+
   function loadCalendarByWelder(id) {
     api.get(`/calendar/byWelder?WelderId=${id}&Year=2023`)
-      .then((res) => {  
-        setvalueWorkDays(res.data) 
+      .then((res) => {
+        setvalueWorkDays(res.data)
         setvalueCalendar(res.data)
       })
-  } 
+  }
   function loadCalendarByEquipment(id) {
     api.get(`/calendar/byEquipment?WeldingEquipmentId=${id}&Year=2023`)
-      .then((res) => {  
-        setvalueWorkDays(res.data) 
+      .then((res) => {
+        setvalueWorkDays(res.data)
         setvalueCalendar(res.data)
       })
   }
@@ -137,7 +137,20 @@ export const Calendar = ({
   }
 
 
-
+  async function loadWorkingShiftByYear(Year) {
+    try {
+      const res = await api.get(`/workingShift/${Year}`);
+      setWorkingShift(res?.data)
+      const newWorkingShiftOptions = res?.data?.map((item) => ({
+        value: item.number,
+        label: `Смена ${item.number}`,
+      }));
+      setWorkingShiftOptions(newWorkingShiftOptions);
+    } catch (error) {
+      // Обработка ошибки при запросе
+      console.error(error);
+    }
+  }
 
 
 
@@ -190,20 +203,43 @@ export const Calendar = ({
   });
 
 
-  let WorkingShiftOptions = valueCalendar?.mainWorkingShifts?.map((item) => {
-    return {
+  const [workingShiftOptions, setWorkingShiftOptions] = useState([]);
+  const [workingShift, setWorkingShift] = useState([]);
+
+  let WorkingShiftOptions = valueCalendar?.mainWorkingShifts
+    ? valueCalendar.mainWorkingShifts.map((item) => ({
       value: item.number,
       label: `Смена ${item.number}`,
-    };
-  })
+    }))
+    : [];
+
+  useEffect(() => {
+    if (workingShiftOptions.length <= 0) {
+      loadWorkingShiftByYear(new Date().getFullYear());
+    }
+  }, []);
 
 
 
-  async function SendData(params) { 
-    let smena = valueCalendar?.mainWorkingShifts?.find(
-      (elem) => elem.number === valueWorkingShift
-    );
-  
+  async function SendData(params) {
+
+
+
+    let smena = null;
+
+    if (valueWorkingShift) {
+      if (valueCalendar && Array.isArray(valueCalendar.mainWorkingShifts)) {
+        smena = valueCalendar.mainWorkingShifts.find(
+          (elem) => elem.number === valueWorkingShift
+        );
+      }
+      if (!smena && Array.isArray(workingShift)) {
+        smena = workingShift.find(
+          (elem) => elem.number === valueWorkingShift
+        );
+      }
+    }
+
     const data = {
       monthNumber: new Date(params.workDay).getMonth() + 1,
       number: new Date(params.workDay).getDate(),
@@ -212,22 +248,26 @@ export const Calendar = ({
       "weldingEquipmentId": equipmentObj?.id ?? null,
       "welderId": executorObj?.id ?? null,
     };
-  
-    const existingDay = valueWorkDays.find(
+
+    const existingDay = valueWorkDays?.days ? valueWorkDays?.days?.find(
       (day) =>
         day.number === new Date(params.workDay).getDate() &&
         day.monthNumber === new Date(params.workDay).getMonth() + 1
-    );
-  
-  
+    )
+      : valueWorkDays?.find(
+        (day) =>
+          day.number === new Date(params.workDay).getDate() &&
+          day.monthNumber === new Date(params.workDay).getMonth() + 1
+      )
+
     if (existingDay) {
       const shiftExists = existingDay.workingShifts.some(
         (shift) => shift.number === smena.number
-      ); 
+      );
       if (!shiftExists) {
         const dayId = existingDay.id;
         const existingShifts = existingDay.workingShifts;
-       
+
         await api.remove(`day/${dayId}`);
         data.workingShifts = [
           ...existingShifts,
@@ -255,7 +295,7 @@ export const Calendar = ({
         },
       ];
     }
-  
+
     // Добавим проверку для valueEquipment или valueExecutors
     const hasValueEquipmentOrExecutors = equipmentObj || executorObj;
     if (
@@ -278,12 +318,15 @@ export const Calendar = ({
   function SetValOpenModalAddWorkDay() {
     setIsModalAddWorkDayOpen(true)
   }
- 
 
-  async function sendWekend(params) {
 
-    const dayId = valueWorkDays?.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+  async function sendWekend(params) { 
  
+    const dayId = valueWorkDays?.days 
+    ? valueWorkDays?.days.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+    :valueWorkDays?.find(day => day?.number == new Date(params?.workDay).getDate() && day?.monthNumber == new Date(params?.workDay).getMonth() + 1)?.id
+    
+
     if (dayId) {
       await api.remove(`day/${dayId}`)
     }
@@ -365,8 +408,10 @@ export const Calendar = ({
         throw new Error('Не выбран работник (welder) или оборудование (equipment).');
       }
       executorObj ? loadDayByWelder(executorObj.id) : loadDayByEquipment(equipmentObj.id)
-    } catch (error) { 
+    } catch (error) {
     }
+
+    window.location.reload()
   }
   return (
     <div className={styles.innerWrapper}>
@@ -391,10 +436,19 @@ export const Calendar = ({
                 <button onClick={SetValOpenModalAddWorkDay}>Добавить рабочий день</button>
                 <button onClick={setValOpenModalAddWekend}>Добавить выходной день</button>
                 <button onClick={() => { setIsModalAddShift(true); }}>Рабочие смены</button>
-                <div className={styles.Create}>
-                  <label>Создание календаря на основе общезаводского</label>
-                  <button onClick={() => { CreateCalendar() }}>Создать</button>
-                </div>
+
+
+                {equipmentObj
+                  ? (
+                    <div className={styles.Create}>
+                      <label>Создание календаря на основе общезаводского</label>
+                      <button onClick={() => { CreateCalendar() }}>Создать</button>
+                    </div>
+                  )
+                  : null
+                }
+
+
 
               </div>
             )
@@ -525,9 +579,9 @@ export const Calendar = ({
                     width="380px"
                     placeholder="Смена"
                     onChange={(event) => {
-                      setValueWorkingShift(event.value)
+                      setValueWorkingShift(event.value);
                     }}
-                    options={WorkingShiftOptions}
+                    options={workingShiftOptions} // Use the state variable here
                   />
                 </div>
                 <div className={styles.row}>
