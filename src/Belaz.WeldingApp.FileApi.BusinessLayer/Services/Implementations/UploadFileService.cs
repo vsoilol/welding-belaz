@@ -155,7 +155,6 @@ public class UploadFileService : IUploadFileService
                 LastName = user.LastName,
                 Position = user.Position,
                 ServiceNumber = user.PersonNumber,
-                ProductionAreaId = productionAreaId,
                 Role = user.Role
             }
         };
@@ -209,7 +208,6 @@ public class UploadFileService : IUploadFileService
                 LastName = user.LastName,
                 Position = user.Position,
                 ServiceNumber = user.PersonNumber,
-                ProductionAreaId = productionAreaId,
                 Role = user.Role
             }
         };
