@@ -192,6 +192,14 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
                 .FirstOrDefaultAsync(_ => _.Id == id)
         )!;
 
+        var deletedCalendars = await _context.Calendars
+            .Include(_ => _.Days)!
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .Where(_ => _.WeldingEquipmentId == id)
+            .ToListAsync();
+
+        _context.Calendars.RemoveRange(deletedCalendars);
         _context.WeldingEquipments.Remove(deletedWeldingEquipment);
         await _context.SaveChangesAsync();
     }

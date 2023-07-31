@@ -86,11 +86,22 @@ public class WelderRepository : IWelderRepository
     {
         var deletedWelder = (await _context.Welders
             .Include(_ => _.Calendars)
+            .Include(_ => _.WeldingTasks)
+            .Include(_ => _.WeldingRecords)
             .FirstOrDefaultAsync(_ => _.Id == id))!;
+
         var deletedUser = (
             await _context.Users.FirstOrDefaultAsync(_ => _.Welders.Any(welder => welder.Id == id))
         )!;
 
+        var deletedCalendars = await _context.Calendars
+            .Include(_ => _.Days)!
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .Where(_ => _.WelderId == id)
+            .ToListAsync();
+
+        _context.Calendars.RemoveRange(deletedCalendars);
         _context.Welders.Remove(deletedWelder);
         _context.Users.Remove(deletedUser);
 
