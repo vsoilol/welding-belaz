@@ -115,21 +115,20 @@ public class UploadFileService : IUploadFileService
                 var productionArea = await _productionAreaRepository
                     .GetBriefInfoByNumberAndWorkshopNumberAsync(user.ProductionArea, user.Workshop);
 
-                if (productionArea is null)
-                {
-                    continue;
-                }
-
                 switch (user.Role)
                 {
                     case Role.Master:
-                        await AddOrUpdateMasterAsync(user, productionArea.Id);
+                        await AddOrUpdateMasterAsync(user);
                         break;
                     case Role.Welder:
-                        await AddOrUpdateWelderAsync(user, productionArea.Id);
+                        if (productionArea is not null)
+                        {
+                            await AddOrUpdateWelderAsync(user, productionArea.Id);
+                        }
+
                         break;
                     case Role.Inspector:
-                        await AddOrUpdateInspectorAsync(user, productionArea.Id);
+                        await AddOrUpdateInspectorAsync(user);
                         break;
                 }
             }
@@ -143,7 +142,7 @@ public class UploadFileService : IUploadFileService
         return Unit.Default;
     }
 
-    private async Task AddOrUpdateInspectorAsync(UserModel user, Guid productionAreaId)
+    private async Task AddOrUpdateInspectorAsync(UserModel user)
     {
         var existedInspector = await _inspectorRepository.GetByServiceNumberOrDefaultAsync(user.PersonNumber);
         var inspector = new Inspector
@@ -197,9 +196,10 @@ public class UploadFileService : IUploadFileService
         await _welderRepository.UpdateAsync(welder);
     }
 
-    private async Task AddOrUpdateMasterAsync(UserModel user, Guid productionAreaId)
+    private async Task AddOrUpdateMasterAsync(UserModel user)
     {
         var existedMaster = await _masterRepository.GetByServiceNumberOrDefaultAsync(user.PersonNumber);
+
         var master = new Master
         {
             UserInfo = new UserData
