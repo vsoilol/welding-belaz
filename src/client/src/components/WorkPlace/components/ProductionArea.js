@@ -143,19 +143,19 @@ export const ProductionArea = ({
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id, "name") ?? "-"}</span>
+          return <span>{DetArea(rowData?.id, "name") ?? "-"}</span>
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{DetArea(rowData.id, "numb") ?? "-"}</span>
+          return <span>{DetArea(rowData?.id, "numb") ?? "-"}</span>
         },
       },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData?.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -199,12 +199,12 @@ export const ProductionArea = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id); setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData?.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
-          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
+          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id) }}>Пост</p>;
         },
       },
     ].filter(column => column),
@@ -212,7 +212,7 @@ export const ProductionArea = ({
       {
         title: "Наименование поста ",
         render: (rowData) => {
-          return <p>Пост {rowData.number}</p>;
+          return <p>Пост {rowData?.number}</p>;
         },
       },
       {
@@ -248,7 +248,7 @@ export const ProductionArea = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData?.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -256,7 +256,7 @@ export const ProductionArea = ({
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number ?? "-"}</p>;
+          return <p>Рабочее место {rowData?.number ?? "-"}</p>;
         },
       },
       {
@@ -573,7 +573,7 @@ export const ProductionArea = ({
                           setModalData(rowData);
                           setIsModalOpen(true);
                           setIsModalNumb(1)
-                          setValueProdArea(rowData.workshop.id)
+                          setValueProdArea(rowData?.workshop.id)
 
                           api.post(`/eventLog`,{
                             "information": "Открыл модальное окно редактирования производственого участка"

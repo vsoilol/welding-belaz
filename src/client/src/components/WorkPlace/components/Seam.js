@@ -129,7 +129,7 @@ export const Seam = ({
       {
         title: "Наименование сварного шва ",
         render: (rowData) => {
-          return <p>{rowData.number}</p>;
+          return <p>{rowData?.number}</p>;
         },
       },
       {

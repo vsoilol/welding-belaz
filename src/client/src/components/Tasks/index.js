@@ -229,7 +229,7 @@ export const Tasks = ({
       },
       render: (rowData) => {
         if (rowData?.product) {
-          return <p>{rowData.product.name} {rowData.product.number}</p>
+          return <p>{rowData?.product.name} {rowData?.product.number}</p>
         } else {
           return <p>-</p>
         }
@@ -255,7 +255,7 @@ export const Tasks = ({
       field: "knot.name",
       customFilterAndSearch: (term, rowData) => rowData?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
       render: (rowData) => rowData?.knot ?
-        <p>{`${rowData.knot.name} ${rowData.knot.number}`}</p> :
+        <p>{`${rowData?.knot.name} ${rowData?.knot.number}`}</p> :
         <p>-</p>
     },
     {
@@ -263,7 +263,7 @@ export const Tasks = ({
       field: "detail.name",
       customFilterAndSearch: (term, rowData) => rowData?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
       render: (rowData) => rowData?.detail ?
-        <p>{`${rowData.detail.name} ${rowData.detail.number}`}</p> :
+        <p>{`${rowData?.detail.name} ${rowData?.detail.number}`}</p> :
         <p>-</p>
     }, */
     /* {
@@ -274,7 +274,7 @@ export const Tasks = ({
         if (rowData?.weldingEquipments) {
           return (
             <ul>
-              {rowData.weldingEquipments.map(equipment => (
+              {rowData?.weldingEquipments.map(equipment => (
                 <li key={equipment.factoryNumber}>
                   {`${equipment.name} ${equipment.factoryNumber}`}
                 </li>
@@ -294,7 +294,7 @@ export const Tasks = ({
         return fullName.includes(term.toLowerCase());
       },
       render: (rowData) => rowData?.welder ?
-        <p>{`${rowData.welder.middleName} ${rowData.welder.firstName} ${rowData.welder.lastName}`}</p> :
+        <p>{`${rowData?.welder.middleName} ${rowData?.welder.firstName} ${rowData?.welder.lastName}`}</p> :
         <p>-</p>
     },
     {
@@ -305,7 +305,7 @@ export const Tasks = ({
         return fullName.includes(term.toLowerCase());
       },
       render: (rowData) => rowData?.master ?
-        <p>{`${rowData.master.middleName} ${rowData.master.firstName} ${rowData.master.lastName}`}</p> :
+        <p>{`${rowData?.master.middleName} ${rowData?.master.firstName} ${rowData?.master.lastName}`}</p> :
         <p>-</p>
     },
     {
@@ -316,7 +316,7 @@ export const Tasks = ({
         return fullName.includes(term.toLowerCase());
       },
       render: (rowData) => rowData?.inspector ?
-        <p>{`${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}`}</p> :
+        <p>{`${rowData?.inspector.middleName} ${rowData?.inspector.firstName} ${rowData?.inspector.lastName}`}</p> :
         <p>-</p>
     }, */
     {
@@ -324,7 +324,7 @@ export const Tasks = ({
       title: "Скачать краткий паспорт",
       render: (rowData) => (
         <div
-          onClick={() => { setgetFailebasedPassport(true); setBasedPassportId(rowData.id) }}
+          onClick={() => { setgetFailebasedPassport(true); setBasedPassportId(rowData?.id) }}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -384,7 +384,7 @@ export const Tasks = ({
       },
       render: (rowData) => {
         if (rowData?.seam?.product) {
-          return <p>{rowData.seam.product.name} {rowData.seam.product.number}</p>
+          return <p>{rowData?.seam.product.name} {rowData?.seam.product.number}</p>
         } else {
           return <p>-</p>
         }
@@ -395,7 +395,7 @@ export const Tasks = ({
       field: "knot.name",
       customFilterAndSearch: (term, rowData) => rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
       render: (rowData) => rowData?.seam?.knot ?
-        <p>{`${rowData.seam.knot.name} ${rowData.seam.knot.number}`}</p> :
+        <p>{`${rowData?.seam.knot.name} ${rowData?.seam.knot.number}`}</p> :
         <p>-</p>
     },
     {
@@ -403,7 +403,7 @@ export const Tasks = ({
       field: "detail.name",
       customFilterAndSearch: (term, rowData) => rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
       render: (rowData) => rowData?.seam?.detail ?
-        <p>{`${rowData.seam.detail.name} ${rowData.seam.detail.number}`}</p> :
+        <p>{`${rowData?.seam.detail.name} ${rowData?.seam.detail.number}`}</p> :
         <p>-</p>
     },
     {
@@ -420,7 +420,7 @@ export const Tasks = ({
         return fullName.includes(term.toLowerCase());
       },
       render: (rowData) => rowData?.welder ?
-        <p>{`${rowData.welder.middleName} ${rowData.welder.firstName} ${rowData.welder.lastName}`}</p> :
+        <p>{`${rowData?.welder.middleName} ${rowData?.welder.firstName} ${rowData?.welder.lastName}`}</p> :
         <p>-</p>
     },
     {
@@ -431,7 +431,7 @@ export const Tasks = ({
         return fullName.includes(term.toLowerCase());
       },
       render: (rowData) => rowData?.master ?
-        <p>{`${rowData.master.middleName} ${rowData.master.firstName} ${rowData.master.lastName}`}</p> :
+        <p>{`${rowData?.master.middleName} ${rowData?.master.firstName} ${rowData?.master.lastName}`}</p> :
         <p>-</p>
     },
     {
@@ -442,7 +442,7 @@ export const Tasks = ({
         return fullName.includes(term.toLowerCase());
       },
       render: (rowData) => rowData?.inspector ?
-        <p>{`${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}`}</p> :
+        <p>{`${rowData?.inspector.middleName} ${rowData?.inspector.firstName} ${rowData?.inspector.lastName}`}</p> :
         <p>-</p>
     },
     {
@@ -537,7 +537,7 @@ export const Tasks = ({
                 {rowData?.knot?.name && rowData?.knot?.number ? `${rowData?.knot?.name} ${rowData?.knot?.number}` : "-"}
               </TableCell>
               <TableCell align="center">
-                {rowData?.detail?.name && rowData?.detail?.number ? `${rowData.detail.name} ${rowData.detail.number}` : "-"}
+                {rowData?.detail?.name && rowData?.detail?.number ? `${rowData?.detail.name} ${rowData?.detail.number}` : "-"}
               </TableCell>
               <TableCell align="center">
                 {rowData?.weldingEquipments.map(equipment => (
@@ -548,15 +548,15 @@ export const Tasks = ({
               </TableCell>
 
               <TableCell align="center">
-                {rowData?.welder?.middleName && rowData?.welder?.firstName && rowData?.welder?.lastName ? `${rowData.welder.middleName} ${rowData.welder.firstName} ${rowData.welder.lastName}` : "-"}
+                {rowData?.welder?.middleName && rowData?.welder?.firstName && rowData?.welder?.lastName ? `${rowData?.welder.middleName} ${rowData?.welder.firstName} ${rowData?.welder.lastName}` : "-"}
               </TableCell>
 
               <TableCell align="center">
-                {rowData?.master?.middleName && rowData?.master?.firstName && rowData?.master?.lastName ? `${rowData.master.middleName} ${rowData.master.firstName} ${rowData.master.lastName}` : "-"}
+                {rowData?.master?.middleName && rowData?.master?.firstName && rowData?.master?.lastName ? `${rowData?.master.middleName} ${rowData?.master.firstName} ${rowData?.master.lastName}` : "-"}
               </TableCell>
 
               <TableCell align="center">
-                {rowData?.inspector?.middleName && rowData?.inspector?.firstName && rowData?.inspector?.lastName ? `${rowData.inspector.middleName} ${rowData.inspector.firstName} ${rowData.inspector.lastName}` : "-"}
+                {rowData?.inspector?.middleName && rowData?.inspector?.firstName && rowData?.inspector?.lastName ? `${rowData?.inspector.middleName} ${rowData?.inspector.firstName} ${rowData?.inspector.lastName}` : "-"}
               </TableCell>
 
 

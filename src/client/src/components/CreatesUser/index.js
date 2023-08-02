@@ -101,7 +101,7 @@ const CreatesUser = ({
 
   const renderRowChildren = (rowData) => { 
     return (
-      rowData.data && (
+      rowData?.data && (
         <TableContainer component={Paper}>
           <MaterialTable aria-label="simple table">
             <TableHead>
@@ -197,13 +197,13 @@ const CreatesUser = ({
     },
     {
       title: "Email", field: "email",
-      render: rowData => rowData.email ? rowData.email : "-"
+      render: rowData => rowData?.email ? rowData?.email : "-"
     },
     {
       title: "Email подтвержден ",
       field: "isEmailConfirmed",
       render: (rowData) => {
-        if (rowData.isEmailConfirmed) {
+        if (rowData?.isEmailConfirmed) {
           return <span className={styles.green}>подтвержден</span>
         } else {
           return <span className={styles.red}>не подтвержден</span>
@@ -227,7 +227,7 @@ const CreatesUser = ({
     {
       title: "Изменение логина и пароля",
       render: (rowData) => {
-        if (rowData.isEmailConfirmed) {
+        if (rowData?.isEmailConfirmed) {
           return <div className={styles.btnTools} onClick={(e) => { setisModalChangeLoginOpen(true); setModalData(rowData); }} >Измененить</div>
         } else {
           return <span>-</span>
@@ -238,7 +238,7 @@ const CreatesUser = ({
     {
       title: "Подтверждение электронной почты",
       render: (rowData) => {
-        return <div className={styles.btnTools} onClick={(e) => { ConfirmationEmail(rowData.id) }}>Подтвердить</div>
+        return <div className={styles.btnTools} onClick={(e) => { ConfirmationEmail(rowData?.id) }}>Подтвердить</div>
       }
     },
   ]
@@ -402,7 +402,7 @@ const CreatesUser = ({
                       onClick: (event, rowData) => {
                         setIsModalOpen(true);
                         setModalData(rowData);
-                        setselectRole(rowData.role)
+                        setselectRole(rowData?.role)
                       },
                     },
                   ]

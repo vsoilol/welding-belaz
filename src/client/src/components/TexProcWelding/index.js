@@ -216,7 +216,7 @@ export const TexProcWelding = ({
       render: (rowData) => (
         <p>
           {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin != null && rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax != null
-            ? `${rowData.weldPassageInstructions[0].preheatingTemperatureMin} - ${rowData.weldPassageInstructions[0].preheatingTemperatureMax}`
+            ? `${rowData?.weldPassageInstructions[0].preheatingTemperatureMin} - ${rowData?.weldPassageInstructions[0].preheatingTemperatureMax}`
             : '-'}
         </p>
       ),
@@ -287,7 +287,7 @@ export const TexProcWelding = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {rowData.weldPassageInstructions.map((passage) => (
+              {rowData?.weldPassageInstructions.map((passage) => (
                 <TableRow key={passage.id}>
                   <TableCell align="center" component="th" scope="row">
                     {passage.number ?? "-"}
@@ -918,9 +918,9 @@ export const TexProcWelding = ({
                       setValuetSeam(rowData?.seams[0]?.id)
                       setValuetVkladka(1)
 
-                      setidPassages(rowData.id);
-                      setvalueNameInst(rowData.name);
-                      setpassagesCnange(rowData.weldPassageInstructions)
+                      setidPassages(rowData?.id);
+                      setvalueNameInst(rowData?.name);
+                      setpassagesCnange(rowData?.weldPassageInstructions)
                       api.post(`/eventLog`, {
                         "information": "Открыл модальное окно редактирования технологической инструкции"
                       })

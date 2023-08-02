@@ -89,9 +89,9 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
       render: (rowData) => (
         <input
           type="checkbox"
-          value={rowData.id}
-          checked={arrayIdRecords.includes(rowData.id)}
-          onChange={() => handleCheckboxChange(rowData.id)}
+          value={rowData?.id}
+          checked={arrayIdRecords.includes(rowData?.id)}
+          onChange={() => handleCheckboxChange(rowData?.id)}
         />
       ),
     },
@@ -107,7 +107,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
       render: (rowData) => {
         if (rowData?.weldingTaskNumber != null) {
           return (
-            <a href="/tasks" target="_blank">{rowData.weldingTaskNumber ?? "-"}</a>
+            <a href="/tasks" target="_blank">{rowData?.weldingTaskNumber ?? "-"}</a>
           );
         }
         else {
@@ -120,33 +120,33 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
     {
       title: "Сварщик", render: (rowData) => (
         <div>
-          <span> {rowData.welder?.middleName}  </span>
-          <span> {rowData.welder?.firstName}</span>
-          <span>  {rowData.welder?.lastName}  </span>
+          <span> {rowData?.welder?.middleName}  </span>
+          <span> {rowData?.welder?.firstName}</span>
+          <span>  {rowData?.welder?.lastName}  </span>
         </div>
       ),
     },
     {
       title: "Оборудование ( номер )", render: (rowData) => (
         <div>
-          <span> {rowData.weldingEquipment?.factoryNumber}</span>
-          <span> {rowData.weldingEquipment?.marking}  </span>
+          <span> {rowData?.weldingEquipment?.factoryNumber}</span>
+          <span> {rowData?.weldingEquipment?.marking}  </span>
         </div>
       ),
     },
     {
       title: "Руководитель сварочных работ (мастер): ", render: (rowData) => (
         <div>
-          <span> {rowData.master?.middleName}  </span>
-          <span> {rowData.master?.firstName}</span>
-          <span>  {rowData.master?.lastName}  </span>
+          <span> {rowData?.master?.middleName}  </span>
+          <span> {rowData?.master?.firstName}</span>
+          <span>  {rowData?.master?.lastName}  </span>
         </div>
       ),
     },
   ].filter(column => column);
   const renderRowChildren = (rowData) => {
-    let time = rowData.startTime
-    let Endtime = rowData.date
+    let time = rowData?.startTime
+    let Endtime = rowData?.date
     let dateObject = new Date(time);
     let dateObjectEnd = new Date(Endtime);
     Array.prototype.max = function () {
@@ -157,11 +157,11 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
     };
     let ArrayVoltageValues = []
     let ArrayweldingCurrentValues = []
-    for (let index = 0; index < rowData.arcVoltageValues.length; index++) {
-      ArrayVoltageValues.push({ id: 0, value: rowData.arcVoltageValues[index] })
+    for (let index = 0; index < rowData?.arcVoltageValues.length; index++) {
+      ArrayVoltageValues.push({ id: 0, value: rowData?.arcVoltageValues[index] })
     }
-    for (let index = 0; index < rowData.weldingCurrentValues.length; index++) {
-      ArrayweldingCurrentValues.push({ id: 0, value: rowData.weldingCurrentValues[index] })
+    for (let index = 0; index < rowData?.weldingCurrentValues.length; index++) {
+      ArrayweldingCurrentValues.push({ id: 0, value: rowData?.weldingCurrentValues[index] })
     }
     const formatYAxis = (value) => Math.round(value / 10);
     return (
@@ -203,18 +203,18 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
                 fill="#8884d8"
                 dot={false}
               />
-              {rowData.weldingCurrentMin !== undefined && (
+              {rowData?.weldingCurrentMin !== undefined && (
                 <ReferenceLine
-                  y={rowData.weldingCurrentMin}
+                  y={rowData?.weldingCurrentMin}
                   stroke="red"
                   strokeDasharray="3 3"
                   label="минимальная сила тока"
                   strokeWidth={2}
                 />
               )}
-              {rowData.weldingCurrentMax !== undefined && (
+              {rowData?.weldingCurrentMax !== undefined && (
                 <ReferenceLine
-                  y={rowData.weldingCurrentMax}
+                  y={rowData?.weldingCurrentMax}
                   stroke="green"
                   strokeDasharray="3 3"
                   label="максимальная сила тока"
@@ -262,18 +262,18 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
                 fill="#82ca9d"
                 dot={false}
               />
-              {rowData.arcVoltageMin !== undefined && (
+              {rowData?.arcVoltageMin !== undefined && (
                 <ReferenceLine
-                  y={rowData.arcVoltageMin}
+                  y={rowData?.arcVoltageMin}
                   stroke="red"
                   strokeDasharray="3 3"
                   label="минимальное напряжение"
                   strokeWidth={2}
                 />
               )}
-              {rowData.arcVoltageMax !== undefined && (
+              {rowData?.arcVoltageMax !== undefined && (
                 <ReferenceLine
-                  y={rowData.arcVoltageMax}
+                  y={rowData?.arcVoltageMax}
                   stroke="green"
                   strokeDasharray="3 3"
                   label="максимальное напряжение"
