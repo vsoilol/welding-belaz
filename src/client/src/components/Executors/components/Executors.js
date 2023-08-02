@@ -141,13 +141,13 @@ export const ExecutorsTable = ({
     {
       title: "Наименование цеха",
       render: (rowData) => {
-        return (ReturnWorkshop(rowData.productionArea.id));
+        return (ReturnWorkshop(rowData?.productionArea?.id));
       },
     },
     {
       title: "Номер цеха",
       render: (rowData) => {
-        return (ReturnWorkshopNumber(rowData.productionArea.id));
+        return (ReturnWorkshopNumber(rowData?.productionArea?.id));
       },
     },
     {
@@ -164,7 +164,7 @@ export const ExecutorsTable = ({
       render: (rowData) => {
         if (rowData?.weldingEquipments && rowData?.weldingEquipments.length !== 0) {
           return (
-            rowData.weldingEquipments.map((equipment) => (
+            rowData?.weldingEquipments?.map((equipment) => (
               <div key={equipment.id}>
                 <a className={styles.equipmentRefs} href="/equipment">
                   {equipment.factoryNumber || "-"}
@@ -220,13 +220,13 @@ export const ExecutorsTable = ({
     {
       title: "Наименование цеха",
       render: (rowData) => {
-        return (ReturnWorkshop(rowData.productionArea.id));
+        return (ReturnWorkshop(rowData?.productionArea?.id));
       },
     },
     {
       title: "Номер цеха",
       render: (rowData) => {
-        return (ReturnWorkshopNumber(rowData.productionArea.id));
+        return (ReturnWorkshopNumber(rowData?.productionArea?.id));
       },
     },
     {
@@ -325,13 +325,13 @@ export const ExecutorsTable = ({
     {
       title: "Наименование цеха",
       render: (rowData) => {
-        return (ReturnWorkshop(rowData.productionArea.id));
+        return (ReturnWorkshop(rowData?.productionArea?.id));
       },
     },
     {
       title: "Номер цеха",
       render: (rowData) => {
-        return (ReturnWorkshopNumber(rowData.productionArea.id));
+        return (ReturnWorkshopNumber(rowData?.productionArea?.id));
       },
     },
     {
@@ -554,8 +554,8 @@ export const ExecutorsTable = ({
                     console.log(rowData)
 
                     setValueWorkshop(rowData?.workshop?.id)
-                    setValuetArea(rowData.productionArea.id)
-                    setValuetEquipment(rowData.weldingEquipment?.id)
+                    setValuetArea(rowData?.productionArea?.id)
+                    setValuetEquipment(rowData?.weldingEquipment?.id)
                     api.post(`/eventLog`, {
                       "information": "Открыл модальное окно редактирования пользователя"
                     })

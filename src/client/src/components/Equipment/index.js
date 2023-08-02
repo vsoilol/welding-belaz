@@ -184,13 +184,13 @@ export const Equipment = ({
     /* {
       title: "Наименование   поста ",
       render: (rowData) => {
-        return <span>{DetArea(rowData.post, "name") ?? "-"}</span>
+        return <span>{DetArea(rowData?.post, "name") ?? "-"}</span>
       },
     },
     {
       title: "Номер поста",
       render: (rowData) => {
-        return <span>{DetArea(rowData.post, "numb") ?? "-"}</span>
+        return <span>{DetArea(rowData?.post, "numb") ?? "-"}</span>
       },
     }, */
     /* {
@@ -580,8 +580,8 @@ export const Equipment = ({
                       setModalData(rowData);
                       setIsModalOpen(true);
                       setIsModalNumb(1);
-                      setEquipmentNumb(rowData.id)
-                      setValuetPosts(rowData.post?.id)
+                      setEquipmentNumb(rowData?.id)
+                      setValuetPosts(rowData?.post?.id)
                       setvalueWorkshop(rowData?.workshop?.id)
                       setvalueoptArea(rowData?.productionArea?.id)
                       setvalueWorkplace(rowData?.workplaces[0]?.id)
@@ -624,9 +624,9 @@ export const Equipment = ({
                       setIsModalOpen(true);
                       setIsModalNumb(3);
  
-                      setValueDownti(rowData.id)
-                      setValuetEquipment(rowData.weldingEquipment.id)
-                      findReason(rowData.downtimeReason)
+                      setValueDownti(rowData?.id)
+                      setValuetEquipment(rowData?.weldingEquipment.id)
+                      findReason(rowData?.downtimeReason)
                     },
                   },
                 ]

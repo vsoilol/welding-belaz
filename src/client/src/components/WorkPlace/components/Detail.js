@@ -165,7 +165,7 @@ export const Detail = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData?.id) }}>Производственный участок</p>;
         },
       },
     ],
@@ -184,12 +184,12 @@ export const Detail = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData?.id) }}>Рабочее место</p>
             </div>
           )
 
-          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
+          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id) }}>Пост</p>;
         },
       },
     ],
@@ -197,7 +197,7 @@ export const Detail = ({
       {
         title: "Наименование поста ",
         render: (rowData) => {
-          return <p>Пост {rowData.number}</p>;
+          return <p>Пост {rowData?.number}</p>;
         },
       },
       {
@@ -207,7 +207,7 @@ export const Detail = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData?.id) }}>Рабочее место</p>;
         },
       },
     ],
@@ -215,7 +215,7 @@ export const Detail = ({
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number}</p>;
+          return <p>Рабочее место {rowData?.number}</p>;
         },
       },
       {
@@ -253,8 +253,8 @@ export const Detail = ({
         render: (rowData) => {
           return <p className={styles.Fix} onClick={e => {
             setValuegoTo(2);
-            setvalueChoise(rowData.name)
-            setIdIzdelia(rowData.id)
+            setvalueChoise(rowData?.name)
+            setIdIzdelia(rowData?.id)
           }}>Закрерить</p>;
         },
       },
@@ -264,9 +264,9 @@ export const Detail = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData.id) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData.id) }}>Узел </p>
-              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData.id) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(6, "Детали ", rowData?.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(5, "Узлы", rowData?.id) }}>Узел </p>
+              <p className={styles.goOver} onClick={e => { GoTo(7, "Сварные швы", rowData?.id) }}>Сварной шов</p>
             </div>
           )
         },
@@ -312,8 +312,8 @@ export const Detail = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData?.id) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData?.id) }}>Сварной шов</p>
             </div>
           )
         },
@@ -364,8 +364,8 @@ export const Detail = ({
       //     return <p className={styles.Fix} onClick={e => {
       //       setcreateTask(1);
       //       setValuegoTo(2);
-      //       setvalueChoise(rowData.name)
-      //       setIdIzdelia(rowData.id)
+      //       setvalueChoise(rowData?.name)
+      //       setIdIzdelia(rowData?.id)
       //     }}>Закрерить</p>;
       //   },
       // },
@@ -380,7 +380,7 @@ export const Detail = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(12, "Сварные швы", rowData?.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -390,7 +390,7 @@ export const Detail = ({
       {
         title: "Наименование сварного шва ",
         render: (rowData) => {
-          return <p>{rowData.number}</p>;
+          return <p>{rowData?.number}</p>;
         },
       },
       {
@@ -839,10 +839,10 @@ export const Detail = ({
                           setModalData(rowData);
                           setIsModalOpen(true);
                           setIsModalNumb(6)
-                          setValueProdArea(rowData.workshop?.id)
-                          setValuetTechProc(rowData.technologicalProcess?.id)
-                          setValuetPosts(rowData.productionArea?.id)
-                          setValuetWorkPlace(rowData.workplace?.id)
+                          setValueProdArea(rowData?.workshop?.id)
+                          setValuetTechProc(rowData?.technologicalProcess?.id)
+                          setValuetPosts(rowData?.productionArea?.id)
+                          setValuetWorkPlace(rowData?.workplace?.id)
                           api.post(`/eventLog`, {
                             "information": "Открыл модальное окно редактирования детали"
                           })

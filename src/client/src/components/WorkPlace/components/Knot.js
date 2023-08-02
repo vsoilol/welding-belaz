@@ -200,8 +200,8 @@ export const Knot = ({
         render: (rowData) => {
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
-              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
+              <p className={styles.goOver} onClick={e => { GoTo(10, "Детали", rowData?.id); setDisplayFixed(rowData?.name) }}>Деталь</p>
+              <p className={styles.goOver} onClick={e => { GoTo(11, "Сварные швы", rowData?.id); setDisplayFixed(rowData?.name) }}>Сварной шов</p>
             </div>
           )
         },
@@ -682,10 +682,10 @@ export const Knot = ({
                           setModalData(rowData);
                           setIsModalOpen(true);
                           setIsModalNumb(5)
-                          setValueProdArea(rowData.workshop?.id)
-                          setValuetTechProc(rowData.technologicalProcess?.id)
-                          setValuetPosts(rowData.productionArea?.id)
-                          setValuetWorkPlace(rowData.workplace?.id)
+                          setValueProdArea(rowData?.workshop?.id)
+                          setValuetTechProc(rowData?.technologicalProcess?.id)
+                          setValuetPosts(rowData?.productionArea?.id)
+                          setValuetWorkPlace(rowData?.workplace?.id)
 
                           setvaluetProduct(rowData?.mainProduct?.id)
 

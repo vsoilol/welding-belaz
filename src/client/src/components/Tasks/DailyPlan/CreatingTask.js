@@ -155,7 +155,7 @@ export const CreatingTask = ({
             title: " Есть ли отклонения ",
             render: rowData => rowData?.areDeviations ? 'есть' : 'нету',
             customFilterAndSearch: (term, rowData) => {
-                const value = rowData.areDeviations ? 'есть' : 'нету';
+                const value = rowData?.areDeviations ? 'есть' : 'нету';
                 return value.toLowerCase().includes(term.toLowerCase());
             },
             customSort: (a, b) => {
@@ -170,7 +170,7 @@ export const CreatingTask = ({
             render: (rowData) => {
                 if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
                     return (
-                        rowData.weldingEquipments?.map(equipments =>
+                        rowData?.weldingEquipments?.map(equipments =>
                             <p>{equipments.factoryNumber ?? '-'}</p>
                         )
                     )
@@ -179,8 +179,8 @@ export const CreatingTask = ({
                 }
             },
             customFilterAndSearch: (term, rowData) => {
-                if (rowData.weldingEquipments) {
-                    return rowData.weldingEquipments.some(equipments => equipments.factoryNumber?.toLowerCase().includes(term.toLowerCase()))
+                if (rowData?.weldingEquipments) {
+                    return rowData?.weldingEquipments.some(equipments => equipments.factoryNumber?.toLowerCase().includes(term.toLowerCase()))
                 }
                 return false
             }

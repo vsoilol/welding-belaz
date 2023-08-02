@@ -273,7 +273,7 @@ export const Reports = ({
             setIsModalOpen(true);
             setidReports(rowData?.id);
             api.post(`/eventLog`, {
-              "information": `Сгенерировал ${rowData.name}`
+              "information": `Сгенерировал ${rowData?.name}`
             })
           }} > Сгенерировать </span>
         )

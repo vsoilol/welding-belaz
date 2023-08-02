@@ -159,7 +159,7 @@ export const Place = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData?.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
         },
       },
     ],
@@ -178,12 +178,12 @@ export const Place = ({
 
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id); setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id); setDisplayFixed(rowData?.name) }}>Пост</p>
+              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData?.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
             </div>
           )
 
-          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData.id) }}>Пост</p>;
+          // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id) }}>Пост</p>;
         },
       },
     ],
@@ -191,7 +191,7 @@ export const Place = ({
       {
         title: "Наименование поста ",
         render: (rowData) => {
-          return <p>Пост {rowData.number ?? "-"}</p>;
+          return <p>Пост {rowData?.number ?? "-"}</p>;
         },
       },
       {
@@ -201,7 +201,7 @@ export const Place = ({
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData?.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
         },
       },
     ],
@@ -222,7 +222,7 @@ export const Place = ({
       {
         title: "Наименование рабочего места ",
         render: (rowData) => {
-          return <p>Рабочее место {rowData.number ?? "-"}</p>;
+          return <p>Рабочее место {rowData?.number ?? "-"}</p>;
         },
       },
       {
@@ -531,10 +531,10 @@ export const Place = ({
                           setIsModalOpen(true);
                           setIsModalNumb(3)
 
-                          setValueProdArea(rowData.workshop?.id)
-                          setValuetTechProc(rowData.technologicalProcess?.id)
-                          setValuetPosts(rowData.productionArea?.id)
-                          setValuetWorkPlace(rowData.workplace?.id)
+                          setValueProdArea(rowData?.workshop?.id)
+                          setValuetTechProc(rowData?.technologicalProcess?.id)
+                          setValuetPosts(rowData?.productionArea?.id)
+                          setValuetWorkPlace(rowData?.workplace?.id)
 
                           api.post(`/eventLog`,{
                             "information": "Открыл модальное окно редактирования рабочего места "
