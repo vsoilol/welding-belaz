@@ -39,17 +39,52 @@ export const CreatingTask = ({
 
 }) => {
 
-    const [modalData, setModalData] = useState(null);
+    ///Текст и модалка ошибки
+    const [errorText, seterrorText] = useState("")
+    const [errorRecordsModal, seterrorRecordsModal] = useState(false)
 
 
-    const [valChioseMaster, setvalChioseMaster] = useState(masters[0].id);
-    const [valChioseInstruct, setvalChioseInstruct] = useState(techs[0].id);
-    const [valueDate, setvalueDate] = useState(0);
-    const [dateCratePlan, setdateCratePlan] = useState("");
-    const [toDay, settoDay] = useState(new Date().toLocaleDateString('ru-RU'));
+    /* Получение данных об изготовленных изделиях, узлах и деталях  */
+    const valueAddMaterial = {
+        date: "",
+        weldingMaterial: "",
+        weldingMaterialBatchNumber: "",
+    };
+    const [modalAddMaterial, setModalAddMaterial] = useState(false);
+    const [modalExistsDate, setmodalExistsDate] = useState(false);
+    const getDetProd = async () => {
+        try {
+            const res = await api.get("/file/product-account-report");
+            if (res.status === 200) {
+                window.open(res.request.responseURL);
+            }
+        } catch (error) {
 
-    const [CheckIsProd, setCheckIsProd] = useState(false);
+        }
+    };
 
+    /* Добавление сварочных материалов */
+    const setMaterial = (variables) => {
+        api
+            .put(`/WeldingTask/welding-material`, {
+                date: new Date(variables.date).toLocaleDateString("ru-RU", { dateStyle: "short" }),
+                weldingMaterial: variables.weldingMaterial??null,
+                weldingMaterialBatchNumber: variables.weldingMaterialBatchNumber != null ? variables.weldingMaterialBatchNumber.toString() : null,
+
+            })
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                setmodalExistsDate(true);
+            });
+    };
+
+
+
+    ////Селекты мастеров и контролеров
+    const [valChioseMaster, setvalChioseMaster] = useState("");
+    const [valChioseInstruct, setvalChioseInstruct] = useState("");
     const mastersOptions = masters?.map((item) => {
         return {
             value: item?.id,
@@ -62,33 +97,177 @@ export const CreatingTask = ({
             label: `${item?.middleName} ${item?.firstName}`,
         };
     });
-    ////Работа со списком дат сущ.плана  
-    const [valueAllDate, setValueAllDate] = useState([]);
+
+
+    ////Работа со списком дат сущ.плана   
     const [valueChioseDate, setvalueChioseDate] = useState(null);
-    useEffect(() => {
-        fetchData();  
-    }, []);
-    async function fetchData() {
-        try {
-            const response = await api.get(`/productAccount/dates/${masters[0]?.productionArea.id}`);
-            setValueAllDate(response.data);
-        } catch (error) {
-            console.log(error);
+    const [valueAllDate, setValueAllDate] = useState([]);
+    const [valueDate, setvalueDate] = useState(0);
+    const [dateCratePlan, setdateCratePlan] = useState("");
+
+
+
+
+    ///Проверка на закреп производ участ. и отправка запроса на даты 
+    async function CheckProduction(masterId) {
+        const masterProductionArea = userRole==="Admin"
+        ?masters?.find(master => master.id === masterId)?.productionArea
+        :masters?.find(master => master.productionArea)?.productionArea;
+ 
+
+        if (!masterProductionArea) {
+            seterrorRecordsModal(true);
+            seterrorText("За данным мастером не закреплен производственный участок.")
+            setValueAllDate([]);
+            setvalueChioseDate(null)
+            setvalue_products([])
+            setdataSelectPlan("")
+        }
+        else {
+            try {
+                if (userRole === "Admin") {
+                    const response = await api.get(`/productAccount/dates/${masterProductionArea?.id}`);
+                    setValueAllDate(response.data);
+                } else {
+                    const executorData = masterProductionArea;
+                    if (executorData) {
+                        const response = await api.get(`/productAccount/dates/${masterProductionArea?.id}`);
+                        setValueAllDate(response.data);
+                    } else {
+                        setValueAllDate([]);
+                        setvalueChioseDate(null)
+                        setvalue_products([])
+                        setdataSelectPlan("")
+                    }
+                }
+            } catch (error) {
+                setvalue_products([])
+                setdataSelectPlan("")
+            }
         }
     }
 
-    ////Получение информации о производимой продукции по дате
-    function GetProductionbyDate(date) {
-        const productionAreaId = userRole === "Admin"
-            ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id
-            : localStorage.getItem('USER_productionAreaId');
 
-        api.get(`/productAccount/byDate?Date=${date}&ProductionAreaId=${productionAreaId}`)
-            .then((response) => {
-                setvalue_products(response.data);
-            })
-            .catch((error) => { });
+    //Отобразить в таблицу план на дату из Выберите план из существующих дат
+    async function DisplayPlan() {
+        const masterProductionArea = userRole==="Admin"
+        ?masters?.find(master => master.id === valChioseMaster)?.productionArea
+        :masters?.find(master => master.productionArea)?.productionArea;
+
+        if (!masterProductionArea && !valueChioseDate) {
+            seterrorRecordsModal(true);
+            seterrorText("Вы не выбрали все поля")
+            setValueAllDate([]);
+            setvalueChioseDate(null)
+            setdataSelectPlan("")
+        }
+        else {
+            try {
+                if (userRole === "Admin") {
+                    const response = await api.get(`/productAccount/byDate?Date=${valueChioseDate}&ProductionAreaId=${masterProductionArea.id}`);
+                    setvalue_products(response.data)
+                    setdataSelectPlan(valueChioseDate)
+                } else {
+                    const executorData = masterProductionArea;
+                    if (executorData) {
+                        const response = await api.get(`/productAccount/byDate?Date=${valueChioseDate}&ProductionAreaId=${masterProductionArea.id}`);
+                        setvalue_products(response.data)
+                        setdataSelectPlan(valueChioseDate)
+                    } else {
+                        setValueAllDate([]);
+                        setvalueChioseDate(null)
+                        setvalue_products([])
+                        setdataSelectPlan("")
+                    }
+                }
+            } catch (error) {
+                setvalueChioseDate(null)
+                setValueAllDate([]);
+                setvalue_products([])
+                setdataSelectPlan("")
+            }
+        }
+ 
+        
+        
     }
+ 
+
+
+    //Проверка на то что есть  закреп производ участ 
+    function CheckForCreatePlan() {
+        
+       
+        const masterProductionArea = userRole==="Admin"
+        ?masters?.find(master => master.id === valChioseMaster)?.productionArea
+        :masters?.find(master => master.productionArea)?.productionArea; 
+        if (masterProductionArea && dateCratePlan) {
+            return true
+        }
+        else {
+            return false
+        }
+
+
+        
+
+    }
+
+
+    //Создать план на дату 
+    const [editExistingPlanDateModal, setEditExistingPlanDateModal] = useState(false);
+    async function CreatePlan() {
+        const masterProductionArea  = userRole==="Admin"
+        ?masters?.find(master => master.id === valChioseMaster)?.productionArea
+        :masters?.find(master => master.productionArea)?.productionArea;
+
+
+        const normalizedDate = dateCratePlan.replace(/^(\d{2}).(\d{2}).(\d{4})$/, '$3-$2-$1');
+        if (valueAllDate.includes(new Date(normalizedDate).toLocaleDateString('ru-RU'))) {
+            setEditExistingPlanDateModal(true);
+        }
+        else if (masterProductionArea && dateCratePlan) {
+            try {
+                if (userRole === "Admin") {
+                    api.post(`/productAccount/generateEmpty`, {
+                        "newDate": new Date(dateCratePlan).toLocaleDateString('ru-RU'),
+                        "productionAreaId": masterProductionArea.id,
+                    }).then(() => {
+                        CheckProduction(valChioseMaster)
+
+                        setvalueChioseDate(new Date(dateCratePlan).toLocaleDateString('ru-RU'))
+                    })
+                } else {
+                    const executorData = masterProductionArea;
+                    if (executorData) {
+                        api.post(`/productAccount/generateEmpty`, {
+                            "newDate": new Date(dateCratePlan).toLocaleDateString('ru-RU'),
+                            "productionAreaId": masterProductionArea.id,
+                        }).then(() => {
+                            CheckProduction(valChioseMaster)
+
+                            setvalueChioseDate(new Date(dateCratePlan).toLocaleDateString('ru-RU'))
+                        })
+                    } else {
+                        setValueAllDate([]);
+                        setvalueChioseDate(null)
+                    }
+                }
+            } catch (error) {
+
+            }
+        }
+    }
+
+
+
+    ///Для отображения таблицы
+    const [ProductAccountId, setProductAccountId] = useState("");
+    const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
+    const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
+    const [value_products, setvalue_products] = useState([]);
+
+    const [dataSelectPlan, setdataSelectPlan] = useState("");
     const TabPanel = (props_panel) => {
         const { children, value, indPanel } = props_panel;
         return (
@@ -97,9 +276,6 @@ export const CreatingTask = ({
             </div>
         );
     };
-    const [value_products, setvalue_products] = useState([]);
-    const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
-    const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
     const columns = [
         (userRole === "Admin" || userRole === "Master") && {
             title: "Удаление",
@@ -199,112 +375,27 @@ export const CreatingTask = ({
         },
     ].filter(column => column);
 
-
-    ////Редактирование данных плана
-    const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
-    const [editExistingPlanDateModal, setEditExistingPlanDateModal] = useState(false);
-    const [ProductAccountId, setProductAccountId] = useState("");
-
-
-    const [idPlan, setidPlan] = useState("");
-
-
-
-    const [prodQuantities, setprodQuantities] = useState(0);
-    const [manufacProducts, setmanufacProducts] = useState(0);
-    const [acceptedProducts, setacceptedProducts] = useState(0);
-    const [productreason, setproductreason] = useState("");
-    const [prodUniqueNumber, setprodUniqueNumber] = useState(0);
-
-
-    ///Создание плана 
-    async function CreatePlan() {
-        const normalizedDate = dateCratePlan.replace(/^(\d{2}).(\d{2}).(\d{4})$/, '$3-$2-$1');
-        if (valueAllDate.includes(new Date(normalizedDate).toLocaleDateString('ru-RU'))) {
-            setEditExistingPlanDateModal(true);
-        } else {
-            const productionAreaId = userRole === "Admin"
-                ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id
-                : localStorage.getItem('USER_productionAreaId');
-            api.post(`/productAccount/generateEmpty`, {
-                "newDate": new Date(dateCratePlan).toLocaleDateString('ru-RU'),
-                "productionAreaId": productionAreaId,
-            })
-                .then(async (response) => {
-                    fetchData();
-                    console.log(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-                    setvalueChioseDate(new Date(normalizedDate).toLocaleDateString('ru-RU'));
-                    setvalueDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-                    GetProductionbyDate(new Date(normalizedDate).toLocaleDateString('ru-RU'))
-
-                    api.post(`/eventLog`, {
-                        "information": `Создание плана на ${new Date(normalizedDate).toLocaleDateString('ru-RU')}`
-                    })
-                })
-                .catch((error) => { });
+    ///Кдаления записи в плане 
+    async function deleteRecords() {
+        try {
+            await api.remove(`/productAccount/${ProductAccountId}`);
+            DisplayPlan()
+        } catch (error) {
+            console.error(error);
         }
     }
-    //Изменение ввода выработки и брака
-    async function ChangeData() {
+
+    ///Закрепление оборудования
+    const [valueWelder, setvalueWelder] = useState("");
+    async function FixoEquipment(valueWelder) {
         try {
-            if (idPlan && idPlan.length > 0) {
-
-                if (prodQuantities >= 0) {
-                    await api.put(`/productAccount/amountFromPlan`, {
-                        "id": idPlan,
-                        "amount": Number(prodQuantities)
-                    });
-                }
-                /* if (CheckIsProd && prodUniqueNumber >= 0) {
-                    await api.put(`/productAccount/unique-number`, {
-                        "ProductAccountId ": idPlan,
-                        "UniqueNumber ": Number(CheckIsProd)
-                    });
-                } */
-                if (manufacProducts >= 0) {
-                    await api.put(`/productAccount/manufacturedAmount`, {
-                        "id": idPlan,
-                        "amount": manufacProducts
-                    });
-                }
-
-                if (userRole === "Admin") {
-                    if (acceptedProducts >= 0 && techs[0] && techs[0].id) {
-                        await api.put(`/productAccount/acceptedAmount`, {
-                            "id": idPlan,
-                            "amount": Number(acceptedProducts),
-                            "inspectorId": techs[0].id
-                        });
-                    }
-                    if (productreason && ProductAccountId) {
-                        await api.put(`/productAccount/reason`, {
-                            "productAccountId": ProductAccountId,
-                            "defectiveReason": productreason
-                        });
-                    } 
-
-                } else {
-                    if (acceptedProducts >= 0 && techs[0] && techs[0].id) {
-                        await api.put(`/productAccount/acceptedAmount`, {
-                            "id": idPlan,
-                            "amount": Number(acceptedProducts),
-                            "inspectorId": techs[0].id
-                        });
-                    }
-                    if (productreason) {
-                        await api.put(`/productAccount/reason`, {
-                            "productAccountId": ProductAccountId,
-                            "defectiveReason": productreason
-                        });
-                    }
-                }
-
-                // Все запросы успешно выполнены
-                GetProductionbyDate(valueChioseDate);
-                loadTasks();
-            }
+            const filteredArray = equipment[0]?.filter(obj => obj.active === 1).map(obj => obj.id);
+            await api.put(`/productAccount/assignWeldingEquipments`, {
+                "productAccountId": ProductAccountId,
+                "weldingEquipmentIds": filteredArray
+            });
+            DisplayPlan()
         } catch (error) {
-            // Произошла ошибка при выполнении запросов
             console.error(error);
         }
     }
@@ -319,84 +410,191 @@ export const CreatingTask = ({
             event.active = 0
         }
     };
-    ///Закрепление оборудования
-    const [valueWelder, setvalueWelder] = useState("");
-    async function FixoEquipment(valueWelder) {
-        try {
-            const filteredArray = equipment[0]?.filter(obj => obj.active === 1).map(obj => obj.id);
-            await api.put(`/productAccount/assignWeldingEquipments`, {
-                "productAccountId": ProductAccountId,
-                "weldingEquipmentIds": filteredArray
-            });
-            GetProductionbyDate(valueChioseDate);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    //Удаление записи в плане 
-    async function deleteRecords() {
-        try {
-            await api.remove(`/productAccount/${ProductAccountId}`);
-            GetProductionbyDate(valueChioseDate);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    ///Создать задание
-    function CreateTask() {
-        const masterId = userRole === "Admin" ? valChioseMaster : masters[0].id;
-        const productionAreaId = userRole === "Admin" ? masters.find(obj => obj.id === valChioseMaster)?.productionArea.id : localStorage.getItem('USER_productionAreaId');
 
-        api.post(`/productAccount/generateTasks`, {
-            "date": valueChioseDate,
-            "productionAreaId": productionAreaId,
-            "masterId": masterId,
-        })
-            .then((response) => {
+
+    ////Редактирование данных плана
+    const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
+
+    const [idPlan, setidPlan] = useState("");
+    const [prodQuantities, setprodQuantities] = useState(0);
+    const [manufacProducts, setmanufacProducts] = useState(0);
+    const [acceptedProducts, setacceptedProducts] = useState(0);
+    const [productreason, setproductreason] = useState("");
+    const [prodUniqueNumber, setprodUniqueNumber] = useState(0);
+
+    const [CheckIsProd, setCheckIsProd] = useState(false);
+    async function ChangeData() {
+        try {
+            if (idPlan && idPlan.length > 0) {
+
+                if (prodQuantities >= 0) {
+                    await api.put(`/productAccount/amountFromPlan`, {
+                        "id": idPlan,
+                        "amount": Number(prodQuantities)
+                    });
+                }
+                if (manufacProducts >= 0) {
+                    await api.put(`/productAccount/manufacturedAmount`, {
+                        "id": idPlan,
+                        "amount": manufacProducts
+                    });
+                }
+
+                if (userRole === "Admin") {
+                    if (acceptedProducts >= 0  && valChioseInstruct  ) { 
+                        await api.put(`/productAccount/acceptedAmount`, {
+                            "id": idPlan,
+                            "amount": Number(acceptedProducts),
+                            "inspectorId": valChioseInstruct
+                        });
+                    } 
+                    else{
+                        seterrorRecordsModal(true);
+                        seterrorText("Неверные данные контролера.")
+                        DisplayPlan()
+                        return
+                    }
+                    if (productreason && ProductAccountId  ) {
+                        await api.put(`/productAccount/reason`, {
+                            "productAccountId": ProductAccountId,
+                            "defectiveReason": productreason
+                        });
+                    }
+
+                } else {
+                    if (productreason && techs[0]) {
+                        await api.put(`/productAccount/reason`, {
+                            "productAccountId": ProductAccountId,
+                            "defectiveReason": productreason
+                        });
+                    }
+                    if (acceptedProducts >= 0   ) {
+                        try {
+                            await api.put(`/productAccount/acceptedAmount`, {
+                              "id": idPlan,
+                              "amount": Number(acceptedProducts),
+                              "inspectorId": techs[0].id
+                            });
+                            
+                          } catch (error) { 
+                            DisplayPlan();
+                          } 
+                    } 
+                    else{
+                        seterrorRecordsModal(true);
+                        seterrorText("Неверные данные контролера.")  
+                    }
+                    
+                }
+
+                // Все запросы успешно выполнены
+                DisplayPlan()
+                loadTasks();
+            }
+        } catch (error) {
+            // Произошла ошибка при выполнении запросов
+            console.error(error);
+        }
+    }
+
+    ///Создать задание
+    async function CreateTask() {
+        const executor = masters?.find(master => master.productionArea)?.productionArea;
+        const selectedMaster = masters.find(obj => obj.id === valChioseMaster);
+        
+        const masterId = userRole === "Admin" ? valChioseMaster : (executor ? executor.id : null);
+        const productionAreaId = userRole === "Admin" ? (selectedMaster ? selectedMaster.productionArea.id : null) : (executor?.productionArea?.id || null);
+    
+        if (!masterId || !productionAreaId) {
+            seterrorRecordsModal(true);
+            seterrorText("Вы не выбрали все поля");
+        } else {
+            try {
+                await api.post(`/productAccount/generateTasks`, {
+                    "date": valueChioseDate,
+                    "productionAreaId": productionAreaId,
+                    "masterId": masterId,
+                });
+    
                 api.post(`/eventLog`, {
                     "information": `Нажал кнопку "Создать задание"`
-                })
+                });
+    
                 setTimeout(() => {
                     window.location.reload();
                 }, 500);
-            })
-            .catch((error) => { });
-    }
-
-    async function getDetProd() {
-        try {
-            const res = await api.get("/file/product-account-report");
-            if (res.status === 200) {
-                window.open(res.request.responseURL);
+    
+            } catch (error) {
+                // Если произошла ошибка при отправке запроса, попытаемся создать задание с другим masterId.
+                try {
+                    const fallbackMasterId = masters.find(obj => obj.productionArea)?.id;
+                    if (!fallbackMasterId) {
+                        throw new Error("Мастер для задания не найден");
+                    }
+    
+                    await api.post(`/productAccount/generateTasks`, {
+                        "date": valueChioseDate,
+                        "productionAreaId": productionAreaId,
+                        "masterId": fallbackMasterId,
+                    });
+    
+                    api.post(`/eventLog`, {
+                        "information": `Нажал кнопку "Создать задание"`
+                    });
+    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+    
+                } catch (fallbackError) {
+                    // Если произошла ошибка и при использовании fallbackMasterId, покажем сообщение пользователю.
+                    seterrorRecordsModal(true);
+                    seterrorText("Произошла ошибка при создании задания");
+                }
             }
-        } catch (error) {
-
         }
-    } 
-
-
-
-    const [modalAddMAterial, setmodalAddMAterial] = useState(false);
-    const [modalExistsDate, setmodalExistsDate] = useState(false);
-    const valueAddMaterial = {
-        date: "",
-        weldingMaterial: "",
-        weldingMaterialBatchNumber: "",
-    };
-    function setMaterial(variables) { 
-        api.put(`/WeldingTask/welding-material`, {
-            "date": new Date(variables.date).toLocaleDateString('ru-RU', { dateStyle: 'short' }),
-            "weldingMaterial": variables.weldingMaterial,
-            "weldingMaterialBatchNumber": `${variables.weldingMaterialBatchNumber??null}`,
-        })
-            .then((response) => {
-                window.location.reload();
-            })
-            .catch((error) => {
-                setmodalExistsDate(true)
-             });
     }
 
+
+
+    ///Проверка для отображения кнопки создать задание
+    function CheckForCreateTask(){
+        const masterProductionArea = userRole==="Admin"
+        ?masters?.find(master => master.id === valChioseMaster)?.productionArea
+        :masters?.find(master => master.productionArea)?.productionArea;
+        if (masterProductionArea && valueChioseDate) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
+
+
+
+    //Если зашел не Admin
+    useEffect(()=>{
+        console.log(userRole)
+        if (userRole!="Admin"||userRole!="admin") {
+            WorkWidthNotAdmin()
+        }
+    },[]) 
+
+    async function WorkWidthNotAdmin() {
+        const executorData = masters?.find(master => master.productionArea)?.productionArea;
+        if (executorData) {
+            const response = await  api.get(`/productAccount/dates/${executorData?.id}`);
+            setValueAllDate(response.data);
+        } else {
+            setValueAllDate([]);
+            setvalueChioseDate(null)
+            setvalue_products([])
+            setdataSelectPlan("")
+        }
+    }
+
+   
 
     return (
         <div className={styles.TablePlan}>
@@ -414,7 +612,7 @@ export const CreatingTask = ({
                                 placeholder="Мастера"
                                 onChange={(event) => {
                                     setvalChioseMaster(event.value);
-                                    GetProductionbyDate(valueChioseDate, 2, valChioseMaster)
+                                    CheckProduction(event.value)
                                 }}
                                 options={mastersOptions}
                             />
@@ -429,7 +627,6 @@ export const CreatingTask = ({
                                 placeholder="Контролеры"
                                 onChange={(event) => {
                                     setvalChioseInstruct(event.value);
-                                    GetProductionbyDate(valueChioseDate, 2, valChioseInstruct)
                                 }}
                                 options={techsOptions}
                             />
@@ -450,7 +647,6 @@ export const CreatingTask = ({
                         onChange={(event) => {
                             setvalueChioseDate(event.value);
                             setvalueDate(event.label)
-                            GetProductionbyDate(event.label)
                         }}
                         options={valueAllDate.map((date) => ({
                             label: date,
@@ -459,32 +655,44 @@ export const CreatingTask = ({
                     />
                 </div>
 
-                <div className={styles.toolsHead}>
-                    <p>Выберите дату для создания плана</p>
-                    <Input
-                        onChange={(e) => {
-                            setdateCratePlan(e.target.value)
-                            settoDay(new Date(e.target.value).toLocaleDateString('ru-RU'))
-                        }}
-                        width="200"
-                        style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                        value={dateCratePlan}
-                        name="dateCratePlan"
-                        placeholder="Дата"
-                        type="text"
-                        onFocus={(e) => {
-                            e.currentTarget.type = "date";
-                        }}
-                        autocomplete="off"
-                    /><br></br>
-
-
-                </div>
+                {userRole != "Inspector"  
+                    ? (
+                        <div className={styles.toolsHead}>
+                            <p>Выберите дату для создания плана</p>
+                            <Input
+                                onChange={(e) => {
+                                    setdateCratePlan(e.target.value)
+                                    CheckForCreatePlan()
+                                }}
+                                width="200"
+                                style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                                value={dateCratePlan}
+                                name="dateCratePlan"
+                                placeholder="Дата"
+                                type="text"
+                                onFocus={(e) => {
+                                    e.currentTarget.type = "date";
+                                }}
+                                autocomplete="off"
+                            /><br></br> 
+                        </div>
+                    )
+                    : null
+                }
+                
 
 
             </div>
+
+
             <div className={styles.RowToolsBTNS}>
-                {userRole === "Master" || userRole === "Admin"
+                {userRole === "Master" || userRole === "Admin" || userRole === "Inspector" && valueChioseDate
+                    ? (
+                        <button className={styles.create} style={{ marginLeft: "20px" }} onClick={DisplayPlan}> Показать план на {valueChioseDate}</button>
+                    )
+                    : null
+                }
+                {userRole === "Master" || userRole === "Admin" && CheckForCreatePlan()
                     ? (
                         <button className={styles.create} style={{ marginLeft: "20px" }} onClick={CreatePlan}> Создать план на {
                             dateCratePlan && new Date(dateCratePlan).toLocaleDateString('ru-RU') !== 'Invalid Date'
@@ -494,39 +702,44 @@ export const CreatingTask = ({
                     )
                     : null
                 }
-
-                {userRole === "Master" || userRole === "Admin"
+                {userRole === "Master" || userRole === "Admin" && CheckForCreateTask()
                     ? <button className={`${styles.create} ${styles.createTaskBtn}`} style={{ marginLeft: "15px" }} onClick={CreateTask} > Создать задание</button>
                     : null
-                }
-                {userRole === "Admin" || userRole === "Master"
-                    ? <div className={styles.Upload}><Upload tool={1}></Upload></div>
-                    : null
-                }
-            </div>
-            <div className={styles.sectionGet}>
+                } 
 
-                {userRole === "Admin" || userRole === "Master"
-                    ? <div className={styles.Upload}>
+            </div>
+
+
+            {/****----******/}
+            <div className={styles.sectionGet}>
+                {(userRole === "Admin" || userRole === "Master") && (
+                    <div className={styles.Upload}>
                         <label>Получение данных об изготовленных изделиях, узлах и деталях </label>
-                        <button className={styles.getDate} onClick={(e) => { getDetProd() }}>Получить</button>
+                        <button className={styles.getDate} onClick={getDetProd}>Получить</button>
                     </div>
-                    : null
-                }
-            </div>
-            <div className={styles.sectionGet}>
-
-                {userRole === "Admin" || userRole === "Master"
-                    ? <div className={styles.Upload}>
+                )}
+                {(userRole === "Admin" || userRole === "Master") && (
+                    <div className={styles.Upload}>
                         <label>Добавление сварочных материалов </label>
-
-                        <button className={styles.addMater} onClick={(e) => { setmodalAddMAterial(true) }}>Добавить</button>
+                        <button className={styles.addMater} onClick={() => setModalAddMaterial(true)}>Добавить</button>
                     </div>
-                    : null
-                }
+                )}
+                {(userRole === "Admin" || userRole === "Master") && (
+                    <div className={styles.Upload}>
+                    <label>Загрузить данные</label>
+                    <br></br>
+                    {userRole === "Admin" || userRole === "Master"
+                        ? <div className={styles.Upload}><Upload tool={1}></Upload></div>
+                        : null
+                    }
+                </div>
+                )}
+                
+
             </div>
 
-            <h3>План на <span>{valueChioseDate}</span></h3>
+
+            <h3>План на <span>{dataSelectPlan}</span></h3>
             {/* таблица плана  */}
             <TabPanel
                 style={{ minWidth: "1200px", }}
@@ -538,34 +751,24 @@ export const CreatingTask = ({
                     actions={
                         [
                             {
-                                icon: "add",
-                                tooltip: "Добавить изделие",
-                                isFreeAction: true,
-                                onClick: () => {
-                                    /* setIsModalOpen(true); 
-                                    setValuetOpenModal(0);
-                                    api.post(`/eventLog`,{
-                                      "information": "Открыл модальное окно добавления пользователя "
-                                    })  */
-                                },
-                            },
-                            {
                                 icon: "edit",
                                 tooltip: "Редактировать план",
                                 onClick: (event, rowData) => {
+                                    setidPlan(rowData?.id)
+                                    setprodQuantities(rowData?.amountFromPlan)
                                     setCheckIsProd(rowData?.product?.product ? true : false);
                                     setprodUniqueNumber(rowData?.uniqueNumber != null ? rowData?.uniqueNumber : "")
                                     setmodalchangeInfoproductAccount(true)
-                                    setidPlan(rowData?.id)
-                                    setprodQuantities(rowData?.amountFromPlan)
+
+
                                     setmanufacProducts(rowData?.amountManufactured)
                                     setacceptedProducts(rowData?.amountAccept)
                                     setProductAccountId(rowData?.id)
- 
-                                    setproductreason(rowData?.defectiveReason??"")
-                                    /* api.post(`/eventLog`, {
+
+                                    setproductreason(rowData?.defectiveReason ?? "")
+                                    api.post(`/eventLog`, {
                                         "information": "Открыл модальное окно редактирования плана"
-                                    }) */
+                                    })
                                 },
                             },
                         ]
@@ -574,13 +777,13 @@ export const CreatingTask = ({
                 />
             </TabPanel>
 
-            {/*Добавление сварочных материалов*/}
+
+
+            {/* Добавление сварочных материалов */}
             <ModalWindow
-                isOpen={modalAddMAterial}
+                isOpen={modalAddMaterial}
                 headerText="Добавление сварочных материалов "
-                setIsOpen={(state) => {
-                    setmodalAddMAterial(false)
-                }}
+                setIsOpen={(state) => setModalAddMaterial(false)}
                 wrapperStyles={{ width: 420 }}
             >
                 <Formik
@@ -588,84 +791,134 @@ export const CreatingTask = ({
                     enableReinitialize
                     onSubmit={(variables) => {
                         const { id, ...dataToSend } = variables;
-                        setmodalAddMAterial(false)
-                        setMaterial(variables)
+                        setModalAddMaterial(false);
+                        setMaterial(variables);
                     }}
                 >
-                    {({
-                        handleSubmit,
-                        handleChange,
-                        values,
-                        setFieldValue,
-                        handleBlur,
-                    }) => (
+                    {({ handleSubmit, handleChange, values, handleBlur }) => (
                         <form onSubmit={handleSubmit}>
-
                             <div className={styles.row}>
                                 <Input
-                                    onChange={(e) => {
-                                        handleChange(e);
-                                    }}
+                                    onChange={handleChange}
                                     width="200"
                                     style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
                                     value={values.date}
                                     name="date"
-                                    placeholder="Дата  "
+                                    placeholder="Дата"
                                     type="text"
                                     onFocus={(e) => {
                                         e.currentTarget.type = "date";
                                     }}
                                     onBlur={handleBlur}
-                                    autocomplete="off"
+                                    autoComplete="off"
                                 />
                             </div>
                             <div className={styles.row}>
                                 <Input
-                                    onChange={(e) => {
-                                        handleChange(e);
-                                    }}
-                                    style={{
-                                        width: 380,
-                                        height: 40,
-                                    }}
+                                    onChange={handleChange}
+                                    style={{ width: 380, height: 40 }}
                                     value={values.weldingMaterial}
-                                    name={`weldingMaterial`}
-                                    placeholder="Наименование сварочного материала "
-                                    autocomplete="off"
+                                    name="weldingMaterial"
+                                    placeholder="Наименование сварочного материала"
+                                    autoComplete="off"
                                 />
                             </div>
                             <div className={styles.row}>
                                 <Input
-                                    onChange={(e) => {
-                                        handleChange(e);
-                                    }}
-                                    style={{
-                                        width: 380,
-                                        height: 40, 
-                                    }}
+                                    onChange={handleChange}
+                                    style={{ width: 380, height: 40 }}
                                     type="number"
                                     min="0"
                                     step="1"
                                     value={values.weldingMaterialBatchNumber}
-                                    name={`weldingMaterialBatchNumber`}
-                                    placeholder="Номер партии сварочного материала "
-                                    autocomplete="off"
+                                    name="weldingMaterialBatchNumber"
+                                    placeholder="Номер партии сварочного материала"
+                                    autoComplete="off"
                                 />
                             </div>
-
                             <div className={styles.row}>
-                                <Button
-                                    disabled={
-                                        values.shiftNumb == ""
-                                    }
-                                    type="submit"
-                                >
-                                    Закрепить
-                                </Button>
+                                <Button disabled={
+                                    !values.date && 
+                                    !values.weldingMaterial &&
+                                    !values.weldingMaterialBatchNumber
+                                    } type="submit">Закрепить</Button>
                             </div>
                         </form>
                     )}
                 </Formik>
+            </ModalWindow>
+
+
+
+            {/*Модалка ошибки*/}
+            <ModalWindow
+                isOpen={errorRecordsModal}
+                headerText="Ошибка"
+                setIsOpen={(state) => {
+                    seterrorRecordsModal(false);
+                }}
+                wrapperStyles={{ width: 420 }}
+            >
+                <div>
+                    <h4 style={{ padding: "35px 40px" }}>{errorText}</h4>
+
+                    <div className={styles.row}>
+                        <Button onClick={() => seterrorRecordsModal(false)}>
+                            Закрыть
+                        </Button>
+                    </div>
+                </div>
+            </ModalWindow>
+            {/*Удаление плана*/}
+            <ModalWindow
+                isOpen={deleteRecordsModal}
+                headerText="Удаление"
+                setIsOpen={(state) => {
+                    setdeleteRecordsModal(false)
+                }}
+                wrapperStyles={{ width: 420 }}
+            >
+                <Formik
+                    initialValues={initialValues}
+                    enableReinitialize
+                    onSubmit={(variables) => {
+                        const { id, ...dataToSend } = variables;
+                        setdeleteRecordsModal(false)
+                        deleteRecords()
+                    }}
+                >
+                    {({
+                        handleSubmit,
+                    }) => (
+                        <form onSubmit={handleSubmit}>
+
+                            <div>
+                                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span>  ? </h4>
+
+                                <div className={styles.row}>
+                                    <Button
+                                        type="submit"
+                                    >
+                                        Удалить
+                                    </Button>
+                                </div>
+
+                            </div>
+                        </form>
+                    )}
+                </Formik>
+            </ModalWindow>
+
+            {/*Модалка если создать план на сущ.дату*/}
+            <ModalWindow
+                isOpen={editExistingPlanDateModal}
+                headerText="Дата уже существует"
+                setIsOpen={(state) => {
+                    setEditExistingPlanDateModal(false)
+                }}
+                wrapperStyles={{ width: 420 }}
+            >
+                <h3 className={styles.ExistingPlan}>План на эту дату уже существует</h3>
             </ModalWindow>
 
 
@@ -723,7 +976,9 @@ export const CreatingTask = ({
                 </Formik>
             </ModalWindow>
 
-            {/*Ввод выработки и брака*/}
+
+
+            {/*Редактировать запись в плане */}
             <ModalWindow
                 isOpen={modalchangeInfoproductAccount}
                 headerText="Редактировать"
@@ -899,17 +1154,9 @@ export const CreatingTask = ({
                     )}
                 </Formik>
             </ModalWindow>
-            {/*Модалка если создать план на сущ.дату*/}
-            <ModalWindow
-                isOpen={editExistingPlanDateModal}
-                headerText="Дата уже существует"
-                setIsOpen={(state) => {
-                    setEditExistingPlanDateModal(false)
-                }}
-                wrapperStyles={{ width: 420 }}
-            >
-                <h3 className={styles.ExistingPlan}>План на эту дату уже существует</h3>
-            </ModalWindow>
+
+
+
             {/*Модалка если задания на дату нету*/}
             <ModalWindow
                 isOpen={modalExistsDate}
@@ -921,48 +1168,7 @@ export const CreatingTask = ({
             >
                 <h3 className={styles.ExistingPlan}>Задач на эту дату не существует</h3>
             </ModalWindow>
-            {/*Удаление задания*/}
-            <ModalWindow
-                isOpen={deleteRecordsModal}
-                headerText="Удаление"
-                setIsOpen={(state) => {
-                    setdeleteRecordsModal(false)
-                }}
-                wrapperStyles={{ width: 420 }}
-            >
-                <Formik
-                    initialValues={initialValues}
-                    enableReinitialize
-                    onSubmit={(variables) => {
-                        const { id, ...dataToSend } = variables;
-                        setdeleteRecordsModal(false)
-                        deleteRecords()
-                    }}
-                >
-                    {({
-                        handleSubmit,
-                    }) => (
-                        <form onSubmit={handleSubmit}>
-
-                            <div>
-                                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span>  ? </h4>
-
-                                <div className={styles.row}>
-                                    <Button
-                                        type="submit"
-                                    >
-                                        Удалить
-                                    </Button>
-                                </div>
-
-                            </div>
-                        </form>
-                    )}
-                </Formik>
-            </ModalWindow>
-
 
         </div>
     );
 };
-

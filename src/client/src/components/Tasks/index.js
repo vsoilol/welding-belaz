@@ -815,7 +815,7 @@ export const Tasks = ({
               <form onSubmit={handleSubmit}>
 
                 <div>
-                  <p style={{ padding: "15px 20px 0 30px" }}>Изменение количества продукции из плана  </p>
+                  {/* <p style={{ padding: "15px 20px 0 30px" }}>Изменение количества продукции из плана  </p>
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
@@ -829,7 +829,7 @@ export const Tasks = ({
                       onBlur={handleBlur}
                       autocomplete="off"
                     />
-                  </div>
+                  </div> */}
 
                   <p style={{ padding: "15px 20px 0 30px" }}>Изменение даты задания </p>
                   <div className={styles.row}>

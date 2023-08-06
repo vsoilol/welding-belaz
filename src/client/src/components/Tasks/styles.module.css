@@ -305,17 +305,25 @@ h3.ExistingPlan{
   margin-left: 20px;
   height: 40px;
   position: relative;
-  top: 40px;
+  top: 40px; 
 }
 
 label{
-  text-align: left !important;
+  text-align: center !important;  
 }
 
 
 .sectionGet{
   padding-left: 20px;
   margin-top: 15px;
+  display: flex;
+  align-items: start;
+  gap: 50px; 
+  padding-right: 80px;
+}
+.sectionGet button{
+  margin: 0 auto;
+  margin-top: 20px;
 }
 .getDate{
   margin: 20px 0px; 
