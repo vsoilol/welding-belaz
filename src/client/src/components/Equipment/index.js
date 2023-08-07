@@ -81,6 +81,9 @@ export const Equipment = ({
   const [valueReason, setValueReaso] = useState();
   const [valuetEquipment, setValuetEquipment] = useState();
   const [valueDownti, setValueDownti] = useState();
+  const [valueTime, setTime] = useState();
+  const [valueData, setData] = useState();
+ 
 
 
   const [valueMaster, setvalueMaster] = useState("");
@@ -444,14 +447,24 @@ export const Equipment = ({
 
     variables.downtimeReasonId = valueReason;
     variables.weldingEquipmentId = valuetEquipment;
-    variables.Date = new Date(variables.Date).toLocaleDateString('ru-RU', { dateStyle: 'short' });
+    variables.Date = new Date(valueData).toLocaleDateString('ru-RU', { dateStyle: 'short' });
     variables.idDownti = valueDownti;
-
-    if (isModalNumb === 2) {
-      addDowntime(variables);
-    }
+    variables.time = valueTime;
+    
     if (isModalNumb === 3) {
-      editDowntime(variables);
+      
+      const dataReason={
+        "id": variables.idDownti,
+        "weldingEquipmentId":  variables.weldingEquipmentId,
+        "downtimeReasonId": variables.downtimeReasonId,
+        "date":   variables.Date,
+        "startConditionTime":  variables.timeStates,
+        "time":  variables.time
+      }
+      api.put("/WeldingEquipment/downtime",dataReason)
+      .then(()=>{
+        loadEquipment()
+      })  
     }
   }
 
@@ -610,12 +623,12 @@ export const Equipment = ({
             actions={
               userRole === "Admin" || userRole === "Master"
                 ? [
-                  {
+                 /*  {
                     icon: "add",
                     tooltip: "Добавить Простои",
                     isFreeAction: true,
                     onClick: () => { setIsModalOpen(true); setIsModalNumb(2) },
-                  },
+                  }, */
                   {
                     icon: "edit",
                     tooltip: "Редактировать Простои",
@@ -627,6 +640,8 @@ export const Equipment = ({
                       setValueDownti(rowData?.id)
                       setValuetEquipment(rowData?.weldingEquipment.id)
                       findReason(rowData?.downtimeReason)
+                      setTime(rowData?.time)
+                      setData(rowData?.date.split('.').reverse().join('-'))
                     },
                   },
                 ]
@@ -1205,13 +1220,13 @@ export const Equipment = ({
                     />
                   </div>
 
-                  <div className={styles.row}>
+                  <div className={styles.row}> 
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        setData(e.target.value);
                       }}
                       style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                      value={values.Date}
+                      value={valueData}
                       name="Date"
                       placeholder="Дата"
                       type="text"
@@ -1236,11 +1251,11 @@ export const Equipment = ({
 
                     <Input
                       onChange={(e) => {
-                        handleChange(e);
+                        setTime(e.target.value);
                       }}
                       style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                      value={values.time}
-                      name="time"
+                      value={valueTime}
+                      name="valueTime"
                       placeholder="Время"
                       onBlur={handleBlur}
                     />
