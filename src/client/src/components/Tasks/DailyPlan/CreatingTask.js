@@ -177,14 +177,16 @@ export const CreatingTask = ({
                         setValueAllDate([]);
                         setvalueChioseDate(null)
                         setvalue_products([])
-                        setdataSelectPlan("")
+                        seterrorRecordsModal(true);
+                        seterrorText("За данным мастером не закреплен производственный участок.");
                     }
                 }
             } catch (error) {
                 setvalueChioseDate(null)
                 setValueAllDate([]);
                 setvalue_products([])
-                setdataSelectPlan("")
+                seterrorRecordsModal(true);
+                seterrorText("Ошибка . Вы не выбрали мастера");
             }
         }
  
