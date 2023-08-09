@@ -1,11 +1,15 @@
 ﻿using System.Data;
 using System.Text;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Constants;
+using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Exceptions;
+using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using DbfDataReader;
 using LanguageExt;
 using LanguageExt.Common;
@@ -17,16 +21,26 @@ public class UploadProductAccountFileService : IUploadProductAccountFileService
 {
     private readonly IProductRepository _productRepository;
     private readonly IProductAccountRepository _productAccountRepository;
+    private readonly IValidationService _validationService;
 
     public UploadProductAccountFileService(IProductRepository productRepository,
-        IProductAccountRepository productAccountRepository)
+        IProductAccountRepository productAccountRepository, IValidationService validationService)
     {
         _productRepository = productRepository;
         _productAccountRepository = productAccountRepository;
+        _validationService = validationService;
     }
 
-    public async Task<Result<Unit>> UploadProductAccountDataDbfAsync(IFormFile formFile)
+    public async Task<Result<Unit>> UploadProductAccountDataDbfAsync(UploadProductAccountDataRequest request)
     {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<Unit>(validationResult.Exception);
+        }
+
+        var formFile = request.File;
         var fileExtension = Path.GetExtension(formFile.FileName);
         var isFileCorrect = CheckThatDbfFileCorrect(formFile, fileExtension);
 
@@ -36,12 +50,23 @@ public class UploadProductAccountFileService : IUploadProductAccountFileService
             return new Result<Unit>(exception);
         }
 
-        var productAccountDbfModels = await GetProductAccountInfoFromFileAsync(formFile);
+        var date = request.Date.ToDateTime();
+
+        var productAccountDbfModels = await GetProductAccountInfoFromFileAsync(formFile, date);
         var existedProducts = await _productRepository.GetAllProductsAsync();
         var needToUpdateProductAccounts =
             GetUpdatedProductAccounts(productAccountDbfModels, existedProducts);
 
         await UpdateProductAccountsAsync(needToUpdateProductAccounts);
+
+        var productionAreaIds = needToUpdateProductAccounts
+            .Select(_ => _.ProductionAreaId)
+            .Distinct();
+
+        foreach (var productionAreaId in productionAreaIds)
+        {
+            await _productAccountRepository.GenerateEmptyIfNotExistAsync(date, productionAreaId);
+        }
 
         return Unit.Default;
     }
@@ -52,7 +77,8 @@ public class UploadProductAccountFileService : IUploadProductAccountFileService
         return formFile.Length > 0 && isFileExtensionCorrect;
     }
 
-    private async Task<List<ProductAccountDbfModel>> GetProductAccountInfoFromFileAsync(IFormFile formFile)
+    private async Task<List<ProductAccountDbfModel>> GetProductAccountInfoFromFileAsync(IFormFile formFile,
+        DateTime date)
     {
         var tempFilePath = Path.GetTempFileName();
         using (var stream = new FileStream(tempFilePath, FileMode.Create))
@@ -74,7 +100,7 @@ public class UploadProductAccountFileService : IUploadProductAccountFileService
         {
             while (await dbfDataReader.ReadAsync())
             {
-                var model = MapDbfDataReaderToProductAccountDbfModel(dbfDataReader);
+                var model = MapDbfDataReaderToProductAccountDbfModel(dbfDataReader, date);
 
                 result.Add(model);
             }
@@ -85,9 +111,9 @@ public class UploadProductAccountFileService : IUploadProductAccountFileService
         return result;
     }
 
-    private ProductAccountDbfModel MapDbfDataReaderToProductAccountDbfModel(IDataRecord dbfDataReader)
+    private ProductAccountDbfModel MapDbfDataReaderToProductAccountDbfModel(IDataRecord dbfDataReader, DateTime date)
     {
-        var date = dbfDataReader.GetDateTime(130);
+        //var date = dbfDataReader.GetDateTime(130);
         var productIndex = ReturnNullIfStringEmpty(dbfDataReader.GetString(8));
         var detailNumber = ReturnNullIfStringEmpty(dbfDataReader.GetString(9));
         var suffix = ReturnNullIfStringEmpty(dbfDataReader.GetString(10));
@@ -134,7 +160,8 @@ public class UploadProductAccountFileService : IUploadProductAccountFileService
                 {
                     ProductId = product.Id,
                     AmountFromPlan = productAccountDbfModel.AmountFromPlan,
-                    Date = productAccountDbfModel.Date
+                    Date = productAccountDbfModel.Date,
+                    ProductionAreaId = product.ProductionAreaId
                 };
 
                 data.Add(updateProductAccount);

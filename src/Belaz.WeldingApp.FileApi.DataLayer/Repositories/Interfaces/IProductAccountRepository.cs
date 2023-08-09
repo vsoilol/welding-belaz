@@ -35,4 +35,6 @@ public interface IProductAccountRepository
     Task AddOnlyByProductAndAmountFromPlanAsync(Guid productId, DateTime date, int amountFromPlan);
     
     Task<List<ProductAccountDto>> GetAllProductAccountsAsync();
+    
+    Task GenerateEmptyIfNotExistAsync(DateTime newDate, Guid productionAreaId);
 }

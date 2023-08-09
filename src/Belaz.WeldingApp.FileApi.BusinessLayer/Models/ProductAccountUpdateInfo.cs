@@ -13,4 +13,6 @@ public class ProductAccountUpdateInfo
     /// Дата
     /// </summary>
     public DateTime Date { get; set; }
+
+    public Guid ProductionAreaId { get; set; }
 }
