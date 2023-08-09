@@ -4,10 +4,14 @@ import Button from "components/shared/Button";
 import api from "services/api";
 import ModalWindow from "components/shared/ModalWindow";
 import { Formik } from "formik";
+import Input from "components/shared/Input";
+
 
 export const Upload = (tool) => {
   const [fileSelected, setFileSelected] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingDateFile, setloadingDateFile] = useState(false);
+  const [dataFile, setdataFile] = useState("");
   const [statusText, setStatusText] = useState("Подождите, файл загружается");
   const fileInputRef = useRef(null);
   const tools = {
@@ -23,14 +27,22 @@ export const Upload = (tool) => {
   const saveFileSelected = (e) => {
     const file = e.target.files[0];
     setFileSelected(file);
-    importFile(file);
+    setloadingDateFile(true);
   };
-  const importFile = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    try {
-      setLoading(true);
+
+  function handleButtonClick() {
+    fileInputRef.current.click();
+  }
+
+  async function sendData() {
+    try { 
+      const formData = new FormData();
+      formData.append("file", fileSelected);  
+      formData.append('date', new Date(dataFile).toLocaleDateString('ru-RU', { dateStyle: 'short' }));
+
       const response = await api.post(`${tools[tool.tool].url}`, formData);
+      setLoading(true);
+      setloadingDateFile(false);
       setStatusText("Файл был успешно загружен");
       setTimeout(() => {
         setStatusText("Подождите, файл загружается");
@@ -42,12 +54,7 @@ export const Upload = (tool) => {
     } finally {
 
     }
-    setFileSelected(null);
-  };
-
-  function handleButtonClick() {
-    fileInputRef.current.click();
-  }  
+  }
   return (
     <div className="buttonXLS">
       <form>
@@ -64,6 +71,67 @@ export const Upload = (tool) => {
       </form>
 
 
+
+      <ModalWindow
+        isOpen={loadingDateFile}
+        headerText="Загрузка файла"
+        setIsOpen={(state) => {
+          setloadingDateFile(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setloadingDateFile(false)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleBlur,
+          }) => (
+            <form   >
+              <div>
+                <label className="getDate">Выберите дату</label>
+                <div className="row">
+                  <Input
+                    onChange={(e) => {
+                      setdataFile(e.target.value);
+                    }}
+                    width="200"
+                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                    value={dataFile}
+                    name="dataFile"
+                    placeholder="Дата очередной аттестации (ППР)»"
+                    type="text"
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                    }}
+                    onBlur={handleBlur}
+                    autocomplete="off"
+                  />
+
+                </div>
+
+              </div>
+
+              <div className="row">
+                <Button
+                  disabled={!dataFile}
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();  
+                    sendData();  
+                  }}
+                >
+                  Загрузить
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
 
       {loading
         ? (
@@ -94,7 +162,7 @@ export const Upload = (tool) => {
             </Formik>
           </ModalWindow>
         )
-        :null
+        : null
       }
 
     </div>
