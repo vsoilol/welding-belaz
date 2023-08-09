@@ -1,4 +1,5 @@
 ﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.FileApi.Extensions;
 using LanguageExt;
@@ -21,10 +22,9 @@ public class UploadFileController : ControllerBase
     }
 
     [HttpPost("product-account")]
-    public async Task<IActionResult> UploadProductAccountDataAsync([FromForm] IFormFile file)
+    public async Task<IActionResult> UploadProductAccountDataAsync([FromForm] UploadProductAccountDataRequest request)
     {
-        var result = await _productAccountFileService.UploadProductAccountDataDbfAsync(file);
-        //var result = await _uploadFileService.UploadProductAccountDataAsync(file);
+        var result = await _productAccountFileService.UploadProductAccountDataDbfAsync(request);
         return result.ToEmptyOk();
     }
 

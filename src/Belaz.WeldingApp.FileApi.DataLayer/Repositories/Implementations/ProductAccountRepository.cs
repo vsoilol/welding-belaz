@@ -177,4 +177,59 @@ public class ProductAccountRepository : IProductAccountRepository
             .ProjectTo<ProductAccountBriefDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
+
+    public async Task GenerateEmptyIfNotExistAsync(DateTime newDate, Guid productionAreaId)
+    {
+        var productsWithoutUpdatedProductAccount  = await _context.Products
+            .Where(_ => _.ProductionAreaId == productionAreaId
+                        && _.ProductAccounts.All(account => account.DateFromPlan != newDate))
+            .Include(_ => _.Seams)
+            .ToListAsync();
+
+        var productAccounts = new List<ProductAccount>();
+        for (int i = 0; i < productsWithoutUpdatedProductAccount.Count; i++)
+        {
+            var product = productsWithoutUpdatedProductAccount[i];
+            var productResultStatus = new List<ProductResult>
+            {
+                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                new() { Amount = 0, Status = ResultProductStatus.Accept },
+                new() { Amount = 0, Status = ResultProductStatus.Defective }
+            };
+
+            var seamAccounts = new List<SeamAccount>();
+
+            foreach (var seam in product.Seams)
+            {
+                var seamResultStatus = new List<SeamResult>
+                {
+                    new() { Amount = 0, Status = ResultProductStatus.Manufactured },
+                    new() { Amount = 0, Status = ResultProductStatus.Accept },
+                    new() { Amount = 0, Status = ResultProductStatus.Defective }
+                };
+
+                var seamAccount = new SeamAccount
+                {
+                    DateFromPlan = newDate,
+                    Seam = seam,
+                    SeamResults = seamResultStatus
+                };
+                seamAccounts.Add(seamAccount);
+            }
+
+            var productAccount = new ProductAccount
+            {
+                Number = i + 1,
+                AmountFromPlan = 0,
+                DateFromPlan = newDate,
+                Product = product,
+                ProductResults = productResultStatus,
+                SeamAccounts = seamAccounts
+            };
+            productAccounts.Add(productAccount);
+        }
+
+        _context.ProductAccounts.AddRange(productAccounts);
+        await _context.SaveChangesAsync();
+    }
 }
