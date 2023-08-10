@@ -595,7 +595,9 @@ export const CreatingTask = ({
         }
     }
 
-   
+    const updateParentState = (newValue) => {
+        setValueAllDate(newValue);
+      };
 
     return (
         <div className={styles.TablePlan}>
@@ -730,7 +732,7 @@ export const CreatingTask = ({
                     <label>Загрузить данные</label>
                     <br></br>
                     {userRole === "Admin" || userRole === "Master"
-                        ? <div className={styles.Upload}><Upload tool={1}></Upload></div>
+                        ? <div className={styles.Upload}><Upload tool={1} updateParentState={updateParentState}></Upload></div>
                         : null
                     }
                 </div>
