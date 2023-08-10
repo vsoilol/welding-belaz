@@ -1,10 +1,10 @@
-﻿using LanguageExt;
+﻿using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
+using LanguageExt;
 using LanguageExt.Common;
-using Microsoft.AspNetCore.Http;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
 
 public interface IUploadProductAccountFileService
 {
-    Task<Result<Unit>> UploadProductAccountDataDbfAsync(IFormFile formFile);
+    Task<Result<Unit>> UploadProductAccountDataDbfAsync(UploadProductAccountDataRequest request);
 }

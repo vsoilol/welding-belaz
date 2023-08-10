@@ -13,4 +13,6 @@ public class ProductBriefDto : IMapFrom<Product>
     public string Name { get; set; } = null!;
 
     public string Number { get; set; } = null!;
+    
+    public Guid ProductionAreaId { get; set; }
 }
