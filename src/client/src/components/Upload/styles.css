@@ -10,9 +10,7 @@ h1{
   margin-bottom: 50px;
 }
 
-.getDate{
-  padding: 20px 0px 0px 25px;
-}
+
 
 .container {
   height: calc(100vh - 100px - 70px - 70px - 400px);
