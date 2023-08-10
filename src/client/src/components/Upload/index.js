@@ -7,8 +7,7 @@ import { Formik } from "formik";
 import Input from "components/shared/Input";
 
 
-export const Upload = ({ tool, updateParentState }) => {
-
+export const Upload = (tool) => {
   const [fileSelected, setFileSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingDateFile, setloadingDateFile] = useState(false);
@@ -35,35 +34,16 @@ export const Upload = ({ tool, updateParentState }) => {
     fileInputRef.current.click();
   }
 
-  const [masters, setmasters] = useState([]);
-
-  useEffect(()=>{
-    api.get("/Master").then((res)=>{
-      setmasters(res.data)
-    })
-  },[])
- 
-
   async function sendData() {
     try { 
       const formData = new FormData();
       formData.append("file", fileSelected);  
       formData.append('date', new Date(dataFile).toLocaleDateString('ru-RU', { dateStyle: 'short' }));
 
-      const response = await api.post(`${tools[tool].url}`, formData);
-
+      const response = await api.post(`${tools[tool.tool].url}`, formData);
       setLoading(true);
       setloadingDateFile(false);
       setStatusText("Файл был успешно загружен");
-
-      const masterProductionArea = masters?.find(master => master.productionArea)?.productionArea;
-
-      const response2 = await api.get(`/productAccount/dates/${masterProductionArea?.id}`);
-
-
-
-      updateParentState(response2.data)
-
       setTimeout(() => {
         setStatusText("Подождите, файл загружается");
         setLoading(false);
@@ -123,7 +103,7 @@ export const Upload = ({ tool, updateParentState }) => {
                     style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
                     value={dataFile}
                     name="dataFile"
-                    placeholder="Выберите дату загрузки ежедневного плана"
+                    placeholder="Дата очередной аттестации (ППР)»"
                     type="text"
                     onFocus={(e) => {
                       e.currentTarget.type = "date";
