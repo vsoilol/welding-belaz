@@ -504,9 +504,14 @@ export const CreatingTask = ({
         const executor = masters?.find(master => master.productionArea)?.productionArea;
         const selectedMaster = masters.find(obj => obj.id === valChioseMaster);
         
-        const masterId = userRole === "Admin" ? valChioseMaster : (executor ? executor.id : null);
-        const productionAreaId = userRole === "Admin" ? (selectedMaster ? selectedMaster.productionArea.id : null) : (executor?.productionArea?.id || null);
-    
+        const masterId = userRole === "Admin" 
+        ? valChioseMaster 
+        : (executor ? executor.id : null);
+        const productionAreaId = userRole === "Admin"
+        ?(selectedMaster ? selectedMaster.productionArea.id : null) 
+        : (localStorage.getItem("USER_productionAreaId") || null);
+     
+ 
         if (!masterId || !productionAreaId) {
             seterrorRecordsModal(true);
             seterrorText("Вы не выбрали все поля");
@@ -732,7 +737,7 @@ export const CreatingTask = ({
                     <label>Загрузить данные</label>
                     <br></br>
                     {userRole === "Admin" || userRole === "Master"
-                        ? <div className={styles.Upload}><Upload tool={1} updateParentState={updateParentState}></Upload></div>
+                        ? <div className={styles.Upload}><Upload Masters={masters} tool={1} updateParentState={updateParentState}></Upload></div>
                         : null
                     }
                 </div>

@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import ToolTip from "components/shared/ToolTip";
 import { ExecutorsTable } from "components/Executors/components";
 import { executorsImage } from "assets/pics";
-
+import { useHistory } from 'react-router-dom';
 import { ChangePassword } from "components/change-password";
 
 export const Executors = ({
@@ -38,6 +38,10 @@ export const Executors = ({
   loadPlace
 }) => {
   const [value, setValue] = useState(0);
+  const history = useHistory();
+
+
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     loadExecutors();
@@ -48,16 +52,13 @@ export const Executors = ({
     loadArea();
     loadPlace();
   }, [loadExecutors, loadTechs, loadMasters, loadEquipment, loadWorkshop, loadArea, loadPlace]);
-
  
   const handleChange = (event, newValue) => {
     localStorage.removeItem("VkladkaExecutors")
     setValue(newValue);
   };
-
-
-  if (Object.keys(user).length > 4) {  
-
+ 
+  if (Object.keys(user).length > 4) {   
     localStorage.setItem("USERID", user.id)
     localStorage.setItem("USER_productionAreaId", user.productionAreaId)
   }
