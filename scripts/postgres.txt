@@ -1,4 +1,4 @@
 psql -d weldingBelazOld -p 5434 -U postgres -f "C:\Data\Belaz\welding-belaz\scripts\init-script.sql" 	- run script
 psql -h 127.0.0.1 -U postgres -d weldingBelaz -p 5434 -f .\backup.sql 									- restore database
-dropdb -h 127.0.0.1 -p 5434 -U postgres weldingBelaz 													- drop database
-createdb -h 127.0.0.1 -p 5434 -U postgres weldingBelaz 													- create database
+dropdb -h 127.0.0.1 -p 5432 -U postgres weldingBelaz 													- drop database
+createdb -h 127.0.0.1 -p 5432 -U postgres weldingBelaz 													- create database
