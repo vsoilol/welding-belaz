@@ -58,7 +58,6 @@ public class WorkshopController : ControllerBase
         return result.ToOk();
     }
 
-    /// Some comment
     [HttpDelete("{id}")]
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
