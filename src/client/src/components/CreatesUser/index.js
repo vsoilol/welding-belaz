@@ -539,7 +539,7 @@ const CreatesUser = ({
                 />
               </div>
 
-              <Upload ></Upload>
+              <Upload tool={0}></Upload>
               <div className={styles.row}>
                 <Button
                   disabled={

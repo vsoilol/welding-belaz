@@ -743,7 +743,7 @@ export const ExecutorsTable = ({
 
 
               {userRole === "Admin" /* || userRole === "Master" */
-                ? <Upload tool={0}></Upload>
+                ? <Upload tool={0} Masters={executors}></Upload>
                 : null
               }
 

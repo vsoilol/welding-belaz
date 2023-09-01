@@ -14,8 +14,8 @@ const {
   Creators: { setError },
 } = errorActions;
 
-function* logIn({ payload }) {
-  try {  
+function* logIn({ payload }) { 
+ try {  
     const { data } = yield call(api.post, `/auth/login`, {
       userName: payload.email,
       password: payload.password,
@@ -29,7 +29,7 @@ function* logIn({ payload }) {
   } catch (error) {
     yield put(logInFailure(error));
     yield put(setError(error.response.data.message));
-  }
+  }  
 }
 
 function* logOut() {
