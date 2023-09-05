@@ -120,7 +120,7 @@ export const TexProcWelding = ({
   const [idProc, setidProc] = useState("");
   const [idInstr, setidInstr] = useState("");
   const columns = [
-    (userRole === "Admin" /* || userRole === "Master" */) && {
+    (userRole === "Admin" || userRole === "Inspector") && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -149,7 +149,7 @@ export const TexProcWelding = ({
     }, 
   ].filter(column => column)
   const colinstructions = [
-    (userRole === "Admin" /* || userRole === "Master" */) && {
+    (userRole === "Admin" || userRole === "Inspector") && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -370,7 +370,7 @@ export const TexProcWelding = ({
       name: valueNameInst,
       seams:valuetSeam,
       weldPassages: filteredVariables.map(item => ({
-        id: isModalOpenNumb === 1 ? item.id || null : null,
+        /* id: isModalOpenNumb === 1 ? item.id || null : null, */
         name: item.weldPassagesName,
         number: item.weldPassagesNumber,
         weldingCurrentMin: item.weldingCurrentMin,
@@ -840,7 +840,7 @@ export const TexProcWelding = ({
             isLoading={isRequesting}
 
             actions={
-              userRole === "Admin"
+              userRole === "Admin"|| userRole === "Inspector"
                 ? [
                   {
                     icon: "add",
@@ -876,7 +876,7 @@ export const TexProcWelding = ({
                 ]
                 : []
             }
-            deleteAction={userRole === "admin" ? deleteEquipment : null}
+            deleteAction={userRole === "Admin" ? deleteEquipment : null}
           />
         </TabPanel> 
         {/*Технологические инструкции*/}
@@ -893,7 +893,7 @@ export const TexProcWelding = ({
             data={instructions}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" /* || userRole === "Master" */
+              userRole === "Admin" || userRole === "Inspector"
                 ? [
                   {
                     icon: "add",
@@ -995,7 +995,7 @@ export const TexProcWelding = ({
                   onBlur={handleBlur}
                 />
               </div>
-              <div className={styles.row}>
+              {/* <div className={styles.row}>
                 <Select
                   name="valuetTechProc"
                   width="380px"
@@ -1004,7 +1004,7 @@ export const TexProcWelding = ({
                   onChange={(event) => setValuetSeam(event.value)}
                   options={SeamOptions}
                 />
-              </div>
+              </div> */}
 
              
               {isModalOpenNumb === 0

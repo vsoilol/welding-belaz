@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import { WorkPlacePage } from "pages/WorkPlace";
 import Actions from "store/workplace/actions";
-import ActionsExecuters from "store/executors/actions";
-import MasterActions from "store/workplace/actions";
+import ActionsExecuters from "store/executors/actions"; 
+import TexprocweldingActions from "store/texprocwelding/actions";
 
 const mapStateToProps = (state) => {
   return {
@@ -31,8 +31,10 @@ const mapStateToProps = (state) => {
     seam: state.workplace.seam,
     
     texprocwelding:state.texprocwelding.texprocwelding,
-
+    instructions:state.texprocwelding.instructions,
+    
     detailbyinspector:state,
+
 
 
     weldingtask:state.workplace.weldingtask,
@@ -85,6 +87,7 @@ const mapDispatchToProps = {
   editSeam:Actions.Creators.editSeamRequest,
   ///Технологические процессы 
   loadTexprocwelding: Actions.Creators.loadTexprocweldingRequest,
+  loadInstructions:TexprocweldingActions.Creators.loadInstructionsRequest,
 
 
   ////
