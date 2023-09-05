@@ -3,3 +3,5 @@ docker exec -t belaz-postgres psql -d bru -p 5432 -U bru -f "/script.sql" 						
 docker cp ~/script.sql belaz-postgres:/script.sql 												- copy file to docker container
 docker exec -it belaz-postgres bash 															- open docker container bash
 docker exec -t postgresql_database pg_dump -U admin -d welding-belaz -O -F p > ~/backup.sql 	- make backup in docker container for belaz server
+
+docker exec -t postgresql_database pg_dump -d welding-belaz -p 5432 -U admin --no-owner --clean > ~/db.sql 
