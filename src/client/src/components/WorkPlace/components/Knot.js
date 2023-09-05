@@ -161,7 +161,7 @@ export const Knot = ({
  
   const columns = {  
     node: [
-      (userRole === "Admin" /* || userRole === "Master" */) && {
+      (userRole === "Admin" || userRole === "Inspector") && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -656,7 +656,7 @@ export const Knot = ({
                 value={1}
                 data={knot}
                 actions={
-                  userRole === "Admin" /* || userRole === "Master" */
+                  userRole === "Admin" || userRole === "Inspector"
                     ? [
                       {
                         icon: "add",

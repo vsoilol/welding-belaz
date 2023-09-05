@@ -584,7 +584,7 @@ function* addSeam(variables) {
     }
 
     if (variables.payload.valEx === undefined) { 
-      const { data } = yield call(api.post, `/seam`, {
+      const { data } = yield call(api.post, `/seam`, { 
         "number": variables.payload.number,
         "isControlSubject": true,
         "isPerformed": true,

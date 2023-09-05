@@ -195,7 +195,7 @@ export const Posts = ({
       },
     ],
     posts: [
-      (userRole === "Admin" /* || userRole === "Master" */) && {
+      (userRole === "Admin" || userRole === "Inspector") && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -538,7 +538,7 @@ export const Posts = ({
                 className="posts"
                 data={posts}
                 actions={
-                  userRole === "Admin" /* || userRole === "Master" */
+                  userRole === "Admin" || userRole === "Inspector"
                     ? [
                       {
                         icon: "add",

@@ -123,7 +123,11 @@ export const WorkPlace = ({
   weldingtask,
 
 
-  deleteProduct
+  deleteProduct,
+
+
+  instructions,
+  loadInstructions
 
 }) => {
 
@@ -155,6 +159,7 @@ export const WorkPlace = ({
     loadTechs();
     loadWeldingTask()
     loadExecutors(); 
+    loadInstructions();
   }, [
     loadWorkshop,
     loadArea,
@@ -168,6 +173,7 @@ export const WorkPlace = ({
     loadTechs,
     loadWeldingTask,
     loadExecutors,  
+    loadInstructions
   ]);
 
   const ChangePanelsworkplace = (event, newValue) => {
@@ -395,6 +401,7 @@ export const WorkPlace = ({
           deleteIcon={deleteIcon}
           addSeam={addSeam}
           editSeam={editSeam}
+          instructions={instructions}
         />
       )
     }

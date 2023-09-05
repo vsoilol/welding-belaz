@@ -53,6 +53,7 @@ export const Seam = ({
   addSeam,
   editSeam,
 
+  instructions,
 
   valueProdArea,
   valuetPosts,
@@ -113,7 +114,7 @@ export const Seam = ({
   const columns = {
 
     welding_seam: [
-      (userRole === "Admin" /* || userRole === "Master" */) && {
+      (userRole === "Admin" || userRole === "Inspector") && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -229,10 +230,10 @@ export const Seam = ({
     };
   });
   //select технологического процесса   
-  const TechProc = texprocwelding?.map((item) => {
+  const TechProc = instructions?.map((item) => {
     return {
       value: item.id,
-      label: `${item.name} ${item.number}`,
+      label: `${item.name}  `,
     };
   });
   //select Сварочный шов  
@@ -294,7 +295,7 @@ export const Seam = ({
     variables["productionAreaId"] = productionArea
     variables["productionAreaNumber"] = SetValue(productionArea, 1)
 
-    variables["technologicalProcessId"] = valuetTechProc
+    variables["technologicalProcessId"] = technologicalProcess
 
     variables["seams"] = [valuetSeam]
 
@@ -302,7 +303,7 @@ export const Seam = ({
     variables["workplaceId"] = valueWorkplace
     variables["productId"] = productValue
 
-
+  
     //Добавить Сварочный шов
     if (isModalNumb == 15) {
       addSeam(variables)
@@ -346,7 +347,7 @@ export const Seam = ({
             columns={columns.welding_seam}
             data={seam}
             actions={
-              userRole === "Admin" /* || userRole === "Master" */
+              userRole === "Admin" || userRole === "Inspector"
                 ? [
                   {
                     icon: "add",
@@ -371,9 +372,9 @@ export const Seam = ({
 
                       setproductionArea(rowData?.productionArea?.id)
                       setproductValue(rowData?.product?.id)
-                      setknotValue(rowData?.knot?.id)
-                      setdetail(rowData?.detail?.id)
-                      settechnologicalProcess(rowData?.technologicalProcess?.id) 
+                      setknotValue(rowData?.knot?.id) 
+                      setdetail(rowData?.detail?.id)  
+                      settechnologicalProcess(instructions?.find(elem=>rowData?.technologicalInstruction?.number == elem.number ).id) 
                       api.post(`/eventLog`,{
                         "information": "Открыл модальное окно редактирования шва "
                       })
@@ -481,7 +482,7 @@ export const Seam = ({
                     name="technologicalProcess"
                     width="380px"
                     value={technologicalProcess}
-                    placeholder="Технологический процесс"
+                    placeholder="Технологическая инструкция"
                     onChange={(event) => {
                       settechnologicalProcess(event.value)
                     }}
