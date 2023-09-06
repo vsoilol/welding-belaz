@@ -99,7 +99,7 @@ export const Workshop = ({
 
   const columns = {
     workshops: [
-      (userRole === "Admin" || userRole === "Inspector") && {
+      (userRole === "Admin" || userRole === "Technologist") && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -403,7 +403,7 @@ export const Workshop = ({
                 columns={columns.workshops}
                 data={workshop}
                 actions={
-                  userRole === "Admin" || userRole === "Inspector"
+                  userRole === "Admin" || userRole === "Technologist"
                     ? [
                       {
                         icon: "add",
