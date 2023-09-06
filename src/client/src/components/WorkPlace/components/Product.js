@@ -229,7 +229,7 @@ export const Product = ({
     ],
 
     goods: [
-      (userRole === "Admin" || userRole === "Inspector") && {
+      (userRole === "Admin" || userRole === "Technologist") && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -870,7 +870,7 @@ export const Product = ({
                 value={0}
                 data={product}
                 actions={
-                  userRole === "Admin" || userRole === "Inspector"
+                  userRole === "Admin" || userRole === "Technologist"
                     ? [
                       {
                         icon: "add",

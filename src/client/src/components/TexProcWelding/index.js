@@ -120,7 +120,7 @@ export const TexProcWelding = ({
   const [idProc, setidProc] = useState("");
   const [idInstr, setidInstr] = useState("");
   const columns = [
-    (userRole === "Admin" || userRole === "Inspector") && {
+    (userRole === "Admin" || userRole === "Technologist") && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -149,7 +149,7 @@ export const TexProcWelding = ({
     }, 
   ].filter(column => column)
   const colinstructions = [
-    (userRole === "Admin" || userRole === "Inspector") && {
+    (userRole === "Admin" || userRole === "Technologist") && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -840,7 +840,7 @@ export const TexProcWelding = ({
             isLoading={isRequesting}
 
             actions={
-              userRole === "Admin"|| userRole === "Inspector"
+              userRole === "Admin"|| userRole === "Technologist"
                 ? [
                   {
                     icon: "add",
@@ -893,7 +893,7 @@ export const TexProcWelding = ({
             data={instructions}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Inspector"
+              userRole === "Admin" || userRole === "Technologist"
                 ? [
                   {
                     icon: "add",

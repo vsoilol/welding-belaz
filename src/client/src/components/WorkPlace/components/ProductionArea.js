@@ -160,7 +160,7 @@ export const ProductionArea = ({
       },
     ],
     production_sites: [
-      (userRole === "Admin" || userRole === "Inspector") && {
+      (userRole === "Admin" || userRole === "Technologist") && {
         title: "Удаление",
         render: (rowData) => (
           <img
@@ -547,7 +547,7 @@ export const ProductionArea = ({
                 columns={columns.production_sites}
                 data={area}
                 actions={
-                  userRole === "Admin"|| userRole === "Inspector"
+                  userRole === "Admin"|| userRole === "Technologist"
                     ? [
                       {
                         icon: "add",
