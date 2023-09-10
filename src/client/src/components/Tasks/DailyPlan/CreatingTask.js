@@ -363,7 +363,7 @@ export const CreatingTask = ({
                 return false
             }
         },
-        {
+        (userRole === "Admin" || userRole === "Master") && {
             title: "Закрерить оборудование",
             render: (rowData) => {
                 return <p className={styles.Fix} onClick={e => {
@@ -463,7 +463,30 @@ export const CreatingTask = ({
                         });
                     }
 
-                } else {
+                }  
+                if (userRole === "Master") {
+                    if (acceptedProducts >= 0  && valChioseInstruct  ) { 
+                        await api.put(`/productAccount/acceptedAmount`, {
+                            "id": idPlan,
+                            "amount": Number(acceptedProducts),
+                            "inspectorId": valChioseInstruct
+                        });
+                    } 
+                    else{
+                        seterrorRecordsModal(true);
+                        seterrorText("Неверные данные контролера.")
+                        DisplayPlan()
+                        return
+                    }
+                    if (productreason && ProductAccountId  ) {
+                        await api.put(`/productAccount/reason`, {
+                            "productAccountId": ProductAccountId,
+                            "defectiveReason": productreason
+                        });
+                    }
+
+                }  
+                else {
                     if (productreason && techs[0]) {
                         await api.put(`/productAccount/reason`, {
                             "productAccountId": ProductAccountId,
@@ -492,6 +515,8 @@ export const CreatingTask = ({
                 // Все запросы успешно выполнены
                 DisplayPlan()
                 loadTasks();
+
+                
             }
         } catch (error) {
             // Произошла ошибка при выполнении запросов
@@ -644,6 +669,27 @@ export const CreatingTask = ({
                 )
                 : null
             }
+            {userRole === "Master"
+                ? (
+                    <div className={styles.RowTools}> 
+                        <div className={styles.toolsHead}>
+                            <p>Выберите контролера</p>
+                            <Select
+                                name="valChioseInstruct"
+                                value={valChioseInstruct}
+                                width="380px"
+                                placeholder="Контролеры"
+                                onChange={(event) => {
+                                    setvalChioseInstruct(event.value);
+                                }}
+                                options={techsOptions}
+                            />
+                        </div>
+
+                    </div>
+                )
+                : null
+            }
             <div className={styles.RowTools}>
                 <div className={styles.toolsHead}>
                     <p>Выберите план из существующих дат</p>
@@ -663,7 +709,7 @@ export const CreatingTask = ({
                     />
                 </div>
 
-                {userRole != "Inspector"  
+                {userRole === "Master" || userRole === "Admin"
                     ? (
                         <div className={styles.toolsHead}>
                             <p>Выберите дату для создания плана</p>
@@ -694,7 +740,7 @@ export const CreatingTask = ({
 
 
             <div className={styles.RowToolsBTNS}>
-                {userRole === "Master" || userRole === "Admin" || userRole === "Inspector" && valueChioseDate
+                {userRole === "Master" || userRole === "Admin" || userRole === "Inspector" || userRole === "Technologist" || userRole === "Chief" || userRole === "PlantManager" && valueChioseDate
                     ? (
                         <button className={styles.create} style={{ marginLeft: "20px" }} onClick={DisplayPlan}> Показать план на {valueChioseDate}</button>
                     )
@@ -720,7 +766,7 @@ export const CreatingTask = ({
 
             {/****----******/}
             <div className={styles.sectionGet}>
-                {(userRole === "Admin" || userRole === "Master") && (
+                {(userRole === "Admin" || userRole === "Master" || userRole === "Chief" || userRole === "PlantManager") && (
                     <div className={styles.Upload}>
                         <label>Получение данных об изготовленных изделиях, узлах и деталях </label>
                         <button className={styles.getDate} onClick={getDetProd}>Получить</button>
@@ -757,7 +803,8 @@ export const CreatingTask = ({
                     columns={columns}
                     data={value_products}
                     actions={
-                        [
+                        userRole === "Admin" || userRole === "Master" || userRole === "Technologist" || userRole === "Inspector"
+                          ? [
                             {
                                 icon: "edit",
                                 tooltip: "Редактировать план",
@@ -779,9 +826,9 @@ export const CreatingTask = ({
                                     })
                                 },
                             },
-                        ]
-
-                    }
+                          ]
+                          : []
+                      } 
                 />
             </TabPanel>
 

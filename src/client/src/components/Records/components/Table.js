@@ -405,7 +405,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
           </div>
           <button className={styles.sort} onClick={showRecordsPeriod}>Отобразить</button>
         </div>
-
+ 
         <div className={styles.datePeriod}>
           <label>Вывод записей  <br></br>без нарушений / с нарушениями </label>
           <div className={styles.period}>

@@ -159,7 +159,6 @@ export const Tasks = ({
     };
   });
   const getDocument = () => {
-
     const number = tasks?.tasks.find(task => task.number === NumberTask).id;
     api.get(`file/seamPassport?TaskId=${number}&SequenceNumber=${SequenceNumber ?? ""}`, {
       responseType: "arraybuffer",
@@ -170,8 +169,7 @@ export const Tasks = ({
           type: "application/pdf",
         });
         const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
-        setSequenceNumber(null)
+        window.open(fileURL); 
       })
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
@@ -680,7 +678,7 @@ export const Tasks = ({
     SecondsToIgnoreBetweenGraphs: "",
   }
 
-  function GetFailebasedPassport(params) {
+  function GetFailebasedPassport(params) {  
     api.get(`file/based-seam-passport?TaskId=${BasedPassportId}&SequenceNumber=${params.SequenceNumber ?? ""}&AverageIntervalSeconds=&SecondsToIgnoreBetweenGraphs=`,
       {
         responseType: "arraybuffer",
@@ -691,8 +689,7 @@ export const Tasks = ({
           type: "application/pdf",
         });
         const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
-        params.SequenceNumber = null
+        window.open(fileURL); 
       })
       .catch((error) => { });
 
@@ -710,7 +707,7 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-      {userRole === "Admin" || userRole === "Master" || userRole === "Inspector"
+      {userRole === "Admin" || userRole === "Master" || userRole === "Inspector" || userRole === "Chief" || userRole === "PlantManager"
         ? (
           <Tabs
             value={value_panel}
@@ -736,7 +733,9 @@ export const Tasks = ({
         >
           <Table
             title="Сменные задания на сварку"
-            columns={userRole === "Admin" || userRole === "Master" ? columns : columnsWelder}
+            columns={
+              columns
+            }
             data={tasks?.tasks}
             isLoading={isRequesting}
             actions={
@@ -982,8 +981,8 @@ export const Tasks = ({
                         handleChange(e);
                       }}
                       style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                      value={values.AverageIntervalSeconds}
-                      name="AverageIntervalSeconds"
+                      value={values.SequenceNumber}
+                      name="SequenceNumber"
                       placeholder="Порядковый номер"
                       onBlur={handleBlur}
                       autocomplete="off"
@@ -1051,6 +1050,7 @@ export const Tasks = ({
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
+                         
                         setSequenceNumber(e.target.value);
                       }}
                       style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
