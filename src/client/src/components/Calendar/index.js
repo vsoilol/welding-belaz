@@ -465,6 +465,8 @@ export const Calendar = ({
                 loadDayByWelder={loadDayByWelder}
                 loadDayByEquipment={loadDayByEquipment}
                 calendar={valueCalendar}
+
+                userRole={userRole}
               />
             )
             : null

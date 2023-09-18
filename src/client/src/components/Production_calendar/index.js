@@ -375,6 +375,7 @@ export const Production_calendar = ({
                 loadCalendarYear={loadCalendarYear}
                 valueWorkDays={valueWorkDays.days}
                 WorkingShiftOptions={valueWorkShift}
+                userRole={userRole}
               />
             )
             : null

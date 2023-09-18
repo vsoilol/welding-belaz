@@ -707,7 +707,7 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-      {userRole === "Admin" || userRole === "Master" || userRole === "Inspector" || userRole === "Chief" || userRole === "PlantManager"
+      {userRole === "Admin" || userRole === "Master" || userRole === "Inspector" || userRole === "Chief" || userRole === "PlantManager" || userRole === "Technologist"
         ? (
           <Tabs
             value={value_panel}

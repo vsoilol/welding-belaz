@@ -10,7 +10,7 @@ import api from "services/api";
 
 const localizer = momentLocalizer(moment);
 
-const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWelder, loadDayByEquipment, executorObj, equipmentObj }) => {
+const Calendars = ({ userRole, calendar, valueWorkDays, WorkingShiftOptions, loadDayByWelder, loadDayByEquipment, executorObj, equipmentObj }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [changedate, setchangedate] = useState("");
   const [valueWorkingShift, setvalueWorkingShift] = useState(null);
@@ -338,8 +338,8 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
                 Перерыв: <br></br> {selectedEvent.breakStart.toLocaleString()} - {selectedEvent.breakEnd.toLocaleString()}
               </p>
             )}
-
-            {!selectedEvent.title.includes("Выходной день") && !valuechange && (
+ 
+            {!selectedEvent.title.includes("Выходной день") && !valuechange && (userRole === "Admin" || userRole === "Master" ) && (
               <div>
                 <p className={styles.par}>Редактировать смену:</p>
                 <div className={styles.rowInputs}>
@@ -374,7 +374,7 @@ const Calendars = ({ calendar, valueWorkDays, WorkingShiftOptions, loadDayByWeld
                 <button onClick={() => { saveChangeShift(selectedEvent) }}>Изменить</button>
               </div>
             )}
-            {!selectedEvent.title.includes("Выходной день") && !valuechange && (
+            {!selectedEvent.title.includes("Выходной день") && !valuechange && (userRole === "Admin" || userRole === "Master") && (
               <div>
                 <button onClick={() => { removeDay(selectedEvent); setSelectedEvent(false); }}>Удалить</button>
               </div>

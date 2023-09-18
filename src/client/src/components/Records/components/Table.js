@@ -347,16 +347,16 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
       .catch((error) => { });
   }
 
-  function FindTask() { 
+  function FindTask() {
     if (serchOnserialnumber) {
       let ListTask = records.filter((item) => item.sequenceNumber === Number(serchOnserialnumber));
       setSelectedOption("task")
-      setUpdatedRecords(ListTask)   
+      setUpdatedRecords(ListTask)
     }
-    else{
-      setSelectedOption("all") 
+    else {
+      setSelectedOption("all")
     }
-    
+
   }
 
   return (
@@ -405,7 +405,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
           </div>
           <button className={styles.sort} onClick={showRecordsPeriod}>Отобразить</button>
         </div>
- 
+
         <div className={styles.datePeriod}>
           <label>Вывод записей  <br></br>без нарушений / с нарушениями </label>
           <div className={styles.period}>
@@ -440,75 +440,80 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
         </div>
 
 
-        <div className={styles.datePeriod}>
-          <label>Установить порядковый <br></br>номер для записей </label>
-          {valueDisplay
-            ? (
-              <div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      setserialnumber(e.target.value);
-                    }}
-                    style={{
-                      width: 150,
-                      height: 40,
-                      padding: "0px 0px 0px 20px"
-                    }}
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={serialnumber}
-                    name={`serialnumber`}
-                    placeholder="Порядковый номер "
-                    autocomplete="off"
-                  />
-                </div>
-                <button className={styles.sort} onClick={()=>{Setserialnumber()}} >
-                  Установить
+        {userRole === "Admin" || userRole === "Master"
+          ? (
+            <div className={styles.datePeriod}>
+              <label>Установить порядковый <br></br>номер для записей </label>
+              {valueDisplay
+                ? (
+                  <div>
+                    <div className={styles.row}>
+                      <Input
+                        onChange={(e) => {
+                          setserialnumber(e.target.value);
+                        }}
+                        style={{
+                          width: 150,
+                          height: 40,
+                          padding: "0px 0px 0px 20px"
+                        }}
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={serialnumber}
+                        name={`serialnumber`}
+                        placeholder="Порядковый номер "
+                        autocomplete="off"
+                      />
+                    </div>
+                    <button className={styles.sort} onClick={() => { Setserialnumber() }} >
+                      Установить
+                    </button>
+                  </div>
+
+                )
+                : null
+
+              }
+
+              <div className={styles.period}>
+                <button className={styles.sort} onClick={(e) => { setvalueDisplay(!valueDisplay) }} >
+                  {!valueDisplay ? "Установить" : "Отменить"}
                 </button>
               </div>
+            </div>
+          ) : null
+        }
 
-            )
-            : null
-
-          }
-
-          <div className={styles.period}>
-            <button className={styles.sort} onClick={(e) => { setvalueDisplay(!valueDisplay) }} >
-               {!valueDisplay?"Установить":"Отменить"} 
-            </button>
-          </div>
-        </div>
 
         <div className={styles.datePeriod}>
           <label>Поиск задания по <br></br>порядковому номеру изделия</label>
           <div>
-                <div className={styles.row}>
-                  <Input
-                    onChange={(e) => {
-                      setserchOnserialnumber(e.target.value);
-                    }}
-                    style={{
-                      width: 150,
-                      height: 40,
-                      padding: "0px 0px 0px 20px"
-                    }}
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={serchOnserialnumber}
-                    name={`serchOnserialnumber`}
-                    placeholder="Порядковый номер "
-                    autocomplete="off"
-                  />
-                </div>
-                <button className={styles.sort} onClick={()=>{FindTask()}} >
-                  Найти
-                </button>
-              </div>
+            <div className={styles.row}>
+              <Input
+                onChange={(e) => {
+                  setserchOnserialnumber(e.target.value);
+                }}
+                style={{
+                  width: 150,
+                  height: 40,
+                  padding: "0px 0px 0px 20px"
+                }}
+                type="number"
+                min="0"
+                step="1"
+                value={serchOnserialnumber}
+                name={`serchOnserialnumber`}
+                placeholder="Порядковый номер "
+                autocomplete="off"
+              />
+            </div>
+            <button className={styles.sort} onClick={() => { FindTask() }} >
+              Найти
+            </button>
+          </div>
         </div>
-    
+
 
       </div>
 
@@ -521,49 +526,49 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
         isLoading={isRequesting}
         deleteAction={null}
       />
-      {/*Удаление записи*/ }
-  <ModalWindow
-    isOpen={deleteRecordsModal}
-    headerText="Удаление"
-    setIsOpen={(state) => {
-      setdeleteRecordsModal(false)
-    }}
-    wrapperStyles={{ width: 420 }}
-  >
-    <Formik
-      initialValues={{}}
-      enableReinitialize
-      onSubmit={(variables) => {
-        const { id, ...dataToSend } = variables;
-        setdeleteRecordsModal(false)
-        deleteRecords(idRecords)
-      }}
-    >
-      {({
-        handleSubmit,
-        handleChange,
-        values,
-        setFieldValue,
-        handleBlur,
-      }) => (
-        <form onSubmit={handleSubmit}>
+      {/*Удаление записи*/}
+      <ModalWindow
+        isOpen={deleteRecordsModal}
+        headerText="Удаление"
+        setIsOpen={(state) => {
+          setdeleteRecordsModal(false)
+        }}
+        wrapperStyles={{ width: 420 }}
+      >
+        <Formik
+          initialValues={{}}
+          enableReinitialize
+          onSubmit={(variables) => {
+            const { id, ...dataToSend } = variables;
+            setdeleteRecordsModal(false)
+            deleteRecords(idRecords)
+          }}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            setFieldValue,
+            handleBlur,
+          }) => (
+            <form onSubmit={handleSubmit}>
 
-          <div>
-            <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> запись ? </h4>
+              <div>
+                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> запись ? </h4>
 
-            <div className={styles.row}>
-              <Button
-                type="submit"
-              >
-                Удалить
-              </Button>
-            </div>
+                <div className={styles.row}>
+                  <Button
+                    type="submit"
+                  >
+                    Удалить
+                  </Button>
+                </div>
 
-          </div>
-        </form>
-      )}
-    </Formik>
-  </ModalWindow>
+              </div>
+            </form>
+          )}
+        </Formik>
+      </ModalWindow>
     </div >
   );
 };

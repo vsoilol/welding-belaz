@@ -11,7 +11,7 @@ import api from "services/api";
 
 const localizer = momentLocalizer(moment);
 
-const Calendars = ({ valueWorkDays, WorkingShiftOptions, loadCalendarYear }) => {
+const Calendars = ({ userRole , valueWorkDays, WorkingShiftOptions, loadCalendarYear }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
 
@@ -234,7 +234,7 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, loadCalendarYear }) => 
                 Перерыв: <br></br> {selectedEvent.breakStart.toLocaleString()} - {selectedEvent.breakEnd.toLocaleString()}
               </p>
             )}
-            {!selectedEvent.title.includes("Выходной день") && !valuechange && (
+            {!selectedEvent.title.includes("Выходной день") && !valuechange && (userRole === "Admin" || userRole === "Master" ) && (
               <div>
                 <p className={styles.par}>Редактировать смену:</p>
                 <div className={styles.rowInputs}>
@@ -270,7 +270,7 @@ const Calendars = ({ valueWorkDays, WorkingShiftOptions, loadCalendarYear }) => 
               </div>
             )}
 
-            {!selectedEvent.title.includes("Выходной день") && !valuechange && (
+            {!selectedEvent.title.includes("Выходной день") && !valuechange && (userRole === "Admin" || userRole === "Master" ) && (
               <div>
                 {/* <button onClick={() => setvaluechange(true)}>Редактировать</button> */}
                 <button onClick={() => { removeDay(selectedEvent); setSelectedEvent(false); }}>Удалить</button>
