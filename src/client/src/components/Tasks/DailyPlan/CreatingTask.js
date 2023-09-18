@@ -766,7 +766,7 @@ export const CreatingTask = ({
 
             {/****----******/}
             <div className={styles.sectionGet}>
-                {(userRole === "Admin" || userRole === "Master" || userRole === "Chief" || userRole === "PlantManager") && (
+                {(userRole === "Admin" || userRole === "Master" || userRole === "Chief" || userRole === "PlantManager" || userRole === "Inspector" || userRole === "Technologist" ) && (
                     <div className={styles.Upload}>
                         <label>Получение данных об изготовленных изделиях, узлах и деталях </label>
                         <button className={styles.getDate} onClick={getDetProd}>Получить</button>
