@@ -25,7 +25,7 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       Auth__Secret: ${AUTH_SECRET}
       Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
-      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     ports:
       - "${WELDING_API_EXTERNAL_PORT}:80"
     volumes:
@@ -44,7 +44,7 @@ services:
       Auth__Secret: ${AUTH_SECRET}
       Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
       REAL_API: ${REAL_APP_API_URL}
-      ConnectionStrings__IdentityDb: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ConnectionStrings__IdentityDb: "Host=${DATABASE_CONTAINER_NAME};Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
       EmailConfiguration__From: ${EMAIL_CONFIGURATION_FROM}
       EmailConfiguration__SmtpServer: ${EMAIL_CONFIGURATION_SMTP_SERVER}
       EmailConfiguration__Port: ${EMAIL_CONFIGURATION_PORT}
@@ -67,7 +67,7 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       Auth__Secret: ${AUTH_SECRET}
       Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
-      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     ports:
       - "${FILE_API_EXTERNAL_PORT}:80"
     volumes:
@@ -86,7 +86,7 @@ services:
       Auth__Secret: ${AUTH_SECRET}
       Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
       REAL_API: ${REAL_APP_API_URL}
-      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
       EmailConfiguration__From: ${EMAIL_CONFIGURATION_FROM}
       EmailConfiguration__SmtpServer: ${EMAIL_CONFIGURATION_SMTP_SERVER}
       EmailConfiguration__Port: ${EMAIL_CONFIGURATION_PORT}
