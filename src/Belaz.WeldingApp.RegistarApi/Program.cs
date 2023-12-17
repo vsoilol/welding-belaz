@@ -20,14 +20,8 @@ builder.WebHost.ConfigureAppConfiguration(
     {
         var env = builderContext.HostingEnvironment;
 
-        // find the shared folder in the parent folder
-        var sharedFolder = env.EnvironmentName.Contains("Docker")
-            ? ""
-            : Path.Combine(env.ContentRootPath, "..");
-
         //load the SharedSettings first, so that appsettings.json overrwrites it
         config
-            .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
             .AddJsonFile("appsettings.json", optional: true)
             .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 

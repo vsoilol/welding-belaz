@@ -19,9 +19,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonProjects", "CommonProjects", "{381831C9-A5D2-4C2D-9EBE-DC8D153E3597}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{9AF7C979-063E-4D41-B6C5-A384284C41A9}"
-	ProjectSection(SolutionItems) = preProject
-		sharedsettings.json = sharedsettings.json
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WeldingApp.ApiGateway", "WeldingApp.ApiGateway", "{290DA6B2-BA8F-4FAB-9D6B-F718AF128648}"
 EndProject

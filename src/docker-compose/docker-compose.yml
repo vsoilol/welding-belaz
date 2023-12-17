@@ -1,117 +1,144 @@
-version: '3.4'
+version: "3.4"
 
 services:
-  postgresql_database:
-    container_name: postgresql_database
+  belaz-database:
+    container_name: ${DATABASE_CONTAINER_NAME}
     image: postgres:15
-    restart: always
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: adminadmin
-      POSTGRES_DB: welding-belaz
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "${DATABASE_EXTERNAL_PORT}:5432"
     volumes:
-      - ./docker-storage/databasedata:/var/lib/postgresql/data/
-      - ../../database/init-script.sql:/docker-entrypoint-initdb.d/init.sql
+      - weldingdatabase:/var/lib/postgresql/data/
+      - ${DATABASE_INIT_SCRIPT_PATH}:/docker-entrypoint-initdb.d/init.sql
 
   welding-api:
     image: welding-app/welding-api
-    restart: on-failure
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: "Docker"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      Auth__Secret: ${AUTH_SECRET}
+      Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
+      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     ports:
-      - "5010:80"
+      - "${WELDING_API_EXTERNAL_PORT}:80"
     volumes:
-      - ./docker-storage/welding-api-logs:/app/logs
-      - ../sharedsettings.json:/app/sharedsettings.json
+      - welding-api-logs:/app/logs
     depends_on:
-      - postgresql_database
-        
+      - belaz-database
+
   identity-api:
     image: welding-app/identity-api
-    restart: on-failure
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: "Docker"
-      REAL_API: "http://weldingcontrol.bru.by:4001"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      Auth__Secret: ${AUTH_SECRET}
+      Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
+      REAL_API: ${REAL_APP_API_URL}
+      ConnectionStrings__IdentityDb: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      EmailConfiguration__From: ${EMAIL_CONFIGURATION_FROM}
+      EmailConfiguration__SmtpServer: ${EMAIL_CONFIGURATION_SMTP_SERVER}
+      EmailConfiguration__Port: ${EMAIL_CONFIGURATION_PORT}
+      EmailConfiguration__Username: ${EMAIL_CONFIGURATION_USERNAME}
+      EmailConfiguration__Password: ${EMAIL_CONFIGURATION_PASSWORD}
     ports:
-      - "5011:80"
+      - "${IDENTITY_API_EXTERNAL_PORT}:80"
     volumes:
-      - ./docker-storage/identity-api-logs:/app/logs
-      - ../sharedsettings.json:/app/sharedsettings.json
+      - identity-api-logs:/app/logs
     depends_on:
-      - postgresql_database
-      - welding-api
-    
+      - belaz-database
+
   file-api:
     image: welding-app/file-api
-    restart: on-failure
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: "Docker"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      Auth__Secret: ${AUTH_SECRET}
+      Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
+      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     ports:
-      - "5012:80"
+      - "${FILE_API_EXTERNAL_PORT}:80"
     volumes:
-      - ./docker-storage/file-api-logs:/app/logs
-      - ../sharedsettings.json:/app/sharedsettings.json
+      - file-api-logs:/app/logs
     depends_on:
-      - postgresql_database
-      - welding-api
-        
+      - belaz-database
+
   registar-api:
     image: welding-app/registar-api
-    restart: on-failure
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.RegistarApi/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: "Docker"
-      REAL_API: "http://weldingcontrol.bru.by:4001"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      Auth__Secret: ${AUTH_SECRET}
+      Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
+      REAL_API: ${REAL_APP_API_URL}
+      ConnectionStrings__WeldingDatabase: "Host=${DATABASE_CONTAINER_NAME};Port=${DATABASE_EXTERNAL_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      EmailConfiguration__From: ${EMAIL_CONFIGURATION_FROM}
+      EmailConfiguration__SmtpServer: ${EMAIL_CONFIGURATION_SMTP_SERVER}
+      EmailConfiguration__Port: ${EMAIL_CONFIGURATION_PORT}
+      EmailConfiguration__Username: ${EMAIL_CONFIGURATION_USERNAME}
+      EmailConfiguration__Password: ${EMAIL_CONFIGURATION_PASSWORD}
     ports:
-      - "5013:80"
+      - "${REGISTAR_API_EXTERNAL_PORT}:80"
     volumes:
-      - ./docker-storage/registar-api-logs:/app/logs
-      - ../sharedsettings.json:/app/sharedsettings.json
+      - registar-api-logs:/app/logs
     depends_on:
-      - postgresql_database
-      - welding-api
-      
+      - belaz-database
+
   gateway-api:
     image: welding-app/gateway-api
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: "Docker"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      Auth__Secret: ${AUTH_SECRET}
+      Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
     ports:
-      - "5100:80"
+      - "${GATEWAY_API_EXTERNAL_PORT}:80"
     volumes:
-      - ./docker-storage/gateway-api-logs:/app/logs
-      - ../sharedsettings.json:/app/sharedsettings.json
+      - gateway-api-logs:/app/logs
     depends_on:
-      - postgresql_database
-        
+      - belaz-database
+
   proxy:
     image: nginx:mainline
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ${NGINX_CONFIG_PATH}:/etc/nginx/nginx.conf
     ports:
-      - "80:80"
-        
+      - "${PROXY_EXTERNAL_PORT}:80"
+
   belaz-client:
     image: belaz-client
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     build:
       context: ../client
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "${CLIENT_EXTERNAL_PORT}:3000"
     environment:
-      - "REACT_APP_API_URI=api"
+      REACT_APP_API_URI: ${REACT_APP_API_URI}
+
+volumes:
+  weldingdatabase:
+  gateway-api-logs:
+  file-api-logs:
+  welding-api-logs:
+  identity-api-logs:
+  registar-api-logs:
