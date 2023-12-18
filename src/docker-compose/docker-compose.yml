@@ -135,6 +135,19 @@ services:
     environment:
       REACT_APP_API_URI: ${REACT_APP_API_URI}
 
+  belaz-migrator:
+    image: welding-app/belaz-migrator
+    build:
+      context: ..
+      dockerfile: ./Belaz.WeldingApp.MigrationUtil/Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=${DATABASE_CONTAINER_NAME};Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+    command:
+      - "--isDowngrade=false"
+      - "--version=-1"
+    depends_on:
+      - belaz-database
+
 volumes:
   weldingdatabase:
   gateway-api-logs:
