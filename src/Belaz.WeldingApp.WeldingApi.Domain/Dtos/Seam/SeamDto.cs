@@ -14,7 +14,7 @@ public class SeamDto : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInfo.Sea
 
     public string? IdFromSystem { get; set; }
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public int Length { get; set; }
 

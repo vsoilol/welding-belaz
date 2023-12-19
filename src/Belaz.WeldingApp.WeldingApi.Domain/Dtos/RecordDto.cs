@@ -11,7 +11,7 @@ public class RecordDto : IMapFrom<WeldingRecord>
 {
     public Guid Id { get; set; }
 
-    public int? SequenceNumber { get; set; }
+    public string? SequenceNumber { get; set; }
 
     public string Date { get; set; } = null!;
 
@@ -38,7 +38,7 @@ public class RecordDto : IMapFrom<WeldingRecord>
 
     public int? WeldingTaskNumber { get; set; }
 
-    public int? SeamNumber { get; set; }
+    public string? SeamNumber { get; set; }
 
     public WeldingEquipmentBriefDto WeldingEquipment { get; set; } = null!;
 

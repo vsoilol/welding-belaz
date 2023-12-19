@@ -6,7 +6,7 @@ public class GetRecordsByDatePeriodRequest
 
     public string EndDate { get; set; } = null!;
     
-    public int? SeamNumber { get; set; }
+    public string? SeamNumber { get; set; }
     
     public int? WeldingTaskNumber { get; set; }
     

@@ -7,7 +7,7 @@ public class SeamBriefDto : IMapFrom<Seam>
 {
     public Guid Id { get; set; }
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public int Length { get; set; }
 }

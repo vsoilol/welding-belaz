@@ -4,7 +4,7 @@ public class GenerateBasedSeamPassportByTaskIdRequest
 {
     public Guid TaskId { get; set; }
 
-    public int? SequenceNumber { get; set; }
+    public string? SequenceNumber { get; set; }
 
     public double? AverageIntervalSeconds { get; set; }
     

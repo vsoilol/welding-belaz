@@ -4,5 +4,5 @@ public class SetSequenceNumberToWeldingRecordsRequest
 {
     public List<Guid> WeldingRecordIds { get; set; } = null!;
 
-    public int SequenceNumber { get; set; }
+    public string SequenceNumber { get; set; } = null!;
 }

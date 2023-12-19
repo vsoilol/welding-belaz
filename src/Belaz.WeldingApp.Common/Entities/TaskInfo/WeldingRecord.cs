@@ -59,7 +59,10 @@ public class WeldingRecord : Entity
     
     public double ArcVoltageAverage { get; set; }
     
-    public int? SequenceNumber { get; set; }
+    /// <summary>
+    /// Порядковый номер
+    /// </summary>
+    public string? SequenceNumber { get; set; }
     
     public Guid WeldingRecordLimitId { get; set; }
 

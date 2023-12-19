@@ -80,7 +80,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .FirstOrDefaultAsync()!;
     }
 
-    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber,
+    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, string? seamNumber,
         int? weldingTaskNumber,
         Guid? welderId, Guid? masterId, Guid? equipmentId)
     {
@@ -157,7 +157,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
         return weldingRecords.ToListAsync();
     }
 
-    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, int? seamNumber)
+    public Task<List<RecordDto>> GetRecordsByDatePeriodAsync(DateTime startDate, DateTime endDate, string? seamNumber)
     {
         var weldingRecords = _context.WeldingRecords
             .OrderByDescending(_ => _.Date.Date)
@@ -176,7 +176,7 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .ToListAsync();
     }
 
-    public async Task SetSequenceNumberToWeldingRecordsAsync(List<Guid> weldingRecordIds, int sequenceNumber)
+    public async Task SetSequenceNumberToWeldingRecordsAsync(List<Guid> weldingRecordIds, string sequenceNumber)
     {
         var weldingRecords = await _context
             .WeldingRecords

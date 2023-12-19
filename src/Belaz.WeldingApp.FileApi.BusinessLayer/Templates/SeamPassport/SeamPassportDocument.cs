@@ -12,9 +12,9 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 public class SeamPassportDocument : IDocument
 {
     private readonly string _fontsPath;
-    private readonly int? _sequenceNumber;
+    private readonly string? _sequenceNumber;
 
-    public SeamPassportDocument(TaskDto task, string fontsPath, int? sequenceNumber)
+    public SeamPassportDocument(TaskDto task, string fontsPath, string? sequenceNumber)
     {
         Task = task;
         _fontsPath = fontsPath;
@@ -76,7 +76,7 @@ public class SeamPassportDocument : IDocument
 
             IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages.OrderBy(_ => _.Number);
 
-            if (_sequenceNumber.HasValue)
+            if (_sequenceNumber is not null)
             {
                 weldPassages = weldPassages.Where(_ => _.SequenceNumber == _sequenceNumber);
             }
@@ -242,7 +242,7 @@ public class SeamPassportDocument : IDocument
                 .Row(2)
                 .Column(2)
                 .Element(BlockLeft)
-                .Text(_sequenceNumber.HasValue ? _sequenceNumber.Value.ToString() : "-")
+                .Text(_sequenceNumber is not null && _sequenceNumber.Length > 0 ? _sequenceNumber : "-")
                 .Style(Typography.Italic);
 
             table

@@ -8,7 +8,7 @@ public class WeldPassageDto : IMapFrom<WeldPassage>
 {
     public int Number { get; set; }
 
-    public int? SequenceNumber { get; set; }
+    public string? SequenceNumber { get; set; }
 
     public string Name { get; set; } = null!;
 

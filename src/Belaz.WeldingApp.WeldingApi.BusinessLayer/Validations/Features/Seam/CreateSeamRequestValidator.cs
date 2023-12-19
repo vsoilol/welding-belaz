@@ -9,7 +9,10 @@ public class CreateSeamRequestValidator : AbstractValidator<CreateSeamRequest>
 {
     public CreateSeamRequestValidator(ApplicationContext context)
     {
-        RuleFor(model => model.Number).Cascade(CascadeMode.Stop).GreaterThanOrEqualTo(1);
+        RuleFor(model => model.Number)
+            .Cascade(CascadeMode.Stop)
+            .NotNull()
+            .NotEmpty();
 
         RuleFor(model => model.ProductionAreaId)
             .Cascade(CascadeMode.Stop)

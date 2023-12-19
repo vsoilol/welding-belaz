@@ -12,11 +12,11 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.BasedSeamPassport;
 public class BasedSeamPassportDocument : IDocument
 {
     private readonly string _fontsPath;
-    private readonly int? _sequenceNumber;
+    private readonly string? _sequenceNumber;
     private readonly double? _averageIntervalSeconds;
     private readonly double? _secondsToIgnoreBetweenGraphs;
 
-    public BasedSeamPassportDocument(TaskDto task, string fontsPath, int? sequenceNumber,
+    public BasedSeamPassportDocument(TaskDto task, string fontsPath, string? sequenceNumber,
         double? averageIntervalSeconds, double? secondsToIgnoreBetweenGraphs)
     {
         Task = task;
@@ -83,10 +83,10 @@ public class BasedSeamPassportDocument : IDocument
             IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages
                 .OrderBy(_ => _.Number);
 
-            if (_sequenceNumber.HasValue)
+            if (_sequenceNumber is not null)
             {
                 weldPassages = weldPassages
-                    .Where(_ => _.SequenceNumber == _sequenceNumber.Value);
+                    .Where(_ => _.SequenceNumber == _sequenceNumber);
             }
 
             var weldPassageDtos = weldPassages as WeldPassageDto[] ?? weldPassages.ToArray();
@@ -272,7 +272,7 @@ public class BasedSeamPassportDocument : IDocument
                 .Row(2)
                 .Column(2)
                 .Element(BlockLeft)
-                .Text(_sequenceNumber.HasValue ? _sequenceNumber.Value.ToString() : "-")
+                .Text(_sequenceNumber is not null && _sequenceNumber.Length > 0 ? _sequenceNumber : "-")
                 .Style(Typography.Italic);
 
             table

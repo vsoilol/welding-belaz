@@ -20,6 +20,8 @@ public class GenerateSeamPassportByTaskIdRequestValidator
         
         RuleFor(model => model.SequenceNumber)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .NotEmpty()
+            .NotNull()
+            .When(_ => _.SequenceNumber is not null);
     }
 }

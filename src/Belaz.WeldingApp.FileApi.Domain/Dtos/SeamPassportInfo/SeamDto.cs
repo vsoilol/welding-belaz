@@ -7,7 +7,7 @@ namespace Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 
 public class SeamDto : IMapFrom<Seam>
 {
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public string? DetectedDefects { get; set; }
 

@@ -21,6 +21,7 @@ public class SetSequenceNumberToWeldingRecordsRequestValidator
 
         RuleFor(model => model.SequenceNumber)
             .Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(1);
+            .NotNull()
+            .NotEmpty();
     }
 }
