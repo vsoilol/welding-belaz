@@ -40,22 +40,23 @@ const dateOptions = {
 };
 const StyleNewTable = {
   width: "calc(100% - 80px)",
-  margin: "0 auto"
-}
+  margin: "0 auto",
+};
 
-
-export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, loadRecords }) => {
+export const RecordsTable = ({
+  records,
+  isRequesting,
+  deleteRecords,
+  userRole,
+  loadRecords,
+}) => {
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idRecords, setidRecords] = useState("");
 
   const [updatedRecords, setUpdatedRecords] = useState(records);
 
-
-
   const [dateStart, setdateStart] = useState("");
   const [dateEnd, setdataEnd] = useState("");
-
-
 
   const [valueDisplay, setvalueDisplay] = useState(false);
   const [arrayIdRecords, setarrayIdRecords] = useState([]);
@@ -68,10 +69,9 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
       // Если id отсутствует в массиве, добавляем его
       setarrayIdRecords([...arrayIdRecords, id]);
     }
-
   };
   const columns = [
-    (userRole === "Admin" /*|| userRole === "Master"*/) && {
+    userRole === "Admin" /*|| userRole === "Master"*/ && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -79,12 +79,12 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
           src={deleteIcon}
           onClick={() => {
             setdeleteRecordsModal(true);
-            setidRecords(rowData?.id)
+            setidRecords(rowData?.id);
           }}
         />
       ),
     },
-    (valueDisplay) && {
+    valueDisplay && {
       title: "Выбор",
       render: (rowData) => (
         <input
@@ -95,58 +95,77 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
         />
       ),
     },
-    { title: "Порядковый номер изделия", field: "sequenceNumber" },
+    {
+      title: "Порядковый номер изделия",
+      render: (rowData) =>
+        rowData?.sequenceNumber !== null &&
+        rowData.sequenceNumber.length > 0 ? (
+          rowData.sequenceNumber
+        ) : (
+          <p>{`  -   `} </p>
+        ),
+    },
     { title: "Дата", field: "date" },
-    { title: "Номер шва", field: "seamNumber" },
+    {
+      title: "Номер шва",
+      render: (rowData) =>
+        rowData?.seamNumber !== null && rowData.seamNumber.length > 0 ? (
+          rowData.seamNumber
+        ) : (
+          <p>{`  -   `} </p>
+        ),
+    },
     { title: "Длительность сварки", field: "weldingDuration" },
-    { title: "Сварочный ток (среднее)", field: "weldingCurrentAverage", },
-    { title: "Напряжение на дуге (среднее)", field: "arcVoltageAverage", },
+    { title: "Сварочный ток (среднее)", field: "weldingCurrentAverage" },
+    { title: "Напряжение на дуге (среднее)", field: "arcVoltageAverage" },
     { title: "Время начала сварки", field: "weldingStart" },
     {
       title: "Номер задания ( ссылка )",
       render: (rowData) => {
         if (rowData?.weldingTaskNumber != null) {
           return (
-            <a href="/tasks" target="_blank">{rowData?.weldingTaskNumber ?? "-"}</a>
+            <a href="/tasks" target="_blank">
+              {rowData?.weldingTaskNumber ?? "-"}
+            </a>
           );
+        } else {
+          return <p>{`  -   `} </p>;
         }
-        else {
-          return (
-            <p>{`  -   `} </p>
-          );
-        }
-      }
+      },
     },
     {
-      title: "Сварщик", render: (rowData) => (
+      title: "Сварщик",
+      render: (rowData) => (
         <div>
-          <span> {rowData?.welder?.middleName}  </span>
+          <span> {rowData?.welder?.middleName} </span>
           <span> {rowData?.welder?.firstName}</span>
-          <span>  {rowData?.welder?.lastName}  </span>
+          <span> {rowData?.welder?.lastName} </span>
         </div>
       ),
     },
     {
-      title: "Оборудование ( номер )", render: (rowData) => (
+      title: "Оборудование ( номер )",
+      render: (rowData) => (
         <div>
           <span> {rowData?.weldingEquipment?.factoryNumber}</span>
-          <span> {rowData?.weldingEquipment?.marking}  </span>
+          <span> {rowData?.weldingEquipment?.marking} </span>
         </div>
       ),
     },
     {
-      title: "Руководитель сварочных работ (мастер): ", render: (rowData) => (
+      title: "Руководитель сварочных работ (мастер): ",
+      render: (rowData) => (
         <div>
-          <span> {rowData?.master?.middleName}  </span>
+          <span> {rowData?.master?.middleName} </span>
           <span> {rowData?.master?.firstName}</span>
-          <span>  {rowData?.master?.lastName}  </span>
+          <span> {rowData?.master?.lastName} </span>
         </div>
       ),
     },
-  ].filter(column => column);
+  ].filter((column) => column);
   const renderRowChildren = (rowData) => {
-    let time = rowData?.startTime
-    let Endtime = rowData?.date
+    let time = rowData?.startTime;
+    let Endtime = rowData?.date;
     let dateObject = new Date(time);
     let dateObjectEnd = new Date(Endtime);
     Array.prototype.max = function () {
@@ -155,13 +174,19 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
     Array.prototype.min = function () {
       return Math.min.apply(null, this);
     };
-    let ArrayVoltageValues = []
-    let ArrayweldingCurrentValues = []
+    let ArrayVoltageValues = [];
+    let ArrayweldingCurrentValues = [];
     for (let index = 0; index < rowData?.arcVoltageValues.length; index++) {
-      ArrayVoltageValues.push({ id: 0, value: rowData?.arcVoltageValues[index] })
+      ArrayVoltageValues.push({
+        id: 0,
+        value: rowData?.arcVoltageValues[index],
+      });
     }
     for (let index = 0; index < rowData?.weldingCurrentValues.length; index++) {
-      ArrayweldingCurrentValues.push({ id: 0, value: rowData?.weldingCurrentValues[index] })
+      ArrayweldingCurrentValues.push({
+        id: 0,
+        value: rowData?.weldingCurrentValues[index],
+      });
     }
     const formatYAxis = (value) => Math.round(value / 10);
     return (
@@ -182,17 +207,21 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
               <CartesianGrid strokeDasharray="3 3" />
               <YAxis
                 label={{
-                  value: 'Ток ',
+                  value: "Ток ",
                   angle: -90,
                   offset: 6,
-                  position: 'insideLeft',
+                  position: "insideLeft",
                 }}
                 labelOffset={-80}
               />
               <XAxis
                 interval={9}
                 tickFormatter={formatYAxis}
-                label={{ value: 'Время сварки ( секунды )', position: 'insideBottom', offset: -4 }}
+                label={{
+                  value: "Время сварки ( секунды )",
+                  position: "insideBottom",
+                  offset: -4,
+                }}
               />
               <Tooltip />
               <Line
@@ -240,17 +269,21 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
               <CartesianGrid strokeDasharray="3 3" />
               <YAxis
                 label={{
-                  value: 'Напряжение ',
+                  value: "Напряжение ",
                   angle: -90,
                   offset: 10,
-                  position: 'insideLeft',
+                  position: "insideLeft",
                 }}
                 labelOffset={-80}
               />
               <XAxis
                 interval={9}
                 tickFormatter={formatYAxis}
-                label={{ value: 'Время сварки ( секунды )', position: 'insideBottom', offset: -2 }}
+                label={{
+                  value: "Время сварки ( секунды )",
+                  position: "insideBottom",
+                  offset: -2,
+                }}
                 style={{ marginBottom: 45 }}
               />
               <Tooltip />
@@ -283,13 +316,15 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className={styles.AxisBlocks}  >
+        <div className={styles.AxisBlocks}>
           <ResponsiveContainer width="100%" height={50}>
-            <LineChart
-              data={ArrayweldingCurrentValues}
-              syncId="anyId"
-            >
-              <Brush interval={9} tickFormatter={formatYAxis} height={45} marginTop={30} />
+            <LineChart data={ArrayweldingCurrentValues} syncId="anyId">
+              <Brush
+                interval={9}
+                tickFormatter={formatYAxis}
+                height={45}
+                marginTop={30}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -297,80 +332,79 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
     );
   };
 
-
-
-
-
   ////Отобразить с отклонениями / без отклонений
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState("all");
   function handleOptionChange(option) {
     setSelectedOption(option);
-    handleShowRecords(option)
-  };
-
-  function handleShowRecords(option) {
-    if (option === 'withViolations') {
-      setUpdatedRecords(records.filter((item) => item.areDeviations === true))
-    } else if (option === 'withoutViolations') {
-      setUpdatedRecords(records.filter((item) => item.areDeviations === false))
-    } else {
-      setUpdatedRecords(records)
-    }
-  };
-
-  function showRecordsPeriod() {
-
-    let StartDate = new Date(dateStart).toLocaleDateString('ru-RU', { dateStyle: 'short' })
-    let EndDate = new Date(dateEnd).toLocaleDateString('ru-RU', { dateStyle: 'short' })
-    api.get(`weldingRecord/period?StartDate=${StartDate}&EndDate=${EndDate}&SeamNumber=&WeldingTaskNumber=&WelderId=&MasterId=&EquipmentId=`).then((response) => {
-      setSelectedOption("Period")
-      setUpdatedRecords(response.data)
-    })
-      .catch((error) => { });
-
+    handleShowRecords(option);
   }
 
+  function handleShowRecords(option) {
+    if (option === "withViolations") {
+      setUpdatedRecords(records.filter((item) => item.areDeviations === true));
+    } else if (option === "withoutViolations") {
+      setUpdatedRecords(records.filter((item) => item.areDeviations === false));
+    } else {
+      setUpdatedRecords(records);
+    }
+  }
+
+  function showRecordsPeriod() {
+    let StartDate = new Date(dateStart).toLocaleDateString("ru-RU", {
+      dateStyle: "short",
+    });
+    let EndDate = new Date(dateEnd).toLocaleDateString("ru-RU", {
+      dateStyle: "short",
+    });
+    api
+      .get(
+        `weldingRecord/period?StartDate=${StartDate}&EndDate=${EndDate}&SeamNumber=&WeldingTaskNumber=&WelderId=&MasterId=&EquipmentId=`
+      )
+      .then((response) => {
+        setSelectedOption("Period");
+        setUpdatedRecords(response.data);
+      })
+      .catch((error) => {});
+  }
 
   const [serialnumber, setserialnumber] = useState("");
   const [serchOnserialnumber, setserchOnserialnumber] = useState("");
 
-
   function Setserialnumber() {
-
-    api.post(`/weldingRecord/set-sequence-number`, {
-      "weldingRecordIds": arrayIdRecords,
-      "sequenceNumber": Number(serialnumber)
-    }).then((response) => {
-      loadRecords()
-      setvalueDisplay(false)
-    })
-      .catch((error) => { });
+    api
+      .post(`/weldingRecord/set-sequence-number`, {
+        weldingRecordIds: arrayIdRecords,
+        sequenceNumber: serialnumber,
+      })
+      .then((response) => {
+        loadRecords();
+        setvalueDisplay(false);
+      })
+      .catch((error) => {});
   }
 
   function FindTask() {
     if (serchOnserialnumber) {
-      let ListTask = records.filter((item) => item.sequenceNumber === Number(serchOnserialnumber));
-      setSelectedOption("task")
-      setUpdatedRecords(ListTask)
+      let ListTask = records.filter(
+        (item) => item.sequenceNumber === serchOnserialnumber
+      );
+      setSelectedOption("task");
+      setUpdatedRecords(ListTask);
+    } else {
+      setSelectedOption("all");
     }
-    else {
-      setSelectedOption("all")
-    }
-
   }
 
   return (
     <div className={styles.tableWrapper}>
-
       <div className={styles.tools}>
-
         <div className={styles.datePeriod}>
           <label>Вывод записей за период </label>
           <div className={`${styles.period}`}>
             <label>Начало </label> <br></br>
             <Input
               onChange={(e) => {
-                setdateStart(e.target.value)
+                setdateStart(e.target.value);
               }}
               width="200"
               style={{ height: 40, padding: "0 20px 0 30px", width: 200 }}
@@ -388,7 +422,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
             <label>Конец </label> <br></br>
             <Input
               onChange={(e) => {
-                setdataEnd(e.target.value)
+                setdataEnd(e.target.value);
               }}
               width="200"
               style={{ height: 40, padding: "0 20px 0 30px", width: 200 }}
@@ -401,20 +435,23 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
               }}
               autocomplete="off"
             />
-
           </div>
-          <button className={styles.sort} onClick={showRecordsPeriod}>Отобразить</button>
+          <button className={styles.sort} onClick={showRecordsPeriod}>
+            Отобразить
+          </button>
         </div>
 
         <div className={styles.datePeriod}>
-          <label>Вывод записей  <br></br>без нарушений / с нарушениями </label>
+          <label>
+            Вывод записей <br></br>без нарушений / с нарушениями{" "}
+          </label>
           <div className={styles.period}>
             <label className={styles.labelradio}>
               <input
                 type="radio"
                 value="withViolations"
-                checked={selectedOption === 'withViolations'}
-                onChange={() => handleOptionChange('withViolations')}
+                checked={selectedOption === "withViolations"}
+                onChange={() => handleOptionChange("withViolations")}
               />
               С нарушениями
             </label>
@@ -422,8 +459,8 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
               <input
                 type="radio"
                 value="withoutViolations"
-                checked={selectedOption === 'withoutViolations'}
-                onChange={() => handleOptionChange('withoutViolations')}
+                checked={selectedOption === "withoutViolations"}
+                onChange={() => handleOptionChange("withoutViolations")}
               />
               Без нарушений
             </label>
@@ -431,63 +468,66 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
               <input
                 type="radio"
                 value="all"
-                checked={selectedOption === 'all'}
-                onChange={() => handleOptionChange('all')}
+                checked={selectedOption === "all"}
+                onChange={() => handleOptionChange("all")}
               />
               Все записи
             </label>
           </div>
         </div>
 
-
-        {userRole === "Admin" || userRole === "Master"
-          ? (
-            <div className={styles.datePeriod}>
-              <label>Установить порядковый <br></br>номер для записей </label>
-              {valueDisplay
-                ? (
-                  <div>
-                    <div className={styles.row}>
-                      <Input
-                        onChange={(e) => {
-                          setserialnumber(e.target.value);
-                        }}
-                        style={{
-                          width: 150,
-                          height: 40,
-                          padding: "0px 0px 0px 20px"
-                        }}
-                        type="number"
-                        min="0"
-                        step="1"
-                        value={serialnumber}
-                        name={`serialnumber`}
-                        placeholder="Порядковый номер "
-                        autocomplete="off"
-                      />
-                    </div>
-                    <button className={styles.sort} onClick={() => { Setserialnumber() }} >
-                      Установить
-                    </button>
-                  </div>
-
-                )
-                : null
-
-              }
-
-              <div className={styles.period}>
-                <button className={styles.sort} onClick={(e) => { setvalueDisplay(!valueDisplay) }} >
-                  {!valueDisplay ? "Установить" : "Отменить"}
+        {userRole === "Admin" || userRole === "Master" ? (
+          <div className={styles.datePeriod}>
+            <label>
+              Установить порядковый <br></br>номер для записей{" "}
+            </label>
+            {valueDisplay ? (
+              <div>
+                <div className={styles.row}>
+                  <Input
+                    onChange={(e) => {
+                      setserialnumber(e.target.value);
+                    }}
+                    style={{
+                      width: 150,
+                      height: 40,
+                      padding: "0px 0px 0px 20px",
+                    }}
+                    type="text"
+                    value={serialnumber}
+                    name={`serialnumber`}
+                    placeholder="Порядковый номер"
+                    autocomplete="off"
+                  />
+                </div>
+                <button
+                  className={styles.sort}
+                  onClick={() => {
+                    Setserialnumber();
+                  }}
+                >
+                  Установить
                 </button>
               </div>
-            </div>
-          ) : null
-        }
+            ) : null}
 
+            <div className={styles.period}>
+              <button
+                className={styles.sort}
+                onClick={(e) => {
+                  setvalueDisplay(!valueDisplay);
+                }}
+              >
+                {!valueDisplay ? "Установить" : "Отменить"}
+              </button>
+            </div>
+          </div>
+        ) : null}
 
         <div className={styles.datePeriod}>
-          <label>Поиск задания по <br></br>порядковому номеру изделия</label>
+          <label>
+            Поиск задания по <br></br>порядковому номеру изделия
+          </label>
           <div>
             <div className={styles.row}>
               <Input
@@ -497,24 +537,25 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
                 style={{
                   width: 150,
                   height: 40,
-                  padding: "0px 0px 0px 20px"
+                  padding: "0px 0px 0px 20px",
                 }}
-                type="number"
-                min="0"
-                step="1"
+                type="text"
                 value={serchOnserialnumber}
                 name={`serchOnserialnumber`}
-                placeholder="Порядковый номер "
+                placeholder="Порядковый номер"
                 autocomplete="off"
               />
             </div>
-            <button className={styles.sort} onClick={() => { FindTask() }} >
+            <button
+              className={styles.sort}
+              onClick={() => {
+                FindTask();
+              }}
+            >
               Найти
             </button>
           </div>
         </div>
-
-
       </div>
 
       <Table
@@ -531,7 +572,7 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
         isOpen={deleteRecordsModal}
         headerText="Удаление"
         setIsOpen={(state) => {
-          setdeleteRecordsModal(false)
+          setdeleteRecordsModal(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -540,8 +581,8 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setdeleteRecordsModal(false)
-            deleteRecords(idRecords)
+            setdeleteRecordsModal(false);
+            deleteRecords(idRecords);
           }}
         >
           {({
@@ -552,23 +593,19 @@ export const RecordsTable = ({ records, isRequesting, deleteRecords, userRole, l
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> запись ? </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Вы уверены что хотите <span>удалить</span> запись ?{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Удалить
-                  </Button>
+                  <Button type="submit">Удалить</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-    </div >
+    </div>
   );
 };
