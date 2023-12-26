@@ -2,9 +2,9 @@ version: "3.4"
 
 services:
   belaz-database:
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     container_name: ${DATABASE_CONTAINER_NAME}
     image: postgres:15
-    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -14,10 +14,12 @@ services:
     volumes:
       - weldingdatabase:/var/lib/postgresql/data/
       - ${DATABASE_INIT_SCRIPT_PATH}:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - belaz
 
   welding-api:
-    image: welding-app/welding-api
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    image: welding-app/welding-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
@@ -32,10 +34,12 @@ services:
       - welding-api-logs:/app/logs
     depends_on:
       - belaz-database
+    networks:
+      - belaz
 
   identity-api:
-    image: welding-app/identity-api
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    image: welding-app/identity-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
@@ -56,10 +60,12 @@ services:
       - identity-api-logs:/app/logs
     depends_on:
       - belaz-database
+    networks:
+      - belaz
 
   file-api:
-    image: welding-app/file-api
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    image: welding-app/file-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
@@ -74,10 +80,12 @@ services:
       - file-api-logs:/app/logs
     depends_on:
       - belaz-database
+    networks:
+      - belaz
 
   registar-api:
-    image: welding-app/registar-api
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    image: welding-app/registar-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.RegistarApi/Dockerfile
@@ -98,10 +106,12 @@ services:
       - registar-api-logs:/app/logs
     depends_on:
       - belaz-database
+    networks:
+      - belaz
 
   gateway-api:
-    image: welding-app/gateway-api
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    image: welding-app/gateway-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
@@ -115,18 +125,22 @@ services:
       - gateway-api-logs:/app/logs
     depends_on:
       - belaz-database
+    networks:
+      - belaz
 
   proxy:
-    image: nginx:mainline
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    image: nginx:mainline
     volumes:
       - ${NGINX_CONFIG_PATH}:/etc/nginx/nginx.conf
     ports:
       - "${PROXY_EXTERNAL_PORT}:80"
+    networks:
+      - belaz
 
   belaz-client:
-    image: belaz-client
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    image: belaz-client
     build:
       context: ../client
       dockerfile: Dockerfile
@@ -134,6 +148,8 @@ services:
       - "${CLIENT_EXTERNAL_PORT}:3000"
     environment:
       REACT_APP_API_URI: ${REACT_APP_API_URI}
+    networks:
+      - belaz
 
   belaz-migrator:
     image: welding-app/belaz-migrator
@@ -147,6 +163,8 @@ services:
       - "--version=-1"
     depends_on:
       - belaz-database
+    networks:
+      - belaz
 
 volumes:
   weldingdatabase:
@@ -155,3 +173,7 @@ volumes:
   welding-api-logs:
   identity-api-logs:
   registar-api-logs:
+
+networks:
+  belaz:
+    name: belaz_network
