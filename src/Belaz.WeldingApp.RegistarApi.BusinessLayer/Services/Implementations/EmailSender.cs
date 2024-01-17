@@ -26,13 +26,6 @@ public class EmailSender : IEmailSender
         _weldingEquipmentRepository = weldingEquipmentRepository;
         _masterRepository = masterRepository;
     }
-
-    public void SendEmail(Message message)
-    {
-        var emailMessage = CreateEmailMessage(message);
-        Send(emailMessage);
-    }
-
     public async Task SendEmailAsync(Message message)
     {
         var mailMessage = CreateEmailMessage(message);
@@ -52,7 +45,7 @@ public class EmailSender : IEmailSender
             ? $"{ampereText} и {voltageText}"
             : ampereText ?? voltageText;
 
-        string link = Environment.GetEnvironmentVariable("REAL_API") ?? "http://192.168.126.161";
+        string link = Environment.GetEnvironmentVariable("REAL_API")!;
         var masterEmail = await _masterRepository.GetMasterEmailByIdAsync(masterId);
 
         if (masterEmail is null)
@@ -92,30 +85,6 @@ public class EmailSender : IEmailSender
         emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = message.Content };
         return emailMessage;
     }
-
-    private void Send(MimeMessage mailMessage)
-    {
-        using (var client = new SmtpClient())
-        {
-            try
-            {
-                client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.StartTls);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-                client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
-                client.Send(mailMessage);
-            }
-            catch
-            {
-                //log an error message or throw an exception or both.
-                throw;
-            }
-            finally
-            {
-                client.Disconnect(true);
-                client.Dispose();
-            }
-        }
-    }
     
     private async Task SendAsync(MimeMessage mailMessage)
     {
@@ -123,22 +92,47 @@ public class EmailSender : IEmailSender
         {
             try
             {
-                await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.None);
-
-                //client.AuthenticationMechanisms.Remove("XOAUTH2");
-                await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
-                var data = await client.SendAsync(mailMessage);
+                await ConfigureAndConnectSmtpClient(client);
+                await client.SendAsync(mailMessage);
             }
             catch(Exception exception)
             {
-                //log an error message or throw an exception, or both.
                 throw;
             }
             finally
             {
-                await client.DisconnectAsync(true);
-                client.Dispose();
+                await DisconnectAndDisposeSmtpClient(client);
             }
         }
+    }
+
+    private async Task ConfigureAndConnectSmtpClient(SmtpClient client)
+    {
+        await ConnectSmtpClientWithPort(client);
+        await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
+    }
+
+    private async Task ConnectSmtpClientWithPort(SmtpClient client)
+    {
+        if (IsSecureProtocolPort(_emailConfig.Port))
+        {
+            await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
+            client.AuthenticationMechanisms.Remove("XOAUTH2");
+        }
+        else
+        {
+            await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.None);
+        }
+    }
+    
+    private async Task DisconnectAndDisposeSmtpClient(SmtpClient client)
+    {
+        await client.DisconnectAsync(true);
+        client.Dispose();
+    }
+
+    private bool IsSecureProtocolPort(int port)
+    {
+        return port is 465 or 587;
     }
 }

@@ -115,11 +115,6 @@ public class AuthController : ControllerBase
 
         if (confirmationEmailInfo is not null)
         {
-            /*var confirmationLink = Url.Action(
-                nameof(ConfirmEmail),
-                "Auth",
-                new { token = confirmationEmailInfo.Token, id = confirmationEmailInfo.Id },
-                Request.Scheme);*/
             var realApi = Environment.GetEnvironmentVariable("REAL_API")!;
             var confirmationLink =
                 $@"{realApi}/api/auth/confirmEmail?token={confirmationEmailInfo.Token}&id={confirmationEmailInfo.Id}";

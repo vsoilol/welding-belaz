@@ -4,8 +4,6 @@ namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Interfaces;
 
 public interface IEmailSender
 {
-    void SendEmail(Message message);
-
     Task SendEmailAsync(Message message);
 
     Task SendDeviationRecordEmailAsync(bool? isEnsuringVoltageAllowance, bool? isEnsuringCurrentAllowance, 
