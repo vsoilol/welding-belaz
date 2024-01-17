@@ -26,6 +26,7 @@ public class EmailSender : IEmailSender
         _weldingEquipmentRepository = weldingEquipmentRepository;
         _masterRepository = masterRepository;
     }
+
     public async Task SendEmailAsync(Message message)
     {
         var mailMessage = CreateEmailMessage(message);
@@ -69,7 +70,7 @@ public class EmailSender : IEmailSender
             emailBody += $"<br>Номер шва: {seam.Number}";
         }
 
-        var message = new Message(new[] { masterEmail },
+        var message = new Message(new[] {masterEmail},
             "Предупреждение об отклонениях",
             emailBody);
 
@@ -82,10 +83,10 @@ public class EmailSender : IEmailSender
         emailMessage.From.Add(new MailboxAddress("Welding Monitoring System", _emailConfig.From));
         emailMessage.To.AddRange(message.To);
         emailMessage.Subject = message.Subject;
-        emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = message.Content };
+        emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) {Text = message.Content};
         return emailMessage;
     }
-    
+
     private async Task SendAsync(MimeMessage mailMessage)
     {
         using (var client = new SmtpClient())
@@ -95,7 +96,7 @@ public class EmailSender : IEmailSender
                 await ConfigureAndConnectSmtpClient(client);
                 await client.SendAsync(mailMessage);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw;
             }
@@ -124,7 +125,7 @@ public class EmailSender : IEmailSender
             await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.None);
         }
     }
-    
+
     private async Task DisconnectAndDisposeSmtpClient(SmtpClient client)
     {
         await client.DisconnectAsync(true);

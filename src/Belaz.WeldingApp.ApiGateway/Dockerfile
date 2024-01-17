@@ -6,7 +6,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Belaz.WeldingApp.ApiGateway/Belaz.WeldingApp.ApiGateway.csproj", "Belaz.WeldingApp.ApiGateway/"]
-
 RUN dotnet restore "Belaz.WeldingApp.ApiGateway/Belaz.WeldingApp.ApiGateway.csproj"
 COPY . .
 WORKDIR "/src/Belaz.WeldingApp.ApiGateway"

@@ -5,7 +5,6 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Belaz.WeldingApp.MigrationUtil/Belaz.WeldingApp.MigrationUtil.csproj", "Belaz.WeldingApp.MigrationUtil/"]
 COPY ["Belaz.WeldingApp.Migrations/Belaz.WeldingApp.Migrations.csproj", "Belaz.WeldingApp.Migrations/"]
-
 RUN dotnet restore "Belaz.WeldingApp.MigrationUtil/Belaz.WeldingApp.MigrationUtil.csproj"
 COPY . .
 WORKDIR "/src/Belaz.WeldingApp.MigrationUtil"
