@@ -3,12 +3,18 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ENV http_proxy http://temp:54321@192.168.100.5:3128
+ENV https_proxy http://temp:54321@192.168.100.5:3128
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Belaz.WeldingApp.IdentityApi/Belaz.WeldingApp.IdentityApi.csproj", "Belaz.WeldingApp.IdentityApi/"]
 COPY ["Belaz.WeldingApp.IdentityApi.Domain/Belaz.WeldingApp.IdentityApi.Domain.csproj", "Belaz.WeldingApp.IdentityApi.Domain/"]
 COPY ["Belaz.WeldingApp.IdentityApi.DataLayer/Belaz.WeldingApp.IdentityApi.DataLayer.csproj", "Belaz.WeldingApp.IdentityApi.DataLayer/"]
 COPY ["Belaz.WeldingApp.IdentityApi.BusinessLayer/Belaz.WeldingApp.IdentityApi.BusinessLayer.csproj", "Belaz.WeldingApp.IdentityApi.BusinessLayer/"]
+
+ENV http_proxy http://temp:54321@192.168.100.5:3128
+ENV https_proxy http://temp:54321@192.168.100.5:3128
 
 RUN dotnet restore "Belaz.WeldingApp.IdentityApi/Belaz.WeldingApp.IdentityApi.csproj"
 COPY . .
