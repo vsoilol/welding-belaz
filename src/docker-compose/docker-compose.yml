@@ -119,6 +119,10 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       Auth__Secret: ${AUTH_SECRET}
       Auth__TokenLifetime: ${AUTH_TOKEN_LIFETIME}
+      Services__identity__DownstreamPath: "http://identity-api:80"
+      Services__welding__DownstreamPath: "http://welding-api:80"
+      Services__file__DownstreamPath: "http://file-api:80"
+      Services__registar__DownstreamPath: "http://registar-api:80"
     ports:
       - "${GATEWAY_API_EXTERNAL_PORT}:80"
     volumes:

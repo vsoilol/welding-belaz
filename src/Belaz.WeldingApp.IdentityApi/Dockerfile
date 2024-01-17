@@ -27,7 +27,4 @@ RUN dotnet publish "Belaz.WeldingApp.IdentityApi.csproj" -c Release -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-RUN apt-get update && apt-get install -y iputils-ping net-tools telnet
-
 ENTRYPOINT ["dotnet", "Belaz.WeldingApp.IdentityApi.dll"]
