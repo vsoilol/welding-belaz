@@ -1,8 +1,5 @@
 FROM node:16.20.2
 
-ENV http_proxy http://temp:54321@192.168.100.5:3128
-ENV https_proxy http://temp:54321@192.168.100.5:3128
-
 WORKDIR /app
 
 COPY ./package*.json .
