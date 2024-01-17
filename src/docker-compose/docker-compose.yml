@@ -19,7 +19,7 @@ services:
 
   welding-api:
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    image: welding-app/welding-api
+    image: vladsokol/belaz-welding-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.WeldingApi/Dockerfile
@@ -39,7 +39,7 @@ services:
 
   identity-api:
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    image: welding-app/identity-api
+    image: vladsokol/belaz-identity-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.IdentityApi/Dockerfile
@@ -65,7 +65,7 @@ services:
 
   file-api:
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    image: welding-app/file-api
+    image: vladsokol/belaz-file-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.FileApi/Dockerfile
@@ -85,7 +85,7 @@ services:
 
   registar-api:
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    image: welding-app/registar-api
+    image: vladsokol/belaz-registar-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.RegistarApi/Dockerfile
@@ -111,7 +111,7 @@ services:
 
   gateway-api:
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    image: welding-app/gateway-api
+    image: vladsokol/belaz-gateway-api
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.ApiGateway/Dockerfile
@@ -140,7 +140,7 @@ services:
 
   belaz-client:
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    image: belaz-client
+    image: vladsokol/belaz-client
     build:
       context: ../client
       dockerfile: Dockerfile
@@ -152,7 +152,7 @@ services:
       - belaz
 
   belaz-migrator:
-    image: welding-app/belaz-migrator
+    image: vladsokol/belaz-migrator
     build:
       context: ..
       dockerfile: ./Belaz.WeldingApp.MigrationUtil/Dockerfile
