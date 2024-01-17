@@ -19,9 +19,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonProjects", "CommonProjects", "{381831C9-A5D2-4C2D-9EBE-DC8D153E3597}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{9AF7C979-063E-4D41-B6C5-A384284C41A9}"
-	ProjectSection(SolutionItems) = preProject
-		sharedsettings.json = sharedsettings.json
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WeldingApp.ApiGateway", "WeldingApp.ApiGateway", "{290DA6B2-BA8F-4FAB-9D6B-F718AF128648}"
 EndProject
@@ -56,6 +53,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.IdentityApi.BusinessLayer", "Belaz.WeldingApp.IdentityApi.BusinessLayer\Belaz.WeldingApp.IdentityApi.BusinessLayer.csproj", "{68D853FC-E7F2-467E-AA41-4DF85160F02A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.IdentityApi.DataLayer", "Belaz.WeldingApp.IdentityApi.DataLayer\Belaz.WeldingApp.IdentityApi.DataLayer.csproj", "{C3BC4792-6BDA-4B30-98BF-6723DF9FDA6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{09B4B591-E57E-48EF-BF3D-E10262A9FAE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.Migrations", "Belaz.WeldingApp.Migrations\Belaz.WeldingApp.Migrations.csproj", "{7C6C8285-3885-4DBE-B73F-A99C809E5546}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belaz.WeldingApp.MigrationUtil", "Belaz.WeldingApp.MigrationUtil\Belaz.WeldingApp.MigrationUtil.csproj", "{2D3CE0A4-FCF1-45E2-AC3F-970337A69999}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +146,14 @@ Global
 		{C3BC4792-6BDA-4B30-98BF-6723DF9FDA6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3BC4792-6BDA-4B30-98BF-6723DF9FDA6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3BC4792-6BDA-4B30-98BF-6723DF9FDA6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C6C8285-3885-4DBE-B73F-A99C809E5546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C6C8285-3885-4DBE-B73F-A99C809E5546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C6C8285-3885-4DBE-B73F-A99C809E5546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C6C8285-3885-4DBE-B73F-A99C809E5546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D3CE0A4-FCF1-45E2-AC3F-970337A69999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D3CE0A4-FCF1-45E2-AC3F-970337A69999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D3CE0A4-FCF1-45E2-AC3F-970337A69999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D3CE0A4-FCF1-45E2-AC3F-970337A69999}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7E98BE2A-D405-434C-B340-C70B7A23B477} = {9366AF82-BA2C-4E32-8453-3C8ABBFBB48A}
@@ -164,5 +175,7 @@ Global
 		{24BD56FA-3D5A-4293-BA1D-D64E660233C7} = {EF350442-F100-4462-8820-3C3392914D1C}
 		{68D853FC-E7F2-467E-AA41-4DF85160F02A} = {EF350442-F100-4462-8820-3C3392914D1C}
 		{C3BC4792-6BDA-4B30-98BF-6723DF9FDA6A} = {EF350442-F100-4462-8820-3C3392914D1C}
+		{7C6C8285-3885-4DBE-B73F-A99C809E5546} = {09B4B591-E57E-48EF-BF3D-E10262A9FAE4}
+		{2D3CE0A4-FCF1-45E2-AC3F-970337A69999} = {09B4B591-E57E-48EF-BF3D-E10262A9FAE4}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.Common.Entities.Production;
-using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.Common.Entities.TechnologicalProcessInfo;
 using Belaz.WeldingApp.Common.Entities.Users;
 
@@ -11,7 +10,7 @@ namespace Belaz.WeldingApp.Common.Entities.ProductInfo;
 /// </summary>
 public class Seam : Entity
 {
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public int Length { get; set; }
 

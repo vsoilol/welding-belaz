@@ -21,7 +21,7 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
 
     public WeldingTaskStatus Status { get; set; }
 
-    public int SeamNumber { get; set; }
+    public string SeamNumber { get; set; } = null!;
 
     //public SeamDto Seam { get; set; } = null!;
 

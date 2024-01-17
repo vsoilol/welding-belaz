@@ -7,9 +7,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
-using Belaz.WeldingApp.WeldingApi.DataLayer.Helpers;
 using Belaz.WeldingApp.WeldingApi.Middlewares;
-using ApplicationContext = Belaz.WeldingApp.WeldingApi.DataLayer.ApplicationContext;
 using Belaz.WeldingApp.Common.Extensions;
 using Belaz.WeldingApp.WeldingApi.Filters;
 
@@ -22,14 +20,8 @@ builder.WebHost.ConfigureAppConfiguration(
     {
         var env = builderContext.HostingEnvironment;
 
-        // find the shared folder in the parent folder
-        var sharedFolder = env.EnvironmentName.Contains("Docker")
-            ? ""
-            : Path.Combine(env.ContentRootPath, "..");
-
         //load the SharedSettings first, so that appsettings.json overrwrites it
         config
-            .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
             .AddJsonFile("appsettings.json", optional: true)
             .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
@@ -99,14 +91,6 @@ builder.Services
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    var context = services.GetRequiredService<ApplicationContext>();
-    await DataSeed.SeedSampleDataAsync(context);
-}
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 

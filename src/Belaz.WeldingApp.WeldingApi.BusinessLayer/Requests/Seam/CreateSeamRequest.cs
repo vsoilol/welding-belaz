@@ -4,7 +4,7 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Seam;
 
 public class CreateSeamRequest : IMapTo<Belaz.WeldingApp.Common.Entities.ProductInfo.Seam>
 {
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     /// <summary>
     /// Подлежит ли контролю

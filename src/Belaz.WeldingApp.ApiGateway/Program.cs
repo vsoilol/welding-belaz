@@ -13,15 +13,10 @@ using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var sharedFolder = builder.Environment.EnvironmentName.Contains("Docker")
-    ? ""
-    : Path.Combine(builder.Environment.ContentRootPath, "..");
-
 builder.Host.UseSerilog(ProjectLoggerConfiguration.GetLoggerConfiguration("gateway-api"));
 
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile(
         $"appsettings.{builder.Environment.EnvironmentName}.json",

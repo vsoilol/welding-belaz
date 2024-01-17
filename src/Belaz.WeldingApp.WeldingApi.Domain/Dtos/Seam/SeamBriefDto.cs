@@ -8,7 +8,7 @@ public class SeamBriefDto : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInf
 
     public string? IdFromSystem { get; set; }
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     public bool IsControlSubject { get; set; }
 

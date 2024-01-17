@@ -5,5 +5,5 @@ namespace Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 
 public class SeamBriefDto : IMapFrom<Seam>
 {
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 }

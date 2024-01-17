@@ -6,7 +6,7 @@ public class UpdateSeamRequest : IMapTo<Belaz.WeldingApp.Common.Entities.Product
 {
     public Guid Id { get; set; }
 
-    public int Number { get; set; }
+    public string Number { get; set; } = null!;
 
     /// <summary>
     /// Подлежит ли контролю
