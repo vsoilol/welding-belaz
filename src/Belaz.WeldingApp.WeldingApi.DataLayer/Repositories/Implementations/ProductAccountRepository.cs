@@ -120,9 +120,9 @@ public class ProductAccountRepository : IProductAccountRepository
 
         var productResultStatus = new List<ProductResult>
         {
-            new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-            new() { Amount = 0, Status = ResultProductStatus.Accept },
-            new() { Amount = 0, Status = ResultProductStatus.Defective }
+            new() {Amount = 0, Status = ResultProductStatus.Manufactured},
+            new() {Amount = 0, Status = ResultProductStatus.Accept},
+            new() {Amount = 0, Status = ResultProductStatus.Defective}
         };
 
         var seamAccounts = new List<SeamAccount>();
@@ -131,9 +131,9 @@ public class ProductAccountRepository : IProductAccountRepository
         {
             var seamResultStatus = new List<SeamResult>
             {
-                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                new() { Amount = 0, Status = ResultProductStatus.Accept },
-                new() { Amount = 0, Status = ResultProductStatus.Defective }
+                new() {Amount = 0, Status = ResultProductStatus.Manufactured},
+                new() {Amount = 0, Status = ResultProductStatus.Accept},
+                new() {Amount = 0, Status = ResultProductStatus.Defective}
             };
 
             var seamAccount = new SeamAccount
@@ -320,9 +320,9 @@ public class ProductAccountRepository : IProductAccountRepository
             var productAccount = productAccounts[i];
             var productResultStatus = new List<ProductResult>
             {
-                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                new() { Amount = 0, Status = ResultProductStatus.Accept },
-                new() { Amount = 0, Status = ResultProductStatus.Defective }
+                new() {Amount = 0, Status = ResultProductStatus.Manufactured},
+                new() {Amount = 0, Status = ResultProductStatus.Accept},
+                new() {Amount = 0, Status = ResultProductStatus.Defective}
             };
 
             var seamAccounts = new List<SeamAccount>();
@@ -331,9 +331,9 @@ public class ProductAccountRepository : IProductAccountRepository
             {
                 var seamResultStatus = new List<SeamResult>
                 {
-                    new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                    new() { Amount = 0, Status = ResultProductStatus.Accept },
-                    new() { Amount = 0, Status = ResultProductStatus.Defective }
+                    new() {Amount = 0, Status = ResultProductStatus.Manufactured},
+                    new() {Amount = 0, Status = ResultProductStatus.Accept},
+                    new() {Amount = 0, Status = ResultProductStatus.Defective}
                 };
 
                 var newSeamAccount = new SeamAccount
@@ -399,9 +399,9 @@ public class ProductAccountRepository : IProductAccountRepository
             var product = products[i];
             var productResultStatus = new List<ProductResult>
             {
-                new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                new() { Amount = 0, Status = ResultProductStatus.Accept },
-                new() { Amount = 0, Status = ResultProductStatus.Defective }
+                new() {Amount = 0, Status = ResultProductStatus.Manufactured},
+                new() {Amount = 0, Status = ResultProductStatus.Accept},
+                new() {Amount = 0, Status = ResultProductStatus.Defective}
             };
 
             var seamAccounts = new List<SeamAccount>();
@@ -410,9 +410,9 @@ public class ProductAccountRepository : IProductAccountRepository
             {
                 var seamResultStatus = new List<SeamResult>
                 {
-                    new() { Amount = 0, Status = ResultProductStatus.Manufactured },
-                    new() { Amount = 0, Status = ResultProductStatus.Accept },
-                    new() { Amount = 0, Status = ResultProductStatus.Defective }
+                    new() {Amount = 0, Status = ResultProductStatus.Manufactured},
+                    new() {Amount = 0, Status = ResultProductStatus.Accept},
+                    new() {Amount = 0, Status = ResultProductStatus.Defective}
                 };
 
                 var seamAccount = new SeamAccount
@@ -534,12 +534,27 @@ public class ProductAccountRepository : IProductAccountRepository
     {
         var productAccountDefectiveResult = (
             await _context.ProductResults.FirstOrDefaultAsync(
-                _ => _.ProductAccountId == productAccountId && 
+                _ => _.ProductAccountId == productAccountId &&
                      _.Status == ResultProductStatus.Defective
             )
         )!;
 
         productAccountDefectiveResult.Reason = defectiveReason;
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(productAccountId);
+    }
+
+    public async Task<ProductAccountDto> EditProductAccountAsync(Guid productAccountId,
+        List<string> sequenceNumbers,
+        int amountFromPlan)
+    {
+        var productAccount = (await _context.ProductAccounts
+            .FirstOrDefaultAsync(_ => _.Id == productAccountId))!;
+
+        productAccount.SequenceNumbers = sequenceNumbers;
+        productAccount.AmountFromPlan = amountFromPlan;
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(productAccountId);

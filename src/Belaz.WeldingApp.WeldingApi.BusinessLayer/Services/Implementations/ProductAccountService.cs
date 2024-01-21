@@ -245,4 +245,18 @@ public class ProductAccountService : IProductAccountService
         await _productAccountRepository.RemoveProductAccountAsync(request.Id);
         return Unit.Default;
     }
+
+    public async Task<Result<ProductAccountDto>> EditProductAccountAsync(EditProductAccountRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<ProductAccountDto>(validationResult.Exception);
+        }
+
+        return await _productAccountRepository
+            .EditProductAccountAsync(request.ProductAccountId,
+                request.SequenceNumbers, request.AmountFromPlan);
+    }
 }

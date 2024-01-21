@@ -51,4 +51,6 @@ public interface IProductAccountService
     Task<Result<ProductAccountDto>> SetUniqueNumberAsync(SetUniqueNumberForProductRequest request);
     
     Task<Result<Unit>> RemoveProductAccountAsync(RemoveProductAccountRequest request);
+    
+    Task<Result<ProductAccountDto>> EditProductAccountAsync(EditProductAccountRequest request);
 }

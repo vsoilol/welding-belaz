@@ -1439,6 +1439,20 @@
       }
     },
     {
+      "UpstreamPathTemplate": "/api/productAccount/edit",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "PUT"
+      ],
+      "DownstreamPathTemplate": "/api/productAccount/edit",
+      "ServiceName": "welding",
+      "SwaggerKey": "welding",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiGatewayKey",
+        "AllowedScopes": []
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/productAccount/amountFromPlan",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
