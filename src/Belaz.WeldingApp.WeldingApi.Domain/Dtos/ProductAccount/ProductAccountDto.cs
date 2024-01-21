@@ -18,6 +18,8 @@ public class ProductAccountDto
     public ProductForProductAccountDto Product { get; set; } = null!;
     
     public int? UniqueNumber { get; set; }
+    
+    public List<string>? SequenceNumbers { get; set; }
 
     public int AmountManufactured { get; set; }
 
