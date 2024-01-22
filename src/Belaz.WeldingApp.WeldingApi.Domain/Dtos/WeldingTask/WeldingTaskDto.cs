@@ -14,6 +14,8 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
     public Guid Id { get; set; }
 
     public int Number { get; set; }
+    
+    public string? SequenceNumber { get; set; }
 
     public string? WeldingDate { get; set; }
 

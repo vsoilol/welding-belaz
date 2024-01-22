@@ -44,6 +44,8 @@ public class WeldingTask : Entity
     /// № сертификата (партии) св. материала
     /// </summary>
     public string? WeldingMaterialBatchNumber { get; set; }
+    
+    public string? SequenceNumber { get; set; }
 
     /// <summary>
     /// Защитный газ
