@@ -49,4 +49,16 @@ public interface IProductAccountRepository
         List<string> sequenceNumbers,
         int amountFromPlan
     );
+    
+    Task<ProductAccountDto> ChangeEndWeldingDateAsync(
+        Guid productAccountId,
+        DateTime? weldingEndDate
+    );
+    
+    Task<ProductAccountDto> ChangeDefectiveAmountAsync(
+        Guid productAccountId,
+        Guid inspectorId,
+        int defectiveAmount,
+        string? defectiveReason
+    );
 }

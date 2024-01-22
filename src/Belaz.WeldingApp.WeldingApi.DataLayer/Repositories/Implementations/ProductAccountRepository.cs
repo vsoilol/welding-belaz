@@ -472,15 +472,39 @@ public class ProductAccountRepository : IProductAccountRepository
 
         foreach (var seamAccount in seamAccounts)
         {
-            weldingTasks.Add(
-                new WeldingTask
+            var sequenceNumbers = seamAccount.ProductAccount.SequenceNumbers;
+
+            if (sequenceNumbers == null || !sequenceNumbers.Any())
+            {
+                continue;
+            }
+
+            var plannedStartDate = seamAccount.ProductAccount.DateFromPlan;
+            var productIdentifier = seamAccount.ProductAccount.ProductId;
+
+            var existingWeldingTasks = await _context.WeldingTasks
+                .Where(weldingTask => sequenceNumbers.Contains(weldingTask.SequenceNumber)
+                                      && weldingTask.TaskStatus != WeldingTaskStatus.Completed
+                                      && weldingTask.SeamAccount.ProductAccount.ProductId == productIdentifier
+                                      && plannedStartDate > weldingTask.WeldingDate.Date
+                                      && plannedStartDate <= weldingTask.SeamAccount.ProductAccount.EndDateFromPlan)
+                .Select(weldingTask => weldingTask.SequenceNumber)
+                .ToListAsync();
+
+            var sequenceNumbersWithoutWeldingTask = sequenceNumbers.Except(existingWeldingTasks);
+
+            foreach (var sequenceNumber in sequenceNumbersWithoutWeldingTask)
+            {
+                var newWeldingTask = new WeldingTask
                 {
                     WeldingDate = date,
                     Master = master,
                     Inspector = seamAccount.Seam.Inspector,
-                    SeamAccount = seamAccount
-                }
-            );
+                    SeamAccount = seamAccount,
+                    SequenceNumber = sequenceNumber
+                };
+                weldingTasks.Add(newWeldingTask);
+            }
         }
 
         _context.WeldingTasks.AddRange(weldingTasks);
@@ -557,6 +581,77 @@ public class ProductAccountRepository : IProductAccountRepository
 
         await _context.SaveChangesAsync();
 
+        return await GetByIdAsync(productAccountId);
+    }
+
+    public async Task<ProductAccountDto> ChangeEndWeldingDateAsync(Guid productAccountId, DateTime? weldingEndDate)
+    {
+        var productAccount = (await _context.ProductAccounts
+            .FirstOrDefaultAsync(_ => _.Id == productAccountId))!;
+
+        productAccount.EndDateFromPlan = weldingEndDate;
+
+        await _context.SaveChangesAsync();
+
+        return await GetByIdAsync(productAccountId);
+    }
+
+    public async Task<ProductAccountDto> ChangeDefectiveAmountAsync(
+        Guid productAccountId,
+        Guid inspectorId,
+        int defectiveAmount,
+        string? defectiveReason
+    )
+    {
+        var inspector = (await _context.Inspectors.FirstOrDefaultAsync(_ => _.Id == inspectorId))!;
+
+        var productAccount = (
+            await _context.ProductAccounts
+                .Include(_ => _.ProductResults)
+                .FirstOrDefaultAsync(_ => _.Id == productAccountId)
+        )!;
+
+        var weldingTasks = _context.WeldingTasks
+            .Where(_ => _.SeamAccount.ProductAccountId == productAccountId);
+
+        await weldingTasks.ForEachAsync(_ => { _.InspectorId = inspector.Id; });
+
+        var productResultAccept = productAccount.ProductResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Accept
+        )!;
+        var productResultDefective = productAccount.ProductResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Defective
+        )!;
+        var productResultManufactured = productAccount.ProductResults.FirstOrDefault(
+            _ => _.Status == ResultProductStatus.Manufactured
+        )!;
+
+        productResultDefective.Amount = defectiveAmount;
+        productResultAccept.Amount =
+            productResultManufactured.Amount > defectiveAmount
+                ? productResultManufactured.Amount - defectiveAmount
+                : 0;
+        productResultDefective.Reason = defectiveReason;
+
+        var seamAccounts = await _context.SeamAccounts
+            .Include(_ => _.SeamResults)
+            .Where(_ => _.ProductAccountId == productAccountId)
+            .ToListAsync();
+
+        foreach (var seamAccount in seamAccounts)
+        {
+            var seamResultAccept = seamAccount.SeamResults.FirstOrDefault(
+                _ => _.Status == ResultProductStatus.Accept
+            )!;
+            var seamResultDefective = seamAccount.SeamResults.FirstOrDefault(
+                _ => _.Status == ResultProductStatus.Defective
+            )!;
+
+            seamResultDefective.Amount = defectiveAmount;
+            seamResultAccept.Amount = productResultAccept.Amount;
+        }
+
+        await _context.SaveChangesAsync();
         return await GetByIdAsync(productAccountId);
     }
 

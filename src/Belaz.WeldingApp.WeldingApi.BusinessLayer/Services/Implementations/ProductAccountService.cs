@@ -259,4 +259,32 @@ public class ProductAccountService : IProductAccountService
             .EditProductAccountAsync(request.ProductAccountId,
                 request.SequenceNumbers, request.AmountFromPlan);
     }
+
+    public async Task<Result<ProductAccountDto>> ChangeEndWeldingDateAsync(ChangeEndWeldingDateRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<ProductAccountDto>(validationResult.Exception);
+        }
+
+        return await _productAccountRepository
+            .ChangeEndWeldingDateAsync(request.ProductAccountId, 
+                request.WeldingEndDate?.ToDateTime() ?? null);
+    }
+
+    public async Task<Result<ProductAccountDto>> ChangeDefectiveAmountAsync(ChangeDefectiveAmountRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<ProductAccountDto>(validationResult.Exception);
+        }
+
+        return await _productAccountRepository
+            .ChangeDefectiveAmountAsync(request.ProductAccountId,
+                request.InspectorId, request.DefectiveAmount, request.DefectiveReason);
+    }
 }
