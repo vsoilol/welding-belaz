@@ -57,4 +57,6 @@ public interface IProductAccountService
     Task<Result<ProductAccountDto>> ChangeEndWeldingDateAsync(ChangeEndWeldingDateRequest request);
 
     Task<Result<ProductAccountDto>> ChangeDefectiveAmountAsync(ChangeDefectiveAmountRequest request);
+
+    Task<Result<List<ProductTaskDto>>> GetAllProductAccountTasksAsync();
 }

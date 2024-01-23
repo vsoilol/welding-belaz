@@ -34,4 +34,6 @@ public interface IProductRepository
     Task AssignProductsToInspectorAsync(List<Guid> productIds, Guid inspectorId);
 
     Task DeleteAsync(Guid id);
+
+    Task<ProductStructureDto> FetchProductStructureAsync(Guid mainProductId);
 }

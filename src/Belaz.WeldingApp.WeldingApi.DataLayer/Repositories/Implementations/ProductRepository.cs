@@ -13,11 +13,13 @@ public class ProductRepository : IProductRepository
 {
     private readonly ApplicationContext _context;
     private readonly IMapper _mapper;
+    private readonly IExtensionRepository _extensionRepository;
 
-    public ProductRepository(ApplicationContext context, IMapper mapper)
+    public ProductRepository(ApplicationContext context, IMapper mapper, IExtensionRepository extensionRepository)
     {
         _context = context;
         _mapper = mapper;
+        _extensionRepository = extensionRepository;
     }
 
     public Task<List<ProductDto>> GetAllByControlSubjectAsync(
@@ -92,7 +94,7 @@ public class ProductRepository : IProductRepository
     {
         var mainProduct = await _context.Products
             .Where(_ => _.Id == mainProductId)
-            .Select(_ => new ProductInside { MainProduct = _ })
+            .Select(_ => new ProductInside {MainProduct = _})
             .FirstOrDefaultAsync();
 
         entity.ProductMain = mainProduct;
@@ -113,7 +115,7 @@ public class ProductRepository : IProductRepository
 
         var mainProduct = await _context.Products
             .Where(_ => _.Id == mainProductId)
-            .Select(_ => new ProductInside { MainProduct = _ })
+            .Select(_ => new ProductInside {MainProduct = _})
             .FirstOrDefaultAsync();
 
         updatedProduct.Name = entity.Name;
@@ -186,6 +188,22 @@ public class ProductRepository : IProductRepository
 
         _context.Products.Remove(deletedProduct);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<ProductStructureDto> FetchProductStructureAsync(Guid mainProductId)
+    {
+        var productInsideIds = await _context.ProductInsides
+            .ProjectTo<ProductInsideOnlyIdDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        var products = await _context.Products
+            .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        var productStructure = _extensionRepository
+            .GetProductStructureByMainProductId(mainProductId, productInsideIds, products);
+
+        return productStructure;
     }
 
     private IQueryable<Product> GetProductsWithIncludesByFilter(

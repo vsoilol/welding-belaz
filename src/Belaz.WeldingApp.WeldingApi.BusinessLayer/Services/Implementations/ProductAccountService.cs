@@ -1,9 +1,15 @@
+using AutoMapper;
+using Belaz.WeldingApp.Common.Entities.ProductInfo;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.Common;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.ProductAccount;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using LanguageExt;
 using LanguageExt.Common;
@@ -15,14 +21,22 @@ public class ProductAccountService : IProductAccountService
     private readonly IValidationService _validationService;
 
     private readonly IProductAccountRepository _productAccountRepository;
+    private readonly IWeldingTaskRepository _weldingTaskRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IMapper _mapper;
 
     public ProductAccountService(
         IValidationService validationService,
-        IProductAccountRepository productAccountRepository
-    )
+        IProductAccountRepository productAccountRepository,
+        IWeldingTaskRepository weldingTaskRepository,
+        IProductRepository productRepository,
+        IMapper mapper)
     {
         _validationService = validationService;
         _productAccountRepository = productAccountRepository;
+        _weldingTaskRepository = weldingTaskRepository;
+        _productRepository = productRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<Unit>> AssignProductAccountToWeldingEquipmentsAsync(
@@ -270,7 +284,7 @@ public class ProductAccountService : IProductAccountService
         }
 
         return await _productAccountRepository
-            .ChangeEndWeldingDateAsync(request.ProductAccountId, 
+            .ChangeEndWeldingDateAsync(request.ProductAccountId,
                 request.WeldingEndDate?.ToDateTime() ?? null);
     }
 
@@ -286,5 +300,79 @@ public class ProductAccountService : IProductAccountService
         return await _productAccountRepository
             .ChangeDefectiveAmountAsync(request.ProductAccountId,
                 request.InspectorId, request.DefectiveAmount, request.DefectiveReason);
+    }
+
+    public async Task<Result<List<ProductTaskDto>>> GetAllProductAccountTasksAsync()
+    {
+        var weldingTasks = await _weldingTaskRepository.GetAllWeldingTasksWithRelatedEntitiesAsync();
+
+        var groupedWeldingTasks = weldingTasks.GroupBy(task => new
+        {
+            task.SequenceNumber, task.SeamAccount.ProductAccountId
+        }).ToList();
+
+        var productTasks = new List<ProductTaskDto>();
+
+        for (var i = 0; i < groupedWeldingTasks.Count; i++)
+        {
+            var group = groupedWeldingTasks[i];
+            var firstTaskInGroup = group.First();
+            var productAccount = firstTaskInGroup.SeamAccount.ProductAccount;
+            var seamNumbers = group.Select(task => task.SeamAccount.Seam.Number);
+
+            var productStructure = await _productRepository.FetchProductStructureAsync(productAccount.ProductId);
+
+            var productTask = MapToProductTaskDto(group, productAccount, productStructure, seamNumbers, i + 1);
+            productTasks.Add(productTask);
+        }
+
+        return productTasks.OrderByDescending(task => task.TaskNumber).ToList();
+    }
+    
+    private ProductTaskDto MapToProductTaskDto(
+        IGrouping<dynamic, WeldingTask> group, 
+        ProductAccount productAccount, 
+        ProductStructureDto productStructure, 
+        IEnumerable<string> seamNumbers,
+        int taskNumber)
+    {
+        return new ProductTaskDto
+        {
+            TaskNumber = taskNumber,
+            PlannedQuantity = productAccount.AmountFromPlan,
+            ProductAccountId = productAccount.Id,
+            IsComplete = group.All(task => task.TaskStatus == WeldingTaskStatus.Completed),
+            SequenceNumbers = group.Key.SequenceNumber,
+            Product = productStructure.Product,
+            Knot = productStructure.Knot,
+            Detail = productStructure.Detail,
+            PlannedStartDate = productAccount.DateFromPlan.ToDayInfoString(),
+            PlannedEndDate = productAccount.EndDateFromPlan?.ToDayInfoString(),
+            SeamNumbers = seamNumbers.ToList(),
+            WeldingEquipments = _mapper.Map<List<WeldingEquipmentBriefDto>>(productAccount.WeldingEquipments),
+            AcceptedAmount = CalculateResultAmount(productAccount, ResultProductStatus.Accept),
+            ManufacturedAmount = CalculateResultAmount(productAccount, ResultProductStatus.Manufactured),
+            DefectiveAmount = CalculateResultAmount(productAccount, ResultProductStatus.Defective),
+            DefectiveReason = GetDefectiveReason(productAccount),
+            HasDeviations = group.Any(task => HasDeviation(task))
+        };
+    }
+    
+    private int CalculateResultAmount(ProductAccount account, ResultProductStatus status)
+    {
+        return account.ProductResults.Where(result => result.Status == status).Sum(result => result.Amount);
+    }
+
+    private string? GetDefectiveReason(ProductAccount account)
+    {
+        return account.ProductResults.FirstOrDefault(result => result.Status == ResultProductStatus.Defective)?.Reason;
+    }
+
+    private bool HasDeviation(WeldingTask task)
+    {
+        return task.WeldPassages.Any(passage =>
+            (!passage.IsEnsuringCurrentAllowance.HasValue || !passage.IsEnsuringCurrentAllowance.Value)
+            || passage.IsEnsuringTemperatureAllowance.HasValue && passage.IsEnsuringTemperatureAllowance.Value
+            || passage.IsEnsuringVoltageAllowance.HasValue && passage.IsEnsuringVoltageAllowance.Value);
     }
 }

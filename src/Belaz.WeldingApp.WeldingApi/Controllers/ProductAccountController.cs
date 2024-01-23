@@ -202,4 +202,12 @@ public class ProductAccountController : ControllerBase
         var result = await _productAccountService.ChangeEndWeldingDateAsync(request);
         return result.ToOk();
     }
+
+    [HttpGet("tasks")]
+    [ProducesResponseType(typeof(List<ProductTaskDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductTaskDto>>> GetAllProductAccountTasksAsync()
+    {
+        var result = await _productAccountService.GetAllProductAccountTasksAsync();
+        return result.ToOk();
+    }
 }

@@ -1,12 +1,12 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
-using Belaz.WeldingApp.Common.Entities.TaskInfo;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
 
@@ -213,6 +213,18 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             WeldingMaterial = weldingMaterial,
             WeldingMaterialBatchNumber = weldingMaterialBatchNumber
         };
+    }
+
+    public Task<List<WeldingTask>> GetAllWeldingTasksWithRelatedEntitiesAsync()
+    {
+        return _context.WeldingTasks
+            .Where(_ => _.SequenceNumber != null)
+            .OrderBy(_ => _.Number)
+            .Include(_ => _.SeamAccount.ProductAccount.WeldingEquipments)
+            .Include(_ => _.SeamAccount.Seam)
+            .Include(_ => _.SeamAccount.ProductAccount.ProductResults)
+            .Include(_ => _.WeldPassages)
+            .ToListAsync();
     }
 
     private IQueryable<WeldingTask> GetWeldingTasksWithIncludesByFilter(

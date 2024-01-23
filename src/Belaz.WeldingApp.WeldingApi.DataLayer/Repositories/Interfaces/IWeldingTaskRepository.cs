@@ -1,6 +1,6 @@
-﻿using Belaz.WeldingApp.Common.Enums;
+﻿using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
-using Belaz.WeldingApp.Common.Entities.TaskInfo;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 
@@ -28,4 +28,6 @@ public interface IWeldingTaskRepository
 
     Task<WeldingMaterialInfoDto> UpdateWeldingMaterialInfoByDateAsync(DateTime date, string? weldingMaterial,
         string? weldingMaterialBatchNumber);
+
+    Task<List<WeldingTask>> GetAllWeldingTasksWithRelatedEntitiesAsync();
 }
