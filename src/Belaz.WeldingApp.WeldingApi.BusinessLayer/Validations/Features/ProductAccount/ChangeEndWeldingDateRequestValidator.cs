@@ -26,7 +26,7 @@ public class ChangeEndWeldingDateRequestValidator : AbstractValidator<ChangeEndW
                 RuleFor(model => model.WeldingEndDate!)
                     .Cascade(CascadeMode.Stop)
                     .SetValidator(new DateValidatorFor<ChangeEndWeldingDateRequest>())
-                    .SetAsyncValidator(new EndDateAfterStartDateValidator(context));
+                    .SetAsyncValidator(new WeldingDateValidator(context));
             }
         );
     }
