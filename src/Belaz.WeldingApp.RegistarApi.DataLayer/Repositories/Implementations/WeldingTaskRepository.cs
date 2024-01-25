@@ -48,6 +48,8 @@ public class WeldingTaskRepository : IWeldingTaskRepository
                     )
                 )
                 && task.WeldingDate.Date.Equals(date.Date)
+                && task.SeamAccount.Seam.TechnologicalInstruction != null
+                && task.SeamAccount.Seam.Product.TechnologicalProcess != null
         );
 
         var tasks = await tasksQuery
