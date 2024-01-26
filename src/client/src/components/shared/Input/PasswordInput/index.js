@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { ReactComponent as LockIcon } from 'assets/icons/password.svg';
-import { ReactComponent as ShowIcon } from 'assets/icons/hide.svg';
-import { ReactComponent as HideIcon } from 'assets/icons/show.svg';
-import DefaultInput from '../DefaultInput';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { ReactComponent as LockIcon } from "assets/icons/password.svg";
+import { ReactComponent as ShowIcon } from "assets/icons/hide.svg";
+import { ReactComponent as HideIcon } from "assets/icons/show.svg";
+import DefaultInput from "../DefaultInput";
 
-import styles from './style.module.css';
+import styles from "./style.module.scss";
 
 const PasswordInput = ({ width, ...props }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +13,7 @@ const PasswordInput = ({ width, ...props }) => {
   return (
     <div className={styles.wrapper} style={{ width }}>
       <LockIcon
-        style={{ width: '15px', pointerEvents: 'none' }}
+        style={{ width: "15px", pointerEvents: "none" }}
         className={styles.icon}
       />
 
@@ -21,20 +21,23 @@ const PasswordInput = ({ width, ...props }) => {
         width={width}
         {...props}
         className={styles.padding}
-        type={showPassword ? 'text' : 'password'}
+        type={showPassword ? "text" : "password"}
       />
 
-      <div className={styles.eyeIcon} onClick={() => setShowPassword(!showPassword)}>
+      <div
+        className={styles.eyeIcon}
+        onClick={() => setShowPassword(!showPassword)}
+      >
         {showPassword ? (
           <HideIcon
             style={{
-              pointerEvents: 'none',
+              pointerEvents: "none",
             }}
           />
         ) : (
           <ShowIcon
             style={{
-              pointerEvents: 'none',
+              pointerEvents: "none",
             }}
           />
         )}
@@ -48,7 +51,7 @@ PasswordInput.propTypes = {
 };
 
 PasswordInput.defaultProps = {
-  width: '350px',
+  width: "350px",
 };
 
 export default PasswordInput;

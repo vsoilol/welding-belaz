@@ -2,7 +2,7 @@
 import { GLOBALS } from "config/GLOBALS";
 import PropTypes from "prop-types";
 import React from "react";
-import styles from "./style.module.css";
+import styles from "./style.module.scss";
 
 const styleTypes = {
   text: styles.text,

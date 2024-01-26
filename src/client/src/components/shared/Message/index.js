@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 // import { ReactComponent as Close } from 'assets/icons/close.png';
 
 import { GLOBALS } from "config/GLOBALS";
-import styles from "./style.module.css";
+import styles from "./style.module.scss";
 
 const Message = ({ type, text, timeout, onClose, left }) => {
   setTimeout(() => {

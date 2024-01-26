@@ -4,26 +4,25 @@ import { closeIcon } from "assets/icons";
 import { logo } from "assets/logos";
 import { GLOBALS } from "config/GLOBALS";
 import TabletContext from "context/TabletContext";
-import Text from 'components/shared/Text';
+import Text from "components/shared/Text";
 import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import BurgerMenu from "../BurgerMenu";
 import ProfileButton from "../ProfileButton";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
-export const Header = ({
-  userRole
-}) => {
+export const Header = ({ userRole }) => {
   const isTablet = useContext(TabletContext);
   const [isMobileMenuOpened, setIsMobileMenuOpened] = useState(false);
-  
-  console.log(userRole)
 
   const menuItems = [
     { name: "Сотрудники", route: "/" },
     { name: "Оборудование", route: "/equipment" },
     { name: "Производство", route: "/production" },
-    { name: "Технологические процессы сборки и сварки", route: "/tex-proc-welding" },
+    {
+      name: "Технологические процессы сборки и сварки",
+      route: "/tex-proc-welding",
+    },
     { name: "Записи", route: "/records" },
     { name: "Режимы сварки", route: "/welding-modes" },
     /* (userRole === "Admin" || userRole === "Master" || userRole === "Chief" || userRole === "PlantManager") 
@@ -31,8 +30,10 @@ export const Header = ({
     { name: "Календарь", route: "/proiz-calendar" },
     { name: "Задания", route: "/tasks" },
     { name: "Отчеты", route: "/reports" },
-    (userRole === "Admin") && { name: "Панель администратора", route: "/creates-user" },
-    
+    userRole === "Admin" && {
+      name: "Панель администратора",
+      route: "/creates-user",
+    },
   ].filter(Boolean);
 
   const renderHeaderButtons = () => {
@@ -84,9 +85,13 @@ export const Header = ({
               className={styles.burgerMenuIcon}
             />
           ))}
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <img src={logo} className={styles.logo} alt="" />
-          {!isTablet && <Text type='p2' style={{ height: 20}}>Белорусско-Российский университет</Text>}
+          {!isTablet && (
+            <Text type="p2" style={{ height: 20 }}>
+              Белорусско-Российский университет
+            </Text>
+          )}
         </div>
 
         <div className={styles.headerWrapper}>

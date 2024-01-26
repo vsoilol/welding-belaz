@@ -9,7 +9,7 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import api from "services/api";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import errorActions from "store/error/actions";
 import { useDispatch } from "react-redux";
 
@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Calendars from "../Calendar/Calendar";
-import "../Calendar/styleCalendar.css";
+import "../Calendar/styleCalendar.scss";
 import imgSmena from "assets/icons/Smena.png";
 import imgEdit from "assets/icons/pen.png";
 const {
@@ -425,7 +425,7 @@ export const Calendar = ({
 
 
 
-        <div class="calendar-wrapper">
+        <div className="calendar-wrapper">
           {executorObj
             ? <h2>Сварщик: {executorObj.middleName} {executorObj.firstName} {executorObj.lastName}</h2>
             : <h2>Оборудование: {equipmentObj.name} №{equipmentObj.factoryNumber}</h2>
@@ -521,7 +521,7 @@ export const Calendar = ({
                     onFocus={(e) => {
                       e.currentTarget.type = "date";
                     }}
-                    autocomplete="off"
+                    autoComplete="off"
                     onBlur={handleBlur}
                   />
                 </div>
@@ -644,7 +644,7 @@ export const Calendar = ({
                     onFocus={(e) => {
                       e.currentTarget.type = "date";
                     }}
-                    autocomplete="off"
+                    autoComplete="off"
                     onBlur={handleBlur}
                   />
                 </div>
@@ -710,7 +710,7 @@ export const Calendar = ({
                     onFocus={(e) => {
                       e.currentTarget.type = "date";
                     }}
-                    autocomplete="off"
+                    autoComplete="off"
                     onBlur={handleBlur}
                   />
                 </div>
@@ -787,7 +787,7 @@ export const Calendar = ({
                           name="shiftNumb"
                           placeholder="Номер смены"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
 
                       </div>
@@ -802,7 +802,7 @@ export const Calendar = ({
                           name="shiftStart"
                           placeholder="Начало работы"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
 
                         <Input
@@ -815,7 +815,7 @@ export const Calendar = ({
                           name="shiftEnd"
                           placeholder="Конец работы"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
                       </div>
                       <div className={styles.row}>
@@ -829,7 +829,7 @@ export const Calendar = ({
                           name="breakStart"
                           placeholder="Начало перерыва"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
 
                         <Input
@@ -842,7 +842,7 @@ export const Calendar = ({
                           name="breakEnd"
                           placeholder="Конец перерыва"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
                       </div>
                       <div className={styles.row}>
@@ -916,7 +916,7 @@ export const Calendar = ({
                           name="shiftNumb"
                           placeholder="Номер смены"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
 
                       </div>
@@ -931,7 +931,7 @@ export const Calendar = ({
                           name="shiftStart"
                           placeholder="Начало работы"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
 
                         <Input
@@ -944,7 +944,7 @@ export const Calendar = ({
                           name="shiftEnd"
                           placeholder="Конец работы"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
                       </div>
                       <div className={styles.row}>
@@ -958,7 +958,7 @@ export const Calendar = ({
                           name="breakStart"
                           placeholder="Начало перерыва"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
 
                         <Input
@@ -971,7 +971,7 @@ export const Calendar = ({
                           name="breakEnd"
                           placeholder="Конец перерыва"
                           onBlur={handleBlur}
-                          autocomplete="off"
+                          autoComplete="off"
                         />
                       </div>
                       <div className={styles.row}>

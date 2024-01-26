@@ -18,23 +18,18 @@ import { Table } from "components/shared/Table";
 import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import styles from "components/WorkPlace/styles.module.css";
- 
+import styles from "components/WorkPlace/styles.module.scss";
 
 import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import api from "services/api";
 
-
-
-
 const dateOptions = {
   day: "numeric",
   month: "short",
   year: "numeric",
 };
-
 
 export const Workshop = ({
   workshop,
@@ -48,14 +43,11 @@ export const Workshop = ({
   userRole,
   indPanel,
 
-
-
   addWorkshop,
   editWorkshop,
   deleteProduct,
-  deleteIcon
+  deleteIcon,
 }) => {
-
   const [modalData, setModalData] = useState(null);
   const [isModalNumb, setIsModalNumb] = useState(0);
   const [value_goToTitle, setValuegoToTitle] = useState("");
@@ -64,37 +56,29 @@ export const Workshop = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   ///дописываю для чего просматриваем закрепленные объекты
   const [isDisplayFixed, setDisplayFixed] = useState("");
-
-
 
   /////Удоление
   const [deleteProdModal, setdeleteProdModal] = useState(false);
   const [idProduct, setidProduct] = useState("");
 
-
   const initialValues = {
     name: modalData?.name ?? "",
     number: modalData?.number ?? "",
     id: modalData?.id ?? "",
-
   };
-
 
   //Запрос на редактирование или добавление
   function SendData(variables) {
-
-    //Добавить Цех 
+    //Добавить Цех
     if (isModalNumb == 8) {
-      addWorkshop(variables)
+      addWorkshop(variables);
     }
     //Редактировать Цех
     if (isModalNumb == 0) {
-      editWorkshop(variables)
+      editWorkshop(variables);
     }
-
   }
 
   const columns = {
@@ -107,11 +91,11 @@ export const Workshop = ({
             src={deleteIcon}
             onClick={() => {
               setdeleteProdModal(true);
-            setidProduct(rowData?.id)
+              setidProduct(rowData?.id);
             }}
           />
         ),
-      }, 
+      },
       {
         title: "Наименование цеха",
         field: "name",
@@ -124,22 +108,32 @@ export const Workshop = ({
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{DetArea(rowData?.id, "name") ?? "-"}</span>
+          return <span>{DetArea(rowData?.id, "name") ?? "-"}</span>;
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{DetArea(rowData?.id, "numb") ?? "-"}</span>
+          return <span>{DetArea(rowData?.id, "numb") ?? "-"}</span>;
         },
       },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(1, "Производственные участки", rowData?.id); setDisplayFixed(rowData?.name) }}>Производственный участок</p>;
+          return (
+            <p
+              className={styles.goOver}
+              onClick={(e) => {
+                GoTo(1, "Производственные участки", rowData?.id);
+                setDisplayFixed(rowData?.name);
+              }}
+            >
+              Производственный участок
+            </p>
+          );
         },
       },
-    ].filter(column => column),
+    ].filter((column) => column),
     production_sites: [
       {
         title: "Наименование производственного участка ",
@@ -152,25 +146,40 @@ export const Workshop = ({
       {
         title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>
+          return <span>{rowData?.workshop.name ?? "-"}</span>;
         },
       },
       {
         title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>
+          return <span>{rowData?.workshop.number ?? "-"}</span>;
         },
       },
       {
         title: "Перерейти к",
         render: (rowData) => {
-
           return (
             <div>
-              <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id); setDisplayFixed(rowData?.name) }}>Пост</p>
-              <p className={styles.goOver} onClick={e => { GoTo(3, "Рабочее место", rowData?.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>
+              <p
+                className={styles.goOver}
+                onClick={(e) => {
+                  GoTo(2, "Посты", rowData?.id);
+                  setDisplayFixed(rowData?.name);
+                }}
+              >
+                Пост
+              </p>
+              <p
+                className={styles.goOver}
+                onClick={(e) => {
+                  GoTo(3, "Рабочее место", rowData?.id);
+                  setDisplayFixed(rowData?.name);
+                }}
+              >
+                Рабочее место
+              </p>
             </div>
-          )
+          );
 
           // return <p className={styles.goOver} onClick={e => { GoTo(2, "Посты", rowData?.id) }}>Пост</p>;
         },
@@ -191,32 +200,42 @@ export const Workshop = ({
       {
         title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>
+          return <span>{rowData?.workshop.name ?? "-"}</span>;
         },
       },
       {
         title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>
+          return <span>{rowData?.workshop.number ?? "-"}</span>;
         },
       },
 
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.name ?? "-"}</span>
+          return <span>{rowData?.productionArea.name ?? "-"}</span>;
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.number ?? "-"}</span>
+          return <span>{rowData?.productionArea.number ?? "-"}</span>;
         },
       },
       {
         title: "Перерейти к",
         render: (rowData) => {
-          return <p className={styles.goOver} onClick={e => { GoTo(9, "Рабочие места", rowData?.id); setDisplayFixed(rowData?.name) }}>Рабочее место</p>;
+          return (
+            <p
+              className={styles.goOver}
+              onClick={(e) => {
+                GoTo(9, "Рабочие места", rowData?.id);
+                setDisplayFixed(rowData?.name);
+              }}
+            >
+              Рабочее место
+            </p>
+          );
         },
       },
     ],
@@ -234,136 +253,128 @@ export const Workshop = ({
       {
         title: "Наименование цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>
+          return <span>{rowData?.workshop.name ?? "-"}</span>;
         },
       },
       {
         title: "Номер  цеха ",
         render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>
+          return <span>{rowData?.workshop.number ?? "-"}</span>;
         },
       },
 
       {
         title: "Наименование производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.name ?? "-"}</span>
+          return <span>{rowData?.productionArea.name ?? "-"}</span>;
         },
       },
       {
         title: "Номер  производственного участка ",
         render: (rowData) => {
-          return <span>{rowData?.productionArea.number ?? "-"}</span>
+          return <span>{rowData?.productionArea.number ?? "-"}</span>;
         },
       },
-
 
       {
         title: "Наименование поста",
         render: (rowData) => {
-          return <span>{rowData?.post?.name ?? "-"}</span>
+          return <span>{rowData?.post?.name ?? "-"}</span>;
         },
       },
       {
         title: "Номер  поста",
         render: (rowData) => {
-          return <span>{rowData?.post?.number ?? "-"}</span>
+          return <span>{rowData?.post?.number ?? "-"}</span>;
         },
       },
     ],
   };
 
-
-  const [value_goToHeadTable, setValuegoToHeadTable] = useState(columns.workshops);
+  const [value_goToHeadTable, setValuegoToHeadTable] = useState(
+    columns.workshops
+  );
   const [value_goTo, setValuegoTo] = useState(0);
-
 
   ///Изменение заголовка модалки
   function TitleTextModal(params) {
     if (params === 0) {
-      return "Редактировать Цех"
+      return "Редактировать Цех";
     }
 
     if (params === 8) {
-      return "Добавить Цех"
+      return "Добавить Цех";
     }
   }
-
-
-
 
   function DetArea(params, field) {
     if (field === "name") {
       for (let index = 0; index < area?.length; index++) {
         if (area[index].workshop.id === params) {
-          return area[index].name
+          return area[index].name;
         }
       }
     }
     if (field === "numb") {
       for (let index = 0; index < area?.length; index++) {
         if (area[index].workshop.id === params) {
-          return area[index].number
+          return area[index].number;
         }
       }
     }
   }
 
-
-
-  ///Перейти к 
+  ///Перейти к
   function GoTo(param, title, id) {
-    setValuegoToTitle(title)
-    setValuegoTo(1)
+    setValuegoToTitle(title);
+    setValuegoTo(1);
 
-
-    setValuegoToHeadTable(columns[Object.keys(columns)[param]])
+    setValuegoToHeadTable(columns[Object.keys(columns)[param]]);
 
     //Вывод Производственный участок для цеха
     if (param === 1) {
-      let areaNew = []
+      let areaNew = [];
       for (let index = 0; index < area.length; index++) {
         if (area[index].workshop.id === id) {
-          areaNew.push(area[index])
+          areaNew.push(area[index]);
         }
       }
-      setValuegoToBodyTable(areaNew)
+      setValuegoToBodyTable(areaNew);
     }
     //Вывод постов для Производственных участоков
     if (param === 2) {
-      let postsNew = []
+      let postsNew = [];
       for (let index = 0; index < posts.length; index++) {
         if (posts[index].productionArea.id === id) {
-          postsNew.push(posts[index])
+          postsNew.push(posts[index]);
         }
       }
-      setValuegoToBodyTable(postsNew)
+      setValuegoToBodyTable(postsNew);
     }
-    //Вывод Рабочее место для производственного участка 
+    //Вывод Рабочее место для производственного участка
     if (param === 3) {
-      let workplaceNew = []
+      let workplaceNew = [];
       for (let index = 0; index < workplace.length; index++) {
         if (workplace[index].productionArea?.id === id) {
-          workplaceNew.push(workplace[index])
+          workplaceNew.push(workplace[index]);
         }
       }
-      setValuegoToBodyTable(workplaceNew)
+      setValuegoToBodyTable(workplaceNew);
     }
-    //Вывод Рабочее место для производственного участка 
+    //Вывод Рабочее место для производственного участка
     if (param === 9) {
-      let workplaceNew = []
+      let workplaceNew = [];
       for (let index = 0; index < workplace.length; index++) {
         if (workplace[index].post?.id != undefined) {
           if (workplace[index].post.id === id) {
-            workplaceNew.push(workplace[index])
+            workplaceNew.push(workplace[index]);
           }
         }
       }
-      setValuegoToBodyTable(workplaceNew)
-      setValuegoToHeadTable(columns[Object.keys(columns)[3]])
+      setValuegoToBodyTable(workplaceNew);
+      setValuegoToHeadTable(columns[Object.keys(columns)[3]]);
     }
     /////////////////
-    
   }
 
   const TabPanel = (props_panel) => {
@@ -374,47 +385,42 @@ export const Workshop = ({
   ////////////////////////////////////////////////////////////////////
   return (
     <div className={styles.innerWrapper}>
-
       <div className={styles.tableWrapper}>
-
-        {value_goTo === 1
-          ? (
-            <div className="TableToGo">
-              {/*Перейти к */}
-              <TabPanel
-                value={value_goTo}
-                indPanel={value_goTo}
-                style={{ minWidth: "800px" }}
-              >
-                <Table
-                  title={isDisplayFixed + " - " + value_goToTitle}
-                  columns={value_goToHeadTable}
-                  data={value_goToBodyTable}
-                />
-              </TabPanel>
-            </div>
-          )
-          : (
+        {value_goTo === 1 ? (
+          <div className="TableToGo">
+            {/*Перейти к */}
             <TabPanel
+              value={value_goTo}
+              indPanel={value_goTo}
               style={{ minWidth: "800px" }}
             >
               <Table
-                title="Цеха"
-                columns={columns.workshops}
-                data={workshop}
-                actions={
-                  userRole === "Admin" || userRole === "Technologist"
-                    ? [
+                title={isDisplayFixed + " - " + value_goToTitle}
+                columns={value_goToHeadTable}
+                data={value_goToBodyTable}
+              />
+            </TabPanel>
+          </div>
+        ) : (
+          <TabPanel style={{ minWidth: "800px" }}>
+            <Table
+              title="Цеха"
+              columns={columns.workshops}
+              data={workshop}
+              actions={
+                userRole === "Admin" || userRole === "Technologist"
+                  ? [
                       {
                         icon: "add",
                         tooltip: "Добавить цех",
                         isFreeAction: true,
                         onClick: () => {
                           setIsModalOpen(true);
-                          setIsModalNumb(8)
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно добавления цеха "
-                          }) 
+                          setIsModalNumb(8);
+                          api.post(`/eventLog`, {
+                            information:
+                              "Открыл модальное окно добавления цеха ",
+                          });
                         },
                       },
                       {
@@ -424,25 +430,18 @@ export const Workshop = ({
                           setModalData(rowData);
                           setIsModalOpen(true);
                           setIsModalNumb(0);
-                          api.post(`/eventLog`,{
-                            "information": "Открыл модальное окно редактирования цеха "
-                          }) 
+                          api.post(`/eventLog`, {
+                            information:
+                              "Открыл модальное окно редактирования цеха ",
+                          });
                         },
                       },
                     ]
-                    : []
-                }
-              />
-            </TabPanel>
-          )
-
-        }
-
-
-
-
-
-
+                  : []
+              }
+            />
+          </TabPanel>
+        )}
 
         <ModalWindow
           isOpen={isModalOpen}
@@ -459,7 +458,7 @@ export const Workshop = ({
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
               setIsModalOpen(false);
-              SendData(variables)
+              SendData(variables);
             }}
           >
             {({
@@ -480,7 +479,7 @@ export const Workshop = ({
                     name="name"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
                 <div className={styles.row}>
@@ -496,26 +495,21 @@ export const Workshop = ({
                     step="1"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
-
 
                 <div className={styles.row}>
                   <Button
                     type="submit"
-                    disabled={
-                      values.number == "" || values.name == ""
-                    }
+                    disabled={values.number == "" || values.name == ""}
                   >
                     {modalData ? "Сохранить" : "Создать"}
                   </Button>
                 </div>
               </form>
-
             )}
           </Formik>
-
         </ModalWindow>
 
         {/*Удаление задания*/}
@@ -523,7 +517,7 @@ export const Workshop = ({
           isOpen={deleteProdModal}
           headerText="Удаление"
           setIsOpen={(state) => {
-            setdeleteProdModal(false)
+            setdeleteProdModal(false);
           }}
           wrapperStyles={{ width: 420 }}
         >
@@ -532,8 +526,8 @@ export const Workshop = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              setdeleteProdModal(false)
-              deleteProduct({id:idProduct,index:0})
+              setdeleteProdModal(false);
+              deleteProduct({ id: idProduct, index: 0 });
             }}
           >
             {({
@@ -544,24 +538,19 @@ export const Workshop = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данный цех ? </h4>
+                  <h4 style={{ padding: "35px 40px" }}>
+                    Вы уверены что хотите <span>удалить</span> данный цех ?{" "}
+                  </h4>
 
                   <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
+                    <Button type="submit">Удалить</Button>
                   </div>
-
                 </div>
               </form>
             )}
           </Formik>
         </ModalWindow>
-
       </div>
     </div>
   );

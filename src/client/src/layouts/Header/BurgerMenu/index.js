@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
-const BurgerMenu = props => {
+const BurgerMenu = (props) => {
   const { renderHeaderButtons, isMobileMenuOpened } = props;
 
   useEffect(() => {
@@ -14,12 +14,13 @@ const BurgerMenu = props => {
 
   return (
     <div
-      className={`${styles.burgerMenuContainer} ${isMobileMenuOpened &&
-        styles.burgerMenuOpenedContainer}`}
+      className={`${styles.burgerMenuContainer} ${
+        isMobileMenuOpened && styles.burgerMenuOpenedContainer
+      }`}
     >
       <div
         className={[
-          isMobileMenuOpened ? styles.mobileMenuWrapper : undefined
+          isMobileMenuOpened ? styles.mobileMenuWrapper : undefined,
         ].join(" ")}
       >
         {renderHeaderButtons()}

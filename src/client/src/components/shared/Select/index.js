@@ -24,9 +24,11 @@ const DropdownIndicator = ({ selectProps }) => {
     />
   );
 };
+
 DropdownIndicator.propTypes = {
   selectProps: PropTypes.object.isRequired,
 };
+
 const CustomOption = (props) => {
   const { isSelected, label, innerProps } = props;
   return isSelected ? (
@@ -43,6 +45,7 @@ const CustomOption = (props) => {
     <components.Option {...props} />
   );
 };
+
 CustomOption.propTypes = {
   innerProps: PropTypes.object.isRequired,
   isSelected: PropTypes.bool.isRequired,
@@ -61,12 +64,14 @@ const ReactSelect = ({
   placeholder,
   isDisabled,
 }) => {
-  const getValue = Array.isArray(options) ? options.filter((option) => {
-    if (value instanceof Array) {
-      return value.includes(option.value);
-    }
-    return option.value === value;
-  }) : [];
+  const getValue = Array.isArray(options)
+    ? options.filter((option) => {
+        if (value instanceof Array) {
+          return value.includes(option.value);
+        }
+        return option.value === value;
+      })
+    : [];
 
   return (
     <Select

@@ -9,7 +9,7 @@ import { Table } from "components/shared/Table";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import TableCell from "@material-ui/core/TableCell";
-import styles from "../styles.module.css";
+import styles from "../styles.module.scss";
 import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
@@ -42,8 +42,7 @@ export const ExecutorsTable = ({
   workshop,
   area,
   workplace,
-  value
-
+  value,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -58,10 +57,8 @@ export const ExecutorsTable = ({
 
   const [valueWorkplace, setvalueWorkplace] = useState(0);
 
-
   /*newPassword */
   const [valuemodalPass, setvaluemodalPass] = useState(false);
-
 
   const classes = useStyles();
   const initialValues = {
@@ -85,8 +82,6 @@ export const ExecutorsTable = ({
     ],
   };
 
-
-   
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
   const [idExecutor, setidExecutor] = useState("");
   const requiredKeys = [
@@ -99,7 +94,7 @@ export const ExecutorsTable = ({
     "workplaceNumber",
   ];
   const controllerColumns = [
-    (userRole === "Admin" /* || userRole === "Master" */) && {
+    userRole === "Admin" /* || userRole === "Master" */ && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -141,13 +136,13 @@ export const ExecutorsTable = ({
     {
       title: "Наименование цеха",
       render: (rowData) => {
-        return (ReturnWorkshop(rowData?.productionArea?.id));
+        return ReturnWorkshop(rowData?.productionArea?.id);
       },
     },
     {
       title: "Номер цеха",
       render: (rowData) => {
-        return (ReturnWorkshopNumber(rowData?.productionArea?.id));
+        return ReturnWorkshopNumber(rowData?.productionArea?.id);
       },
     },
     {
@@ -162,23 +157,24 @@ export const ExecutorsTable = ({
     {
       title: "Закреплённое оборудование (ссылка)",
       render: (rowData) => {
-        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length !== 0) {
-          return (
-            rowData?.weldingEquipments?.map((equipment) => (
-              <div key={equipment.id}>
-                <a className={styles.equipmentRefs} href="/equipment">
-                  {equipment.factoryNumber || "-"}
-                </a>
-              </div>
-            ))
-          );
+        if (
+          rowData?.weldingEquipments &&
+          rowData?.weldingEquipments.length !== 0
+        ) {
+          return rowData?.weldingEquipments?.map((equipment) => (
+            <div key={equipment.id}>
+              <a className={styles.equipmentRefs} href="/equipment">
+                {equipment.factoryNumber || "-"}
+              </a>
+            </div>
+          ));
         }
       },
-    }
-  ].filter(column => column);;
+    },
+  ].filter((column) => column);
 
   const controllersColumns = [
-    (userRole === "Admin"/*  || userRole === "Master" */) && {
+    userRole === "Admin" /*  || userRole === "Master" */ && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -220,13 +216,13 @@ export const ExecutorsTable = ({
     {
       title: "Наименование цеха",
       render: (rowData) => {
-        return (ReturnWorkshop(rowData?.productionArea?.id));
+        return ReturnWorkshop(rowData?.productionArea?.id);
       },
     },
     {
       title: "Номер цеха",
       render: (rowData) => {
-        return (ReturnWorkshopNumber(rowData?.productionArea?.id));
+        return ReturnWorkshopNumber(rowData?.productionArea?.id);
       },
     },
     {
@@ -237,29 +233,26 @@ export const ExecutorsTable = ({
       title: "Номер производственного участка",
       field: "productionArea.number",
     },
-  ].filter(column => column);
-
+  ].filter((column) => column);
 
   function ReturnWorkshop(Area) {
     if (area != undefined) {
       for (let index = 0; index < area.length; index++) {
         if (area[index].id === Area) {
-          return area[index].workshop.name
+          return area[index].workshop.name;
         }
       }
     }
-
   }
 
   function ReturnWorkshopNumber(Area) {
     if (area != undefined) {
       for (let index = 0; index < area.length; index++) {
         if (area[index].id === Area) {
-          return area[index].workshop.number
+          return area[index].workshop.number;
         }
       }
     }
-
   }
 
   const renderValue = (value) => {
@@ -283,7 +276,7 @@ export const ExecutorsTable = ({
   };
 
   const extraUserColumns = [
-    (userRole === "Admin" /* || userRole === "Master" */) && {
+    userRole === "Admin" /* || userRole === "Master" */ && {
       title: "Удаление",
       render: (rowData) => (
         <img
@@ -325,13 +318,13 @@ export const ExecutorsTable = ({
     {
       title: "Наименование цеха",
       render: (rowData) => {
-        return (ReturnWorkshop(rowData?.productionArea?.id));
+        return ReturnWorkshop(rowData?.productionArea?.id);
       },
     },
     {
       title: "Номер цеха",
       render: (rowData) => {
-        return (ReturnWorkshopNumber(rowData?.productionArea?.id));
+        return ReturnWorkshopNumber(rowData?.productionArea?.id);
       },
     },
     {
@@ -345,12 +338,17 @@ export const ExecutorsTable = ({
     {
       title: "Закреплённое оборудование ( ссылка )",
       render: (rowData) => {
-        if (rowData?.weldingEquipments && rowData?.weldingEquipments.length != 0) {
-          return (
-            rowData.weldingEquipments?.map(equipments =>
-              <div><a className={styles.equipmentRefs} href="/equipment">{equipments.factoryNumber ?? "-"}</a> </div>
-            )
-          )
+        if (
+          rowData?.weldingEquipments &&
+          rowData?.weldingEquipments.length != 0
+        ) {
+          return rowData.weldingEquipments?.map((equipments) => (
+            <div>
+              <a className={styles.equipmentRefs} href="/equipment">
+                {equipments.factoryNumber ?? "-"}
+              </a>{" "}
+            </div>
+          ));
         }
       },
     },
@@ -358,23 +356,27 @@ export const ExecutorsTable = ({
       title: "Номер рабочего места",
       field: "workplaceNumber",
       render: (rowData) => {
-        return <p>{renderValue(rowData?.workplace?.number??"-")}</p>;
+        return <p>{renderValue(rowData?.workplace?.number ?? "-")}</p>;
       },
     },
     {
       title: "Просмотреть календарь",
       render: (rowData) => {
-        return <img onClick={e => OpenCalendar(rowData)} className={styles.imgcalendar} src={imgcalendar}></img>;
+        return (
+          <img
+            onClick={(e) => OpenCalendar(rowData)}
+            className={styles.imgcalendar}
+            src={imgcalendar}
+          ></img>
+        );
       },
-    }
-  ].filter(column => column);
+    },
+  ].filter((column) => column);
 
   const renderRowChildren = (rowData) => {
-
     if (rowData?.weldingEquipments?.length > 0) {
       return (
         <TableContainer component={Paper}>
-
           <MaterialTable aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -429,18 +431,12 @@ export const ExecutorsTable = ({
               </TableRow>
             </TableHead>
 
-            {rowData?.weldingEquipments?.map(equipments =>
+            {rowData?.weldingEquipments?.map((equipments) => (
               <TableBody>
                 <TableRow key={equipments.id}>
-                  <TableCell align="center">
-                    {equipments.rfidTag}
-                  </TableCell>
-                  <TableCell align="center">
-                    {equipments.name}
-                  </TableCell>
-                  <TableCell align="center">
-                    {equipments.marking}
-                  </TableCell>
+                  <TableCell align="center">{equipments.rfidTag}</TableCell>
+                  <TableCell align="center">{equipments.name}</TableCell>
+                  <TableCell align="center">{equipments.marking}</TableCell>
                   <TableCell align="center">
                     {equipments.factoryNumber}
                   </TableCell>
@@ -448,26 +444,22 @@ export const ExecutorsTable = ({
                     {equipments.commissioningDate}
                   </TableCell>
                   <TableCell align="center">
-                    {renderConditionValue(
-                      equipments.currentCondition
-                    )}
+                    {renderConditionValue(equipments.currentCondition)}
                   </TableCell>
                 </TableRow>
               </TableBody>
-            )}
+            ))}
           </MaterialTable>
-
-
         </TableContainer>
       );
     }
   };
 
   function OpenCalendar(rowData) {
-    window.localStorage.setItem("executor", JSON.stringify(rowData))
-    window.localStorage.removeItem("equipment")
+    window.localStorage.setItem("executor", JSON.stringify(rowData));
+    window.localStorage.removeItem("equipment");
     setTimeout(() => {
-      window.location.href = "/calendar"
+      window.location.href = "/calendar";
     }, 500);
   }
 
@@ -499,28 +491,26 @@ export const ExecutorsTable = ({
 
   //Запрос на редактирование или добавление
   function SendData(variables) {
-    variables["productionAreaId"] = valuetArea
-    variables["weldingEquipmentId"] = valuetEquipment
-    variables["workshopId"] = valueWorkshopa
-    variables["workplaceId"] = valueWorkplace
-    //Добавить  
+    variables["productionAreaId"] = valuetArea;
+    variables["weldingEquipmentId"] = valuetEquipment;
+    variables["workshopId"] = valueWorkshopa;
+    variables["workplaceId"] = valueWorkplace;
+    //Добавить
     if (valuetOpenModal === 0) {
-      addExecutor(variables)
+      addExecutor(variables);
     }
-    // //Редактировать 
+    // //Редактировать
     if (valuetOpenModal === 1 && type === "master") {
-      editMaster(variables)
+      editMaster(variables);
     }
     if (valuetOpenModal === 1 && type === "executor") {
-      editExecutor(variables)
+      editExecutor(variables);
     }
     if (valuetOpenModal === 1 && type === "controller") {
-      editTech(variables)
+      editTech(variables);
     }
   }
 
-
- 
   return (
     <>
       <div className={styles.tableWrapper}>
@@ -530,51 +520,48 @@ export const ExecutorsTable = ({
           actions={
             userRole === "Admin" /* || userRole === "Master" */
               ? [
-                {
-                  icon: "add",
-                  tooltip: "Добавить пользователя",
-                  isFreeAction: true,
-                  onClick: () => {
-                    setIsModalOpen(true);
-                    setValuetOpenModal(0);
-                    api.post(`/eventLog`, {
-                      "information": "Открыл модальное окно добавления пользователя "
-                    })
+                  {
+                    icon: "add",
+                    tooltip: "Добавить пользователя",
+                    isFreeAction: true,
+                    onClick: () => {
+                      setIsModalOpen(true);
+                      setValuetOpenModal(0);
+                      api.post(`/eventLog`, {
+                        information:
+                          "Открыл модальное окно добавления пользователя ",
+                      });
+                    },
                   },
-                },
-                {
-                  icon: "edit",
-                  tooltip: "Редактировать пользователя",
-                  onClick: (event, rowData) => {
-                    setModalData(rowData);
-                    setIsModalOpen(true);
-                    setValuetOpenModal(1);
-                    setvalueWorkplace(rowData?.workplace?.id)
+                  {
+                    icon: "edit",
+                    tooltip: "Редактировать пользователя",
+                    onClick: (event, rowData) => {
+                      setModalData(rowData);
+                      setIsModalOpen(true);
+                      setValuetOpenModal(1);
+                      setvalueWorkplace(rowData?.workplace?.id);
 
-                    console.log(rowData)
+                      console.log(rowData);
 
-                    setValueWorkshop(rowData?.workshop?.id)
-                    setValuetArea(rowData?.productionArea?.id)
-                    setValuetEquipment(rowData?.weldingEquipment?.id)
-                    api.post(`/eventLog`, {
-                      "information": "Открыл модальное окно редактирования пользователя"
-                    })
+                      setValueWorkshop(rowData?.workshop?.id);
+                      setValuetArea(rowData?.productionArea?.id);
+                      setValuetEquipment(rowData?.weldingEquipment?.id);
+                      api.post(`/eventLog`, {
+                        information:
+                          "Открыл модальное окно редактирования пользователя",
+                      });
+                    },
                   },
-                },
-              ]
+                ]
               : []
           }
           renderRowChildren={renderRowChildren}
           rowStyle={classes.rowStyle}
           columns={type === "executor" ? extraUserColumns : controllerColumns}
           data={executors}
-
         />
       </div>
-
-
-
-
 
       <ResultsModal
         type={"EXECUTOR"}
@@ -598,7 +585,7 @@ export const ExecutorsTable = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            SendData(variables, type)
+            SendData(variables, type);
             setIsModalOpen(false);
             setModalData(null);
           }}
@@ -611,7 +598,6 @@ export const ExecutorsTable = ({
             handleBlur,
           }) => (
             <form className={styles.form} onSubmit={handleSubmit}>
-
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
@@ -625,9 +611,8 @@ export const ExecutorsTable = ({
                   name="middleName"
                   placeholder="Фамилия"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
-
 
                 <Input
                   onChange={(e) => {
@@ -641,7 +626,7 @@ export const ExecutorsTable = ({
                   name="firstName"
                   placeholder="Имя"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
                 <Input
                   onChange={(e) => {
@@ -654,7 +639,7 @@ export const ExecutorsTable = ({
                   name="lastName"
                   placeholder="Отчество"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -667,7 +652,7 @@ export const ExecutorsTable = ({
                   name="rfidTag"
                   placeholder="RFID метка "
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -716,41 +701,38 @@ export const ExecutorsTable = ({
                   width="380px"
                   placeholder="Цех"
                   onChange={(event) => {
-                    setValueWorkshop(event.value)
+                    setValueWorkshop(event.value);
                   }}
                   options={optworkshop}
                 />
               </div>
 
-              {value === 1
-                ? (
-                  <div className={styles.row}>
-                    <Select
-                      name="valueWorkplace"
-                      value={valueWorkplace}
-                      width="380px"
-                      placeholder="Рабочее место"
-                      onChange={(event) => {
-                        setvalueWorkplace(event.value)
-                      }}
-                      options={optWorkPlase}
-                    />
-                  </div>
-                )
-                : null
-              }
+              {value === 1 ? (
+                <div className={styles.row}>
+                  <Select
+                    name="valueWorkplace"
+                    value={valueWorkplace}
+                    width="380px"
+                    placeholder="Рабочее место"
+                    onChange={(event) => {
+                      setvalueWorkplace(event.value);
+                    }}
+                    options={optWorkPlase}
+                  />
+                </div>
+              ) : null}
 
-
-
-              {userRole === "Admin" /* || userRole === "Master" */
-                ? <Upload tool={0} Masters={executors}></Upload>
-                : null
-              }
+              {userRole === "Admin" /* || userRole === "Master" */ ? (
+                <Upload tool={0} Masters={executors}></Upload>
+              ) : null}
 
               <div className={styles.row}>
                 <Button
                   disabled={
-                    values.middleName == "" || values.firstName == "" || values.lastName == "" || values.rfidTag == ""
+                    values.middleName == "" ||
+                    values.firstName == "" ||
+                    values.lastName == "" ||
+                    values.rfidTag == ""
                   }
                   type="submit"
                 >
@@ -767,7 +749,7 @@ export const ExecutorsTable = ({
         isOpen={deleteTaskModal}
         headerText="Удаление"
         setIsOpen={(state) => {
-          setdeleteTaskModal(false)
+          setdeleteTaskModal(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -776,8 +758,8 @@ export const ExecutorsTable = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setdeleteTaskModal(false)
-            deleteExecutor(idExecutor)
+            setdeleteTaskModal(false);
+            deleteExecutor(idExecutor);
           }}
         >
           {({
@@ -788,28 +770,19 @@ export const ExecutorsTable = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> сотрудника ? </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Вы уверены что хотите <span>удалить</span> сотрудника ?{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Удалить
-                  </Button>
+                  <Button type="submit">Удалить</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
-
-
-     
-
     </>
   );
 };

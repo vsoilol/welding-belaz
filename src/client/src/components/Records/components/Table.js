@@ -30,9 +30,9 @@ import {
   ResponsiveContainer,
   Layer,
 } from "recharts";
-import styles from "../styles.module.css";
+import styles from "../styles.module.scss";
 
-import "../style.css";
+import "../style.scss";
 const dateOptions = {
   day: "numeric",
   month: "short",
@@ -415,7 +415,7 @@ export const RecordsTable = ({
               onFocus={(e) => {
                 e.currentTarget.type = "date";
               }}
-              autocomplete="off"
+              autoComplete="off"
             />
             <br></br>
             <br></br>
@@ -433,7 +433,7 @@ export const RecordsTable = ({
               onFocus={(e) => {
                 e.currentTarget.type = "date";
               }}
-              autocomplete="off"
+              autoComplete="off"
             />
           </div>
           <button className={styles.sort} onClick={showRecordsPeriod}>
@@ -497,7 +497,7 @@ export const RecordsTable = ({
                     value={serialnumber}
                     name={`serialnumber`}
                     placeholder="Порядковый номер"
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
                 <button
@@ -543,7 +543,7 @@ export const RecordsTable = ({
                 value={serchOnserialnumber}
                 name={`serchOnserialnumber`}
                 placeholder="Порядковый номер"
-                autocomplete="off"
+                autoComplete="off"
               />
             </div>
             <button

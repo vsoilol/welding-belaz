@@ -31,17 +31,19 @@ const getInitialState = () => {
   };
 };
 
+const DOMAIN = process.env.REACT_APP_ENVIRONMENT;
+
 const initialState = getInitialState();
 
 const sagaMiddleware = createSagaMiddleware();
 
 const middleWare =
-  process.env.NODE_ENV !== "production"
+  process.env.REACT_APP_ENVIRONMENT !== "production"
     ? [logger, routerMiddleware(history), sagaMiddleware]
     : [routerMiddleware(history), sagaMiddleware];
 
 const composeEnhancers =
-  process.env.NODE_ENV !== "production" &&
+  process.env.REACT_APP_ENVIRONMENT !== "production" &&
   typeof window === "object" &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})

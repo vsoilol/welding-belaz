@@ -4,7 +4,7 @@ import { instructionsImage } from "assets/pics";
 import { InstructionsTable } from "components/Instructions/components/Instructions";
 import ToolTip from "components/shared/ToolTip";
 import React, { useEffect, useState } from "react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 export const Instructions = ({
   instructions,
@@ -28,7 +28,7 @@ export const Instructions = ({
   useEffect(() => {
     // loadInstructions();
     loadWpsInstructions();
-  }, [/* loadInstructions */, loadWpsInstructions]);
+  }, [, /* loadInstructions */ loadWpsInstructions]);
 
   const wpsSelectInstructions = wpsInstructions.length
     ? wpsInstructions?.map(({ id, wpsName }) => ({

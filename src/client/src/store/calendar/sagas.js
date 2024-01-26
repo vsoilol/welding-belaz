@@ -1,13 +1,12 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import api from "services/api";
-import workplaceActions from "./actions";
+import calendarActions from "./actions-file";
 import errorActions from "../error/actions";
+import { calendarTypes, loadMainCalendarByYear } from "./actions/index";
 
 const {
   Types: {
-
-    LOAD_EQUIPMENT_REQUEST,
-    ///Календарь 
+    ///Календарь
     LOAD_CALENDARYEAR_REQUEST,
     ADD_CALENDARMAIN_REQUEST,
     EDIT_EDITCALENDAR_REQUEST,
@@ -15,76 +14,66 @@ const {
     LOAD_CALENDARWELDER_REQUEST,
     ADD_CALENDAREQUIPMENT_REQUEST,
     LOAD_CALENDAREQUIPMENT_REQUEST,
-    ///Executor
-    LOAD_EXECUTORS_REQUEST,
+
     ////WorkingShift
     EDIT_SHIFT_REQUEST,
     ADD_SHIFT_REQUEST,
+
     ////Day
     LOAD_DAYEQUI_REQUEST,
     LOAD_DAYBYWELDER_REQUEST,
     EDIT_DAY_REQUEST,
     ADD_DAY_REQUEST,
+
+    // LOAD_MAIN_CALENDAR_BY_YEAR_REQUEST,
   },
   Creators: {
-    ///Календарь 
+    ///Календарь
     loadCalendaryearSuccess,
     loadCalendaryearFailure,
 
     addCalendarmainSuccess,
     addCalendarmainFailure,
 
-    editEditcalendarSuccess,
     editEditcalendarFailure,
 
-    addCalendarwelderSuccess,
     addCalendarwelderFailure,
 
-    loadCalendarwelderSuccess,
     loadCalendarwelderFailure,
 
-    addCalendarequipmentSuccess,
-    addCalendarequipmentFailure,
-
-    loadCalendarequipmentSuccess,
     loadCalendarequipmentFailure,
 
     loadDayByWelderSuccess,
-    ///Executor
-    loadExecutorsSuccess,
-    loadExecutorsFailure,
 
-    ///Equipment
-    loadEquipmentSuccess,
-    loadEquipmentFailure,
-
-
-    ////WorkingShift
-    editShiftSuccess,
     editShiftFailure,
 
     addShiftSuccess,
     addShiftFailure,
 
-
-    ////Day
-    editDaySuccess,
     editDayFailure,
 
-    addDaySuccess,
     addDayFailure,
 
     loadDayequiSuccess,
-    loadDayequiFailure
-
-
+    loadDayequiFailure,
   },
-} = workplaceActions;
+} = calendarActions;
 
 const {
   Creators: { setError },
 } = errorActions;
-///Календарь 
+
+// function* loadMainCalendarByYear({ year }) {
+//   try {
+//     const { data } = yield call(api.get, `/calendar/main/${year}`);
+//     yield put(CalendarActions.loadMainCalendarByYearSuccess(data));
+//   } catch (error) {
+//     yield put(CalendarActions.loadMainCalendarByYearFailure(error));
+//     yield put(setError(error.message));
+//   }
+// }
+
+///Календарь
 function* loadCalendaryear(date) {
   try {
     const { data } = yield call(api.get, `/calendar/main/${date.payload}`);
@@ -94,35 +83,36 @@ function* loadCalendaryear(date) {
     yield put(setError(error.message));
   }
 }
+
 function* addCalendarmain({ payload }) {
   try {
     const { data } = yield call(api.post, `/calendar/main`, {
-      "year": 2023,
-      "mainWorkingShift": [
+      year: 2023,
+      mainWorkingShift: [
         {
-          "number": 1,
-          "shiftStart": "11:30",
-          "shiftEnd": "11:30",
-          "breakStart": "11:30",
-          "breakEnd": "11:30"
-        }
+          number: 1,
+          shiftStart: "11:30",
+          shiftEnd: "11:30",
+          breakStart: "11:30",
+          breakEnd: "11:30",
+        },
       ],
-      "days": [
+      days: [
         {
-          "monthNumber": 1,
-          "number": 24,
-          "isWorkingDay": true,
-          "workingShifts": [
+          monthNumber: 1,
+          number: 24,
+          isWorkingDay: true,
+          workingShifts: [
             {
-              "number": 1,
-              "shiftStart": "11:30",
-              "shiftEnd": "11:30",
-              "breakStart": "11:30",
-              "breakEnd": "11:30"
-            }
-          ]
-        }
-      ]
+              number: 1,
+              shiftStart: "11:30",
+              shiftEnd: "11:30",
+              breakStart: "11:30",
+              breakEnd: "11:30",
+            },
+          ],
+        },
+      ],
     });
     yield put(addCalendarmainSuccess(data));
   } catch (error) {
@@ -130,25 +120,26 @@ function* addCalendarmain({ payload }) {
     yield put(setError(error.message));
   }
 }
+
 function* editEditcalendar({ payload }) {
   try {
-
   } catch (error) {
     yield put(editEditcalendarFailure(error));
     yield put(setError(error.message));
   }
 }
+
 function* addCalendarwelder({ payload }) {
   try {
-
-    // yield put(addCalendarwelderSuccess(data)); 
+    // yield put(addCalendarwelderSuccess(data));
   } catch (error) {
     yield put(addCalendarwelderFailure(error));
     yield put(setError(error.message));
   }
 }
+
 function* loadCalendarwelder() {
-  try { 
+  try {
     // const { data } = yield call(api.get, `/calendar/byWelde`);
     // console.log(data)
     // yield put(loadCalendarwelderSuccess(data));
@@ -157,17 +148,18 @@ function* loadCalendarwelder() {
     yield put(setError(error.message));
   }
 }
+
 function* addCalendarequipment({ payload }) {
   try {
-
-    // yield put(addCalendarwelderSuccess(data)); 
+    // yield put(addCalendarwelderSuccess(data));
   } catch (error) {
     yield put(addCalendarwelderFailure(error));
     yield put(setError(error.message));
   }
 }
+
 function* loadCalendarequipment() {
-  try { 
+  try {
     // const { data } = yield call(api.get, `/calendar/byEquipment`);
     // console.log(data)
     // yield put(loadCalendarequipmentSuccess(data));
@@ -177,21 +169,19 @@ function* loadCalendarequipment() {
   }
 }
 
-
 ///WorkingShift
 function* addShift({ payload }) {
   try {
-
     const { data } = yield call(api.post, `/workingShift`, {
-      "number": payload.shiftNumb,
-      "shiftStart": payload.shiftStart,
-      "shiftEnd": payload.shiftEnd,
-      "breakStart": payload.breakStart,
-      "breakEnd": payload.breakEnd,
-      "year": 2023,
-      "dayId": null
+      number: payload.shiftNumb,
+      shiftStart: payload.shiftStart,
+      shiftEnd: payload.shiftEnd,
+      breakStart: payload.breakStart,
+      breakEnd: payload.breakEnd,
+      year: 2023,
+      dayId: null,
     });
-    window.location.reload()
+    window.location.reload();
     yield put(addShiftSuccess(data));
   } catch (error) {
     yield put(addShiftFailure(error));
@@ -201,8 +191,6 @@ function* addShift({ payload }) {
 
 function* editShift({ payload }) {
   try {
-
-
     // yield put(editShiftSuccess(data));
   } catch (error) {
     yield put(editShiftFailure(error));
@@ -210,26 +198,25 @@ function* editShift({ payload }) {
   }
 }
 
-
 ///Day
 function* addDay({ payload }) {
-  try {   
-    const { data } = yield call(api.post, `/day`, payload);    
-    yield call(loadDayByWelder(payload.welderId)); 
+  try {
+    const { data } = yield call(api.post, `/day`, payload);
+    yield call(loadDayByWelder(payload.welderId));
   } catch (error) {
     yield put(addDayFailure(error));
     yield put(setError(error.message));
-  } 
+  }
 }
 
 function* editDay({ payload }) {
   try {
     const { data } = yield call(api.put, `/day`, {
-      "id": payload.daiID,
-      "monthNumber": payload.monthNumber,
-      "number": payload.number,
-      "isWorkingDay": true,
-      "year": 2023
+      id: payload.daiID,
+      monthNumber: payload.monthNumber,
+      number: payload.number,
+      isWorkingDay: true,
+      year: 2023,
     });
 
     /* window.location.reload() */
@@ -240,8 +227,6 @@ function* editDay({ payload }) {
   }
 }
 
-
-
 /// Day by  Welder
 function* loadDayByWelder({ payload }) {
   try {
@@ -251,13 +236,10 @@ function* loadDayByWelder({ payload }) {
     yield put(addDayFailure(error));
     yield put(setError(error.message));
   }
-
-
-
 }
+
 function* loadDayByEquipment({ payload }) {
   try {
-
     const { data } = yield call(api.get, `/day/byEquipment/${payload}`);
     yield put(loadDayequiSuccess(data));
   } catch (error) {
@@ -265,8 +247,9 @@ function* loadDayByEquipment({ payload }) {
     yield put(setError(error.message));
   }
 }
+
 export function* CalendarSaga() {
-  ///Календарь 
+  ///Календарь
   yield takeLatest(LOAD_CALENDARYEAR_REQUEST, loadCalendaryear);
   yield takeLatest(ADD_CALENDARMAIN_REQUEST, addCalendarmain);
   yield takeLatest(EDIT_EDITCALENDAR_REQUEST, editEditcalendar);
@@ -274,11 +257,6 @@ export function* CalendarSaga() {
   yield takeLatest(LOAD_CALENDARWELDER_REQUEST, loadCalendarwelder);
   yield takeLatest(ADD_CALENDAREQUIPMENT_REQUEST, addCalendarequipment);
   yield takeLatest(LOAD_CALENDAREQUIPMENT_REQUEST, loadCalendarequipment);
-
-  ///Executor
-  // yield takeLatest(LOAD_EXECUTORS_REQUEST, loadExecutors);
-  ///Equipment
-  // yield takeLatest(LOAD_EQUIPMENT_REQUEST, loadEquipment);
 
   ///WorkingShift
 
@@ -291,6 +269,9 @@ export function* CalendarSaga() {
 
   yield takeLatest(ADD_DAY_REQUEST, addDay);
   yield takeLatest(EDIT_DAY_REQUEST, editDay);
+
+  yield takeLatest(
+    calendarTypes.LOAD_MAIN_CALENDAR_BY_YEAR_REQUEST,
+    loadMainCalendarByYear
+  );
 }
-
-

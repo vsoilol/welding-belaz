@@ -1,8 +1,7 @@
 import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
-
-  ///calendar 
+  ///calendar
   loadCalendaryearRequest: ["payload"],
   loadCalendaryearSuccess: ["calendaryear"],
   loadCalendaryearFailure: ["error"],
@@ -17,7 +16,7 @@ const { Types, Creators } = createActions({
 
   addCalendarwelderRequest: ["payload"],
   addCalendarwelderSuccess: ["calendarWelder"],
-  addCalendarwelderFailure: ["error"], 
+  addCalendarwelderFailure: ["error"],
 
   loadCalendarwelderRequest: ["payload"],
   loadCalendarwelderSuccess: ["loadCalendarwelder"],
@@ -30,17 +29,16 @@ const { Types, Creators } = createActions({
   loadCalendarequipmentRequest: ["payload"],
   loadCalendarequipmentSuccess: ["loadEquipment"],
   loadCalendarequipmentFailure: ["error"],
+
   ///Executor
   loadExecutorsRequest: ["payload"],
   loadExecutorsSuccess: ["executors"],
   loadExecutorsFailure: ["error"],
 
-
   ///Equipment
   loadEquipmentRequest: ["payload"],
   loadEquipmentSuccess: ["equipment"],
   loadEquipmentFailure: ["error"],
-
 
   //WorkingShift
   editShiftRequest: ["payload"],
@@ -60,20 +58,22 @@ const { Types, Creators } = createActions({
   addDaySuccess: ["day"],
   addDayFailure: ["error"],
 
-
   loadDaybywelderRequest: ["payload"],
   loadDaybywelderSuccess: ["day"],
   loadDaybywelderFailure: ["error"],
 
-
   loadDayequiRequest: ["payload"],
   loadDayequiSuccess: ["day"],
   loadDayequiFailure: ["error"],
+
+  loadMainCalendarByYearRequest: ["year"],
+  loadMainCalendarByYearSuccess: ["calendar"],
+  loadMainCalendarByYearFailure: ["error"],
 });
 
 const workplaceActions = {
   Types,
-  Creators
+  Creators,
 };
 
 export default workplaceActions;

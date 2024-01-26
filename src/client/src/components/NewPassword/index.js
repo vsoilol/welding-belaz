@@ -6,10 +6,9 @@ import { Formik } from "formik";
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { resetPasswordValidation } from "validation/auth.validation";
-import styles from "./index.module.css";
+import styles from "./index.module.scss";
 
 import api from "services/api";
-
 
 const initialValues = {
   oldpassword: "",
@@ -21,22 +20,19 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
   const isMobile = useContext(TabletContext);
   const history = useHistory();
 
-
   async function ChangePassword(params) {
     try {
-      const response = await api.post(`auth/change-password`,{
-        "oldPassword": params.oldpassword,
-        "newPassword": params.password,
-        "confirmNewPassword": params.confirmPassword
-      }); 
+      const response = await api.post(`auth/change-password`, {
+        oldPassword: params.oldpassword,
+        newPassword: params.password,
+        confirmNewPassword: params.confirmPassword,
+      });
     } catch (error) {
       console.log(error);
-    }
-    finally {
-      history.push("/login")
+    } finally {
+      history.push("/login");
     }
   }
-
 
   return (
     <div className={styles.page}>
@@ -58,7 +54,7 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
         validationSchema={resetPasswordValidation}
         onSubmit={(values) => {
           /* resetPassword(values); */
-          ChangePassword(values)
+          ChangePassword(values);
         }}
       >
         {({
@@ -72,7 +68,6 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
           dirty,
         }) => (
           <form className={styles.form} onSubmit={handleSubmit}>
-
             <Field
               type="password"
               width="300px"
@@ -117,7 +112,7 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
             />
 
             <Button
-              onClick={{}/* () => history.push("/login") */}
+              onClick={{} /* () => history.push("/login") */}
               isRequesting={isRequesting}
               disabled={isRequesting || !(isValid && dirty)}
               width="255px"
@@ -128,10 +123,6 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
           </form>
         )}
       </Formik>
-
-
-
-      
     </div>
   );
 };

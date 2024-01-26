@@ -9,11 +9,11 @@ import records from "store/records/reducers";
 import instructions from "store/instructions/reducers";
 import history from "./history";
 
-///Производство 
+///Производство
 import workplace from "./workplace/reducers";
 ///Технологические процессы
 import texprocwelding from "./texprocwelding/reducers";
-import calendar from "./calendar/reducers";
+import calendar from "./calendar/calendar-reducer";
 
 const reducers = {
   router: connectRouter(history),
@@ -25,12 +25,11 @@ const reducers = {
   auth,
   records,
 
-  ///Производство 
+  ///Производство
   workplace,
   ///Технологические процессы
   texprocwelding,
-  calendar
-  
+  calendar,
 };
 
 export default combineReducers(reducers);
