@@ -32,4 +32,6 @@ public interface ICalendarRepository
     Task<CalendarDto> CreateWelderCalendarBasedOnMainAsync(int year, Guid welderId);
     
     Task<CalendarDto> CreateEquipmentCalendarBasedOnMainAsync(int year, Guid equipmentId);
+    
+    Task DeleteCalendarAsync(Guid calendarId);
 }

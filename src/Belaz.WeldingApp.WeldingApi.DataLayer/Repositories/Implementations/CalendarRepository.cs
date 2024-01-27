@@ -249,6 +249,18 @@ public class CalendarRepository : ICalendarRepository
         return await GetByIdAsync(entity.Id);
     }
 
+    public async Task DeleteCalendarAsync(Guid calendarId)
+    {
+        var existedCalendar = await _context.Calendars
+            .Include(_ => _.Days!)
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .FirstOrDefaultAsync(_ => _.Id == calendarId);
+
+        _context.Calendars.Remove(existedCalendar!);
+        await _context.SaveChangesAsync();
+    }
+
     private List<WorkingShift> CreateNewWorkingShifts(List<WorkingShift>? workingShifts)
     {
         var newWorkingShifts = new List<WorkingShift>();
