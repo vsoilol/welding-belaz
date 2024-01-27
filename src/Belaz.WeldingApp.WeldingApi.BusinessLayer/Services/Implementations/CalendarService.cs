@@ -7,6 +7,7 @@ using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests;
+using LanguageExt;
 using LanguageExt.Common;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
@@ -122,6 +123,23 @@ public class CalendarService : ICalendarService
         var message = $"Обновление производственного календаря на {data.Year}.";
 
         return new BaseResultRequest<CalendarDto>(data, message);
+    }
+
+    public async Task<BaseResultRequest<Unit>> DeleteCalendarAsync(DeleteCalendarRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            var result = new Result<Unit>(validationResult.Exception);
+            return new BaseResultRequest<Unit>(result);
+        }
+
+        await _calendarRepository.DeleteCalendarAsync(request.CalendarId);
+
+        var message = $"Удаление календаря";
+
+        return new BaseResultRequest<Unit>(Unit.Default, message);
     }
 
     public async Task<BaseResultRequest<CalendarDto?>> GetMainCalendarByYearAsync(GetMainCalendarByYearRequest request)
