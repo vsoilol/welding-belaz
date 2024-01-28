@@ -542,8 +542,6 @@ export const ExecutorsTable = ({
                       setValuetOpenModal(1);
                       setvalueWorkplace(rowData?.workplace?.id);
 
-                      console.log(rowData);
-
                       setValueWorkshop(rowData?.workshop?.id);
                       setValuetArea(rowData?.productionArea?.id);
                       setValuetEquipment(rowData?.weldingEquipment?.id);

@@ -1,9 +1,21 @@
-import { takeLatest } from "redux-saga/effects";
-import { calendarTypes, loadMainCalendarByYear } from "./actions";
+import {
+  loadMainCalendarByYearWatchers,
+  createCalendarFromStoredWatchers,
+  updateWorkingDayWithWorkingShiftWatchers,
+  createDayWatchers,
+  updateDayWatchers,
+  createWorkingShiftWatchers,
+  deleteWorkingShiftWatchers,
+  updateWorkingShiftWatchers,
+} from "./sagas";
 
-export default function* calendarSaga() {
-  yield takeLatest(
-    calendarTypes.LOAD_MAIN_CALENDAR_BY_YEAR_REQUEST,
-    loadMainCalendarByYear
-  );
-}
+export default [
+  ...loadMainCalendarByYearWatchers,
+  ...createCalendarFromStoredWatchers,
+  ...updateWorkingDayWithWorkingShiftWatchers,
+  ...createDayWatchers,
+  ...updateDayWatchers,
+  ...createWorkingShiftWatchers,
+  ...deleteWorkingShiftWatchers,
+  ...updateWorkingShiftWatchers,
+];

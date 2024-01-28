@@ -794,7 +794,6 @@ export const TexProcWelding = ({
       }
       loadTexprocwelding();
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -803,7 +802,6 @@ export const TexProcWelding = ({
       const response = await api.remove(`/TechnologicalProcess/${params}`);
       loadTexprocwelding();
     } catch (error) {
-      console.log(error);
     }
   }
 

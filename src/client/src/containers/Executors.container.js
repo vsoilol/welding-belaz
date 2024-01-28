@@ -3,7 +3,7 @@ import { ExecutorsPage } from "pages/ExecutorsPage";
 import Actions from "store/executors/actions";
 import Actions2 from "store/workplace/actions";
 
-const mapStateToProps = (state) => { 
+const mapStateToProps = (state) => {
   return {
     masters: state.executors.masters,
     techs: state.executors.techs,
@@ -12,19 +12,17 @@ const mapStateToProps = (state) => {
     userRole: state.auth.user.role,
     user: state.auth.user,
 
-    equipment:state.equipment.equipment[0],
-    ///Цеха 
+    equipment: state.equipment.equipment[0],
+    ///Цеха
     workshop: state.workplace.workshop,
-    ///Производственные участки 
+    ///Производственные участки
     area: state.workplace.productionArea,
 
     workplace: state.workplace.workplace,
 
-
-    state:state
+    state: state,
   };
-}; 
-
+};
 
 const mapDispatchToProps = {
   loadExecutors: Actions.Creators.loadExecutorsRequest,
@@ -40,11 +38,10 @@ const mapDispatchToProps = {
   deleteTech: Actions.Creators.deleteTechRequest,
   editTech: Actions.Creators.editTechRequest,
 
-
-  loadEquipment: Actions.Creators.loadEquipmentRequest, 
-  ///Цеха 
+  loadEquipment: Actions.Creators.loadEquipmentRequest,
+  ///Цеха
   loadWorkshop: Actions.Creators.loadWorkshopRequest,
-   ///Производственные участки 
+  ///Производственные участки
   loadArea: Actions.Creators.loadAreaRequest,
   loadPlace: Actions2.Creators.loadWorkplaceRequest,
 };

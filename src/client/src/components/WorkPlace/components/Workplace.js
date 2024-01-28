@@ -114,7 +114,6 @@ export const Place = ({
       } else {
         variables.productionAreaId = null;
       }
-      console.log(variables);
       addWorkplace(variables);
     }
     //Редактировать Рабочие места
@@ -124,7 +123,6 @@ export const Place = ({
       } else {
         variables.productionAreaId = null;
       }
-      console.log(variables);
       editWorkplace(variables);
     }
   }

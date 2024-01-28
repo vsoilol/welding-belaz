@@ -269,7 +269,6 @@ export const Seam = ({
 
     variables["technologicalProcessId"] = technologicalProcess;
 
-    console.log(valuetSeam);
     variables["seams"] = [valuetSeam];
 
     variables["postId"] = valuetWorkPlace;

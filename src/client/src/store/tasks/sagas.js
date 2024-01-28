@@ -15,10 +15,9 @@ const {
 
     LOAD_TASKTOOLS_REQUEST,
 
-
     ///Ежедневный план
     LOAD_ALLDATES_REQUEST,
-    ADD_PLAN_REQUEST
+    ADD_PLAN_REQUEST,
   },
   Creators: {
     loadTasksSuccess,
@@ -57,8 +56,8 @@ function* loadTasks() {
 
     let datas = {
       fullNames: data,
-      tasks: data
-    }
+      tasks: data,
+    };
     yield put(loadTasksSuccess(datas));
   } catch (error) {
     yield put(loadTasksFailure(error));
@@ -69,7 +68,6 @@ function* loadTasks() {
 function* loadInfo() {
   try {
     const { data } = yield call(api.get, `/WeldingTask/registrarInfo`);
-    console.log(data)
     yield put(loadInfoSuccess(data));
   } catch (error) {
     yield put(loadInfoFailure(error));
@@ -107,29 +105,23 @@ function* deleteTask({ payload }) {
   }
 }
 
-
-
-
 function* loadTasktools(dataTools) {
   try {
-
-    console.log(dataTools)
-    ///получение всех дат по Id производственного участка 
-    // if (numberTools===1) { 
+    ///получение всех дат по Id производственного участка
+    // if (numberTools===1) {
     //   const { data } = yield call(api.get, `/productAccount/dates/${productionAreaId}`);
     //   console.log(data)
     //   yield put(loadTasktoolsSuccess(data));
     // }
-
   } catch (error) {
     yield put(loadTasktoolsFailure(error));
     yield put(setError(error.message));
   }
 }
 
-///Ежедневный план 
-function* loadAlldates({payload}) {
-  try { 
+///Ежедневный план
+function* loadAlldates({ payload }) {
+  try {
     const { data } = yield call(api.get, `/productAccount/dates/${payload}`);
     yield put(loadAlldatesSuccess(data));
   } catch (error) {
@@ -138,9 +130,10 @@ function* loadAlldates({payload}) {
   }
 }
 function* addPlan({ payload }) {
-  try { 
-    const { data } = yield call(api.post(`/productAccount/generateEmpty`, payload)); 
-    console.log(data)
+  try {
+    const { data } = yield call(
+      api.post(`/productAccount/generateEmpty`, payload)
+    );
     // yield put(addPlanSuccess(data));
   } catch (error) {
     yield put(addPlanFailure(error));
@@ -148,26 +141,34 @@ function* addPlan({ payload }) {
   }
 }
 
+// export function* tasksSaga() {
+//   yield takeLatest(LOAD_TASKS_REQUEST, loadTasks);
+//   yield takeLatest(LOAD_INFO_REQUEST, loadInfo);
+//   // yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
 
-export function* tasksSaga() {
-  yield takeLatest(LOAD_TASKS_REQUEST, loadTasks);
-  yield takeLatest(LOAD_INFO_REQUEST, loadInfo);
+//   yield takeLatest(ADD_TASK_REQUEST, addTask);
+//   yield takeLatest(DELETE_TASK_REQUEST, deleteTask);
+//   yield takeLatest(EDIT_TASK_REQUEST, editTask);
+
+//   yield takeLatest(LOAD_TASKTOOLS_REQUEST, loadTasktools);
+
+//   ///Ежедневный план
+//   yield takeLatest(LOAD_ALLDATES_REQUEST, loadAlldates);
+//   yield takeLatest(ADD_PLAN_REQUEST, addPlan);
+// }
+
+export default [
+  takeLatest(LOAD_TASKS_REQUEST, loadTasks),
+  takeLatest(LOAD_INFO_REQUEST, loadInfo),
   // yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
 
+  takeLatest(ADD_TASK_REQUEST, addTask),
+  takeLatest(DELETE_TASK_REQUEST, deleteTask),
+  takeLatest(EDIT_TASK_REQUEST, editTask),
 
-  yield takeLatest(ADD_TASK_REQUEST, addTask);
-  yield takeLatest(DELETE_TASK_REQUEST, deleteTask);
-  yield takeLatest(EDIT_TASK_REQUEST, editTask);
-
-
-  yield takeLatest(LOAD_TASKTOOLS_REQUEST, loadTasktools);
-
-
+  takeLatest(LOAD_TASKTOOLS_REQUEST, loadTasktools),
 
   ///Ежедневный план
-  yield takeLatest(LOAD_ALLDATES_REQUEST, loadAlldates);
-  yield takeLatest(ADD_PLAN_REQUEST, addPlan);
-
-
-
-}
+  takeLatest(LOAD_ALLDATES_REQUEST, loadAlldates),
+  takeLatest(ADD_PLAN_REQUEST, addPlan),
+];

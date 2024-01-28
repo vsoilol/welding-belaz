@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { ProductionCalendarPage } from "pages/ProductionCalendarPage";
 import Actions from "store/calendar/actions-file";
-import { calendarActions } from "store/calendar";
+import { calendarActionCreators } from "store/calendar";
 
 const mapStateToProps = (state) => {
   return {
@@ -38,7 +38,14 @@ const mapDispatchToProps = {
   addDay: Actions.Creators.addDayRequest,
   editDay: Actions.Creators.editDayRequest,
 
-  loadMainCalendarByYear: calendarActions.loadMainCalendarByYearRequest,
+  loadMainCalendarByYear: calendarActionCreators.loadMainCalendarByYearRequest,
+  updateWorkingDayWithWorkingShift:
+    calendarActionCreators.updateWorkingDayWithWorkingShiftRequest,
+  createDay: calendarActionCreators.createDayRequest,
+  updateDay: calendarActionCreators.updateDayRequest,
+  createWorkingShift: calendarActionCreators.createWorkingShiftRequest,
+  deleteWorkingShift: calendarActionCreators.deleteWorkingShiftRequest,
+  updateWorkingShift: calendarActionCreators.updateWorkingShiftRequest,
 };
 
 export default connect(

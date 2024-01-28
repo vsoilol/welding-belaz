@@ -7,6 +7,7 @@ import auth from "services/auth";
 import history from "./history";
 import rootReducer from "./reducer";
 import rootSaga from "./saga";
+import { executorsNewSaga } from "./executors/sagas";
 
 const getInitialState = () => {
   const token = auth.getToken();
@@ -39,7 +40,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const middleWare =
   process.env.REACT_APP_ENVIRONMENT !== "production"
-    ? [logger, routerMiddleware(history), sagaMiddleware]
+    ? [routerMiddleware(history), sagaMiddleware]
     : [routerMiddleware(history), sagaMiddleware];
 
 const composeEnhancers =

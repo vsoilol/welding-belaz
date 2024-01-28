@@ -12,4 +12,4 @@ const Actions = {
 };
 
 export default Actions;
-export { Types as errorTypes, Creators as errorCreators };
+export { Types as errorActionTypes, Creators as errorActionCreators };

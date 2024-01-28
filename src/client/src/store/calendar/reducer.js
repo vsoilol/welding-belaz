@@ -1,7 +1,7 @@
 import { createReducer } from "reduxsauce";
 import actions from "./actions-file";
 import { CALENDAR_INITIAL_STATE } from "./calendar-initial-state";
-import { calendarTypes } from "./actions";
+import { calendarTypes } from "./sagas";
 
 const { Types } = actions;
 
@@ -15,7 +15,6 @@ export const request = (state = CALENDAR_INITIAL_STATE) => {
 };
 
 export const failure = (state = CALENDAR_INITIAL_STATE, { error }) => {
-  console.log(error);
   return {
     ...state,
     isRequesting: false,

@@ -74,9 +74,6 @@ class EquipmentMap extends React.Component {
       });
     });
 
-    /* console.log(!!this.state.geojson.features[0]);
-    console.log(this.state.geojson.features); */
-
     if (this.state.geojson.features && !!this.state.geojson.features[0])
       this.state.geojson.features.forEach(function (marker) {
         // create a HTML element for each feature

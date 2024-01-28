@@ -2,7 +2,7 @@ import { takeLatest, call, put } from "redux-saga/effects";
 import api from "services/api";
 import calendarActions from "./actions-file";
 import errorActions from "../error/actions";
-import { calendarTypes, loadMainCalendarByYear } from "./actions/index";
+import { calendarTypes, loadMainCalendarByYear } from "./sagas/index";
 
 const {
   Types: {
@@ -62,16 +62,6 @@ const {
 const {
   Creators: { setError },
 } = errorActions;
-
-// function* loadMainCalendarByYear({ year }) {
-//   try {
-//     const { data } = yield call(api.get, `/calendar/main/${year}`);
-//     yield put(CalendarActions.loadMainCalendarByYearSuccess(data));
-//   } catch (error) {
-//     yield put(CalendarActions.loadMainCalendarByYearFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
 
 ///Календарь
 function* loadCalendaryear(date) {

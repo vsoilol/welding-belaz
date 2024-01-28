@@ -14,14 +14,14 @@ const {
   Creators: { setError },
 } = errorActions;
 
-function* logIn({ payload }) { 
- try {  
+function* logIn({ payload }) {
+  try {
     const { data } = yield call(api.post, `/auth/login`, {
       userName: payload.email,
       password: payload.password,
     });
 
-    localStorage.setItem("isFirstLogin",data.isFirstLogin) 
+    localStorage.setItem("isFirstLogin", data.isFirstLogin);
     yield put(logInSuccess(data));
 
     auth.setToken(data.token);
@@ -29,7 +29,7 @@ function* logIn({ payload }) {
   } catch (error) {
     yield put(logInFailure(error));
     yield put(setError(error.response.data.message));
-  }  
+  }
 }
 
 function* logOut() {
@@ -44,7 +44,7 @@ function* logOut() {
   }
 }
 
-export function* authSaga() {
-  yield takeLatest(LOG_IN_REQUEST, logIn);
-  yield takeLatest(LOG_OUT_REQUEST, logOut);
-}
+export default [
+  takeLatest(LOG_IN_REQUEST, logIn),
+  takeLatest(LOG_OUT_REQUEST, logOut),
+];

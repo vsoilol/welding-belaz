@@ -1,18 +1,16 @@
 import React, { useState, useMemo } from "react";
-import { Formik, useFormik, Form } from "formik";
+import { Formik, Form } from "formik";
 
 import {
   Button,
-  Input,
   ModalWindow,
-  Select,
   CustomFormikSelect,
   CustomFormikTextInput,
   CustomFormikField,
 } from "components/shared";
 
 import styles from "../modal-style.module.scss";
-import { validationSchema } from "./validation-schema";
+import { createValidationSchema } from "./validation-schema";
 
 export const AddWorkingDayModal = ({
   isOpen,
@@ -20,9 +18,11 @@ export const AddWorkingDayModal = ({
   calendarId,
   workingShifts,
   onWorkingDaySubmit,
+  currentYear,
 }) => {
+  const validationSchema = createValidationSchema(currentYear);
+
   const [modalContent, setModalContent] = useState(null);
-  const [selectedShift, setSelectedShift] = useState(null);
 
   // Memoize working shift options to avoid recalculating on every render
   const workingShiftOptions = useMemo(
@@ -35,39 +35,21 @@ export const AddWorkingDayModal = ({
   );
 
   const initialFormValues = {
-    shiftId: modalContent?.shiftId ?? "",
+    workingShiftId: modalContent?.shiftId ?? "",
     calendarId: calendarId ?? null,
     workingDay:
       modalContent?.workingDay ?? new Date().toISOString().split("T")[0],
   };
 
-  const handleSubmit = (values) => {
-    toggleModal(false);
-    setModalContent(null);
-    onWorkingDaySubmit({ ...values, shiftId: selectedShift });
-  };
-
   const handleFormSubmit = async (values, { setSubmitting }) => {
     try {
-      // Make your request here, e.g., await yourApiService.submitForm(values);
-      console.log("Form submitted with values:", values);
+      onWorkingDaySubmit(values);
       toggleModal(false);
-      // Handle success response
     } catch (error) {
-      // Handle any errors
       console.error("Error submitting form:", error);
     }
 
-    setSubmitting(false); // Set submitting to false after the operation
-  };
-
-  const onSubmit = async (values, actions) => {
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-    // actions.resetForm();
-    // console.log(values);
-    // console.log(actions);
-    const result = await actions.validateForm();
-    console.log(result);
+    setSubmitting(false);
   };
 
   return (
@@ -100,7 +82,7 @@ export const AddWorkingDayModal = ({
             </div>
 
             <div className={styles.row}>
-              <CustomFormikField name="shiftId">
+              <CustomFormikField name="workingShiftId">
                 <CustomFormikSelect
                   width="380px"
                   placeholder="Смена"
