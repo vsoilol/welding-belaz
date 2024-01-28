@@ -16,8 +16,10 @@ public class CreateWorkingShiftWithYearRequest
     public string? BreakStart { get; set; }
 
     public string? BreakEnd { get; set; }
-
-    public int? Year { get; set; }
+    //
+    // public int? Year { get; set; }
+    
+    public Guid? CalendarId { get; set; }
 
     public Guid? DayId { get; set; }
 

@@ -24,7 +24,7 @@ public class WorkingShiftUniquenessValidator
 
         return request.DayId.HasValue
             ? await IsUniqueShiftForDayAsync(request.DayId.Value, shiftNumber, cancellationToken)
-            : await IsUniqueShiftForYearAsync(request.Year, shiftNumber, cancellationToken);
+            : await IsUniqueShiftForYearAsync(request.CalendarId, shiftNumber, cancellationToken);
     }
 
     private async Task<bool> IsUniqueShiftForDayAsync(Guid dayId, int shiftNumber, CancellationToken cancellationToken)
@@ -34,15 +34,15 @@ public class WorkingShiftUniquenessValidator
         return !exists;
     }
 
-    private async Task<bool> IsUniqueShiftForYearAsync(int? year, int shiftNumber, CancellationToken cancellationToken)
+    private async Task<bool> IsUniqueShiftForYearAsync(Guid? calendarId, int shiftNumber, CancellationToken cancellationToken)
     {
-        if (year is null)
+        if (calendarId is null)
         {
             return false;
         }
 
         var exists = await _dbContext.WorkingShifts
-            .AnyAsync(ws => ws.Calendar!.Year == year && ws.Number == shiftNumber, cancellationToken);
+            .AnyAsync(ws => ws.CalendarId == calendarId && ws.Number == shiftNumber, cancellationToken);
         return !exists;
     }
 

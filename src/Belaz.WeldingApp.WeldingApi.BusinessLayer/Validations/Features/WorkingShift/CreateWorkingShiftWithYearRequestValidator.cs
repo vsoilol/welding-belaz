@@ -46,7 +46,7 @@ public class CreateWorkingShiftWithYearRequestValidator
             .SetValidator(new TimeValidatorFor<CreateWorkingShiftWithYearRequest>());
 
         When(
-            _ => _.Year is null,
+            _ => _.CalendarId is null,
             () =>
             {
                 RuleFor(model => model.DayId)
@@ -62,16 +62,21 @@ public class CreateWorkingShiftWithYearRequestValidator
         );
 
         When(
-            _ => _.Year is not null,
+            _ => _.CalendarId is not null,
             () =>
             {
                 RuleFor(model => model.DayId).Cascade(CascadeMode.Stop).Null();
 
-                RuleFor(model => model.Year)
+                RuleFor(model => model.CalendarId)
                     .Cascade(CascadeMode.Stop)
                     .NotNull()
                     .NotEmpty()
-                    .SetValidator(new YearValidatorFor<CreateWorkingShiftWithYearRequest>());
+                    .SetValidator(
+                        new SqlIdValidatorFor<
+                            CreateWorkingShiftWithYearRequest,
+                            Belaz.WeldingApp.Common.Entities.CalendarInfo.Calendar
+                        >(context)
+                    );
             }
         );
 
@@ -79,7 +84,7 @@ public class CreateWorkingShiftWithYearRequestValidator
             _ => _.DayId is not null,
             () =>
             {
-                RuleFor(model => model.Year).Cascade(CascadeMode.Stop).Null();
+                RuleFor(model => model.CalendarId).Cascade(CascadeMode.Stop).Null();
 
                 RuleFor(model => model.DayId)
                     .Cascade(CascadeMode.Stop)
@@ -97,11 +102,16 @@ public class CreateWorkingShiftWithYearRequestValidator
             _ => _.DayId is null,
             () =>
             {
-                RuleFor(model => model.Year)
+                RuleFor(model => model.CalendarId)
                     .Cascade(CascadeMode.Stop)
                     .NotNull()
                     .NotEmpty()
-                    .SetValidator(new YearValidatorFor<CreateWorkingShiftWithYearRequest>());
+                    .SetValidator(
+                        new SqlIdValidatorFor<
+                            CreateWorkingShiftWithYearRequest,
+                            Belaz.WeldingApp.Common.Entities.CalendarInfo.Calendar
+                        >(context)
+                    );
             }
         );
     }
