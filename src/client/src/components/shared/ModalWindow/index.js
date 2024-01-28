@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { closeIcon } from "assets/icons";
 // import { TabletContext } from 'context';
 // import { useSwipeable } from 'react-swipeable';
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 const ModalWindow = ({
   children,

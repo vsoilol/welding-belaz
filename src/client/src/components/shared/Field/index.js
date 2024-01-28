@@ -2,10 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Input from "components/shared/Input";
 
-import styles from "./style.module.css";
+import styles from "./style.module.scss";
 
 const Field = ({ type, invalid, error, noError, ...props }) => {
-
   const inputProps = {
     ...props,
     type,
@@ -20,9 +19,7 @@ const Field = ({ type, invalid, error, noError, ...props }) => {
     <div className={`${styles.field}`}>
       {renderInput()}
       {!noError && (
-        <p className={`${styles.error}`}>
-          {invalid && error && error}
-        </p>
+        <p className={`${styles.error}`}>{invalid && error && error}</p>
       )}
     </div>
   );

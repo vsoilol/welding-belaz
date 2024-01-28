@@ -1,12 +1,12 @@
 import React from "react";
-import { Production_calendar } from "components";
+import { ProductionCalendar } from "components";
 import { HeaderLayout } from "layouts/Header";
 
-export const ProductionCalendar = props => {
+export const ProductionCalendarPage = (props) => {
   return (
     <div>
-      <HeaderLayout {...props?.state?.auth?.user?.role??props?.userRole}>
-        <Production_calendar {...props} />
+      <HeaderLayout {...(props?.state?.auth?.user?.role ?? props?.userRole)}>
+        <ProductionCalendar {...props} />
       </HeaderLayout>
     </div>
   );

@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react";
-import "../Upload/styles.css";
 import Button from "components/shared/Button";
 import api from "services/api";
 import ModalWindow from "components/shared/ModalWindow";
 import { Formik } from "formik";
 import Input from "components/shared/Input";
+
+import "../Upload/styles.scss";
 
 export const Upload = ({ tool, updateParentState, Masters }) => {
   const fileInputRef = useRef(null);
@@ -17,7 +18,7 @@ export const Upload = ({ tool, updateParentState, Masters }) => {
 
   const saveFileSelected = async (file) => {
     setModalDate(false);
-    document.querySelector("body").style.overflowY="auto"
+    document.querySelector("body").style.overflowY = "auto";
     setFileSelected(file);
     try {
       if (tool === 0) {
@@ -32,7 +33,7 @@ export const Upload = ({ tool, updateParentState, Masters }) => {
         "Возникла ошибка. Пожалуйста, проверьте файл, который вы загружаете."
       );
       setModalDate(false);
-      document.querySelector("body").style.overflowY="auto"
+      document.querySelector("body").style.overflowY = "auto";
     }
   };
 
@@ -48,7 +49,7 @@ export const Upload = ({ tool, updateParentState, Masters }) => {
         setLoading(false);
       }, 5000);
       setModalDate(false);
-      document.querySelector("body").style.overflowY="auto"
+      document.querySelector("body").style.overflowY = "auto";
       fileInputRef.current.value = null;
     } catch (error) {
       setLoading(true);
@@ -85,7 +86,7 @@ export const Upload = ({ tool, updateParentState, Masters }) => {
         setLoading(false);
       }, 5000);
       setModalDate(false);
-      document.querySelector("body").style.overflowY="auto"
+      document.querySelector("body").style.overflowY = "auto";
       fileInputRef.current.value = null;
     } catch (error) {
       setLoading(true);
@@ -93,7 +94,7 @@ export const Upload = ({ tool, updateParentState, Masters }) => {
         "Возникла ошибка. Пожалуйста, проверьте файл, который вы загружаете."
       );
       setModalDate(false);
-      document.querySelector("body").style.overflowY="auto"
+      document.querySelector("body").style.overflowY = "auto";
     }
   }
 
@@ -120,71 +121,67 @@ export const Upload = ({ tool, updateParentState, Masters }) => {
         />
       </form>
 
-
-
-      {modalDate
-        ? (
-          <ModalWindow
-            isOpen={modalDate}
-            headerText="Загрузка файла"
-            setIsOpen={() => {
+      {modalDate ? (
+        <ModalWindow
+          isOpen={modalDate}
+          headerText="Загрузка файла"
+          setIsOpen={() => {
+            setModalDate(false);
+            document.querySelector("body").style.overflowY = "auto";
+          }}
+          wrapperStyles={{ width: 420 }}
+        >
+          <Formik
+            enableReinitialize
+            onSubmit={(variables) => {
               setModalDate(false);
-              document.querySelector("body").style.overflowY="auto"
+              document.querySelector("body").style.overflowY = "auto";
             }}
-            wrapperStyles={{ width: 420 }}
           >
-            <Formik
-              enableReinitialize
-              onSubmit={(variables) => {
-                const { id, ...dataToSend } = variables;
-                setModalDate(false);
-                document.querySelector("body").style.overflowY="auto"
-              }}
-            >
-              {({ handleSubmit, handleBlur }) => (
-                <form onSubmit={handleSubmit}>
-                  <div>
-                    <label className="getDate">Выберите дату</label>
-                    <div className="row">
-                      <Input
-                        onChange={(e) => {
-                          setdataFile(e.target.value);
-                        }}
-                        width="200"
-                        style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
-                        value={dataFile}
-                        name="dataFile"
-                        placeholder="Выберите дату загрузки ежедневного плана"
-                        type="text"
-                        onFocus={(e) => {
-                          e.currentTarget.type = "date";
-                        }}
-                        onBlur={handleBlur}
-                        autoComplete="off"
-                      />
-                    </div>
-                  </div>
+            {({ handleSubmit, handleBlur }) => (
+              <form onSubmit={handleSubmit}>
+                <div>
+                  <label className="getDate">Выберите дату</label>
                   <div className="row">
-                    <Button
-                      disabled={!dataFile}
-                      type="submit"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        sendDataPlan();
+                    <Input
+                      onChange={(e) => {
+                        setdataFile(e.target.value);
                       }}
-                    >
-                      Загрузить
-                    </Button>
+                      width="200"
+                      style={{
+                        height: 40,
+                        padding: "0 20px 0 30px",
+                        width: 380,
+                      }}
+                      value={dataFile}
+                      name="dataFile"
+                      placeholder="Выберите дату загрузки ежедневного плана"
+                      type="text"
+                      onFocus={(e) => {
+                        e.currentTarget.type = "date";
+                      }}
+                      onBlur={handleBlur}
+                      autoComplete="off"
+                    />
                   </div>
-                </form>
-              )}
-            </Formik>
-          </ModalWindow>
-        ) 
-        : null
-
-     }
-
+                </div>
+                <div className="row">
+                  <Button
+                    disabled={!dataFile}
+                    type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      sendDataPlan();
+                    }}
+                  >
+                    Загрузить
+                  </Button>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </ModalWindow>
+      ) : null}
 
       {loading ? (
         <ModalWindow

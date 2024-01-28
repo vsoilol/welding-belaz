@@ -1,0 +1,12 @@
+.inputField {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+}
+
+.inputError {
+  font-size: 14px;
+  color: red;
+  font-style: italic;
+  margin-left: 25px;
+}

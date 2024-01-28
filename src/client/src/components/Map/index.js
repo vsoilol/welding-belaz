@@ -1,6 +1,6 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA";
@@ -36,8 +36,8 @@ class EquipmentMap extends React.Component {
                 type: "Point",
                 coordinates: [item?.geoData?.lat, item?.geoData?.ing],
               },
-              serialNum:item?.serialNum,
-              machineId:item?.machineId,
+              serialNum: item?.serialNum,
+              machineId: item?.machineId,
               status:
                 new Date() - new Date(item?.updatedAt) < 5 * 60 * 1000
                   ? "Активно"
@@ -74,9 +74,6 @@ class EquipmentMap extends React.Component {
       });
     });
 
-    /* console.log(!!this.state.geojson.features[0]);
-    console.log(this.state.geojson.features); */
-
     if (this.state.geojson.features && !!this.state.geojson.features[0])
       this.state.geojson.features.forEach(function (marker) {
         // create a HTML element for each feature
@@ -91,10 +88,10 @@ class EquipmentMap extends React.Component {
         ].join(" ");
 
         //Click on marker
-        el.addEventListener("click",()=>{
-          window.open('/records');
-        })
-        
+        el.addEventListener("click", () => {
+          window.open("/records");
+        });
+
         // make a marker for each feature and add to the map
         new mapboxgl.Marker(el)
           .setLngLat(marker?.geometry?.coordinates)
@@ -102,12 +99,12 @@ class EquipmentMap extends React.Component {
             new mapboxgl.Popup({ offset: 25 }) // add popups
               .setHTML(
                 "<h3>" +
-                marker.properties.title +
-                "</h3><p> Маркировка:" +
-                marker.machineId+
-                "</p><p> Серийный (инвентарный номер):" +
-                marker.serialNum+
-                "</p>"   
+                  marker.properties.title +
+                  "</h3><p> Маркировка:" +
+                  marker.machineId +
+                  "</p><p> Серийный (инвентарный номер):" +
+                  marker.serialNum +
+                  "</p>"
               )
           )
           .addTo(map);

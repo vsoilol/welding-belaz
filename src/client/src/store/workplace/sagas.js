@@ -5,11 +5,11 @@ import errorActions from "../error/actions";
 
 const {
   Types: {
-    ///Цеха 
+    ///Цеха
     LOAD_WORKSHOP_REQUEST,
     ADD_WORKSHOP_REQUEST,
     EDIT_WORKSHOP_REQUEST,
-    ///Производственные участки 
+    ///Производственные участки
     LOAD_AREA_REQUEST,
     ADD_AREA_REQUEST,
     EDIT_AREA_REQUEST,
@@ -37,19 +37,17 @@ const {
     LOAD_SEAM_REQUEST,
     ADD_SEAM_REQUEST,
     EDIT_SEAM_REQUEST,
-    ///Технологические процессы 
+    ///Технологические процессы
     LOAD_TEXPROCWELDING_REQUEST,
-  ///Закрепленные детали  за инспектором
+    ///Закрепленные детали  за инспектором
     LOAD_DETAILBYINSPECTOR_REQUEST,
 
-    LOAD_WELDINGTASK_REQUEST,  
-
+    LOAD_WELDINGTASK_REQUEST,
 
     DELETE_PRODUCT_REQUEST,
- 
   },
   Creators: {
-    ///Цеха 
+    ///Цеха
     loadWorkshopSuccess,
     loadWorkshopFailure,
 
@@ -58,7 +56,7 @@ const {
 
     editWorkshopSuccess,
     editWorkshopFailure,
-    ///Производственные участки 
+    ///Производственные участки
     loadAreaSuccess,
     loadAreaFailure,
 
@@ -76,7 +74,7 @@ const {
 
     editPostsSuccess,
     editPostsFailure,
-    ///Рабочие места 
+    ///Рабочие места
     loadWorkplaceSuccess,
     loadWorkplaceFailure,
 
@@ -121,7 +119,7 @@ const {
 
     editSeamSuccess,
     editSeamFailure,
-    ///Технологические процессы 
+    ///Технологические процессы
     loadTexprocweldingSuccess,
     loadTexprocweldingFailure,
 
@@ -129,25 +127,21 @@ const {
     loadDetailbyinspectorSuccess,
     loadDetailbyinspectorFailure,
 
-
     loadWeldingtaskSuccess,
     loadWeldingtaskFailure,
- 
 
     deleteProductSuccess,
     deleteProductFailure,
-
- 
   },
 } = workplaceActions;
 
 const {
   Creators: { setError },
 } = errorActions;
-///Цеха 
+///Цеха
 function* loadWorkshop() {
   try {
-    const { data } = yield call(api.get, `/Workshop`); 
+    const { data } = yield call(api.get, `/Workshop`);
     yield put(loadWorkshopSuccess(data));
   } catch (error) {
     yield put(loadWorkshopFailure(error));
@@ -157,8 +151,8 @@ function* loadWorkshop() {
 function* addWorkshop(variables) {
   try {
     const { data } = yield call(api.post, `/Workshop`, {
-      "name": variables.payload.name,
-      "number": variables.payload.number
+      name: variables.payload.name,
+      number: variables.payload.number,
     });
     yield call(loadWorkshop);
     yield put(addWorkshopSuccess(data));
@@ -170,9 +164,9 @@ function* addWorkshop(variables) {
 function* editWorkshop(variables) {
   try {
     const { data } = yield call(api.put, `/Workshop`, {
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number": variables.payload.number
+      id: variables.payload.id,
+      name: variables.payload.name,
+      number: variables.payload.number,
     });
     yield call(loadWorkshop);
     yield put(editWorkshopSuccess(variables.payload));
@@ -181,7 +175,7 @@ function* editWorkshop(variables) {
     yield put(setError(error.message));
   }
 }
-///Производственные участки 
+///Производственные участки
 function* loadArea() {
   try {
     const { data } = yield call(api.get, `/ProductionArea`);
@@ -194,9 +188,9 @@ function* loadArea() {
 function* addArea(variables) {
   try {
     const { data } = yield call(api.post, `/ProductionArea`, {
-      "name": variables.payload.name,
-      "number": variables.payload.number,
-      "workshopId": variables.payload.workshopId
+      name: variables.payload.name,
+      number: variables.payload.number,
+      workshopId: variables.payload.workshopId,
     });
     yield call(loadArea);
     yield put(addAreaSuccess(data));
@@ -208,10 +202,10 @@ function* addArea(variables) {
 function* editArea(variables) {
   try {
     const { data } = yield call(api.put, `/ProductionArea`, {
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number": variables.payload.number,
-      "workshopId": variables.payload.workshopId
+      id: variables.payload.id,
+      name: variables.payload.name,
+      number: variables.payload.number,
+      workshopId: variables.payload.workshopId,
     });
     yield call(loadArea);
     yield put(editAreaSuccess(variables.payload));
@@ -232,13 +226,11 @@ function* loadPosts() {
 }
 function* addPosts(variables) {
   try {
-    const { data } = yield call(api.post, `/post`,
-      {
-        "number": variables.payload.number,
-        "name": variables.payload.name,
-        "productionAreaId": variables.payload.productionAreaId
-      }
-    );
+    const { data } = yield call(api.post, `/post`, {
+      number: variables.payload.number,
+      name: variables.payload.name,
+      productionAreaId: variables.payload.productionAreaId,
+    });
     yield call(loadPosts);
     yield put(addPostsSuccess(data));
   } catch (error) {
@@ -249,10 +241,10 @@ function* addPosts(variables) {
 function* editPosts(variables) {
   try {
     const { data } = yield call(api.put, `/post`, {
-      "id": variables.payload.id,
-      "number": variables.payload.number,
-      "name": variables.payload.name,
-      "productionAreaId": variables.payload.productionAreaId
+      id: variables.payload.id,
+      number: variables.payload.number,
+      name: variables.payload.name,
+      productionAreaId: variables.payload.productionAreaId,
     });
     yield call(loadPosts);
     yield put(editPostsSuccess(data));
@@ -273,13 +265,11 @@ function* loadWorkplace() {
 }
 function* addWorkplace(variables) {
   try {
-    const { data } = yield call(api.post, `/Workplace`,
-      {
-        "number": variables.payload.number,
-        "postId": variables.payload.postId,
-        "productionAreaId": variables.payload.productionAreaId
-      }
-    );
+    const { data } = yield call(api.post, `/Workplace`, {
+      number: variables.payload.number,
+      postId: variables.payload.postId,
+      productionAreaId: variables.payload.productionAreaId,
+    });
     yield call(loadWorkplace);
     yield put(addWorkplaceSuccess(data));
   } catch (error) {
@@ -290,10 +280,10 @@ function* addWorkplace(variables) {
 function* editWorkplace(variables) {
   try {
     const { data } = yield call(api.put, `/Workplace`, {
-      "id": variables.payload.id,
-      "number": variables.payload.number,
-      "postId": variables.payload.postId,
-      "productionAreaId": variables.payload.productionAreaId
+      id: variables.payload.id,
+      number: variables.payload.number,
+      postId: variables.payload.postId,
+      productionAreaId: variables.payload.productionAreaId,
     });
     yield call(loadWorkplace);
     yield put(editWorkplaceSuccess(variables.payload));
@@ -302,9 +292,6 @@ function* editWorkplace(variables) {
     yield put(setError(error.message));
   }
 }
-
-
-
 
 ///Изделия
 function* loadProduct() {
@@ -328,61 +315,59 @@ function* loadWeldingTask() {
 }
 function* addProduct(variables) {
   try {
-    
-    if (variables.payload.status==="add") {
+    if (variables.payload.status === "add") {
       if (variables.payload.valEx === 1) {
         const { data } = yield call(api.put, `/product/assignMaster`, {
-          "productId": variables.payload.productId,
-          "masterId": variables.payload.masterId
+          productId: variables.payload.productId,
+          masterId: variables.payload.masterId,
         });
       }
       if (variables.payload.valEx === 2) {
         const { data } = yield call(api.put, `/product/assignInspector`, {
-          "productId": variables.payload.productId,
-          "inspectorId": variables.payload.inspectorId
+          productId: variables.payload.productId,
+          inspectorId: variables.payload.inspectorId,
         });
       }
-  
+
       if (variables.payload.valEx === undefined) {
         const { data } = yield call(api.post, `/product`, {
-          "name": variables.payload.name,
-          "number": `${variables.payload.number}`,
-          "isControlSubject": true,
-          "productionAreaId": variables.payload.productionAreaId,
-          "workplaceId": variables.payload.workplaceId,
-          "technologicalProcessId": variables.payload.technologicalProcessId,
-          "seams":variables.payload.seams,
-          "manufacturingTime":variables.payload.manufacturingTime,
+          name: variables.payload.name,
+          number: `${variables.payload.number}`,
+          isControlSubject: true,
+          productionAreaId: variables.payload.productionAreaId,
+          workplaceId: variables.payload.workplaceId,
+          technologicalProcessId: variables.payload.technologicalProcessId,
+          seams: variables.payload.seams,
+          manufacturingTime: variables.payload.manufacturingTime,
         });
         yield put(addProductSuccess(data));
         yield call(loadProduct);
       }
     }
 
-    if (variables.payload.status==="assign") {
+    if (variables.payload.status === "assign") {
       const { data } = yield call(api.put, `/product/assignWelders`, {
-        "productId": variables.payload.productId,
-        "welderIds":variables.payload.welderIds
-      });  
+        productId: variables.payload.productId,
+        welderIds: variables.payload.welderIds,
+      });
     }
-    
   } catch (error) {
     yield put(addProductFailure(error));
     yield put(setError(error.message));
   }
 }
 function* editProduct(variables) {
-  try {        
+  try {
     const { data } = yield call(api.put, `/product`, {
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number": `${variables.payload.number}`,
-      "isControlSubject": true,
-      "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId,
-      "seams":variables.payload.seams,
-      "manufacturingTime":variables.payload.manufacturingTime,
+      id: variables.payload.id,
+      name: variables.payload.name,
+      number: `${variables.payload.number}`,
+      isControlSubject: true,
+      productionAreaId: variables.payload.productionAreaId,
+      workplaceId: variables.payload.workplaceId,
+      technologicalProcessId: variables.payload.technologicalProcessId,
+      seams: variables.payload.seams,
+      manufacturingTime: variables.payload.manufacturingTime,
     });
     yield call(loadProduct);
     yield put(editProductSuccess(data));
@@ -392,15 +377,18 @@ function* editProduct(variables) {
   }
 }
 function* getDetailByInspector(variables) {
-  try { 
-    const { data } = yield call(api.get, `/detail/byInspector/${variables.payload}` ); 
+  try {
+    const { data } = yield call(
+      api.get,
+      `/detail/byInspector/${variables.payload}`
+    );
     yield put(loadDetailbyinspectorSuccess(data));
   } catch (error) {
     yield put(loadDetailbyinspectorFailure(error));
     yield put(setError(error.message));
   }
 }
- 
+
 ///Узлы
 function* loadKnot() {
   try {
@@ -413,47 +401,42 @@ function* loadKnot() {
   }
 }
 function* addKnot(variables) {
-
   try {
-    if (variables.payload.status==="add") {
+    if (variables.payload.status === "add") {
       if (variables.payload.valEx === 1) {
         const { data } = yield call(api.put, `/knot/assignMaster`, {
-          "productId": variables.payload.productId,
-          "masterId": variables.payload.masterId
+          productId: variables.payload.productId,
+          masterId: variables.payload.masterId,
         });
       }
       if (variables.payload.valEx === 2) {
         const { data } = yield call(api.put, `/knot/assignInspector`, {
-          "productId": variables.payload.productId,
-          "inspectorId": variables.payload.inspectorId
+          productId: variables.payload.productId,
+          inspectorId: variables.payload.inspectorId,
         });
       }
-  
-      if (variables.payload.valEx === undefined) {
-        const { data } = yield call(api.post, `/knot`, { 
 
-          "name": variables.payload.name,
-          "number": `${variables.payload.number}`,
-          "isControlSubject": false,
-          "productionAreaId": variables.payload.productionAreaId,  
-          "technologicalProcessId": variables.payload.technologicalProcessId,
-          "mainProductId": variables.payload.mainProductId,
-          "manufacturingTime":variables.payload.manufacturingTime,
-          
+      if (variables.payload.valEx === undefined) {
+        const { data } = yield call(api.post, `/knot`, {
+          name: variables.payload.name,
+          number: `${variables.payload.number}`,
+          isControlSubject: false,
+          productionAreaId: variables.payload.productionAreaId,
+          technologicalProcessId: variables.payload.technologicalProcessId,
+          mainProductId: variables.payload.mainProductId,
+          manufacturingTime: variables.payload.manufacturingTime,
         });
         yield call(loadKnot);
         yield put(addKnotSuccess(data));
       }
-    } 
-
-
-    if (variables.payload.status==="assign") {
-      const { data } = yield call(api.put, `/knot/assignWelders`, {
-        "productId": variables.payload.productId,
-        "welderIds": variables.payload.welderIds
-      });  
     }
 
+    if (variables.payload.status === "assign") {
+      const { data } = yield call(api.put, `/knot/assignWelders`, {
+        productId: variables.payload.productId,
+        welderIds: variables.payload.welderIds,
+      });
+    }
   } catch (error) {
     yield put(addKnotFailure(error));
     yield put(setError(error.message));
@@ -462,14 +445,14 @@ function* addKnot(variables) {
 function* editKnot(variables) {
   try {
     const { data } = yield call(api.put, `/knot`, {
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number": `${variables.payload.number}`,
-      "isControlSubject": false,
-      "productionAreaId": variables.payload.productionAreaId,  
-      "technologicalProcessId": variables.payload.technologicalProcessId,
-      "mainProductId": variables.payload.mainProductId,
-      "manufacturingTime":variables.payload.manufacturingTime,
+      id: variables.payload.id,
+      name: variables.payload.name,
+      number: `${variables.payload.number}`,
+      isControlSubject: false,
+      productionAreaId: variables.payload.productionAreaId,
+      technologicalProcessId: variables.payload.technologicalProcessId,
+      mainProductId: variables.payload.mainProductId,
+      manufacturingTime: variables.payload.manufacturingTime,
     });
     yield call(loadKnot);
     yield put(editKnotSuccess(data));
@@ -490,64 +473,59 @@ function* loadDetail() {
   }
 }
 function* addDetail(variables) {
-  
-
   try {
-    if (variables.payload.status==="add") {
+    if (variables.payload.status === "add") {
       if (variables.payload.valEx === 1) {
         const { data } = yield call(api.put, `/detail/assignMaster`, {
-          "productId": variables.payload.productId,
-          "masterId": variables.payload.masterId
+          productId: variables.payload.productId,
+          masterId: variables.payload.masterId,
         });
       }
       if (variables.payload.valEx === 2) {
         const { data } = yield call(api.put, `/detail/assignInspector`, {
-          "productId": variables.payload.productId,
-          "inspectorId": variables.payload.inspectorId
+          productId: variables.payload.productId,
+          inspectorId: variables.payload.inspectorId,
         });
       }
-  
+
       if (variables.payload.valEx === undefined) {
-       
         const { data } = yield call(api.post, `/detail`, {
-          "name": variables.payload.name,
-          "number": `${variables.payload.number}`,
-          "isControlSubject": true,
-          "productionAreaId": variables.payload.productionAreaId, 
-          "technologicalProcessId": variables.payload.technologicalProcessId,  
-          "mainProductId": variables.payload.mainProductId,  
-          "manufacturingTime":variables.payload.manufacturingTime,
+          name: variables.payload.name,
+          number: `${variables.payload.number}`,
+          isControlSubject: true,
+          productionAreaId: variables.payload.productionAreaId,
+          technologicalProcessId: variables.payload.technologicalProcessId,
+          mainProductId: variables.payload.mainProductId,
+          manufacturingTime: variables.payload.manufacturingTime,
         });
         yield call(loadDetail);
         yield put(addDetailSuccess(data));
       }
-    } 
-
-    
-    if (variables.payload.status==="assign") {
-      const { data } = yield call(api.put, `/detail/assignWelders`, {
-        "productId": variables.payload.productId,
-        "welderIds": variables.payload.welderIds
-      });  
     }
 
+    if (variables.payload.status === "assign") {
+      const { data } = yield call(api.put, `/detail/assignWelders`, {
+        productId: variables.payload.productId,
+        welderIds: variables.payload.welderIds,
+      });
+    }
   } catch (error) {
     yield put(addDetailFailure(error));
     yield put(setError(error.message));
   }
 }
 function* editDetail(variables) {
-  try { 
+  try {
     const { data } = yield call(api.put, `/detail`, {
-      "id": variables.payload.id,
-      "name": variables.payload.name,
-      "number": `${variables.payload.number}`, 
-      "isControlSubject": true,
-      "productionAreaId": variables.payload.productionAreaId,
-      "workplaceId": variables.payload.workplaceId,
-      "technologicalProcessId": variables.payload.technologicalProcessId, 
-      "mainProductId": variables.payload.mainProductId,  
-      "manufacturingTime":variables.payload.manufacturingTime,
+      id: variables.payload.id,
+      name: variables.payload.name,
+      number: `${variables.payload.number}`,
+      isControlSubject: true,
+      productionAreaId: variables.payload.productionAreaId,
+      workplaceId: variables.payload.workplaceId,
+      technologicalProcessId: variables.payload.technologicalProcessId,
+      mainProductId: variables.payload.mainProductId,
+      manufacturingTime: variables.payload.manufacturingTime,
     });
     yield put(editDetailSuccess(data));
     yield call(loadDetail);
@@ -569,50 +547,49 @@ function* loadSeam() {
   }
 }
 function* addSeam(variables) {
-  try { 
+  try {
     if (variables.payload.valEx === 1) {
       const { data } = yield call(api.put, `/seam/assignWelder`, {
-        "seamId": variables.payload.seamId,
-        "welderId": variables.payload.masterId
+        seamId: variables.payload.seamId,
+        welderId: variables.payload.masterId,
       });
     }
     if (variables.payload.valEx === 2) {
       const { data } = yield call(api.put, `/seam/assignInspector`, {
-        "seamId": variables.payload.seamId,
-        "inspectorId": variables.payload.inspectorId
+        seamId: variables.payload.seamId,
+        inspectorId: variables.payload.inspectorId,
       });
     }
 
-    if (variables.payload.valEx === undefined) { 
-      const { data } = yield call(api.post, `/seam`, { 
-        "number": variables.payload.number,
-        "isControlSubject": true,
-        "isPerformed": true,
-        "length": 0,
-        "productionAreaId": variables.payload.productionAreaId,
-        "technologicalInstructionId": variables.payload.technologicalProcessId,
-        "productId": variables.payload.productId, 
+    if (variables.payload.valEx === undefined) {
+      const { data } = yield call(api.post, `/seam`, {
+        number: variables.payload.number,
+        isControlSubject: true,
+        isPerformed: true,
+        length: 0,
+        productionAreaId: variables.payload.productionAreaId,
+        technologicalInstructionId: variables.payload.technologicalProcessId,
+        productId: variables.payload.productId,
       });
       yield call(loadSeam);
       yield put(addSeamSuccess(data));
     }
-    
   } catch (error) {
     yield put(addSeamFailure(error));
     yield put(setError(error.message));
   }
 }
 function* editSeam(variables) {
-  try { 
-    const { data } = yield call(api.put, `/seam`, { 
-      "id": variables.payload.id,
-      "number": variables.payload.number,
-      "isControlSubject": true,
-      "isPerformed": true,
-      "length": 0,
-      "productionAreaId": variables.payload.productionAreaId,
-      "technologicalInstructionId": variables.payload.technologicalProcessId,
-      "productId": variables.payload.productId 
+  try {
+    const { data } = yield call(api.put, `/seam`, {
+      id: variables.payload.id,
+      number: variables.payload.number,
+      isControlSubject: true,
+      isPerformed: true,
+      length: 0,
+      productionAreaId: variables.payload.productionAreaId,
+      technologicalInstructionId: variables.payload.technologicalProcessId,
+      productId: variables.payload.productId,
     });
     yield put(editSeamSuccess(data));
     yield call(loadSeam);
@@ -620,17 +597,17 @@ function* editSeam(variables) {
     yield put(editSeamFailure(error));
     yield put(setError(error.message));
   }
-}  
+}
 
 const deleteEndpoints = {
-  0: { endpoint: '/Workshop', loadFunction: loadWorkshop },
-  1: { endpoint: '/ProductionArea', loadFunction: loadArea },
-  2: { endpoint: '/post', loadFunction: loadPosts },
-  3: { endpoint: '/Workplace', loadFunction: loadWorkplace },
-  4: { endpoint: '/product', loadFunction: loadProduct },
-  5: { endpoint: '/knot', loadFunction: loadKnot },
-  6: { endpoint: '/detail', loadFunction: loadDetail },
-  7: { endpoint: '/seam', loadFunction: loadSeam },
+  0: { endpoint: "/Workshop", loadFunction: loadWorkshop },
+  1: { endpoint: "/ProductionArea", loadFunction: loadArea },
+  2: { endpoint: "/post", loadFunction: loadPosts },
+  3: { endpoint: "/Workplace", loadFunction: loadWorkplace },
+  4: { endpoint: "/product", loadFunction: loadProduct },
+  5: { endpoint: "/knot", loadFunction: loadKnot },
+  6: { endpoint: "/detail", loadFunction: loadDetail },
+  7: { endpoint: "/seam", loadFunction: loadSeam },
 };
 
 function* deleteProduct({ payload }) {
@@ -645,48 +622,86 @@ function* deleteProduct({ payload }) {
   }
 }
 
-
-export function* workplaceSaga() {
-
-  ///Цеха 
-  yield takeLatest(LOAD_WORKSHOP_REQUEST, loadWorkshop);
-  yield takeLatest(ADD_WORKSHOP_REQUEST, addWorkshop);
-  yield takeLatest(EDIT_WORKSHOP_REQUEST, editWorkshop);
-  ///Производственные участки 
-  yield takeLatest(LOAD_AREA_REQUEST, loadArea);
-  yield takeLatest(ADD_AREA_REQUEST, addArea);
-  yield takeLatest(EDIT_AREA_REQUEST, editArea);
+export default [
+  ///Цеха
+  takeLatest(LOAD_WORKSHOP_REQUEST, loadWorkshop),
+  takeLatest(ADD_WORKSHOP_REQUEST, addWorkshop),
+  takeLatest(EDIT_WORKSHOP_REQUEST, editWorkshop),
+  ///Производственные участки
+  takeLatest(LOAD_AREA_REQUEST, loadArea),
+  takeLatest(ADD_AREA_REQUEST, addArea),
+  takeLatest(EDIT_AREA_REQUEST, editArea),
   ///Посты
-  yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
-  yield takeLatest(ADD_POSTS_REQUEST, addPosts);
-  yield takeLatest(EDIT_POSTS_REQUEST, editPosts)
+  takeLatest(LOAD_POSTS_REQUEST, loadPosts),
+  takeLatest(ADD_POSTS_REQUEST, addPosts),
+  takeLatest(EDIT_POSTS_REQUEST, editPosts),
   ///Рабочие места
-  yield takeLatest(LOAD_WORKPLACE_REQUEST, loadWorkplace);
-  yield takeLatest(ADD_WORKPLACE_REQUEST, addWorkplace);
-  yield takeLatest(EDIT_WORKPLACE_REQUEST, editWorkplace)
+  takeLatest(LOAD_WORKPLACE_REQUEST, loadWorkplace),
+  takeLatest(ADD_WORKPLACE_REQUEST, addWorkplace),
+  takeLatest(EDIT_WORKPLACE_REQUEST, editWorkplace),
   ///Изделия
-  yield takeLatest(LOAD_PRODUCT_REQUEST, loadProduct);
-  yield takeLatest(ADD_PRODUCT_REQUEST, addProduct);
-  yield takeLatest(EDIT_PRODUCT_REQUEST, editProduct) 
+  takeLatest(LOAD_PRODUCT_REQUEST, loadProduct),
+  takeLatest(ADD_PRODUCT_REQUEST, addProduct),
+  takeLatest(EDIT_PRODUCT_REQUEST, editProduct),
   ///Узлы
-  yield takeLatest(LOAD_KNOT_REQUEST, loadKnot);
-  yield takeLatest(ADD_KNOT_REQUEST, addKnot);
-  yield takeLatest(EDIT_KNOT_REQUEST, editKnot)
+  takeLatest(LOAD_KNOT_REQUEST, loadKnot),
+  takeLatest(ADD_KNOT_REQUEST, addKnot),
+  takeLatest(EDIT_KNOT_REQUEST, editKnot),
   ///Детали
-  yield takeLatest(LOAD_DETAIL_REQUEST, loadDetail);
-  yield takeLatest(ADD_DETAIL_REQUEST, addDetail);
-  yield takeLatest(EDIT_DETAIL_REQUEST, editDetail)
+  takeLatest(LOAD_DETAIL_REQUEST, loadDetail),
+  takeLatest(ADD_DETAIL_REQUEST, addDetail),
+  takeLatest(EDIT_DETAIL_REQUEST, editDetail),
   ///Сварные швы
-  yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
-  yield takeLatest(ADD_SEAM_REQUEST, addSeam);
-  yield takeLatest(EDIT_SEAM_REQUEST, editSeam)
-  ///Технологические процессы  
-  yield takeLatest(LOAD_DETAILBYINSPECTOR_REQUEST, getDetailByInspector);
+  takeLatest(LOAD_SEAM_REQUEST, loadSeam),
+  takeLatest(ADD_SEAM_REQUEST, addSeam),
+  takeLatest(EDIT_SEAM_REQUEST, editSeam),
+  ///Технологические процессы
+  takeLatest(LOAD_DETAILBYINSPECTOR_REQUEST, getDetailByInspector),
 
+  ///Технологические процессы
+  takeLatest(LOAD_WELDINGTASK_REQUEST, loadWeldingTask),
 
-   ///Технологические процессы  
-   yield takeLatest(LOAD_WELDINGTASK_REQUEST, loadWeldingTask);
- 
-   yield takeLatest(DELETE_PRODUCT_REQUEST, deleteProduct);
-}
+  takeLatest(DELETE_PRODUCT_REQUEST, deleteProduct),
+];
 
+// export function* workplaceSaga() {
+//   ///Цеха
+//   yield takeLatest(LOAD_WORKSHOP_REQUEST, loadWorkshop);
+//   yield takeLatest(ADD_WORKSHOP_REQUEST, addWorkshop);
+//   yield takeLatest(EDIT_WORKSHOP_REQUEST, editWorkshop);
+//   ///Производственные участки
+//   yield takeLatest(LOAD_AREA_REQUEST, loadArea);
+//   yield takeLatest(ADD_AREA_REQUEST, addArea);
+//   yield takeLatest(EDIT_AREA_REQUEST, editArea);
+//   ///Посты
+//   yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
+//   yield takeLatest(ADD_POSTS_REQUEST, addPosts);
+//   yield takeLatest(EDIT_POSTS_REQUEST, editPosts);
+//   ///Рабочие места
+//   yield takeLatest(LOAD_WORKPLACE_REQUEST, loadWorkplace);
+//   yield takeLatest(ADD_WORKPLACE_REQUEST, addWorkplace);
+//   yield takeLatest(EDIT_WORKPLACE_REQUEST, editWorkplace);
+//   ///Изделия
+//   yield takeLatest(LOAD_PRODUCT_REQUEST, loadProduct);
+//   yield takeLatest(ADD_PRODUCT_REQUEST, addProduct);
+//   yield takeLatest(EDIT_PRODUCT_REQUEST, editProduct);
+//   ///Узлы
+//   yield takeLatest(LOAD_KNOT_REQUEST, loadKnot);
+//   yield takeLatest(ADD_KNOT_REQUEST, addKnot);
+//   yield takeLatest(EDIT_KNOT_REQUEST, editKnot);
+//   ///Детали
+//   yield takeLatest(LOAD_DETAIL_REQUEST, loadDetail);
+//   yield takeLatest(ADD_DETAIL_REQUEST, addDetail);
+//   yield takeLatest(EDIT_DETAIL_REQUEST, editDetail);
+//   ///Сварные швы
+//   yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
+//   yield takeLatest(ADD_SEAM_REQUEST, addSeam);
+//   yield takeLatest(EDIT_SEAM_REQUEST, editSeam);
+//   ///Технологические процессы
+//   yield takeLatest(LOAD_DETAILBYINSPECTOR_REQUEST, getDetailByInspector);
+
+//   ///Технологические процессы
+//   yield takeLatest(LOAD_WELDINGTASK_REQUEST, loadWeldingTask);
+
+//   yield takeLatest(DELETE_PRODUCT_REQUEST, deleteProduct);
+// }

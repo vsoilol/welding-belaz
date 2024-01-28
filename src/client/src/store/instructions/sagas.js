@@ -60,7 +60,11 @@ function* addInstruction({ payload }) {
 
 function* editInstruction({ payload }) {
   try {
-    const { data } = yield call(api.put, `/instructions/${payload.id}`, payload);
+    const { data } = yield call(
+      api.put,
+      `/instructions/${payload.id}`,
+      payload
+    );
     yield put(editInstructionSuccess(data));
   } catch (error) {
     yield put(editInstructionFailure(error));
@@ -100,7 +104,11 @@ function* addWpsInstruction({ payload }) {
 
 function* editWpsInstruction({ payload }) {
   try {
-    const { data } = yield call(api.put, `/instructions/wps/${payload.id}`, payload);
+    const { data } = yield call(
+      api.put,
+      `/instructions/wps/${payload.id}`,
+      payload
+    );
     yield put(editWpsInstructionSuccess(data));
   } catch (error) {
     yield put(editWpsInstructionFailure(error));
@@ -118,13 +126,24 @@ function* deleteWpsInstruction({ payload }) {
   }
 }
 
-export function* instructionsSaga() {
-  yield takeLatest(LOAD_INSTRUCTIONS_REQUEST, loadInstructions);
-  yield takeLatest(ADD_INSTRUCTION_REQUEST, addInstruction);
-  yield takeLatest(DELETE_INSTRUCTION_REQUEST, deleteInstruction);
-  yield takeLatest(EDIT_INSTRUCTION_REQUEST, editInstruction);
-  yield takeLatest(LOAD_WPS_INSTRUCTIONS_REQUEST, loadWpsInstructions);
-  yield takeLatest(ADD_WPS_INSTRUCTION_REQUEST, addWpsInstruction);
-  yield takeLatest(DELETE_WPS_INSTRUCTION_REQUEST, deleteWpsInstruction);
-  yield takeLatest(EDIT_WPS_INSTRUCTION_REQUEST, editWpsInstruction);
-}
+// export function* instructionsSaga() {
+//   yield takeLatest(LOAD_INSTRUCTIONS_REQUEST, loadInstructions);
+//   yield takeLatest(ADD_INSTRUCTION_REQUEST, addInstruction);
+//   yield takeLatest(DELETE_INSTRUCTION_REQUEST, deleteInstruction);
+//   yield takeLatest(EDIT_INSTRUCTION_REQUEST, editInstruction);
+//   yield takeLatest(LOAD_WPS_INSTRUCTIONS_REQUEST, loadWpsInstructions);
+//   yield takeLatest(ADD_WPS_INSTRUCTION_REQUEST, addWpsInstruction);
+//   yield takeLatest(DELETE_WPS_INSTRUCTION_REQUEST, deleteWpsInstruction);
+//   yield takeLatest(EDIT_WPS_INSTRUCTION_REQUEST, editWpsInstruction);
+// }
+
+export default [
+  takeLatest(LOAD_INSTRUCTIONS_REQUEST, loadInstructions),
+  takeLatest(ADD_INSTRUCTION_REQUEST, addInstruction),
+  takeLatest(DELETE_INSTRUCTION_REQUEST, deleteInstruction),
+  takeLatest(EDIT_INSTRUCTION_REQUEST, editInstruction),
+  takeLatest(LOAD_WPS_INSTRUCTIONS_REQUEST, loadWpsInstructions),
+  takeLatest(ADD_WPS_INSTRUCTION_REQUEST, addWpsInstruction),
+  takeLatest(DELETE_WPS_INSTRUCTION_REQUEST, deleteWpsInstruction),
+  takeLatest(EDIT_WPS_INSTRUCTION_REQUEST, editWpsInstruction),
+];

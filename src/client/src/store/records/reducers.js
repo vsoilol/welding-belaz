@@ -24,7 +24,6 @@ const loadRecordsSuccess = (state = INITIAL_STATE, { records }) => {
   };
 };
 const deleteRecordsSuccess = (state = INITIAL_STATE, { id }) => {
-  console.log(state.records)
   /* return {
     ...state,
     isRequesting: false,
@@ -41,9 +40,8 @@ const failure = (state = INITIAL_STATE, { error }) => {
 
 export const HANDLERS = {
   [Types.LOAD_RECORDS_REQUEST]: request,
-  [Types.LOAD_RECORDS_SUCCESS]: loadRecordsSuccess, 
+  [Types.LOAD_RECORDS_SUCCESS]: loadRecordsSuccess,
   [Types.LOAD_RECORDS_FAILURE]: failure,
-
 
   [Types.DELETE_RECORDS_REQUEST]: request,
   [Types.DELETE_RECORDS_SUCCESS]: deleteRecordsSuccess,

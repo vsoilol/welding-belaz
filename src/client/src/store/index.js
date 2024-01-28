@@ -7,6 +7,7 @@ import auth from "services/auth";
 import history from "./history";
 import rootReducer from "./reducer";
 import rootSaga from "./saga";
+import { executorsNewSaga } from "./executors/sagas";
 
 const getInitialState = () => {
   const token = auth.getToken();
@@ -31,17 +32,19 @@ const getInitialState = () => {
   };
 };
 
+const DOMAIN = process.env.REACT_APP_ENVIRONMENT;
+
 const initialState = getInitialState();
 
 const sagaMiddleware = createSagaMiddleware();
 
 const middleWare =
-  process.env.NODE_ENV !== "production"
-    ? [logger, routerMiddleware(history), sagaMiddleware]
+  process.env.REACT_APP_ENVIRONMENT !== "production"
+    ? [routerMiddleware(history), sagaMiddleware]
     : [routerMiddleware(history), sagaMiddleware];
 
 const composeEnhancers =
-  process.env.NODE_ENV !== "production" &&
+  process.env.REACT_APP_ENVIRONMENT !== "production" &&
   typeof window === "object" &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})

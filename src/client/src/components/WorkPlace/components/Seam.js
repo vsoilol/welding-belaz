@@ -18,7 +18,7 @@ import { Table } from "components/shared/Table";
 import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import styles from "components/WorkPlace/styles.module.css";
+import styles from "components/WorkPlace/styles.module.scss";
 
 import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
@@ -269,7 +269,6 @@ export const Seam = ({
 
     variables["technologicalProcessId"] = technologicalProcess;
 
-    console.log(valuetSeam);
     variables["seams"] = [valuetSeam];
 
     variables["postId"] = valuetWorkPlace;
@@ -410,7 +409,7 @@ export const Seam = ({
                     type="text"
                     placeholder="Номер"
                     onBlur={handleBlur}
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                 </div>
 

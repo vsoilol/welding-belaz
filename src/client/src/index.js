@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import store from "store";
 import { Provider } from "react-redux";
@@ -9,6 +8,8 @@ import history from "store/history";
 import * as serviceWorker from "./serviceWorker";
 import api from "services/api";
 import auth from "services/auth";
+
+import "./index.scss";
 
 const RootApp = () => {
   const token = auth.getToken();

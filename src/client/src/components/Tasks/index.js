@@ -9,7 +9,7 @@ import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import api from "services/api";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import errorActions from "store/error/actions";
 import { useDispatch } from "react-redux";
 
@@ -56,10 +56,8 @@ export const Tasks = ({
   userRole,
   equipment,
 
-
   loadSeam,
   seam,
-
 
   loadProduct,
   loadKnot,
@@ -74,8 +72,7 @@ export const Tasks = ({
   user,
 
   loadTasktools,
-  loadEquipment
-
+  loadEquipment,
 }) => {
   const [modalData, setModalData] = useState(null);
   const dispatch = useDispatch();
@@ -83,7 +80,6 @@ export const Tasks = ({
   const [modalDataPasport, setmodalDataPasport] = useState(false);
   const [SequenceNumber, setSequenceNumber] = useState("");
   const [NumberTask, setNumberTask] = useState(null);
-
 
   const formattedMasters = masters?.map((item) => {
     return {
@@ -106,7 +102,6 @@ export const Tasks = ({
     date: modalData?.weldingDate ?? "",
   };
 
-
   const requiredKeys = [
     "object",
     "sector",
@@ -117,7 +112,6 @@ export const Tasks = ({
     "weldingWire",
     "instructionId",
   ];
-
 
   useEffect(() => {
     loadTasks();
@@ -140,10 +134,8 @@ export const Tasks = ({
     loadKnot,
     loadDetail,
     loadEquipment,
-    loadSeam]);
-
-
-
+    loadSeam,
+  ]);
 
   const formattedTechs = techs?.map((item) => {
     return {
@@ -159,22 +151,26 @@ export const Tasks = ({
     };
   });
   const getDocument = () => {
-    const number = tasks?.tasks.find(task => task.number === NumberTask).id;
-    api.get(`file/seamPassport?TaskId=${number}&SequenceNumber=${SequenceNumber ?? ""}`, {
-      responseType: "arraybuffer",
-      dataType: "blob",
-    })
+    const number = tasks?.tasks.find((task) => task.number === NumberTask).id;
+    api
+      .get(
+        `file/seamPassport?TaskId=${number}&SequenceNumber=${
+          SequenceNumber ?? ""
+        }`,
+        {
+          responseType: "arraybuffer",
+          dataType: "blob",
+        }
+      )
       .then((response) => {
         const file = new Blob([response["data"]], {
           type: "application/pdf",
         });
         const fileURL = URL.createObjectURL(file);
-        window.open(fileURL); 
+        window.open(fileURL);
       })
       .catch((error) => dispatch(setError(error?.response?.data?.title ?? "")));
   };
-
-
 
   const columns = [
     (userRole === "Admin" || userRole === "Master") && {
@@ -185,22 +181,26 @@ export const Tasks = ({
           src={deleteIcon}
           onClick={() => {
             setdeleteTaskModal(true);
-            setidPlan(rowData?.id)
+            setidPlan(rowData?.id);
           }}
         />
       ),
     },
     {
-      title: "№ задания»", field: "number",
+      title: "№ задания»",
+      field: "number",
     },
     {
-      title: "Номер шва", field: "seamNumber",
+      title: "Номер шва",
+      field: "seamNumber",
     },
     {
-      title: "Количество швов", field: "manufacturedAmount",
+      title: "Количество швов",
+      field: "manufacturedAmount",
     },
     {
-      title: "Дата ", field: "weldingDate",
+      title: "Дата ",
+      field: "weldingDate",
     },
     {
       title: "Статус",
@@ -213,8 +213,7 @@ export const Tasks = ({
         }
       },
       customFilterAndSearch: (term, rowData) => {
-        const statusString =
-          rowData?.status === 3 ? "Завершено" : "В процессе";
+        const statusString = rowData?.status === 3 ? "Завершено" : "В процессе";
         return statusString.toLowerCase().includes(term.toLowerCase());
       },
     },
@@ -322,7 +321,10 @@ export const Tasks = ({
       title: "Скачать краткий паспорт",
       render: (rowData) => (
         <div
-          onClick={() => { setgetFailebasedPassport(true); setBasedPassportId(rowData?.id) }}
+          onClick={() => {
+            setgetFailebasedPassport(true);
+            setBasedPassportId(rowData?.id);
+          }}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -335,7 +337,10 @@ export const Tasks = ({
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => { setmodalDataPasport(true); setNumberTask(rowData?.number) }}
+          onClick={() => {
+            setmodalDataPasport(true);
+            setNumberTask(rowData?.number);
+          }}
           className={styles.downloadButton}
         >
           <SaveIcon />
@@ -343,19 +348,23 @@ export const Tasks = ({
       ),
       width: 54,
     },
-  ].filter(column => column);
+  ].filter((column) => column);
   const columnsWelder = [
     {
-      title: "№ задания»", field: "number",
+      title: "№ задания»",
+      field: "number",
     },
     {
-      title: "Номер шва", field: "seamNumber",
+      title: "Номер шва",
+      field: "seamNumber",
     },
     {
-      title: "Количество швов", field: "manufacturedAmount",
+      title: "Количество швов",
+      field: "manufacturedAmount",
     },
     {
-      title: "Дата ", field: "weldingDate",
+      title: "Дата ",
+      field: "weldingDate",
     },
     {
       title: "Статус",
@@ -368,8 +377,7 @@ export const Tasks = ({
         }
       },
       customFilterAndSearch: (term, rowData) => {
-        const statusString =
-          rowData?.status === 3 ? "Завершено" : "В процессе";
+        const statusString = rowData?.status === 3 ? "Завершено" : "В процессе";
         return statusString.toLowerCase().includes(term.toLowerCase());
       },
     },
@@ -377,92 +385,126 @@ export const Tasks = ({
       title: "Наименование изделия",
       field: "product.name",
       customFilterAndSearch: (term, rowData) => {
-        return rowData?.seam?.product?.name?.toLowerCase().includes(term.toLowerCase()) ||
-          rowData?.seam?.product?.number?.toLowerCase().includes(term.toLowerCase())
+        return (
+          rowData?.seam?.product?.name
+            ?.toLowerCase()
+            .includes(term.toLowerCase()) ||
+          rowData?.seam?.product?.number
+            ?.toLowerCase()
+            .includes(term.toLowerCase())
+        );
       },
       render: (rowData) => {
         if (rowData?.seam?.product) {
-          return <p>{rowData?.seam.product.name} {rowData?.seam.product.number}</p>
+          return (
+            <p>
+              {rowData?.seam.product.name} {rowData?.seam.product.number}
+            </p>
+          );
         } else {
-          return <p>-</p>
+          return <p>-</p>;
         }
-      }
+      },
     },
     {
       title: "Наименование узла",
       field: "knot.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.knot ?
-        <p>{`${rowData?.seam.knot.name} ${rowData?.seam.knot.number}`}</p> :
-        <p>-</p>
+      customFilterAndSearch: (term, rowData) =>
+        rowData?.seam?.knot?.name?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) =>
+        rowData?.seam?.knot ? (
+          <p>{`${rowData?.seam.knot.name} ${rowData?.seam.knot.number}`}</p>
+        ) : (
+          <p>-</p>
+        ),
     },
     {
       title: "Наименование детали",
       field: "detail.name",
-      customFilterAndSearch: (term, rowData) => rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.seam?.detail ?
-        <p>{`${rowData?.seam.detail.name} ${rowData?.seam.detail.number}`}</p> :
-        <p>-</p>
+      customFilterAndSearch: (term, rowData) =>
+        rowData?.seam?.detail?.name?.toLowerCase().includes(term.toLowerCase()),
+      render: (rowData) =>
+        rowData?.seam?.detail ? (
+          <p>{`${rowData?.seam.detail.name} ${rowData?.seam.detail.number}`}</p>
+        ) : (
+          <p>-</p>
+        ),
     },
     {
       title: "Оборудование  ( инвентарный номер )",
       field: "weldingEquipment.factoryNumber",
-      customFilterAndSearch: (term, rowData) => rowData?.weldingEquipment?.factoryNumber?.toLowerCase().includes(term.toLowerCase()),
-      render: (rowData) => rowData?.weldingEquipment?.factoryNumber ?? "-"
+      customFilterAndSearch: (term, rowData) =>
+        rowData?.weldingEquipment?.factoryNumber
+          ?.toLowerCase()
+          .includes(term.toLowerCase()),
+      render: (rowData) => rowData?.weldingEquipment?.factoryNumber ?? "-",
     },
     {
       title: "Исполнитель",
       field: "welder",
       customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.welder?.middleName} ${rowData?.welder?.firstName} ${rowData?.welder?.lastName}`.toLowerCase();
+        const fullName =
+          `${rowData?.welder?.middleName} ${rowData?.welder?.firstName} ${rowData?.welder?.lastName}`.toLowerCase();
         return fullName.includes(term.toLowerCase());
       },
-      render: (rowData) => rowData?.welder ?
-        <p>{`${rowData?.welder.middleName} ${rowData?.welder.firstName} ${rowData?.welder.lastName}`}</p> :
-        <p>-</p>
+      render: (rowData) =>
+        rowData?.welder ? (
+          <p>{`${rowData?.welder.middleName} ${rowData?.welder.firstName} ${rowData?.welder.lastName}`}</p>
+        ) : (
+          <p>-</p>
+        ),
     },
     {
       title: "Руководитель сварочных работ",
       field: "master",
       customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.master?.middleName} ${rowData?.master?.firstName} ${rowData?.master?.lastName}`.toLowerCase();
+        const fullName =
+          `${rowData?.master?.middleName} ${rowData?.master?.firstName} ${rowData?.master?.lastName}`.toLowerCase();
         return fullName.includes(term.toLowerCase());
       },
-      render: (rowData) => rowData?.master ?
-        <p>{`${rowData?.master.middleName} ${rowData?.master.firstName} ${rowData?.master.lastName}`}</p> :
-        <p>-</p>
+      render: (rowData) =>
+        rowData?.master ? (
+          <p>{`${rowData?.master.middleName} ${rowData?.master.firstName} ${rowData?.master.lastName}`}</p>
+        ) : (
+          <p>-</p>
+        ),
     },
     {
       title: "Контролер",
       field: "inspector",
       customFilterAndSearch: (term, rowData) => {
-        const fullName = `${rowData?.inspector?.middleName} ${rowData?.inspector?.firstName} ${rowData?.inspector?.lastName}`.toLowerCase();
+        const fullName =
+          `${rowData?.inspector?.middleName} ${rowData?.inspector?.firstName} ${rowData?.inspector?.lastName}`.toLowerCase();
         return fullName.includes(term.toLowerCase());
       },
-      render: (rowData) => rowData?.inspector ?
-        <p>{`${rowData?.inspector.middleName} ${rowData?.inspector.firstName} ${rowData?.inspector.lastName}`}</p> :
-        <p>-</p>
+      render: (rowData) =>
+        rowData?.inspector ? (
+          <p>{`${rowData?.inspector.middleName} ${rowData?.inspector.firstName} ${rowData?.inspector.lastName}`}</p>
+        ) : (
+          <p>-</p>
+        ),
     },
     {
       field: "url",
       title: "Скачать паспорт",
       render: (rowData) => (
         <div
-          onClick={() => { setmodalDataPasport(true); setNumberTask(rowData?.number) }}
+          onClick={() => {
+            setmodalDataPasport(true);
+            setNumberTask(rowData?.number);
+          }}
           className={styles.downloadButton}
         >
           <SaveIcon />
         </div>
       ),
-      width: 54
+      width: 54,
     },
   ];
 
-
   const renderRowChildren = (rowData) => {
-
     return (
-      <TableContainer >
+      <TableContainer>
         <MaterialTable aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -491,14 +533,13 @@ export const Tasks = ({
                 Наименование детали
               </TableCell>
 
-
               <TableCell
                 style={{
                   borderBottom: 0,
                 }}
                 align="center"
               >
-                Оборудование  ( инвентарный номер )
+                Оборудование ( инвентарный номер )
               </TableCell>
               <TableCell
                 style={{
@@ -527,18 +568,22 @@ export const Tasks = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow  >
+            <TableRow>
               <TableCell align="center">
                 {rowData?.product?.name ?? "-"}
               </TableCell>
               <TableCell align="center">
-                {rowData?.knot?.name && rowData?.knot?.number ? `${rowData?.knot?.name} ${rowData?.knot?.number}` : "-"}
+                {rowData?.knot?.name && rowData?.knot?.number
+                  ? `${rowData?.knot?.name} ${rowData?.knot?.number}`
+                  : "-"}
               </TableCell>
               <TableCell align="center">
-                {rowData?.detail?.name && rowData?.detail?.number ? `${rowData?.detail.name} ${rowData?.detail.number}` : "-"}
+                {rowData?.detail?.name && rowData?.detail?.number
+                  ? `${rowData?.detail.name} ${rowData?.detail.number}`
+                  : "-"}
               </TableCell>
               <TableCell align="center">
-                {rowData?.weldingEquipments.map(equipment => (
+                {rowData?.weldingEquipments.map((equipment) => (
                   <li key={equipment.factoryNumber}>
                     {`${equipment.name} ${equipment.factoryNumber}`}
                   </li>
@@ -546,18 +591,28 @@ export const Tasks = ({
               </TableCell>
 
               <TableCell align="center">
-                {rowData?.welder?.middleName && rowData?.welder?.firstName && rowData?.welder?.lastName ? `${rowData?.welder.middleName} ${rowData?.welder.firstName} ${rowData?.welder.lastName}` : "-"}
+                {rowData?.welder?.middleName &&
+                rowData?.welder?.firstName &&
+                rowData?.welder?.lastName
+                  ? `${rowData?.welder.middleName} ${rowData?.welder.firstName} ${rowData?.welder.lastName}`
+                  : "-"}
               </TableCell>
 
               <TableCell align="center">
-                {rowData?.master?.middleName && rowData?.master?.firstName && rowData?.master?.lastName ? `${rowData?.master.middleName} ${rowData?.master.firstName} ${rowData?.master.lastName}` : "-"}
+                {rowData?.master?.middleName &&
+                rowData?.master?.firstName &&
+                rowData?.master?.lastName
+                  ? `${rowData?.master.middleName} ${rowData?.master.firstName} ${rowData?.master.lastName}`
+                  : "-"}
               </TableCell>
 
               <TableCell align="center">
-                {rowData?.inspector?.middleName && rowData?.inspector?.firstName && rowData?.inspector?.lastName ? `${rowData?.inspector.middleName} ${rowData?.inspector.firstName} ${rowData?.inspector.lastName}` : "-"}
+                {rowData?.inspector?.middleName &&
+                rowData?.inspector?.firstName &&
+                rowData?.inspector?.lastName
+                  ? `${rowData?.inspector.middleName} ${rowData?.inspector.firstName} ${rowData?.inspector.lastName}`
+                  : "-"}
               </TableCell>
-
-
             </TableRow>
           </TableBody>
         </MaterialTable>
@@ -565,34 +620,27 @@ export const Tasks = ({
     );
   };
 
-
-
-
   const [value_panel, setValue] = useState(0);
   const ChangePanels = (event, newValue) => {
     setValue(newValue);
   };
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
-    return (
-      <div hidden={value !== indPanel}  >
-        {children}
-      </div>
-    );
+    return <div hidden={value !== indPanel}>{children}</div>;
   };
-  const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] = useState(false);
+  const [modalchangeInfoproductAccount, setmodalchangeInfoproductAccount] =
+    useState(false);
   const [AmountManufactured, setAmountManufactured] = useState(0);
   const [idPlan, setidPlan] = useState("");
-
-
 
   function ChangeManufacturedDefective(AmountManufactured, variables) {
     const promises = [];
     // Редактирование даты задания
-    const datePromise = api.put(`/WeldingTask/changeDate`, {
-      "id": idPlan,
-      "date": new Date(variables.date).toLocaleDateString('ru-RU')
-    })
+    const datePromise = api
+      .put(`/WeldingTask/changeDate`, {
+        id: idPlan,
+        date: new Date(variables.date).toLocaleDateString("ru-RU"),
+      })
       .then((response) => {
         loadTasks();
       })
@@ -600,11 +648,12 @@ export const Tasks = ({
         console.error(error);
       });
     promises.push(datePromise);
-    // Редактирование количества швов 
-    const seamAmountPromise = api.put(`/WeldingTask/changeSeamAmount`, {
-      "id": idPlan,
-      "seamAmount": AmountManufactured
-    })
+    // Редактирование количества швов
+    const seamAmountPromise = api
+      .put(`/WeldingTask/changeSeamAmount`, {
+        id: idPlan,
+        seamAmount: AmountManufactured,
+      })
       .then((response) => {
         loadTasks();
       })
@@ -614,37 +663,35 @@ export const Tasks = ({
     promises.push(seamAmountPromise);
     // Редактирование статуса
     const statusPromise = isChecked1
-      ? api.put(`/WeldingTask/changeStatus`, { "id": idPlan, "status": 3 })
-        .then((response) => {
-          loadTasks();
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-      : api.put(`/WeldingTask/changeStatus`, { "id": idPlan, "status": 1 })
-        .then((response) => {
-          loadTasks();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      ? api
+          .put(`/WeldingTask/changeStatus`, { id: idPlan, status: 3 })
+          .then((response) => {
+            loadTasks();
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      : api
+          .put(`/WeldingTask/changeStatus`, { id: idPlan, status: 1 })
+          .then((response) => {
+            loadTasks();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     promises.push(statusPromise);
     Promise.all(promises)
       .then(() => {
-        console.log('All requests have been completed.');
+        console.log("All requests have been completed.");
       })
       .catch((error) => {
         console.error(error);
       });
   }
 
-
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
   const [dateTask, setdateTask] = useState("");
-
-
-
 
   const handleCheckboxChange = (checkboxIndex) => {
     if (checkboxIndex === 1) {
@@ -656,18 +703,16 @@ export const Tasks = ({
     }
   };
 
-
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
 
   function deleteTaskAjax() {
-    api.remove(`/WeldingTask/${idPlan}`)
-      .then((response) => { loadTasks() })
-      .catch((error) => { });
+    api
+      .remove(`/WeldingTask/${idPlan}`)
+      .then((response) => {
+        loadTasks();
+      })
+      .catch((error) => {});
   }
-
-  
- 
-
 
   const [getFailebasedPassport, setgetFailebasedPassport] = useState(false);
   const [BasedPassportId, setBasedPassportId] = useState("");
@@ -676,28 +721,30 @@ export const Tasks = ({
     SequenceNumber: "",
     AverageIntervalSeconds: "",
     SecondsToIgnoreBetweenGraphs: "",
-  }
+  };
 
-  function GetFailebasedPassport(params) {  
-    api.get(`file/based-seam-passport?TaskId=${BasedPassportId}&SequenceNumber=${params.SequenceNumber ?? ""}&AverageIntervalSeconds=&SecondsToIgnoreBetweenGraphs=`,
-      {
-        responseType: "arraybuffer",
-        dataType: "blob",
-      })
+  function GetFailebasedPassport(params) {
+    api
+      .get(
+        `file/based-seam-passport?TaskId=${BasedPassportId}&SequenceNumber=${
+          params.SequenceNumber ?? ""
+        }&AverageIntervalSeconds=&SecondsToIgnoreBetweenGraphs=`,
+        {
+          responseType: "arraybuffer",
+          dataType: "blob",
+        }
+      )
       .then((response) => {
         const file = new Blob([response["data"]], {
           type: "application/pdf",
         });
         const fileURL = URL.createObjectURL(file);
-        window.open(fileURL); 
+        window.open(fileURL);
       })
-      .catch((error) => { });
-
+      .catch((error) => {});
   }
 
-
   const [serchOnserialnumber, setserchOnserialnumber] = useState("");
-
 
   return (
     <div className={styles.innerWrapper}>
@@ -707,59 +754,59 @@ export const Tasks = ({
         src={tasksImage}
       />
 
-      {userRole === "Admin" || userRole === "Master" || userRole === "Inspector" || userRole === "Chief" || userRole === "PlantManager" || userRole === "Technologist"
-        ? (
-          <Tabs
-            value={value_panel}
-            onChange={ChangePanels}
-            indicatorColor="primary"
-            textColor="primary"
-            aria-label="full width tabs example"
-          >
-            <Tab label="Сменные задания на сварку " />
-            <Tab label="Ежедневный план" />
-          </Tabs>
-        )
-        : null
-      }
+      {userRole === "Admin" ||
+      userRole === "Master" ||
+      userRole === "Inspector" ||
+      userRole === "Chief" ||
+      userRole === "PlantManager" ||
+      userRole === "Technologist" ? (
+        <Tabs
+          value={value_panel}
+          onChange={ChangePanels}
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="full width tabs example"
+        >
+          <Tab label="Сменные задания на сварку " />
+          <Tab label="Ежедневный план" />
+        </Tabs>
+      ) : null}
 
-
-      <div className={styles.tableWrapper}> 
+      <div className={styles.tableWrapper}>
         {/*Сменные задания на сварку*/}
         <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{ minWidth: "1200px", }}
+          style={{ minWidth: "1200px" }}
         >
           <Table
             title="Сменные задания на сварку"
-            columns={
-              columns
-            }
+            columns={columns}
             data={tasks?.tasks}
             isLoading={isRequesting}
             actions={
               userRole === "Admin" || userRole === "Master"
                 ? [
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать ",
-                    onClick: (event, rowData) => {
-                      setAmountManufactured(rowData?.manufacturedAmount)
-                      setidPlan(rowData?.id)
-                      setmodalchangeInfoproductAccount(true)
-                      if (rowData?.status === 3) {
-                        setIsChecked1(true)
-                        setIsChecked2(false)
-                      }
-                      else {
-                        setIsChecked1(false)
-                        setIsChecked2(true)
-                      }
-                      setdateTask(rowData?.weldingDate.split(".").reverse().join("-"))
+                    {
+                      icon: "edit",
+                      tooltip: "Редактировать ",
+                      onClick: (event, rowData) => {
+                        setAmountManufactured(rowData?.manufacturedAmount);
+                        setidPlan(rowData?.id);
+                        setmodalchangeInfoproductAccount(true);
+                        if (rowData?.status === 3) {
+                          setIsChecked1(true);
+                          setIsChecked2(false);
+                        } else {
+                          setIsChecked1(false);
+                          setIsChecked2(true);
+                        }
+                        setdateTask(
+                          rowData?.weldingDate.split(".").reverse().join("-")
+                        );
+                      },
                     },
-                  },
-                ]
+                  ]
                 : []
             }
             renderRowChildren={renderRowChildren}
@@ -767,31 +814,28 @@ export const Tasks = ({
         </TabPanel>
 
         {/*Ежедневный план*/}
-        {value_panel === 1
-          ? (
-            <DailyPlan
-              masters={masters}
-              product={product}
-              knot={knot}
-              detail={detail}
-              executors={executors}
-              initialValues={initialValues}
-              user={user}
-              equipment={equipment}
-              userRole={userRole}
-              techs={techs}
-              loadTasks={loadTasks}
-            />
-          )
-          : null
-        }
+        {value_panel === 1 ? (
+          <DailyPlan
+            masters={masters}
+            product={product}
+            knot={knot}
+            detail={detail}
+            executors={executors}
+            initialValues={initialValues}
+            user={user}
+            equipment={equipment}
+            userRole={userRole}
+            techs={techs}
+            loadTasks={loadTasks}
+          />
+        ) : null}
 
         {/*Ввод выработки и брака*/}
         <ModalWindow
           isOpen={modalchangeInfoproductAccount}
           headerText="Редактировать"
           setIsOpen={(state) => {
-            setmodalchangeInfoproductAccount(false)
+            setmodalchangeInfoproductAccount(false);
           }}
           wrapperStyles={{ width: 420 }}
         >
@@ -800,8 +844,8 @@ export const Tasks = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              setmodalchangeInfoproductAccount(false)
-              ChangeManufacturedDefective(AmountManufactured, variables)
+              setmodalchangeInfoproductAccount(false);
+              ChangeManufacturedDefective(AmountManufactured, variables);
             }}
           >
             {({
@@ -812,7 +856,6 @@ export const Tasks = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-
                 <div>
                   {/* <p style={{ padding: "15px 20px 0 30px" }}>Изменение количества продукции из плана  </p>
                   <div className={styles.row}>
@@ -826,20 +869,25 @@ export const Tasks = ({
                       name="AmountManufactured"
                       placeholder="количества продукции из плана"
                       onBlur={handleBlur}
-                      autocomplete="off"
+                      autoComplete="off"
                     />
                   </div> */}
 
-                  <p style={{ padding: "15px 20px 0 30px" }}>Изменение даты задания </p>
+                  <p style={{ padding: "15px 20px 0 30px" }}>
+                    Изменение даты задания{" "}
+                  </p>
                   <div className={styles.row}>
-
                     <Input
                       onChange={(e) => {
                         handleChange(e);
-                        setdateTask(e.target.value)
+                        setdateTask(e.target.value);
                       }}
                       width="200"
-                      style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                      style={{
+                        height: 40,
+                        padding: "0 20px 0 30px",
+                        width: 380,
+                      }}
                       value={dateTask}
                       name="date"
                       placeholder="Дата "
@@ -848,53 +896,47 @@ export const Tasks = ({
                         e.currentTarget.type = "date";
                       }}
                       onBlur={handleBlur}
-                      autocomplete="off"
+                      autoComplete="off"
                     />
                   </div>
 
-                  <p style={{ padding: "15px 20px 0 30px" }}>Изменение статус задания </p>
+                  <p style={{ padding: "15px 20px 0 30px" }}>
+                    Изменение статус задания{" "}
+                  </p>
                   <div className={styles.rowCheck}>
-                    <div className={styles.row} onClick={() => handleCheckboxChange(1)}>
-                      <input
-                        type="checkbox"
-                        checked={isChecked1}
-                      />
+                    <div
+                      className={styles.row}
+                      onClick={() => handleCheckboxChange(1)}
+                    >
+                      <input type="checkbox" checked={isChecked1} />
                       <span className={styles.Done}>Завершено</span>
                     </div>
-                    <div className={styles.row} onClick={() => handleCheckboxChange(2)}>
-                      <input
-                        type="checkbox"
-                        checked={isChecked2}
-                      />
+                    <div
+                      className={styles.row}
+                      onClick={() => handleCheckboxChange(2)}
+                    >
+                      <input type="checkbox" checked={isChecked2} />
                       <span className={styles.InProcess}>В процессе</span>
                     </div>
                   </div>
 
-
                   <div className={styles.row}>
-                    <Button
-                      disabled={
-                        values.shiftNumb == ""
-                      }
-                      type="submit"
-                    >
+                    <Button disabled={values.shiftNumb == ""} type="submit">
                       Изменить
                     </Button>
                   </div>
-
                 </div>
               </form>
             )}
           </Formik>
         </ModalWindow>
 
-
         {/*Удаление задания*/}
         <ModalWindow
           isOpen={deleteTaskModal}
           headerText="Удаление"
           setIsOpen={(state) => {
-            setdeleteTaskModal(false)
+            setdeleteTaskModal(false);
           }}
           wrapperStyles={{ width: 420 }}
         >
@@ -903,8 +945,8 @@ export const Tasks = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              setdeleteTaskModal(false)
-              deleteTaskAjax()
+              setdeleteTaskModal(false);
+              deleteTaskAjax();
             }}
           >
             {({
@@ -915,18 +957,14 @@ export const Tasks = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данное задание ? </h4>
+                  <h4 style={{ padding: "35px 40px" }}>
+                    Вы уверены что хотите <span>удалить</span> данное задание ?{" "}
+                  </h4>
 
                   <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Удалить
-                    </Button>
+                    <Button type="submit">Удалить</Button>
                   </div>
-
                 </div>
               </form>
             )}
@@ -938,7 +976,7 @@ export const Tasks = ({
           isOpen={getFailebasedPassport}
           headerText="Получение паспорта"
           setIsOpen={(state) => {
-            setgetFailebasedPassport(false)
+            setgetFailebasedPassport(false);
           }}
           wrapperStyles={{ width: 420 }}
         >
@@ -947,8 +985,8 @@ export const Tasks = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              setgetFailebasedPassport(false)
-              GetFailebasedPassport(variables, id)
+              setgetFailebasedPassport(false);
+              GetFailebasedPassport(variables, id);
             }}
           >
             {({
@@ -959,7 +997,6 @@ export const Tasks = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-
                 <div>
                   {/* <div className={styles.row}>
                     <Input
@@ -971,7 +1008,7 @@ export const Tasks = ({
                       name="SequenceNumber"
                       placeholder="Интервал времени в секундах"
                       onBlur={handleBlur}
-                      autocomplete="off"
+                      autoComplete="off"
                     />
                   </div> */}
 
@@ -980,12 +1017,16 @@ export const Tasks = ({
                       onChange={(e) => {
                         handleChange(e);
                       }}
-                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      style={{
+                        height: 40,
+                        padding: "0 20px 0 30px",
+                        width: "100%",
+                      }}
                       value={values.SequenceNumber}
                       name="SequenceNumber"
                       placeholder="Порядковый номер"
                       onBlur={handleBlur}
-                      autocomplete="off"
+                      autoComplete="off"
                     />
                   </div>
 
@@ -999,18 +1040,13 @@ export const Tasks = ({
                       name="SecondsToIgnoreBetweenGraphs"
                       placeholder="Интервал времени"
                       onBlur={handleBlur}
-                      autocomplete="off"
+                      autoComplete="off"
                     />
                   </div> */}
 
                   <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Получить
-                    </Button>
+                    <Button type="submit">Получить</Button>
                   </div>
-
                 </div>
               </form>
             )}
@@ -1022,7 +1058,7 @@ export const Tasks = ({
           isOpen={modalDataPasport}
           headerText="Получение паспорта"
           setIsOpen={(state) => {
-            setmodalDataPasport(false)
+            setmodalDataPasport(false);
           }}
           wrapperStyles={{ width: 420 }}
         >
@@ -1031,8 +1067,8 @@ export const Tasks = ({
             enableReinitialize
             onSubmit={(variables) => {
               const { id, ...dataToSend } = variables;
-              setmodalDataPasport(false)
-              getDocument()
+              setmodalDataPasport(false);
+              getDocument();
             }}
           >
             {({
@@ -1043,41 +1079,33 @@ export const Tasks = ({
               handleBlur,
             }) => (
               <form onSubmit={handleSubmit}>
-
                 <div>
-
-
                   <div className={styles.row}>
                     <Input
                       onChange={(e) => {
-                         
                         setSequenceNumber(e.target.value);
                       }}
-                      style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
+                      style={{
+                        height: 40,
+                        padding: "0 20px 0 30px",
+                        width: "100%",
+                      }}
                       value={SequenceNumber}
                       name="SequenceNumber"
                       placeholder="Порядковый номер"
                       onBlur={handleBlur}
-                      autocomplete="off"
+                      autoComplete="off"
                     />
                   </div>
 
-
-
                   <div className={styles.row}>
-                    <Button
-                      type="submit"
-                    >
-                      Получить
-                    </Button>
+                    <Button type="submit">Получить</Button>
                   </div>
-
                 </div>
               </form>
             )}
           </Formik>
         </ModalWindow>
-
       </div>
     </div>
   );

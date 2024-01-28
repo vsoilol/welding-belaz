@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import ToolTip from "components/shared/ToolTip";
 import { reportsImage } from "assets/pics";
 import { Table } from "components/shared/Table";
@@ -61,12 +61,13 @@ export const Modes = ({
         const arcVoltageValues = response.data.arcVoltageValues;
         const weldingStartTime = response.data.weldingStartTime;
         const weldingEndTime = response.data.weldingEndTime;
- 
-        if (response.status===204) {
+
+        if (response.status === 204) {
           setvalueMess("Данные за этот период отсутствуют");
         }
         if (
-          weldingCurrentValues && weldingCurrentValues.length === arcVoltageValues.length &&
+          weldingCurrentValues &&
+          weldingCurrentValues.length === arcVoltageValues.length &&
           weldingCurrentValues.length > 0
         ) {
           const MAX_DATA_POINTS = 1000; // Максимальное количество точек на графике
@@ -92,11 +93,11 @@ export const Modes = ({
               weldingCurrent: weldingCurrentValues[i],
               arcVoltage: arcVoltageValues[i],
             });
-          }      
+          }
           setvalueData(sampledData);
         } else {
-          setvalueData(null); 
-        } 
+          setvalueData(null);
+        }
       })
       .catch((error) => {
         setvalueData(null);
@@ -155,7 +156,7 @@ export const Modes = ({
                 onFocus={(e) => {
                   e.currentTarget.type = "date";
                 }}
-                autocomplete="off"
+                autoComplete="off"
               />
             </div>
             <div className={styles.row}>
@@ -196,7 +197,7 @@ export const Modes = ({
                 value={valueStartTime}
                 name={`valueStartTime`}
                 placeholder="Время начало сварки "
-                autocomplete="off"
+                autoComplete="off"
               />
             </div>
             <div className={styles.row}>
@@ -213,7 +214,7 @@ export const Modes = ({
                 value={valueEndTime}
                 name={`valueEndTime`}
                 placeholder="Время окончания сварки  "
-                autocomplete="off"
+                autoComplete="off"
               />
             </div>
           </div>
