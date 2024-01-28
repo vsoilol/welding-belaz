@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.CalendarInfo;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
@@ -14,6 +13,10 @@ public class CalendarDto : IMapFrom<Calendar>
     public IReadOnlyCollection<DayDto>? Days { get; set; }
 
     public IReadOnlyCollection<WorkingShiftDto> MainWorkingShifts { get; set; } = null!;
+    
+    public Guid? WelderId { get; set; }
+
+    public Guid? WeldingEquipmentId { get; set; }
     
     public void Mapping(Profile profile)
     {
