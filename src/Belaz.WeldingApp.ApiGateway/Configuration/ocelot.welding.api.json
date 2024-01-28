@@ -1028,7 +1028,7 @@
       "UpstreamPathTemplate": "/api/day",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "POST"
+        "POST", "PUT"
       ],
       "DownstreamPathTemplate": "/api/day",
       "ServiceName": "welding",
