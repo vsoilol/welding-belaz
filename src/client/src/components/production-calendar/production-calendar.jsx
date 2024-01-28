@@ -15,9 +15,9 @@ import "./styleCalendar.scss";
 
 export const ProductionCalendar = ({
   userRole,
-  loadMainCalendarByYear,
   mainCalendar,
   calendarIsLoading,
+  loadMainCalendarByYear,
   updateWorkingDayWithWorkingShift,
   createDay,
   updateDay,
@@ -180,7 +180,7 @@ export const ProductionCalendar = ({
         <EditWorkingShiftModal
           isOpen={isModalAddShiftOpen}
           toggleModal={setIsModalAddShiftOpen}
-          currentYear={mainCalendar?.year}
+          calendarId={mainCalendar?.id}
           workingShifts={mainCalendar.mainWorkingShifts}
           createWorkingShift={createWorkingShift}
           deleteWorkingShift={deleteWorkingShift}

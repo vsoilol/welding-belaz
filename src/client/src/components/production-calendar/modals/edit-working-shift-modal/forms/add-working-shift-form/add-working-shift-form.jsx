@@ -9,7 +9,7 @@ import { validationSchema } from "./validation-schema";
 import styles from "../../../modal-style.module.scss";
 
 export const AddWorkingShiftForm = ({
-  currentYear,
+  calendarId,
   toggleModal,
   createWorkingShift,
 }) => {
@@ -25,7 +25,7 @@ export const AddWorkingShiftForm = ({
     try {
       const workingShift = {
         ...values,
-        year: currentYear,
+        calendarId: calendarId,
         dayId: null,
       };
 

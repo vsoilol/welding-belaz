@@ -19,7 +19,7 @@ function* updateWorkingDayWithWorkingShiftSaga({ day, workingShift }) {
       yield call(api.put, "/day", day);
     }
 
-    workingShift.year = null;
+    workingShift.calendarId = null;
     workingShift.dayId = day.id;
 
     yield call(api.post, "/workingShift", workingShift);

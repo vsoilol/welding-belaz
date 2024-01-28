@@ -22,7 +22,7 @@ export const EditWorkingShiftModal = ({
   isOpen,
   toggleModal,
   workingShifts,
-  currentYear,
+  calendarId,
   createWorkingShift,
   deleteWorkingShift,
   updateWorkingShift,
@@ -60,7 +60,7 @@ export const EditWorkingShiftModal = ({
 
         {selectedOption === 1 && (
           <AddWorkingShiftForm
-            currentYear={currentYear}
+            calendarId={calendarId}
             toggleModal={toggleModal}
             createWorkingShift={createWorkingShift}
           />
