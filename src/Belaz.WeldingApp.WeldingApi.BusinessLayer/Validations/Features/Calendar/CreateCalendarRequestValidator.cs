@@ -18,14 +18,13 @@ public class CreateCalendarRequestValidator : AbstractValidator<CreateCalendarRe
             .NotEmpty()
             .SetAsyncValidator(new ExistYearValidatorFor<CreateCalendarRequest>(context));
 
-        RuleFor(model => model.MainWorkingShift)
-            .Cascade(CascadeMode.Stop)
-            .NotNull()
-            .NotEmpty();
-
-        RuleForEach(model => model.MainWorkingShift)
-            .Cascade(CascadeMode.Stop)
-            .SetValidator(new CreateWorkingShiftRequestValidator());
+        When(model => model.MainWorkingShift is not null && model.MainWorkingShift.Any(),
+            () =>
+            {
+                RuleForEach(model => model.MainWorkingShift)
+                    .Cascade(CascadeMode.Stop)
+                    .SetValidator(new CreateWorkingShiftRequestValidator());
+            });
         
         When(_ => _.Days is not null,
             () =>
