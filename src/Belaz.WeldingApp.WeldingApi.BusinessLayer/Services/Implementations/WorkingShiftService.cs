@@ -41,7 +41,7 @@ public class WorkingShiftService : IWorkingShiftService
 
         var workingShift = _mapper.Map<WorkingShift>(request);
 
-        return await _workingShiftRepository.CreateAsync(workingShift, request.Year);
+        return await _workingShiftRepository.CreateAsync(workingShift);
     }
 
     public async Task<Result<WorkingShiftDto>> UpdateAsync(UpdateWorkingShiftRequest request)
