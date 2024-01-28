@@ -18,8 +18,28 @@ function* updateWorkingShiftSaga({ workingShift }) {
 }
 
 function* reloadCalendarAfterUpdateWorkingShiftSaga() {
-  let calendarYear = yield select((state) => state.calendar?.calendar?.year);
-  yield put(calendarActionCreators.loadMainCalendarByYearRequest(calendarYear));
+  let { year, welderId, weldingEquipmentId } = yield select(
+    (state) => state.calendar?.calendar
+  );
+
+  if (weldingEquipmentId) {
+    yield put(
+      calendarActionCreators.loadCalendarByEquipmentRequest(
+        weldingEquipmentId,
+        year
+      )
+    );
+    return;
+  }
+
+  if (welderId) {
+    yield put(
+      calendarActionCreators.loadCalendarByWelderRequest(welderId, year)
+    );
+    return;
+  }
+
+  yield put(calendarActionCreators.loadMainCalendarByYearRequest(year));
 }
 
 export const updateWorkingShiftWatchers = [

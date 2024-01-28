@@ -86,6 +86,23 @@ export const HANDLERS = {
   [calendarActionTypes.UPDATE_WORKING_SHIFT_REQUEST]: startLoading,
   [calendarActionTypes.UPDATE_WORKING_SHIFT_SUCCESS]: finishLoading,
   [calendarActionTypes.UPDATE_WORKING_SHIFT_FAILURE]: loadingFailure,
+
+  [calendarActionTypes.LOAD_CALENDAR_BY_WELDER_REQUEST]: startLoading,
+  [calendarActionTypes.LOAD_CALENDAR_BY_WELDER_SUCCESS]:
+    updateStateWithLoadedCalendar,
+  [calendarActionTypes.LOAD_CALENDAR_BY_WELDER_FAILURE]: loadingFailure,
+
+  [calendarActionTypes.LOAD_CALENDAR_BY_EQUIPMENT_REQUEST]: startLoading,
+  [calendarActionTypes.LOAD_CALENDAR_BY_EQUIPMENT_SUCCESS]:
+    updateStateWithLoadedCalendar,
+  [calendarActionTypes.LOAD_CALENDAR_BY_EQUIPMENT_FAILURE]: loadingFailure,
+
+  [calendarActionTypes.CREATE_CALENDAR_FOR_EQUIPMENT_BASED_ON_MAIN_REQUEST]:
+    startLoading,
+  [calendarActionTypes.CREATE_CALENDAR_FOR_EQUIPMENT_BASED_ON_MAIN_SUCCESS]:
+    updateStateWithLoadedCalendar,
+  [calendarActionTypes.CREATE_CALENDAR_FOR_EQUIPMENT_BASED_ON_MAIN_FAILURE]:
+    loadingFailure,
 };
 
 export default createReducer(CALENDAR_INITIAL_STATE, HANDLERS);

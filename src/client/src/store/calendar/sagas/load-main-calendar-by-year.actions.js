@@ -1,4 +1,3 @@
-import { createActions } from "reduxsauce";
 import {
   call,
   put,
@@ -7,7 +6,6 @@ import {
   take,
   cancelled,
   takeLatest,
-  select,
 } from "redux-saga/effects";
 import { LOCATION_CHANGE } from "connected-react-router";
 import api, { getCancelToken } from "services/api";
@@ -25,10 +23,6 @@ function* loadMainCalendarByYearSaga(year) {
       api.getCancelled,
       `/calendar/main/${year}`,
       cancelToken
-    );
-
-    const calendarYear = yield select(
-      (state) => state.calendar?.calendar?.year ?? null
     );
 
     if (response.status === 204) {

@@ -33,6 +33,22 @@ const { Types, Creators } = createActions(
     updateWorkingShiftRequest: ["workingShift"],
     updateWorkingShiftSuccess: null,
     updateWorkingShiftFailure: ["error"],
+
+    loadCalendarByWelderRequest: ["welderId", "year"],
+    loadCalendarByWelderSuccess: ["calendar"],
+    loadCalendarByWelderFailure: ["error"],
+
+    loadCalendarByEquipmentRequest: ["equipmentId", "year"],
+    loadCalendarByEquipmentSuccess: ["calendar"],
+    loadCalendarByEquipmentFailure: ["error"],
+
+    createCalendarForEquipmentBasedOnMainRequest: ["equipmentId", "year"],
+    createCalendarForEquipmentBasedOnMainSuccess: ["calendar"],
+    createCalendarForEquipmentBasedOnMainFailure: ["error"],
+
+    createCalendarForWelderBasedOnMainRequest: ["welderId", "year"],
+    createCalendarForWelderBasedOnMainSuccess: ["calendar"],
+    createCalendarForWelderBasedOnMainFailure: ["error"],
   },
   {}
 );

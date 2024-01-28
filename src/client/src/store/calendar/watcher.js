@@ -7,6 +7,9 @@ import {
   createWorkingShiftWatchers,
   deleteWorkingShiftWatchers,
   updateWorkingShiftWatchers,
+  loadCalendarByWelderWatchers,
+  loadCalendarByEquipmentWatchers,
+  createCalendarForEquipmentBasedOnMainWatchers,
 } from "./sagas";
 
 export default [
@@ -18,4 +21,7 @@ export default [
   ...createWorkingShiftWatchers,
   ...deleteWorkingShiftWatchers,
   ...updateWorkingShiftWatchers,
+  ...loadCalendarByWelderWatchers,
+  ...loadCalendarByEquipmentWatchers,
+  ...createCalendarForEquipmentBasedOnMainWatchers,
 ];
