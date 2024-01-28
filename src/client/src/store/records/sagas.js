@@ -4,15 +4,12 @@ import recordsActions from "./actions";
 import errorActions from "../error/actions";
 
 const {
-  Types: {
-    LOAD_RECORDS_REQUEST,
-    DELETE_RECORDS_REQUEST
-  },
+  Types: { LOAD_RECORDS_REQUEST, DELETE_RECORDS_REQUEST },
   Creators: {
     loadRecordsSuccess,
     loadRecordsFailure,
     deleteRecordsSuccess,
-    deleteRecordsFailure
+    deleteRecordsFailure,
   },
 } = recordsActions;
 
@@ -40,8 +37,12 @@ function* deleteRecords({ payload }) {
   }
 }
 
-export function* recordsSaga() {
-  yield takeLatest(LOAD_RECORDS_REQUEST, loadRecords);
-  yield takeLatest(DELETE_RECORDS_REQUEST, deleteRecords);
+// export function* recordsSaga() {
+//   yield takeLatest(LOAD_RECORDS_REQUEST, loadRecords);
+//   yield takeLatest(DELETE_RECORDS_REQUEST, deleteRecords);
+// }
 
-}
+export default [
+  takeLatest(LOAD_RECORDS_REQUEST, loadRecords),
+  takeLatest(DELETE_RECORDS_REQUEST, deleteRecords),
+];

@@ -21,7 +21,7 @@ public class CalendarRepository : ICalendarRepository
     public async Task<CalendarDto> CreateAsync(
         Calendar calendar,
         List<Day>? days,
-        List<WorkingShift> workingShifts
+        List<WorkingShift>? workingShifts
     )
     {
         var createdCalendar = _context.Calendars.Add(calendar).Entity;
@@ -31,9 +31,12 @@ public class CalendarRepository : ICalendarRepository
             days.ForEach(_ => _.CalendarId = createdCalendar.Id);
             _context.Days.AddRange(days);
         }
-
-        workingShifts.ForEach(_ => _.CalendarId = createdCalendar.Id);
-        _context.WorkingShifts.AddRange(workingShifts);
+        
+        if (workingShifts is not null)
+        {
+            workingShifts.ForEach(_ => _.CalendarId = createdCalendar.Id);
+            _context.WorkingShifts.AddRange(workingShifts);
+        }
 
         await _context.SaveChangesAsync();
 
@@ -247,6 +250,18 @@ public class CalendarRepository : ICalendarRepository
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(entity.Id);
+    }
+
+    public async Task DeleteCalendarAsync(Guid calendarId)
+    {
+        var existedCalendar = await _context.Calendars
+            .Include(_ => _.Days!)
+            .ThenInclude(_ => _.WorkingShifts)
+            .Include(_ => _.MainWorkingShifts)
+            .FirstOrDefaultAsync(_ => _.Id == calendarId);
+
+        _context.Calendars.Remove(existedCalendar!);
+        await _context.SaveChangesAsync();
     }
 
     private List<WorkingShift> CreateNewWorkingShifts(List<WorkingShift>? workingShifts)

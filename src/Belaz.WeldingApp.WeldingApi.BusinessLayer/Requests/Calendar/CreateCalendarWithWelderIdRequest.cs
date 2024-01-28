@@ -12,7 +12,7 @@ public class CreateCalendarWithWelderIdRequest
 
     public Guid WelderId { get; set; }
 
-    public List<CreateWorkingShiftRequest> MainWorkingShift { get; set; } = null!;
+    public List<CreateWorkingShiftRequest>? MainWorkingShift { get; set; }
 
     public List<CreateDayRequest>? Days { get; set; }
 

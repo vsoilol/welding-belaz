@@ -16,8 +16,8 @@ const request = (state = INITIAL_STATE) => {
     error: null,
   };
 };
-///Цеха 
-const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => { 
+///Цеха
+const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
   return {
     ...state,
     isRequesting: false,
@@ -31,7 +31,7 @@ const addWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
     /* workshop: [...state.workshop, workshop], */
   };
 };
-const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => { 
+const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
   return {
     ...state,
     isRequesting: false,
@@ -45,7 +45,7 @@ const editWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
     }), */
   };
 };
-///Производственные участки 
+///Производственные участки
 const loadAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
   return {
     ...state,
@@ -61,7 +61,6 @@ const addAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
   };
 };
 const editAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
-
   return {
     ...state,
     isRequesting: false,
@@ -134,9 +133,6 @@ const editWorkplaceSuccess = (state = INITIAL_STATE, { workplace }) => {
   };
 };
 
-
-
-
 ///Изделия
 const loadProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
@@ -144,7 +140,7 @@ const loadProductSuccess = (state = INITIAL_STATE, { product }) => {
     isRequesting: false,
     product,
   };
-}; 
+};
 const addProductSuccess = (state = INITIAL_STATE, { product }) => {
   return {
     ...state,
@@ -153,13 +149,12 @@ const addProductSuccess = (state = INITIAL_STATE, { product }) => {
   };
 };
 const editProductSuccess = (state = INITIAL_STATE, { product }) => {
-
   return {
     ...state,
     isRequesting: false,
     /* product: state.product.map((item, index) => item.id === product.id ? state.product[index] = product : item) */
   };
-}; 
+};
 
 ///Узлы
 const loadKnotSuccess = (state = INITIAL_STATE, { knot }) => {
@@ -227,8 +222,11 @@ const editSeamSuccess = (state = INITIAL_STATE, { seam }) => {
     /* seam: state.seam.map((item, index) => item.id === seam.id ? state.seam[index] = seam : item) */
   };
 };
-///Технологические процессы 
-const loadTexprocweldingSuccess = (state = INITIAL_STATE, { texprocwelding }) => {
+///Технологические процессы
+const loadTexprocweldingSuccess = (
+  state = INITIAL_STATE,
+  { texprocwelding }
+) => {
   return {
     ...state,
     isRequesting: false,
@@ -236,7 +234,10 @@ const loadTexprocweldingSuccess = (state = INITIAL_STATE, { texprocwelding }) =>
   };
 };
 ///Закрепленные детали  за инспектором
-const loadDetailbyinspectorSuccess = (state = INITIAL_STATE, { detailbyinspector }) => {
+const loadDetailbyinspectorSuccess = (
+  state = INITIAL_STATE,
+  { detailbyinspector }
+) => {
   return {
     ...state,
     isRequesting: false,
@@ -253,14 +254,11 @@ const loadWeldingtaskSuccess = (state = INITIAL_STATE, { weldingtask }) => {
   };
 };
 
-const deleteProductSuccess = (state = INITIAL_STATE, { id }) => { 
-  return state; 
+const deleteProductSuccess = (state = INITIAL_STATE, { id }) => {
+  return state;
 };
 
-
-
 const failure = (state = INITIAL_STATE, { error }) => {
-  console.log(error)
   return {
     ...state,
     isRequesting: false,
@@ -268,10 +266,8 @@ const failure = (state = INITIAL_STATE, { error }) => {
   };
 };
 
-
-
 export const HANDLERS = {
-  ///Цеха 
+  ///Цеха
   [Types.LOAD_WORKSHOP_REQUEST]: request,
   [Types.LOAD_WORKSHOP_SUCCESS]: loadWorkshopSuccess,
   [Types.LOAD_WORKSHOP_FAILURE]: failure,
@@ -283,7 +279,7 @@ export const HANDLERS = {
   [Types.EDIT_WORKSHOP_REQUEST]: request,
   [Types.EDIT_WORKSHOP_SUCCESS]: editWorkshopSuccess,
   [Types.EDIT_WORKSHOP_FAILURE]: failure,
-  ///Производственные участки 
+  ///Производственные участки
   [Types.LOAD_AREA_REQUEST]: request,
   [Types.LOAD_AREA_SUCCESS]: loadAreaSuccess,
   [Types.LOAD_AREA_FAILURE]: failure,
@@ -320,19 +316,14 @@ export const HANDLERS = {
   [Types.EDIT_WORKPLACE_SUCCESS]: editWorkplaceSuccess,
   [Types.EDIT_WORKPLACE_FAILURE]: failure,
 
-
   [Types.DELETE_PRODUCT_REQUEST]: request,
   [Types.DELETE_PRODUCT_SUCCESS]: deleteProductSuccess,
   [Types.DELETE_PRODUCT_FAILURE]: failure,
-
-
 
   ///Изделия
   [Types.LOAD_PRODUCT_REQUEST]: request,
   [Types.LOAD_PRODUCT_SUCCESS]: loadProductSuccess,
   [Types.LOAD_PRODUCT_FAILURE]: failure,
-
- 
 
   [Types.ADD_PRODUCT_REQUEST]: request,
   [Types.ADD_PRODUCT_SUCCESS]: addProductSuccess,
@@ -341,7 +332,7 @@ export const HANDLERS = {
   [Types.EDIT_PRODUCT_REQUEST]: request,
   [Types.EDIT_PRODUCT_SUCCESS]: editProductSuccess,
   [Types.EDIT_PRODUCT_FAILURE]: failure,
- 
+
   ///Узлы
   [Types.LOAD_KNOT_REQUEST]: request,
   [Types.LOAD_KNOT_SUCCESS]: loadKnotSuccess,
@@ -378,17 +369,15 @@ export const HANDLERS = {
   [Types.EDIT_SEAM_REQUEST]: request,
   [Types.EDIT_SEAM_SUCCESS]: editSeamSuccess,
   [Types.EDIT_SEAM_FAILURE]: failure,
-  ///Технологические процессы 
+  ///Технологические процессы
   [Types.LOAD_TEXPROCWELDING_REQUEST]: request,
   [Types.LOAD_TEXPROCWELDING_SUCCESS]: loadTexprocweldingSuccess,
   [Types.LOAD_TEXPROCWELDING_FAILURE]: failure,
-
 
   ///Закрепленные детали  за инспектором
   [Types.LOAD_DETAILBYINSPECTOR_REQUEST]: request,
   [Types.LOAD_DETAILBYINSPECTOR_SUCCESS]: loadDetailbyinspectorSuccess,
   [Types.LOAD_DETAILBYINSPECTOR_FAILURE]: failure,
-
 
   /////////
   [Types.LOAD_WELDINGTASK_REQUEST]: request,

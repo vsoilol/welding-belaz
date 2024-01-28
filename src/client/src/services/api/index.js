@@ -3,12 +3,21 @@ import store from "store";
 import history from "store/history";
 import apiConfig from "./configure";
 
+export function getCancelToken() {
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
+  return {
+    cancelToken: source.token,
+    cancel: source.cancel,
+  };
+}
+
 axios.defaults.baseURL = apiConfig.getBaseUrl();
 axios.defaults.timeout = apiConfig.timeout;
 
 axios.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     const status = error.response ? error.response.status : null;
 
     if (status === 401) {
@@ -25,13 +34,13 @@ axios.interceptors.response.use(
   }
 );
 
-const setHeaders = headers => {
+const setHeaders = (headers) => {
   const defaultHeader = { "Content-Type": "application/json" };
   if (headers) return Object.assign(defaultHeader, headers);
   return defaultHeader;
 };
 
-const setAuthTokenToHeader = token => {
+const setAuthTokenToHeader = (token) => {
   if (token) {
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   } else {
@@ -41,6 +50,10 @@ const setAuthTokenToHeader = token => {
 
 const get = (url, headers) => {
   return axios.get(`${url}`, setHeaders(headers));
+};
+
+const getCancelled = (url, cancelToken, headers) => {
+  return axios.get(`${url}`, { headers: setHeaders(headers), cancelToken });
 };
 
 const post = (url, data, headers) => {
@@ -66,5 +79,6 @@ export default {
   put,
   patch,
   remove,
-  setAuthTokenToHeader
+  setAuthTokenToHeader,
+  getCancelled,
 };

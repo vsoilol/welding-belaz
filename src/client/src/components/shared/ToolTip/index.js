@@ -1,6 +1,5 @@
-
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import MobileContext from "context/MobileContext";
 import { Table } from "components/shared/Table";
 import TableCell from "@material-ui/core/TableCell";
@@ -38,33 +37,40 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
     cutType: modalData?.cutType ?? "",
   });
 
-  ////Select 
+  ////Select
   const workshopOptions = workshop?.map((item) => {
     return {
       value: item.id,
       label: item.name,
     };
   });
-  const equipmentOptions = equipment && Array.isArray(equipment[0]) && equipment[0].map((item) => {
-    return {
-      value: item.id,
-      label: `${item.name} ${item.factoryNumber}  `,
-    };
-  });;
+  const equipmentOptions =
+    equipment &&
+    Array.isArray(equipment[0]) &&
+    equipment[0].map((item) => {
+      return {
+        value: item.id,
+        label: `${item.name} ${item.factoryNumber}  `,
+      };
+    });
 
   function FormTable() {
     const handleChange = (name, value) => {
       setInitialValues({ ...initialValues, [name]: value });
     };
 
-    {/*startDate - endDate*/ }
+    {
+      /*startDate - endDate*/
+    }
     function StartDateEndDate() {
       return (
         <div className={styles.row}>
           <Input
             onChange={(event) => {
-              let date = new Date(event.target.value).toLocaleDateString('ru-RU')
-              handleChange("startDate", date)
+              let date = new Date(event.target.value).toLocaleDateString(
+                "ru-RU"
+              );
+              handleChange("startDate", date);
             }}
             width="200"
             style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
@@ -75,14 +81,15 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
             onFocus={(e) => {
               e.currentTarget.type = "date";
             }}
-            autocomplete="off"
+            autoComplete="off"
           />
-
 
           <Input
             onChange={(event) => {
-              let date = new Date(event.target.value).toLocaleDateString('ru-RU')
-              handleChange("endDate", date)
+              let date = new Date(event.target.value).toLocaleDateString(
+                "ru-RU"
+              );
+              handleChange("endDate", date);
             }}
             width="200"
             style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
@@ -93,12 +100,14 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
             onFocus={(e) => {
               e.currentTarget.type = "date";
             }}
-            autocomplete="off"
+            autoComplete="off"
           />
         </div>
-      )
+      );
     }
-    {/*workshopId*/ }
+    {
+      /*workshopId*/
+    }
     function WorkshopId() {
       return (
         <div className={styles.row}>
@@ -108,12 +117,12 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
             width="380px"
             placeholder="Цех"
             onChange={(event) => {
-              handleChange("workshopId", event.value)
+              handleChange("workshopId", event.value);
             }}
             options={workshopOptions}
           />
         </div>
-      )
+      );
     }
     if (idReports === 4 || idReports === 5) {
       return (
@@ -126,7 +135,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
               width="380px"
               placeholder="Оборудование"
               onChange={(event) => {
-                handleChange("WeldingEquipmentId", event.value)
+                handleChange("WeldingEquipmentId", event.value);
               }}
               options={equipmentOptions}
             />
@@ -134,8 +143,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
 
           <StartDateEndDate />
         </div>
-
-      )
+      );
     }
 
     if (idReports === 10) {
@@ -144,8 +152,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
           <WorkshopId />
           <StartDateEndDate />
         </div>
-
-      )
+      );
     }
   }
 
@@ -166,7 +173,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
         window.open(res.request.responseURL);
       }
     } catch (error) {
-      setisModalErrOpen(true)
+      setisModalErrOpen(true);
     }
   }
 
@@ -194,19 +201,15 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
             }> Отчет о работе</button>
             : null
           } */}
-
         </div>
       </div>
-
-
-
 
       {/*Формирование отчёта*/}
       <ModalWindow
         isOpen={isModalOpen}
         headerText="Формирование отчёта"
         setIsOpen={(state) => {
-          setIsModalOpen(false)
+          setIsModalOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -215,8 +218,8 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setIsModalOpen(false)
-            SendData()
+            setIsModalOpen(false);
+            SendData();
           }}
         >
           {({
@@ -227,18 +230,12 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
                 <FormTable />
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Сформировать
-                  </Button>
+                  <Button type="submit">Сформировать</Button>
                 </div>
-
               </div>
             </form>
           )}
@@ -249,7 +246,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
         isOpen={isModalNothinOpen}
         headerText=""
         setIsOpen={(state) => {
-          setisModalNothinOpen(false)
+          setisModalNothinOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -258,7 +255,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setisModalNothinOpen(false)
+            setisModalNothinOpen(false);
           }}
         >
           {({
@@ -269,31 +266,26 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Данные по этому отчету отсутствуют. </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Данные по этому отчету отсутствуют.{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Закрыть
-                  </Button>
+                  <Button type="submit">Закрыть</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
 
       {/*Ошибка*/}
       <ModalWindow
         isOpen={isModalErrOpen}
         headerText="Ошибка"
         setIsOpen={(state) => {
-          setisModalErrOpen(false)
+          setisModalErrOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -302,7 +294,7 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setisModalErrOpen(false)
+            setisModalErrOpen(false);
           }}
         >
           {({
@@ -313,25 +305,19 @@ const ToolTip = ({ title, src, toolTipText, button, workshop, equipment }) => {
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Произошла ошибка, перепроверьте введенные данные </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Произошла ошибка, перепроверьте введенные данные{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Закрыть
-                  </Button>
+                  <Button type="submit">Закрыть</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
-
     </div>
   );
 };

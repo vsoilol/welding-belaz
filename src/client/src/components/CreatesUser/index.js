@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState, useCallback } from "react";
-import styles from "./index.module.css";
+import styles from "./index.module.scss";
 import ToolTip from "components/shared/ToolTip";
 import { reportsImage } from "assets/pics";
 import { Table } from "components/shared/Table";
@@ -23,17 +22,11 @@ import Paper from "@material-ui/core/Paper";
 import deleteIcon from "assets/icons/delete.png";
 import { Upload } from "components/Upload/index";
 
-const CreatesUser = ({
-
-}) => {
-
-
+const CreatesUser = ({}) => {
   const [panelId, setpanelId] = useState(0);
-
 
   const [allUsers, setallUsers] = useState(null);
   const [aleventLog, setaleventLog] = useState(null);
-
 
   const [modalData, setModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,11 +37,14 @@ const CreatesUser = ({
   const [selectRole, setselectRole] = useState("");
   const [isModalConfiOpen, setisModalConfiOpen] = useState(false);
   const [isModalErrOpen, setisModalErrOpen] = useState(false);
-  const [isModalComplitChangLogPassOpen, setisModalComplitChangLogPassOpen] = useState(false);
-  const [isModalComplitChangLogPassErrOpen, setisModalComplitChangLogPassErrOpen] = useState(false);
+  const [isModalComplitChangLogPassOpen, setisModalComplitChangLogPassOpen] =
+    useState(false);
+  const [
+    isModalComplitChangLogPassErrOpen,
+    setisModalComplitChangLogPassErrOpen,
+  ] = useState(false);
   const [deleteRecordsModal, setdeleteRecordsModal] = useState(false);
   const [idUser, setidUser] = useState("");
-
 
   const initialValues = {
     id: modalData?.id ?? "",
@@ -70,19 +66,20 @@ const CreatesUser = ({
   async function fetchUsers() {
     try {
       const response = await api.get(`/users`);
-      setallUsers(response.data)
+      setallUsers(response.data);
     } catch (error) {
       console.log(error);
     }
   }
 
-
-  ////Получение всех записей в журнале 
+  ////Получение всех записей в журнале
   async function fetchEventLog() {
     try {
       const response = await api.get(`/eventLog`);
       const result = response.data.reduce((acc, curr) => {
-        const userIndex = acc.findIndex((item) => item.user.id === curr.user.id);
+        const userIndex = acc.findIndex(
+          (item) => item.user.id === curr.user.id
+        );
         if (userIndex === -1) {
           acc.push({
             user: curr.user,
@@ -93,13 +90,13 @@ const CreatesUser = ({
         }
         return acc;
       }, []);
-      setaleventLog(result)
+      setaleventLog(result);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const renderRowChildren = (rowData) => { 
+  const renderRowChildren = (rowData) => {
     return (
       rowData?.data && (
         <TableContainer component={Paper}>
@@ -109,7 +106,7 @@ const CreatesUser = ({
                 <TableCell
                   style={{
                     borderBottom: 0,
-                  }} 
+                  }}
                   align="center"
                 >
                   Дата
@@ -131,10 +128,9 @@ const CreatesUser = ({
                 >
                   Действие
                 </TableCell>
-                
-              </TableRow> 
+              </TableRow>
             </TableHead>
-            {rowData?.data?.map(info =>
+            {rowData?.data?.map((info) => (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" component="th" scope="row">
@@ -145,30 +141,24 @@ const CreatesUser = ({
                   </TableCell>
                   <TableCell align="center">
                     {info?.information ?? "-"}
-                  </TableCell>       
+                  </TableCell>
                 </TableRow>
               </TableBody>
-            )}
-            
+            ))}
           </MaterialTable>
         </TableContainer>
       )
     );
   };
   const ChangePanelId = (event, newValue) => {
-    setpanelId(newValue)
+    setpanelId(newValue);
   };
 
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
 
-    return (
-      <div hidden={value !== indPanel}  >
-        {children}
-      </div>
-    );
+    return <div hidden={value !== indPanel}>{children}</div>;
   };
-
 
   const colUsers = [
     {
@@ -179,34 +169,36 @@ const CreatesUser = ({
           src={deleteIcon}
           onClick={() => {
             setdeleteRecordsModal(true);
-            setidUser(rowData?.id)
+            setidUser(rowData?.id);
           }}
         />
       ),
     },
     {
-      title: "Фамилия ", field: "middleName",
-
+      title: "Фамилия ",
+      field: "middleName",
     },
     {
-      title: "Имя ", field: "firstName",
-
+      title: "Имя ",
+      field: "firstName",
     },
     {
-      title: "Отчество ", field: "lastName",
+      title: "Отчество ",
+      field: "lastName",
     },
     {
-      title: "Email", field: "email",
-      render: rowData => rowData?.email ? rowData?.email : "-"
+      title: "Email",
+      field: "email",
+      render: (rowData) => (rowData?.email ? rowData?.email : "-"),
     },
     {
       title: "Email подтвержден ",
       field: "isEmailConfirmed",
       render: (rowData) => {
         if (rowData?.isEmailConfirmed) {
-          return <span className={styles.green}>подтвержден</span>
+          return <span className={styles.green}>подтвержден</span>;
         } else {
-          return <span className={styles.red}>не подтвержден</span>
+          return <span className={styles.red}>не подтвержден</span>;
         }
       },
     },
@@ -228,21 +220,38 @@ const CreatesUser = ({
       title: "Изменение логина и пароля",
       render: (rowData) => {
         if (rowData?.isEmailConfirmed) {
-          return <div className={styles.btnTools} onClick={(e) => { setisModalChangeLoginOpen(true); setModalData(rowData); }} >Измененить</div>
+          return (
+            <div
+              className={styles.btnTools}
+              onClick={(e) => {
+                setisModalChangeLoginOpen(true);
+                setModalData(rowData);
+              }}
+            >
+              Измененить
+            </div>
+          );
         } else {
-          return <span>-</span>
+          return <span>-</span>;
         }
-
-      }
+      },
     },
     {
       title: "Подтверждение электронной почты",
       render: (rowData) => {
-        return <div className={styles.btnTools} onClick={(e) => { ConfirmationEmail(rowData?.id) }}>Подтвердить</div>
-      }
+        return (
+          <div
+            className={styles.btnTools}
+            onClick={(e) => {
+              ConfirmationEmail(rowData?.id);
+            }}
+          >
+            Подтвердить
+          </div>
+        );
+      },
     },
-  ]
-
+  ];
 
   const opteRole = [
     { id: 1, name: "Администратор" },
@@ -261,15 +270,16 @@ const CreatesUser = ({
   });
   const coleventLog = [
     {
-      title: "Фамилия ", field: "user.middleName",
-
+      title: "Фамилия ",
+      field: "user.middleName",
     },
     {
-      title: "Имя ", field: "user.firstName",
-
+      title: "Имя ",
+      field: "user.firstName",
     },
     {
-      title: "Отчество ", field: "user.lastName",
+      title: "Отчество ",
+      field: "user.lastName",
     },
     /* {
       title: "Дата ", field: "date",
@@ -280,78 +290,78 @@ const CreatesUser = ({
     {
       title: "Действие ", field: "information",
     }, */
-  ]
+  ];
 
   function ConfirmationEmail(params) {
-    api.post(`auth/send-email-confirmation/${params}`)
+    api
+      .post(`auth/send-email-confirmation/${params}`)
       .then((response) => {
-        setisModalConfiOpen(true)
+        setisModalConfiOpen(true);
       })
       .catch((error) => {
-        setisModalErrOpen(true)
+        setisModalErrOpen(true);
       });
   }
 
   function SendData(params) {
-
     if (modalData) {
-      //Редактировать пользователя 
-      api.put(`users`, {
-        "id": params.id,
-        "firstName": params.firstName,
-        "middleName": params.middleName,
-        "lastName": params.lastName,
-        "email": params.email,
-        "role": selectRole
-      })
-        .then((response) => {
-          fetchUsers()
+      //Редактировать пользователя
+      api
+        .put(`users`, {
+          id: params.id,
+          firstName: params.firstName,
+          middleName: params.middleName,
+          lastName: params.lastName,
+          email: params.email,
+          role: selectRole,
         })
-        .catch((error) => { });
-    }
-    else {
+        .then((response) => {
+          fetchUsers();
+        })
+        .catch((error) => {});
+    } else {
       //Создать пользователя
-      api.post(`users`, {
-        "firstName": params.firstName,
-        "middleName": params.middleName,
-        "lastName": params.lastName,
-        "email": params.email,
-        "role": selectRole
-      })
-        .then((response) => {
-          fetchUsers()
+      api
+        .post(`users`, {
+          firstName: params.firstName,
+          middleName: params.middleName,
+          lastName: params.lastName,
+          email: params.email,
+          role: selectRole,
         })
-        .catch((error) => { });
-
+        .then((response) => {
+          fetchUsers();
+        })
+        .catch((error) => {});
     }
-
   }
 
-
   function ChangeLoginPass(params) {
-    api.post(`auth/user-credentials`, {
-      "userName": params.login,
-      "password": params.password,
-      "userId": params.id
-    })
+    api
+      .post(`auth/user-credentials`, {
+        userName: params.login,
+        password: params.password,
+        userId: params.id,
+      })
       .then((response) => {
-        setisModalComplitChangLogPassOpen(true)
+        setisModalComplitChangLogPassOpen(true);
       })
       .catch((error) => {
-        setisModalComplitChangLogPassErrOpen(true)
+        setisModalComplitChangLogPassErrOpen(true);
       });
   }
 
   function deleteUser(idUser) {
-    api.remove(`/users/${idUser}`)
-      .then((response) => { fetchUsers() })
-      .catch((error) => { });
+    api
+      .remove(`/users/${idUser}`)
+      .then((response) => {
+        fetchUsers();
+      })
+      .catch((error) => {});
   }
 
   return (
     <div className={styles.innerWrapper}>
-
-
       <ToolTip
         title="Панель администратора"
         toolTipText="Здесь вы можете создать пользователя, изменить данные пользователя "
@@ -367,72 +377,56 @@ const CreatesUser = ({
       >
         <Tab label="Список пользователей " />
         <Tab label="Список записей в журнале " />
-
       </Tabs>
 
-       {
-        
-       }
+      {}
 
       <div className={styles.tableWrapper}>
-        {panelId === 0
-          ? (
-            <TabPanel
-              style={{ minWidth: "800px", }}
-              className="TableTech"
-            >
-              <Table
-                title="Список пользователей "
-                columns={colUsers}
-                value={0}
-                data={allUsers ?? []}
-                actions={
-                  [
-                    {
-                      icon: "add",
-                      tooltip: "Добавить пользователя",
-                      isFreeAction: true,
-                      onClick: () => {
-                        setIsModalOpen(true);
-                      },
-                    },
-                    {
-                      icon: "edit",
-                      tooltip: "Редактировать пользователя",
-                      onClick: (event, rowData) => {
-                        setIsModalOpen(true);
-                        setModalData(rowData);
-                        setselectRole(rowData?.role)
-                      },
-                    },
-                  ]
-                }
-              />
-            </TabPanel>
-          )
-          : <div></div>
-
-        }
-        {panelId === 1
-          ? (
-
-            <TabPanel
-              style={{ minWidth: "800px", }}
-              className="TableTech"
-            >
-              <Table
-                title="Список записей в журнале"
-                columns={coleventLog}
-                value={0}
-                data={aleventLog}
-                renderRowChildren={renderRowChildren}
-              />
-            </TabPanel>
-          )
-          : <div></div>
-        }
+        {panelId === 0 ? (
+          <TabPanel style={{ minWidth: "800px" }} className="TableTech">
+            <Table
+              title="Список пользователей "
+              columns={colUsers}
+              value={0}
+              data={allUsers ?? []}
+              actions={[
+                {
+                  icon: "add",
+                  tooltip: "Добавить пользователя",
+                  isFreeAction: true,
+                  onClick: () => {
+                    setIsModalOpen(true);
+                  },
+                },
+                {
+                  icon: "edit",
+                  tooltip: "Редактировать пользователя",
+                  onClick: (event, rowData) => {
+                    setIsModalOpen(true);
+                    setModalData(rowData);
+                    setselectRole(rowData?.role);
+                  },
+                },
+              ]}
+            />
+          </TabPanel>
+        ) : (
+          <div></div>
+        )}
+        {panelId === 1 ? (
+          <TabPanel style={{ minWidth: "800px" }} className="TableTech">
+            <Table
+              title="Список записей в журнале"
+              columns={coleventLog}
+              value={0}
+              data={aleventLog}
+              renderRowChildren={renderRowChildren}
+            />
+          </TabPanel>
+        ) : (
+          <div></div>
+        )}
       </div>
-
 
       <ResultsModal
         type={"EXECUTOR"}
@@ -456,7 +450,7 @@ const CreatesUser = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            SendData(variables)
+            SendData(variables);
             setIsModalOpen(false);
             setModalData(null);
           }}
@@ -469,7 +463,6 @@ const CreatesUser = ({
             handleBlur,
           }) => (
             <form className={styles.form} onSubmit={handleSubmit}>
-
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
@@ -483,9 +476,8 @@ const CreatesUser = ({
                   name="middleName"
                   placeholder="Фамилия"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
-
 
                 <Input
                   onChange={(e) => {
@@ -499,7 +491,7 @@ const CreatesUser = ({
                   name="firstName"
                   placeholder="Имя"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
                 <Input
                   onChange={(e) => {
@@ -512,7 +504,7 @@ const CreatesUser = ({
                   name="lastName"
                   placeholder="Отчество"
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -525,7 +517,7 @@ const CreatesUser = ({
                   name="email"
                   placeholder="email "
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
               <div className={styles.row}>
@@ -543,7 +535,10 @@ const CreatesUser = ({
               <div className={styles.row}>
                 <Button
                   disabled={
-                    values.middleName == "" || values.firstName == "" || values.lastName == "" || values.rfidTag == ""
+                    values.middleName == "" ||
+                    values.firstName == "" ||
+                    values.lastName == "" ||
+                    values.rfidTag == ""
                   }
                   type="submit"
                 >
@@ -571,7 +566,7 @@ const CreatesUser = ({
             const { id, ...dataToSend } = variables;
             setisModalChangeLoginOpen(false);
             setModalData(null);
-            ChangeLoginPass(variables)
+            ChangeLoginPass(variables);
           }}
         >
           {({
@@ -582,11 +577,13 @@ const CreatesUser = ({
             handleBlur,
           }) => (
             <form className={styles.form} onSubmit={handleSubmit}>
-
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    if (values === "" || /^[^а-яА-ЯёЁ]+$/.test(e.target.value)) {
+                    if (
+                      values === "" ||
+                      /^[^а-яА-ЯёЁ]+$/.test(e.target.value)
+                    ) {
                       handleChange(e);
                     }
                   }}
@@ -601,7 +598,10 @@ const CreatesUser = ({
               <div className={styles.row}>
                 <Input
                   onChange={(e) => {
-                    if (values === "" || /^[A-Za-z0-9-]+$/.test(e.target.value)) {
+                    if (
+                      values === "" ||
+                      /^[A-Za-z0-9-]+$/.test(e.target.value)
+                    ) {
                       handleChange(e);
                     }
                   }}
@@ -610,16 +610,13 @@ const CreatesUser = ({
                   name="password"
                   placeholder="password "
                   onBlur={handleBlur}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </div>
 
-
               <div className={styles.row}>
                 <Button
-                  disabled={
-                    values.login == "" || values.password == ""
-                  }
+                  disabled={values.login == "" || values.password == ""}
                   type="submit"
                 >
                   {"Сохранить"}
@@ -635,7 +632,7 @@ const CreatesUser = ({
         isOpen={isModalConfiOpen}
         headerText="Подтверждение"
         setIsOpen={(state) => {
-          setisModalConfiOpen(false)
+          setisModalConfiOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -644,7 +641,7 @@ const CreatesUser = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setisModalConfiOpen(false)
+            setisModalConfiOpen(false);
           }}
         >
           {({
@@ -655,32 +652,26 @@ const CreatesUser = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Сообщение на подтверждения электронной почты было отправлено </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Сообщение на подтверждения электронной почты было отправлено{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Закрыть
-                  </Button>
+                  <Button type="submit">Закрыть</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
-
 
       {/*Ошибка*/}
       <ModalWindow
         isOpen={isModalErrOpen}
         headerText="Ошибка"
         setIsOpen={(state) => {
-          setisModalErrOpen(false)
+          setisModalErrOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -689,7 +680,7 @@ const CreatesUser = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setisModalErrOpen(false)
+            setisModalErrOpen(false);
           }}
         >
           {({
@@ -700,31 +691,26 @@ const CreatesUser = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Сообщение было отправлено ранее, пожалуйста, проверьте почту.</h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Сообщение было отправлено ранее, пожалуйста, проверьте почту.
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Закрыть
-                  </Button>
+                  <Button type="submit">Закрыть</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
 
-
       {/**/}
       <ModalWindow
         isOpen={isModalComplitChangLogPassOpen}
         headerText=""
         setIsOpen={(state) => {
-          setisModalComplitChangLogPassOpen(false)
+          setisModalComplitChangLogPassOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -733,7 +719,7 @@ const CreatesUser = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setisModalComplitChangLogPassOpen(false)
+            setisModalComplitChangLogPassOpen(false);
           }}
         >
           {({
@@ -744,18 +730,12 @@ const CreatesUser = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
                 <h4 style={{ padding: "35px 40px" }}>Данные были обновлены</h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Закрыть
-                  </Button>
+                  <Button type="submit">Закрыть</Button>
                 </div>
-
               </div>
             </form>
           )}
@@ -765,7 +745,7 @@ const CreatesUser = ({
         isOpen={isModalComplitChangLogPassErrOpen}
         headerText="Ошибка"
         setIsOpen={(state) => {
-          setisModalComplitChangLogPassErrOpen(false)
+          setisModalComplitChangLogPassErrOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -774,7 +754,7 @@ const CreatesUser = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setisModalComplitChangLogPassErrOpen(false)
+            setisModalComplitChangLogPassErrOpen(false);
           }}
         >
           {({
@@ -785,31 +765,26 @@ const CreatesUser = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Произошла ошибка, перепроверьте введенные данные </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Произошла ошибка, перепроверьте введенные данные{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Закрыть
-                  </Button>
+                  <Button type="submit">Закрыть</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
 
-
       {/*Удаление */}
       <ModalWindow
         isOpen={deleteRecordsModal}
         headerText="Удаление"
         setIsOpen={(state) => {
-          setdeleteRecordsModal(false)
+          setdeleteRecordsModal(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -818,8 +793,8 @@ const CreatesUser = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setdeleteRecordsModal(false)
-            deleteUser(idUser)
+            setdeleteRecordsModal(false);
+            deleteUser(idUser);
           }}
         >
           {({
@@ -830,24 +805,19 @@ const CreatesUser = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> пользователя ? </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Вы уверены что хотите <span>удалить</span> пользователя ?{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Удалить
-                  </Button>
+                  <Button type="submit">Удалить</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
     </div>
   );
 };

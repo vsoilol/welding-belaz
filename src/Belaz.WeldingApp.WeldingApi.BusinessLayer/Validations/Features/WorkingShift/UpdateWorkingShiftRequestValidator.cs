@@ -1,6 +1,6 @@
 ﻿using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WorkingShift;
-using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
+using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.WorkingShift;
 using Belaz.WeldingApp.WeldingApi.DataLayer;
 using FluentValidation;
 
@@ -23,7 +23,8 @@ public class UpdateWorkingShiftRequestValidator : AbstractValidator<UpdateWorkin
         RuleFor(model => model.Number)
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1)
-            .LessThanOrEqualTo(10);
+            .LessThanOrEqualTo(10)
+            .SetAsyncValidator(new WorkingShiftUniquenessUpdateValidator(context));
 
         When(
             _ => _.BreakStart is not null,

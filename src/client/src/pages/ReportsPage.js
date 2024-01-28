@@ -2,11 +2,10 @@ import React from "react";
 import { Reports } from "components";
 import { HeaderLayout } from "layouts/Header";
 
-export const ReportsPage = props => {
-  console.log(props)
+export const ReportsPage = (props) => {
   return (
     <div>
-      <HeaderLayout {...props?.state?.auth?.user?.role??props?.userRole}>
+      <HeaderLayout {...(props?.state?.auth?.user?.role ?? props?.userRole)}>
         <Reports {...props} />
       </HeaderLayout>
     </div>

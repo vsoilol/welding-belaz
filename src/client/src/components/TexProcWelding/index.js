@@ -18,14 +18,13 @@ import { Table } from "components/shared/Table";
 import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState, useCallback } from "react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 import deleteIcon from "assets/icons/delete.png";
 import api from "services/api";
-import {Upload} from "components/Upload/index";
+import { Upload } from "components/Upload/index";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
 
 const dateOptions = {
   day: "numeric",
@@ -41,21 +40,16 @@ export const TexProcWelding = ({
   addInst,
   editInst,
 
-
   equipment,
   deleteEquipment,
   isRequesting,
   masters,
   userRole,
 
-
   texprocwelding,
   instructions,
 
   seam,
-
-
-
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalpProcOpen, setisModalpProcOpen] = useState(false);
@@ -72,10 +66,7 @@ export const TexProcWelding = ({
 
   const [valuetNumberInstr, setvaluetNumberInstr] = useState("");
 
-
-
   const [idPassages, setidPassages] = useState(0);
-
 
   const initialValues = {
     id: modalData?.weldPassageInstructions?.id ?? "",
@@ -83,14 +74,18 @@ export const TexProcWelding = ({
     number: modalData?.number ?? "",
     weldPassagesName: modalData?.weldPassageInstructions?.[0]?.name ?? "",
     weldPassagesNumber: modalData?.weldPassageInstructions?.[0]?.number ?? "",
-    weldingCurrentMin: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
-    weldingCurrentMax: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
+    weldingCurrentMin:
+      modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
+    weldingCurrentMax:
+      modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
     arcVoltageMin: modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
     arcVoltageMax: modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
-    preheatingTemperatureMin: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ?? "",
-    preheatingTemperatureMax: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ?? "",
+    preheatingTemperatureMin:
+      modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ?? "",
+    preheatingTemperatureMax:
+      modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ?? "",
     weldPassagesId: modalData?.weldPassageInstructions?.[0]?.id ?? "",
-    pdmSystemFileLink: modalData?.pdmSystemFileLink ?? ""
+    pdmSystemFileLink: modalData?.pdmSystemFileLink ?? "",
   };
 
   const formattedMasters = masters?.map((item) => {
@@ -104,15 +99,7 @@ export const TexProcWelding = ({
     loadTexprocwelding();
     loadInstructions();
     loadSeam();
-  }, [
-    loadMasters,
-    loadTexprocwelding,
-    loadInstructions,
-    loadSeam
-  ]);
-
-
-
+  }, [loadMasters, loadTexprocwelding, loadInstructions, loadSeam]);
 
   ////////////////////////////////////////////////////////////////////
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
@@ -128,16 +115,18 @@ export const TexProcWelding = ({
           src={deleteIcon}
           onClick={() => {
             setdeleteProcModal(true);
-            setidProc(rowData?.id)
+            setidProc(rowData?.id);
           }}
         />
       ),
     },
     {
-      title: "Наименование", field: "name",
+      title: "Наименование",
+      field: "name",
     },
     {
-      title: "Номер технологического процесса", field: "number",
+      title: "Номер технологического процесса",
+      field: "number",
     },
     {
       title: "Ссылка на PDF-файл ",
@@ -146,8 +135,8 @@ export const TexProcWelding = ({
           {rowData?.pdmSystemFileLink ?? "-"}
         </a>
       ),
-    }, 
-  ].filter(column => column)
+    },
+  ].filter((column) => column);
   const colinstructions = [
     (userRole === "Admin" || userRole === "Technologist") && {
       title: "Удаление",
@@ -157,16 +146,18 @@ export const TexProcWelding = ({
           src={deleteIcon}
           onClick={() => {
             setdeleteTaskModal(true);
-            setidInstr(rowData?.id)
+            setidInstr(rowData?.id);
           }}
         />
       ),
     },
     {
-      title: "Наименование", field: "name",
+      title: "Наименование",
+      field: "name",
     },
     {
-      title: "Номер", field: "number",
+      title: "Номер",
+      field: "number",
     },
     /* {
       title: "Шов",
@@ -215,13 +206,15 @@ export const TexProcWelding = ({
       title: "Температура предварительного нагрева",
       render: (rowData) => (
         <p>
-          {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin != null && rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax != null
+          {rowData?.weldPassageInstructions[0]?.preheatingTemperatureMin !=
+            null &&
+          rowData?.weldPassageInstructions[0]?.preheatingTemperatureMax != null
             ? `${rowData?.weldPassageInstructions[0].preheatingTemperatureMin} - ${rowData?.weldPassageInstructions[0].preheatingTemperatureMax}`
-            : '-'}
+            : "-"}
         </p>
       ),
-    }
-  ].filter(column => column)
+    },
+  ].filter((column) => column);
   const renderRowChildren = (rowData) => {
     return (
       rowData?.weldPassageInstructions?.length > 0 && (
@@ -326,7 +319,7 @@ export const TexProcWelding = ({
     );
   };
 
-  //select Сварочный шов  
+  //select Сварочный шов
   const SeamOptions = seam?.map((item) => {
     return {
       value: item.id,
@@ -334,19 +327,15 @@ export const TexProcWelding = ({
     };
   });
 
-  //Номера технологического процесса   
+  //Номера технологического процесса
   const TexProcOptions = texprocwelding?.map((item) => {
     return {
       value: item.id,
       label: item.number,
     };
   });
- 
 
-
-
-
-  const [value_panel, setValue] = useState(0); 
+  const [value_panel, setValue] = useState(0);
   const [valueNameInst, setvalueNameInst] = useState("");
   const ChangePanels = (event, newValue) => {
     setValue(newValue);
@@ -354,22 +343,20 @@ export const TexProcWelding = ({
   const TabPanel = (props_panel) => {
     const { children, value, indPanel } = props_panel;
 
-    return (
-      <div hidden={value !== indPanel}  >
-        {children}
-      </div>
-    );
+    return <div hidden={value !== indPanel}>{children}</div>;
   };
 
   //Запрос на редактирование или добавление
-  function SendData(variables) { 
-    const filteredVariables = variables.filter(item => Object.values(item).some(val => val !== '')); 
+  function SendData(variables) {
+    const filteredVariables = variables.filter((item) =>
+      Object.values(item).some((val) => val !== "")
+    );
     const data = {
       id: isModalOpenNumb === 1 ? idPassages : undefined,
       number: valuetNumberInstr,
       name: valueNameInst,
-      seams:valuetSeam,
-      weldPassages: filteredVariables.map(item => ({
+      seams: valuetSeam,
+      weldPassages: filteredVariables.map((item) => ({
         /* id: isModalOpenNumb === 1 ? item.id || null : null, */
         name: item.weldPassagesName,
         number: item.weldPassagesNumber,
@@ -380,7 +367,7 @@ export const TexProcWelding = ({
         preheatingTemperatureMin: item.preheatingTemperatureMin || null,
         preheatingTemperatureMax: item.preheatingTemperatureMax || null,
       })),
-    };  
+    };
     if (isModalOpenNumb === 0) {
       addInst(data);
     } else if (isModalOpenNumb === 1) {
@@ -388,19 +375,26 @@ export const TexProcWelding = ({
     }
   }
 
-
-
   function WeldingInputs() {
     const [passages, setPassages] = useState([
       {
         weldPassagesName: modalData?.weldPassageInstructions?.[0]?.name ?? "",
-        weldPassagesNumber: modalData?.weldPassageInstructions?.[0]?.number ?? "",
-        weldingCurrentMin: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
-        weldingCurrentMax: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
-        arcVoltageMin: modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
-        arcVoltageMax: modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
-        preheatingTemperatureMin: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ?? "",
-        preheatingTemperatureMax: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ?? "",
+        weldPassagesNumber:
+          modalData?.weldPassageInstructions?.[0]?.number ?? "",
+        weldingCurrentMin:
+          modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
+        weldingCurrentMax:
+          modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
+        arcVoltageMin:
+          modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
+        arcVoltageMax:
+          modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
+        preheatingTemperatureMin:
+          modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ??
+          "",
+        preheatingTemperatureMax:
+          modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ??
+          "",
       },
     ]);
     const addPassage = () => {
@@ -408,13 +402,22 @@ export const TexProcWelding = ({
         ...passages,
         {
           weldPassagesName: modalData?.weldPassageInstructions?.[0]?.name ?? "",
-          weldPassagesNumber: modalData?.weldPassageInstructions?.[0]?.number ?? "",
-          weldingCurrentMin: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
-          weldingCurrentMax: modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
-          arcVoltageMin: modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
-          arcVoltageMax: modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
-          preheatingTemperatureMin: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ?? "",
-          preheatingTemperatureMax: modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ?? "",
+          weldPassagesNumber:
+            modalData?.weldPassageInstructions?.[0]?.number ?? "",
+          weldingCurrentMin:
+            modalData?.weldPassageInstructions?.[0]?.weldingCurrentMin ?? "",
+          weldingCurrentMax:
+            modalData?.weldPassageInstructions?.[0]?.weldingCurrentMax ?? "",
+          arcVoltageMin:
+            modalData?.weldPassageInstructions?.[0]?.arcVoltageMin ?? "",
+          arcVoltageMax:
+            modalData?.weldPassageInstructions?.[0]?.arcVoltageMax ?? "",
+          preheatingTemperatureMin:
+            modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMin ??
+            "",
+          preheatingTemperatureMax:
+            modalData?.weldPassageInstructions?.[0]?.preheatingTemperatureMax ??
+            "",
         },
       ]);
     };
@@ -453,7 +456,7 @@ export const TexProcWelding = ({
                   handleChange(e.target.name, e.target.value, index);
                 }}
                 style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                value={passage.weldPassagesNumber} 
+                value={passage.weldPassagesNumber}
                 name="weldPassagesNumber"
                 placeholder="Номер прохода"
                 autoComplete="off"
@@ -553,7 +556,10 @@ export const TexProcWelding = ({
               />
             </div>
             {index !== 0 && (
-              <Button className={styles.remowePassages} onClick={() => removePassage(index)}>
+              <Button
+                className={styles.remowePassages}
+                onClick={() => removePassage(index)}
+              >
                 Убрать проход
               </Button>
             )}
@@ -565,29 +571,33 @@ export const TexProcWelding = ({
         <div className={styles.row}>
           <Button
             type="submit"
-            onClick={() => {SendData(passages);setIsModalOpen(false)}}
+            onClick={() => {
+              SendData(passages);
+              setIsModalOpen(false);
+            }}
           >
             {modalData ? "Сохранить" : "Создать"}
           </Button>
         </div>
       </>
-    )
+    );
   }
 
   const [passagesCnange, setpassagesCnange] = useState([]);
   function CnangeWeldingInputs() {
-
-    const [passages, setPassages] = useState(passagesCnange.map(item => ({
-      id: item.id,
-      weldPassagesName: item.name,
-      weldPassagesNumber: item.number,
-      weldingCurrentMin: item.weldingCurrentMin,
-      weldingCurrentMax: item.weldingCurrentMax,
-      arcVoltageMin: item.arcVoltageMin,
-      arcVoltageMax: item.arcVoltageMax,
-      preheatingTemperatureMin: item.preheatingTemperatureMin,
-      preheatingTemperatureMax: item.preheatingTemperatureMax,
-    })));
+    const [passages, setPassages] = useState(
+      passagesCnange.map((item) => ({
+        id: item.id,
+        weldPassagesName: item.name,
+        weldPassagesNumber: item.number,
+        weldingCurrentMin: item.weldingCurrentMin,
+        weldingCurrentMax: item.weldingCurrentMax,
+        arcVoltageMin: item.arcVoltageMin,
+        arcVoltageMax: item.arcVoltageMax,
+        preheatingTemperatureMin: item.preheatingTemperatureMin,
+        preheatingTemperatureMax: item.preheatingTemperatureMax,
+      }))
+    );
 
     const addPassage = () => {
       setPassages([
@@ -640,7 +650,7 @@ export const TexProcWelding = ({
                   handleChange(e.target.name, e.target.value, index);
                 }}
                 style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
-                value={passage.weldPassagesNumber} 
+                value={passage.weldPassagesNumber}
                 name="weldPassagesNumber"
                 placeholder="Номер прохода"
                 autoComplete="off"
@@ -740,7 +750,10 @@ export const TexProcWelding = ({
               />
             </div>
             {index !== 0 && (
-              <Button className={styles.remowePassages} onClick={() => removePassage(index)}>
+              <Button
+                className={styles.remowePassages}
+                onClick={() => removePassage(index)}
+              >
                 Убрать проход
               </Button>
             )}
@@ -751,24 +764,23 @@ export const TexProcWelding = ({
           <Button onClick={addPassage}>Добавить проход</Button>
         </div>
         <div className={styles.row}>
-          <Button
-            type="submit"
-            onClick={() => SendData(passages)}
-          >
+          <Button type="submit" onClick={() => SendData(passages)}>
             {modalData ? "Сохранить" : "Создать"}
           </Button>
         </div>
       </>
-    )
+    );
   }
 
   ///
   function deleteInstruction() {
-    api.remove(`/TechnologicalInstruction/${idInstr}`)
-      .then((response) => { loadInstructions() })
-      .catch((error) => { });
+    api
+      .remove(`/TechnologicalInstruction/${idInstr}`)
+      .then((response) => {
+        loadInstructions();
+      })
+      .catch((error) => {});
   }
-
 
   async function SendDataProc(variables) {
     const { name, number, pdmSystemFileLink } = variables;
@@ -777,12 +789,11 @@ export const TexProcWelding = ({
       if (modalDataNumb === 0) {
         await api.post("/TechnologicalProcess", newObj);
       } else if (modalDataNumb === 1) {
-        newObj["id"] = idProc
+        newObj["id"] = idProc;
         await api.put("/TechnologicalProcess", newObj);
       }
       loadTexprocwelding();
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -791,16 +802,11 @@ export const TexProcWelding = ({
       const response = await api.remove(`/TechnologicalProcess/${params}`);
       loadTexprocwelding();
     } catch (error) {
-      console.log(error);
     }
   }
 
   return (
-
     <div className={styles.innerWrapper}>
-
-
-
       <ToolTip
         title="Технологические процессы сборки и сварки"
         toolTipText="Здесь Вы можете просмотреть технологические процессы сборки и сварки"
@@ -824,12 +830,12 @@ export const TexProcWelding = ({
         <Tab label="Технологические инструкции" />
       </Tabs>
 
-      <div className={styles.tableWrapper}> 
+      <div className={styles.tableWrapper}>
         {/*Технологические процессы сборки и сварки */}
         <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{ minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
           className="TableTech"
         >
           <Table
@@ -838,52 +844,53 @@ export const TexProcWelding = ({
             value={0}
             data={texprocwelding}
             isLoading={isRequesting}
-
             actions={
-              userRole === "Admin"|| userRole === "Technologist"
+              userRole === "Admin" || userRole === "Technologist"
                 ? [
-                  {
-                    icon: "add",
-                    tooltip: "Добавить ",
-                    isFreeAction: true,
-                    onClick: () => {
-                      setisModalpProcOpen(true);
-                      setmodalDataNumb(0)
-                      setModalData({
-                        name: "",
-                        number: "",
-                        pdmSystemFileLink: ""
-                      });
+                    {
+                      icon: "add",
+                      tooltip: "Добавить ",
+                      isFreeAction: true,
+                      onClick: () => {
+                        setisModalpProcOpen(true);
+                        setmodalDataNumb(0);
+                        setModalData({
+                          name: "",
+                          number: "",
+                          pdmSystemFileLink: "",
+                        });
 
-                      api.post(`/eventLog`, {
-                        "information": "Открыл модальное окно добавления технологического процесса"
-                      })
+                        api.post(`/eventLog`, {
+                          information:
+                            "Открыл модальное окно добавления технологического процесса",
+                        });
+                      },
                     },
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать ",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setisModalpProcOpen(true);
-                      setmodalDataNumb(1)
-                      setidProc(rowData?.id)
-                      api.post(`/eventLog`, {
-                        "information": "Открыл модальное окно редактирования технологического процесса"
-                      })
+                    {
+                      icon: "edit",
+                      tooltip: "Редактировать ",
+                      onClick: (event, rowData) => {
+                        setModalData(rowData);
+                        setisModalpProcOpen(true);
+                        setmodalDataNumb(1);
+                        setidProc(rowData?.id);
+                        api.post(`/eventLog`, {
+                          information:
+                            "Открыл модальное окно редактирования технологического процесса",
+                        });
+                      },
                     },
-                  },
-                ]
+                  ]
                 : []
             }
             deleteAction={userRole === "Admin" ? deleteEquipment : null}
           />
-        </TabPanel> 
+        </TabPanel>
         {/*Технологические инструкции*/}
         <TabPanel
           value={value_panel}
           indPanel={1}
-          style={{ minWidth: "800px", }}
+          style={{ minWidth: "800px" }}
           className="TableTech"
         >
           <Table
@@ -895,38 +902,40 @@ export const TexProcWelding = ({
             actions={
               userRole === "Admin" || userRole === "Technologist"
                 ? [
-                  {
-                    icon: "add",
-                    tooltip: "Добавить ",
-                    isFreeAction: true,
-                    onClick: () => {
-                      setIsModalOpen(true);
-                      setIsModalOpenNumb(0);
-                      setValuetVkladka(1)
-                      api.post(`/eventLog`, {
-                        "information": "Открыл модальное окно добавления технологической инструкции"
-                      })
+                    {
+                      icon: "add",
+                      tooltip: "Добавить ",
+                      isFreeAction: true,
+                      onClick: () => {
+                        setIsModalOpen(true);
+                        setIsModalOpenNumb(0);
+                        setValuetVkladka(1);
+                        api.post(`/eventLog`, {
+                          information:
+                            "Открыл модальное окно добавления технологической инструкции",
+                        });
+                      },
                     },
-                  },
-                  {
-                    icon: "edit",
-                    tooltip: "Редактировать ",
-                    onClick: (event, rowData) => {
-                      setModalData(rowData);
-                      setIsModalOpen(true);
-                      setIsModalOpenNumb(1)
-                      setValuetSeam(rowData?.seams[0]?.id)
-                      setValuetVkladka(1)
+                    {
+                      icon: "edit",
+                      tooltip: "Редактировать ",
+                      onClick: (event, rowData) => {
+                        setModalData(rowData);
+                        setIsModalOpen(true);
+                        setIsModalOpenNumb(1);
+                        setValuetSeam(rowData?.seams[0]?.id);
+                        setValuetVkladka(1);
 
-                      setidPassages(rowData?.id);
-                      setvalueNameInst(rowData?.name);
-                      setpassagesCnange(rowData?.weldPassageInstructions)
-                      api.post(`/eventLog`, {
-                        "information": "Открыл модальное окно редактирования технологической инструкции"
-                      })
+                        setidPassages(rowData?.id);
+                        setvalueNameInst(rowData?.name);
+                        setpassagesCnange(rowData?.weldPassageInstructions);
+                        api.post(`/eventLog`, {
+                          information:
+                            "Открыл модальное окно редактирования технологической инструкции",
+                        });
+                      },
                     },
-                  },
-                ]
+                  ]
                 : []
             }
             renderRowChildren={renderRowChildren}
@@ -943,9 +952,7 @@ export const TexProcWelding = ({
       />
       <ModalWindow
         isOpen={isModalOpen}
-        headerText={
-          modalData ? "Редактировать " : "Добавить "
-        }
+        headerText={modalData ? "Редактировать " : "Добавить "}
         setIsOpen={(state) => {
           setIsModalOpen(state);
           setModalData(null);
@@ -958,7 +965,7 @@ export const TexProcWelding = ({
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
             setIsModalOpen(false);
-            setModalData(null); 
+            setModalData(null);
           }}
         >
           {({
@@ -977,7 +984,7 @@ export const TexProcWelding = ({
                   style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                   value={valueNameInst}
                   name="name"
-                  autocomplete="off"
+                  autoComplete="off"
                   placeholder="Наименовние"
                   onBlur={handleBlur}
                 />
@@ -990,7 +997,7 @@ export const TexProcWelding = ({
                   style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                   value={valuetNumberInstr}
                   name="name"
-                  autocomplete="off"
+                  autoComplete="off"
                   placeholder="Номер"
                   onBlur={handleBlur}
                 />
@@ -1006,28 +1013,22 @@ export const TexProcWelding = ({
                 />
               </div> */}
 
-             
-              {isModalOpenNumb === 0
-                ? <WeldingInputs />
-                : <CnangeWeldingInputs />
-              } 
-
+              {isModalOpenNumb === 0 ? (
+                <WeldingInputs />
+              ) : (
+                <CnangeWeldingInputs />
+              )}
             </form>
-
           )}
         </Formik>
       </ModalWindow>
 
-
-
       {/*Технологические процессы  */}
       <ModalWindow
         isOpen={isModalpProcOpen}
-        headerText={
-          modalDataNumb ? "Редактировать " : "Добавить "
-        }
+        headerText={modalDataNumb ? "Редактировать " : "Добавить "}
         setIsOpen={(state) => {
-          setisModalpProcOpen(false)
+          setisModalpProcOpen(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -1036,8 +1037,8 @@ export const TexProcWelding = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setisModalpProcOpen(false)
-            SendDataProc(variables)
+            setisModalpProcOpen(false);
+            SendDataProc(variables);
           }}
         >
           {({
@@ -1048,7 +1049,6 @@ export const TexProcWelding = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
                 <div className={styles.row}>
                   <Input
@@ -1058,7 +1058,7 @@ export const TexProcWelding = ({
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.name}
                     name="name"
-                    autocomplete="off"
+                    autoComplete="off"
                     placeholder="Наименовние"
                     onBlur={handleBlur}
                   />
@@ -1084,32 +1084,28 @@ export const TexProcWelding = ({
                     style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
                     value={values.pdmSystemFileLink}
                     name="pdmSystemFileLink"
-                    autocomplete="off"
+                    autoComplete="off"
                     placeholder="Ссылка на PDF-файл "
                     onBlur={handleBlur}
                   />
-                </div> 
+                </div>
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
+                  <Button type="submit">
                     {modalDataNumb ? "Редактировать " : "Добавить "}
                   </Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
 
       {/*Удаление инструкции*/}
       <ModalWindow
         isOpen={deleteTaskModal}
         headerText="Удаление"
         setIsOpen={(state) => {
-          setdeleteTaskModal(false)
+          setdeleteTaskModal(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -1118,8 +1114,8 @@ export const TexProcWelding = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setdeleteTaskModal(false)
-            deleteInstruction()
+            setdeleteTaskModal(false);
+            deleteInstruction();
           }}
         >
           {({
@@ -1130,31 +1126,26 @@ export const TexProcWelding = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> данную инструкцию ? </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Вы уверены что хотите <span>удалить</span> данную инструкцию ?{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Удалить
-                  </Button>
+                  <Button type="submit">Удалить</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
 
       {/*Удаление процесса*/}
       <ModalWindow
         isOpen={deleteProcModal}
         headerText="Удаление"
         setIsOpen={(state) => {
-          setdeleteProcModal(false)
+          setdeleteProcModal(false);
         }}
         wrapperStyles={{ width: 420 }}
       >
@@ -1163,8 +1154,8 @@ export const TexProcWelding = ({
           enableReinitialize
           onSubmit={(variables) => {
             const { id, ...dataToSend } = variables;
-            setdeleteProcModal(false)
-            deleteProc(idProc)
+            setdeleteProcModal(false);
+            deleteProc(idProc);
           }}
         >
           {({
@@ -1175,25 +1166,19 @@ export const TexProcWelding = ({
             handleBlur,
           }) => (
             <form onSubmit={handleSubmit}>
-
               <div>
-                <h4 style={{ padding: "35px 40px" }}>Вы уверены что хотите <span>удалить</span> процесс ? </h4>
+                <h4 style={{ padding: "35px 40px" }}>
+                  Вы уверены что хотите <span>удалить</span> процесс ?{" "}
+                </h4>
 
                 <div className={styles.row}>
-                  <Button
-                    type="submit"
-                  >
-                    Удалить
-                  </Button>
+                  <Button type="submit">Удалить</Button>
                 </div>
-
               </div>
             </form>
           )}
         </Formik>
       </ModalWindow>
-
-
     </div>
   );
 };

@@ -8,7 +8,7 @@ public interface ICalendarRepository
     Task<CalendarDto> CreateAsync(
         Calendar calendar,
         List<Day>? days,
-        List<WorkingShift> workingShifts
+        List<WorkingShift>? workingShifts
     );
 
     Task<CalendarDto> UpdateAsync(Calendar calendar);
@@ -32,4 +32,6 @@ public interface ICalendarRepository
     Task<CalendarDto> CreateWelderCalendarBasedOnMainAsync(int year, Guid welderId);
     
     Task<CalendarDto> CreateEquipmentCalendarBasedOnMainAsync(int year, Guid equipmentId);
+    
+    Task DeleteCalendarAsync(Guid calendarId);
 }

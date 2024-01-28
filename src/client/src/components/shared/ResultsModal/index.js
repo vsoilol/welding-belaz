@@ -2,7 +2,7 @@ import React from "react";
 import Button from "components/shared/Button";
 import ModalWindow from "components/shared/ModalWindow";
 import Input from "components/shared/Input";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import api from "services/api";
 import errorActions from "store/error/actions";
 import { Formik } from "formik";
@@ -89,7 +89,7 @@ export const ResultsModal = ({ isOpen, setIsOpen, type, activeId }) => {
                 }}
                 placeholder="Начальная дата"
                 onBlur={handleBlur}
-                autocomplete="off"
+                autoComplete="off"
               />
               <Input
                 onChange={(e) => {
@@ -103,7 +103,7 @@ export const ResultsModal = ({ isOpen, setIsOpen, type, activeId }) => {
                   e.currentTarget.type = "date";
                 }}
                 placeholder="Конечная дата"
-                autocomplete="off"
+                autoComplete="off"
                 onBlur={handleBlur}
               />
             </div>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import ToolTip from "components/shared/ToolTip";
 import { ExecutorsTable } from "components/Executors/components";
 import { executorsImage } from "assets/pics";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { ChangePassword } from "components/change-password";
 
 export const Executors = ({
@@ -35,11 +35,10 @@ export const Executors = ({
   workshop,
   area,
   workplace,
-  loadPlace
+  loadPlace,
 }) => {
   const [value, setValue] = useState(0);
   const history = useHistory();
-
 
   const [hasError, setHasError] = useState(false);
 
@@ -51,19 +50,25 @@ export const Executors = ({
     loadWorkshop();
     loadArea();
     loadPlace();
-  }, [loadExecutors, loadTechs, loadMasters, loadEquipment, loadWorkshop, loadArea, loadPlace]);
- 
+  }, [
+    loadExecutors,
+    loadTechs,
+    loadMasters,
+    loadEquipment,
+    loadWorkshop,
+    loadArea,
+    loadPlace,
+  ]);
+
   const handleChange = (event, newValue) => {
-    localStorage.removeItem("VkladkaExecutors")
+    localStorage.removeItem("VkladkaExecutors");
     setValue(newValue);
   };
- 
-  if (Object.keys(user).length > 4) {   
-    localStorage.setItem("USERID", user.id)
-    localStorage.setItem("USER_productionAreaId", user.productionAreaId)
+
+  if (Object.keys(user).length > 4) {
+    localStorage.setItem("USERID", user.id);
+    localStorage.setItem("USER_productionAreaId", user.productionAreaId);
   }
-
-
 
   const a11yProps = (index) => {
     return {
@@ -75,7 +80,7 @@ export const Executors = ({
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
     if (localStorage.getItem("VkladkaExecutors") != null) {
-      setValue(Number(localStorage.getItem("VkladkaExecutors")))
+      setValue(Number(localStorage.getItem("VkladkaExecutors")));
     }
     return (
       <div
@@ -92,12 +97,9 @@ export const Executors = ({
 
   return (
     <div className={styles.innerWrapper}>
-
-      {localStorage.getItem("isFirstLogin")==="true"
-        ?<ChangePassword></ChangePassword>
-        :null
-      }
-      
+      {localStorage.getItem("isFirstLogin") === "true" ? (
+        <ChangePassword></ChangePassword>
+      ) : null}
 
       <ToolTip
         title="Сотрудники"
@@ -134,7 +136,6 @@ export const Executors = ({
           deleteExecutor={deleteMaster}
           editMaster={editMaster}
           executors={masters}
-
           value={value}
           equipment={equipment}
           workshop={workshop}
@@ -157,7 +158,6 @@ export const Executors = ({
           editExecutor={editExecutor}
           executors={executors}
           workplace={workplace}
-
           value={value}
           equipment={equipment}
           workshop={workshop}

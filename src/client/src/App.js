@@ -1,13 +1,11 @@
 import Message from "components/shared/Message";
 import {
   EquipmentContainer,
-
   WorkPlacePage,
   TexProcWeldingPage,
-
   ExecutorsContainer,
   InstructionsContainer,
-  LoginContainer, 
+  LoginContainer,
   TasksContainer,
   RecordsContainer,
   ModesContainer,
@@ -15,10 +13,9 @@ import {
   CreatesUserContainer,
   ProductionCalendarContainer,
 } from "containers";
-import UploadContainer from "containers/Upload.container";
 import MobileContext from "context/MobileContext";
 import TabletContext from "context/TabletContext";
-import { NewPasswordPage } from "pages"; 
+import { NewPasswordPage } from "pages";
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Switch, withRouter } from "react-router-dom";
@@ -26,7 +23,7 @@ import PrivateRoute from "services/HOCs/PrivateRoute";
 import ScrollToTop from "services/HOCs/ScrollToTop";
 import ErrorActions from "store/error/actions";
 
-import CalendarPage from "containers/Calendar.container"
+import CalendarPage from "containers/Calendar.container";
 
 function App({ error, errorType, clearError }) {
   const isAuth = useSelector((state) => state.auth.isAuth);
@@ -63,7 +60,6 @@ function App({ error, errorType, clearError }) {
                 component={LoginContainer}
                 redirectTo="/"
               />
-               
               <PrivateRoute
                 // allow={!isAuth}
                 allow={true}
@@ -175,7 +171,6 @@ function App({ error, errorType, clearError }) {
                 component={ReportsContainer}
                 redirectTo="/login"
               />
-
             </Switch>
           </ScrollToTop>
           {/* </React.StrictMode> */}

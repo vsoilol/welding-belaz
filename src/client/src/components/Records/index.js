@@ -2,13 +2,19 @@ import { instructionsImage } from "assets/pics";
 import { RecordsTable } from "./components/Table";
 import ToolTip from "components/shared/ToolTip";
 import React, { useEffect } from "react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
-export const Records = ({ records, loadRecords, isRequesting, deleteRecords , userRole}) => {
+export const Records = ({
+  records,
+  loadRecords,
+  isRequesting,
+  deleteRecords,
+  userRole,
+}) => {
   useEffect(() => {
     loadRecords();
   }, [loadRecords]);
- 
+
   return (
     <div className={styles.innerWrapper}>
       <ToolTip

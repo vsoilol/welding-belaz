@@ -18,15 +18,12 @@ import { Table } from "components/shared/Table";
 import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import styles from "./styles.module.css";
-
-
+import styles from "./styles.module.scss";
 
 import axios from "axios";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import api from "services/api";
-
 
 /////компоненты
 import { Workshop } from "components/WorkPlace/components";
@@ -34,17 +31,12 @@ import { ProductionArea } from "components/WorkPlace/components";
 import { Posts } from "components/WorkPlace/components";
 import { Place } from "components/WorkPlace/components";
 
-
 import { Product } from "components/WorkPlace/components";
 import { Knot } from "components/WorkPlace/components";
 import { Detail } from "components/WorkPlace/components";
 import { Seam } from "components/WorkPlace/components";
- 
-
 
 import deleteIcon from "assets/icons/delete.png";
-
-
 
 const dateOptions = {
   day: "numeric",
@@ -62,15 +54,15 @@ export const WorkPlace = ({
   loadWorkshop,
   addWorkshop,
   editWorkshop,
-  ///Area 
+  ///Area
   loadArea,
   addArea,
   editArea,
-  ///Posts 
+  ///Posts
   loadPosts,
   addPosts,
   editPosts,
-  ///Workplace 
+  ///Workplace
   loadWorkplace,
   addWorkplace,
   editWorkplace,
@@ -92,14 +84,11 @@ export const WorkPlace = ({
   editSeam,
   loadTexprocwelding,
 
-
-
   deleteEquipment,
   isRequesting,
   masters,
   techs,
   userRole,
-
 
   workshop,
   area,
@@ -113,37 +102,24 @@ export const WorkPlace = ({
 
   executors,
 
-
-
   detailbyinspector,
   getDetailByInspector,
-
 
   loadWeldingTask,
   weldingtask,
 
-
   deleteProduct,
 
-
   instructions,
-  loadInstructions
-
+  loadInstructions,
 }) => {
-
- 
-
-
   const [workplaceValue, setValueWorkplaceValue] = useState(0);
 
   const [value_panel, setValue] = useState(0);
   const [value_panel2, setValue2] = useState(0);
   const [indPanel, setindPanel] = useState(0);
 
-
-
-
-  let RefElem = React.createRef()
+  let RefElem = React.createRef();
 
   useEffect(() => {
     loadWorkshop();
@@ -157,8 +133,8 @@ export const WorkPlace = ({
     loadTexprocwelding();
     loadMasters();
     loadTechs();
-    loadWeldingTask()
-    loadExecutors(); 
+    loadWeldingTask();
+    loadExecutors();
     loadInstructions();
   }, [
     loadWorkshop,
@@ -172,46 +148,38 @@ export const WorkPlace = ({
     loadMasters,
     loadTechs,
     loadWeldingTask,
-    loadExecutors,  
-    loadInstructions
+    loadExecutors,
+    loadInstructions,
   ]);
 
   const ChangePanelsworkplace = (event, newValue) => {
-    setValueWorkplaceValue(newValue)
+    setValueWorkplaceValue(newValue);
 
-    setindPanel(0)
-    DisplayWorkPlace(workplaceValue, newValue)
-  }
-
+    setindPanel(0);
+    DisplayWorkPlace(workplaceValue, newValue);
+  };
 
   const ChangePanels = (event, newValue) => {
     if (workplaceValue === 0) {
       setValue(newValue);
       setValue2(0);
-    }
-    else {
+    } else {
       setValue(0);
       setValue2(newValue);
     }
-    setindPanel(newValue)
+    setindPanel(newValue);
 
-
-    DisplayWorkPlace(workplaceValue, newValue)
+    DisplayWorkPlace(workplaceValue, newValue);
   };
 
-
   function DisplayWorkPlace(panel1, panel2) {
-    let primaryPanel = workplaceValue
-    let secondPanel = value_panel
+    let primaryPanel = workplaceValue;
+    let secondPanel = value_panel;
     if (primaryPanel == 1) {
-      secondPanel = value_panel2
+      secondPanel = value_panel2;
     }
 
-
-
-
     if (primaryPanel === 0 && secondPanel === 0) {
-
       return (
         <Workshop
           indPanel={indPanel}
@@ -227,13 +195,12 @@ export const WorkPlace = ({
           value_panel2={value_panel2}
           userRole={userRole}
           addWorkshop={addWorkshop}
-          editWorkshop={editWorkshop} 
+          editWorkshop={editWorkshop}
           deleteProduct={deleteProduct}
           deleteIcon={deleteIcon}
         />
-      )
-    }
-    else if (primaryPanel === 0 && secondPanel === 1) {
+      );
+    } else if (primaryPanel === 0 && secondPanel === 1) {
       return (
         <ProductionArea
           indPanel={indPanel}
@@ -251,12 +218,11 @@ export const WorkPlace = ({
           userRole={userRole}
           deleteProduct={deleteProduct}
           deleteIcon={deleteIcon}
-          addArea={addArea} 
+          addArea={addArea}
           editArea={editArea}
         />
-      )
-    }
-    else if (primaryPanel === 0 && secondPanel === 2) {
+      );
+    } else if (primaryPanel === 0 && secondPanel === 2) {
       return (
         <Posts
           ref={RefElem}
@@ -273,12 +239,11 @@ export const WorkPlace = ({
           userRole={userRole}
           deleteProduct={deleteProduct}
           deleteIcon={deleteIcon}
-          addPosts={addPosts} 
+          addPosts={addPosts}
           editPosts={editPosts}
         />
-      )
-    }
-    else if (primaryPanel === 0 && secondPanel === 3) {
+      );
+    } else if (primaryPanel === 0 && secondPanel === 3) {
       return (
         <Place
           ref={RefElem}
@@ -294,15 +259,12 @@ export const WorkPlace = ({
           value_panel2={value_panel2}
           userRole={userRole}
           deleteProduct={deleteProduct}
-          deleteIcon={deleteIcon} 
+          deleteIcon={deleteIcon}
           addWorkplace={addWorkplace}
           editWorkplace={editWorkplace}
         />
-      )
-    }
-
-
-    else if (primaryPanel === 1 && secondPanel === 0) {
+      );
+    } else if (primaryPanel === 1 && secondPanel === 0) {
       return (
         <Product
           ref={RefElem}
@@ -316,21 +278,18 @@ export const WorkPlace = ({
           detail={detail}
           seam={seam}
           texprocwelding={texprocwelding}
-          value_panel={value_panel} 
+          value_panel={value_panel}
           value_panel2={value_panel2}
           userRole={userRole}
-
           masters={masters}
           techs={techs}
           deleteProduct={deleteProduct}
           deleteIcon={deleteIcon}
-
           addProduct={addProduct}
           editProduct={editProduct}
         />
-      )
-    }
-    else if (primaryPanel === 1 && secondPanel === 1) {
+      );
+    } else if (primaryPanel === 1 && secondPanel === 1) {
       return (
         <Knot
           ref={RefElem}
@@ -351,13 +310,11 @@ export const WorkPlace = ({
           deleteIcon={deleteIcon}
           masters={masters}
           techs={techs}
-
           addKnot={addKnot}
           editKnot={editKnot}
         />
-      )
-    }
-    else if (primaryPanel === 1 && secondPanel === 2) {
+      );
+    } else if (primaryPanel === 1 && secondPanel === 2) {
       return (
         <Detail
           ref={RefElem}
@@ -379,9 +336,8 @@ export const WorkPlace = ({
           addDetail={addDetail}
           editDetail={editDetail}
         />
-      )
-    }
-    else if (primaryPanel === 1 && secondPanel === 3) {
+      );
+    } else if (primaryPanel === 1 && secondPanel === 3) {
       return (
         <Seam
           ref={RefElem}
@@ -403,21 +359,12 @@ export const WorkPlace = ({
           editSeam={editSeam}
           instructions={instructions}
         />
-      )
+      );
+    } else if (primaryPanel === 2) {
+      return null;
+    } else {
+      return <div></div>;
     }
-
-
-    else if (primaryPanel === 2  ) {
-      return (       null
-      )
-    } 
-
-    else {
-      return (
-        <div></div>
-      )
-    }
-
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -437,59 +384,40 @@ export const WorkPlace = ({
         aria-label="full width tabs example"
       >
         <Tab label="Структура производства" />
-        <Tab label="Структура продукции" /> 
-
+        <Tab label="Структура продукции" />
       </Tabs>
 
+      {workplaceValue === 0 ? (
+        <Tabs
+          value={value_panel}
+          onChange={ChangePanels}
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="full width tabs example"
+        >
+          <Tab label="Цеха" />
+          <Tab label="Производственные участки" />
+          <Tab label="Посты" />
+          <Tab label="Рабочие места" />
+        </Tabs>
+      ) : null}
+      {workplaceValue === 1 ? (
+        <Tabs
+          value={value_panel2}
+          onChange={ChangePanels}
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="full width tabs example"
+        >
+          <Tab label="Изделия" />
+          <Tab label="Узлы" />
+          <Tab label="Детали" />
+          <Tab label="Сварные швы" />
+        </Tabs>
+      ) : null}
+      {workplaceValue === 2 ? null : null}
 
-      {workplaceValue === 0
-        ? (
-          <Tabs
-            value={value_panel}
-            onChange={ChangePanels}
-            indicatorColor="primary"
-            textColor="primary"
-            aria-label="full width tabs example"
-          >
-            <Tab label="Цеха" />
-            <Tab label="Производственные участки" />
-            <Tab label="Посты" />
-            <Tab label="Рабочие места" />
-          </Tabs>
-        )
-        :null
-         
-      }
-      {workplaceValue === 1
-        ? (
-
-          <Tabs
-            value={value_panel2}
-            onChange={ChangePanels}
-            indicatorColor="primary"
-            textColor="primary"
-            aria-label="full width tabs example"
-          >
-
-            <Tab label="Изделия" />
-            <Tab label="Узлы" />
-            <Tab label="Детали" />
-            <Tab label="Сварные швы" />
-          </Tabs>
-        )
-        :null
-      }
-       {workplaceValue === 2
-        ? null
-        : null
-      }
-
-
-      <DisplayWorkPlace
-        primaryPanel={value_panel}
-        secondPanel={value_panel2}
-      />
-
+      <DisplayWorkPlace primaryPanel={value_panel} secondPanel={value_panel2} />
     </div>
   );
 };

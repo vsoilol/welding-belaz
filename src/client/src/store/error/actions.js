@@ -1,8 +1,8 @@
-import { createActions } from 'reduxsauce';
+import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
-  setError: ['message'],
-  setMessage: ['message'],
+  setError: ["message"],
+  setMessage: ["message"],
   clearError: [],
 });
 
@@ -12,3 +12,4 @@ const Actions = {
 };
 
 export default Actions;
+export { Types as errorActionTypes, Creators as errorActionCreators };

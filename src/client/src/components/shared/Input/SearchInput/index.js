@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 // import PropTypes from 'prop-types';
-import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
-import DefaultInput from '../DefaultInput';
+import { ReactComponent as SearchIcon } from "assets/icons/search.svg";
+import DefaultInput from "../DefaultInput";
 
-import styles from './style.module.css';
+import styles from "./style.module.scss";
 
-const SearchInput = props => {
+const SearchInput = (props) => {
   return (
     <div className={styles.wrapper}>
       <SearchIcon
-        style={{ width: '15px', pointerEvents: 'none' }}
+        style={{ width: "15px", pointerEvents: "none" }}
         className={styles.icon}
       />
 

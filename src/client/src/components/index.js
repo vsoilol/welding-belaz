@@ -1,8 +1,7 @@
 export { Executors } from "components/Executors";
- 
+
 export { WorkPlace } from "components/WorkPlace";
-export { TexProcWelding } from "components/TexProcWelding"; 
-export { Calendar } from "components/Calendar"; 
+export { TexProcWelding } from "components/TexProcWelding";
 
 export { Equipment } from "components/Equipment";
 export { Instructions } from "components/Instructions";
@@ -12,10 +11,7 @@ export { Modes } from "components/Modes";
 export { Upload } from "components/Upload";
 export { ChangePassword } from "components/change-password";
 
-export {Reports} from "components/Reports";
-export {Production_calendar} from "components/Production_calendar";
+export { Reports } from "components/Reports";
+export { ProductionCalendar } from "components/production-calendar";
 
-
- 
- 
-
+export * from "./base-calendar";

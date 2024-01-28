@@ -3,6 +3,7 @@ using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Contracts;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.WeldingApi.Extensions;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,12 +35,22 @@ public class CalendarController : ControllerBase
         return result.Result.ToOk();
     }
 
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Unit>> CreateMainCalendarAsync([FromRoute] Guid id)
+    {
+        var result = await _calendarService.DeleteCalendarAsync(new DeleteCalendarRequest {CalendarId = id});
+
+        HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
+
+        return result.Result.ToOk();
+    }
+
     [HttpGet("main/{year}")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<CalendarDto?>> GetMainCalendarByYearAsync([FromRoute] int year)
     {
         var result = await _calendarService.GetMainCalendarByYearAsync(
-            new GetMainCalendarByYearRequest { Year = year }
+            new GetMainCalendarByYearRequest {Year = year}
         );
 
         HttpContext.Items[ContextItems.LogMessage] = result.LogMessage;
@@ -164,7 +175,7 @@ public class CalendarController : ControllerBase
 
         return result.Result.ToOk();
     }
-    
+
     [HttpPost("based-on-main/welder")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<CalendarDto>> CreateWelderCalendarBasedOnMainAsync(
@@ -176,7 +187,7 @@ public class CalendarController : ControllerBase
 
         return result.Result.ToOk();
     }
-    
+
     [HttpPost("based-on-main/equipment")]
     [ProducesResponseType(typeof(CalendarDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<CalendarDto>> CreateEquipmentCalendarBasedOnMainAsync(

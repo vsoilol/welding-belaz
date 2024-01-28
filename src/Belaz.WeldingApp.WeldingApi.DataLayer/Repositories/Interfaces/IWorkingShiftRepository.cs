@@ -7,7 +7,7 @@ public interface IWorkingShiftRepository
 {
     Task<WorkingShiftDto> UpdateAsync(WorkingShift entity);
 
-    Task<WorkingShiftDto> CreateAsync(WorkingShift entity, int? year);
+    Task<WorkingShiftDto> CreateAsync(WorkingShift entity);
     
     Task<List<WorkingShiftDto>> GetAllMainWorkingShiftsByYearAsync(int year);
     

@@ -1,0 +1,28 @@
+/* FullScreenSpinner.module.css */
+.fullScreenSpinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(35, 35, 35, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  overflow-y: hidden; /* Prevent scrolling within the spinner itself */
+}
+
+.inlineSpinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 1000;
+}
+
+.noScroll {
+  overflow: hidden !important; /* Prevent scrolling on the body */
+}

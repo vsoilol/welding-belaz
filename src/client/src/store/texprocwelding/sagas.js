@@ -5,9 +5,9 @@ import errorActions from "../error/actions";
 
 const {
   Types: {
-    ///Технологические процессы 
+    ///Технологические процессы
     LOAD_TEXPROCWELDING_REQUEST,
-    ///Технологические инструкции  
+    ///Технологические инструкции
     LOAD_INSTRUCTIONS_REQUEST,
     ADD_INST_REQUEST,
     EDIT_INST_REQUEST,
@@ -15,10 +15,10 @@ const {
     LOAD_SEAM_REQUEST,
   },
   Creators: {
-    ///Технологические процессы 
+    ///Технологические процессы
     loadTexprocweldingSuccess,
     loadTexprocweldingFailure,
-    ///Технологические инструкции  
+    ///Технологические инструкции
     loadInstructionsSuccess,
     loadInstructionsFailure,
 
@@ -31,15 +31,13 @@ const {
     ///Сварные швы
     loadSeamSuccess,
     loadSeamFailure,
-
-
   },
 } = texprocweldingActions;
 
 const {
   Creators: { setError },
 } = errorActions;
-///Технологические процессы 
+///Технологические процессы
 function* loadTexprocwelding() {
   try {
     const { data } = yield call(api.get, `/TechnologicalProcess`);
@@ -49,7 +47,7 @@ function* loadTexprocwelding() {
     yield put(setError(error.message));
   }
 }
-///Технологические инструкции  
+///Технологические инструкции
 function* loadInstructions() {
   try {
     const { data } = yield call(api.get, `/TechnologicalInstruction`);
@@ -62,8 +60,11 @@ function* loadInstructions() {
 
 function* addInst(variables) {
   try {
-    const { data } = yield call(api.post, `/TechnologicalInstruction`, variables.payload);
-    console.log(variables.payload)
+    const { data } = yield call(
+      api.post,
+      `/TechnologicalInstruction`,
+      variables.payload
+    );
     yield put(addInstSuccess(variables.payload));
     yield call(loadInstructions); // выполнение функции loadInstructions
   } catch (error) {
@@ -72,8 +73,12 @@ function* addInst(variables) {
   }
 }
 function* editInst(variables) {
-  try { 
-    const { data } = yield call(api.put, `/TechnologicalInstruction`, variables.payload);
+  try {
+    const { data } = yield call(
+      api.put,
+      `/TechnologicalInstruction`,
+      variables.payload
+    );
     yield put(addInstSuccess(variables.payload));
     yield call(loadInstructions); // выполнение функции loadInstructions
     yield put(editInstSuccess(data));
@@ -93,15 +98,28 @@ function* loadSeam() {
   }
 }
 
-export function* texprocweldingSaga() {
-  ///Технологические процессы 
-  yield takeLatest(LOAD_TEXPROCWELDING_REQUEST, loadTexprocwelding);
-  ///Технологические инструкции 
-  yield takeLatest(LOAD_INSTRUCTIONS_REQUEST, loadInstructions);
+// export function* texprocweldingSaga() {
+//   ///Технологические процессы
+//   yield takeLatest(LOAD_TEXPROCWELDING_REQUEST, loadTexprocwelding);
+//   ///Технологические инструкции
+//   yield takeLatest(LOAD_INSTRUCTIONS_REQUEST, loadInstructions);
 
-  yield takeLatest(ADD_INST_REQUEST, addInst);
-  yield takeLatest(EDIT_INST_REQUEST, editInst);
+//   yield takeLatest(ADD_INST_REQUEST, addInst);
+//   yield takeLatest(EDIT_INST_REQUEST, editInst);
+
+//   ///Сварные швы
+//   yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
+// }
+
+export default [
+  ///Технологические процессы
+  takeLatest(LOAD_TEXPROCWELDING_REQUEST, loadTexprocwelding),
+  ///Технологические инструкции
+  takeLatest(LOAD_INSTRUCTIONS_REQUEST, loadInstructions),
+
+  takeLatest(ADD_INST_REQUEST, addInst),
+  takeLatest(EDIT_INST_REQUEST, editInst),
 
   ///Сварные швы
-  yield takeLatest(LOAD_SEAM_REQUEST, loadSeam);
-}
+  takeLatest(LOAD_SEAM_REQUEST, loadSeam),
+];
