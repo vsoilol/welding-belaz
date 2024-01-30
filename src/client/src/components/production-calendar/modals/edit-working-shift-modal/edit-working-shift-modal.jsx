@@ -1,15 +1,6 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { Formik, Form } from "formik";
-import Select from "react-select";
+import React, { useState } from "react";
 
-import {
-  Button,
-  ModalWindow,
-  CustomFormikSelect,
-  CustomFormikTextInput,
-  CustomFormikField,
-  CustomSelect,
-} from "components/shared";
+import { ModalWindow, CustomSelect } from "components/shared";
 import {
   AddWorkingShiftForm,
   DeleteWorkingShiftForm,
@@ -18,15 +9,7 @@ import {
 
 import styles from "../modal-style.module.scss";
 
-export const EditWorkingShiftModal = ({
-  isOpen,
-  toggleModal,
-  workingShifts,
-  calendarId,
-  createWorkingShift,
-  deleteWorkingShift,
-  updateWorkingShift,
-}) => {
+export const EditWorkingShiftModal = ({ isOpen, toggleModal }) => {
   const [selectedOption, setSelectedOption] = useState(0);
 
   const workingShiftOptions = [
@@ -59,27 +42,15 @@ export const EditWorkingShiftModal = ({
         />
 
         {selectedOption === 1 && (
-          <AddWorkingShiftForm
-            calendarId={calendarId}
-            toggleModal={toggleModal}
-            createWorkingShift={createWorkingShift}
-          />
+          <AddWorkingShiftForm toggleModal={toggleModal} />
         )}
 
         {selectedOption === 2 && (
-          <DeleteWorkingShiftForm
-            workingShifts={workingShifts}
-            toggleModal={toggleModal}
-            deleteWorkingShift={deleteWorkingShift}
-          />
+          <DeleteWorkingShiftForm toggleModal={toggleModal} />
         )}
 
         {selectedOption === 3 && (
-          <UpdateWorkingShiftForm
-            workingShifts={workingShifts}
-            toggleModal={toggleModal}
-            updateWorkingShift={updateWorkingShift}
-          />
+          <UpdateWorkingShiftForm toggleModal={toggleModal} />
         )}
       </div>
     </ModalWindow>

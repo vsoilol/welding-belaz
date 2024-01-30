@@ -7,58 +7,44 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { EditDayWorkingShiftModal } from "../modals";
 import { generateCalendarEvents } from "./generate-calendar-events";
 
+import { useCalendarStore } from "store/calendar";
+
 import styles from "../styles.module.scss";
 
 const localizer = momentLocalizer(moment);
 
-export const CustomCalendar = ({
-  userRole,
-  calendarDays,
-  mainWorkingShifts,
-  loadMainCalendarByYear,
-  calendarYear,
-  currentDate,
-  setCurrentDate,
-  updateWorkingShift,
-  createDay,
-  deleteWorkingShift,
-}) => {
-  const messages = {
-    today: "Сегодня",
-    previous: "Назад",
-    next: "Вперед",
-  };
+const calendarMessages = {
+  today: "Сегодня",
+  previous: "Назад",
+  next: "Вперед",
+};
 
-  const [selectedDayEvent, setSelectedDayEvent] = useState(null);
-  const [events, setEvents] = useState([]);
+export const CustomCalendar = ({ currentDate, setCurrentDate }) => {
+  const { calendar, loadMainCalendarByYear } = useCalendarStore();
 
-  const handleSelectEvent = (event) => {
-    setSelectedDayEvent(event);
-  };
-
-  const updateCalendarEvents = (currentDate) => {
-    const newEvents = generateCalendarEvents(
-      currentDate,
-      calendarDays,
-      mainWorkingShifts
-    );
-    setEvents(newEvents);
-  };
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [calendarEvents, setCalendarEvents] = useState([]);
 
   useEffect(() => {
-    updateCalendarEvents(currentDate);
-  }, [calendarYear]);
+    const events = generateCalendarEvents(
+      currentDate,
+      calendar?.days,
+      calendar?.mainWorkingShifts
+    );
+    setCalendarEvents(events);
+  }, [currentDate, calendar]);
 
-  const handleMonthChange = (date) => {
+  const handleEventSelection = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const handleNavigation = (date) => {
+    const year = date.getFullYear();
     setCurrentDate(date);
-    const currentYear = date.getFullYear();
 
-    if (calendarYear === currentYear) {
-      updateCalendarEvents(date);
-      return;
+    if (calendar?.year !== year) {
+      loadMainCalendarByYear(year);
     }
-
-    loadMainCalendarByYear(currentYear);
   };
 
   return (
@@ -68,24 +54,18 @@ export const CustomCalendar = ({
         startAccessor="start"
         endAccessor="end"
         selectable
-        onSelectEvent={handleSelectEvent}
-        onNavigate={handleMonthChange}
+        onSelectEvent={handleEventSelection}
+        onNavigate={handleNavigation}
         date={currentDate}
         views={["month"]}
-        messages={messages}
-        events={events}
+        messages={calendarMessages}
+        events={calendarEvents}
       />
 
-      {selectedDayEvent && (
+      {selectedEvent && (
         <EditDayWorkingShiftModal
-          dayEvent={selectedDayEvent}
-          setDayEvent={setSelectedDayEvent}
-          userRole={userRole}
-          updateWorkingShift={updateWorkingShift}
-          calendarDays={calendarDays}
-          mainWorkingShifts={mainWorkingShifts}
-          createDay={createDay}
-          deleteWorkingShift={deleteWorkingShift}
+          dayEvent={selectedEvent}
+          setDayEvent={setSelectedEvent}
         />
       )}
     </div>

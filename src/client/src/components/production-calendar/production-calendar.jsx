@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { tasksImage } from "assets/pics";
 
 import { LoadingSpinner, ToolTip } from "components/shared";
@@ -11,35 +12,51 @@ import {
 import styles from "./styles.module.scss";
 
 import { CustomCalendar } from "./custom-calendar";
+import { useCalendarStore } from "store/calendar";
+import { useAuthStore } from "store/auth";
 import "./styleCalendar.scss";
 
-export const ProductionCalendar = ({
-  userRole,
-  mainCalendar,
-  calendarIsLoading,
-  loadMainCalendarByYear,
-  updateWorkingDayWithWorkingShift,
-  createDay,
-  updateDay,
-  createWorkingShift,
-  deleteWorkingShift,
-  updateWorkingShift,
-}) => {
-  const [isModalAddWorkDayOpen, setIsModalAddWorkDayOpen] = useState(false);
-  const [isModalAddWeekendOpen, setIsModalAddWeekendOpen] = useState(false);
-  const [isModalAddShiftOpen, setIsModalAddShiftOpen] = useState(false);
+const AdminTools = ({ onAddWorkDay, onAddWeekend, onEditShift }) => (
+  <div className={styles.RowToolsBtns}>
+    <button onClick={onAddWorkDay}>Добавить рабочий день</button>
+    <button onClick={onAddWeekend}>Добавить выходной день</button>
+    <button onClick={onEditShift}>Рабочие смены</button>
+  </div>
+);
+
+export const ProductionCalendar = () => {
+  const {
+    calendar,
+    isLoading,
+    loadMainCalendarByYear,
+    updateWorkingDayWithWorkingShift,
+    createDay,
+    updateDay,
+  } = useCalendarStore();
+
+  const { userRole } = useAuthStore();
+
+  const [isAddWorkDayModalOpen, setIsAddWorkDayModalOpen] = useState(false);
+  const [isAddWeekendModalOpen, setIsAddWeekendModalOpen] = useState(false);
+  const [isEditShiftModalOpen, setIsEditShiftModalOpen] = useState(false);
 
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    console.log("Param id", id);
+  }, [id]);
 
   useEffect(() => {
     const currentDate = new Date().getUTCFullYear();
     loadMainCalendarByYear(currentDate);
   }, [loadMainCalendarByYear]);
 
-  const addOrUpdateWorkingDay = (data) => {
+  const handleAddOrUpdateWorkingDay = (data) => {
     const { workingShiftId, workingDay } = data;
 
-    const workingShift = mainCalendar.mainWorkingShifts.find(
+    const workingShift = calendar.mainWorkingShifts.find(
       (shift) => shift.id === workingShiftId
     );
 
@@ -48,7 +65,7 @@ export const ProductionCalendar = ({
     const monthNumber = parsedDate.getMonth() + 1;
     const year = parsedDate.getFullYear();
 
-    const existingDay = mainCalendar.days.find(
+    const existingDay = calendar.days.find(
       (day) => day.number === dayNumber && day.monthNumber === monthNumber
     );
 
@@ -75,13 +92,13 @@ export const ProductionCalendar = ({
     }
   };
 
-  const addWeekendDay = ({ dayDate }) => {
+  const handleAddWeekendDay = ({ dayDate }) => {
     const parsedDate = new Date(dayDate);
     const dayNumber = parsedDate.getDate();
     const monthNumber = parsedDate.getMonth() + 1;
     const year = parsedDate.getFullYear();
 
-    const existingDay = mainCalendar.days.find(
+    const existingDay = calendar.days.find(
       (day) => day.number === dayNumber && day.monthNumber === monthNumber
     );
 
@@ -114,77 +131,48 @@ export const ProductionCalendar = ({
 
         <div className={styles.tableWrapper}>
           <div className="calendar-wrapper">
-            {userRole === "Admin" || userRole === "Master" ? (
-              <div className={styles.RowToolsBtns}>
-                <button onClick={() => setIsModalAddWorkDayOpen(true)}>
-                  Добавить рабочий день
-                </button>
-                <button onClick={() => setIsModalAddWeekendOpen(true)}>
-                  Добавить выходной день
-                </button>
-                <button
-                  onClick={() => {
-                    setIsModalAddShiftOpen(true);
-                  }}
-                >
-                  Рабочие смены
-                </button>
-              </div>
-            ) : null}
+            {(userRole === "Admin" || userRole === "Master") && (
+              <AdminTools
+                onAddWorkDay={() => setIsAddWorkDayModalOpen(true)}
+                onAddWeekend={() => setIsAddWeekendModalOpen(true)}
+                onEditShift={() => setIsEditShiftModalOpen(true)}
+              />
+            )}
 
-            {calendarIsLoading && (
+            {isLoading && (
               <LoadingSpinner isFullScreenMode={false} paddingTop={"2vw"} />
             )}
 
-            {mainCalendar?.days &&
-              mainCalendar?.mainWorkingShifts &&
-              !calendarIsLoading && (
-                <CustomCalendar
-                  loadMainCalendarByYear={loadMainCalendarByYear}
-                  calendarDays={mainCalendar?.days}
-                  mainWorkingShifts={mainCalendar?.mainWorkingShifts}
-                  userRole={userRole}
-                  calendarYear={mainCalendar.year}
-                  currentDate={currentDate}
-                  setCurrentDate={setCurrentDate}
-                  updateWorkingShift={updateWorkingShift}
-                  createDay={createDay}
-                  deleteWorkingShift={deleteWorkingShift}
-                />
-              )}
+            {calendar?.days && calendar?.mainWorkingShifts && !isLoading && (
+              <CustomCalendar
+                currentDate={currentDate}
+                setCurrentDate={setCurrentDate}
+              />
+            )}
           </div>
         </div>
       </div>
 
-      {mainCalendar?.year && (
+      {calendar?.year && (
         <AddWorkingDayModal
-          isOpen={isModalAddWorkDayOpen}
-          toggleModal={setIsModalAddWorkDayOpen}
-          calendarId={mainCalendar?.id ?? ""}
-          workingShifts={mainCalendar?.mainWorkingShifts}
-          onWorkingDaySubmit={addOrUpdateWorkingDay}
-          currentYear={mainCalendar?.year}
+          isOpen={isAddWorkDayModalOpen}
+          toggleModal={setIsAddWorkDayModalOpen}
+          onWorkingDaySubmit={handleAddOrUpdateWorkingDay}
         />
       )}
 
-      {mainCalendar?.year && (
+      {calendar?.year && (
         <AddWeekendModal
-          isOpen={isModalAddWeekendOpen}
-          toggleModal={setIsModalAddWeekendOpen}
-          onWeekendDaySubmit={addWeekendDay}
-          currentYear={mainCalendar?.year}
+          isOpen={isAddWeekendModalOpen}
+          toggleModal={setIsAddWeekendModalOpen}
+          onWeekendDaySubmit={handleAddWeekendDay}
         />
       )}
 
-      {mainCalendar?.year && (
+      {calendar?.year && (
         <EditWorkingShiftModal
-          isOpen={isModalAddShiftOpen}
-          toggleModal={setIsModalAddShiftOpen}
-          calendarId={mainCalendar?.id}
-          workingShifts={mainCalendar.mainWorkingShifts}
-          createWorkingShift={createWorkingShift}
-          deleteWorkingShift={deleteWorkingShift}
-          updateWorkingShift={updateWorkingShift}
+          isOpen={isEditShiftModalOpen}
+          toggleModal={setIsEditShiftModalOpen}
         />
       )}
     </>

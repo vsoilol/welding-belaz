@@ -5,14 +5,12 @@ import {
   CustomFormikTextInput,
   CustomFormikField,
 } from "components/shared";
+import { useCalendarStore } from "store/calendar";
 import { validationSchema } from "./validation-schema";
 import styles from "../../../modal-style.module.scss";
 
-export const AddWorkingShiftForm = ({
-  calendarId,
-  toggleModal,
-  createWorkingShift,
-}) => {
+export const AddWorkingShiftForm = ({ toggleModal }) => {
+  const { calendarId, createWorkingShift } = useCalendarStore();
   const initialFormValues = {
     number: 1,
     shiftStart: "",

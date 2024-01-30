@@ -25,11 +25,11 @@ export const Header = ({ userRole }) => {
     },
     { name: "Записи", route: "/records" },
     { name: "Режимы сварки", route: "/welding-modes" },
-    /* (userRole === "Admin" || userRole === "Master" || userRole === "Chief" || userRole === "PlantManager") 
-    && { name: "Режимы сварки", route: "/welding-modes" }, */
-    { name: "Календарь", route: "/proiz-calendar" },
+
+    { name: "Календарь", route: "/production-calendar" },
     { name: "Задания", route: "/tasks" },
     { name: "Отчеты", route: "/reports" },
+
     userRole === "Admin" && {
       name: "Панель администратора",
       route: "/creates-user",

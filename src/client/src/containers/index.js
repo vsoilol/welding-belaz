@@ -1,5 +1,5 @@
 export { default as EquipmentContainer } from "./Equipment.container";
- 
+
 export { default as WorkPlacePage } from "./WorkPlace.container";
 export { default as TexProcWeldingPage } from "./TexProcWelding.container";
 
@@ -12,14 +12,6 @@ export { default as RecordsContainer } from "./Records.container";
 
 export { default as ModesContainer } from "./Modes.container";
 
+export { default as ReportsContainer } from "./Reports.container";
 
-export { default as ReportsContainer } from "./Reports.container"; 
-
-export { default as CreatesUserContainer } from "./CreatesUser.container"; 
-
-export { default as ProductionCalendarContainer } from "./ProductionCalendar.container"; 
-
-
-
-
-
+export { default as CreatesUserContainer } from "./CreatesUser.container";

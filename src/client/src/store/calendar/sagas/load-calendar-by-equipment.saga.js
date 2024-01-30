@@ -13,7 +13,7 @@ import { errorActionCreators } from "store/error";
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar-actions";
+} from "../calendar.actions";
 
 function* loadCalendarByEquipmentSaga(year, equipmentId) {
   const { cancelToken, cancel } = getCancelToken();

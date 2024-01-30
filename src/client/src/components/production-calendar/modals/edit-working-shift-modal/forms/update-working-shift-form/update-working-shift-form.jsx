@@ -6,22 +6,21 @@ import {
   CustomFormikField,
   CustomFormikSelect,
 } from "components/shared";
+import { useCalendarStore } from "store/calendar";
 import { validationSchema } from "./validation-schema";
 import styles from "../../../modal-style.module.scss";
 
-export const UpdateWorkingShiftForm = ({
-  workingShifts,
-  toggleModal,
-  updateWorkingShift,
-}) => {
+export const UpdateWorkingShiftForm = ({ toggleModal }) => {
+  const { mainWorkingShifts, updateWorkingShift } = useCalendarStore();
+
   // Memoize working shift options to avoid recalculating on every render
   const workingShiftOptions = useMemo(
     () =>
-      workingShifts.map((shift) => ({
+      mainWorkingShifts.map((shift) => ({
         value: shift.id,
         label: `Смена ${shift.number}`,
       })),
-    [workingShifts]
+    [mainWorkingShifts]
   );
 
   const initialFormValues = {
@@ -67,7 +66,7 @@ export const UpdateWorkingShiftForm = ({
                 options={workingShiftOptions}
                 onChange={(val) => {
                   const { value: workingShiftId } = val;
-                  const selectedWorkingShift = workingShifts.find(
+                  const selectedWorkingShift = mainWorkingShifts.find(
                     (shift) => shift.id === workingShiftId
                   );
 

@@ -22,9 +22,17 @@ const decodeToken = (token) => {
   return JSON.parse(jsonPayload);
 };
 
+const isTokenExpired = (token) => {
+  const exp = token.exp * 1000;
+  const now = new Date().getTime();
+
+  return now > exp;
+};
+
 export default {
   getToken,
   setToken,
   removeToken,
   decodeToken,
+  isTokenExpired,
 };

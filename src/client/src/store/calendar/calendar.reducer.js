@@ -1,6 +1,6 @@
 import { createReducer } from "reduxsauce";
 
-import { calendarActionTypes } from "./calendar-actions";
+import { calendarActionTypes } from "./calendar.actions";
 
 const CALENDAR_INITIAL_STATE = {
   isRequesting: false,

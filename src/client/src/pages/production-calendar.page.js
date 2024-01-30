@@ -5,7 +5,7 @@ import { HeaderLayout } from "layouts/Header";
 export const ProductionCalendarPage = (props) => {
   return (
     <div>
-      <HeaderLayout {...(props?.state?.auth?.user?.role ?? props?.userRole)}>
+      <HeaderLayout>
         <ProductionCalendar {...props} />
       </HeaderLayout>
     </div>

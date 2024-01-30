@@ -7,6 +7,7 @@ import {
   CustomFormikTextInput,
   CustomFormikField,
 } from "components/shared";
+import { useCalendarStore } from "store/calendar";
 
 import styles from "../modal-style.module.scss";
 import { createValidationSchema } from "./validation-schema";
@@ -15,15 +16,15 @@ export const AddWeekendModal = ({
   isOpen,
   toggleModal,
   onWeekendDaySubmit,
-  currentYear,
 }) => {
+  const { calendarYear } = useCalendarStore();
   const [modalContent, setModalContent] = useState(null);
 
   const initialFormValues = {
     dayDate: modalContent?.workingDay ?? new Date().toISOString().split("T")[0],
   };
 
-  const validationSchema = createValidationSchema(currentYear);
+  const validationSchema = createValidationSchema(calendarYear);
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
     try {

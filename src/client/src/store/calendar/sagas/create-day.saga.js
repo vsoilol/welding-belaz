@@ -4,7 +4,7 @@ import { errorActionCreators } from "store/error";
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar-actions";
+} from "../calendar.actions";
 
 function* createDaySaga({ day }) {
   try {

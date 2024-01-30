@@ -13,7 +13,7 @@ import { errorActionCreators } from "store/error";
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar-actions";
+} from "../calendar.actions";
 
 function* loadMainCalendarByYearSaga(year) {
   const { cancelToken, cancel } = getCancelToken();

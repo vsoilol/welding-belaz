@@ -11,11 +11,10 @@ import {
   ModesContainer,
   ReportsContainer,
   CreatesUserContainer,
-  ProductionCalendarContainer,
 } from "containers";
 import MobileContext from "context/MobileContext";
 import TabletContext from "context/TabletContext";
-import { NewPasswordPage } from "pages";
+import { NewPasswordPage, ProductionCalendarPage } from "pages";
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Switch, withRouter } from "react-router-dom";
@@ -159,9 +158,9 @@ function App({ error, errorType, clearError }) {
               />
               <PrivateRoute
                 allow={isAuth}
-                path="/proiz-calendar"
+                path="/production-calendar"
                 exact
-                component={ProductionCalendarContainer}
+                component={ProductionCalendarPage}
                 redirectTo="/login"
               />
               <PrivateRoute

@@ -13,7 +13,7 @@ import history from "./history";
 import workplace from "./workplace/reducers";
 ///Технологические процессы
 import texprocwelding from "./texprocwelding/reducers";
-import calendar from "./calendar/calendar-reducer";
+import calendar from "./calendar/calendar.reducer";
 
 const reducers = {
   router: connectRouter(history),

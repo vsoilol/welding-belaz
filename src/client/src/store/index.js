@@ -1,38 +1,33 @@
 import { routerMiddleware } from "connected-react-router";
 import { applyMiddleware, compose, createStore } from "redux";
-import { logger } from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 import auth from "services/auth";
-// import authUtils from "utils/auth";
+
 import history from "./history";
 import rootReducer from "./reducer";
 import rootSaga from "./saga";
-import { executorsNewSaga } from "./executors/sagas";
 
 const getInitialState = () => {
   const token = auth.getToken();
-  if (token) {
-    const { email, role } = auth.decodeToken(token);
+  const defaultState = { auth: { isAuth: false } };
 
-    return {
-      auth: {
-        isAuth: true,
-        user: {
-          email,
-          role,
-        },
-      },
-    };
-  }
+  if (!token) return defaultState;
+
+  const decodedToken = auth.decodeToken(token);
+  const isTokenExpired = auth.isTokenExpired(decodedToken);
+
+  if (isTokenExpired) return defaultState;
 
   return {
     auth: {
-      isAuth: false,
+      isAuth: true,
+      user: {
+        email: decodedToken.email,
+        role: decodedToken.role,
+      },
     },
   };
 };
-
-const DOMAIN = process.env.REACT_APP_ENVIRONMENT;
 
 const initialState = getInitialState();
 

@@ -8,6 +8,7 @@ import {
   CustomFormikTextInput,
   CustomFormikField,
 } from "components/shared";
+import { useCalendarStore } from "store/calendar";
 
 import styles from "../modal-style.module.scss";
 import { createValidationSchema } from "./validation-schema";
@@ -15,28 +16,27 @@ import { createValidationSchema } from "./validation-schema";
 export const AddWorkingDayModal = ({
   isOpen,
   toggleModal,
-  calendarId,
-  workingShifts,
   onWorkingDaySubmit,
-  currentYear,
 }) => {
-  const validationSchema = createValidationSchema(currentYear);
+  const { calendar } = useCalendarStore();
+
+  const validationSchema = createValidationSchema(calendar?.year);
 
   const [modalContent, setModalContent] = useState(null);
 
   // Memoize working shift options to avoid recalculating on every render
   const workingShiftOptions = useMemo(
     () =>
-      workingShifts.map((shift) => ({
+      calendar?.mainWorkingShifts.map((shift) => ({
         value: shift.id,
         label: `Смена ${shift.number}`,
       })),
-    [workingShifts]
+    [calendar]
   );
 
   const initialFormValues = {
     workingShiftId: modalContent?.shiftId ?? "",
-    calendarId: calendarId ?? null,
+    calendarId: calendar?.id ?? null,
     workingDay:
       modalContent?.workingDay ?? new Date().toISOString().split("T")[0],
   };

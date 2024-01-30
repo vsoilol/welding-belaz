@@ -6,19 +6,16 @@ import {
   CustomFormikTextInput,
   CustomFormikField,
 } from "components/shared";
+import { useCalendarStore } from "store/calendar";
+import { useAuthStore } from "store/auth";
 import { validationSchema } from "./validation-schema";
 import styles from "./edit-day-working-shift-modal.module.scss";
 
-export const EditDayWorkingShiftModal = ({
-  dayEvent,
-  setDayEvent,
-  userRole,
-  updateWorkingShift,
-  calendarDays,
-  mainWorkingShifts,
-  createDay,
-  deleteWorkingShift,
-}) => {
+export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
+  const { userRole } = useAuthStore();
+  const { calendar, updateWorkingShift, deleteWorkingShift, createDay } =
+    useCalendarStore();
+
   function formatTime(date) {
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -63,12 +60,12 @@ export const EditDayWorkingShiftModal = ({
     const monthNumber = parsedDate.getMonth() + 1;
     const year = parsedDate.getFullYear();
 
-    const existingDay = calendarDays.find(
+    const existingDay = calendar?.days.find(
       (day) => day.number === dayNumber && day.monthNumber === monthNumber
     );
 
     if (!existingDay) {
-      const filteredWorkingShifts = mainWorkingShifts.filter(
+      const filteredWorkingShifts = calendar?.mainWorkingShifts.filter(
         (shift) => shift.number !== workingShiftNumber
       );
 
