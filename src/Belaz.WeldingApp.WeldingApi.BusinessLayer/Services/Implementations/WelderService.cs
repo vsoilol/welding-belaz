@@ -34,6 +34,18 @@ public class WelderService : IWelderService
         return _welderRepository.GetAllAsync();
     }
 
+    public async Task<Result<WelderDto>> GetByIdAsync(GetWelderByIdRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<WelderDto>(validationResult.Exception);
+        }
+
+        return await _welderRepository.GetByIdAsync(request.Id);
+    }
+
     public async Task<Result<WelderDto>> CreateAsync(CreateWelderRequest request)
     {
         var validationResult = await _validationService.ValidateAsync(request);

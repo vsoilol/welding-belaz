@@ -29,7 +29,16 @@ public class WelderController : ControllerBase
     {
         return await _welderService.GetAllAsync();
     }
+    
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(WelderDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WelderDto>> GetByIdAsync([FromRoute] Guid id)
+    {
+        var result = await _welderService.GetByIdAsync(new GetWelderByIdRequest { Id = id });
 
+        return result.ToOk();
+    }
+    
     [HttpPost]
     [ProducesResponseType(typeof(WelderDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<WelderDto>> CreateAsync([FromBody] CreateWelderRequest request)

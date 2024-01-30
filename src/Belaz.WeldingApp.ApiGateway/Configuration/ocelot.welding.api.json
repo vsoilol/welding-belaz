@@ -609,7 +609,7 @@
       "UpstreamPathTemplate": "/api/Welder/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "DELETE"
+        "DELETE", "GET"
       ],
       "DownstreamPathTemplate": "/api/Welder/{id}",
       "ServiceName": "welding",

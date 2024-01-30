@@ -9,6 +9,8 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 public interface IWelderService
 {
     Task<List<WelderDto>> GetAllAsync();
+    
+    Task<Result<WelderDto>> GetByIdAsync(GetWelderByIdRequest request);
 
     Task<Result<WelderDto>> CreateAsync(CreateWelderRequest request);
 
