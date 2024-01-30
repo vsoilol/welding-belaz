@@ -6,8 +6,6 @@ using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Belaz.WeldingApp.Common.Attributes;
-using Belaz.WeldingApp.Common.Enums;
 
 namespace Belaz.WeldingApp.WeldingApi.Controllers;
 
@@ -28,6 +26,15 @@ public class WeldingEquipmentController : ControllerBase
     public async Task<ActionResult<IEnumerable<WeldingEquipmentDto>>> GetAllWeldingEquipmentsAsync()
     {
         return await _weldingEquipmentService.GetAllAsync();
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(WeldingEquipmentDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<WeldingEquipmentDto>> GetByIdAsync([FromRoute] Guid id)
+    {
+        var result = await _weldingEquipmentService.GetByIdAsync(new GetEquipmentByIdRequest {Id = id});
+
+        return result.ToOk();
     }
 
     [HttpGet("downtime")]
@@ -104,7 +111,7 @@ public class WeldingEquipmentController : ControllerBase
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _weldingEquipmentService.DeleteAsync(
-            new DeleteWeldingEquipmentRequest { Id = id }
+            new DeleteWeldingEquipmentRequest {Id = id}
         );
         return result.ToOk();
     }

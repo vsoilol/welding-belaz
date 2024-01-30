@@ -8,6 +8,8 @@ namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 public interface IWeldingEquipmentService
 {
     Task<List<WeldingEquipmentDto>> GetAllAsync();
+    
+    Task<Result<WeldingEquipmentDto>> GetByIdAsync(GetEquipmentByIdRequest request);
 
     Task<List<WeldingEquipmentDowntimeDto>> GetAllWeldingEquipmentDowntimesAsync();
 

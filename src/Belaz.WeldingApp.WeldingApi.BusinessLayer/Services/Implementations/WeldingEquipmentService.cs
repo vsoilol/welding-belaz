@@ -33,6 +33,18 @@ public class WeldingEquipmentService : IWeldingEquipmentService
         return _weldingEquipmentRepository.GetAllAsync();
     }
 
+    public async Task<Result<WeldingEquipmentDto>> GetByIdAsync(GetEquipmentByIdRequest request)
+    {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<WeldingEquipmentDto>(validationResult.Exception);
+        }
+
+        return await _weldingEquipmentRepository.GetByIdAsync(request.Id);
+    }
+
     public Task<List<WeldingEquipmentDowntimeDto>> GetAllWeldingEquipmentDowntimesAsync()
     {
         return _weldingEquipmentRepository.GetAllWeldingEquipmentDowntimesAsync();

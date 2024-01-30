@@ -639,7 +639,7 @@
       "UpstreamPathTemplate": "/api/WeldingEquipment/{id}",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [
-        "DELETE"
+        "DELETE", "GET"
       ],
       "DownstreamPathTemplate": "/api/WeldingEquipment/{id}",
       "ServiceName": "welding",
