@@ -15,7 +15,6 @@
     "material-table": "^1.57.2",
     "react": "^16.13.0",
     "react-big-calendar": "^1.6.9",
-    "react-calendar": "^3.9.0",
     "react-dom": "^16.13.0",
     "react-loader-spinner": "^6.1.6",
     "react-redux": "^7.2.0",
