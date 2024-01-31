@@ -67,6 +67,33 @@ export const useCalendarStore = () => {
     [dispatch]
   );
 
+  const loadCalendarByWelder = useCallback(
+    (welderId, year) =>
+      dispatch(
+        calendarActionCreators.loadCalendarByWelderRequest(welderId, year)
+      ),
+    [dispatch]
+  );
+
+  const loadCalendarByEquipment = useCallback(
+    (equipmentId, year) =>
+      dispatch(
+        calendarActionCreators.loadCalendarByEquipmentRequest(equipmentId, year)
+      ),
+    [dispatch]
+  );
+
+  const createCalendarForEquipmentBasedOnMain = useCallback(
+    (equipmentId, year) =>
+      dispatch(
+        calendarActionCreators.createCalendarForEquipmentBasedOnMainRequest(
+          equipmentId,
+          year
+        )
+      ),
+    [dispatch]
+  );
+
   return {
     calendar,
     isLoading,
@@ -80,5 +107,8 @@ export const useCalendarStore = () => {
     createWorkingShift,
     deleteWorkingShift,
     updateWorkingShift,
+    loadCalendarByEquipment,
+    loadCalendarByWelder,
+    createCalendarForEquipmentBasedOnMain,
   };
 };

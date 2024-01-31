@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "components/shared/Button";
@@ -7,7 +9,6 @@ import { ResultsModal } from "components/shared/ResultsModal";
 import Select from "components/shared/Select";
 import { Table } from "components/shared/Table";
 import { Formik } from "formik";
-import React, { useState } from "react";
 import TableCell from "@material-ui/core/TableCell";
 import styles from "../styles.module.scss";
 import TableRow from "@material-ui/core/TableRow";
@@ -363,11 +364,13 @@ export const ExecutorsTable = ({
       title: "Просмотреть календарь",
       render: (rowData) => {
         return (
-          <img
-            onClick={(e) => OpenCalendar(rowData)}
-            className={styles.imgcalendar}
-            src={imgcalendar}
-          ></img>
+          <Link to={`/production-calendar?welderId=${rowData.id}`}>
+            <img
+              alt="Календарь"
+              className={styles.imgcalendar}
+              src={imgcalendar}
+            ></img>
+          </Link>
         );
       },
     },
@@ -454,14 +457,6 @@ export const ExecutorsTable = ({
       );
     }
   };
-
-  function OpenCalendar(rowData) {
-    window.localStorage.setItem("executor", JSON.stringify(rowData));
-    window.localStorage.removeItem("equipment");
-    setTimeout(() => {
-      window.location.href = "/calendar";
-    }, 500);
-  }
 
   const optworkshop = workshop?.map((item) => {
     return {

@@ -1,4 +1,4 @@
-import Message from "components/shared/Message";
+import Message from 'components/shared/Message';
 import {
   EquipmentContainer,
   WorkPlacePage,
@@ -11,21 +11,19 @@ import {
   ModesContainer,
   ReportsContainer,
   CreatesUserContainer,
-} from "containers";
-import MobileContext from "context/MobileContext";
-import TabletContext from "context/TabletContext";
-import { NewPasswordPage, ProductionCalendarPage } from "pages";
-import React, { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
-import { Switch, withRouter } from "react-router-dom";
-import PrivateRoute from "services/HOCs/PrivateRoute";
-import ScrollToTop from "services/HOCs/ScrollToTop";
-import ErrorActions from "store/error/actions";
-
-import CalendarPage from "containers/Calendar.container";
+} from 'containers';
+import MobileContext from 'context/MobileContext';
+import TabletContext from 'context/TabletContext';
+import { NewPasswordPage, ProductionCalendarPage } from 'pages';
+import React, { useEffect, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
+import { Switch, withRouter } from 'react-router-dom';
+import PrivateRoute from 'services/HOCs/PrivateRoute';
+import ScrollToTop from 'services/HOCs/ScrollToTop';
+import ErrorActions from 'store/error/actions';
 
 function App({ error, errorType, clearError }) {
-  const isAuth = useSelector((state) => state.auth.isAuth);
+  const isAuth = useSelector(state => state.auth.isAuth);
 
   const [isMobile, setIsMobile] = useState(
     document.documentElement.clientWidth <= 767
@@ -42,7 +40,7 @@ function App({ error, errorType, clearError }) {
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
   }, []);
 
   return (
@@ -106,13 +104,6 @@ function App({ error, errorType, clearError }) {
                 redirectTo="/login"
               />
 
-              <PrivateRoute
-                allow={isAuth}
-                path="/calendar"
-                exact
-                component={CalendarPage}
-                redirectTo="/login"
-              />
               <PrivateRoute
                 allow={isAuth}
                 path="/tex-proc-welding"
@@ -188,12 +179,12 @@ function App({ error, errorType, clearError }) {
   );
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   error: state.error.message,
   errorType: state.error.type,
 });
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     clearError: () => {
       dispatch(ErrorActions.Creators.clearError());

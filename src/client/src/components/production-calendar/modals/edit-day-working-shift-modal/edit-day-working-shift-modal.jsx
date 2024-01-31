@@ -74,8 +74,8 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
         number: dayNumber,
         isWorkingDay: true,
         year: year,
-        weldingEquipmentId: null,
-        welderId: null,
+        weldingEquipmentId: calendar.weldingEquipmentId,
+        welderId: calendar.welderId,
         workingShifts: filteredWorkingShifts,
       };
 

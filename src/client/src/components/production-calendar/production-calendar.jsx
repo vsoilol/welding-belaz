@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
 import { tasksImage } from "assets/pics";
+import { useQuery } from "hooks";
 
 import { LoadingSpinner, ToolTip } from "components/shared";
 import {
@@ -14,13 +14,28 @@ import styles from "./styles.module.scss";
 import { CustomCalendar } from "./custom-calendar";
 import { useCalendarStore } from "store/calendar";
 import { useAuthStore } from "store/auth";
+import { useWelderStore } from "store/welder";
+import { useWeldingEquipmentStore } from "store/welding-equipment";
 import "./styleCalendar.scss";
 
-const AdminTools = ({ onAddWorkDay, onAddWeekend, onEditShift }) => (
+const AdminTools = ({
+  onAddWorkDay,
+  onAddWeekend,
+  onEditShift,
+  isEquipmentExists,
+  onCalendarForEquipmentBasedOnMain,
+}) => (
   <div className={styles.RowToolsBtns}>
     <button onClick={onAddWorkDay}>Добавить рабочий день</button>
     <button onClick={onAddWeekend}>Добавить выходной день</button>
     <button onClick={onEditShift}>Рабочие смены</button>
+
+    {isEquipmentExists && (
+      <div className={styles.Create}>
+        <label>Создание календаря на основе общезаводского</label>
+        <button onClick={onCalendarForEquipmentBasedOnMain}>Создать</button>
+      </div>
+    )}
   </div>
 );
 
@@ -32,9 +47,23 @@ export const ProductionCalendar = () => {
     updateWorkingDayWithWorkingShift,
     createDay,
     updateDay,
+    loadCalendarByEquipment,
+    loadCalendarByWelder,
+    createCalendarForEquipmentBasedOnMain,
   } = useCalendarStore();
 
   const { userRole } = useAuthStore();
+  const {
+    welder,
+    getWelderById,
+    isLoading: IsWelderLoading,
+  } = useWelderStore();
+
+  const {
+    weldingEquipment,
+    getWeldingEquipmentById,
+    isLoading: IsWeldingEquipmentLoading,
+  } = useWeldingEquipmentStore();
 
   const [isAddWorkDayModalOpen, setIsAddWorkDayModalOpen] = useState(false);
   const [isAddWeekendModalOpen, setIsAddWeekendModalOpen] = useState(false);
@@ -42,16 +71,42 @@ export const ProductionCalendar = () => {
 
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const { id } = useParams();
+  const searchParams = useQuery();
+  const welderId = searchParams.get("welderId");
+  const equipmentId = searchParams.get("equipmentId");
 
-  useEffect(() => {
-    console.log("Param id", id);
-  }, [id]);
+  const isAdditionalLoading = useMemo(
+    () =>
+      (welderId && IsWelderLoading) ||
+      (equipmentId && IsWeldingEquipmentLoading),
+    [IsWeldingEquipmentLoading, IsWelderLoading, welderId, equipmentId]
+  );
 
   useEffect(() => {
     const currentDate = new Date().getUTCFullYear();
+
+    if (welderId) {
+      getWelderById(welderId);
+      loadCalendarByWelder(welderId, currentDate);
+      return;
+    }
+
+    if (equipmentId) {
+      getWeldingEquipmentById(equipmentId);
+      loadCalendarByEquipment(equipmentId, currentDate);
+      return;
+    }
+
     loadMainCalendarByYear(currentDate);
-  }, [loadMainCalendarByYear]);
+  }, [
+    welderId,
+    equipmentId,
+    loadMainCalendarByYear,
+    loadCalendarByEquipment,
+    loadCalendarByWelder,
+    getWelderById,
+    getWeldingEquipmentById,
+  ]);
 
   const handleAddOrUpdateWorkingDay = (data) => {
     const { workingShiftId, workingDay } = data;
@@ -83,8 +138,8 @@ export const ProductionCalendar = () => {
         number: dayNumber,
         isWorkingDay: true,
         year,
-        weldingEquipmentId: null,
-        welderId: null,
+        weldingEquipmentId: calendar?.weldingEquipmentId,
+        welderId: calendar?.welderId,
         workingShifts: [workingShift],
       };
 
@@ -111,8 +166,8 @@ export const ProductionCalendar = () => {
         number: dayNumber,
         isWorkingDay: false,
         year,
-        weldingEquipmentId: null,
-        welderId: null,
+        weldingEquipmentId: calendar?.weldingEquipmentId,
+        welderId: calendar?.welderId,
         workingShifts: [],
       };
 
@@ -130,51 +185,76 @@ export const ProductionCalendar = () => {
         />
 
         <div className={styles.tableWrapper}>
-          <div className="calendar-wrapper">
-            {(userRole === "Admin" || userRole === "Master") && (
-              <AdminTools
-                onAddWorkDay={() => setIsAddWorkDayModalOpen(true)}
-                onAddWeekend={() => setIsAddWeekendModalOpen(true)}
-                onEditShift={() => setIsEditShiftModalOpen(true)}
-              />
-            )}
+          {isAdditionalLoading && (
+            <LoadingSpinner isFullScreenMode={true} paddingTop={"2vw"} />
+          )}
 
-            {isLoading && (
-              <LoadingSpinner isFullScreenMode={false} paddingTop={"2vw"} />
-            )}
+          {!isAdditionalLoading && (
+            <div className="calendar-wrapper">
+              {welderId && welder && (
+                <h2>
+                  Сварщик: {welder?.middleName} {welder?.firstName}{" "}
+                  {welder?.lastName}
+                </h2>
+              )}
 
-            {calendar?.days && calendar?.mainWorkingShifts && !isLoading && (
-              <CustomCalendar
-                currentDate={currentDate}
-                setCurrentDate={setCurrentDate}
-              />
-            )}
-          </div>
+              {equipmentId && weldingEquipment && (
+                <h2>
+                  Оборудование: {weldingEquipment.name} №
+                  {weldingEquipment.factoryNumber}
+                </h2>
+              )}
+
+              {(userRole === "Admin" || userRole === "Master") && (
+                <AdminTools
+                  onAddWorkDay={() => setIsAddWorkDayModalOpen(true)}
+                  onAddWeekend={() => setIsAddWeekendModalOpen(true)}
+                  onEditShift={() => setIsEditShiftModalOpen(true)}
+                  isEquipmentExists={equipmentId && weldingEquipment}
+                  onCalendarForEquipmentBasedOnMain={() => {
+                    createCalendarForEquipmentBasedOnMain(
+                      equipmentId,
+                      calendar?.year
+                    );
+                  }}
+                />
+              )}
+
+              {isLoading && (
+                <LoadingSpinner isFullScreenMode={false} paddingTop={"2vw"} />
+              )}
+
+              {calendar?.days && calendar?.mainWorkingShifts && !isLoading && (
+                <CustomCalendar
+                  currentDate={currentDate}
+                  setCurrentDate={setCurrentDate}
+                />
+              )}
+
+              {calendar && (
+                <>
+                  <AddWorkingDayModal
+                    isOpen={isAddWorkDayModalOpen}
+                    toggleModal={setIsAddWorkDayModalOpen}
+                    onWorkingDaySubmit={handleAddOrUpdateWorkingDay}
+                  />
+
+                  <AddWeekendModal
+                    isOpen={isAddWeekendModalOpen}
+                    toggleModal={setIsAddWeekendModalOpen}
+                    onWeekendDaySubmit={handleAddWeekendDay}
+                  />
+
+                  <EditWorkingShiftModal
+                    isOpen={isEditShiftModalOpen}
+                    toggleModal={setIsEditShiftModalOpen}
+                  />
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
-
-      {calendar?.year && (
-        <AddWorkingDayModal
-          isOpen={isAddWorkDayModalOpen}
-          toggleModal={setIsAddWorkDayModalOpen}
-          onWorkingDaySubmit={handleAddOrUpdateWorkingDay}
-        />
-      )}
-
-      {calendar?.year && (
-        <AddWeekendModal
-          isOpen={isAddWeekendModalOpen}
-          toggleModal={setIsAddWeekendModalOpen}
-          onWeekendDaySubmit={handleAddWeekendDay}
-        />
-      )}
-
-      {calendar?.year && (
-        <EditWorkingShiftModal
-          isOpen={isEditShiftModalOpen}
-          toggleModal={setIsEditShiftModalOpen}
-        />
-      )}
     </>
   );
 };

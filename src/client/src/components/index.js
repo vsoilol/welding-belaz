@@ -13,5 +13,3 @@ export { ChangePassword } from "components/change-password";
 
 export { Reports } from "components/Reports";
 export { ProductionCalendar } from "components/production-calendar";
-
-export * from "./base-calendar";

@@ -20,7 +20,12 @@ const calendarMessages = {
 };
 
 export const CustomCalendar = ({ currentDate, setCurrentDate }) => {
-  const { calendar, loadMainCalendarByYear } = useCalendarStore();
+  const {
+    calendar,
+    loadMainCalendarByYear,
+    loadCalendarByEquipment,
+    loadCalendarByWelder,
+  } = useCalendarStore();
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [calendarEvents, setCalendarEvents] = useState([]);
@@ -38,12 +43,26 @@ export const CustomCalendar = ({ currentDate, setCurrentDate }) => {
     setSelectedEvent(event);
   };
 
+  const loadAppropriateCalendar = (year) => {
+    if (calendar.welderId) {
+      loadCalendarByWelder(calendar.welderId, year);
+      return;
+    }
+
+    if (calendar.weldingEquipmentId) {
+      loadCalendarByEquipment(calendar.weldingEquipmentId, year);
+      return;
+    }
+
+    loadMainCalendarByYear(year);
+  };
+
   const handleNavigation = (date) => {
     const year = date.getFullYear();
     setCurrentDate(date);
 
     if (calendar?.year !== year) {
-      loadMainCalendarByYear(year);
+      loadAppropriateCalendar(year);
     }
   };
 

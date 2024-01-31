@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import MaterialTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -17,7 +19,6 @@ import Select from "components/shared/Select";
 import { Table } from "components/shared/Table";
 import ToolTip from "components/shared/ToolTip";
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import imgcalendar from "assets/icons/calendar.png";
 import deleteIcon from "assets/icons/delete.png";
@@ -211,11 +212,13 @@ export const Equipment = ({
       title: "Просмотреть календарь",
       render: (rowData) => {
         return (
-          <img
-            onClick={(e) => OpenCalendar(rowData)}
-            className={styles.imgcalendar}
-            src={imgcalendar}
-          ></img>
+          <Link to={`/production-calendar?equipmentId=${rowData.id}`}>
+            <img
+              alt="Календарь"
+              className={styles.imgcalendar}
+              src={imgcalendar}
+            ></img>
+          </Link>
         );
       },
     },
@@ -262,14 +265,6 @@ export const Equipment = ({
         }
       }
     }
-  }
-
-  function OpenCalendar(rowData) {
-    window.localStorage.removeItem("executor");
-    window.localStorage.setItem("equipment", JSON.stringify(rowData));
-    setTimeout(() => {
-      window.location.href = "/calendar";
-    }, 500);
   }
 
   const renderRowChildren = (rowData) => {

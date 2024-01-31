@@ -9,6 +9,8 @@ import tasksWatchers from "store/tasks/sagas";
 import recordsWatchers from "store/records/sagas";
 import instructionsWatchers from "store/instructions/sagas";
 import equipmentWatchers from "store/equipment/sagas";
+import welderWatchers from "store/welder/welder.watcher";
+import { weldingEquipmentWatchers } from "store/welding-equipment";
 
 export default function* () {
   const sagas = [
@@ -21,6 +23,8 @@ export default function* () {
     ...recordsWatchers,
     ...instructionsWatchers,
     ...equipmentWatchers,
+    ...welderWatchers,
+    ...weldingEquipmentWatchers,
   ];
 
   yield all(sagas);

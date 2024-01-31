@@ -10,7 +10,7 @@ import { validationSchema } from "./validation-schema";
 import styles from "../../../modal-style.module.scss";
 
 export const AddWorkingShiftForm = ({ toggleModal }) => {
-  const { calendarId, createWorkingShift } = useCalendarStore();
+  const { calendar, createWorkingShift } = useCalendarStore();
   const initialFormValues = {
     number: 1,
     shiftStart: "",
@@ -23,7 +23,9 @@ export const AddWorkingShiftForm = ({ toggleModal }) => {
     try {
       const workingShift = {
         ...values,
-        calendarId: calendarId,
+        calendarId: calendar.id,
+        weldingEquipmentId: calendar.weldingEquipmentId,
+        welderId: calendar.welderId,
         dayId: null,
       };
 
