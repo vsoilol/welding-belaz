@@ -1,10 +1,10 @@
-import { call, put, takeLatest, select } from "redux-saga/effects";
-import api from "services/api";
-import { errorActionCreators } from "store/error";
+import { call, put, takeLatest, select } from 'redux-saga/effects';
+import api from 'services/api';
+import { errorActionCreators } from 'store/error';
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar.actions";
+} from '../calendar.actions';
 
 function* updateWorkingShiftSaga({ workingShift }) {
   try {
@@ -19,7 +19,7 @@ function* updateWorkingShiftSaga({ workingShift }) {
 
 function* reloadCalendarAfterUpdateWorkingShiftSaga() {
   let { year, welderId, weldingEquipmentId } = yield select(
-    (state) => state.calendar?.calendar
+    state => state.calendar?.calendar
   );
 
   if (weldingEquipmentId) {

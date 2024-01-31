@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { Formik, Form } from "formik";
+import React, { useState } from 'react';
+import { Formik, Form } from 'formik';
 
 import {
   Button,
   ModalWindow,
   CustomFormikTextInput,
   CustomFormikField,
-} from "components/shared";
-import { useCalendarStore } from "store/calendar";
+} from 'components/shared';
+import { useCalendarStore } from 'store/calendar';
 
-import styles from "../modal-style.module.scss";
-import { createValidationSchema } from "./validation-schema";
+import styles from '../modal-style.module.scss';
+import { createValidationSchema } from './validation-schema';
 
 export const AddWeekendModal = ({
   isOpen,
@@ -21,7 +21,7 @@ export const AddWeekendModal = ({
   const [modalContent, setModalContent] = useState(null);
 
   const initialFormValues = {
-    dayDate: modalContent?.workingDay ?? new Date().toISOString().split("T")[0],
+    dayDate: modalContent?.workingDay ?? new Date().toISOString().split('T')[0],
   };
 
   const validationSchema = createValidationSchema(calendarYear);
@@ -31,7 +31,7 @@ export const AddWeekendModal = ({
       onWeekendDaySubmit(values);
       toggleModal(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     }
 
     setSubmitting(false);
@@ -41,25 +41,23 @@ export const AddWeekendModal = ({
     <ModalWindow
       isOpen={isOpen}
       headerText="Добавить выходной день"
-      setIsOpen={(state) => {
+      setIsOpen={state => {
         toggleModal(state);
         setModalContent(null);
       }}
-      wrapperStyles={{ width: 420 }}
-    >
+      wrapperStyles={{ width: 420 }}>
       <Formik
         initialValues={initialFormValues}
         enableReinitialize
         onSubmit={handleFormSubmit}
-        validationSchema={validationSchema}
-      >
+        validationSchema={validationSchema}>
         {({ isSubmitting, isValid }) => (
           <Form>
             <div className={styles.row}>
               <CustomFormikField name="dayDate">
                 <CustomFormikTextInput
                   width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                  style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
                   placeholder="Дата дня"
                   type="date"
                 />

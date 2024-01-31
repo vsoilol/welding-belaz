@@ -66,7 +66,7 @@ form label {
 }
 
 .calendar-wrapper #btnPrev:before {
-  content: " ";
+  content: ' ';
   padding-right: 4px;
 }
 
@@ -76,7 +76,7 @@ form label {
 }
 
 .calendar-wrapper #btnNext:after {
-  content: " ";
+  content: ' ';
   padding-left: 4px;
 }
 
@@ -135,8 +135,10 @@ form label {
   display: none;
   z-index: 10;
   /* border: 1px solid #919191; */
-  box-shadow: 0px 3px 1px -4px rgb(0 0 0 / 48%),
-    0px 2px 2px 0px rgb(0 0 0 / 38%), 0px 1px 20px 0px rgb(0 0 0 / 43%);
+  box-shadow:
+    0px 3px 1px -4px rgb(0 0 0 / 48%),
+    0px 2px 2px 0px rgb(0 0 0 / 38%),
+    0px 1px 20px 0px rgb(0 0 0 / 43%);
 }
 
 .calendar-wrapper #divCal table td .vkladka .events {
@@ -193,7 +195,9 @@ form label {
 }
 
 #divCal table td.smena:not(.today):hover {
-  box-shadow: 2px 2px 0 #febc59 inset, -2px -2px 0 #febc59 inset;
+  box-shadow:
+    2px 2px 0 #febc59 inset,
+    -2px -2px 0 #febc59 inset;
 }
 
 .calendar-wrapper .days td {
@@ -234,8 +238,10 @@ span.obj {
   padding: 10px;
   background-color: transparent;
   border: 1px solid #dadada;
-  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
-    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  box-shadow:
+    0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%),
+    0px 1px 5px 0px rgb(0 0 0 / 12%);
   outline: none;
   font-size: 18px;
   cursor: pointer;
@@ -448,7 +454,7 @@ span.obj {
 }
 
 .loader::after {
-  content: "";
+  content: '';
   box-sizing: border-box;
   position: absolute;
   left: 50%;
@@ -517,7 +523,7 @@ span.obj {
   border-radius: 25px;
   outline: none;
   border: 2px solid #e8e8e8;
-  font-family: "Muller Narrow Light";
+  font-family: 'Muller Narrow Light';
   font-size: 14px;
   line-height: 14px;
   color: #000000;

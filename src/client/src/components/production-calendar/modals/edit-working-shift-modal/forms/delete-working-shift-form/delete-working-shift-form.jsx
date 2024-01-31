@@ -1,13 +1,13 @@
-import React, { useMemo } from "react";
-import { Formik, Form } from "formik";
+import React, { useMemo } from 'react';
+import { Formik, Form } from 'formik';
 import {
   Button,
   CustomFormikSelect,
   CustomFormikField,
-} from "components/shared";
-import { useCalendarStore } from "store/calendar";
-import { validationSchema } from "./validation-schema";
-import styles from "../../../modal-style.module.scss";
+} from 'components/shared';
+import { useCalendarStore } from 'store/calendar';
+import { validationSchema } from './validation-schema';
+import styles from '../../../modal-style.module.scss';
 
 export const DeleteWorkingShiftForm = ({ toggleModal }) => {
   const { mainWorkingShifts, deleteWorkingShift } = useCalendarStore();
@@ -15,7 +15,7 @@ export const DeleteWorkingShiftForm = ({ toggleModal }) => {
   // Memoize working shift options to avoid recalculating on every render
   const workingShiftOptions = useMemo(
     () =>
-      mainWorkingShifts.map((shift) => ({
+      mainWorkingShifts.map(shift => ({
         value: shift.id,
         label: `Смена ${shift.number}`,
       })),
@@ -23,7 +23,7 @@ export const DeleteWorkingShiftForm = ({ toggleModal }) => {
   );
 
   const initialFormValues = {
-    workingShiftId: "",
+    workingShiftId: '',
   };
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
@@ -33,7 +33,7 @@ export const DeleteWorkingShiftForm = ({ toggleModal }) => {
       deleteWorkingShift(workingShiftId);
       toggleModal(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     }
 
     setSubmitting(false);
@@ -44,8 +44,7 @@ export const DeleteWorkingShiftForm = ({ toggleModal }) => {
       initialValues={initialFormValues}
       enableReinitialize
       onSubmit={handleFormSubmit}
-      validationSchema={validationSchema}
-    >
+      validationSchema={validationSchema}>
       {({ isSubmitting, isValid }) => (
         <Form>
           <div className={styles.rowWithoutMargin}>

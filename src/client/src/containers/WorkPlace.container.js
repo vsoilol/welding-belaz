@@ -1,10 +1,10 @@
-import { connect } from "react-redux";
-import { WorkPlacePage } from "pages/WorkPlace";
-import Actions from "store/workplace/actions";
-import ActionsExecuters from "store/executors/actions"; 
-import TexprocweldingActions from "store/texprocwelding/actions";
+import { connect } from 'react-redux';
+import { WorkPlacePage } from 'pages/WorkPlace';
+import Actions from 'store/workplace/actions';
+import ActionsExecuters from 'store/executors/actions';
+import TexprocweldingActions from 'store/texprocwelding/actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     masters: state.executors.masters,
     techs: state.executors.techs,
@@ -13,9 +13,9 @@ const mapStateToProps = (state) => {
       state?.equipment?.isRequesting || state?.masters?.isRequesting,
     userRole: state.auth.user.role,
 
-    ///Цеха 
+    ///Цеха
     workshop: state.workplace.workshop,
-    ///Производственные участки 
+    ///Производственные участки
     area: state.workplace.productionArea,
     ///Посты
     posts: state.workplace.posts,
@@ -29,35 +29,29 @@ const mapStateToProps = (state) => {
     detail: state.workplace.detail,
     ///Сварные швы
     seam: state.workplace.seam,
-    
-    texprocwelding:state.texprocwelding.texprocwelding,
-    instructions:state.texprocwelding.instructions,
-    
-    detailbyinspector:state,
 
+    texprocwelding: state.texprocwelding.texprocwelding,
+    instructions: state.texprocwelding.instructions,
 
+    detailbyinspector: state,
 
-    weldingtask:state.workplace.weldingtask,
-
+    weldingtask: state.workplace.weldingtask,
   };
 };
 const mapDispatchToProps = {
-
   getDetailByInspector: Actions.Creators.loadDetailbyinspectorRequest,
 
-
   addFixedProduct: Actions.Creators.loadfixedRequest,
-
 
   loadMasters: ActionsExecuters.Creators.loadMastersRequest,
   loadTechs: ActionsExecuters.Creators.loadTechsRequest,
   loadExecutors: ActionsExecuters.Creators.loadExecutorsRequest,
 
-  ///Цеха 
+  ///Цеха
   loadWorkshop: Actions.Creators.loadWorkshopRequest,
   addWorkshop: Actions.Creators.addWorkshopRequest,
   editWorkshop: Actions.Creators.editWorkshopRequest,
-  ///Производственные участки 
+  ///Производственные участки
   loadArea: Actions.Creators.loadAreaRequest,
   addArea: Actions.Creators.addAreaRequest,
   editArea: Actions.Creators.editAreaRequest,
@@ -71,24 +65,23 @@ const mapDispatchToProps = {
   editWorkplace: Actions.Creators.editWorkplaceRequest,
   ///Изделия
   loadProduct: Actions.Creators.loadProductRequest,
-  addProduct:Actions.Creators.addProductRequest,
-  editProduct:Actions.Creators.editProductRequest, 
+  addProduct: Actions.Creators.addProductRequest,
+  editProduct: Actions.Creators.editProductRequest,
   ///Узлы
   loadKnot: Actions.Creators.loadKnotRequest,
-  addKnot:Actions.Creators.addKnotRequest,
-  editKnot:Actions.Creators.editKnotRequest,
+  addKnot: Actions.Creators.addKnotRequest,
+  editKnot: Actions.Creators.editKnotRequest,
   ///Детали
   loadDetail: Actions.Creators.loadDetailRequest,
-  addDetail:Actions.Creators.addDetailRequest,
-  editDetail:Actions.Creators.editDetailRequest,
+  addDetail: Actions.Creators.addDetailRequest,
+  editDetail: Actions.Creators.editDetailRequest,
   ///Сварные швы
   loadSeam: Actions.Creators.loadSeamRequest,
-  addSeam:Actions.Creators.addSeamRequest,
-  editSeam:Actions.Creators.editSeamRequest,
-  ///Технологические процессы 
+  addSeam: Actions.Creators.addSeamRequest,
+  editSeam: Actions.Creators.editSeamRequest,
+  ///Технологические процессы
   loadTexprocwelding: Actions.Creators.loadTexprocweldingRequest,
-  loadInstructions:TexprocweldingActions.Creators.loadInstructionsRequest,
-
+  loadInstructions: TexprocweldingActions.Creators.loadInstructionsRequest,
 
   ////
   loadWeldingTask: Actions.Creators.loadWeldingtaskRequest,

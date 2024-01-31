@@ -1,6 +1,6 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
-import { flattenObject } from "services/makeFlat";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
+import { flattenObject } from 'services/makeFlat';
 
 const { Types } = actions;
 const INITIAL_STATE = {

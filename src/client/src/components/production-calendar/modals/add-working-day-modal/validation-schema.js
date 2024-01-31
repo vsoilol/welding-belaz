@@ -1,6 +1,6 @@
-import * as yup from "yup";
+import * as yup from 'yup';
 
-export const createValidationSchema = (currentYear) => {
+export const createValidationSchema = currentYear => {
   const startOfYear = new Date(currentYear, 0, 1); // January 1st of the current year
   const endOfYear = new Date(currentYear, 11, 31); // December 31st of the current year
 
@@ -15,9 +15,9 @@ export const createValidationSchema = (currentYear) => {
         endOfYear,
         `Дата должна быть не позднее ${endOfYear.toLocaleDateString()}`
       )
-      .required("Это поле обязательно для заполнения"),
+      .required('Это поле обязательно для заполнения'),
     workingShiftId: yup
       .string()
-      .required("Это поле обязательно для заполнения"),
+      .required('Это поле обязательно для заполнения'),
   });
 };

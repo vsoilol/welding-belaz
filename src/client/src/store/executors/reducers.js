@@ -1,6 +1,6 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
-import { flattenObject } from "services/makeFlat";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
+import { flattenObject } from 'services/makeFlat';
 
 const { Types } = actions;
 const INITIAL_STATE = {
@@ -22,7 +22,7 @@ const loadExecutorsSuccess = (state = INITIAL_STATE, { executors }) => {
   return {
     ...state,
     isRequesting: false,
-    executors: executors?.map((executor) => {
+    executors: executors?.map(executor => {
       return { ...executor };
     }),
   };
@@ -32,7 +32,9 @@ const editExecutorSuccess = (state = INITIAL_STATE, { executor, userId }) => {
   return {
     ...state,
     isRequesting: false,
-    executors:state.executors.map((item,index) => item.id === executor.id?state.executors[index]=executor:item)
+    executors: state.executors.map((item, index) =>
+      item.id === executor.id ? (state.executors[index] = executor) : item
+    ),
   };
 };
 
@@ -40,7 +42,7 @@ const deleteExecutorSuccess = (state = INITIAL_STATE, { id }) => {
   return {
     ...state,
     isRequesting: false,
-    executors: state.executors?.filter((item) => item.executorId !== id),
+    executors: state.executors?.filter(item => item.executorId !== id),
   };
 };
 
@@ -48,16 +50,15 @@ const addExecutorSuccess = (state = INITIAL_STATE, { executor }) => {
   return {
     ...state,
     isRequesting: false,
-    executors: [...state.executors, executor], 
-  }; 
+    executors: [...state.executors, executor],
+  };
 };
 
 const loadMastersSuccess = (state = INITIAL_STATE, { masters }) => {
-  
   return {
     ...state,
     isRequesting: false,
-    masters: masters?.map((masters) => {
+    masters: masters?.map(masters => {
       return { ...masters };
     }),
   };
@@ -66,8 +67,10 @@ const loadMastersSuccess = (state = INITIAL_STATE, { masters }) => {
 const editMasterSuccess = (state = INITIAL_STATE, { master, userId }) => {
   return {
     ...state,
-    isRequesting: false, 
-    masters:state.masters.map((item,index) => item.id === master.id?state.masters[index]=master:item)
+    isRequesting: false,
+    masters: state.masters.map((item, index) =>
+      item.id === master.id ? (state.masters[index] = master) : item
+    ),
   };
 };
 
@@ -75,7 +78,7 @@ const deleteMasterSuccess = (state = INITIAL_STATE, { id }) => {
   return {
     ...state,
     isRequesting: false,
-    masters: state.masters?.filter((item) => item.masterId !== id),
+    masters: state.masters?.filter(item => item.masterId !== id),
   };
 };
 
@@ -87,11 +90,11 @@ const addMasterSuccess = (state = INITIAL_STATE, { master }) => {
   };
 };
 
-const loadTechsSuccess = (state = INITIAL_STATE, { techs }) => { 
+const loadTechsSuccess = (state = INITIAL_STATE, { techs }) => {
   return {
     ...state,
     isRequesting: false,
-    techs: techs?.map((techs) => {
+    techs: techs?.map(techs => {
       return { ...techs };
     }),
   };
@@ -100,8 +103,10 @@ const loadTechsSuccess = (state = INITIAL_STATE, { techs }) => {
 const editTechSuccess = (state = INITIAL_STATE, { tech, userId }) => {
   return {
     ...state,
-    isRequesting: false,  
-    techs:state.techs.map((item,index) => item.id === tech.id?state.techs[index]=tech:item)
+    isRequesting: false,
+    techs: state.techs.map((item, index) =>
+      item.id === tech.id ? (state.techs[index] = tech) : item
+    ),
   };
 };
 
@@ -109,7 +114,7 @@ const deleteTechSuccess = (state = INITIAL_STATE, { id }) => {
   return {
     ...state,
     isRequesting: false,
-    techs: state.techs?.filter((item) => item.techUserId !== id),
+    techs: state.techs?.filter(item => item.techUserId !== id),
   };
 };
 
@@ -117,11 +122,11 @@ const addTechSuccess = (state = INITIAL_STATE, { tech }) => {
   return {
     ...state,
     isRequesting: false,
-    techs: [...state.techs, tech], 
+    techs: [...state.techs, tech],
   };
 };
 
-  ///Оборудование
+///Оборудование
 const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
   return {
     ...state,
@@ -129,7 +134,7 @@ const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
     equipment,
   };
 };
-///Цеха 
+///Цеха
 const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
   return {
     ...state,
@@ -137,7 +142,7 @@ const loadWorkshopSuccess = (state = INITIAL_STATE, { workshop }) => {
     workshop,
   };
 };
-///Производственные участки 
+///Производственные участки
 const loadAreaSuccess = (state = INITIAL_STATE, { productionArea }) => {
   return {
     ...state,
@@ -153,9 +158,6 @@ const failure = (state = INITIAL_STATE, { error }) => {
     error,
   };
 };
-
-
-
 
 export const HANDLERS = {
   [Types.LOAD_EXECUTORS_REQUEST]: request,
@@ -210,15 +212,15 @@ export const HANDLERS = {
   [Types.ADD_TECH_SUCCESS]: addTechSuccess,
   [Types.ADD_TECH_FAILURE]: failure,
 
-  ///Цеха 
+  ///Цеха
   [Types.LOAD_WORKSHOP_REQUEST]: request,
   [Types.LOAD_WORKSHOP_SUCCESS]: loadWorkshopSuccess,
   [Types.LOAD_WORKSHOP_FAILURE]: failure,
 
- ///Производственные участки 
- [Types.LOAD_AREA_REQUEST]: request,
- [Types.LOAD_AREA_SUCCESS]: loadAreaSuccess,
- [Types.LOAD_AREA_FAILURE]: failure,
+  ///Производственные участки
+  [Types.LOAD_AREA_REQUEST]: request,
+  [Types.LOAD_AREA_SUCCESS]: loadAreaSuccess,
+  [Types.LOAD_AREA_FAILURE]: failure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

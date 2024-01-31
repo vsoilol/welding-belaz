@@ -1,8 +1,8 @@
-import React from "react";
-import { ProductionCalendar } from "components";
-import { HeaderLayout } from "layouts/Header";
+import React from 'react';
+import { ProductionCalendar } from 'components';
+import { HeaderLayout } from 'layouts/Header';
 
-export const ProductionCalendarPage = (props) => {
+export const ProductionCalendarPage = props => {
   return (
     <div>
       <HeaderLayout>

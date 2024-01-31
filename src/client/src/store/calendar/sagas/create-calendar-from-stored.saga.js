@@ -1,13 +1,13 @@
-import { call, put, takeLatest, select } from "redux-saga/effects";
-import api from "services/api";
-import { errorActionCreators } from "store/error";
+import { call, put, takeLatest, select } from 'redux-saga/effects';
+import api from 'services/api';
+import { errorActionCreators } from 'store/error';
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar.actions";
+} from '../calendar.actions';
 
 function* createCalendarFromStoredSaga({ year }) {
-  let calendar = yield select((state) => state.calendar?.calendar);
+  let calendar = yield select(state => state.calendar?.calendar);
 
   if (!calendar) {
     const previousYear = year - 1;
@@ -21,24 +21,24 @@ function* createCalendarFromStoredSaga({ year }) {
   const mainWorkingShifts = [
     {
       number: 1,
-      shiftStart: "07:30",
-      shiftEnd: "16:00",
-      breakStart: "12:00",
-      breakEnd: "12:30",
+      shiftStart: '07:30',
+      shiftEnd: '16:00',
+      breakStart: '12:00',
+      breakEnd: '12:30',
     },
     {
       number: 2,
-      shiftStart: "16:00",
-      shiftEnd: "00:30",
-      breakStart: "20:00",
-      breakEnd: "20:30",
+      shiftStart: '16:00',
+      shiftEnd: '00:30',
+      breakStart: '20:00',
+      breakEnd: '20:30',
     },
     {
       number: 3,
-      shiftStart: "00:30",
-      shiftEnd: "07:50",
-      breakStart: "02:00",
-      breakEnd: "02:20",
+      shiftStart: '00:30',
+      shiftEnd: '07:50',
+      breakStart: '02:00',
+      breakEnd: '02:20',
     },
   ];
 
@@ -52,7 +52,7 @@ function* createCalendarFromStoredSaga({ year }) {
   try {
     const { data: savedCalendar } = yield call(
       api.post,
-      "/calendar/main",
+      '/calendar/main',
       updatedCalendar
     );
     yield put(

@@ -1,6 +1,6 @@
-import { createReducer } from "reduxsauce";
+import { createReducer } from 'reduxsauce';
 
-import { weldingEquipmentActionTypes } from "./welding-equipment.actions";
+import { weldingEquipmentActionTypes } from './welding-equipment.actions';
 
 const WELDING_EQUIPMENT_INITIAL_STATE = {
   isLoading: true,

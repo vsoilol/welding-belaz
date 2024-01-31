@@ -1,5 +1,5 @@
-export const selectWeldingEquipmentIsLoading = (state) =>
+export const selectWeldingEquipmentIsLoading = state =>
   state.weldingEquipment.isLoading;
 
-export const selectWeldingEquipment = (state) =>
+export const selectWeldingEquipment = state =>
   state.weldingEquipment.weldingEquipment;

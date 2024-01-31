@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import "../change-password/styles.scss";
-import Button from "components/shared/Button";
-import api from "services/api";
-import ModalWindow from "components/shared/ModalWindow";
-import { Formik } from "formik";
-import Input from "components/shared/Input";
+import React, { useState, useEffect, useRef } from 'react';
+import '../change-password/styles.scss';
+import Button from 'components/shared/Button';
+import api from 'services/api';
+import ModalWindow from 'components/shared/ModalWindow';
+import { Formik } from 'formik';
+import Input from 'components/shared/Input';
 
-export const ChangePassword = (tool) => {
+export const ChangePassword = tool => {
   const [isOpen, setisOpen] = useState(true);
 
   function ChangePassw(values) {
@@ -17,17 +17,17 @@ export const ChangePassword = (tool) => {
           newPassword: values.newPass,
           confirmNewPassword: values.confirmNewPassword,
         })
-        .then((response) => {
+        .then(response => {
           setisOpen(false);
-          localStorage.setItem("isFirstLogin", "false");
+          localStorage.setItem('isFirstLogin', 'false');
         })
-        .catch((error) => {});
+        .catch(error => {});
     }
   }
   const initialValuesPass = {
-    oldPass: "",
-    newPass: "",
-    confirmNewPassword: "",
+    oldPass: '',
+    newPass: '',
+    confirmNewPassword: '',
   };
 
   return (
@@ -35,19 +35,17 @@ export const ChangePassword = (tool) => {
       <ModalWindow
         isOpen={isOpen}
         headerText="Поменять пароль"
-        setIsOpen={(state) => {
+        setIsOpen={state => {
           /* setisOpen(false) */
         }}
-        wrapperStyles={{ width: 420 }}
-      >
+        wrapperStyles={{ width: 420 }}>
         <Formik
           enableReinitialize
           initialValues={initialValuesPass}
-          onSubmit={(variables) => {
+          onSubmit={variables => {
             /* setisOpen(false) */
             /* localStorage.setItem("isFirstLogin","false") */
-          }}
-        >
+          }}>
           {({
             handleSubmit,
             handleChange,
@@ -59,7 +57,7 @@ export const ChangePassword = (tool) => {
               <div>
                 <div className="row">
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ height: 40, width: 562 }}
@@ -72,7 +70,7 @@ export const ChangePassword = (tool) => {
                 </div>
                 <div className="row">
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ height: 40, width: 562 }}
@@ -85,7 +83,7 @@ export const ChangePassword = (tool) => {
                 </div>
                 <div className="row">
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ height: 40, width: 562 }}
@@ -100,8 +98,7 @@ export const ChangePassword = (tool) => {
                   <Button
                     onClick={() => {
                       ChangePassw(values);
-                    }}
-                  >
+                    }}>
                     Сохранить
                   </Button>
                 </div>

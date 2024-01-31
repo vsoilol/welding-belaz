@@ -7,15 +7,15 @@
 }
 
 .active {
-  background-image: url("../../assets/icons/marker.png");
+  background-image: url('../../assets/icons/marker.png');
 }
 
 .off {
-  background-image: url("../../assets/icons/marker-gray.png");
+  background-image: url('../../assets/icons/marker-gray.png');
 }
 
 .idle {
-  background-image: url("../../assets/icons/locationYellow.svg");
+  background-image: url('../../assets/icons/locationYellow.svg');
 }
 
 .mapboxgl-popup {
@@ -24,10 +24,9 @@
 
 .mapboxgl-popup-content {
   text-align: center;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
-
-h3{
+h3 {
   text-align: center;
 }

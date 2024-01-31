@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useCallback } from "react";
-import { calendarActionCreators } from "store/calendar";
+import { useDispatch, useSelector } from 'react-redux';
+import { useCallback } from 'react';
+import { calendarActionCreators } from 'store/calendar';
 import {
   selectCalendar,
   selectCalendarId,
   selectCalendarIsLoading,
   selectCalendarMainWorkingShifts,
   selectCalendarYear,
-} from "./calendar.selectors";
+} from './calendar.selectors';
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export const useCalendarStore = () => {
 
   // Actions
   const loadMainCalendarByYear = useCallback(
-    (year) =>
+    year =>
       dispatch(calendarActionCreators.loadMainCalendarByYearRequest(year)),
     [dispatch]
   );
@@ -38,23 +38,23 @@ export const useCalendarStore = () => {
   );
 
   const createDay = useCallback(
-    (day) => dispatch(calendarActionCreators.createDayRequest(day)),
+    day => dispatch(calendarActionCreators.createDayRequest(day)),
     [dispatch]
   );
 
   const updateDay = useCallback(
-    (day) => dispatch(calendarActionCreators.updateDayRequest(day)),
+    day => dispatch(calendarActionCreators.updateDayRequest(day)),
     [dispatch]
   );
 
   const createWorkingShift = useCallback(
-    (workingShift) =>
+    workingShift =>
       dispatch(calendarActionCreators.createWorkingShiftRequest(workingShift)),
     [dispatch]
   );
 
   const deleteWorkingShift = useCallback(
-    (workingShiftId) =>
+    workingShiftId =>
       dispatch(
         calendarActionCreators.deleteWorkingShiftRequest(workingShiftId)
       ),
@@ -62,7 +62,7 @@ export const useCalendarStore = () => {
   );
 
   const updateWorkingShift = useCallback(
-    (workingShift) =>
+    workingShift =>
       dispatch(calendarActionCreators.updateWorkingShiftRequest(workingShift)),
     [dispatch]
   );

@@ -1,19 +1,19 @@
-import Button from "components/shared/Button";
-import Field from "components/shared/Field";
-import Text from "components/shared/Text";
-import TabletContext from "context/TabletContext";
-import { Formik } from "formik";
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
-import { resetPasswordValidation } from "validation/auth.validation";
-import styles from "./index.module.scss";
+import Button from 'components/shared/Button';
+import Field from 'components/shared/Field';
+import Text from 'components/shared/Text';
+import TabletContext from 'context/TabletContext';
+import { Formik } from 'formik';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { resetPasswordValidation } from 'validation/auth.validation';
+import styles from './index.module.scss';
 
-import api from "services/api";
+import api from 'services/api';
 
 const initialValues = {
-  oldpassword: "",
-  password: "",
-  confirmPassword: "",
+  oldpassword: '',
+  password: '',
+  confirmPassword: '',
 };
 
 const NewPassword = ({ resetPassword, isRequesting }) => {
@@ -30,7 +30,7 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
     } catch (error) {
       console.log(error);
     } finally {
-      history.push("/login");
+      history.push('/login');
     }
   }
 
@@ -52,11 +52,10 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={resetPasswordValidation}
-        onSubmit={(values) => {
+        onSubmit={values => {
           /* resetPassword(values); */
           ChangePassword(values);
-        }}
-      >
+        }}>
         {({
           handleSubmit,
           handleChange,
@@ -116,8 +115,7 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
               isRequesting={isRequesting}
               disabled={isRequesting || !(isValid && dirty)}
               width="255px"
-              type="submit"
-            >
+              type="submit">
               Сохранить
             </Button>
           </form>

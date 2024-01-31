@@ -1,8 +1,8 @@
-import { instructionsImage } from "assets/pics";
-import { RecordsTable } from "./components/Table";
-import ToolTip from "components/shared/ToolTip";
-import React, { useEffect } from "react";
-import styles from "./styles.module.scss";
+import { instructionsImage } from 'assets/pics';
+import { RecordsTable } from './components/Table';
+import ToolTip from 'components/shared/ToolTip';
+import React, { useEffect } from 'react';
+import styles from './styles.module.scss';
 
 export const Records = ({
   records,

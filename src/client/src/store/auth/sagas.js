@@ -1,9 +1,9 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import api from "services/api";
-import auth from "services/auth";
-import authActions from "./actions";
-import history from "store/history";
-import errorActions from "../error/actions";
+import { takeLatest, call, put } from 'redux-saga/effects';
+import api from 'services/api';
+import auth from 'services/auth';
+import authActions from './actions';
+import history from 'store/history';
+import errorActions from '../error/actions';
 
 const {
   Types: { LOG_IN_REQUEST, LOG_OUT_REQUEST },
@@ -21,7 +21,7 @@ function* logIn({ payload }) {
       password: payload.password,
     });
 
-    localStorage.setItem("isFirstLogin", data.isFirstLogin);
+    localStorage.setItem('isFirstLogin', data.isFirstLogin);
     yield put(logInSuccess(data));
 
     auth.setToken(data.token);
@@ -38,7 +38,7 @@ function* logOut() {
     yield put(logOutSuccess());
     auth.removeToken();
     api.setAuthTokenToHeader();
-    history.push("/login");
+    history.push('/login');
   } catch (error) {
     yield put(logOutFailure(error));
   }

@@ -28,7 +28,7 @@
 }
 
 .headerItem {
-  font-family: "Muller Narrow Light";
+  font-family: 'Muller Narrow Light';
   color: grey;
   text-decoration: none;
   font-size: 14px;
@@ -45,16 +45,16 @@
   justify-content: space-around;
 }
 
-.headerItemsWrapper  a{
+.headerItemsWrapper a {
   margin-right: 22px;
 }
-.headerItemsWrapper  a:last-child{
+.headerItemsWrapper a:last-child {
   margin-right: 0;
 }
 
 .headerItemActive {
   color: #000000;
-  font-family: "Muller Narrow Extra Bold";
+  font-family: 'Muller Narrow Extra Bold';
   font-weight: 700;
 }
 
@@ -70,7 +70,7 @@
   }
 
   .headerItem {
-    font-family: "Muller Narrow Light";
+    font-family: 'Muller Narrow Light';
     font-size: 19px;
     font-weight: 300;
     letter-spacing: 1px;
@@ -80,7 +80,7 @@
   }
 
   .headerItemActive {
-    font-family: "Muller Narrow Extra Bold";
+    font-family: 'Muller Narrow Extra Bold';
     font-weight: 900;
   }
 

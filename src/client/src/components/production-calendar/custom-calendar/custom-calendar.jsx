@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import "moment/locale/ru";
+import React, { useState, useEffect } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'moment/locale/ru';
 
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import { EditDayWorkingShiftModal } from "../modals";
-import { generateCalendarEvents } from "./generate-calendar-events";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { EditDayWorkingShiftModal } from '../modals';
+import { generateCalendarEvents } from './generate-calendar-events';
 
-import { useCalendarStore } from "store/calendar";
+import { useCalendarStore } from 'store/calendar';
 
-import styles from "../styles.module.scss";
+import styles from '../styles.module.scss';
 
 const localizer = momentLocalizer(moment);
 
 const calendarMessages = {
-  today: "Сегодня",
-  previous: "Назад",
-  next: "Вперед",
+  today: 'Сегодня',
+  previous: 'Назад',
+  next: 'Вперед',
 };
 
 export const CustomCalendar = ({ currentDate, setCurrentDate }) => {
@@ -39,11 +39,11 @@ export const CustomCalendar = ({ currentDate, setCurrentDate }) => {
     setCalendarEvents(events);
   }, [currentDate, calendar]);
 
-  const handleEventSelection = (event) => {
+  const handleEventSelection = event => {
     setSelectedEvent(event);
   };
 
-  const loadAppropriateCalendar = (year) => {
+  const loadAppropriateCalendar = year => {
     if (calendar.welderId) {
       loadCalendarByWelder(calendar.welderId, year);
       return;
@@ -57,7 +57,7 @@ export const CustomCalendar = ({ currentDate, setCurrentDate }) => {
     loadMainCalendarByYear(year);
   };
 
-  const handleNavigation = (date) => {
+  const handleNavigation = date => {
     const year = date.getFullYear();
     setCurrentDate(date);
 
@@ -76,7 +76,7 @@ export const CustomCalendar = ({ currentDate, setCurrentDate }) => {
         onSelectEvent={handleEventSelection}
         onNavigate={handleNavigation}
         date={currentDate}
-        views={["month"]}
+        views={['month']}
         messages={calendarMessages}
         events={calendarEvents}
       />

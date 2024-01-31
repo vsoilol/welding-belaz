@@ -1,1 +1,1 @@
-export * from "./custom-calendar";
+export * from './custom-calendar';

@@ -1,9 +1,9 @@
-import { connect } from "react-redux";
-import { ExecutorsPage } from "pages/ExecutorsPage";
-import Actions from "store/executors/actions";
-import Actions2 from "store/workplace/actions";
+import { connect } from 'react-redux';
+import { ExecutorsPage } from 'pages/ExecutorsPage';
+import Actions from 'store/executors/actions';
+import Actions2 from 'store/workplace/actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     masters: state.executors.masters,
     techs: state.executors.techs,

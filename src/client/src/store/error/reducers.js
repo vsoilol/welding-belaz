@@ -1,16 +1,16 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
 
 const { Types } = actions;
 const INITIAL_STATE = {
-  type: "",
-  message: "",
+  type: '',
+  message: '',
 };
 
 const setMessage = (state = INITIAL_STATE, { message }) => {
   return {
     ...state,
-    type: "message",
+    type: 'message',
     message,
   };
 };
@@ -25,8 +25,8 @@ const setError = (state = INITIAL_STATE, { message }) => {
 const clearError = (state = INITIAL_STATE) => {
   return {
     ...state,
-    message: "",
-    type: "",
+    message: '',
+    type: '',
   };
 };
 

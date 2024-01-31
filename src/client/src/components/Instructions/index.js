@@ -1,10 +1,10 @@
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
-import { instructionsImage } from "assets/pics";
-import { InstructionsTable } from "components/Instructions/components/Instructions";
-import ToolTip from "components/shared/ToolTip";
-import React, { useEffect, useState } from "react";
-import styles from "./styles.module.scss";
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import { instructionsImage } from 'assets/pics';
+import { InstructionsTable } from 'components/Instructions/components/Instructions';
+import ToolTip from 'components/shared/ToolTip';
+import React, { useEffect, useState } from 'react';
+import styles from './styles.module.scss';
 
 export const Instructions = ({
   instructions,
@@ -37,14 +37,14 @@ export const Instructions = ({
       }))
     : [];
 
-  const a11yProps = (index) => {
+  const a11yProps = index => {
     return {
       id: `full-width-tab-${index}`,
-      "aria-controls": `full-width-tabpanel-${index}`,
+      'aria-controls': `full-width-tabpanel-${index}`,
     };
   };
 
-  const TabPanel = (props) => {
+  const TabPanel = props => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -53,8 +53,7 @@ export const Instructions = ({
         hidden={value !== index}
         id={`full-width-tabpanel-${index}`}
         aria-labelledby={`full-width-tab-${index}`}
-        {...other}
-      >
+        {...other}>
         {value === index && children}
       </div>
     );
@@ -77,8 +76,7 @@ export const Instructions = ({
         indicatorColor="primary"
         textColor="primary"
         variant="fullWidth"
-        aria-label="full width tabs example"
-      >
+        aria-label="full width tabs example">
         <Tab label="ОТК" {...a11yProps(0)} />
         <Tab label="ИТП" {...a11yProps(1)} />
       </Tabs>
@@ -86,9 +84,8 @@ export const Instructions = ({
         value={value}
         index={0}
         style={{
-          minWidth: "60%",
-        }}
-      >
+          minWidth: '60%',
+        }}>
         <InstructionsTable
           tableType="OTK"
           isRequesting={isRequesting}
@@ -105,9 +102,8 @@ export const Instructions = ({
         value={value}
         index={1}
         style={{
-          minWidth: "60%",
-        }}
-      >
+          minWidth: '60%',
+        }}>
         <InstructionsTable
           tableType="WPS"
           isRequesting={isRequesting}

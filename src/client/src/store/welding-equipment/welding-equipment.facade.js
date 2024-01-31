@@ -1,10 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useCallback } from "react";
-import { weldingEquipmentActionCreators } from "./welding-equipment.actions";
+import { useDispatch, useSelector } from 'react-redux';
+import { useCallback } from 'react';
+import { weldingEquipmentActionCreators } from './welding-equipment.actions';
 import {
   selectWeldingEquipment,
   selectWeldingEquipmentIsLoading,
-} from "./welding-equipment.selectors";
+} from './welding-equipment.selectors';
 
 export const useWeldingEquipmentStore = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ export const useWeldingEquipmentStore = () => {
 
   // Actions
   const getWeldingEquipmentById = useCallback(
-    (id) =>
+    id =>
       dispatch(
         weldingEquipmentActionCreators.getWeldingEquipmentByIdRequest(id)
       ),

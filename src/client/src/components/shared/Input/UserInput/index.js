@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 // import PropTypes from 'prop-types';
-import { ReactComponent as UserIcon } from "assets/icons/login.svg";
-import DefaultInput from "../DefaultInput";
+import { ReactComponent as UserIcon } from 'assets/icons/login.svg';
+import DefaultInput from '../DefaultInput';
 
-import styles from "./style.module.scss";
+import styles from './style.module.scss';
 
-const UserInput = (props) => {
+const UserInput = props => {
   return (
     <div className={styles.wrapper}>
       <UserIcon
-        style={{ width: "15px", pointerEvents: "none" }}
+        style={{ width: '15px', pointerEvents: 'none' }}
         className={styles.icon}
       />
 

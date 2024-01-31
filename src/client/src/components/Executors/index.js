@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import styles from "./styles.module.scss";
-import ToolTip from "components/shared/ToolTip";
-import { ExecutorsTable } from "components/Executors/components";
-import { executorsImage } from "assets/pics";
-import { useHistory } from "react-router-dom";
-import { ChangePassword } from "components/change-password";
+import React, { useState, useEffect } from 'react';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import styles from './styles.module.scss';
+import ToolTip from 'components/shared/ToolTip';
+import { ExecutorsTable } from 'components/Executors/components';
+import { executorsImage } from 'assets/pics';
+import { useHistory } from 'react-router-dom';
+import { ChangePassword } from 'components/change-password';
 
 export const Executors = ({
   loadExecutors,
@@ -61,26 +61,26 @@ export const Executors = ({
   ]);
 
   const handleChange = (event, newValue) => {
-    localStorage.removeItem("VkladkaExecutors");
+    localStorage.removeItem('VkladkaExecutors');
     setValue(newValue);
   };
 
   if (Object.keys(user).length > 4) {
-    localStorage.setItem("USERID", user.id);
-    localStorage.setItem("USER_productionAreaId", user.productionAreaId);
+    localStorage.setItem('USERID', user.id);
+    localStorage.setItem('USER_productionAreaId', user.productionAreaId);
   }
 
-  const a11yProps = (index) => {
+  const a11yProps = index => {
     return {
       id: `full-width-tab-${index}`,
-      "aria-controls": `full-width-tabpanel-${index}`,
+      'aria-controls': `full-width-tabpanel-${index}`,
     };
   };
 
-  const TabPanel = (props) => {
+  const TabPanel = props => {
     const { children, value, index, ...other } = props;
-    if (localStorage.getItem("VkladkaExecutors") != null) {
-      setValue(Number(localStorage.getItem("VkladkaExecutors")));
+    if (localStorage.getItem('VkladkaExecutors') != null) {
+      setValue(Number(localStorage.getItem('VkladkaExecutors')));
     }
     return (
       <div
@@ -88,8 +88,7 @@ export const Executors = ({
         hidden={value !== index}
         id={`full-width-tabpanel-${index}`}
         aria-labelledby={`full-width-tab-${index}`}
-        {...other}
-      >
+        {...other}>
         {value === index && children}
       </div>
     );
@@ -97,7 +96,7 @@ export const Executors = ({
 
   return (
     <div className={styles.innerWrapper}>
-      {localStorage.getItem("isFirstLogin") === "true" ? (
+      {localStorage.getItem('isFirstLogin') === 'true' ? (
         <ChangePassword></ChangePassword>
       ) : null}
 
@@ -115,8 +114,7 @@ export const Executors = ({
         textColor="primary"
         variant="fullWidth"
         aria-label="full width tabs example"
-        className={styles.Tabs}
-      >
+        className={styles.Tabs}>
         <Tab label="Руководители сварочных работ (мастера)" {...a11yProps(0)} />
         <Tab label="Сварщики" {...a11yProps(1)} />
         <Tab label="Контролеры УКК" {...a11yProps(2)} />
@@ -125,9 +123,8 @@ export const Executors = ({
         value={value}
         index={0}
         style={{
-          minWidth: "60%",
-        }}
-      >
+          minWidth: '60%',
+        }}>
         <ExecutorsTable
           type="master"
           isRequesting={isRequesting}
@@ -146,9 +143,8 @@ export const Executors = ({
         value={value}
         index={1}
         style={{
-          minWidth: "60%",
-        }}
-      >
+          minWidth: '60%',
+        }}>
         <ExecutorsTable
           type="executor"
           isRequesting={isRequesting}
@@ -168,9 +164,8 @@ export const Executors = ({
         value={value}
         index={2}
         style={{
-          minWidth: "60%",
-        }}
-      >
+          minWidth: '60%',
+        }}>
         <ExecutorsTable
           type="controller"
           isRequesting={isRequesting}

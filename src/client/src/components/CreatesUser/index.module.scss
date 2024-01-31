@@ -9,13 +9,13 @@
   padding: 20px;
 }
 .tableWrapper {
-  margin-top: 80px;  
+  margin-top: 80px;
   width: calc(100vw - 100px);
 }
-.green{
+.green {
   color: green;
 }
-.red{
+.red {
   color: red;
 }
 .row {
@@ -34,7 +34,7 @@
 .innerWrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;   
+  align-items: center;
 }
 
 .form {
@@ -42,7 +42,7 @@
   flex-direction: column;
   align-items: center;
 }
-.deleteIcon{
+.deleteIcon {
   cursor: pointer;
   width: 20px;
   position: relative;
@@ -57,7 +57,7 @@
   margin-top: 30px;
   width: 250px;
 }
-.btnTools{
+.btnTools {
   color: blue;
   cursor: pointer;
   width: -moz-fit-content;

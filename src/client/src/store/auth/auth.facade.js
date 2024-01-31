@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { selectUserRole } from "./auth.selectors";
+import { useSelector } from 'react-redux';
+import { selectUserRole } from './auth.selectors';
 
 export const useAuthStore = () => {
   // Selectors

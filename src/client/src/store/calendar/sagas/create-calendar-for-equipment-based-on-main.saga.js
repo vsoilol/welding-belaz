@@ -1,10 +1,10 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import api from "services/api";
-import { errorActionCreators } from "store/error";
+import { call, put, takeLatest } from 'redux-saga/effects';
+import api from 'services/api';
+import { errorActionCreators } from 'store/error';
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar.actions";
+} from '../calendar.actions';
 
 function* createCalendarForEquipmentBasedOnMainSaga({ equipmentId, year }) {
   try {

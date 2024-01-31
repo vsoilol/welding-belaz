@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { closeIcon } from "assets/icons";
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { closeIcon } from 'assets/icons';
 // import { TabletContext } from 'context';
 // import { useSwipeable } from 'react-swipeable';
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 const ModalWindow = ({
   children,
@@ -19,11 +19,11 @@ const ModalWindow = ({
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflowY = "hidden";
-      document.body.style.height = "100%";
+      document.body.style.overflowY = 'hidden';
+      document.body.style.height = '100%';
     } else {
-      document.body.style.position = "static";
-      document.body.style.overflowY = "auto";
+      document.body.style.position = 'static';
+      document.body.style.overflowY = 'auto';
     }
   }, [isOpen]);
 
@@ -42,19 +42,16 @@ const ModalWindow = ({
       )}
       <div
         className={`${styles.modalContainer} ${
-          isOpen ? styles.openedModalContainer : "undefined"
+          isOpen ? styles.openedModalContainer : 'undefined'
         }`}
-        style={wrapperStyles}
-      >
+        style={wrapperStyles}>
         <div className={styles.wrapper}>
           <div
             className={styles.header}
-            style={{ backgroundColor: headerColor }}
-          >
+            style={{ backgroundColor: headerColor }}>
             <span
               className={styles.headerText}
-              style={{ color: headerTextColor }}
-            >
+              style={{ color: headerTextColor }}>
               {headerText}
             </span>
             <div onClick={() => setIsOpen(false)}>
@@ -91,9 +88,9 @@ ModalWindow.defaultProps = {
   },
   closeButtonStyles: {
     filter:
-      "invert(100%) sepia(0%) saturate(0%) hue-rotate(24deg) brightness(101%) contrast(103%)",
+      'invert(100%) sepia(0%) saturate(0%) hue-rotate(24deg) brightness(101%) contrast(103%)',
   },
-  headerColor: "#2D3029",
-  headerText: "",
-  headerTextColor: "#ffffff",
+  headerColor: '#2D3029',
+  headerText: '',
+  headerTextColor: '#ffffff',
 };

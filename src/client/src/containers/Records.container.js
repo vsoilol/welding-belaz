@@ -1,8 +1,8 @@
-import { connect } from "react-redux";
-import { RecordsPage } from "pages/RecordsPage";
-import Actions from "store/records/actions";
+import { connect } from 'react-redux';
+import { RecordsPage } from 'pages/RecordsPage';
+import Actions from 'store/records/actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     records: state.records.records,
     isRequesting: state.records.isRequesting,
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   loadRecords: Actions.Creators.loadRecordsRequest,
-  deleteRecords:Actions.Creators.deleteRecordsRequest,
+  deleteRecords: Actions.Creators.deleteRecordsRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecordsPage);

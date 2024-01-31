@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Formik } from "formik";
-import { loginValidation } from "validation/auth.validation";
-import TabletContext from "context/TabletContext";
-import Field from "components/shared/Field";
-import Button from "components/shared/Button";
-import styles from "./styles.module.scss";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect, useContext } from 'react';
+import { Formik } from 'formik';
+import { loginValidation } from 'validation/auth.validation';
+import TabletContext from 'context/TabletContext';
+import Field from 'components/shared/Field';
+import Button from 'components/shared/Button';
+import styles from './styles.module.scss';
+import { useHistory } from 'react-router-dom';
 
-const initialValues = { email: "", password: "" };
+const initialValues = { email: '', password: '' };
 
 const Main = ({ logIn, isRequesting, requestType, error }) => {
   const isTablet = useContext(TabletContext);
@@ -16,7 +16,7 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
   const [indexForm, setindexForm] = useState(0);
 
   useEffect(() => {
-    if (requestType === "LOGIN_FAILURE") {
+    if (requestType === 'LOGIN_FAILURE') {
       setShowError(true);
     }
   }, [requestType, error]);
@@ -27,9 +27,9 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
         <div className={styles.content}>
           <Formik
             initialValues={initialValues}
-            onSubmit={(values) => {
+            onSubmit={values => {
               logIn(values);
-              history.push("/");
+              history.push('/');
             }}
             /* validationSchema={loginValidation} */
           >
@@ -46,8 +46,8 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
               return (
                 <form className={styles.form} onSubmit={handleSubmit}>
                   <Field
-                    width={isTablet ? "300px" : "360px"}
-                    onChange={(e) => {
+                    width={isTablet ? '300px' : '360px'}
+                    onChange={e => {
                       setShowError(false);
                       handleChange(e);
                     }}
@@ -67,8 +67,8 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
 
                   <Field
                     type="password"
-                    width={isTablet ? "300px" : "360px"}
-                    onChange={(e) => {
+                    width={isTablet ? '300px' : '360px'}
+                    onChange={e => {
                       setShowError(false);
                       handleChange(e);
                     }}
@@ -89,10 +89,9 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
                     /*  disabled={!(isValid && dirty)   || isRequesting} */
                     disabled={!dirty}
                     isRequesting={isRequesting}
-                    width={isTablet ? "275px" : "200px"}
+                    width={isTablet ? '275px' : '200px'}
                     className={styles.button}
-                    type="submit"
-                  >
+                    type="submit">
                     Войти
                   </Button>
                 </form>

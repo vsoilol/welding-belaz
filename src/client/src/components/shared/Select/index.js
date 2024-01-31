@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Select, { components } from "react-select";
-import { ReactComponent as Arrow } from "assets/icons/chevronDownGreen.svg";
-import selectStyles from "./selectStyles";
-import customOptionsStyles from "./customOptionStyles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Select, { components } from 'react-select';
+import { ReactComponent as Arrow } from 'assets/icons/chevronDownGreen.svg';
+import selectStyles from './selectStyles';
+import customOptionsStyles from './customOptionStyles';
 
 const DropdownIndicator = ({ selectProps }) => {
   const { menuIsOpen } = selectProps;
@@ -11,16 +11,16 @@ const DropdownIndicator = ({ selectProps }) => {
     return (
       <Arrow
         style={{
-          width: "12px",
-          marginRight: "20px",
-          transform: "rotate(180deg)",
-          pointerEvents: "none",
+          width: '12px',
+          marginRight: '20px',
+          transform: 'rotate(180deg)',
+          pointerEvents: 'none',
         }}
       />
     );
   return (
     <Arrow
-      style={{ width: "12px", marginRight: "20px", pointerEvents: "none" }}
+      style={{ width: '12px', marginRight: '20px', pointerEvents: 'none' }}
     />
   );
 };
@@ -29,7 +29,7 @@ DropdownIndicator.propTypes = {
   selectProps: PropTypes.object.isRequired,
 };
 
-const CustomOption = (props) => {
+const CustomOption = props => {
   const { isSelected, label, innerProps } = props;
   return isSelected ? (
     <div {...innerProps} style={customOptionsStyles}>
@@ -65,7 +65,7 @@ const ReactSelect = ({
   isDisabled,
 }) => {
   const getValue = Array.isArray(options)
-    ? options.filter((option) => {
+    ? options.filter(option => {
         if (value instanceof Array) {
           return value.includes(option.value);
         }
@@ -77,25 +77,25 @@ const ReactSelect = ({
     <Select
       styles={{
         ...selectStyles,
-        container: (base) => ({
+        container: base => ({
           ...base,
-          borderRadius: "20px",
-          paddingLeft: "12px",
-          width: width || "260px",
-          height: height || "40px",
-          border: "1px solid #E1E1E1",
-          "&:focus": {
-            outline: "none",
+          borderRadius: '20px',
+          paddingLeft: '12px',
+          width: width || '260px',
+          height: height || '40px',
+          border: '1px solid #E1E1E1',
+          '&:focus': {
+            outline: 'none',
           },
-          "&:active": {
-            outline: "none",
+          '&:active': {
+            outline: 'none',
           },
         }),
-        placeholder: (base) => ({
+        placeholder: base => ({
           ...base,
-          color: "#a6a6a6",
+          color: '#a6a6a6',
         }),
-        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+        menuPortal: base => ({ ...base, zIndex: 9999 }),
       }}
       components={{
         DropdownIndicator,
@@ -129,12 +129,12 @@ ReactSelect.propTypes = {
 };
 ReactSelect.defaultProps = {
   options: [],
-  value: "",
-  name: "select",
-  defaultValue: "",
-  placeholder: "",
-  width: "260px",
-  height: "40px",
+  value: '',
+  name: 'select',
+  defaultValue: '',
+  placeholder: '',
+  width: '260px',
+  height: '40px',
   isSearchable: false,
   onChange: () => {},
   isDisabled: false,

@@ -1,9 +1,9 @@
-import React from "react";
-import Login from "components/Login";
+import React from 'react';
+import Login from 'components/Login';
 
-export const LoginPage = (props) => {
+export const LoginPage = props => {
   return (
-    <> 
+    <>
       <Login {...props} />
     </>
   );

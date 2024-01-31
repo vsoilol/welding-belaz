@@ -8,11 +8,11 @@ import {
   take,
   spawn,
   cancelled,
-} from "redux-saga/effects";
-import api, { getCancelToken } from "services/api";
-import executorsActions from "./actions";
-import errorActions from "../error/actions";
-import { LOCATION_CHANGE } from "connected-react-router";
+} from 'redux-saga/effects';
+import api, { getCancelToken } from 'services/api';
+import executorsActions from './actions';
+import errorActions from '../error/actions';
+import { LOCATION_CHANGE } from 'connected-react-router';
 
 const {
   Types: {
@@ -259,7 +259,7 @@ function* fetchExecutorsSaga() {
     yield put(setError(error.message));
   } finally {
     if (yield cancelled()) {
-      cancel("Operation canceled by the user.");
+      cancel('Operation canceled by the user.');
     }
   }
 }

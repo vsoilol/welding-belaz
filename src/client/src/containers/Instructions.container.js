@@ -1,8 +1,8 @@
-import { connect } from "react-redux";
-import { InstructionsPage } from "pages/Instructions";
-import Actions from "store/instructions/actions";
+import { connect } from 'react-redux';
+import { InstructionsPage } from 'pages/Instructions';
+import Actions from 'store/instructions/actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     instructions: state.instructions.instructions,
     wpsInstructions: state.instructions.wpsInstructions,

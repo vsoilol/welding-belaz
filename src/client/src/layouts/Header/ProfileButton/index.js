@@ -1,23 +1,22 @@
-import { logout } from "assets/icons";
-import React from "react";
-import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
-import Actions from "store/auth/actions";
-import styles from "./styles.module.scss";
+import { logout } from 'assets/icons';
+import React from 'react';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import Actions from 'store/auth/actions';
+import styles from './styles.module.scss';
 
 const ProfileButton = ({ logOut }) => {
   return (
     <NavLink
       onClick={logOut}
-      to={"/login"}
-      className={styles.profileIconWrapper}
-    >
+      to={'/login'}
+      className={styles.profileIconWrapper}>
       <img src={logout} className={styles.profileIcon} alt="Profile" />
     </NavLink>
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isAuth: state.auth.isAuth,
     isRequesting: state.auth.isRequesting,

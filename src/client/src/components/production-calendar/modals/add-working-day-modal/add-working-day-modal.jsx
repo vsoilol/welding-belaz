@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Formik, Form } from "formik";
+import React, { useState, useMemo } from 'react';
+import { Formik, Form } from 'formik';
 
 import {
   Button,
@@ -7,11 +7,11 @@ import {
   CustomFormikSelect,
   CustomFormikTextInput,
   CustomFormikField,
-} from "components/shared";
-import { useCalendarStore } from "store/calendar";
+} from 'components/shared';
+import { useCalendarStore } from 'store/calendar';
 
-import styles from "../modal-style.module.scss";
-import { createValidationSchema } from "./validation-schema";
+import styles from '../modal-style.module.scss';
+import { createValidationSchema } from './validation-schema';
 
 export const AddWorkingDayModal = ({
   isOpen,
@@ -27,7 +27,7 @@ export const AddWorkingDayModal = ({
   // Memoize working shift options to avoid recalculating on every render
   const workingShiftOptions = useMemo(
     () =>
-      calendar?.mainWorkingShifts.map((shift) => ({
+      calendar?.mainWorkingShifts.map(shift => ({
         value: shift.id,
         label: `Смена ${shift.number}`,
       })),
@@ -35,10 +35,10 @@ export const AddWorkingDayModal = ({
   );
 
   const initialFormValues = {
-    workingShiftId: modalContent?.shiftId ?? "",
+    workingShiftId: modalContent?.shiftId ?? '',
     calendarId: calendar?.id ?? null,
     workingDay:
-      modalContent?.workingDay ?? new Date().toISOString().split("T")[0],
+      modalContent?.workingDay ?? new Date().toISOString().split('T')[0],
   };
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
@@ -46,7 +46,7 @@ export const AddWorkingDayModal = ({
       onWorkingDaySubmit(values);
       toggleModal(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     }
 
     setSubmitting(false);
@@ -56,25 +56,23 @@ export const AddWorkingDayModal = ({
     <ModalWindow
       isOpen={isOpen}
       headerText="Добавить рабочий день"
-      setIsOpen={(state) => {
+      setIsOpen={state => {
         toggleModal(state);
         setModalContent(null);
       }}
-      wrapperStyles={{ width: 420 }}
-    >
+      wrapperStyles={{ width: 420 }}>
       <Formik
         initialValues={initialFormValues}
         enableReinitialize
         onSubmit={handleFormSubmit}
-        validationSchema={validationSchema}
-      >
+        validationSchema={validationSchema}>
         {({ isSubmitting, isValid }) => (
           <Form>
             <div className={styles.row}>
               <CustomFormikField name="workingDay">
                 <CustomFormikTextInput
                   width="200"
-                  style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                  style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
                   placeholder="Дата рабочего дня"
                   type="date"
                 />

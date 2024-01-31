@@ -1,12 +1,12 @@
-import { connect } from "react-redux";
-import { TasksPage } from "pages/Tasks";
-import Actions from "store/tasks/actions";
-import ExecutorsActions from "store/executors/actions";
-import InstructionsActions from "store/instructions/actions";
-import EquipmentActions from "store/equipment/actions";
-import WorkplaceActions from "store/workplace/actions";
+import { connect } from 'react-redux';
+import { TasksPage } from 'pages/Tasks';
+import Actions from 'store/tasks/actions';
+import ExecutorsActions from 'store/executors/actions';
+import InstructionsActions from 'store/instructions/actions';
+import EquipmentActions from 'store/equipment/actions';
+import WorkplaceActions from 'store/workplace/actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     tasks: state.tasks.tasks,
     masters: state.executors.masters,
@@ -29,21 +29,17 @@ const mapStateToProps = (state) => {
     ///Узлы
     knot: state.workplace.knot,
     ///Детали
-    detail: state.workplace.detail, 
-
+    detail: state.workplace.detail,
 
     ///Ежедневный план
-    alldates:state.tasks.alldates,
-    plan:state.tasks.plan,
+    alldates: state.tasks.alldates,
+    plan: state.tasks.plan,
   };
 };
 const mapDispatchToProps = {
-
   loadProduct: WorkplaceActions.Creators.loadProductRequest,
   loadKnot: WorkplaceActions.Creators.loadKnotRequest,
   loadDetail: WorkplaceActions.Creators.loadDetailRequest,
-
-
 
   loadTasks: Actions.Creators.loadTasksRequest,
   loadInfo: Actions.Creators.loadInfoRequest,
@@ -58,14 +54,11 @@ const mapDispatchToProps = {
   ///Сварные швы
   loadSeam: Actions.Creators.loadSeamRequest,
 
-  loadTasktools:Actions.Creators.loadTasktoolsRequest,
-
-
+  loadTasktools: Actions.Creators.loadTasktoolsRequest,
 
   ///Ежедневный план
-  loadAlldates:Actions.Creators.loadAlldatesRequest,
-  addPlan:Actions.Creators.addPlanRequest,
-
+  loadAlldates: Actions.Creators.loadAlldatesRequest,
+  addPlan: Actions.Creators.addPlanRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);

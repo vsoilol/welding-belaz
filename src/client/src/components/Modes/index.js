@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useCallback } from "react";
-import styles from "./styles.module.scss";
-import ToolTip from "components/shared/ToolTip";
-import { reportsImage } from "assets/pics";
-import { Table } from "components/shared/Table";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import MaterialTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import ModalWindow from "components/shared/ModalWindow";
-import { Formik } from "formik";
-import Button from "components/shared/Button";
-import Select from "components/shared/Select";
-import Input from "components/shared/Input";
-import api from "services/api";
-import Paper from "@material-ui/core/Paper";
+import React, { useEffect, useState, useCallback } from 'react';
+import styles from './styles.module.scss';
+import ToolTip from 'components/shared/ToolTip';
+import { reportsImage } from 'assets/pics';
+import { Table } from 'components/shared/Table';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import MaterialTable from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import ModalWindow from 'components/shared/ModalWindow';
+import { Formik } from 'formik';
+import Button from 'components/shared/Button';
+import Select from 'components/shared/Select';
+import Input from 'components/shared/Input';
+import api from 'services/api';
+import Paper from '@material-ui/core/Paper';
 
 import {
   LineChart,
@@ -27,7 +27,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts";
+} from 'recharts';
 
 export const Modes = ({
   loadEquipmentRequest,
@@ -37,7 +37,7 @@ export const Modes = ({
 }) => {
   const [valueData, setvalueData] = useState(null);
   const [valueMess, setvalueMess] = useState(
-    "Данные за этот период отсутствуют"
+    'Данные за этот период отсутствуют'
   );
 
   const [valueDate, setvalueDate] = useState(null);
@@ -50,20 +50,20 @@ export const Modes = ({
     api
       .get(
         `weldingRecord/full?Date=${new Date(valueDate).toLocaleDateString(
-          "ru-RU",
-          { dateStyle: "short" }
-        )}&StartTime=${valueStartTime ?? ""}&EndTime=${
-          valueEndTime ?? ""
-        }&WelderId=${valueWelderId ?? ""}&EquipmentId=${valueEquipmentId ?? ""}`
+          'ru-RU',
+          { dateStyle: 'short' }
+        )}&StartTime=${valueStartTime ?? ''}&EndTime=${
+          valueEndTime ?? ''
+        }&WelderId=${valueWelderId ?? ''}&EquipmentId=${valueEquipmentId ?? ''}`
       )
-      .then((response) => {
+      .then(response => {
         const weldingCurrentValues = response.data.weldingCurrentValues;
         const arcVoltageValues = response.data.arcVoltageValues;
         const weldingStartTime = response.data.weldingStartTime;
         const weldingEndTime = response.data.weldingEndTime;
 
         if (response.status === 204) {
-          setvalueMess("Данные за этот период отсутствуют");
+          setvalueMess('Данные за этот период отсутствуют');
         }
         if (
           weldingCurrentValues &&
@@ -81,11 +81,11 @@ export const Modes = ({
 
           for (let i = 0; i < weldingCurrentValues.length; i += step) {
             const currentTime = new Date(startTime.getTime() + i * timeStep);
-            const hours = currentTime.getHours().toString().padStart(2, "0");
+            const hours = currentTime.getHours().toString().padStart(2, '0');
             const minutes = currentTime
               .getMinutes()
               .toString()
-              .padStart(2, "0");
+              .padStart(2, '0');
             const timeString = `${hours}:${minutes}`;
 
             sampledData.push({
@@ -99,9 +99,9 @@ export const Modes = ({
           setvalueData(null);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         setvalueData(null);
-        setvalueMess("Выберите либо оборудование либо сварщика");
+        setvalueMess('Выберите либо оборудование либо сварщика');
       });
   }
 
@@ -111,16 +111,16 @@ export const Modes = ({
   }, [loadEquipmentRequest, loadExecutorsRequest]);
 
   const optequipment = [
-    { value: null, label: "Не выбрано" },
-    ...(equipment[0]?.map((item) => ({
+    { value: null, label: 'Не выбрано' },
+    ...(equipment[0]?.map(item => ({
       value: item.id,
       label: `${item.name} ${item.factoryNumber}`,
     })) || []),
   ];
 
   const optionWelder = [
-    { value: null, label: "Не выбрано" },
-    ...(executors?.map((item) => ({
+    { value: null, label: 'Не выбрано' },
+    ...(executors?.map(item => ({
       value: item.id,
       label: `${item.middleName} ${item.firstName} ${item.lastName}`,
     })) || []),
@@ -139,22 +139,22 @@ export const Modes = ({
           <div className={styles.rowTools}>
             <div className={styles.row}>
               <Input
-                onChange={(event) => {
+                onChange={event => {
                   setvalueDate(event.target.value);
                 }}
                 width="100%"
                 style={{
                   margin: 0,
                   height: 40,
-                  padding: "0 20px 0 30px",
-                  width: "100%",
+                  padding: '0 20px 0 30px',
+                  width: '100%',
                 }}
                 value={valueDate}
                 name="valueDate"
                 placeholder="Дата  "
                 type="text"
-                onFocus={(e) => {
-                  e.currentTarget.type = "date";
+                onFocus={e => {
+                  e.currentTarget.type = 'date';
                 }}
                 autoComplete="off"
               />
@@ -165,7 +165,7 @@ export const Modes = ({
                 value={valueWelderId}
                 width="100%"
                 placeholder="Сварщик"
-                onChange={(event) => {
+                onChange={event => {
                   setvalueWelderId(event.value);
                 }}
                 options={optionWelder}
@@ -177,7 +177,7 @@ export const Modes = ({
                 value={valueEquipmentId}
                 width="100%"
                 placeholder="Оборудование"
-                onChange={(event) => {
+                onChange={event => {
                   setvalueEquipmentId(event.value);
                 }}
                 options={optequipment}
@@ -185,13 +185,13 @@ export const Modes = ({
             </div>
             <div className={styles.row}>
               <Input
-                onChange={(event) => {
+                onChange={event => {
                   setvalueStartTime(event.target.value);
                 }}
                 style={{
-                  width: "100%",
+                  width: '100%',
                   height: 40,
-                  padding: "0px 0px 0px 20px",
+                  padding: '0px 0px 0px 20px',
                 }}
                 type="text"
                 value={valueStartTime}
@@ -202,13 +202,13 @@ export const Modes = ({
             </div>
             <div className={styles.row}>
               <Input
-                onChange={(event) => {
+                onChange={event => {
                   setvalueEndTime(event.target.value);
                 }}
                 style={{
-                  width: "100%",
+                  width: '100%',
                   height: 40,
-                  padding: "0px 0px 0px 20px",
+                  padding: '0px 0px 0px 20px',
                 }}
                 type="text"
                 value={valueEndTime}
@@ -230,16 +230,16 @@ export const Modes = ({
               <XAxis
                 dataKey="name"
                 label={{
-                  value: "Точки",
-                  position: "insideBottomRight",
+                  value: 'Точки',
+                  position: 'insideBottomRight',
                   offset: -10,
                 }}
               />
               <YAxis
                 label={{
-                  value: "Значение",
+                  value: 'Значение',
                   angle: -90,
-                  position: "insideLeft",
+                  position: 'insideLeft',
                 }}
               />
               <Tooltip />

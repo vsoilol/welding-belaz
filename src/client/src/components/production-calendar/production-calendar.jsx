@@ -1,22 +1,22 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { tasksImage } from "assets/pics";
-import { useQuery } from "hooks";
+import React, { useEffect, useState, useMemo } from 'react';
+import { tasksImage } from 'assets/pics';
+import { useQuery } from 'hooks';
 
-import { LoadingSpinner, ToolTip } from "components/shared";
+import { LoadingSpinner, ToolTip } from 'components/shared';
 import {
   AddWeekendModal,
   AddWorkingDayModal,
   EditWorkingShiftModal,
-} from "./modals";
+} from './modals';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
-import { CustomCalendar } from "./custom-calendar";
-import { useCalendarStore } from "store/calendar";
-import { useAuthStore } from "store/auth";
-import { useWelderStore } from "store/welder";
-import { useWeldingEquipmentStore } from "store/welding-equipment";
-import "./styleCalendar.scss";
+import { CustomCalendar } from './custom-calendar';
+import { useCalendarStore } from 'store/calendar';
+import { useAuthStore } from 'store/auth';
+import { useWelderStore } from 'store/welder';
+import { useWeldingEquipmentStore } from 'store/welding-equipment';
+import './styleCalendar.scss';
 
 const AdminTools = ({
   onAddWorkDay,
@@ -72,8 +72,8 @@ export const ProductionCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const searchParams = useQuery();
-  const welderId = searchParams.get("welderId");
-  const equipmentId = searchParams.get("equipmentId");
+  const welderId = searchParams.get('welderId');
+  const equipmentId = searchParams.get('equipmentId');
 
   const isAdditionalLoading = useMemo(
     () =>
@@ -108,11 +108,11 @@ export const ProductionCalendar = () => {
     getWeldingEquipmentById,
   ]);
 
-  const handleAddOrUpdateWorkingDay = (data) => {
+  const handleAddOrUpdateWorkingDay = data => {
     const { workingShiftId, workingDay } = data;
 
     const workingShift = calendar.mainWorkingShifts.find(
-      (shift) => shift.id === workingShiftId
+      shift => shift.id === workingShiftId
     );
 
     const parsedDate = new Date(workingDay);
@@ -121,12 +121,12 @@ export const ProductionCalendar = () => {
     const year = parsedDate.getFullYear();
 
     const existingDay = calendar.days.find(
-      (day) => day.number === dayNumber && day.monthNumber === monthNumber
+      day => day.number === dayNumber && day.monthNumber === monthNumber
     );
 
     if (existingDay) {
       const shiftExistsInDay = existingDay.workingShifts.some(
-        (shift) => shift.number === workingShift.number
+        shift => shift.number === workingShift.number
       );
 
       if (!shiftExistsInDay) {
@@ -154,7 +154,7 @@ export const ProductionCalendar = () => {
     const year = parsedDate.getFullYear();
 
     const existingDay = calendar.days.find(
-      (day) => day.number === dayNumber && day.monthNumber === monthNumber
+      day => day.number === dayNumber && day.monthNumber === monthNumber
     );
 
     if (existingDay) {
@@ -186,14 +186,14 @@ export const ProductionCalendar = () => {
 
         <div className={styles.tableWrapper}>
           {isAdditionalLoading && (
-            <LoadingSpinner isFullScreenMode={true} paddingTop={"2vw"} />
+            <LoadingSpinner isFullScreenMode={true} paddingTop={'2vw'} />
           )}
 
           {!isAdditionalLoading && (
             <div className="calendar-wrapper">
               {welderId && welder && (
                 <h2>
-                  Сварщик: {welder?.middleName} {welder?.firstName}{" "}
+                  Сварщик: {welder?.middleName} {welder?.firstName}{' '}
                   {welder?.lastName}
                 </h2>
               )}
@@ -205,7 +205,7 @@ export const ProductionCalendar = () => {
                 </h2>
               )}
 
-              {(userRole === "Admin" || userRole === "Master") && (
+              {(userRole === 'Admin' || userRole === 'Master') && (
                 <AdminTools
                   onAddWorkDay={() => setIsAddWorkDayModalOpen(true)}
                   onAddWeekend={() => setIsAddWeekendModalOpen(true)}
@@ -221,7 +221,7 @@ export const ProductionCalendar = () => {
               )}
 
               {isLoading && (
-                <LoadingSpinner isFullScreenMode={false} paddingTop={"2vw"} />
+                <LoadingSpinner isFullScreenMode={false} paddingTop={'2vw'} />
               )}
 
               {calendar?.days && calendar?.mainWorkingShifts && !isLoading && (

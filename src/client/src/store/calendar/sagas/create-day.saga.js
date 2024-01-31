@@ -1,14 +1,14 @@
-import { call, put, takeLatest, select } from "redux-saga/effects";
-import api from "services/api";
-import { errorActionCreators } from "store/error";
+import { call, put, takeLatest, select } from 'redux-saga/effects';
+import api from 'services/api';
+import { errorActionCreators } from 'store/error';
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar.actions";
+} from '../calendar.actions';
 
 function* createDaySaga({ day }) {
   try {
-    yield call(api.post, "/day", day);
+    yield call(api.post, '/day', day);
 
     yield put(calendarActionCreators.createDaySuccess());
   } catch (error) {
@@ -19,7 +19,7 @@ function* createDaySaga({ day }) {
 
 function* reloadCalendarAfterCreateDaySaga() {
   let { year, welderId, weldingEquipmentId } = yield select(
-    (state) => state.calendar?.calendar
+    state => state.calendar?.calendar
   );
 
   if (weldingEquipmentId) {

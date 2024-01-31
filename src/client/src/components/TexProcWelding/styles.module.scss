@@ -1,6 +1,3 @@
-
-
-
 .tableWrapper {
   margin-top: 80px;
   width: calc(100vw - 100px);
@@ -19,7 +16,7 @@
   margin: 0 20px 0 20px;
   /* font-weight: 700; */
 }
-button.remowePassages{
+button.remowePassages {
   background-color: brown !important;
   display: block;
   margin: 0 auto;
@@ -46,7 +43,7 @@ button.remowePassages{
 .button {
   cursor: pointer;
   display: block;
-  font-family: "Muller Extra Bold";
+  font-family: 'Muller Extra Bold';
   margin: 16px 40px 0 auto;
   height: 36px;
   width: 240px;
@@ -71,8 +68,7 @@ button.remowePassages{
   }
 }
 
-
-.deleteIcon{
+.deleteIcon {
   cursor: pointer;
   width: 20px;
   position: relative;

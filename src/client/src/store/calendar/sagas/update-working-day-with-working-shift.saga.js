@@ -1,13 +1,13 @@
-import { call, put, takeLatest, select } from "redux-saga/effects";
-import api from "services/api";
-import { errorActionCreators } from "store/error";
+import { call, put, takeLatest, select } from 'redux-saga/effects';
+import api from 'services/api';
+import { errorActionCreators } from 'store/error';
 import {
   calendarActionTypes,
   calendarActionCreators,
-} from "../calendar.actions";
+} from '../calendar.actions';
 
 function* updateWorkingDayWithWorkingShiftSaga({ day, workingShift }) {
-  let calendar = yield select((state) => state.calendar?.calendar);
+  let calendar = yield select(state => state.calendar?.calendar);
 
   if (!calendar) {
     return;
@@ -16,13 +16,13 @@ function* updateWorkingDayWithWorkingShiftSaga({ day, workingShift }) {
   try {
     if (!day.isWorkingDay) {
       day.isWorkingDay = true;
-      yield call(api.put, "/day", day);
+      yield call(api.put, '/day', day);
     }
 
     workingShift.calendarId = null;
     workingShift.dayId = day.id;
 
-    yield call(api.post, "/workingShift", workingShift);
+    yield call(api.post, '/workingShift', workingShift);
 
     yield put(calendarActionCreators.updateWorkingDayWithWorkingShiftSuccess());
   } catch (error) {
@@ -35,7 +35,7 @@ function* updateWorkingDayWithWorkingShiftSaga({ day, workingShift }) {
 
 function* reloadCalendarAfterUpdateSaga() {
   let { year, welderId, weldingEquipmentId } = yield select(
-    (state) => state.calendar?.calendar
+    state => state.calendar?.calendar
   );
 
   if (weldingEquipmentId) {

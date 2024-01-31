@@ -1,5 +1,5 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
 
 const { Types } = actions;
 const INITIAL_STATE = {
@@ -35,7 +35,7 @@ const editTaskSuccess = (state = INITIAL_STATE, { task }) => {
   return {
     ...state,
     isRequesting: false,
-    tasks: state.tasks?.map((item) => (item.id === task.id ? task : item)),
+    tasks: state.tasks?.map(item => (item.id === task.id ? task : item)),
   };
 };
 
@@ -43,7 +43,7 @@ const deleteTaskSuccess = (state = INITIAL_STATE, { id }) => {
   return {
     ...state,
     isRequesting: false,
-    tasks: state.tasks.filter((item) => item.id !== id),
+    tasks: state.tasks.filter(item => item.id !== id),
   };
 };
 

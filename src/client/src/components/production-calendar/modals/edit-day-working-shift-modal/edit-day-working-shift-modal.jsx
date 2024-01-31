@@ -1,15 +1,15 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import React from 'react';
+import { Formik, Form } from 'formik';
 
 import {
   Button,
   CustomFormikTextInput,
   CustomFormikField,
-} from "components/shared";
-import { useCalendarStore } from "store/calendar";
-import { useAuthStore } from "store/auth";
-import { validationSchema } from "./validation-schema";
-import styles from "./edit-day-working-shift-modal.module.scss";
+} from 'components/shared';
+import { useCalendarStore } from 'store/calendar';
+import { useAuthStore } from 'store/auth';
+import { validationSchema } from './validation-schema';
+import styles from './edit-day-working-shift-modal.module.scss';
 
 export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
   const { userRole } = useAuthStore();
@@ -17,25 +17,25 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
     useCalendarStore();
 
   function formatTime(date) {
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
 
   const initialFormValues = {
-    shiftStart: dayEvent.start ? formatTime(dayEvent.start) : "",
-    shiftEnd: dayEvent.end ? formatTime(dayEvent.end) : "",
-    breakStart: dayEvent.breakStart ? formatTime(dayEvent.breakStart) : "",
-    breakEnd: dayEvent.breakEnd ? formatTime(dayEvent.breakEnd) : "",
+    shiftStart: dayEvent.start ? formatTime(dayEvent.start) : '',
+    shiftEnd: dayEvent.end ? formatTime(dayEvent.end) : '',
+    breakStart: dayEvent.breakStart ? formatTime(dayEvent.breakStart) : '',
+    breakEnd: dayEvent.breakEnd ? formatTime(dayEvent.breakEnd) : '',
   };
 
-  const dateToLocalTimeString = (date) => {
+  const dateToLocalTimeString = date => {
     return date.toLocaleTimeString([], {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -45,7 +45,7 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
         <span>Перерыв:</span>
         <span>
           {dateToLocalTimeString(dayEvent.breakStart)}
-          {" - "}
+          {' - '}
           {dateToLocalTimeString(dayEvent.breakEnd)}
         </span>
       </div>
@@ -61,12 +61,12 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
     const year = parsedDate.getFullYear();
 
     const existingDay = calendar?.days.find(
-      (day) => day.number === dayNumber && day.monthNumber === monthNumber
+      day => day.number === dayNumber && day.monthNumber === monthNumber
     );
 
     if (!existingDay) {
       const filteredWorkingShifts = calendar?.mainWorkingShifts.filter(
-        (shift) => shift.number !== workingShiftNumber
+        shift => shift.number !== workingShiftNumber
       );
 
       const day = {
@@ -84,7 +84,7 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
     }
 
     const workingShiftToDelete = existingDay.workingShifts.find(
-      (elem) => elem.number === workingShiftNumber
+      elem => elem.number === workingShiftNumber
     );
 
     if (workingShiftToDelete) {
@@ -103,7 +103,7 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
       updateWorkingShift(workingShift);
       setDayEvent(null);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     }
 
     setSubmitting(false);
@@ -119,22 +119,21 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
         {dayEvent.breakStart && dayEvent.breakEnd && breakTimeRange()}
 
         {dayEvent.isWorkingDay &&
-          (userRole === "Admin" || userRole === "Master") && (
+          (userRole === 'Admin' || userRole === 'Master') && (
             <div>
               <p className={styles.par}>Редактировать смену:</p>
               <Formik
                 initialValues={initialFormValues}
                 enableReinitialize
                 onSubmit={handleFormSubmit}
-                validationSchema={validationSchema}
-              >
+                validationSchema={validationSchema}>
                 {({ isSubmitting, isValid }) => (
                   <Form>
                     <div className={styles.rowWithoutMargin}>
                       <CustomFormikField name="shiftStart">
                         <CustomFormikTextInput
                           width="200"
-                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          style={{ height: 40, padding: '0 20px 0 30px' }}
                           placeholder="Начало работы"
                         />
                       </CustomFormikField>
@@ -142,7 +141,7 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
                       <CustomFormikField name="shiftEnd">
                         <CustomFormikTextInput
                           width="200"
-                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          style={{ height: 40, padding: '0 20px 0 30px' }}
                           placeholder="Конец работы"
                         />
                       </CustomFormikField>
@@ -153,7 +152,7 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
                       <CustomFormikField name="breakStart">
                         <CustomFormikTextInput
                           width="200"
-                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          style={{ height: 40, padding: '0 20px 0 30px' }}
                           placeholder="Начало перерыва"
                         />
                       </CustomFormikField>
@@ -161,7 +160,7 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
                       <CustomFormikField name="breakEnd">
                         <CustomFormikTextInput
                           width="200"
-                          style={{ height: 40, padding: "0 20px 0 30px" }}
+                          style={{ height: 40, padding: '0 20px 0 30px' }}
                           placeholder="Конец перерыва"
                         />
                       </CustomFormikField>
@@ -171,16 +170,14 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
                       <Button
                         className={styles.button}
                         disabled={!isValid || isSubmitting}
-                        type="submit"
-                      >
+                        type="submit">
                         Изменить
                       </Button>
 
                       <Button
                         onClick={() => {
                           removeDay();
-                        }}
-                      >
+                        }}>
                         Удалить
                       </Button>
                     </div>
@@ -194,8 +191,7 @@ export const EditDayWorkingShiftModal = ({ dayEvent, setDayEvent }) => {
         className={styles.hintsBg}
         onClick={() => {
           setDayEvent(null);
-        }}
-      ></div>
+        }}></div>
     </div>
   );
 };

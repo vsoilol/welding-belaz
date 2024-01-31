@@ -1,7 +1,7 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import api from "services/api";
-import tasksActions from "./actions";
-import errorActions from "../error/actions";
+import { takeLatest, call, put } from 'redux-saga/effects';
+import api from 'services/api';
+import tasksActions from './actions';
+import errorActions from '../error/actions';
 
 const {
   Types: {

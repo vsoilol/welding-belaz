@@ -6,11 +6,11 @@ import {
   take,
   cancelled,
   takeLatest,
-} from "redux-saga/effects";
-import { LOCATION_CHANGE } from "connected-react-router";
-import api, { getCancelToken } from "services/api";
-import { errorActionCreators } from "store/error";
-import { welderActionTypes, welderActionCreators } from "../welder.actions";
+} from 'redux-saga/effects';
+import { LOCATION_CHANGE } from 'connected-react-router';
+import api, { getCancelToken } from 'services/api';
+import { errorActionCreators } from 'store/error';
+import { welderActionTypes, welderActionCreators } from '../welder.actions';
 
 function* getWelderByIdSaga(id) {
   const { cancelToken, cancel } = getCancelToken();
@@ -24,7 +24,7 @@ function* getWelderByIdSaga(id) {
     yield put(errorActionCreators.setError(error.message));
   } finally {
     if (yield cancelled()) {
-      cancel("Operation canceled by the user.");
+      cancel('Operation canceled by the user.');
     }
   }
 }

@@ -1,7 +1,7 @@
-import React from "react";
-import { Header } from "./HeaderComponent";
-import { useAuthStore } from "store/auth";
-import styles from "./styles.module.scss";
+import React from 'react';
+import { Header } from './HeaderComponent';
+import { useAuthStore } from 'store/auth';
+import styles from './styles.module.scss';
 
 export const HeaderLayout = ({ children }) => {
   const { userRole } = useAuthStore();

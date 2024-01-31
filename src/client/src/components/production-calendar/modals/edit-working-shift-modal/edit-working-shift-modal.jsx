@@ -1,32 +1,31 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { ModalWindow, CustomSelect } from "components/shared";
+import { ModalWindow, CustomSelect } from 'components/shared';
 import {
   AddWorkingShiftForm,
   DeleteWorkingShiftForm,
   UpdateWorkingShiftForm,
-} from "./forms";
+} from './forms';
 
-import styles from "../modal-style.module.scss";
+import styles from '../modal-style.module.scss';
 
 export const EditWorkingShiftModal = ({ isOpen, toggleModal }) => {
   const [selectedOption, setSelectedOption] = useState(0);
 
   const workingShiftOptions = [
-    { value: 1, label: "Добавить смену" },
-    { value: 2, label: "Удалить смену" },
-    { value: 3, label: "Редактировать смену" },
+    { value: 1, label: 'Добавить смену' },
+    { value: 2, label: 'Удалить смену' },
+    { value: 3, label: 'Редактировать смену' },
   ];
 
   return (
     <ModalWindow
       isOpen={isOpen}
       headerText="Редактировать рабочую смену"
-      setIsOpen={(state) => {
+      setIsOpen={state => {
         toggleModal(state);
       }}
-      wrapperStyles={{ width: 420 }}
-    >
+      wrapperStyles={{ width: 420 }}>
       <div className={styles.wrapper}>
         <div className={styles.selectOptionLabel}>
           <span>Выберите действие</span>
@@ -35,7 +34,7 @@ export const EditWorkingShiftModal = ({ isOpen, toggleModal }) => {
         <CustomSelect
           width="380px"
           placeholder="Действие"
-          onChange={(event) => {
+          onChange={event => {
             setSelectedOption(event.value);
           }}
           options={workingShiftOptions}

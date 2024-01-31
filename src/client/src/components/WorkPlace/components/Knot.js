@@ -1,34 +1,18 @@
-import Paper from "@material-ui/core/Paper";
-import MaterialTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import SaveIcon from "@material-ui/icons/Save";
-import { workPlaceImage } from "assets/pics";
-import Button from "components/shared/Button";
-import EquipmentMap from "components/Map";
-import Modal from "components/shared/Modal";
-import Input from "components/shared/Input";
-import ModalWindow from "components/shared/ModalWindow";
-import { ResultsModal } from "components/shared/ResultsModal";
-import Select from "components/shared/Select";
-import { Table } from "components/shared/Table";
-import ToolTip from "components/shared/ToolTip";
-import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
-import styles from "components/WorkPlace/styles.module.scss";
+import Button from 'components/shared/Button';
+import Input from 'components/shared/Input';
+import ModalWindow from 'components/shared/ModalWindow';
+import Select from 'components/shared/Select';
+import { Table } from 'components/shared/Table';
+import { Formik } from 'formik';
+import React, { useState } from 'react';
+import styles from 'components/WorkPlace/styles.module.scss';
 
-import axios from "axios";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import api from "services/api";
+import api from 'services/api';
 
 const dateOptions = {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
 };
 
 export const Knot = ({
@@ -57,7 +41,7 @@ export const Knot = ({
 }) => {
   const [modalData, setModalData] = useState(null);
   const [isModalNumb, setIsModalNumb] = useState(0);
-  const [value_goToTitle, setValuegoToTitle] = useState("");
+  const [value_goToTitle, setValuegoToTitle] = useState('');
 
   const [valueProdArea, setValueProdArea] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
@@ -76,7 +60,7 @@ export const Knot = ({
 
   const [valueWelder, setValueWelder] = useState(1);
   const [valueWelderExe, setValueWelderExe] = useState(0);
-  const [valueWelderExeName, setValueWelderName] = useState("");
+  const [valueWelderExeName, setValueWelderName] = useState('');
 
   const [valueFixed, setValueFixed] = useState(0);
   //Создание задания
@@ -84,20 +68,20 @@ export const Knot = ({
   //Выбранные сварщики
   const [welderListChoise, setwelderListChoise] = useState([]);
   //Выбранное изделие/деталь/узел
-  const [valueChoise, setvalueChoise] = useState("");
+  const [valueChoise, setvalueChoise] = useState('');
   //Id выбранного изделие/деталь/узел
-  const [valueIdIzdelia, setIdIzdelia] = useState("");
+  const [valueIdIzdelia, setIdIzdelia] = useState('');
   ///дописываю для чего просматриваем закрепленные объекты
-  const [isDisplayFixed, setDisplayFixed] = useState("");
+  const [isDisplayFixed, setDisplayFixed] = useState('');
   const initialValues = {
-    name: modalData?.name ?? "",
-    number: modalData?.number ?? "",
-    id: modalData?.id ?? "",
-    manufacturingTime: modalData?.manufacturingTime ?? "",
+    name: modalData?.name ?? '',
+    number: modalData?.number ?? '',
+    id: modalData?.id ?? '',
+    manufacturingTime: modalData?.manufacturingTime ?? '',
   };
   /////Удоление
   const [deleteProdModal, setdeleteProdModal] = useState(false);
-  const [idProduct, setidProduct] = useState("");
+  const [idProduct, setidProduct] = useState('');
   function SetValue(valueId, index) {
     ///area
     if (index === 1) {
@@ -118,28 +102,28 @@ export const Knot = ({
   }
   //Запрос на редактирование или добавление
   function SendData(variables) {
-    variables["workshopId"] = valueProdArea;
-    variables["workshopNumber"] = SetValue(valueProdArea, 0);
+    variables['workshopId'] = valueProdArea;
+    variables['workshopNumber'] = SetValue(valueProdArea, 0);
 
-    variables["productionAreaId"] = valuetPosts;
-    variables["productionAreaNumber"] = SetValue(valuetPosts, 1);
+    variables['productionAreaId'] = valuetPosts;
+    variables['productionAreaNumber'] = SetValue(valuetPosts, 1);
 
-    variables["technologicalProcessId"] = valuetTechProc;
+    variables['technologicalProcessId'] = valuetTechProc;
 
-    variables["seams"] = [valuetSeam];
+    variables['seams'] = [valuetSeam];
 
-    variables["postId"] = valuetWorkPlace;
-    variables["workplaceId"] = valueWorkplace;
+    variables['postId'] = valuetWorkPlace;
+    variables['workplaceId'] = valueWorkplace;
 
     //Добавить Узел
     if (isModalNumb == 13) {
-      variables["status"] = "add";
-      variables["mainProductId"] = valuetProduct;
+      variables['status'] = 'add';
+      variables['mainProductId'] = valuetProduct;
       addKnot(variables);
     }
     //Редактировать Узел
     if (isModalNumb == 5) {
-      variables["mainProductId"] = valuetProduct;
+      variables['mainProductId'] = valuetProduct;
 
       editKnot(variables);
     }
@@ -147,9 +131,9 @@ export const Knot = ({
 
   const columns = {
     node: [
-      (userRole === "Admin" || userRole === "Technologist") && {
-        title: "Удаление",
-        render: (rowData) => (
+      (userRole === 'Admin' || userRole === 'Technologist') && {
+        title: 'Удаление',
+        render: rowData => (
           <img
             className={styles.deleteIcon}
             src={deleteIcon}
@@ -161,142 +145,139 @@ export const Knot = ({
         ),
       },
       {
-        title: "Наименование узла ",
-        field: "name",
+        title: 'Наименование узла ',
+        field: 'name',
       },
       {
-        title: "Номер  узла ",
-        field: "number",
+        title: 'Номер  узла ',
+        field: 'number',
       },
       {
-        title: "Норма времени на изготовление",
-        field: "manufacturingTime",
+        title: 'Норма времени на изготовление',
+        field: 'manufacturingTime',
       },
       {
-        title: "Номер  цеха ",
-        field: "workshop.number",
+        title: 'Номер  цеха ',
+        field: 'workshop.number',
       },
       {
-        title: "Номер  производственного участка ",
-        field: "productionArea.number",
+        title: 'Номер  производственного участка ',
+        field: 'productionArea.number',
       },
       {
-        title: "Наименование   технологического процесса  ",
-        field: "technologicalProcess.name",
+        title: 'Наименование   технологического процесса  ',
+        field: 'technologicalProcess.name',
       },
       {
-        title: "Номер  технологического процесса  ",
-        field: "technologicalProcess.number",
+        title: 'Номер  технологического процесса  ',
+        field: 'technologicalProcess.number',
       },
       {
-        title: "Перерейти к",
-        render: (rowData) => {
+        title: 'Перерейти к',
+        render: rowData => {
           return (
             <div>
               <p
                 className={styles.goOver}
-                onClick={(e) => {
-                  GoTo(10, "Детали", rowData?.id);
+                onClick={e => {
+                  GoTo(10, 'Детали', rowData?.id);
                   setDisplayFixed(rowData?.name);
-                }}
-              >
+                }}>
                 Деталь
               </p>
               <p
                 className={styles.goOver}
-                onClick={(e) => {
-                  GoTo(11, "Сварные швы", rowData?.id);
+                onClick={e => {
+                  GoTo(11, 'Сварные швы', rowData?.id);
                   setDisplayFixed(rowData?.name);
-                }}
-              >
+                }}>
                 Сварной шов
               </p>
             </div>
           );
         },
       },
-    ].filter((column) => column),
+    ].filter(column => column),
   };
 
   const columnsFix = {
     node: [
       {
-        title: "Закрепить узлы",
-        render: (rowData) => {
+        title: 'Закрепить узлы',
+        render: rowData => {
           return <input type="checkbox"></input>;
         },
       },
       {
-        title: "Наименование узла ",
-        field: "name",
+        title: 'Наименование узла ',
+        field: 'name',
       },
       {
-        title: "Номер  узла ",
-        field: "number",
+        title: 'Номер  узла ',
+        field: 'number',
       },
 
       {
-        title: "Номер  цеха ",
-        field: "workshop.number",
+        title: 'Номер  цеха ',
+        field: 'workshop.number',
       },
       {
-        title: "Номер  производственного участка ",
-        field: "productionArea.number",
+        title: 'Номер  производственного участка ',
+        field: 'productionArea.number',
       },
       // {
       //   title: "Номер  рабочего места  ", field: "workplace.number"
       // },
       {
-        title: "Наименование   технологического процесса  ",
-        field: "technologicalProcess.name",
+        title: 'Наименование   технологического процесса  ',
+        field: 'technologicalProcess.name',
       },
       {
-        title: "Номер  технологического процесса  ",
-        field: "technologicalProcess.number",
+        title: 'Номер  технологического процесса  ',
+        field: 'technologicalProcess.number',
       },
     ],
 
     welder: [
       {
-        title: "Закрепить сварщика",
-        render: (rowData) => {
+        title: 'Закрепить сварщика',
+        render: rowData => {
           return (
             <input
               type="checkbox"
-              onClick={(e) => {
+              onClick={e => {
                 ChioseWelder(rowData);
-              }}
-            ></input>
+              }}></input>
           );
         },
       },
       {
-        title: "RFID-метка",
-        render: (rowData) => {
+        title: 'RFID-метка',
+        render: rowData => {
           return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
         },
       },
       {
-        title: "Имя",
-        field: "firstName",
+        title: 'Имя',
+        field: 'firstName',
       },
       {
-        title: "Фамилия",
-        field: "middleName",
+        title: 'Фамилия',
+        field: 'middleName',
       },
       {
-        title: "Отчество",
-        field: "lastName",
+        title: 'Отчество',
+        field: 'lastName',
       },
       {
-        title: "Цех",
-        render: (rowData) => {
+        title: 'Цех',
+        render: rowData => {
           return rowData?.workshop?.name;
         },
       },
       {
-        title: "Производственный участок",
-        field: "productionArea.name",
+        title: 'Производственный участок',
+        field: 'productionArea.name',
       },
     ],
   };
@@ -306,44 +287,44 @@ export const Knot = ({
   ///Изменение заголовка модалки
   function TitleTextModal(params) {
     if (params === 5) {
-      return "Редактировать Узел";
+      return 'Редактировать Узел';
     }
 
     if (params === 13) {
-      return "Добавить Узел";
+      return 'Добавить Узел';
     }
   }
 
   //select Посты
-  const optPosts = area?.map((item) => {
+  const optPosts = area?.map(item => {
     return {
       value: item.id,
       label: `№${item.number} ${item.name} `,
     };
   });
   //select Рабочие места
-  const WorkPlaceOpt = posts?.map((item) => {
+  const WorkPlaceOpt = posts?.map(item => {
     return {
       value: item.id,
-      label: "Пост " + item.number,
+      label: 'Пост ' + item.number,
     };
   });
   //select рабочие места
-  const workplaceIdOptions = workplace?.map((item) => {
+  const workplaceIdOptions = workplace?.map(item => {
     return {
       value: item.id,
       label: `Рабочие место ${item.number}`,
     };
   });
   //select технологического процесса
-  const TechProc = texprocwelding?.map((item) => {
+  const TechProc = texprocwelding?.map(item => {
     return {
       value: item.id,
       label: `${item.name} ${item.number}`,
     };
   });
   //select Сварочный шов
-  const SeamOptions = seam?.map((item) => {
+  const SeamOptions = seam?.map(item => {
     return {
       value: item.id,
       label: `Cварочный шов ${item.number}`,
@@ -503,18 +484,18 @@ export const Knot = ({
     }
   }
 
-  const TabPanel = (props_panel) => {
+  const TabPanel = props_panel => {
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
 
-  const formattedMasters = masters?.map((item) => {
+  const formattedMasters = masters?.map(item => {
     return {
       value: item.id,
       label: `${item.middleName} ${item.firstName}`,
     };
   });
-  const formattedTechs = techs?.map((item) => {
+  const formattedTechs = techs?.map(item => {
     return {
       value: item.id,
       label: `${item.middleName} ${item.firstName}`,
@@ -524,16 +505,16 @@ export const Knot = ({
   const exec = [
     {
       id: 1,
-      name: "Мастера",
+      name: 'Мастера',
     },
     {
       id: 2,
-      name: "Контролеры УКК",
+      name: 'Контролеры УКК',
     },
   ];
 
   //Select выбор сотрудника
-  const optExecutors = exec?.map((item) => {
+  const optExecutors = exec?.map(item => {
     return {
       value: item.id,
       label: item.name,
@@ -541,10 +522,10 @@ export const Knot = ({
   });
 
   //наименование изделия
-  const [valuetProduct, setvaluetProduct] = useState("");
+  const [valuetProduct, setvaluetProduct] = useState('');
   const productsOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(product?.map((item) => ({
+    { value: null, label: 'Не выбрано' },
+    ...(product?.map(item => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
     })) || []),
@@ -571,28 +552,28 @@ export const Knot = ({
     }
   }
   function ChioseWelder(welder) {
-    if (welder["active"] === undefined) {
+    if (welder['active'] === undefined) {
       welderListChoise.push(welder.id);
-      welder["active"] = 1;
+      welder['active'] = 1;
       setwelderListChoise(welderListChoise);
-    } else if (welder["active"] === 1) {
+    } else if (welder['active'] === 1) {
       for (let index = 0; index < welderListChoise.length; index++) {
         if (welderListChoise[index].id === welder.id) {
           welderListChoise.splice(index, 1);
         }
       }
-      welder["active"] = 0;
-    } else if (welder["active"] === 0) {
+      welder['active'] = 0;
+    } else if (welder['active'] === 0) {
       welderListChoise.push(welder.id);
       setwelderListChoise(welderListChoise);
-      welder["active"] = 1;
+      welder['active'] = 1;
     }
   }
   function SendChoiseWelder() {
     let dataToassignWelders = {
       productId: valueIdIzdelia,
       welderIds: welderListChoise,
-      status: "assign",
+      status: 'assign',
     };
     addKnot(dataToassignWelders);
   }
@@ -609,7 +590,7 @@ export const Knot = ({
       setdisplaySeams(0);
     }
   }
-  const [valuetKnots, setvaluetKnots] = useState("");
+  const [valuetKnots, setvaluetKnots] = useState('');
 
   function GetSeams() {
     let SeamsArray = [];
@@ -635,10 +616,9 @@ export const Knot = ({
             <TabPanel
               value={value_goTo}
               indPanel={value_goTo}
-              style={{ minWidth: "800px" }}
-            >
+              style={{ minWidth: '800px' }}>
               <Table
-                title={isDisplayFixed + " - " + value_goToTitle}
+                title={isDisplayFixed + ' - ' + value_goToTitle}
                 columns={value_goToHeadTable}
                 data={value_goToBodyTable}
               />
@@ -650,37 +630,36 @@ export const Knot = ({
           <TabPanel
             value={value_panel2}
             indPanel={1}
-            style={{ minWidth: "800px" }}
-          >
+            style={{ minWidth: '800px' }}>
             <Table
               title="Узлы"
               columns={columns.node}
               value={1}
               data={knot}
               actions={
-                userRole === "Admin" || userRole === "Technologist"
+                userRole === 'Admin' || userRole === 'Technologist'
                   ? [
                       {
-                        icon: "add",
-                        tooltip: "Добавить узел",
+                        icon: 'add',
+                        tooltip: 'Добавить узел',
                         isFreeAction: true,
                         onClick: () => {
                           setIsModalOpen(true);
                           setIsModalNumb(13);
-                          setValueProdArea("");
-                          setValuetTechProc("");
-                          setValuetPosts("");
-                          setValuetWorkPlace("");
+                          setValueProdArea('');
+                          setValuetTechProc('');
+                          setValuetPosts('');
+                          setValuetWorkPlace('');
 
                           api.post(`/eventLog`, {
                             information:
-                              "Открыл модальное окно добавления узла",
+                              'Открыл модальное окно добавления узла',
                           });
                         },
                       },
                       {
-                        icon: "edit",
-                        tooltip: "Редактировать узел",
+                        icon: 'edit',
+                        tooltip: 'Редактировать узел',
                         onClick: (event, rowData) => {
                           setModalData(rowData);
                           setIsModalOpen(true);
@@ -694,7 +673,7 @@ export const Knot = ({
 
                           api.post(`/eventLog`, {
                             information:
-                              "Открыл модальное окно редактирования узла",
+                              'Открыл модальное окно редактирования узла',
                           });
                         },
                       },
@@ -711,7 +690,7 @@ export const Knot = ({
             <h3>Узел: {valueChoise}</h3>
             <div className={styles.Seams}>
               {displaySeams === 1 ? (
-                <TabPanel style={{ minWidth: "800px" }}>
+                <TabPanel style={{ minWidth: '800px' }}>
                   <Table
                     title="Сварные швы"
                     columns={columns.welding_seam}
@@ -730,20 +709,20 @@ export const Knot = ({
                   width="380px"
                   value={valuetPosts}
                   placeholder="Производственные участки"
-                  onChange={(event) => {
+                  onChange={event => {
                     setValuetPosts(event.value);
                     welderGetList(event.value, 1);
                   }}
                   options={optPosts}
                 />
                 <button className={styles.fixed} onClick={SendChoiseWelder}>
-                  {" "}
-                  Закрерить{" "}
+                  {' '}
+                  Закрерить{' '}
                 </button>
               </div>
             </div>
 
-            <TabPanel style={{ minWidth: "800px" }}>
+            <TabPanel style={{ minWidth: '800px' }}>
               <Table
                 title="Сварщики"
                 columns={columnsFix.welder}
@@ -756,21 +735,19 @@ export const Knot = ({
         <ModalWindow
           isOpen={isModalOpen}
           headerText={TitleTextModal(isModalNumb)}
-          setIsOpen={(state) => {
+          setIsOpen={state => {
             setIsModalOpen(state);
             setModalData(null);
           }}
-          wrapperStyles={{ width: 420 }}
-        >
+          wrapperStyles={{ width: 420 }}>
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setIsModalOpen(false);
               SendData(variables);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -781,10 +758,10 @@ export const Knot = ({
               <form onSubmit={handleSubmit}>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    style={{ width: 380, height: 40, padding: '0 20px 0 30px' }}
                     value={values.name}
                     name="name"
                     placeholder="Наименовние"
@@ -794,13 +771,13 @@ export const Knot = ({
                 </div>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       const value = e.target.value;
                       if (/^[\dA-Za-z-]+$/.test(value)) {
                         handleChange(e);
                       }
                     }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    style={{ width: 380, height: 40, padding: '0 20px 0 30px' }}
                     value={values.number}
                     name="number"
                     placeholder="Номер"
@@ -810,13 +787,13 @@ export const Knot = ({
                 </div>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       const value = e.target.value;
                       if (/^[\dA-Z-]+$/.test(value)) {
                         handleChange(e);
                       }
                     }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    style={{ width: 380, height: 40, padding: '0 20px 0 30px' }}
                     value={values.manufacturingTime}
                     name="manufacturingTime"
                     placeholder="Норма времени на изготовление"
@@ -830,7 +807,7 @@ export const Knot = ({
                     width="380px"
                     value={valuetPosts}
                     placeholder="Производственные участки"
-                    onChange={(event) => setValuetPosts(event.value)}
+                    onChange={event => setValuetPosts(event.value)}
                     options={optPosts}
                   />
                 </div>
@@ -841,7 +818,7 @@ export const Knot = ({
                     width="380px"
                     value={valuetProduct}
                     placeholder="Изделие"
-                    onChange={(event) => setvaluetProduct(event.value)}
+                    onChange={event => setvaluetProduct(event.value)}
                     options={productsOptions}
                   />
                 </div>
@@ -851,7 +828,7 @@ export const Knot = ({
                     width="380px"
                     value={valuetTechProc}
                     placeholder="Технологический процесс"
-                    onChange={(event) => setValuetTechProc(event.value)}
+                    onChange={event => setValuetTechProc(event.value)}
                     options={TechProc}
                   />
                 </div>
@@ -859,9 +836,8 @@ export const Knot = ({
                 <div className={styles.row}>
                   <Button
                     type="submit"
-                    disabled={values.number == "" || values.name == ""}
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
+                    disabled={values.number == '' || values.name == ''}>
+                    {modalData ? 'Сохранить' : 'Создать'}
                   </Button>
                 </div>
               </form>
@@ -873,20 +849,18 @@ export const Knot = ({
         <ModalWindow
           isOpen={deleteProdModal}
           headerText="Удаление"
-          setIsOpen={(state) => {
+          setIsOpen={state => {
             setdeleteProdModal(false);
           }}
-          wrapperStyles={{ width: 420 }}
-        >
+          wrapperStyles={{ width: 420 }}>
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setdeleteProdModal(false);
               deleteProduct({ id: idProduct, index: 5 });
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -896,8 +870,8 @@ export const Knot = ({
             }) => (
               <form onSubmit={handleSubmit}>
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>
-                    Вы уверены что хотите <span>удалить</span> данный узел ?{" "}
+                  <h4 style={{ padding: '35px 40px' }}>
+                    Вы уверены что хотите <span>удалить</span> данный узел ?{' '}
                   </h4>
                   <div className={styles.row}>
                     <Button type="submit">Удалить</Button>

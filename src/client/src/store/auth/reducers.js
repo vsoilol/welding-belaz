@@ -1,6 +1,6 @@
-import { createReducer } from "reduxsauce";
-import auth from "services/auth";
-import actions from "./actions";
+import { createReducer } from 'reduxsauce';
+import auth from 'services/auth';
+import actions from './actions';
 
 const { Types } = actions;
 const INITIAL_STATE = {
@@ -17,8 +17,7 @@ const request = (state = INITIAL_STATE) => {
     error: null,
   };
 };
-const logInSuccess = (state = INITIAL_STATE, { data }) => { 
-  
+const logInSuccess = (state = INITIAL_STATE, { data }) => {
   return {
     ...state,
     user: { ...auth.decodeToken(data.token) },

@@ -1,35 +1,13 @@
-import Paper from "@material-ui/core/Paper";
-import MaterialTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import SaveIcon from "@material-ui/icons/Save";
-import { workPlaceImage } from "assets/pics";
-import Button from "components/shared/Button";
-import EquipmentMap from "components/Map";
-import Modal from "components/shared/Modal";
-import Input from "components/shared/Input";
-import ModalWindow from "components/shared/ModalWindow";
-import { ResultsModal } from "components/shared/ResultsModal";
-import Select from "components/shared/Select";
-import { Table } from "components/shared/Table";
-import ToolTip from "components/shared/ToolTip";
-import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
-import styles from "components/WorkPlace/styles.module.scss";
+import Button from 'components/shared/Button';
+import Input from 'components/shared/Input';
+import ModalWindow from 'components/shared/ModalWindow';
+import Select from 'components/shared/Select';
+import { Table } from 'components/shared/Table';
+import { Formik } from 'formik';
+import React, { useState } from 'react';
+import styles from 'components/WorkPlace/styles.module.scss';
 
-import axios from "axios";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import api from "services/api";
-
-const dateOptions = {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-};
+import api from 'services/api';
 
 export const Posts = ({
   workshop,
@@ -50,7 +28,7 @@ export const Posts = ({
 }) => {
   const [modalData, setModalData] = useState(null);
   const [isModalNumb, setIsModalNumb] = useState(0);
-  const [value_goToTitle, setValuegoToTitle] = useState("");
+  const [value_goToTitle, setValuegoToTitle] = useState('');
 
   const [valueProdArea, setValueProdArea] = useState();
   const [valuetTechProc, setValuetTechProc] = useState();
@@ -65,15 +43,15 @@ export const Posts = ({
   const [, setValue] = useState(value_panel);
   const [, setValue2] = useState(value_panel2);
   ///дописываю для чего просматриваем закрепленные объекты
-  const [isDisplayFixed, setDisplayFixed] = useState("");
+  const [isDisplayFixed, setDisplayFixed] = useState('');
   /////Удоление
   const [deleteProdModal, setdeleteProdModal] = useState(false);
-  const [idProduct, setidProduct] = useState("");
+  const [idProduct, setidProduct] = useState('');
 
   const initialValues = {
-    name: modalData?.name ?? "",
-    number: modalData?.number ?? "",
-    id: modalData?.id ?? "",
+    name: modalData?.name ?? '',
+    number: modalData?.number ?? '',
+    id: modalData?.id ?? '',
   };
 
   function SetValue(valueId, index) {
@@ -96,13 +74,13 @@ export const Posts = ({
   }
   //Запрос на редактирование или добавление
   function SendData(variables) {
-    variables["workshopId"] = valueProdArea;
-    variables["workshopNumber"] = SetValue(valueProdArea, 0);
+    variables['workshopId'] = valueProdArea;
+    variables['workshopNumber'] = SetValue(valueProdArea, 0);
 
-    variables["productionAreaId"] = valuetPosts;
-    variables["productionAreaNumber"] = SetValue(valuetPosts, 1);
+    variables['productionAreaId'] = valuetPosts;
+    variables['productionAreaNumber'] = SetValue(valuetPosts, 1);
 
-    variables["workplaceId"] = valueWorkplace;
+    variables['workplaceId'] = valueWorkplace;
 
     //Добавить Посты
     if (isModalNumb == 10) {
@@ -117,37 +95,36 @@ export const Posts = ({
   const columns = {
     workshops: [
       {
-        title: "Наименование цеха",
-        field: "name",
+        title: 'Наименование цеха',
+        field: 'name',
       },
       {
-        title: "Номер  цеха",
-        field: "number",
+        title: 'Номер  цеха',
+        field: 'number',
       },
 
       {
-        title: "Наименование производственного участка ",
-        render: (rowData) => {
-          return <span>{DetArea(rowData?.id, "name") ?? "-"}</span>;
+        title: 'Наименование производственного участка ',
+        render: rowData => {
+          return <span>{DetArea(rowData?.id, 'name') ?? '-'}</span>;
         },
       },
       {
-        title: "Номер  производственного участка ",
-        render: (rowData) => {
-          return <span>{DetArea(rowData?.id, "numb") ?? "-"}</span>;
+        title: 'Номер  производственного участка ',
+        render: rowData => {
+          return <span>{DetArea(rowData?.id, 'numb') ?? '-'}</span>;
         },
       },
       {
-        title: "Перерейти к",
-        render: (rowData) => {
+        title: 'Перерейти к',
+        render: rowData => {
           return (
             <p
               className={styles.goOver}
-              onClick={(e) => {
-                GoTo(1, "Производственные участки", rowData?.id);
+              onClick={e => {
+                GoTo(1, 'Производственные участки', rowData?.id);
                 setDisplayFixed(rowData?.name);
-              }}
-            >
+              }}>
               Производственный участок
             </p>
           );
@@ -156,46 +133,44 @@ export const Posts = ({
     ],
     production_sites: [
       {
-        title: "Наименование производственного участка ",
-        field: "name",
+        title: 'Наименование производственного участка ',
+        field: 'name',
       },
       {
-        title: "Номер  производственного участка ",
-        field: "number",
+        title: 'Номер  производственного участка ',
+        field: 'number',
       },
       {
-        title: "Наименование цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>;
+        title: 'Наименование цеха ',
+        render: rowData => {
+          return <span>{rowData?.workshop.name ?? '-'}</span>;
         },
       },
       {
-        title: "Номер  цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>;
+        title: 'Номер  цеха ',
+        render: rowData => {
+          return <span>{rowData?.workshop.number ?? '-'}</span>;
         },
       },
       {
-        title: "Перерейти к",
-        render: (rowData) => {
+        title: 'Перерейти к',
+        render: rowData => {
           return (
             <div>
               <p
                 className={styles.goOver}
-                onClick={(e) => {
-                  GoTo(2, "Посты", rowData?.id);
+                onClick={e => {
+                  GoTo(2, 'Посты', rowData?.id);
                   setDisplayFixed(rowData?.name);
-                }}
-              >
+                }}>
                 Пост
               </p>
               <p
                 className={styles.goOver}
-                onClick={(e) => {
-                  GoTo(3, "Рабочее место", rowData?.id);
+                onClick={e => {
+                  GoTo(3, 'Рабочее место', rowData?.id);
                   setDisplayFixed(rowData?.name);
-                }}
-              >
+                }}>
                 Рабочее место
               </p>
             </div>
@@ -206,9 +181,9 @@ export const Posts = ({
       },
     ],
     posts: [
-      (userRole === "Admin" || userRole === "Technologist") && {
-        title: "Удаление",
-        render: (rowData) => (
+      (userRole === 'Admin' || userRole === 'Technologist') && {
+        title: 'Удаление',
+        render: rowData => (
           <img
             className={styles.deleteIcon}
             src={deleteIcon}
@@ -220,105 +195,104 @@ export const Posts = ({
         ),
       },
       {
-        title: "Наименование поста ",
-        render: (rowData) => {
+        title: 'Наименование поста ',
+        render: rowData => {
           return <p>Пост {rowData?.number}</p>;
         },
       },
       {
-        title: "Номер  поста ",
-        field: "number",
+        title: 'Номер  поста ',
+        field: 'number',
       },
 
       {
-        title: "Наименование цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>;
+        title: 'Наименование цеха ',
+        render: rowData => {
+          return <span>{rowData?.workshop.name ?? '-'}</span>;
         },
       },
       {
-        title: "Номер  цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>;
+        title: 'Номер  цеха ',
+        render: rowData => {
+          return <span>{rowData?.workshop.number ?? '-'}</span>;
         },
       },
 
       {
-        title: "Наименование производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.name ?? "-"}</span>;
+        title: 'Наименование производственного участка ',
+        render: rowData => {
+          return <span>{rowData?.productionArea.name ?? '-'}</span>;
         },
       },
       {
-        title: "Номер  производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.number ?? "-"}</span>;
+        title: 'Номер  производственного участка ',
+        render: rowData => {
+          return <span>{rowData?.productionArea.number ?? '-'}</span>;
         },
       },
       {
-        title: "Перерейти к",
-        render: (rowData) => {
+        title: 'Перерейти к',
+        render: rowData => {
           return (
             <p
               className={styles.goOver}
-              onClick={(e) => {
-                GoTo(9, "Рабочие места", rowData?.id);
+              onClick={e => {
+                GoTo(9, 'Рабочие места', rowData?.id);
                 setDisplayFixed(rowData?.name);
-              }}
-            >
+              }}>
               Рабочее место
             </p>
           );
         },
       },
-    ].filter((column) => column),
+    ].filter(column => column),
     jobs_place: [
       {
-        title: "Наименование рабочего места ",
-        render: (rowData) => {
-          return <p>Рабочее место {rowData?.number ?? "-"}</p>;
+        title: 'Наименование рабочего места ',
+        render: rowData => {
+          return <p>Рабочее место {rowData?.number ?? '-'}</p>;
         },
       },
       {
-        title: "Номер  рабочего места ",
-        field: "number",
+        title: 'Номер  рабочего места ',
+        field: 'number',
       },
       {
-        title: "Наименование цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.name ?? "-"}</span>;
+        title: 'Наименование цеха ',
+        render: rowData => {
+          return <span>{rowData?.workshop.name ?? '-'}</span>;
         },
       },
       {
-        title: "Номер  цеха ",
-        render: (rowData) => {
-          return <span>{rowData?.workshop.number ?? "-"}</span>;
-        },
-      },
-
-      {
-        title: "Наименование производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.name ?? "-"}</span>;
-        },
-      },
-      {
-        title: "Номер  производственного участка ",
-        render: (rowData) => {
-          return <span>{rowData?.productionArea.number ?? "-"}</span>;
+        title: 'Номер  цеха ',
+        render: rowData => {
+          return <span>{rowData?.workshop.number ?? '-'}</span>;
         },
       },
 
       {
-        title: "Наименование поста",
-        render: (rowData) => {
-          return <span>{rowData?.post?.name ?? "-"}</span>;
+        title: 'Наименование производственного участка ',
+        render: rowData => {
+          return <span>{rowData?.productionArea.name ?? '-'}</span>;
         },
       },
       {
-        title: "Номер  поста",
-        render: (rowData) => {
-          return <span>{rowData?.post?.number ?? "-"}</span>;
+        title: 'Номер  производственного участка ',
+        render: rowData => {
+          return <span>{rowData?.productionArea.number ?? '-'}</span>;
+        },
+      },
+
+      {
+        title: 'Наименование поста',
+        render: rowData => {
+          return <span>{rowData?.post?.name ?? '-'}</span>;
+        },
+      },
+      {
+        title: 'Номер  поста',
+        render: rowData => {
+          return <span>{rowData?.post?.number ?? '-'}</span>;
         },
       },
     ],
@@ -326,14 +300,14 @@ export const Posts = ({
 
   function DetArea(params, field, numb) {
     if (numb === 2) {
-      if (field === "name") {
+      if (field === 'name') {
         for (let index = 0; index < workplace?.length; index++) {
           if (workplace[index].post?.id === params) {
             return `Рабочее место ${workplace[index].number}`;
           }
         }
       }
-      if (field === "numb") {
+      if (field === 'numb') {
         for (let index = 0; index < workplace?.length; index++) {
           if (workplace[index].post?.id === params) {
             return workplace[index].number;
@@ -348,16 +322,16 @@ export const Posts = ({
   ///Изменение заголовка модалки
   function TitleTextModal(params) {
     if (params === 2) {
-      return "Редактировать Пост";
+      return 'Редактировать Пост';
     }
 
     if (params === 10) {
-      return "Добавить Пост";
+      return 'Добавить Пост';
     }
   }
 
   //select Посты
-  const optPosts = area?.map((item) => {
+  const optPosts = area?.map(item => {
     return {
       value: item.id,
       label: `№${item.number} ${item.name} `,
@@ -517,11 +491,11 @@ export const Posts = ({
     }
   }
 
-  const TabPanel = (props_panel) => {
+  const TabPanel = props_panel => {
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
-  const optProdArea = workshop?.map((item) => {
+  const optProdArea = workshop?.map(item => {
     return {
       value: item.id,
       label: item.name,
@@ -536,45 +510,44 @@ export const Posts = ({
             <TabPanel
               value={value_goTo}
               indPanel={value_goTo}
-              style={{ minWidth: "800px" }}
-            >
+              style={{ minWidth: '800px' }}>
               <Table
-                title={isDisplayFixed + " - " + value_goToTitle}
+                title={isDisplayFixed + ' - ' + value_goToTitle}
                 columns={value_goToHeadTable}
                 data={value_goToBodyTable}
               />
             </TabPanel>
           </div>
         ) : (
-          <TabPanel style={{ minWidth: "800px" }}>
+          <TabPanel style={{ minWidth: '800px' }}>
             <Table
               title="Посты"
               columns={columns.posts}
               className="posts"
               data={posts}
               actions={
-                userRole === "Admin" || userRole === "Technologist"
+                userRole === 'Admin' || userRole === 'Technologist'
                   ? [
                       {
-                        icon: "add",
-                        tooltip: "Добавить пост",
+                        icon: 'add',
+                        tooltip: 'Добавить пост',
                         isFreeAction: true,
                         onClick: () => {
                           setIsModalOpen(true);
                           setIsModalNumb(10);
-                          setValueProdArea("");
-                          setValuetTechProc("");
-                          setValuetPosts("");
-                          setValuetWorkPlace("");
+                          setValueProdArea('');
+                          setValuetTechProc('');
+                          setValuetPosts('');
+                          setValuetWorkPlace('');
                           api.post(`/eventLog`, {
                             information:
-                              "Открыл модальное окно добавления поста",
+                              'Открыл модальное окно добавления поста',
                           });
                         },
                       },
                       {
-                        icon: "edit",
-                        tooltip: "Редактировать пост",
+                        icon: 'edit',
+                        tooltip: 'Редактировать пост',
                         onClick: (event, rowData) => {
                           setModalData(rowData);
                           setIsModalOpen(true);
@@ -582,7 +555,7 @@ export const Posts = ({
                           setValuetPosts(rowData?.productionArea.id);
                           api.post(`/eventLog`, {
                             information:
-                              "Открыл модальное окно редактирования поста",
+                              'Открыл модальное окно редактирования поста',
                           });
                         },
                       },
@@ -596,21 +569,19 @@ export const Posts = ({
         <ModalWindow
           isOpen={isModalOpen}
           headerText={TitleTextModal(isModalNumb)}
-          setIsOpen={(state) => {
+          setIsOpen={state => {
             setIsModalOpen(state);
             setModalData(null);
           }}
-          wrapperStyles={{ width: 420 }}
-        >
+          wrapperStyles={{ width: 420 }}>
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setIsModalOpen(false);
               SendData(variables);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -621,10 +592,10 @@ export const Posts = ({
               <form onSubmit={handleSubmit}>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    style={{ width: 380, height: 40, padding: '0 20px 0 30px' }}
                     value={values.name}
                     name="name"
                     placeholder="Наименовние"
@@ -634,10 +605,10 @@ export const Posts = ({
                 </div>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    style={{ width: 380, height: 40, padding: '0 20px 0 30px' }}
                     value={values.number}
                     name="number"
                     placeholder="Номер"
@@ -654,7 +625,7 @@ export const Posts = ({
                     width="380px"
                     value={valuetPosts}
                     placeholder="Производственные участки"
-                    onChange={(event) => setValuetPosts(event.value)}
+                    onChange={event => setValuetPosts(event.value)}
                     options={optPosts}
                   />
                 </div>
@@ -665,7 +636,7 @@ export const Posts = ({
                     value={valueProdArea}
                     width="380px"
                     placeholder="Цех"
-                    onChange={(event) => {
+                    onChange={event => {
                       setValueProdArea(event.value);
                     }}
                     options={optProdArea}
@@ -674,9 +645,8 @@ export const Posts = ({
                 <div className={styles.row}>
                   <Button
                     type="submit"
-                    disabled={values.number == "" || values.name == ""}
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
+                    disabled={values.number == '' || values.name == ''}>
+                    {modalData ? 'Сохранить' : 'Создать'}
                   </Button>
                 </div>
               </form>
@@ -688,20 +658,18 @@ export const Posts = ({
         <ModalWindow
           isOpen={deleteProdModal}
           headerText="Удаление"
-          setIsOpen={(state) => {
+          setIsOpen={state => {
             setdeleteProdModal(false);
           }}
-          wrapperStyles={{ width: 420 }}
-        >
+          wrapperStyles={{ width: 420 }}>
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setdeleteProdModal(false);
               deleteProduct({ id: idProduct, index: 2 });
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -711,8 +679,8 @@ export const Posts = ({
             }) => (
               <form onSubmit={handleSubmit}>
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>
-                    Вы уверены что хотите <span>удалить</span> данный пост ?{" "}
+                  <h4 style={{ padding: '35px 40px' }}>
+                    Вы уверены что хотите <span>удалить</span> данный пост ?{' '}
                   </h4>
 
                   <div className={styles.row}>

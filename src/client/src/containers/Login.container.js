@@ -1,8 +1,8 @@
-import { connect } from "react-redux";
-import { LoginPage } from "pages/LoginPage";
-import Actions from "store/auth/actions";
+import { connect } from 'react-redux';
+import { LoginPage } from 'pages/LoginPage';
+import Actions from 'store/auth/actions';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isAuth: state.auth.isAuth,
     isRequesting: state.auth.isRequesting,

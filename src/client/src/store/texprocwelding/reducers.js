@@ -1,5 +1,5 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
 
 const { Types } = actions;
 const INITIAL_STATE = {
@@ -15,15 +15,18 @@ const request = (state = INITIAL_STATE) => {
     error: null,
   };
 };
-///Технологические процессы 
-const loadTexprocweldingSuccess = (state = INITIAL_STATE, { texprocwelding }) => {
+///Технологические процессы
+const loadTexprocweldingSuccess = (
+  state = INITIAL_STATE,
+  { texprocwelding }
+) => {
   return {
     ...state,
     isRequesting: false,
     texprocwelding,
   };
 };
-///Технологические инструкции 
+///Технологические инструкции
 const loadInstructionsSuccess = (state = INITIAL_STATE, { instructions }) => {
   return {
     ...state,
@@ -44,7 +47,11 @@ const editInstSuccess = (state = INITIAL_STATE, { instructions }) => {
   return {
     ...state,
     isRequesting: false,
-    instructions:state.instructions.map((item,index) => item.id === instructions.id?state.instructions[index]=instructions:item)
+    instructions: state.instructions.map((item, index) =>
+      item.id === instructions.id
+        ? (state.instructions[index] = instructions)
+        : item
+    ),
   };
 };
 
@@ -65,13 +72,12 @@ const loadSeamSuccess = (state = INITIAL_STATE, { seam }) => {
   };
 };
 
-
 export const HANDLERS = {
-  ///Технологические процессы 
+  ///Технологические процессы
   [Types.LOAD_TEXPROCWELDING_REQUEST]: request,
   [Types.LOAD_TEXPROCWELDING_SUCCESS]: loadTexprocweldingSuccess,
   [Types.LOAD_TEXPROCWELDING_FAILURE]: failure,
-  ///Технологические инструкции 
+  ///Технологические инструкции
   [Types.LOAD_INSTRUCTIONS_REQUEST]: request,
   [Types.LOAD_INSTRUCTIONS_SUCCESS]: loadInstructionsSuccess,
   [Types.LOAD_INSTRUCTIONS_FAILURE]: failure,
@@ -83,7 +89,6 @@ export const HANDLERS = {
   [Types.EDIT_INST_REQUEST]: request,
   [Types.EDIT_INST_SUCCESS]: editInstSuccess,
   [Types.EDIT_INST_FAILURE]: failure,
-
 
   ///Сварные швы
   [Types.LOAD_SEAM_REQUEST]: request,

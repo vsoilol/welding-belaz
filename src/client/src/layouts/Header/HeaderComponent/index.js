@@ -1,43 +1,43 @@
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { closeIcon } from "assets/icons";
-import { logo } from "assets/logos";
-import { GLOBALS } from "config/GLOBALS";
-import TabletContext from "context/TabletContext";
-import Text from "components/shared/Text";
-import React, { useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
-import BurgerMenu from "../BurgerMenu";
-import ProfileButton from "../ProfileButton";
-import styles from "./styles.module.scss";
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { closeIcon } from 'assets/icons';
+import { logo } from 'assets/logos';
+import { GLOBALS } from 'config/GLOBALS';
+import TabletContext from 'context/TabletContext';
+import Text from 'components/shared/Text';
+import React, { useContext, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import BurgerMenu from '../BurgerMenu';
+import ProfileButton from '../ProfileButton';
+import styles from './styles.module.scss';
 
 export const Header = ({ userRole }) => {
   const isTablet = useContext(TabletContext);
   const [isMobileMenuOpened, setIsMobileMenuOpened] = useState(false);
 
   const menuItems = [
-    { name: "Сотрудники", route: "/" },
-    { name: "Оборудование", route: "/equipment" },
-    { name: "Производство", route: "/production" },
+    { name: 'Сотрудники', route: '/' },
+    { name: 'Оборудование', route: '/equipment' },
+    { name: 'Производство', route: '/production' },
     {
-      name: "Технологические процессы сборки и сварки",
-      route: "/tex-proc-welding",
+      name: 'Технологические процессы сборки и сварки',
+      route: '/tex-proc-welding',
     },
-    { name: "Записи", route: "/records" },
-    { name: "Режимы сварки", route: "/welding-modes" },
+    { name: 'Записи', route: '/records' },
+    { name: 'Режимы сварки', route: '/welding-modes' },
 
-    { name: "Календарь", route: "/production-calendar" },
-    { name: "Задания", route: "/tasks" },
-    { name: "Отчеты", route: "/reports" },
+    { name: 'Календарь', route: '/production-calendar' },
+    { name: 'Задания', route: '/tasks' },
+    { name: 'Отчеты', route: '/reports' },
 
-    userRole === "Admin" && {
-      name: "Панель администратора",
-      route: "/creates-user",
+    userRole === 'Admin' && {
+      name: 'Панель администратора',
+      route: '/creates-user',
     },
   ].filter(Boolean);
 
   const renderHeaderButtons = () => {
-    return menuItems?.map((item) => {
+    return menuItems?.map(item => {
       return (
         <NavLink
           key={item.name}
@@ -47,8 +47,7 @@ export const Header = ({ userRole }) => {
             borderBottom: `4px solid ${GLOBALS.COLORS.PRIMARY_COLOR}`,
           }}
           activeClassName={styles.headerItemActive}
-          className={styles.headerItem}
-        >
+          className={styles.headerItem}>
           {item.name}
         </NavLink>
       );
@@ -85,7 +84,7 @@ export const Header = ({ userRole }) => {
               className={styles.burgerMenuIcon}
             />
           ))}
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <img src={logo} className={styles.logo} alt="" />
           {!isTablet && (
             <Text type="p2" style={{ height: 20 }}>

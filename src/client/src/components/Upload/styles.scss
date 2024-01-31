@@ -1,16 +1,15 @@
-*{
+* {
   margin: 0;
   padding: 0;
 }
- 
 
-h1{
-  text-align: center; 
+h1 {
+  text-align: center;
   padding-top: 50px;
   margin-bottom: 50px;
 }
 
-.getDate{
+.getDate {
   padding: 20px 0px 0px 25px;
 }
 
@@ -19,7 +18,7 @@ h1{
   width: 100%;
   align-items: center;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .card {
@@ -33,7 +32,7 @@ h1{
 
 .card h3 {
   font-size: 22px;
-  font-weight: 600; 
+  font-weight: 600;
 }
 
 .drop_box {
@@ -72,7 +71,7 @@ h1{
   cursor: pointer;
 }
 
-.btn:hover{
+.btn:hover {
   text-decoration: none;
   background-color: #ffffff;
   color: #005af0;
@@ -90,12 +89,11 @@ h1{
   border-radius: 4px;
 }
 
-#fileID{
+#fileID {
   display: none;
 }
 
-
-#content-target{
+#content-target {
   padding: 10px;
   border-radius: 15px;
   background-color: whitesmoke;
@@ -113,13 +111,10 @@ h1{
   margin: 16px;
 }
 
-.buttonXLS .XLS{
+.buttonXLS .XLS {
   display: block;
   margin: 0 auto;
   margin-bottom: 20px;
   background-color: rgb(16, 121, 63) !important;
   border-radius: 10px;
 }
-
-
- 

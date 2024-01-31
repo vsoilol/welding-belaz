@@ -1,56 +1,48 @@
-import { createActions } from "reduxsauce";
+import { createActions } from 'reduxsauce';
 
 const { Types, Creators } = createActions({
-  loadTasksRequest: ["payload"],
-  loadTasksSuccess: ["tasks"],
-  loadTasksFailure: ["error"],
+  loadTasksRequest: ['payload'],
+  loadTasksSuccess: ['tasks'],
+  loadTasksFailure: ['error'],
 
+  loadInfoRequest: ['payload'],
+  loadInfoSuccess: ['info'],
+  loadInfoFailure: ['error'],
 
-  loadInfoRequest: ["payload"],
-  loadInfoSuccess: ["info"],
-  loadInfoFailure: ["error"],
+  editTaskRequest: ['payload'],
+  editTaskSuccess: ['task'],
+  editTaskFailure: ['error'],
 
-  editTaskRequest: ["payload"],
-  editTaskSuccess: ["task"],
-  editTaskFailure: ["error"],
+  addTaskRequest: ['payload'],
+  addTaskSuccess: ['task'],
+  addTaskFailure: ['error'],
 
-  addTaskRequest: ["payload"],
-  addTaskSuccess: ["task"],
-  addTaskFailure: ["error"],
-
-  deleteTaskRequest: ["payload"],
-  deleteTaskSuccess: ["id"],
-  deleteTaskFailure: ["error"],
-
+  deleteTaskRequest: ['payload'],
+  deleteTaskSuccess: ['id'],
+  deleteTaskFailure: ['error'],
 
   ///Сварные швы
-  loadSeamRequest: ["payload"],
-  loadSeamSuccess: ["seam"],
-  loadSeamFailure: ["error"],
+  loadSeamRequest: ['payload'],
+  loadSeamSuccess: ['seam'],
+  loadSeamFailure: ['error'],
 
-  loadTasktoolsRequest: ["payload"],
-  loadTasktoolsSuccess: ["tasktools"],
-  loadTasktoolsFailure: ["error"],
-
-
-
+  loadTasktoolsRequest: ['payload'],
+  loadTasktoolsSuccess: ['tasktools'],
+  loadTasktoolsFailure: ['error'],
 
   ///Ежедневный план
-  loadAlldatesRequest: ["payload"],
-  loadAlldatesSuccess: ["alldates"],
-  loadAlldatesFailure: ["error"],
+  loadAlldatesRequest: ['payload'],
+  loadAlldatesSuccess: ['alldates'],
+  loadAlldatesFailure: ['error'],
 
-
-  addPlanRequest: ["payload"],
-  addPlanSuccess: ["plan"],
-  addPlanFailure: ["error"],
- 
-
+  addPlanRequest: ['payload'],
+  addPlanSuccess: ['plan'],
+  addPlanFailure: ['error'],
 });
 
 const tasksActions = {
   Types,
-  Creators
+  Creators,
 };
 
 export default tasksActions;

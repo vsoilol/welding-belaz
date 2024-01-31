@@ -1,10 +1,10 @@
-import { createActions } from "reduxsauce";
+import { createActions } from 'reduxsauce';
 
 const { Types, Creators } = createActions(
   {
-    getWelderByIdRequest: ["id"],
-    getWelderByIdSuccess: ["welder"],
-    getWelderByIdFailure: ["error"],
+    getWelderByIdRequest: ['id'],
+    getWelderByIdSuccess: ['welder'],
+    getWelderByIdFailure: ['error'],
   },
   {}
 );

@@ -1,6 +1,6 @@
-import { createReducer } from "reduxsauce";
+import { createReducer } from 'reduxsauce';
 
-import { welderActionTypes } from "./welder.actions";
+import { welderActionTypes } from './welder.actions';
 
 const WELDER_INITIAL_STATE = {
   isLoading: true,

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import Text from "components/shared/Text";
-import PasswordInput from "../PasswordInput";
-import { calculateStrength } from "./calculateStrength";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import Text from 'components/shared/Text';
+import PasswordInput from '../PasswordInput';
+import { calculateStrength } from './calculateStrength';
 
-import styles from "./style.module.scss";
+import styles from './style.module.scss';
 
-const strengths = ["Weak", "Weak", "Medium", "Strong!"];
+const strengths = ['Weak', 'Weak', 'Medium', 'Strong!'];
 
 const PasswordStrengthInput = ({ width, value, ...props }) => {
   const [strength, setStrength] = useState(-1);
@@ -30,10 +30,9 @@ const PasswordStrengthInput = ({ width, value, ...props }) => {
                   strength >= 3
                     ? styles.greenText
                     : strength >= 2
-                    ? styles.yellowText
-                    : ""
-                }
-              >
+                      ? styles.yellowText
+                      : ''
+                }>
                 {strengths[strength]}
               </Text>
             </>
@@ -63,8 +62,8 @@ PasswordStrengthInput.propTypes = {
 };
 
 PasswordStrengthInput.defaultProps = {
-  width: "350px",
-  value: "",
+  width: '350px',
+  value: '',
 };
 
 export default PasswordStrengthInput;

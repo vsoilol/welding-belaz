@@ -1,7 +1,7 @@
-import React from "react";
-import NewPassword from "components/NewPassword";
+import React from 'react';
+import NewPassword from 'components/NewPassword';
 
-export const NewPasswordPage = (props) => {
+export const NewPasswordPage = props => {
   return (
     <>
       <NewPassword {...props} />

@@ -1,15 +1,12 @@
-
-
-
 .tableWrapper {
-  margin-top: 80px;  
+  margin-top: 80px;
   width: calc(100vw - 100px);
 }
 
 .innerWrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;   
+  align-items: center;
 }
 
 .text {
@@ -19,7 +16,7 @@
   margin: 0 20px 0 20px;
   /* font-weight: 700; */
 }
-.Fix{
+.Fix {
   color: blue;
   cursor: pointer;
   width: fit-content;
@@ -30,24 +27,22 @@
   justify-content: space-around;
   margin: 16px;
 }
-.goOver{
+.goOver {
   color: blue;
   cursor: pointer;
   width: fit-content;
   border-bottom: 1px solid;
 }
-.goOver:nth-child(n+2){
+.goOver:nth-child(n + 2) {
   margin-top: 10px;
 }
 .row:first-child {
- /*  margin-top: 30px; */
+  /*  margin-top: 30px; */
 }
 
-.hiddenTable{ 
+.hiddenTable {
   border: 2px solid red;
 }
-
-
 
 .row:last-child {
   /* margin-bottom: 30px; */
@@ -57,11 +52,11 @@
   display: flex;
   flex-direction: column;
 }
-select{
+select {
   width: 380px;
   height: 40px;
   padding: 0px 20px 0px 30px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   min-width: 100px;
   border: 1px solid #e8e8e8;
   border-radius: 25px;
@@ -76,7 +71,7 @@ select{
 .button {
   cursor: pointer;
   display: block;
-  font-family: "Muller Extra Bold";
+  font-family: 'Muller Extra Bold';
   margin: 16px 40px 0 auto;
   height: 36px;
   width: 240px;
@@ -101,29 +96,27 @@ select{
   }
 }
 
-
-
-.TableToFixed{
-  background-color: white; 
+.TableToFixed {
+  background-color: white;
   padding-top: 20px;
 }
-.TableToFixed h2{
-  margin: 20px ;
+.TableToFixed h2 {
+  margin: 20px;
 }
 
-.TableToFixed h3{
+.TableToFixed h3 {
   text-align: left;
-  margin: 20px ;
+  margin: 20px;
 }
 
-.TableToFixed input{
+.TableToFixed input {
   cursor: pointer;
   width: 20px;
   height: 20px;
   margin-left: 10px;
 }
 
-.TableToFixed .Seams .refSeam{
+.TableToFixed .Seams .refSeam {
   color: blue;
   cursor: pointer;
   display: block;
@@ -132,55 +125,56 @@ select{
   margin: 10px 20px 20px;
 }
 
-
-.selects{
+.selects {
   padding-left: 20px;
   margin-top: 20px;
 }
-.select{
+.select {
   display: block;
   margin-top: 15px;
 }
 
-.selects p{ 
+.selects p {
   margin-bottom: 15px;
   padding-top: 8px;
   padding-right: 15px;
 }
-.selects .roww{
+.selects .roww {
   display: grid;
   grid-template-columns: auto 1fr auto;
   margin-bottom: 20px;
 }
 
-button.fixed{
+button.fixed {
   margin: 0px 15px;
   margin-bottom: 20px;
   padding: 8px 25px;
   background-color: transparent;
   border: 1px solid #dadada;
-  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  box-shadow:
+    0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%),
+    0px 1px 5px 0px rgb(0 0 0 / 12%);
   outline: none;
   font-size: 18px;
   cursor: pointer;
-  border-radius: 8px ;
+  border-radius: 8px;
   transition: 0.3s;
   font-weight: 600;
   margin-left: auto;
 }
-button.fixed:hover{
+button.fixed:hover {
   background-color: whitesmoke;
 }
 
- 
-input[type="checkbox"]{
+input[type='checkbox'] {
   cursor: pointer;
   width: 20px;
   height: 20px;
   margin-left: 10px;
 }
 
-.inputCount{
+.inputCount {
   width: calc(100% - 50px);
   border: 0;
   padding: 15px 25px;
@@ -191,31 +185,28 @@ input[type="checkbox"]{
   max-width: 150px;
 }
 
-.radioPost{
+.radioPost {
   display: grid;
   grid-template-columns: 70px 1fr;
   grid-column-gap: 10px;
 }
-.radioPost{
+.radioPost {
   padding: 10px 22px;
 }
-.radioPost input{
+.radioPost input {
   margin-bottom: 10px;
 }
-.radioPost input[type="radio"]{
+.radioPost input[type='radio'] {
   margin-right: 10px;
 }
 
-
-
-p{ 
-   font-size: 14px;
-   line-height: 20px;
-   margin: 20px 20px 10px; 
+p {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 20px 20px 10px;
 }
 
-
-.deleteIcon{
+.deleteIcon {
   cursor: pointer;
   width: 20px;
   position: relative;

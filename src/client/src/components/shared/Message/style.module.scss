@@ -8,9 +8,11 @@
   bottom: 7%;
   padding: 5px 20px;
   border-radius: 2px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
   color: white;
-  font-family: "Futura Book";
+  font-family: 'Futura Book';
   font-weight: 500;
   height: 40px;
 }
@@ -31,7 +33,7 @@
 .text {
   margin-bottom: 0;
   margin: 10px;
-  font-family: "Futura Book";
+  font-family: 'Futura Book';
   font-weight: 500;
 }
 

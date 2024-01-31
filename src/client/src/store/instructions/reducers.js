@@ -1,5 +1,5 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
 
 const { Types } = actions;
 const INITIAL_STATE = {
@@ -28,7 +28,7 @@ const editInstructionSuccess = (state = INITIAL_STATE, { instruction }) => {
   return {
     ...state,
     isRequesting: false,
-    instructions: state.instructions?.map((item) =>
+    instructions: state.instructions?.map(item =>
       item.id === instruction.id ? instruction : item
     ),
   };
@@ -38,7 +38,7 @@ const deleteInstructionSuccess = (state = INITIAL_STATE, { id }) => {
   return {
     ...state,
     isRequesting: false,
-    instructions: state.instructions.filter((item) => item.id !== id),
+    instructions: state.instructions.filter(item => item.id !== id),
   };
 };
 
@@ -65,7 +65,7 @@ const editWpsInstructionSuccess = (state = INITIAL_STATE, { instruction }) => {
   return {
     ...state,
     isRequesting: false,
-    wpsInstructions: state.wpsInstructions?.map((item) =>
+    wpsInstructions: state.wpsInstructions?.map(item =>
       item.id === instruction.id ? instruction : item
     ),
   };
@@ -75,7 +75,7 @@ const deleteWpsInstructionSuccess = (state = INITIAL_STATE, { id }) => {
   return {
     ...state,
     isRequesting: false,
-    wpsInstructions: state.wpsInstructions.filter((item) => item.id !== id),
+    wpsInstructions: state.wpsInstructions.filter(item => item.id !== id),
   };
 };
 

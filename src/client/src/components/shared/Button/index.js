@@ -1,8 +1,8 @@
 /* eslint-disable react/button-has-type */
-import { GLOBALS } from "config/GLOBALS";
-import PropTypes from "prop-types";
-import React from "react";
-import styles from "./style.module.scss";
+import { GLOBALS } from 'config/GLOBALS';
+import PropTypes from 'prop-types';
+import React from 'react';
+import styles from './style.module.scss';
 
 const styleTypes = {
   text: styles.text,
@@ -26,8 +26,7 @@ const Button = ({
       type={type}
       className={classNames}
       style={{ width, backgroundColor: GLOBALS.COLORS.PRIMARY_COLOR }}
-      {...props}
-    >
+      {...props}>
       <div className={styles.content}>
         {isRequesting && (
           <div className={styles.ldsRing}>
@@ -54,12 +53,12 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  styleType: "",
-  color: "",
-  children: "",
-  type: "button",
-  width: "",
-  className: "",
+  styleType: '',
+  color: '',
+  children: '',
+  type: 'button',
+  width: '',
+  className: '',
   isRequesting: false,
 };
 

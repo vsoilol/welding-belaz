@@ -1,5 +1,5 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
 
 const { Types } = actions;
 const INITIAL_STATE = {

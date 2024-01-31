@@ -3,7 +3,7 @@
   height: calc(100% + 50px);
   width: 100%;
   overflow: auto;
-  background-image: url("../../assets/pics/login.jpg");
+  background-image: url('../../assets/pics/login.jpg');
 
   background-size: cover;
   -webkit-background-size: cover;
@@ -129,10 +129,7 @@
   }
 }
 
-
-
- 
-.refChange{
+.refChange {
   text-align: center;
   cursor: pointer;
   color: blue;

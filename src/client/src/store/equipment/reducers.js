@@ -1,5 +1,5 @@
-import { createReducer } from "reduxsauce";
-import actions from "./actions";
+import { createReducer } from 'reduxsauce';
+import actions from './actions';
 
 const { Types } = actions;
 const INITIAL_STATE = {
@@ -21,15 +21,15 @@ const loadEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
     isRequesting: false,
     equipment,
   };
-}; 
+};
 
-const editEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => { 
+const editEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
   /* window.location.reload() */
   return {
     ...state,
     isRequesting: false,
-    equipment
-  } 
+    equipment,
+  };
 };
 
 const deleteEquipmentSuccess = (state = INITIAL_STATE, { machineId }) => {
@@ -37,11 +37,11 @@ const deleteEquipmentSuccess = (state = INITIAL_STATE, { machineId }) => {
   return {
     ...state,
     isRequesting: false,
-    equipment: state.equipment?.filter((item) => item.machineId !== machineId),
+    equipment: state.equipment?.filter(item => item.machineId !== machineId),
   };
 };
 
-const addEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => { 
+const addEquipmentSuccess = (state = INITIAL_STATE, { equipment }) => {
   /* window.location.reload() */
   return {
     ...state,
@@ -67,23 +67,24 @@ const loadPostsSuccess = (state = INITIAL_STATE, { posts }) => {
   };
 };
 
-
 ////Downtime
 
-const addDowntimeSuccess = (state = INITIAL_STATE, { downtime }) => {  
+const addDowntimeSuccess = (state = INITIAL_STATE, { downtime }) => {
   return {
     ...state,
     isRequesting: false,
-    equipment: [...state.equipment[1], downtime], 
+    equipment: [...state.equipment[1], downtime],
   };
 };
 
-const editDowntimeSuccess = (state = INITIAL_STATE, { downtime }) => { 
+const editDowntimeSuccess = (state = INITIAL_STATE, { downtime }) => {
   return {
     ...state,
     isRequesting: false,
-    downtime:state.downtime.map((item,index) => item.id === downtime.id?state.downtime[index]=downtime:item)
-  } 
+    downtime: state.downtime.map((item, index) =>
+      item.id === downtime.id ? (state.downtime[index] = downtime) : item
+    ),
+  };
 };
 const loaddowntimeReasonRequest = (state = INITIAL_STATE, { reason }) => {
   return {
@@ -93,21 +94,18 @@ const loaddowntimeReasonRequest = (state = INITIAL_STATE, { reason }) => {
   };
 };
 
-const assignWeldersRequest = (state = INITIAL_STATE, { assignwelders }) => { 
- 
+const assignWeldersRequest = (state = INITIAL_STATE, { assignwelders }) => {
   return {
     ...state,
-    isRequesting: false,  
+    isRequesting: false,
   };
 };
-const assignMasterRequest = (state = INITIAL_STATE, { assignmaster }) => { 
- 
+const assignMasterRequest = (state = INITIAL_STATE, { assignmaster }) => {
   return {
     ...state,
-    isRequesting: false,  
+    isRequesting: false,
   };
 };
-
 
 export const HANDLERS = {
   [Types.LOAD_EQUIPMENT_REQUEST]: request,
@@ -126,7 +124,6 @@ export const HANDLERS = {
   [Types.ADD_EQUIPMENT_SUCCESS]: addEquipmentSuccess,
   [Types.ADD_EQUIPMENT_FAILURE]: failure,
 
-
   ///Посты
   [Types.LOAD_POSTS_REQUEST]: request,
   [Types.LOAD_POSTS_SUCCESS]: loadPostsSuccess,
@@ -136,30 +133,24 @@ export const HANDLERS = {
   [Types.EDIT_DOWNTIME_REQUEST]: request,
   [Types.EDIT_DOWNTIME_SUCCESS]: editDowntimeSuccess,
   [Types.EDIT_DOWNTIME_FAILURE]: failure,
-  
 
   [Types.ADD_DOWNTIME_REQUEST]: request,
   [Types.ADD_DOWNTIME_SUCCESS]: addDowntimeSuccess,
   [Types.ADD_DOWNTIME_FAILURE]: failure,
 
-
   [Types.LOAD_REASON_REQUEST]: request,
   [Types.LOAD_REASON_SUCCESS]: loaddowntimeReasonRequest,
   [Types.LOAD_REASON_FAILURE]: failure,
-
 
   ///assignwelders
   [Types.ASSIGN_WELDERS_REQUEST]: request,
   [Types.ASSIGN_WELDERS_SUCCESS]: assignWeldersRequest,
   [Types.ASSIGN_WELDERS_FAILURE]: failure,
 
-
   ///assignMaster
   [Types.ASSIGN_MASTER_REQUEST]: request,
   [Types.ASSIGN_MASTER_SUCCESS]: assignMasterRequest,
   [Types.ASSIGN_MASTER_FAILURE]: failure,
-
-
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

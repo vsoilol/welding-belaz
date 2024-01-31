@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useField } from "formik";
-import styles from "./custom-formik-field.module.scss";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useField } from 'formik';
+import styles from './custom-formik-field.module.scss';
 
 const CustomFormikField = ({ name, children }) => {
   const [field, meta] = useField(name);

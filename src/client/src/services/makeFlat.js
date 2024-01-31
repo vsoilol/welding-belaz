@@ -6,7 +6,7 @@
  * Returns:
  *   { a: 1, c: 2}
  */
-export const flattenObject = ((o) => {
+export const flattenObject = o => {
   return o !== Object(o) || Array.isArray(o)
     ? {}
     : Object.assign(
@@ -16,8 +16,8 @@ export const flattenObject = ((o) => {
             [],
             Object.entries(o)?.map(([k, v]) => {
               return !v ||
-                typeof v !== "object" ||
-                !Object.keys(v).some((key) => v.hasOwnProperty(key)) ||
+                typeof v !== 'object' ||
+                !Object.keys(v).some(key => v.hasOwnProperty(key)) ||
                 Array.isArray(v)
                 ? { [k]: v }
                 : leaves(v);
@@ -25,4 +25,4 @@ export const flattenObject = ((o) => {
           );
         })(o)
       );
-});
+};

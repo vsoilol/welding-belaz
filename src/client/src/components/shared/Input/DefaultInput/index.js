@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styles from "./style.module.scss";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styles from './style.module.scss';
 
 const DefaultInput = ({ width, height, invalid, className, ...props }) => {
   return (
@@ -20,10 +20,10 @@ DefaultInput.propTypes = {
 };
 
 DefaultInput.defaultProps = {
-  width: "350px",
-  height: "50px",
+  width: '350px',
+  height: '50px',
   invalid: false,
-  className: "",
+  className: '',
 };
 
 export default DefaultInput;

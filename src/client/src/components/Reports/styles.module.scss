@@ -19,7 +19,7 @@
   /* align-items: center; */
 }
 
-input[type="file"] {
+input[type='file'] {
   display: none;
 }
 
@@ -52,7 +52,7 @@ input[type="file"] {
   min-width: 100px;
   border: 1px solid #e8e8e8;
   border-radius: 25px;
-  font-family: "Muller Narrow Light";
+  font-family: 'Muller Narrow Light';
   font-size: 14px;
   line-height: 14px;
   padding: 0 20px 0 55px;
@@ -60,7 +60,7 @@ input[type="file"] {
 }
 
 .customUploadText {
-  font-family: "Muller Narrow Light";
+  font-family: 'Muller Narrow Light';
   font-size: 14px;
   line-height: 14px;
   color: #a0a0a0;
@@ -91,8 +91,6 @@ input[type="file"] {
   margin-bottom: 30px;
 }
 
-
- 
 @media (max-width: 1440px) {
   .tableWrapper {
     margin-top: 40px;
@@ -105,50 +103,43 @@ input[type="file"] {
     margin-top: 0;
   }
 }
- 
 
-.border{
+.border {
   padding: 30px 10px;
   max-width: calc(100vw - 50px);
 }
-.border p{
-  margin: 20px 30px; 
+.border p {
+  margin: 20px 30px;
   font-size: 18px;
   font-weight: 600;
 }
 
-.AxisBlocks{
+.AxisBlocks {
   position: relative;
 }
-.AxisBlocks .Axis:first-child{
-   position: absolute;
-   left: 0;
-   transform: rotate(-90deg);
+.AxisBlocks .Axis:first-child {
+  position: absolute;
+  left: 0;
+  transform: rotate(-90deg);
 }
 
-.Axis{
+.Axis {
   text-align: center;
   display: block;
 }
 
-
-
-.deleteIcon{
+.deleteIcon {
   cursor: pointer;
   width: 20px;
   position: relative;
   top: 5px;
 }
 
-
-h3{
+h3 {
   text-align: left;
 }
 
- 
-
-
-.ReportsSpan{
+.ReportsSpan {
   color: #3f51b5;
   border-bottom: 1px solid #3f51b5;
   text-decoration: none;

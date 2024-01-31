@@ -1,47 +1,28 @@
-import Paper from "@material-ui/core/Paper";
-import MaterialTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import SaveIcon from "@material-ui/icons/Save";
-import { workPlaceImage } from "assets/pics";
-import Button from "components/shared/Button";
-import EquipmentMap from "components/Map";
-import Modal from "components/shared/Modal";
-import Input from "components/shared/Input";
-import ModalWindow from "components/shared/ModalWindow";
-import { ResultsModal } from "components/shared/ResultsModal";
-import Select from "components/shared/Select";
-import { Table } from "components/shared/Table";
-import ToolTip from "components/shared/ToolTip";
-import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
-import styles from "./styles.module.scss";
+import { workPlaceImage } from 'assets/pics';
+import ToolTip from 'components/shared/ToolTip';
+import React, { useEffect, useState } from 'react';
+import styles from './styles.module.scss';
 
-import axios from "axios";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import api from "services/api";
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 /////компоненты
-import { Workshop } from "components/WorkPlace/components";
-import { ProductionArea } from "components/WorkPlace/components";
-import { Posts } from "components/WorkPlace/components";
-import { Place } from "components/WorkPlace/components";
+import { Workshop } from 'components/WorkPlace/components';
+import { ProductionArea } from 'components/WorkPlace/components';
+import { Posts } from 'components/WorkPlace/components';
+import { Place } from 'components/WorkPlace/components';
 
-import { Product } from "components/WorkPlace/components";
-import { Knot } from "components/WorkPlace/components";
-import { Detail } from "components/WorkPlace/components";
-import { Seam } from "components/WorkPlace/components";
+import { Product } from 'components/WorkPlace/components';
+import { Knot } from 'components/WorkPlace/components';
+import { Detail } from 'components/WorkPlace/components';
+import { Seam } from 'components/WorkPlace/components';
 
-import deleteIcon from "assets/icons/delete.png";
+import deleteIcon from 'assets/icons/delete.png';
 
 const dateOptions = {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
 };
 
 export const WorkPlace = ({
@@ -381,8 +362,7 @@ export const WorkPlace = ({
         onChange={ChangePanelsworkplace}
         indicatorColor="primary"
         textColor="primary"
-        aria-label="full width tabs example"
-      >
+        aria-label="full width tabs example">
         <Tab label="Структура производства" />
         <Tab label="Структура продукции" />
       </Tabs>
@@ -393,8 +373,7 @@ export const WorkPlace = ({
           onChange={ChangePanels}
           indicatorColor="primary"
           textColor="primary"
-          aria-label="full width tabs example"
-        >
+          aria-label="full width tabs example">
           <Tab label="Цеха" />
           <Tab label="Производственные участки" />
           <Tab label="Посты" />
@@ -407,8 +386,7 @@ export const WorkPlace = ({
           onChange={ChangePanels}
           indicatorColor="primary"
           textColor="primary"
-          aria-label="full width tabs example"
-        >
+          aria-label="full width tabs example">
           <Tab label="Изделия" />
           <Tab label="Узлы" />
           <Tab label="Детали" />

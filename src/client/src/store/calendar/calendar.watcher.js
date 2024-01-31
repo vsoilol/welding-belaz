@@ -1,4 +1,4 @@
-import * as sagas from "./sagas";
+import * as sagas from './sagas';
 
 export default [
   ...sagas.loadMainCalendarByYearWatchers,

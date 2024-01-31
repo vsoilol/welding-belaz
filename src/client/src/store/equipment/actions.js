@@ -1,60 +1,55 @@
-import { createActions } from "reduxsauce";
+import { createActions } from 'reduxsauce';
 
 const { Types, Creators } = createActions({
-  loadEquipmentRequest: ["payload"],
-  loadEquipmentSuccess: ["equipment"],
-  loadEquipmentFailure: ["error"],
+  loadEquipmentRequest: ['payload'],
+  loadEquipmentSuccess: ['equipment'],
+  loadEquipmentFailure: ['error'],
 
   ///Посты
-  loadPostsRequest: ["payload"],
-  loadPostsSuccess: ["posts"],
-  loadPostsFailure: ["error"],
+  loadPostsRequest: ['payload'],
+  loadPostsSuccess: ['posts'],
+  loadPostsFailure: ['error'],
 
+  editEquipmentRequest: ['payload'],
+  editEquipmentSuccess: ['equipment'],
+  editEquipmentFailure: ['error'],
 
-  editEquipmentRequest: ["payload"],
-  editEquipmentSuccess: ["equipment"],
-  editEquipmentFailure: ["error"],
+  addEquipmentRequest: ['payload'],
+  addEquipmentSuccess: ['equipment'],
+  addEquipmentFailure: ['error'],
 
-  addEquipmentRequest: ["payload"],
-  addEquipmentSuccess: ["equipment"],
-  addEquipmentFailure: ["error"],
-
-  deleteEquipmentRequest: ["payload"],
-  deleteEquipmentSuccess: ["id"],
-  deleteEquipmentFailure: ["error"],
-
+  deleteEquipmentRequest: ['payload'],
+  deleteEquipmentSuccess: ['id'],
+  deleteEquipmentFailure: ['error'],
 
   ////Downtime
-  editDowntimeRequest: ["payload"],
-  editDowntimeSuccess: ["downtime"],
-  editDowntimeFailure: ["error"],
+  editDowntimeRequest: ['payload'],
+  editDowntimeSuccess: ['downtime'],
+  editDowntimeFailure: ['error'],
 
-  addDowntimeRequest: ["payload"],
-  addDowntimeSuccess: ["downtime"],
-  addDowntimeFailure: ["error"],
+  addDowntimeRequest: ['payload'],
+  addDowntimeSuccess: ['downtime'],
+  addDowntimeFailure: ['error'],
 
-
-  ////assignWelders 
-  assignWeldersRequest: ["payload"],
-  assignWeldersSuccess: ["assignwelders"],
-  assignWeldersFailure: ["error"],
+  ////assignWelders
+  assignWeldersRequest: ['payload'],
+  assignWeldersSuccess: ['assignwelders'],
+  assignWeldersFailure: ['error'],
 
   ////assignMaster
-  assignMasterRequest: ["payload"],
-  assignMasterSuccess: ["assignmaster"],
-  assignMasterFailure: ["error"],
-
+  assignMasterRequest: ['payload'],
+  assignMasterSuccess: ['assignmaster'],
+  assignMasterFailure: ['error'],
 
   //loaddowntime
-  loadReasonRequest: ["payload"],
-  loadReasonSuccess: ["reason"],
-  loadReasonFailure: ["error"],
-
+  loadReasonRequest: ['payload'],
+  loadReasonSuccess: ['reason'],
+  loadReasonFailure: ['error'],
 });
 
 const equipmentActions = {
   Types,
-  Creators
+  Creators,
 };
 
 export default equipmentActions;

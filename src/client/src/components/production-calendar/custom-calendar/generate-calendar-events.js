@@ -18,7 +18,7 @@ export const generateCalendarEvents = (
     dayOfMonth++
   ) {
     const dayDetails = calendarDays.find(
-      (day) => day.number === dayOfMonth && day.monthNumber === monthNumber
+      day => day.number === dayOfMonth && day.monthNumber === monthNumber
     );
 
     if (!dayDetails) {
@@ -50,17 +50,17 @@ export const generateCalendarEvents = (
 const generateDefaultShiftEvents = (currentDate, dayOfMonth, workingShifts) => {
   return workingShifts
     .slice(0, 3)
-    .map((shift) => createShiftEvent(currentDate, dayOfMonth, shift));
+    .map(shift => createShiftEvent(currentDate, dayOfMonth, shift));
 };
 
 const generateWorkingShiftEvents = (currentDate, dayOfMonth, workingShifts) => {
   return workingShifts
     .slice(0, 3)
-    .map((shift) => createShiftEvent(currentDate, dayOfMonth, shift, shift.id));
+    .map(shift => createShiftEvent(currentDate, dayOfMonth, shift, shift.id));
 };
 
 const generateNonWorkingDayEvent = (currentDate, dayOfMonth) => ({
-  title: "Выходной день",
+  title: 'Выходной день',
   isWorkingDay: false,
   start: new Date(
     currentDate.getFullYear(),
@@ -97,7 +97,7 @@ const createShiftEvent = (currentDate, dayOfMonth, shift, id = null) => {
 };
 
 function parseShiftTime(date, dayOfMonth, timeString) {
-  const [hours, minutes] = timeString.split(":").map(Number);
+  const [hours, minutes] = timeString.split(':').map(Number);
   return new Date(
     date.getFullYear(),
     date.getMonth(),

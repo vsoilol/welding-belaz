@@ -1,31 +1,17 @@
-import SaveIcon from "@material-ui/icons/Save";
-import { tasksImage } from "assets/pics";
-import Button from "components/shared/Button";
-import Input from "components/shared/Input";
-import ModalWindow from "components/shared/ModalWindow";
-import Select from "components/shared/Select";
-import { Table } from "components/shared/Table";
-import ToolTip from "components/shared/ToolTip";
-import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
-import api from "services/api";
-import styles from "./styles.module.scss";
-import errorActions from "store/error/actions";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import styles from './styles.module.scss';
+import errorActions from 'store/error/actions';
 
-import { CreatingTask } from "./DailyPlan/CreatingTask";
-
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import { CreatingTask } from './DailyPlan/CreatingTask';
 
 const {
   Creators: { setError },
 } = errorActions;
 
 const dateOptions = {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
 };
 
 export const DailyPlan = ({

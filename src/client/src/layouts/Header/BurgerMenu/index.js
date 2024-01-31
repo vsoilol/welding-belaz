@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import styles from "./styles.module.scss";
+import React, { useEffect } from 'react';
+import styles from './styles.module.scss';
 
-const BurgerMenu = (props) => {
+const BurgerMenu = props => {
   const { renderHeaderButtons, isMobileMenuOpened } = props;
 
   useEffect(() => {
     if (isMobileMenuOpened) {
-      document.body.style.position = "fixed";
+      document.body.style.position = 'fixed';
     } else {
-      document.body.style.position = "static";
+      document.body.style.position = 'static';
     }
   }, [isMobileMenuOpened]);
 
@@ -16,13 +16,11 @@ const BurgerMenu = (props) => {
     <div
       className={`${styles.burgerMenuContainer} ${
         isMobileMenuOpened && styles.burgerMenuOpenedContainer
-      }`}
-    >
+      }`}>
       <div
         className={[
           isMobileMenuOpened ? styles.mobileMenuWrapper : undefined,
-        ].join(" ")}
-      >
+        ].join(' ')}>
         {renderHeaderButtons()}
       </div>
     </div>

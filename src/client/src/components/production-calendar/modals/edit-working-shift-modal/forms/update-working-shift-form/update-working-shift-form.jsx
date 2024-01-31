@@ -1,14 +1,14 @@
-import React, { useMemo } from "react";
-import { Formik, Form } from "formik";
+import React, { useMemo } from 'react';
+import { Formik, Form } from 'formik';
 import {
   Button,
   CustomFormikTextInput,
   CustomFormikField,
   CustomFormikSelect,
-} from "components/shared";
-import { useCalendarStore } from "store/calendar";
-import { validationSchema } from "./validation-schema";
-import styles from "../../../modal-style.module.scss";
+} from 'components/shared';
+import { useCalendarStore } from 'store/calendar';
+import { validationSchema } from './validation-schema';
+import styles from '../../../modal-style.module.scss';
 
 export const UpdateWorkingShiftForm = ({ toggleModal }) => {
   const { mainWorkingShifts, updateWorkingShift } = useCalendarStore();
@@ -16,7 +16,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
   // Memoize working shift options to avoid recalculating on every render
   const workingShiftOptions = useMemo(
     () =>
-      mainWorkingShifts.map((shift) => ({
+      mainWorkingShifts.map(shift => ({
         value: shift.id,
         label: `Смена ${shift.number}`,
       })),
@@ -25,11 +25,11 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
 
   const initialFormValues = {
     number: 1,
-    shiftStart: "",
-    shiftEnd: "",
-    breakStart: "",
-    breakEnd: "",
-    workingShiftId: "",
+    shiftStart: '',
+    shiftEnd: '',
+    breakStart: '',
+    breakEnd: '',
+    workingShiftId: '',
   };
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
@@ -43,7 +43,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
       updateWorkingShift(workingShift);
       toggleModal(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     }
 
     setSubmitting(false);
@@ -54,8 +54,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
       initialValues={initialFormValues}
       enableReinitialize
       onSubmit={handleFormSubmit}
-      validationSchema={validationSchema}
-    >
+      validationSchema={validationSchema}>
       {({ isSubmitting, isValid, setFieldValue }) => (
         <Form>
           <div className={styles.rowWithoutMargin}>
@@ -64,17 +63,17 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
                 width="380px"
                 placeholder="Смена"
                 options={workingShiftOptions}
-                onChange={(val) => {
+                onChange={val => {
                   const { value: workingShiftId } = val;
                   const selectedWorkingShift = mainWorkingShifts.find(
-                    (shift) => shift.id === workingShiftId
+                    shift => shift.id === workingShiftId
                   );
 
-                  setFieldValue("number", selectedWorkingShift.number);
-                  setFieldValue("shiftStart", selectedWorkingShift.shiftStart);
-                  setFieldValue("shiftEnd", selectedWorkingShift.shiftEnd);
-                  setFieldValue("breakStart", selectedWorkingShift.breakStart);
-                  setFieldValue("breakEnd", selectedWorkingShift.breakEnd);
+                  setFieldValue('number', selectedWorkingShift.number);
+                  setFieldValue('shiftStart', selectedWorkingShift.shiftStart);
+                  setFieldValue('shiftEnd', selectedWorkingShift.shiftEnd);
+                  setFieldValue('breakStart', selectedWorkingShift.breakStart);
+                  setFieldValue('breakEnd', selectedWorkingShift.breakEnd);
                 }}
               />
             </CustomFormikField>
@@ -84,7 +83,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="number">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
                 placeholder="Номер смены"
                 type="number"
               />
@@ -95,7 +94,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="shiftStart">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Начало работы"
               />
             </CustomFormikField>
@@ -103,7 +102,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="shiftEnd">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Конец работы"
               />
             </CustomFormikField>
@@ -113,7 +112,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="breakStart">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Начало перерыва"
               />
             </CustomFormikField>
@@ -121,7 +120,7 @@ export const UpdateWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="breakEnd">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Конец перерыва"
               />
             </CustomFormikField>

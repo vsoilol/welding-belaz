@@ -1,37 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Paper from "@material-ui/core/Paper";
-import MaterialTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import SaveIcon from "@material-ui/icons/Save";
-import { equipmentImage } from "assets/pics";
-import Button from "components/shared/Button";
-import EquipmentMap from "components/Map";
-import Modal from "components/shared/Modal";
-import Input from "components/shared/Input";
-import ModalWindow from "components/shared/ModalWindow";
-import { ResultsModal } from "components/shared/ResultsModal";
-import Select from "components/shared/Select";
-import { Table } from "components/shared/Table";
-import ToolTip from "components/shared/ToolTip";
-import { Formik } from "formik";
-import styles from "./styles.module.scss";
-import imgcalendar from "assets/icons/calendar.png";
-import deleteIcon from "assets/icons/delete.png";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
+import MaterialTable from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import { equipmentImage } from 'assets/pics';
+import Button from 'components/shared/Button';
+import EquipmentMap from 'components/Map';
+import Modal from 'components/shared/Modal';
+import Input from 'components/shared/Input';
+import ModalWindow from 'components/shared/ModalWindow';
+import { ResultsModal } from 'components/shared/ResultsModal';
+import Select from 'components/shared/Select';
+import { Table } from 'components/shared/Table';
+import ToolTip from 'components/shared/ToolTip';
+import { Formik } from 'formik';
+import styles from './styles.module.scss';
+import imgcalendar from 'assets/icons/calendar.png';
+import deleteIcon from 'assets/icons/delete.png';
 
-import { Upload } from "components/Upload/index";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import api from "services/api";
+import { Upload } from 'components/Upload/index';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import api from 'services/api';
 
 const dateOptions = {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
 };
 
 export const Equipment = ({
@@ -71,10 +70,10 @@ export const Equipment = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
-  const [activeEquipment, setActiveEquipment] = useState("");
+  const [activeEquipment, setActiveEquipment] = useState('');
   const [open, setOpen] = useState(false);
   const [valuetPosts, setValuetPosts] = useState();
-  const [valuetPostsNumber, setValuetPostsNumber] = useState("");
+  const [valuetPostsNumber, setValuetPostsNumber] = useState('');
   const [isModalNumb, setIsModalNumb] = useState(0);
 
   const [isEquipmentNumb, setEquipmentNumb] = useState(0);
@@ -85,8 +84,8 @@ export const Equipment = ({
   const [valueTime, setTime] = useState();
   const [valueData, setData] = useState();
 
-  const [valueMaster, setvalueMaster] = useState("");
-  const [valueWelder, setvalueWelder] = useState("");
+  const [valueMaster, setvalueMaster] = useState('');
+  const [valueWelder, setvalueWelder] = useState('');
 
   const [valueChoiseWelder, setvalueChoiseWelder] = useState(false);
 
@@ -95,31 +94,31 @@ export const Equipment = ({
 
   const [deleteTaskModal, setdeleteTaskModal] = useState(false);
   const initialValues = {
-    rfidTag: modalData?.rfidTag ?? "",
-    name: modalData?.name ?? "",
-    marking: modalData?.marking ?? "",
-    factoryNumber: modalData?.factoryNumber ?? "",
-    height: modalData?.height ?? "",
-    width: modalData?.width ?? "",
-    lenght: modalData?.lenght ?? "",
-    groupNumber: modalData?.groupNumber ?? "",
-    manufacturerName: modalData?.manufacturerName ?? "",
+    rfidTag: modalData?.rfidTag ?? '',
+    name: modalData?.name ?? '',
+    marking: modalData?.marking ?? '',
+    factoryNumber: modalData?.factoryNumber ?? '',
+    height: modalData?.height ?? '',
+    width: modalData?.width ?? '',
+    lenght: modalData?.lenght ?? '',
+    groupNumber: modalData?.groupNumber ?? '',
+    manufacturerName: modalData?.manufacturerName ?? '',
 
-    nextAttestationDate: modalData?.nextAttestationDate ?? "",
-    commissioningDate: modalData?.commissioningDate ?? "",
+    nextAttestationDate: modalData?.nextAttestationDate ?? '',
+    commissioningDate: modalData?.commissioningDate ?? '',
 
-    weldingProcess: modalData?.weldingProcess ?? "",
-    idleVoltage: modalData?.idleVoltage ?? "",
-    weldingCurrentMin: modalData?.weldingCurrentMin ?? "",
-    weldingCurrentMax: modalData?.weldingCurrentMax ?? "",
-    arcVoltageMin: modalData?.arcVoltageMin ?? "",
-    arcVoltageMax: modalData?.arcVoltageMax ?? "",
+    weldingProcess: modalData?.weldingProcess ?? '',
+    idleVoltage: modalData?.idleVoltage ?? '',
+    weldingCurrentMin: modalData?.weldingCurrentMin ?? '',
+    weldingCurrentMax: modalData?.weldingCurrentMax ?? '',
+    arcVoltageMin: modalData?.arcVoltageMin ?? '',
+    arcVoltageMax: modalData?.arcVoltageMax ?? '',
 
-    timeStates: modalData?.startConditionTime ?? "",
-    time: modalData?.time ?? "",
-    weldingEquipmentId: modalData?.weldingEquipment?.id ?? "",
-    date: modalData?.date ?? "",
-    Date: modalData?.Date ?? "",
+    timeStates: modalData?.startConditionTime ?? '',
+    time: modalData?.time ?? '',
+    weldingEquipmentId: modalData?.weldingEquipment?.id ?? '',
+    date: modalData?.date ?? '',
+    Date: modalData?.Date ?? '',
   };
   const [valueWorkplace, setvalueWorkplace] = useState(0);
 
@@ -147,9 +146,9 @@ export const Equipment = ({
   ]);
 
   const columns = [
-    userRole === "Admin" /* || userRole === "Master" */ && {
-      title: "Удаление",
-      render: (rowData) => (
+    userRole === 'Admin' /* || userRole === "Master" */ && {
+      title: 'Удаление',
+      render: rowData => (
         <img
           className={styles.deleteIcon}
           src={deleteIcon}
@@ -160,35 +159,35 @@ export const Equipment = ({
         />
       ),
     },
-    { title: "Наименование", field: "name" },
-    { title: "Маркировка", field: "marking" },
+    { title: 'Наименование', field: 'name' },
+    { title: 'Маркировка', field: 'marking' },
     {
-      title: "RFID метка",
-      render: (rowData) => {
+      title: 'RFID метка',
+      render: rowData => {
         return <p>{rowData?.rfidTag ?? rowData?.idFromSystem}</p>;
       },
     },
-    { title: "Заводской  (инвентарный) номер", field: "factoryNumber" },
-    { title: "Дата ввода в эксплуатацию", field: "commissioningDate" },
-    { title: "Номер группы оборудования", field: "groupNumber" },
-    { title: "Наименование изготовителя", field: "manufacturerName" },
-    { title: "Дата очередной аттестации", field: "nextAttestationDate" },
+    { title: 'Заводской  (инвентарный) номер', field: 'factoryNumber' },
+    { title: 'Дата ввода в эксплуатацию', field: 'commissioningDate' },
+    { title: 'Номер группы оборудования', field: 'groupNumber' },
+    { title: 'Наименование изготовителя', field: 'manufacturerName' },
+    { title: 'Дата очередной аттестации', field: 'nextAttestationDate' },
 
     {
-      title: "Наименование цеха",
-      field: "workshop.name",
+      title: 'Наименование цеха',
+      field: 'workshop.name',
     },
     {
-      title: "Номер цеха",
-      field: "workshop.number",
+      title: 'Номер цеха',
+      field: 'workshop.number',
     },
     {
-      title: "Наименование производственного участка",
-      field: "productionArea.name",
+      title: 'Наименование производственного участка',
+      field: 'productionArea.name',
     },
     {
-      title: "Номер производственного участка",
-      field: "productionArea.number",
+      title: 'Номер производственного участка',
+      field: 'productionArea.number',
     },
     /* {
       title: "Наименование   поста ",
@@ -209,56 +208,55 @@ export const Equipment = ({
       },
     }, */
     {
-      title: "Просмотреть календарь",
-      render: (rowData) => {
+      title: 'Просмотреть календарь',
+      render: rowData => {
         return (
           <Link to={`/production-calendar?equipmentId=${rowData.id}`}>
             <img
               alt="Календарь"
               className={styles.imgcalendar}
-              src={imgcalendar}
-            ></img>
+              src={imgcalendar}></img>
           </Link>
         );
       },
     },
-  ].filter((column) => column);
+  ].filter(column => column);
 
   const columns2 = [
     {
-      title: "Дата",
-      field: "date",
+      title: 'Дата',
+      field: 'date',
     },
     {
-      title: "Время начала простоя",
-      field: "startConditionTime",
+      title: 'Время начала простоя',
+      field: 'startConditionTime',
     },
     {
-      title: "Длительность",
-      field: "time",
+      title: 'Длительность',
+      field: 'time',
     },
     {
-      title: "Причина простоя",
-      field: "downtimeReason",
+      title: 'Причина простоя',
+      field: 'downtimeReason',
     },
     {
-      title: "Наименование оборудования",
-      field: "weldingEquipment.name",
+      title: 'Наименование оборудования',
+      field: 'weldingEquipment.name',
     },
     {
-      title: "Номер оборудования",
-      field: "weldingEquipment.factoryNumber",
+      title: 'Номер оборудования',
+      field: 'weldingEquipment.factoryNumber',
     },
   ];
   function DetArea(params, field) {
-    if (field === "name") {
+    if (field === 'name') {
       for (let index = 0; index < posts?.length; index++) {
         if (posts[index]?.id === params) {
           return posts[index].name;
         }
       }
     }
-    if (field === "numb") {
+    if (field === 'numb') {
       for (let index = 0; index < posts?.length; index++) {
         if (posts[index]?.id === params) {
           return posts[index].number;
@@ -267,7 +265,7 @@ export const Equipment = ({
     }
   }
 
-  const renderRowChildren = (rowData) => {
+  const renderRowChildren = rowData => {
     return (
       rowData && (
         <TableContainer component={Paper}>
@@ -278,8 +276,7 @@ export const Equipment = ({
                   style={{
                     borderBottom: 0,
                   }}
-                  align="center"
-                >
+                  align="center">
                   Процесс сварки
                 </TableCell>
 
@@ -287,8 +284,7 @@ export const Equipment = ({
                   style={{
                     borderBottom: 0,
                   }}
-                  align="center"
-                >
+                  align="center">
                   Напряжение холостого хода, В
                 </TableCell>
                 <TableCell
@@ -296,8 +292,7 @@ export const Equipment = ({
                     borderBottom: 0,
                   }}
                   align="center"
-                  colSpan={2}
-                >
+                  colSpan={2}>
                   Диапазон сварочного тока, А
                 </TableCell>
                 <TableCell
@@ -305,16 +300,14 @@ export const Equipment = ({
                     borderBottom: 0,
                   }}
                   align="center"
-                  colSpan={2}
-                >
+                  colSpan={2}>
                   Диапазон напряжения на дуге, В
                 </TableCell>
                 <TableCell
                   style={{
                     borderBottom: 0,
                   }}
-                  align="center"
-                >
+                  align="center">
                   Продолжительность включения/нагрузки, %
                 </TableCell>
                 {/* <TableCell
@@ -343,25 +336,25 @@ export const Equipment = ({
             <TableBody>
               <TableRow>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.weldingProcess ?? "-"}
+                  {rowData?.weldingProcess ?? '-'}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.idleVoltage ?? "-"}
+                  {rowData?.idleVoltage ?? '-'}
                 </TableCell>
                 <TableCell align="center">
-                  {rowData?.weldingCurrentMin ?? "-"}
+                  {rowData?.weldingCurrentMin ?? '-'}
                 </TableCell>
                 <TableCell align="center">
-                  {rowData?.weldingCurrentMax ?? "-"}
+                  {rowData?.weldingCurrentMax ?? '-'}
                 </TableCell>
                 <TableCell align="center">
-                  {rowData?.arcVoltageMin ?? "-"}
+                  {rowData?.arcVoltageMin ?? '-'}
                 </TableCell>
                 <TableCell align="center">
-                  {rowData?.arcVoltageMax ?? "-"}
+                  {rowData?.arcVoltageMax ?? '-'}
                 </TableCell>
                 <TableCell align="center" component="th" scope="row">
-                  {rowData?.loadDuration ?? "-"}
+                  {rowData?.loadDuration ?? '-'}
                 </TableCell>
                 {/* <TableCell align="center" component="th" scope="row">
                   {rowData?.lenght ?? "-"}
@@ -382,13 +375,13 @@ export const Equipment = ({
 
   const [valueWorkshop, setvalueWorkshop] = useState(null);
   const [valueoptArea, setvalueoptArea] = useState(null);
-  const optworkshop = workshop?.map((item) => {
+  const optworkshop = workshop?.map(item => {
     return {
       value: item.id,
       label: item.name,
     };
   });
-  const optArea = area?.map((item) => {
+  const optArea = area?.map(item => {
     return {
       value: item.id,
       label: `№${item.number} ${item.name} `,
@@ -399,25 +392,25 @@ export const Equipment = ({
   const ChangePanels = (event, newValue) => {
     setValue(newValue);
   };
-  const TabPanel = (props_panel) => {
+  const TabPanel = props_panel => {
     const { children, value, indPanel } = props_panel;
     return <div hidden={value !== indPanel}>{children}</div>;
   };
   //select Посты
   const optPosts = [
-    { value: null, label: "Не выбрано" },
-    ...(posts?.map((item) => ({
+    { value: null, label: 'Не выбрано' },
+    ...(posts?.map(item => ({
       value: item.id,
       label: `Пост ${item.number}`,
     })) || []),
   ];
-  const reasonOptions = reason?.map((item) => {
+  const reasonOptions = reason?.map(item => {
     return {
       value: item.id,
       label: item.reason,
     };
   });
-  const optequipment = equipment[0]?.map((item) => {
+  const optequipment = equipment[0]?.map(item => {
     return {
       value: item.id,
       label: `${item.name} ${item.factoryNumber}`,
@@ -428,7 +421,7 @@ export const Equipment = ({
     if (!isNaN(new Date(variables.commissioningDate))) {
       commissioningDate = new Date(
         variables.commissioningDate
-      ).toLocaleDateString("ru-RU", { dateStyle: "short" });
+      ).toLocaleDateString('ru-RU', { dateStyle: 'short' });
     }
     variables.id = isEquipmentNumb;
     variables.postId = valuetPosts;
@@ -436,7 +429,7 @@ export const Equipment = ({
     variables.commissioningDate = commissioningDate;
     variables.nextAttestationDate = new Date(
       variables.nextAttestationDate
-    ).toLocaleDateString("ru-RU", { dateStyle: "short" });
+    ).toLocaleDateString('ru-RU', { dateStyle: 'short' });
 
     variables.workplaceIds = [valueWorkplace];
 
@@ -449,8 +442,8 @@ export const Equipment = ({
 
     variables.downtimeReasonId = valueReason;
     variables.weldingEquipmentId = valuetEquipment;
-    variables.Date = new Date(valueData).toLocaleDateString("ru-RU", {
-      dateStyle: "short",
+    variables.Date = new Date(valueData).toLocaleDateString('ru-RU', {
+      dateStyle: 'short',
     });
     variables.idDownti = valueDownti;
     variables.time = valueTime;
@@ -464,7 +457,7 @@ export const Equipment = ({
         startConditionTime: variables.timeStates,
         time: variables.time,
       };
-      api.put("/WeldingEquipment/downtime", dataReason).then(() => {
+      api.put('/WeldingEquipment/downtime', dataReason).then(() => {
         loadEquipment();
       });
     }
@@ -479,14 +472,14 @@ export const Equipment = ({
     }
   }
 
-  const optionMasters = masters?.map((item) => {
+  const optionMasters = masters?.map(item => {
     return {
       value: item.id,
       label: `${item.middleName} ${item.firstName} ${item.lastName}`,
     };
   });
 
-  const optionWelder = welder?.map((item) => {
+  const optionWelder = welder?.map(item => {
     return {
       value: item.id,
       label: `${item.middleName} ${item.firstName} ${item.lastName}`,
@@ -495,8 +488,8 @@ export const Equipment = ({
 
   function assignWeldersFunction(idWelder, idMaster) {
     const ArrayWelders = welder
-      ?.filter((obj) => obj.active === 1)
-      .map((obj) => obj.id);
+      ?.filter(obj => obj.active === 1)
+      .map(obj => obj.id);
     let dataWelders = {
       weldingEquipmentId: weldingEquipmentId,
       welderIds: ArrayWelders,
@@ -509,7 +502,7 @@ export const Equipment = ({
     };
     assignMaster(dataMaster);
   }
-  const handleSelectChange = (event) => {
+  const handleSelectChange = event => {
     if (event.active === undefined) {
       event.active = 1;
     } else if (event.active === 0) {
@@ -519,7 +512,7 @@ export const Equipment = ({
     }
   };
 
-  const optWorkPlase = workplace?.map((item) => {
+  const optWorkPlase = workplace?.map(item => {
     return {
       value: item.id,
       label: `Рабочее место №${item.number}`,
@@ -548,8 +541,7 @@ export const Equipment = ({
         onChange={ChangePanels}
         indicatorColor="primary"
         textColor="primary"
-        aria-label="full width tabs example"
-      >
+        aria-label="full width tabs example">
         <Tab label="Сварочное оборудование" />
         <Tab label="Простои оборудования " />
       </Tabs>
@@ -559,32 +551,31 @@ export const Equipment = ({
         <TabPanel
           value={value_panel}
           indPanel={0}
-          style={{ minWidth: "800px" }}
-        >
+          style={{ minWidth: '800px' }}>
           <Table
             title="Сварочное оборудование "
             columns={columns}
             data={equipment[0]}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" /* || userRole === "Master" */
+              userRole === 'Admin' /* || userRole === "Master" */
                 ? [
                     {
-                      icon: "add",
-                      tooltip: "Добавить оборудование",
+                      icon: 'add',
+                      tooltip: 'Добавить оборудование',
                       isFreeAction: true,
                       onClick: () => {
                         setIsModalNumb(0);
                         setIsModalOpen(true);
                         api.post(`/eventLog`, {
                           information:
-                            "Открыл модальное окно добавления оборудования ",
+                            'Открыл модальное окно добавления оборудования ',
                         });
                       },
                     },
                     {
-                      icon: "edit",
-                      tooltip: "Редактировать оборудование",
+                      icon: 'edit',
+                      tooltip: 'Редактировать оборудование',
                       onClick: (event, rowData) => {
                         setModalData(rowData);
                         setIsModalOpen(true);
@@ -596,7 +587,7 @@ export const Equipment = ({
                         setvalueWorkplace(rowData?.workplaces[0]?.id);
                         api.post(`/eventLog`, {
                           information:
-                            "Открыл модальное окно редактирования оборудования ",
+                            'Открыл модальное окно редактирования оборудования ',
                         });
                       },
                     },
@@ -610,15 +601,14 @@ export const Equipment = ({
         <TabPanel
           value={value_panel}
           indPanel={1}
-          style={{ minWidth: "800px" }}
-        >
+          style={{ minWidth: '800px' }}>
           <Table
             title="Простои оборудования "
             columns={columns2}
             data={equipment[1]}
             isLoading={isRequesting}
             actions={
-              userRole === "Admin" || userRole === "Master"
+              userRole === 'Admin' || userRole === 'Master'
                 ? [
                     /*  {
                     icon: "add",
@@ -627,8 +617,8 @@ export const Equipment = ({
                     onClick: () => { setIsModalOpen(true); setIsModalNumb(2) },
                   }, */
                     {
-                      icon: "edit",
-                      tooltip: "Редактировать Простои",
+                      icon: 'edit',
+                      tooltip: 'Редактировать Простои',
                       onClick: (event, rowData) => {
                         setModalData(rowData);
                         setIsModalOpen(true);
@@ -638,7 +628,7 @@ export const Equipment = ({
                         setValuetEquipment(rowData?.weldingEquipment.id);
                         findReason(rowData?.downtimeReason);
                         setTime(rowData?.time);
-                        setData(rowData?.date.split(".").reverse().join("-"));
+                        setData(rowData?.date.split('.').reverse().join('-'));
                       },
                     },
                   ]
@@ -648,7 +638,7 @@ export const Equipment = ({
         </TabPanel>
       </div>
       <ResultsModal
-        type={"EQUIPMENT"}
+        type={'EQUIPMENT'}
         activeId={activeEquipment}
         isOpen={isResultsModalOpen}
         setIsOpen={setIsResultsModalOpen}
@@ -658,20 +648,18 @@ export const Equipment = ({
       <ModalWindow
         isOpen={valueChoiseWelder}
         headerText="Закрерить сотрудников"
-        setIsOpen={(state) => {
+        setIsOpen={state => {
           setvalueChoiseWelder(false);
         }}
-        wrapperStyles={{ width: 420 }}
-      >
+        wrapperStyles={{ width: 420 }}>
         <Formik
           initialValues={initialValues}
           enableReinitialize
-          onSubmit={(variables) => {
+          onSubmit={variables => {
             const { id, ...dataToSend } = variables;
 
             assignWeldersFunction(valueWelder, valueMaster);
-          }}
-        >
+          }}>
           {({
             handleSubmit,
             handleChange,
@@ -686,7 +674,7 @@ export const Equipment = ({
                   value={valueMaster}
                   width="380px"
                   placeholder="Мастер"
-                  onChange={(event) => {
+                  onChange={event => {
                     setvalueMaster(event.value);
                   }}
                   options={optionMasters}
@@ -694,11 +682,11 @@ export const Equipment = ({
               </div>
               <p className={styles.titleSelects}>Сварщики</p>
               <div className={styles.equipments}>
-                {welder?.map((option) => (
+                {welder?.map(option => (
                   <div>
                     <input
                       type="checkbox"
-                      onChange={(e) => {
+                      onChange={e => {
                         handleSelectChange(option);
                       }}
                     />
@@ -720,7 +708,7 @@ export const Equipment = ({
                 </div>  */}
 
               <div className={styles.row}>
-                <Button disabled={values.shiftNumb == ""} type="submit">
+                <Button disabled={values.shiftNumb == ''} type="submit">
                   Закрепить
                 </Button>
               </div>
@@ -731,24 +719,22 @@ export const Equipment = ({
 
       <ModalWindow
         isOpen={isModalOpen}
-        headerText={modalData ? "Редактировать " : "Добавить "}
-        setIsOpen={(state) => {
+        headerText={modalData ? 'Редактировать ' : 'Добавить '}
+        setIsOpen={state => {
           setIsModalOpen(state);
           setModalData(null);
         }}
-        wrapperStyles={{ width: 420 }}
-      >
+        wrapperStyles={{ width: 420 }}>
         {isModalNumb === 0 || isModalNumb === 1 ? (
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               SendData(variables);
               setIsModalOpen(false);
               setModalData(null);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -776,7 +762,7 @@ export const Equipment = ({
                     value={valueWorkplace}
                     width="380px"
                     placeholder="Рабочее место"
-                    onChange={(event) => {
+                    onChange={event => {
                       setvalueWorkplace(event.value);
                     }}
                     options={optWorkPlase}
@@ -789,7 +775,7 @@ export const Equipment = ({
                     value={valueWorkshop}
                     width="380px"
                     placeholder="Цех"
-                    onChange={(event) => {
+                    onChange={event => {
                       setvalueWorkshop(event.value);
                     }}
                     options={optworkshop}
@@ -802,7 +788,7 @@ export const Equipment = ({
                     value={valueoptArea}
                     width="380px"
                     placeholder="Поизводственный участок"
-                    onChange={(event) => {
+                    onChange={event => {
                       setvalueoptArea(event.value);
                     }}
                     options={optArea}
@@ -811,13 +797,13 @@ export const Equipment = ({
 
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
                         handleChange(e);
                       }
                     }}
                     width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    style={{ height: 40, padding: '0 20px 0 30px' }}
                     value={values.name}
                     name="name"
                     placeholder="Наименовние"
@@ -826,16 +812,16 @@ export const Equipment = ({
                   />
 
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       if (
-                        value === "" ||
+                        value === '' ||
                         /^[A-Za-z0-9-]+$/.test(e.target.value)
                       ) {
                         handleChange(e);
                       }
                     }}
                     width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px" }}
+                    style={{ height: 40, padding: '0 20px 0 30px' }}
                     value={values.marking}
                     name="marking"
                     placeholder="Маркировка"
@@ -845,9 +831,9 @@ export const Equipment = ({
                 </div>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       const value = e.target.value;
-                      if (value === "" || /^[0-9A-Za-z:]+$/.test(value)) {
+                      if (value === '' || /^[0-9A-Za-z:]+$/.test(value)) {
                         handleChange(e);
                       }
                     }}
@@ -864,13 +850,13 @@ export const Equipment = ({
 
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{
                       width: 380,
                       height: 40,
-                      padding: "0px 0px 0px 20px",
+                      padding: '0px 0px 0px 20px',
                     }}
                     type="number"
                     min="0"
@@ -884,34 +870,34 @@ export const Equipment = ({
 
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                    style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
                     value={values.nextAttestationDate}
                     name="nextAttestationDate"
                     placeholder="Дата очередной аттестации (ППР)»"
                     type="text"
-                    onFocus={(e) => {
-                      e.currentTarget.type = "date";
+                    onFocus={e => {
+                      e.currentTarget.type = 'date';
                     }}
                     onBlur={handleBlur}
                     autoComplete="off"
                   />
 
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     width="200"
-                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                    style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
                     value={values.commissioningDate}
                     name="commissioningDate"
                     placeholder="Дата ввода в эксплуатацию"
                     type="text"
-                    onFocus={(e) => {
-                      e.currentTarget.type = "date";
+                    onFocus={e => {
+                      e.currentTarget.type = 'date';
                     }}
                     onBlur={handleBlur}
                     autoComplete="off"
@@ -919,7 +905,7 @@ export const Equipment = ({
                 </div>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       if (/^[а-яА-ЯЁё\s]+$/.test(e.target.value)) {
                         handleChange(e);
                       }
@@ -935,7 +921,7 @@ export const Equipment = ({
                     autoComplete="off"
                   />
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{
@@ -967,7 +953,7 @@ export const Equipment = ({
                     placeholder="Продолжительность нагрузки, %"
                   /> */}
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{
@@ -984,7 +970,7 @@ export const Equipment = ({
                 <p className={styles.text}>Габариты</p>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{
@@ -1001,7 +987,7 @@ export const Equipment = ({
                     placeholder="Высота"
                   />
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{
@@ -1018,7 +1004,7 @@ export const Equipment = ({
                     autoComplete="off"
                   />
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{
@@ -1037,7 +1023,7 @@ export const Equipment = ({
                 </div>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{
@@ -1055,9 +1041,9 @@ export const Equipment = ({
                 <p className={styles.text}>Диапазон сварочного тока:</p>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       const re = /^[0-9]+([,.][0-9]*)?$/;
-                      if (e.target.value === "" || re.test(e.target.value)) {
+                      if (e.target.value === '' || re.test(e.target.value)) {
                         handleChange(e);
                       }
                     }}
@@ -1075,9 +1061,9 @@ export const Equipment = ({
                     autoComplete="off"
                   />
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       const re = /^[0-9]+([,.][0-9]*)?$/;
-                      if (e.target.value === "" || re.test(e.target.value)) {
+                      if (e.target.value === '' || re.test(e.target.value)) {
                         handleChange(e);
                       }
                     }}
@@ -1097,9 +1083,9 @@ export const Equipment = ({
                 <p className={styles.text}>Диапазон напряжения на дуге:</p>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       const re = /^[0-9]+([,.][0-9]*)?$/;
-                      if (e.target.value === "" || re.test(e.target.value)) {
+                      if (e.target.value === '' || re.test(e.target.value)) {
                         handleChange(e);
                       }
                     }}
@@ -1116,9 +1102,9 @@ export const Equipment = ({
                     autoComplete="off"
                   />
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       const re = /^[0-9]+([,.][0-9]*)?$/;
-                      if (e.target.value === "" || re.test(e.target.value)) {
+                      if (e.target.value === '' || re.test(e.target.value)) {
                         handleChange(e);
                       }
                     }}
@@ -1143,27 +1129,26 @@ export const Equipment = ({
                 <div className={styles.row}>
                   <Button
                     disabled={
-                      values.name == "" ||
-                      values.marking == "" ||
-                      values.rfidTag == "" ||
-                      values.factoryNumber == "" ||
-                      values.nextAttestationDate == "" ||
-                      values.commissioningDate == "" ||
-                      values.weldingProcess == "" ||
-                      values.idleVoltage == "" ||
-                      values.loadPercentage == "" ||
-                      values.manufacturerName == "" ||
-                      values.height == "" ||
-                      values.width == "" ||
-                      values.lenght == "" ||
-                      values.weldingCurrentMin == "" ||
-                      values.weldingCurrentMax == "" ||
-                      values.arcVoltageMin == "" ||
-                      values.arcVoltageMax == ""
+                      values.name == '' ||
+                      values.marking == '' ||
+                      values.rfidTag == '' ||
+                      values.factoryNumber == '' ||
+                      values.nextAttestationDate == '' ||
+                      values.commissioningDate == '' ||
+                      values.weldingProcess == '' ||
+                      values.idleVoltage == '' ||
+                      values.loadPercentage == '' ||
+                      values.manufacturerName == '' ||
+                      values.height == '' ||
+                      values.width == '' ||
+                      values.lenght == '' ||
+                      values.weldingCurrentMin == '' ||
+                      values.weldingCurrentMax == '' ||
+                      values.arcVoltageMin == '' ||
+                      values.arcVoltageMax == ''
                     }
-                    type="submit"
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
+                    type="submit">
+                    {modalData ? 'Сохранить' : 'Создать'}
                   </Button>
                 </div>
               </form>
@@ -1173,12 +1158,11 @@ export const Equipment = ({
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setIsModalOpen(false);
               SendData(variables);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -1193,7 +1177,7 @@ export const Equipment = ({
                     value={valueReason}
                     width="380px"
                     placeholder="Причина простоя"
-                    onChange={(event) => {
+                    onChange={event => {
                       setValueReaso(event.value);
                     }}
                     options={reasonOptions}
@@ -1205,23 +1189,23 @@ export const Equipment = ({
                     width="380px"
                     value={valuetEquipment}
                     placeholder="Оборудование"
-                    onChange={(event) => setValuetEquipment(event.value)}
+                    onChange={event => setValuetEquipment(event.value)}
                     options={optequipment}
                   />
                 </div>
 
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       setData(e.target.value);
                     }}
-                    style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                    style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
                     value={valueData}
                     name="Date"
                     placeholder="Дата"
                     type="text"
-                    onFocus={(e) => {
-                      e.currentTarget.type = "date";
+                    onFocus={e => {
+                      e.currentTarget.type = 'date';
                     }}
                     onBlur={handleBlur}
                   />
@@ -1229,10 +1213,10 @@ export const Equipment = ({
 
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    style={{ width: 380, height: 40, padding: '0 20px 0 30px' }}
                     value={values.timeStates}
                     name="timeStates"
                     placeholder="Время изменения состояния"
@@ -1240,10 +1224,10 @@ export const Equipment = ({
                   />
 
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       setTime(e.target.value);
                     }}
-                    style={{ width: 380, height: 40, padding: "0 20px 0 30px" }}
+                    style={{ width: 380, height: 40, padding: '0 20px 0 30px' }}
                     value={valueTime}
                     name="valueTime"
                     placeholder="Время"
@@ -1252,8 +1236,8 @@ export const Equipment = ({
                 </div>
 
                 <div className={styles.row}>
-                  <Button type="submit" disabled={values.number == ""}>
-                    {modalData ? "Сохранить" : "Создать"}
+                  <Button type="submit" disabled={values.number == ''}>
+                    {modalData ? 'Сохранить' : 'Создать'}
                   </Button>
                 </div>
               </form>
@@ -1266,20 +1250,18 @@ export const Equipment = ({
       <ModalWindow
         isOpen={deleteTaskModal}
         headerText="Удаление"
-        setIsOpen={(state) => {
+        setIsOpen={state => {
           setdeleteTaskModal(false);
         }}
-        wrapperStyles={{ width: 420 }}
-      >
+        wrapperStyles={{ width: 420 }}>
         <Formik
           initialValues={initialValues}
           enableReinitialize
-          onSubmit={(variables) => {
+          onSubmit={variables => {
             const { id, ...dataToSend } = variables;
             setdeleteTaskModal(false);
             deleteEquipment(weldingEquipmentId);
-          }}
-        >
+          }}>
           {({
             handleSubmit,
             handleChange,
@@ -1289,8 +1271,8 @@ export const Equipment = ({
           }) => (
             <form onSubmit={handleSubmit}>
               <div>
-                <h4 style={{ padding: "35px 40px" }}>
-                  Вы уверены что хотите <span>удалить</span> оборудование ?{" "}
+                <h4 style={{ padding: '35px 40px' }}>
+                  Вы уверены что хотите <span>удалить</span> оборудование ?{' '}
                 </h4>
 
                 <div className={styles.row}>

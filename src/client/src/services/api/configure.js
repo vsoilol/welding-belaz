@@ -9,7 +9,7 @@
 
 const api = {
   url: process.env.REACT_APP_API_URI,
-  suffix: "",
+  suffix: '',
   timeout: 200000,
   getBaseUrl() {
     return this.url.toString();

@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import DefaultInput from "../DefaultInput";
-import styles from "./style.module.scss";
+import React from 'react';
+import PropTypes from 'prop-types';
+import DefaultInput from '../DefaultInput';
+import styles from './style.module.scss';
 
 const BillingInput = ({ width, height, label, ...props }) => {
   return (
@@ -24,9 +24,9 @@ BillingInput.propTypes = {
 };
 
 BillingInput.defaultProps = {
-  label: "",
-  width: "350px",
-  height: "40px",
+  label: '',
+  width: '350px',
+  height: '40px',
 };
 
 export default BillingInput;

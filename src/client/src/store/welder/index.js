@@ -1,1 +1,1 @@
-export * from "./welder.facade";
+export * from './welder.facade';

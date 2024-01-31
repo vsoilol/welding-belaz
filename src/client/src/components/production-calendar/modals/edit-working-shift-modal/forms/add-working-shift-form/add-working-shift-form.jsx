@@ -1,22 +1,22 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import React from 'react';
+import { Formik, Form } from 'formik';
 import {
   Button,
   CustomFormikTextInput,
   CustomFormikField,
-} from "components/shared";
-import { useCalendarStore } from "store/calendar";
-import { validationSchema } from "./validation-schema";
-import styles from "../../../modal-style.module.scss";
+} from 'components/shared';
+import { useCalendarStore } from 'store/calendar';
+import { validationSchema } from './validation-schema';
+import styles from '../../../modal-style.module.scss';
 
 export const AddWorkingShiftForm = ({ toggleModal }) => {
   const { calendar, createWorkingShift } = useCalendarStore();
   const initialFormValues = {
     number: 1,
-    shiftStart: "",
-    shiftEnd: "",
-    breakStart: "",
-    breakEnd: "",
+    shiftStart: '',
+    shiftEnd: '',
+    breakStart: '',
+    breakEnd: '',
   };
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
@@ -32,7 +32,7 @@ export const AddWorkingShiftForm = ({ toggleModal }) => {
       createWorkingShift(workingShift);
       toggleModal(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error('Error submitting form:', error);
     }
 
     setSubmitting(false);
@@ -43,15 +43,14 @@ export const AddWorkingShiftForm = ({ toggleModal }) => {
       initialValues={initialFormValues}
       enableReinitialize
       onSubmit={handleFormSubmit}
-      validationSchema={validationSchema}
-    >
+      validationSchema={validationSchema}>
       {({ isSubmitting, isValid }) => (
         <Form>
           <div className={styles.rowWithoutMargin}>
             <CustomFormikField name="number">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px", width: 380 }}
+                style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
                 placeholder="Номер смены"
                 type="number"
               />
@@ -62,7 +61,7 @@ export const AddWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="shiftStart">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Начало работы"
               />
             </CustomFormikField>
@@ -70,7 +69,7 @@ export const AddWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="shiftEnd">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Конец работы"
               />
             </CustomFormikField>
@@ -80,7 +79,7 @@ export const AddWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="breakStart">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Начало перерыва"
               />
             </CustomFormikField>
@@ -88,7 +87,7 @@ export const AddWorkingShiftForm = ({ toggleModal }) => {
             <CustomFormikField name="breakEnd">
               <CustomFormikTextInput
                 width="200"
-                style={{ height: 40, padding: "0 20px 0 30px" }}
+                style={{ height: 40, padding: '0 20px 0 30px' }}
                 placeholder="Конец перерыва"
               />
             </CustomFormikField>

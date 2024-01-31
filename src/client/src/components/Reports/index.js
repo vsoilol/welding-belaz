@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useCallback } from "react";
-import styles from "./styles.module.scss";
-import ToolTip from "components/shared/ToolTip";
-import { reportsImage } from "assets/pics";
-import { Table } from "components/shared/Table";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import MaterialTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import ModalWindow from "components/shared/ModalWindow";
-import { Formik } from "formik";
-import Button from "components/shared/Button";
-import Select from "components/shared/Select";
-import Input from "components/shared/Input";
-import api from "services/api";
-import Paper from "@material-ui/core/Paper";
+import React, { useEffect, useState, useCallback } from 'react';
+import styles from './styles.module.scss';
+import ToolTip from 'components/shared/ToolTip';
+import { reportsImage } from 'assets/pics';
+import { Table } from 'components/shared/Table';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import MaterialTable from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import ModalWindow from 'components/shared/ModalWindow';
+import { Formik } from 'formik';
+import Button from 'components/shared/Button';
+import Select from 'components/shared/Select';
+import Input from 'components/shared/Input';
+import api from 'services/api';
+import Paper from '@material-ui/core/Paper';
 export const Reports = ({
   loadWorkshop,
   loadArea,
@@ -60,69 +60,69 @@ export const Reports = ({
   const [modalDataDate, setmodalDataDate] = useState(null);
 
   const initialDate = {
-    startDate: modalDataDate?.startDate ?? "",
-    endDate: modalDataDate?.endDate ?? "",
+    startDate: modalDataDate?.startDate ?? '',
+    endDate: modalDataDate?.endDate ?? '',
   };
 
   const [initialValues, setInitialValues] = useState({
-    workshopId: modalData?.workshopId ?? "",
-    startDate: modalData?.startDate ?? "",
-    endDate: modalData?.endDate ?? "",
-    seamId: modalData?.seamId ?? "",
-    productId: modalData?.productId ?? "",
-    productionAreaId: modalData?.productionAreaId ?? "",
-    welderId: modalData?.welderId ?? "",
-    WorkplaceId: modalData?.WorkplaceId ?? "",
-    WeldingEquipmentId: modalData?.WeldingEquipmentId ?? "",
-    cutType: modalData?.cutType ?? "",
-    smena: modalData?.smena ?? "",
+    workshopId: modalData?.workshopId ?? '',
+    startDate: modalData?.startDate ?? '',
+    endDate: modalData?.endDate ?? '',
+    seamId: modalData?.seamId ?? '',
+    productId: modalData?.productId ?? '',
+    productionAreaId: modalData?.productionAreaId ?? '',
+    welderId: modalData?.welderId ?? '',
+    WorkplaceId: modalData?.WorkplaceId ?? '',
+    WeldingEquipmentId: modalData?.WeldingEquipmentId ?? '',
+    cutType: modalData?.cutType ?? '',
+    smena: modalData?.smena ?? '',
   });
 
-  const [accessibility, setaccessibility] = useState("");
-  const [efficiency, setefficiency] = useState("");
-  const [quality, setquality] = useState("");
+  const [accessibility, setaccessibility] = useState('');
+  const [efficiency, setefficiency] = useState('');
+  const [quality, setquality] = useState('');
 
   ////Select
-  const executorsOptions = executors?.map((item) => {
+  const executorsOptions = executors?.map(item => {
     return {
       value: item.id,
       label: `${item.middleName} ${item.firstName} ${item.lastName}`,
     };
   });
-  const workshopOptions = workshop?.map((item) => {
+  const workshopOptions = workshop?.map(item => {
     return {
       value: item.id,
       label: item.name,
     };
   });
-  const areaOptions = area?.map((item) => {
+  const areaOptions = area?.map(item => {
     return {
       value: item.id,
       label: `№${item.number} ${item.name} `,
     };
   });
   const productOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(product?.map((item) => ({
+    { value: null, label: 'Не выбрано' },
+    ...(product?.map(item => ({
       value: item.id,
       label: `${item.name} ${item.number}`,
     })) || []),
   ];
   const seamOptions = [
-    { value: null, label: "Не выбрано" },
-    ...(seam?.map((item) => ({
+    { value: null, label: 'Не выбрано' },
+    ...(seam?.map(item => ({
       value: item.id,
       label: `Cварочный шов ${item.number}`,
     })) || []),
   ];
 
-  const workplaceOptions = workplace?.map((item) => {
+  const workplaceOptions = workplace?.map(item => {
     return {
       value: item.id,
       label: `Рабочее место ${item.number}`,
     };
   });
-  const equipmentOptions = equipment[0]?.map((item) => {
+  const equipmentOptions = equipment[0]?.map(item => {
     return {
       value: item.id,
       label: `${item.name} ${item.factoryNumber}  `,
@@ -149,7 +149,7 @@ export const Reports = ({
       value: 5,
       label: `В разрезе лет`,
     },
-  ].map((item) => ({
+  ].map(item => ({
     value: item.value,
     label: item.label,
   }));
@@ -158,117 +158,117 @@ export const Reports = ({
   const reports = [
     {
       id: 0,
-      name: "Отчет об отклонениях от нормативных параметров режимов сварки по цеху",
+      name: 'Отчет об отклонениях от нормативных параметров режимов сварки по цеху',
     },
     {
       id: 1,
-      name: "Отчет об отклонениях от нормативных параметров режимов сварки по производственному участку",
+      name: 'Отчет об отклонениях от нормативных параметров режимов сварки по производственному участку',
     },
     {
       id: 2,
-      name: "Отчет об отклонениях от нормативных параметров режимов сварки по исполнителю",
+      name: 'Отчет об отклонениях от нормативных параметров режимов сварки по исполнителю',
     },
     {
       id: 3,
-      name: "Отчет об отклонениях от нормативных параметров режимов сварки по рабочему месту",
+      name: 'Отчет об отклонениях от нормативных параметров режимов сварки по рабочему месту',
     },
     {
       id: 4,
-      name: "Отчет о простоях оборудования за период ",
+      name: 'Отчет о простоях оборудования за период ',
       tableData: null,
     },
     {
       id: 5,
-      name: "Отчет работе оборудования за период  ",
+      name: 'Отчет работе оборудования за период  ',
       tableData: null,
     },
     {
       id: 6,
-      name: "Отчет о выполненных операциях по цеху  ",
+      name: 'Отчет о выполненных операциях по цеху  ',
     },
     {
       id: 7,
-      name: "Отчет о выполненных операциях по исполнителю  ",
+      name: 'Отчет о выполненных операциях по исполнителю  ',
     },
     {
       id: 8,
-      name: "Отчет о выполненных операциях по рабочему месту  ",
+      name: 'Отчет о выполненных операциях по рабочему месту  ',
     },
     {
       id: 9,
-      name: "Отчет о выполненных операциях по производственному участку  ",
+      name: 'Отчет о выполненных операциях по производственному участку  ',
     },
     {
       id: 10,
-      name: "Отчет о работе сварщиков по цеху",
+      name: 'Отчет о работе сварщиков по цеху',
     },
     {
       id: 11,
-      name: "Отчет о работе сварщиков по производственному участку",
+      name: 'Отчет о работе сварщиков по производственному участку',
     },
     {
       id: 12,
-      name: "Отчет о работе сварщиков по исполнителю",
+      name: 'Отчет о работе сварщиков по исполнителю',
     },
     {
       id: 13,
-      name: "Отчет о работе сварщиков по рабочему месту",
+      name: 'Отчет о работе сварщиков по рабочему месту',
     },
     {
       id: 14,
-      name: "Отчет о работе сварщиков для завода",
+      name: 'Отчет о работе сварщиков для завода',
     },
     {
       id: 15,
-      name: "Отчет об отклонениях от нормативных параметров режимов сварки для завода",
+      name: 'Отчет об отклонениях от нормативных параметров режимов сварки для завода',
     },
     {
       id: 16,
-      name: "Отчет о выполненных операциях (швах) для завода",
+      name: 'Отчет о выполненных операциях (швах) для завода',
     },
 
     {
       id: 17,
-      name: "Отчет об анализе работы оборудования для завода",
+      name: 'Отчет об анализе работы оборудования для завода',
     },
     {
       id: 18,
-      name: "Отчет об анализе работы оборудования по цеху",
+      name: 'Отчет об анализе работы оборудования по цеху',
     },
     {
       id: 19,
-      name: "Отчет об анализе работы оборудования  по производственному участку",
+      name: 'Отчет об анализе работы оборудования  по производственному участку',
     },
     {
       id: 20,
-      name: "Отчет об эффективности использования оборудования для завода",
+      name: 'Отчет об эффективности использования оборудования для завода',
     },
     {
       id: 21,
-      name: "Отчет об эффективности использования оборудования  по рабочему месту",
+      name: 'Отчет об эффективности использования оборудования  по рабочему месту',
     },
     {
       id: 22,
-      name: "Отчет об эффективности использования оборудования  по цеху",
+      name: 'Отчет об эффективности использования оборудования  по цеху',
     },
     {
       id: 23,
-      name: "Отчет об эффективности использования оборудования  по производственному участку",
+      name: 'Отчет об эффективности использования оборудования  по производственному участку',
     },
   ];
 
   const colinstructions = [
     {
-      title: "Наименование",
-      field: "name",
+      title: 'Наименование',
+      field: 'name',
     },
     {
-      title: "",
-      render: (rowData) => {
+      title: '',
+      render: rowData => {
         return (
           <span
             className={styles.ReportsSpan}
-            onClick={(e) => {
+            onClick={e => {
               setmodalDataDate(rowData);
               e.preventDefault();
               setIsModalOpen(true);
@@ -276,10 +276,9 @@ export const Reports = ({
               api.post(`/eventLog`, {
                 information: `Сгенерировал ${rowData?.name}`,
               });
-            }}
-          >
-            {" "}
-            Сгенерировать{" "}
+            }}>
+            {' '}
+            Сгенерировать{' '}
           </span>
         );
       },
@@ -302,8 +301,8 @@ export const Reports = ({
               value={initialValues.cutType}
               width="380px"
               placeholder="Тип разреза "
-              onChange={(event) => {
-                handleChange("cutType", event.value);
+              onChange={event => {
+                handleChange('cutType', event.value);
               }}
               options={cutTypeOptions}
             />
@@ -312,13 +311,13 @@ export const Reports = ({
           {initialValues.cutType === 1 ? (
             <div className={styles.row}>
               <Input
-                onChange={(event) => {
-                  handleChange("smena", event.target.value);
+                onChange={event => {
+                  handleChange('smena', event.target.value);
                 }}
                 style={{
                   width: 380,
                   height: 40,
-                  padding: "0px 0px 0px 20px",
+                  padding: '0px 0px 0px 20px',
                 }}
                 type="number"
                 min="0"
@@ -344,8 +343,8 @@ export const Reports = ({
             value={initialValues.seamId}
             width="380px"
             placeholder="Швы"
-            onChange={(event) => {
-              handleChange("seamId", event.value);
+            onChange={event => {
+              handleChange('seamId', event.value);
             }}
             options={seamOptions}
           />
@@ -363,8 +362,8 @@ export const Reports = ({
             value={initialValues.productId}
             width="380px"
             placeholder="Изделие"
-            onChange={(event) => {
-              handleChange("productId", event.value);
+            onChange={event => {
+              handleChange('productId', event.value);
             }}
             options={productOptions}
           />
@@ -382,8 +381,8 @@ export const Reports = ({
             value={initialValues.workshopId}
             width="380px"
             placeholder="Цех"
-            onChange={(event) => {
-              handleChange("workshopId", event.value);
+            onChange={event => {
+              handleChange('workshopId', event.value);
             }}
             options={workshopOptions}
           />
@@ -401,8 +400,8 @@ export const Reports = ({
             value={initialValues.productionAreaId}
             width="380px"
             placeholder="Производственный участок"
-            onChange={(event) => {
-              handleChange("productionAreaId", event.value);
+            onChange={event => {
+              handleChange('productionAreaId', event.value);
             }}
             options={areaOptions}
           />
@@ -420,8 +419,8 @@ export const Reports = ({
             value={initialValues.welderId}
             width="380px"
             placeholder="Сварщик"
-            onChange={(event) => {
-              handleChange("welderId", event.value);
+            onChange={event => {
+              handleChange('welderId', event.value);
             }}
             options={executorsOptions}
           />
@@ -439,8 +438,8 @@ export const Reports = ({
             value={initialValues.WorkplaceId}
             width="380px"
             placeholder="Рабочие места"
-            onChange={(event) => {
-              handleChange("WorkplaceId", event.value);
+            onChange={event => {
+              handleChange('WorkplaceId', event.value);
             }}
             options={workplaceOptions}
           />
@@ -455,7 +454,7 @@ export const Reports = ({
         <div>
           <div className={styles.row}>
             <Input
-              onChange={(event) => {
+              onChange={event => {
                 setaccessibility(event.target.value);
               }}
               style={{ height: 40, width: 562 }}
@@ -470,7 +469,7 @@ export const Reports = ({
           </div>
           <div className={styles.row}>
             <Input
-              onChange={(event) => {
+              onChange={event => {
                 setefficiency(event.target.value);
               }}
               style={{ height: 40, width: 562 }}
@@ -485,7 +484,7 @@ export const Reports = ({
           </div>
           <div className={styles.row}>
             <Input
-              onChange={(event) => {
+              onChange={event => {
                 setquality(event.target.value);
               }}
               style={{ height: 40, width: 562 }}
@@ -547,8 +546,8 @@ export const Reports = ({
               value={initialValues.WeldingEquipmentId}
               width="380px"
               placeholder="Оборудование"
-              onChange={(event) => {
-                handleChange("WeldingEquipmentId", event.value);
+              onChange={event => {
+                handleChange('WeldingEquipmentId', event.value);
               }}
               options={equipmentOptions}
             />
@@ -684,16 +683,16 @@ export const Reports = ({
   }
 
   async function SendData(variables) {
-    let startDate = new Date(variables.startDate).toLocaleDateString("ru-RU", {
-      dateStyle: "short",
+    let startDate = new Date(variables.startDate).toLocaleDateString('ru-RU', {
+      dateStyle: 'short',
     });
-    let endDate = new Date(variables.endDate).toLocaleDateString("ru-RU", {
-      dateStyle: "short",
+    let endDate = new Date(variables.endDate).toLocaleDateString('ru-RU', {
+      dateStyle: 'short',
     });
     let endpoint;
 
-    const seamId = variables.seamId !== null ? variables.seamId : "";
-    const productId = variables.productId !== null ? variables.productId : "";
+    const seamId = variables.seamId !== null ? variables.seamId : '';
+    const productId = variables.productId !== null ? variables.productId : '';
 
     if (idReports === 0) {
       endpoint = `excelDeviationReport/byWorkshop?WorkshopId=${initialValues.workshopId}&ProductId=${productId}&SeamId=${seamId}&StartDate=${startDate}&EndDate=${endDate}`;
@@ -772,7 +771,7 @@ export const Reports = ({
     }
   }
 
-  const TabPanel = (props_panel) => {
+  const TabPanel = props_panel => {
     const { children, value, indPanel } = props_panel;
 
     return <div hidden={value !== indPanel}>{children}</div>;
@@ -786,7 +785,7 @@ export const Reports = ({
       />
 
       <div className={styles.tableWrapper}>
-        <TabPanel style={{ minWidth: "800px" }} className="TableTech">
+        <TabPanel style={{ minWidth: '800px' }} className="TableTech">
           <Table
             title="Выберите отчет"
             columns={colinstructions}
@@ -799,21 +798,19 @@ export const Reports = ({
         <ModalWindow
           isOpen={isModalOpen}
           headerText="Формирование отчёта"
-          setIsOpen={(state) => {
+          setIsOpen={state => {
             setIsModalOpen(false);
           }}
-          wrapperStyles={{ width: 420 }}
-        >
+          wrapperStyles={{ width: 420 }}>
           <Formik
             initialValues={initialValues}
             initialDate={initialDate}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setIsModalOpen(false);
               SendData(variables);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -827,42 +824,42 @@ export const Reports = ({
 
                   <div className={styles.row}>
                     <Input
-                      onChange={(e) => {
+                      onChange={e => {
                         handleChange(e);
                       }}
                       width="200"
                       style={{
                         height: 40,
-                        padding: "0 20px 0 30px",
+                        padding: '0 20px 0 30px',
                         width: 380,
                       }}
                       value={values.startDate}
                       name="startDate"
                       placeholder="Дата с которой начинается"
                       type="text"
-                      onFocus={(e) => {
-                        e.currentTarget.type = "date";
+                      onFocus={e => {
+                        e.currentTarget.type = 'date';
                       }}
                       onBlur={handleBlur}
                       autoComplete="off"
                     />
 
                     <Input
-                      onChange={(e) => {
+                      onChange={e => {
                         handleChange(e);
                       }}
                       width="200"
                       style={{
                         height: 40,
-                        padding: "0 20px 0 30px",
+                        padding: '0 20px 0 30px',
                         width: 380,
                       }}
                       value={values.endDate}
                       name="endDate"
                       placeholder="Дата с которой заканчивается"
                       type="text"
-                      onFocus={(e) => {
-                        e.currentTarget.type = "date";
+                      onFocus={e => {
+                        e.currentTarget.type = 'date';
                       }}
                       onBlur={handleBlur}
                       autoComplete="off"
@@ -882,19 +879,17 @@ export const Reports = ({
         <ModalWindow
           isOpen={isModalNothinOpen}
           headerText=""
-          setIsOpen={(state) => {
+          setIsOpen={state => {
             setisModalNothinOpen(false);
           }}
-          wrapperStyles={{ width: 420 }}
-        >
+          wrapperStyles={{ width: 420 }}>
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setisModalNothinOpen(false);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -904,8 +899,8 @@ export const Reports = ({
             }) => (
               <form onSubmit={handleSubmit}>
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>
-                    Данные по этому отчету отсутствуют.{" "}
+                  <h4 style={{ padding: '35px 40px' }}>
+                    Данные по этому отчету отсутствуют.{' '}
                   </h4>
 
                   <div className={styles.row}>
@@ -921,19 +916,17 @@ export const Reports = ({
         <ModalWindow
           isOpen={isModalErrOpen}
           headerText="Ошибка"
-          setIsOpen={(state) => {
+          setIsOpen={state => {
             setisModalErrOpen(false);
           }}
-          wrapperStyles={{ width: 420 }}
-        >
+          wrapperStyles={{ width: 420 }}>
           <Formik
             initialValues={initialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               setisModalErrOpen(false);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -943,8 +936,8 @@ export const Reports = ({
             }) => (
               <form onSubmit={handleSubmit}>
                 <div>
-                  <h4 style={{ padding: "35px 40px" }}>
-                    Произошла ошибка, перепроверьте введенные данные{" "}
+                  <h4 style={{ padding: '35px 40px' }}>
+                    Произошла ошибка, перепроверьте введенные данные{' '}
                   </h4>
 
                   <div className={styles.row}>

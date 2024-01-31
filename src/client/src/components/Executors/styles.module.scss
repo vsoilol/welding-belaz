@@ -1,4 +1,4 @@
-.tableWrapper { 
+.tableWrapper {
   margin: 0 auto;
   margin-top: 80px;
   width: calc(100vw - 100px);
@@ -9,7 +9,7 @@
   flex-direction: column;
   align-items: center;
 }
-.Tabs{
+.Tabs {
   width: 770px;
 }
 .row {
@@ -25,7 +25,7 @@
 .row:last-child {
   margin-bottom: 30px;
 }
-.tableWrapper {  
+.tableWrapper {
   margin: 0 auto;
   margin-top: 40px;
   margin: 0 auto;
@@ -33,19 +33,19 @@
   width: calc(100vw - 100px);
 }
 
-.AddEvent{
+.AddEvent {
   padding: 10px;
   border-radius: 16px;
   background-color: white;
 }
 
-.equipmentRefs{
+.equipmentRefs {
   color: #3f51b5;
   border-bottom: 1px solid #3f51b5;
   text-decoration: none;
 }
 
-.refCalendar{
+.refCalendar {
   font-size: 18px;
   color: white;
   text-decoration: none;
@@ -57,14 +57,14 @@
   width: fit-content;
 }
 
-.imgcalendar{
-  width: 30px; 
+.imgcalendar {
+  width: 30px;
   cursor: pointer;
 }
 @media (max-width: 1440px) {
   .tableWrapper {
     margin-top: 40px;
-  /*   width: 100%; */
+    /*   width: 100%; */
   }
 }
 
@@ -74,15 +74,13 @@
   }
 }
 
-
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.deleteIcon{
+.deleteIcon {
   cursor: pointer;
   width: 20px;
   position: relative;

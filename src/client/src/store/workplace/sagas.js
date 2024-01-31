@@ -1,7 +1,7 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import api from "services/api";
-import workplaceActions from "./actions";
-import errorActions from "../error/actions";
+import { takeLatest, call, put } from 'redux-saga/effects';
+import api from 'services/api';
+import workplaceActions from './actions';
+import errorActions from '../error/actions';
 
 const {
   Types: {
@@ -315,7 +315,7 @@ function* loadWeldingTask() {
 }
 function* addProduct(variables) {
   try {
-    if (variables.payload.status === "add") {
+    if (variables.payload.status === 'add') {
       if (variables.payload.valEx === 1) {
         const { data } = yield call(api.put, `/product/assignMaster`, {
           productId: variables.payload.productId,
@@ -345,7 +345,7 @@ function* addProduct(variables) {
       }
     }
 
-    if (variables.payload.status === "assign") {
+    if (variables.payload.status === 'assign') {
       const { data } = yield call(api.put, `/product/assignWelders`, {
         productId: variables.payload.productId,
         welderIds: variables.payload.welderIds,
@@ -402,7 +402,7 @@ function* loadKnot() {
 }
 function* addKnot(variables) {
   try {
-    if (variables.payload.status === "add") {
+    if (variables.payload.status === 'add') {
       if (variables.payload.valEx === 1) {
         const { data } = yield call(api.put, `/knot/assignMaster`, {
           productId: variables.payload.productId,
@@ -431,7 +431,7 @@ function* addKnot(variables) {
       }
     }
 
-    if (variables.payload.status === "assign") {
+    if (variables.payload.status === 'assign') {
       const { data } = yield call(api.put, `/knot/assignWelders`, {
         productId: variables.payload.productId,
         welderIds: variables.payload.welderIds,
@@ -474,7 +474,7 @@ function* loadDetail() {
 }
 function* addDetail(variables) {
   try {
-    if (variables.payload.status === "add") {
+    if (variables.payload.status === 'add') {
       if (variables.payload.valEx === 1) {
         const { data } = yield call(api.put, `/detail/assignMaster`, {
           productId: variables.payload.productId,
@@ -503,7 +503,7 @@ function* addDetail(variables) {
       }
     }
 
-    if (variables.payload.status === "assign") {
+    if (variables.payload.status === 'assign') {
       const { data } = yield call(api.put, `/detail/assignWelders`, {
         productId: variables.payload.productId,
         welderIds: variables.payload.welderIds,
@@ -600,14 +600,14 @@ function* editSeam(variables) {
 }
 
 const deleteEndpoints = {
-  0: { endpoint: "/Workshop", loadFunction: loadWorkshop },
-  1: { endpoint: "/ProductionArea", loadFunction: loadArea },
-  2: { endpoint: "/post", loadFunction: loadPosts },
-  3: { endpoint: "/Workplace", loadFunction: loadWorkplace },
-  4: { endpoint: "/product", loadFunction: loadProduct },
-  5: { endpoint: "/knot", loadFunction: loadKnot },
-  6: { endpoint: "/detail", loadFunction: loadDetail },
-  7: { endpoint: "/seam", loadFunction: loadSeam },
+  0: { endpoint: '/Workshop', loadFunction: loadWorkshop },
+  1: { endpoint: '/ProductionArea', loadFunction: loadArea },
+  2: { endpoint: '/post', loadFunction: loadPosts },
+  3: { endpoint: '/Workplace', loadFunction: loadWorkplace },
+  4: { endpoint: '/product', loadFunction: loadProduct },
+  5: { endpoint: '/knot', loadFunction: loadKnot },
+  6: { endpoint: '/detail', loadFunction: loadDetail },
+  7: { endpoint: '/seam', loadFunction: loadSeam },
 };
 
 function* deleteProduct({ payload }) {

@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useFormikContext } from "formik";
-import { CustomSelect } from "components/shared/custom-select";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useFormikContext } from 'formik';
+import { CustomSelect } from 'components/shared/custom-select';
 
 const CustomFormikSelect = ({
   options,
@@ -13,7 +13,7 @@ const CustomFormikSelect = ({
 }) => {
   const { setFieldValue } = useFormikContext();
 
-  const value = options?.filter((o) => {
+  const value = options?.filter(o => {
     const isArrayValue = Array.isArray(field.value);
 
     if (isArrayValue) {
@@ -29,11 +29,11 @@ const CustomFormikSelect = ({
       {...restProps}
       options={options}
       value={value}
-      onChange={(val) => {
+      onChange={val => {
         const _val = val;
         const isArray = Array.isArray(_val);
         if (isArray) {
-          const values = _val.map((o) => o.value);
+          const values = _val.map(o => o.value);
           setFieldValue(name, values);
         } else {
           setFieldValue(name, _val.value);
@@ -60,12 +60,12 @@ CustomFormikSelect.propTypes = {
 
 CustomFormikSelect.defaultProps = {
   options: [],
-  value: "",
-  name: "select",
-  defaultValue: "",
-  placeholder: "",
-  width: "260px",
-  height: "40px",
+  value: '',
+  name: 'select',
+  defaultValue: '',
+  placeholder: '',
+  width: '260px',
+  height: '40px',
   isSearchable: false,
   onChange: () => {},
   isDisabled: false,

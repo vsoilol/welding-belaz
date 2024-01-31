@@ -1,151 +1,132 @@
-import { createActions } from "reduxsauce";
+import { createActions } from 'reduxsauce';
 
-const { Types, Creators } = createActions({ 
-  ///Цеха 
-  loadWorkshopRequest: ["payload"],
-  loadWorkshopSuccess: ["workshop"],
-  loadWorkshopFailure: ["error"],
+const { Types, Creators } = createActions({
+  ///Цеха
+  loadWorkshopRequest: ['payload'],
+  loadWorkshopSuccess: ['workshop'],
+  loadWorkshopFailure: ['error'],
 
-  addWorkshopRequest: ["payload"],
-  addWorkshopSuccess: ["workshop"],
-  addWorkshopFailure: ["error"],
+  addWorkshopRequest: ['payload'],
+  addWorkshopSuccess: ['workshop'],
+  addWorkshopFailure: ['error'],
 
-  editWorkshopRequest: ["payload"],
-  editWorkshopSuccess: ["workshop"],
-  editWorkshopFailure: ["error"],
+  editWorkshopRequest: ['payload'],
+  editWorkshopSuccess: ['workshop'],
+  editWorkshopFailure: ['error'],
 
-  ///Производственные участки 
-  loadAreaRequest: ["payload"],
-  loadAreaSuccess: ["productionArea"],
-  loadAreaFailure: ["error"],
+  ///Производственные участки
+  loadAreaRequest: ['payload'],
+  loadAreaSuccess: ['productionArea'],
+  loadAreaFailure: ['error'],
 
-  addAreaRequest: ["payload"],
-  addAreaSuccess: ["productionArea"],
-  addAreaFailure: ["error"],
+  addAreaRequest: ['payload'],
+  addAreaSuccess: ['productionArea'],
+  addAreaFailure: ['error'],
 
-  editAreaRequest: ["payload"],
-  editAreaSuccess: ["productionArea"],
-  editAreaFailure: ["error"],
+  editAreaRequest: ['payload'],
+  editAreaSuccess: ['productionArea'],
+  editAreaFailure: ['error'],
   ///Посты
-  loadPostsRequest: ["payload"],
-  loadPostsSuccess: ["posts"],
-  loadPostsFailure: ["error"],
+  loadPostsRequest: ['payload'],
+  loadPostsSuccess: ['posts'],
+  loadPostsFailure: ['error'],
 
-  addPostsRequest: ["payload"],
-  addPostsSuccess: ["posts"],
-  addPostsFailure: ["error"],
+  addPostsRequest: ['payload'],
+  addPostsSuccess: ['posts'],
+  addPostsFailure: ['error'],
 
-  editPostsRequest: ["payload"],
-  editPostsSuccess: ["posts"],
-  editPostsFailure: ["error"],
+  editPostsRequest: ['payload'],
+  editPostsSuccess: ['posts'],
+  editPostsFailure: ['error'],
 
   ///Рабочие места
-  loadWorkplaceRequest: ["payload"],
-  loadWorkplaceSuccess: ["workplace"],
-  loadWorkplaceFailure: ["error"],
+  loadWorkplaceRequest: ['payload'],
+  loadWorkplaceSuccess: ['workplace'],
+  loadWorkplaceFailure: ['error'],
 
-  addWorkplaceRequest: ["payload"],
-  addWorkplaceSuccess: ["workplace"],
-  addWorkplaceFailure: ["error"],
+  addWorkplaceRequest: ['payload'],
+  addWorkplaceSuccess: ['workplace'],
+  addWorkplaceFailure: ['error'],
 
-  editWorkplaceRequest: ["payload"],
-  editWorkplaceSuccess: ["workplace"],
-  editWorkplaceFailure: ["error"],
-
-
-
-
-
-
-
+  editWorkplaceRequest: ['payload'],
+  editWorkplaceSuccess: ['workplace'],
+  editWorkplaceFailure: ['error'],
 
   ///Изделия
-  loadProductRequest: ["payload"],
-  loadProductSuccess: ["product"],
-  loadProductFailure: ["error"],
- 
+  loadProductRequest: ['payload'],
+  loadProductSuccess: ['product'],
+  loadProductFailure: ['error'],
 
-  addProductRequest: ["payload"],
-  addProductSuccess: ["product"],
-  addProductFailure: ["error"],
+  addProductRequest: ['payload'],
+  addProductSuccess: ['product'],
+  addProductFailure: ['error'],
 
-  editProductRequest: ["payload"],
-  editProductSuccess: ["product"],
-  editProductFailure: ["error"],
-   
+  editProductRequest: ['payload'],
+  editProductSuccess: ['product'],
+  editProductFailure: ['error'],
 
   ///Узлы
-  loadKnotRequest: ["payload"],
-  loadKnotSuccess: ["knot"],
-  loadKnotFailure: ["error"],
+  loadKnotRequest: ['payload'],
+  loadKnotSuccess: ['knot'],
+  loadKnotFailure: ['error'],
 
-  addKnotRequest: ["payload"],
-  addKnotSuccess: ["knot"],
-  addKnotFailure: ["error"],
+  addKnotRequest: ['payload'],
+  addKnotSuccess: ['knot'],
+  addKnotFailure: ['error'],
 
-  editKnotRequest: ["payload"],
-  editKnotSuccess: ["knot"],
-  editKnotFailure: ["error"],
-
+  editKnotRequest: ['payload'],
+  editKnotSuccess: ['knot'],
+  editKnotFailure: ['error'],
 
   ///Детали
-  loadDetailRequest: ["payload"],
-  loadDetailSuccess: ["detail"],
-  loadDetailFailure: ["error"],
+  loadDetailRequest: ['payload'],
+  loadDetailSuccess: ['detail'],
+  loadDetailFailure: ['error'],
 
-  addDetailRequest: ["payload"],
-  addDetailSuccess: ["detail"],
-  addDetailFailure: ["error"],
+  addDetailRequest: ['payload'],
+  addDetailSuccess: ['detail'],
+  addDetailFailure: ['error'],
 
-  editDetailRequest: ["payload"],
-  editDetailSuccess: ["detail"],
-  editDetailFailure: ["error"],
+  editDetailRequest: ['payload'],
+  editDetailSuccess: ['detail'],
+  editDetailFailure: ['error'],
 
   ///Сварные швы
-  loadSeamRequest: ["payload"],
-  loadSeamSuccess: ["seam"],
-  loadSeamFailure: ["error"],
+  loadSeamRequest: ['payload'],
+  loadSeamSuccess: ['seam'],
+  loadSeamFailure: ['error'],
 
-  addSeamRequest: ["payload"],
-  addSeamSuccess: ["seam"],
-  addSeamFailure: ["error"],
+  addSeamRequest: ['payload'],
+  addSeamSuccess: ['seam'],
+  addSeamFailure: ['error'],
 
-  editSeamRequest: ["payload"],
-  editSeamSuccess: ["seam"],
-  editSeamFailure: ["error"],
+  editSeamRequest: ['payload'],
+  editSeamSuccess: ['seam'],
+  editSeamFailure: ['error'],
 
-
-
-  ///Технологические процессы 
-  loadTexprocweldingRequest: ["payload"],
-  loadTexprocweldingSuccess: ["texprocwelding"],
-  loadTexprocweldingFailure: ["error"],
-
-
+  ///Технологические процессы
+  loadTexprocweldingRequest: ['payload'],
+  loadTexprocweldingSuccess: ['texprocwelding'],
+  loadTexprocweldingFailure: ['error'],
 
   ///Закрепленные детали  за инспектором
-  loadDetailbyinspectorRequest: ["payload"],
-  loadDetailbyinspectorSuccess: ["detailbyinspector"],
-  loadDetailbyinspectorFailure: ["error"],
-
-
+  loadDetailbyinspectorRequest: ['payload'],
+  loadDetailbyinspectorSuccess: ['detailbyinspector'],
+  loadDetailbyinspectorFailure: ['error'],
 
   ///////////
-  loadWeldingtaskRequest: ["payload"],
-  loadWeldingtaskSuccess: ["weldingtask"],
-  loadWeldingtaskFailure: ["error"],
+  loadWeldingtaskRequest: ['payload'],
+  loadWeldingtaskSuccess: ['weldingtask'],
+  loadWeldingtaskFailure: ['error'],
 
-
-
-  deleteProductRequest: ["payload"],
-  deleteProductSuccess: ["id"],
-  deleteProductFailure: ["error"],
-
+  deleteProductRequest: ['payload'],
+  deleteProductSuccess: ['id'],
+  deleteProductFailure: ['error'],
 });
 
 const workplaceActions = {
   Types,
-  Creators
+  Creators,
 };
 
 export default workplaceActions;

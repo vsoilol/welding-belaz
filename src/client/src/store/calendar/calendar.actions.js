@@ -1,54 +1,54 @@
-import { createActions } from "reduxsauce";
+import { createActions } from 'reduxsauce';
 
 const { Types, Creators } = createActions(
   {
-    createCalendarFromStoredRequest: ["year"],
-    createCalendarFromStoredSuccess: ["calendar"],
-    createCalendarFromStoredFailure: ["error"],
+    createCalendarFromStoredRequest: ['year'],
+    createCalendarFromStoredSuccess: ['calendar'],
+    createCalendarFromStoredFailure: ['error'],
 
-    loadMainCalendarByYearRequest: ["year"],
-    loadMainCalendarByYearSuccess: ["calendar"],
-    loadMainCalendarByYearFailure: ["error"],
+    loadMainCalendarByYearRequest: ['year'],
+    loadMainCalendarByYearSuccess: ['calendar'],
+    loadMainCalendarByYearFailure: ['error'],
 
-    updateWorkingDayWithWorkingShiftRequest: ["day", "workingShift"],
+    updateWorkingDayWithWorkingShiftRequest: ['day', 'workingShift'],
     updateWorkingDayWithWorkingShiftSuccess: null,
-    updateWorkingDayWithWorkingShiftFailure: ["error"],
+    updateWorkingDayWithWorkingShiftFailure: ['error'],
 
-    createDayRequest: ["day"],
+    createDayRequest: ['day'],
     createDaySuccess: null,
-    createDayFailure: ["error"],
+    createDayFailure: ['error'],
 
-    updateDayRequest: ["day"],
+    updateDayRequest: ['day'],
     updateDaySuccess: null,
-    updateDayFailure: ["error"],
+    updateDayFailure: ['error'],
 
-    createWorkingShiftRequest: ["workingShift"],
+    createWorkingShiftRequest: ['workingShift'],
     createWorkingShiftSuccess: null,
-    createWorkingShiftFailure: ["error"],
+    createWorkingShiftFailure: ['error'],
 
-    deleteWorkingShiftRequest: ["workingShiftId"],
+    deleteWorkingShiftRequest: ['workingShiftId'],
     deleteWorkingShiftSuccess: null,
-    deleteWorkingShiftFailure: ["error"],
+    deleteWorkingShiftFailure: ['error'],
 
-    updateWorkingShiftRequest: ["workingShift"],
+    updateWorkingShiftRequest: ['workingShift'],
     updateWorkingShiftSuccess: null,
-    updateWorkingShiftFailure: ["error"],
+    updateWorkingShiftFailure: ['error'],
 
-    loadCalendarByWelderRequest: ["welderId", "year"],
-    loadCalendarByWelderSuccess: ["calendar"],
-    loadCalendarByWelderFailure: ["error"],
+    loadCalendarByWelderRequest: ['welderId', 'year'],
+    loadCalendarByWelderSuccess: ['calendar'],
+    loadCalendarByWelderFailure: ['error'],
 
-    loadCalendarByEquipmentRequest: ["equipmentId", "year"],
-    loadCalendarByEquipmentSuccess: ["calendar"],
-    loadCalendarByEquipmentFailure: ["error"],
+    loadCalendarByEquipmentRequest: ['equipmentId', 'year'],
+    loadCalendarByEquipmentSuccess: ['calendar'],
+    loadCalendarByEquipmentFailure: ['error'],
 
-    createCalendarForEquipmentBasedOnMainRequest: ["equipmentId", "year"],
-    createCalendarForEquipmentBasedOnMainSuccess: ["calendar"],
-    createCalendarForEquipmentBasedOnMainFailure: ["error"],
+    createCalendarForEquipmentBasedOnMainRequest: ['equipmentId', 'year'],
+    createCalendarForEquipmentBasedOnMainSuccess: ['calendar'],
+    createCalendarForEquipmentBasedOnMainFailure: ['error'],
 
-    createCalendarForWelderBasedOnMainRequest: ["welderId", "year"],
-    createCalendarForWelderBasedOnMainSuccess: ["calendar"],
-    createCalendarForWelderBasedOnMainFailure: ["error"],
+    createCalendarForWelderBasedOnMainRequest: ['welderId', 'year'],
+    createCalendarForWelderBasedOnMainSuccess: ['calendar'],
+    createCalendarForWelderBasedOnMainFailure: ['error'],
   },
   {}
 );

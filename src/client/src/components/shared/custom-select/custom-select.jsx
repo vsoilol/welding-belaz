@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Select from "react-select";
-import { CustomSelectOption, DropdownArrowIndicator } from "./components";
-import selectStyles from "./select-styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Select from 'react-select';
+import { CustomSelectOption, DropdownArrowIndicator } from './components';
+import selectStyles from './select-styles';
 
 export const CustomSelect = ({
   options,
@@ -15,20 +15,20 @@ export const CustomSelect = ({
 }) => {
   const customStyles = {
     ...selectStyles,
-    container: (base) => ({
+    container: base => ({
       ...base,
-      borderRadius: "20px",
-      paddingLeft: "12px",
-      width: width || "260px",
-      border: "1px solid #E1E1E1",
-      "&:focus": { outline: "none" },
-      "&:active": { outline: "none" },
+      borderRadius: '20px',
+      paddingLeft: '12px',
+      width: width || '260px',
+      border: '1px solid #E1E1E1',
+      '&:focus': { outline: 'none' },
+      '&:active': { outline: 'none' },
     }),
-    placeholder: (base) => ({
+    placeholder: base => ({
       ...base,
-      color: "#a6a6a6",
+      color: '#a6a6a6',
     }),
-    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+    menuPortal: base => ({ ...base, zIndex: 9999 }),
   };
 
   return (
@@ -64,11 +64,11 @@ CustomSelect.propTypes = {
 CustomSelect.defaultProps = {
   options: [],
   // value: "",
-  name: "select",
-  defaultValue: "",
-  placeholder: "",
-  width: "260px",
-  height: "40px",
+  name: 'select',
+  defaultValue: '',
+  placeholder: '',
+  width: '260px',
+  height: '40px',
   isSearchable: false,
   onChange: () => {},
   isDisabled: false,

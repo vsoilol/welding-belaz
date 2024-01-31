@@ -1,21 +1,21 @@
-import Paper from "@material-ui/core/Paper";
-import MaterialTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import AddIcon from "@material-ui/icons/Add";
-import { eye } from "assets/icons";
-import Button from "components/shared/Button";
-import { deleteEmpty } from "services/deleteEmpty";
-import Input from "components/shared/Input";
-import ModalWindow from "components/shared/ModalWindow";
-import Select from "components/shared/Select";
-import { Table } from "components/shared/Table";
-import { FieldArray, Formik } from "formik";
-import React, { useState } from "react";
-import styles from "../styles.module.scss";
+import Paper from '@material-ui/core/Paper';
+import MaterialTable from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import AddIcon from '@material-ui/icons/Add';
+import { eye } from 'assets/icons';
+import Button from 'components/shared/Button';
+import { deleteEmpty } from 'services/deleteEmpty';
+import Input from 'components/shared/Input';
+import ModalWindow from 'components/shared/ModalWindow';
+import Select from 'components/shared/Select';
+import { Table } from 'components/shared/Table';
+import { FieldArray, Formik } from 'formik';
+import React, { useState } from 'react';
+import styles from '../styles.module.scss';
 
 export const InstructionsTable = ({
   tableType,
@@ -32,68 +32,66 @@ export const InstructionsTable = ({
 
   const otkInitialValues = {
     id: modalData?.id ?? null,
-    otkName: modalData?.otkName ?? "",
-    otkDescription: modalData?.otkDescription ?? "",
-    otkUrl: modalData?.otkUrl ?? "",
-    wpsIds: modalData?.wps?.map((item) => item?.id) ?? [""],
+    otkName: modalData?.otkName ?? '',
+    otkDescription: modalData?.otkDescription ?? '',
+    otkUrl: modalData?.otkUrl ?? '',
+    wpsIds: modalData?.wps?.map(item => item?.id) ?? [''],
     allowances: modalData?.allowances ?? [
       {
         passNumber: 1,
-        minPreTemp: "",
-        maxPreTemp: "",
-        minLayerTemp: "",
-        maxLayerTemp: "",
-        minAmp: "",
-        maxAmp: "",
-        minVolt: "",
-        maxVolt: "",
-        minSpeed: "",
-        maxSpeed: "",
-        layerName: "",
+        minPreTemp: '',
+        maxPreTemp: '',
+        minLayerTemp: '',
+        maxLayerTemp: '',
+        minAmp: '',
+        maxAmp: '',
+        minVolt: '',
+        maxVolt: '',
+        minSpeed: '',
+        maxSpeed: '',
+        layerName: '',
       },
     ],
   };
 
   const wpsInitialValues = {
     id: modalData?.id ?? null,
-    wpsName: modalData?.wpsName ?? "",
-    wpsDescription: modalData?.wpsDescription ?? "",
-    wpsUrl: modalData?.wpsUrl ?? "",
+    wpsName: modalData?.wpsName ?? '',
+    wpsDescription: modalData?.wpsDescription ?? '',
+    wpsUrl: modalData?.wpsUrl ?? '',
   };
 
   const otkColumns = [
-    { title: "Наименовние", field: "otkName" },
-    { title: "Шифр", field: "otkDescription" },
+    { title: 'Наименовние', field: 'otkName' },
+    { title: 'Шифр', field: 'otkDescription' },
     {
-      title: "Соответствующие ИТП",
-      field: "wps",
-      render: (rowData) =>
+      title: 'Соответствующие ИТП',
+      field: 'wps',
+      render: rowData =>
         rowData?.wps && (
           <p>
-            {rowData.wps?.map((wps) => (
+            {rowData.wps?.map(wps => (
               <a
                 className={styles.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 href={wps?.wpsUrl}
-                key={wps?.id}
-              >
-                {wps?.wpsName + " "}
+                key={wps?.id}>
+                {wps?.wpsName + ' '}
               </a>
             ))}
           </p>
         ),
     },
     {
-      field: "otkUrl",
-      title: "Просмотр",
-      render: (rowData) => (
+      field: 'otkUrl',
+      title: 'Просмотр',
+      render: rowData => (
         <a
           className={styles.downloadButton}
           target="_blank"
           rel="noopener noreferrer"
-          href={rowData?.otkUrl}
-        >
+          href={rowData?.otkUrl}>
           <img src={eye} alt="" />
         </a>
       ),
@@ -102,18 +100,17 @@ export const InstructionsTable = ({
   ];
 
   const wpsColumns = [
-    { title: "Название", field: "wpsName" },
-    { title: "Описание", field: "wpsDescription" },
+    { title: 'Название', field: 'wpsName' },
+    { title: 'Описание', field: 'wpsDescription' },
     {
-      field: "wpsUrl",
-      title: "Просмотр",
-      render: (rowData) => (
+      field: 'wpsUrl',
+      title: 'Просмотр',
+      render: rowData => (
         <a
           className={styles.downloadButton}
           target="_blank"
           rel="noopener noreferrer"
-          href={rowData?.wpsUrl}
-        >
+          href={rowData?.wpsUrl}>
           <img src={eye} alt="" />
         </a>
       ),
@@ -121,17 +118,17 @@ export const InstructionsTable = ({
     },
   ];
 
-  const renderValue = (value) => {
-    if (value === 0 || value === "0") {
-      return "-";
+  const renderValue = value => {
+    if (value === 0 || value === '0') {
+      return '-';
     }
-    return value ?? "-";
+    return value ?? '-';
   };
 
   const requiredKeys =
-    tableType === "OTK" ? ["otkName", "otkUrl"] : ["wpsName", "wpsUrl"];
+    tableType === 'OTK' ? ['otkName', 'otkUrl'] : ['wpsName', 'wpsUrl'];
 
-  const renderRowChildren = (rowData) => {
+  const renderRowChildren = rowData => {
     return (
       rowData?.allowances && (
         <TableContainer component={Paper}>
@@ -142,16 +139,14 @@ export const InstructionsTable = ({
                   style={{
                     borderBottom: 0,
                   }}
-                  align="center"
-                >
+                  align="center">
                   Номер Прохода
                 </TableCell>
                 <TableCell
                   style={{
                     borderBottom: 0,
                   }}
-                  align="center"
-                >
+                  align="center">
                   Наименование слоя
                 </TableCell>
                 <TableCell
@@ -159,8 +154,7 @@ export const InstructionsTable = ({
                     borderBottom: 0,
                   }}
                   align="center"
-                  colSpan={2}
-                >
+                  colSpan={2}>
                   Температура предварительного подогрева
                 </TableCell>
                 <TableCell
@@ -168,8 +162,7 @@ export const InstructionsTable = ({
                     borderBottom: 0,
                   }}
                   align="center"
-                  colSpan={2}
-                >
+                  colSpan={2}>
                   Межслойная температура
                 </TableCell>
                 <TableCell
@@ -177,8 +170,7 @@ export const InstructionsTable = ({
                     borderBottom: 0,
                   }}
                   align="center"
-                  colSpan={2}
-                >
+                  colSpan={2}>
                   Сила тока
                 </TableCell>
                 <TableCell
@@ -186,8 +178,7 @@ export const InstructionsTable = ({
                     borderBottom: 0,
                   }}
                   align="center"
-                  colSpan={2}
-                >
+                  colSpan={2}>
                   Напряжение на дуге
                 </TableCell>
                 <TableCell
@@ -195,8 +186,7 @@ export const InstructionsTable = ({
                     borderBottom: 0,
                   }}
                   align="center"
-                  colSpan={2}
-                >
+                  colSpan={2}>
                   Скорость варки
                 </TableCell>
               </TableRow>
@@ -216,7 +206,7 @@ export const InstructionsTable = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {rowData?.allowances?.map((row) => (
+              {rowData?.allowances?.map(row => (
                 <TableRow key={row.id}>
                   <TableCell align="center" component="th" scope="row">
                     {row.passNumber}
@@ -268,22 +258,22 @@ export const InstructionsTable = ({
       <div className={styles.tableWrapper}>
         <Table
           title={
-            tableType === "WPS"
-              ? "Инструкции на технологический процесс сварки"
-              : "Операционные технологические карты"
+            tableType === 'WPS'
+              ? 'Инструкции на технологический процесс сварки'
+              : 'Операционные технологические карты'
           }
           actions={
-            userRole === "admin"
+            userRole === 'admin'
               ? [
                   {
-                    icon: "add",
-                    tooltip: "Добавить инструкцию",
+                    icon: 'add',
+                    tooltip: 'Добавить инструкцию',
                     isFreeAction: true,
                     onClick: () => setIsModalOpen(true),
                   },
                   {
-                    icon: "edit",
-                    tooltip: "Редактировать инструкцию",
+                    icon: 'edit',
+                    tooltip: 'Редактировать инструкцию',
                     onClick: (event, rowData) => {
                       setModalData(rowData);
                       setIsModalOpen(true);
@@ -292,37 +282,35 @@ export const InstructionsTable = ({
                 ]
               : []
           }
-          columns={tableType === "WPS" ? wpsColumns : otkColumns}
-          renderRowChildren={tableType === "OTK" && renderRowChildren}
+          columns={tableType === 'WPS' ? wpsColumns : otkColumns}
+          renderRowChildren={tableType === 'OTK' && renderRowChildren}
           data={instructions}
           isLoading={isRequesting}
-          deleteAction={userRole === "admin" ? deleteInstruction : null}
+          deleteAction={userRole === 'admin' ? deleteInstruction : null}
         />
       </div>
       <ModalWindow
         isOpen={isModalOpen}
         headerText={
-          modalData ? "Редактировать инструкцию" : "Добавить инструкцию"
+          modalData ? 'Редактировать инструкцию' : 'Добавить инструкцию'
         }
-        setIsOpen={(state) => {
+        setIsOpen={state => {
           setIsModalOpen(state);
           setModalData(null);
         }}
-        wrapperStyles={{ width: 400 }}
-      >
-        {tableType === "OTK" ? (
+        wrapperStyles={{ width: 400 }}>
+        {tableType === 'OTK' ? (
           <Formik
             initialValues={otkInitialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               modalData
                 ? editInstruction(deleteEmpty({ ...variables }))
                 : addInstruction(deleteEmpty({ ...dataToSend }));
               setIsModalOpen(false);
               setModalData(null);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -333,7 +321,7 @@ export const InstructionsTable = ({
               <form onSubmit={handleSubmit}>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ width: 180, height: 40, paddingLeft: 20 }}
@@ -344,7 +332,7 @@ export const InstructionsTable = ({
                     autoComplete="off"
                   />
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ width: 180, height: 40, paddingLeft: 20 }}
@@ -362,10 +350,10 @@ export const InstructionsTable = ({
                       value={values.wpsIds?.[index]}
                       placeholder="Выбрать WPS"
                       width="360px"
-                      onChange={(e) => {
+                      onChange={e => {
                         // setFieldValue("wpsIds", e.value);
                         setFieldValue(
-                          "wpsIds",
+                          'wpsIds',
                           values.wpsIds?.map((item, itemIndex) => {
                             if (index === itemIndex) {
                               return e.value;
@@ -378,17 +366,16 @@ export const InstructionsTable = ({
                     {values.wpsIds.length !== 2 && (
                       <div
                         onClick={() => {
-                          values.wpsIds.push("");
-                          setFieldValue("wpsIds", values.wpsIds);
+                          values.wpsIds.push('');
+                          setFieldValue('wpsIds', values.wpsIds);
                         }}
                         style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           width: 80,
-                          cursor: "pointer",
-                        }}
-                      >
+                          cursor: 'pointer',
+                        }}>
                         <AddIcon />
                       </div>
                     )}
@@ -396,7 +383,7 @@ export const InstructionsTable = ({
                 ))}
                 <div className={styles.row}>
                   <textarea
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ width: 330, height: 60, paddingLeft: 20 }}
@@ -408,17 +395,16 @@ export const InstructionsTable = ({
                 </div>
                 <FieldArray
                   name="allowances"
-                  render={(arrayHelpers) => (
+                  render={arrayHelpers => (
                     <div>
                       {values.allowances?.map((item, index) => {
                         return (
                           <div key={index}>
                             <div
                               style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                              }}>
                               <p className={styles.text}>
                                 Номер прохода: {index + 1}
                               </p>
@@ -426,29 +412,28 @@ export const InstructionsTable = ({
                                 onClick={() => {
                                   values.allowances.push({
                                     passNumber: values?.allowances?.length + 1,
-                                    minPreTemp: "",
-                                    maxPreTemp: "",
-                                    minLayerTemp: "",
-                                    maxLayerTemp: "",
-                                    minAmp: "",
-                                    maxAmp: "",
-                                    minVolt: "",
-                                    maxVolt: "",
-                                    minSpeed: "",
-                                    maxSpeed: "",
+                                    minPreTemp: '',
+                                    maxPreTemp: '',
+                                    minLayerTemp: '',
+                                    maxLayerTemp: '',
+                                    minAmp: '',
+                                    maxAmp: '',
+                                    minVolt: '',
+                                    maxVolt: '',
+                                    minSpeed: '',
+                                    maxSpeed: '',
                                   });
                                   setFieldValue(
-                                    "allowances",
+                                    'allowances',
                                     values.allowances
                                   );
-                                }}
-                              >
+                                }}>
                                 <p className={styles.text}>Добавить</p>
                               </div>
                             </div>
                             <div className={styles.row}>
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -468,7 +453,7 @@ export const InstructionsTable = ({
                             </p>
                             <div className={styles.row}>
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -483,7 +468,7 @@ export const InstructionsTable = ({
                                 autoComplete="off"
                               />
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -502,7 +487,7 @@ export const InstructionsTable = ({
                             </p>
                             <div className={styles.row}>
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -516,7 +501,7 @@ export const InstructionsTable = ({
                                 autoComplete="off"
                               />
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -533,7 +518,7 @@ export const InstructionsTable = ({
                             <p className={styles.text}>Сила тока:</p>
                             <div className={styles.row}>
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -547,7 +532,7 @@ export const InstructionsTable = ({
                                 autoComplete="off"
                               />
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -564,7 +549,7 @@ export const InstructionsTable = ({
                             <p className={styles.text}>Напряжение на дуге:</p>
                             <div className={styles.row}>
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -578,7 +563,7 @@ export const InstructionsTable = ({
                                 autoComplete="off"
                               />
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -595,7 +580,7 @@ export const InstructionsTable = ({
                             <p className={styles.text}>Скорость сварки м\ч:</p>
                             <div className={styles.row}>
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -609,7 +594,7 @@ export const InstructionsTable = ({
                                 autoComplete="off"
                               />
                               <Input
-                                onChange={(e) => {
+                                onChange={e => {
                                   handleChange(e);
                                 }}
                                 style={{
@@ -631,10 +616,9 @@ export const InstructionsTable = ({
                 />
                 <div className={styles.row}>
                   <Button
-                    disabled={requiredKeys.some((key) => !values[key])}
-                    type="submit"
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
+                    disabled={requiredKeys.some(key => !values[key])}
+                    type="submit">
+                    {modalData ? 'Сохранить' : 'Создать'}
                   </Button>
                 </div>
               </form>
@@ -644,15 +628,14 @@ export const InstructionsTable = ({
           <Formik
             initialValues={wpsInitialValues}
             enableReinitialize
-            onSubmit={(variables) => {
+            onSubmit={variables => {
               const { id, ...dataToSend } = variables;
               modalData
                 ? editInstruction({ ...variables })
                 : addInstruction({ ...dataToSend });
               setIsModalOpen(false);
               setModalData(null);
-            }}
-          >
+            }}>
             {({
               handleSubmit,
               handleChange,
@@ -663,7 +646,7 @@ export const InstructionsTable = ({
               <form onSubmit={handleSubmit}>
                 <div className={styles.row}>
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ width: 180, height: 40, paddingLeft: 20 }}
@@ -674,7 +657,7 @@ export const InstructionsTable = ({
                     autoComplete="off"
                   />
                   <Input
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ width: 180, height: 40, paddingLeft: 20 }}
@@ -687,7 +670,7 @@ export const InstructionsTable = ({
                 </div>
                 <div className={styles.row}>
                   <textarea
-                    onChange={(e) => {
+                    onChange={e => {
                       handleChange(e);
                     }}
                     style={{ width: 330, height: 60, paddingLeft: 20 }}
@@ -699,10 +682,9 @@ export const InstructionsTable = ({
                 </div>
                 <div className={styles.row}>
                   <Button
-                    disabled={requiredKeys.some((key) => !values[key])}
-                    type="submit"
-                  >
-                    {modalData ? "Сохранить" : "Создать"}
+                    disabled={requiredKeys.some(key => !values[key])}
+                    type="submit">
+                    {modalData ? 'Сохранить' : 'Создать'}
                   </Button>
                 </div>
               </form>

@@ -1,13 +1,13 @@
-import { createActions } from "reduxsauce";
+import { createActions } from 'reduxsauce';
 
 const { Types, Creators } = createActions({
-  logInRequest: ["payload"],
-  logInSuccess: ["data"],
-  logInFailure: ["error"],
+  logInRequest: ['payload'],
+  logInSuccess: ['data'],
+  logInFailure: ['error'],
 
-  logOutRequest: ["payload"],
-  logOutSuccess: ["data"],
-  logOutFailure: ["error"],
+  logOutRequest: ['payload'],
+  logOutSuccess: ['data'],
+  logOutFailure: ['error'],
 });
 
 const authActions = {

@@ -1,14 +1,13 @@
-import { createActions } from "reduxsauce";
+import { createActions } from 'reduxsauce';
 
 const { Types, Creators } = createActions({
-  loadRecordsRequest: ["payload"],
-  loadRecordsSuccess: ["records"],
-  loadRecordsFailure: ["error"],
+  loadRecordsRequest: ['payload'],
+  loadRecordsSuccess: ['records'],
+  loadRecordsFailure: ['error'],
 
-
-  deleteRecordsRequest: ["payload"],
-  deleteRecordsSuccess: ["id"],
-  deleteRecordsFailure: ["error"],
+  deleteRecordsRequest: ['payload'],
+  deleteRecordsSuccess: ['id'],
+  deleteRecordsFailure: ['error'],
 });
 
 const recordsActions = {

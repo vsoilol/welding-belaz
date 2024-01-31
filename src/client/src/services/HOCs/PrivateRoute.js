@@ -30,7 +30,9 @@ const PrivateRoute = ({
   return (
     <Route
       {...rest}
-      render={props => (allow ? <Component {...props} /> : <Redirect to={redirectTo} />)}
+      render={props =>
+        allow ? <Component {...props} /> : <Redirect to={redirectTo} />
+      }
     />
   );
 };
