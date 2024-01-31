@@ -5,7 +5,6 @@ import locationGreen from './locationGreen.svg';
 import locationGrey from './locationGrey.svg';
 import locationYellow from './locationYellow.svg';
 import eye from './eye.svg';
-import plus from './plus.svg';
 import logout from './logout.svg';
 
 export {
@@ -16,6 +15,5 @@ export {
   locationGreen,
   locationGrey,
   locationYellow,
-  plus,
   logout,
 };
