@@ -7,7 +7,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { TechProcWeldImage } from 'assets/pics';
 import Button from 'components/shared/Button';
-import EquipmentMap from 'components/Map';
 import Modal from 'components/shared/Modal';
 import Input from 'components/shared/Input';
 import ModalWindow from 'components/shared/ModalWindow';
@@ -793,13 +792,6 @@ export const TexProcWelding = ({
         toolTipText="Здесь Вы можете просмотреть технологические процессы сборки и сварки"
         src={TechProcWeldImage}
       />
-      {open ? (
-        <Modal
-          open={open}
-          setOpen={setOpen}
-          children={<EquipmentMap equipment={equipment} />}
-        />
-      ) : null}
 
       <Tabs
         value={value_panel}

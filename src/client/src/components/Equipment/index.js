@@ -9,8 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { equipmentImage } from 'assets/pics';
 import Button from 'components/shared/Button';
-import EquipmentMap from 'components/Map';
-import Modal from 'components/shared/Modal';
 import Input from 'components/shared/Input';
 import ModalWindow from 'components/shared/ModalWindow';
 import { ResultsModal } from 'components/shared/ResultsModal';
@@ -528,13 +526,6 @@ export const Equipment = ({
         workshop={workshop}
         equipment={equipment}
       />
-      {open ? (
-        <Modal
-          open={open}
-          setOpen={setOpen}
-          children={<EquipmentMap equipment={equipment} />}
-        />
-      ) : null}
 
       <Tabs
         value={value_panel}
