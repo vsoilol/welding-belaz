@@ -1,4 +1,8 @@
-import { applyMiddleware, compose, createStore } from 'redux';
+import {
+  applyMiddleware,
+  compose,
+  legacy_createStore as createStore,
+} from 'redux';
 import { createRouterMiddleware } from '@lagunovsky/redux-react-router';
 import createSagaMiddleware from 'redux-saga';
 import auth from 'services/auth';
