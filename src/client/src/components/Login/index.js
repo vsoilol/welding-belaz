@@ -5,14 +5,12 @@ import TabletContext from 'context/TabletContext';
 import Field from 'components/shared/Field';
 import Button from 'components/shared/Button';
 import styles from './styles.module.scss';
-import { useHistory } from 'react-router-dom';
 
 const initialValues = { email: '', password: '' };
 
 const Main = ({ logIn, isRequesting, requestType, error }) => {
   const isTablet = useContext(TabletContext);
   const [showError, setShowError] = useState(false);
-  const history = useHistory();
   const [indexForm, setindexForm] = useState(0);
 
   useEffect(() => {
@@ -29,7 +27,6 @@ const Main = ({ logIn, isRequesting, requestType, error }) => {
             initialValues={initialValues}
             onSubmit={values => {
               logIn(values);
-              history.push('/');
             }}
             /* validationSchema={loginValidation} */
           >

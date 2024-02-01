@@ -12,7 +12,7 @@ import {
 import api, { getCancelToken } from 'services/api';
 import executorsActions from './actions';
 import errorActions from '../error/actions';
-import { LOCATION_CHANGE } from 'connected-react-router';
+import { ROUTER_ON_LOCATION_CHANGED } from '@lagunovsky/redux-react-router';
 
 const {
   Types: {
@@ -267,7 +267,7 @@ function* fetchExecutorsSaga() {
 function* manageFetchExecutorsSaga() {
   const forkedSaga = yield fork(fetchExecutorsSaga);
 
-  yield take(LOCATION_CHANGE);
+  yield take(ROUTER_ON_LOCATION_CHANGED);
 
   yield cancel(forkedSaga);
 }

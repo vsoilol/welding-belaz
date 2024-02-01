@@ -7,13 +7,13 @@ import {
   cancelled,
   takeLatest,
 } from 'redux-saga/effects';
-import { LOCATION_CHANGE } from 'connected-react-router';
 import api, { getCancelToken } from 'services/api';
 import { errorActionCreators } from 'store/error';
 import {
   calendarActionTypes,
   calendarActionCreators,
 } from '../calendar.actions';
+import { ROUTER_ON_LOCATION_CHANGED } from '@lagunovsky/redux-react-router';
 
 function* loadMainCalendarByYearSaga(year) {
   const { cancelToken, cancel } = getCancelToken();
@@ -45,7 +45,7 @@ function* loadMainCalendarByYearSaga(year) {
 function* manageLoadMainCalendarByYearSaga({ year }) {
   const forkedSaga = yield fork(loadMainCalendarByYearSaga, year);
 
-  yield take(LOCATION_CHANGE);
+  yield take(ROUTER_ON_LOCATION_CHANGED);
 
   yield cancel(forkedSaga);
 }

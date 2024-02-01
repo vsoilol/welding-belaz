@@ -9,6 +9,7 @@ const { Types, Creators } = createActions(
     loadMainCalendarByYearRequest: ['year'],
     loadMainCalendarByYearSuccess: ['calendar'],
     loadMainCalendarByYearFailure: ['error'],
+    loadMainCalendarByYearCancel: null,
 
     updateWorkingDayWithWorkingShiftRequest: ['day', 'workingShift'],
     updateWorkingDayWithWorkingShiftSuccess: null,

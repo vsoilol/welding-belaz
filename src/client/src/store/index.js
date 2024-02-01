@@ -1,11 +1,13 @@
-import { routerMiddleware } from 'connected-react-router';
 import { applyMiddleware, compose, createStore } from 'redux';
+import { createRouterMiddleware } from '@lagunovsky/redux-react-router';
 import createSagaMiddleware from 'redux-saga';
 import auth from 'services/auth';
 
 import history from './history';
 import rootReducer from './reducer';
 import rootSaga from './saga';
+
+const routerMiddleware = createRouterMiddleware(history);
 
 const getInitialState = () => {
   const token = auth.getToken();
@@ -35,8 +37,8 @@ const sagaMiddleware = createSagaMiddleware();
 
 const middleWare =
   process.env.REACT_APP_ENVIRONMENT !== 'production'
-    ? [routerMiddleware(history), sagaMiddleware]
-    : [routerMiddleware(history), sagaMiddleware];
+    ? [routerMiddleware, sagaMiddleware]
+    : [routerMiddleware, sagaMiddleware];
 
 const composeEnhancers =
   process.env.REACT_APP_ENVIRONMENT !== 'production' &&

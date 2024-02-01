@@ -1,1 +1,1 @@
-export const selectUserRole = state => state.auth.user.role;
+export const selectUserRole = state => state.auth?.user?.role;

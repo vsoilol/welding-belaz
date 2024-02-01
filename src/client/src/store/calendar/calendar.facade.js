@@ -26,6 +26,11 @@ export const useCalendarStore = () => {
     [dispatch]
   );
 
+  const cancelLoadMainCalendarByYear = useCallback(
+    () => dispatch(calendarActionCreators.loadMainCalendarByYearCancel()),
+    [dispatch]
+  );
+
   const updateWorkingDayWithWorkingShift = useCallback(
     (day, workingShift) =>
       dispatch(
@@ -110,5 +115,6 @@ export const useCalendarStore = () => {
     loadCalendarByEquipment,
     loadCalendarByWelder,
     createCalendarForEquipmentBasedOnMain,
+    cancelLoadMainCalendarByYear,
   };
 };

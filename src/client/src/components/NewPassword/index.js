@@ -4,7 +4,7 @@ import Text from 'components/shared/Text';
 import TabletContext from 'context/TabletContext';
 import { Formik } from 'formik';
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { resetPasswordValidation } from 'validation/auth.validation';
 import styles from './index.module.scss';
 
@@ -16,9 +16,9 @@ const initialValues = {
   confirmPassword: '',
 };
 
-const NewPassword = ({ resetPassword, isRequesting }) => {
+const NewPassword = () => {
   const isMobile = useContext(TabletContext);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   async function ChangePassword(params) {
     try {
@@ -30,7 +30,7 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
     } catch (error) {
       console.log(error);
     } finally {
-      history.push('/login');
+      navigate('/login');
     }
   }
 
@@ -78,7 +78,6 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
               placeholder="старый пароль"
               onBlur={handleBlur}
               withStrength
-              disabled={isRequesting}
             />
 
             <Field
@@ -92,7 +91,6 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
               placeholder="новый пароль"
               onBlur={handleBlur}
               withStrength
-              disabled={isRequesting}
             />
 
             <Field
@@ -107,13 +105,11 @@ const NewPassword = ({ resetPassword, isRequesting }) => {
               name="confirmPassword"
               placeholder="повторите пароль"
               onBlur={handleBlur}
-              disabled={isRequesting}
             />
 
             <Button
               onClick={{} /* () => history.push("/login") */}
-              isRequesting={isRequesting}
-              disabled={isRequesting || !(isValid && dirty)}
+              disabled={!(isValid && dirty)}
               width="255px"
               type="submit">
               Сохранить

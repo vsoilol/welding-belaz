@@ -4,9 +4,10 @@ import auth from 'services/auth';
 import authActions from './actions';
 import history from 'store/history';
 import errorActions from '../error/actions';
+import { routerActions } from '@lagunovsky/redux-react-router';
 
 const {
-  Types: { LOG_IN_REQUEST, LOG_OUT_REQUEST },
+  Types: { LOG_IN_REQUEST, LOG_OUT_REQUEST, LOG_IN_SUCCESS },
   Creators: { logInSuccess, logInFailure, logOutSuccess, logOutFailure },
 } = authActions;
 
@@ -44,7 +45,12 @@ function* logOut() {
   }
 }
 
+function* navigateAfterLogin() {
+  yield put(routerActions.push('/'));
+}
+
 export default [
   takeLatest(LOG_IN_REQUEST, logIn),
   takeLatest(LOG_OUT_REQUEST, logOut),
+  takeLatest(LOG_IN_SUCCESS, navigateAfterLogin),
 ];

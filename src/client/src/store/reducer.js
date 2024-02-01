@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
+import { createRouterReducer } from '@lagunovsky/redux-react-router';
 import auth from './auth/reducers';
 import equipment from './equipment/reducers';
 import executors from 'store/executors/reducers';
@@ -18,7 +18,7 @@ import welder from './welder/welder.reducer';
 import { weldingEquipmentReducer } from './welding-equipment';
 
 const reducers = {
-  router: connectRouter(history),
+  router: createRouterReducer(history),
   equipment,
   executors,
   tasks,

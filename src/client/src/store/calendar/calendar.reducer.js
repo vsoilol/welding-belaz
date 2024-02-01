@@ -54,6 +54,7 @@ export const HANDLERS = {
   [calendarActionTypes.LOAD_MAIN_CALENDAR_BY_YEAR_SUCCESS]:
     updateStateWithLoadedCalendar,
   [calendarActionTypes.LOAD_MAIN_CALENDAR_BY_YEAR_FAILURE]: loadingFailure,
+  [calendarActionTypes.LOAD_MAIN_CALENDAR_BY_YEAR_CANCEL]: finishLoading,
 
   [calendarActionTypes.CREATE_CALENDAR_FROM_STORED_REQUEST]: startLoading,
   [calendarActionTypes.CREATE_CALENDAR_FROM_STORED_SUCCESS]:

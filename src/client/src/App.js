@@ -1,30 +1,12 @@
 import Message from 'components/shared/Message';
-import {
-  EquipmentContainer,
-  WorkPlacePage,
-  TexProcWeldingPage,
-  ExecutorsContainer,
-  InstructionsContainer,
-  LoginContainer,
-  TasksContainer,
-  RecordsContainer,
-  ModesContainer,
-  ReportsContainer,
-  CreatesUserContainer,
-} from 'containers';
 import MobileContext from 'context/MobileContext';
 import TabletContext from 'context/TabletContext';
-import { NewPasswordPage, ProductionCalendarPage } from 'pages';
 import React, { useEffect, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
-import { Switch, withRouter } from 'react-router-dom';
-import PrivateRoute from 'services/HOCs/PrivateRoute';
-import ScrollToTop from 'services/HOCs/ScrollToTop';
+import { connect } from 'react-redux';
 import ErrorActions from 'store/error/actions';
+import AppRouter from 'app.router';
 
 function App({ error, errorType, clearError }) {
-  const isAuth = useSelector(state => state.auth.isAuth);
-
   const [isMobile, setIsMobile] = useState(
     document.documentElement.clientWidth <= 767
   );
@@ -47,123 +29,7 @@ function App({ error, errorType, clearError }) {
     <>
       <TabletContext.Provider value={isTablet}>
         <MobileContext.Provider value={isMobile}>
-          {/* <React.StrictMode> */}
-          <ScrollToTop>
-            <Switch>
-              <PrivateRoute
-                allow={!isAuth}
-                path="/login"
-                exact
-                component={LoginContainer}
-                redirectTo="/"
-              />
-              <PrivateRoute
-                // allow={!isAuth}
-                allow={true}
-                path="/new-password"
-                exact
-                component={NewPasswordPage}
-                redirectTo="/"
-              />
-              <PrivateRoute
-                // allow={!isAuth}
-                allow={true}
-                path="/creates-user"
-                exact
-                component={CreatesUserContainer}
-                redirectTo="/"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/"
-                exact
-                component={ExecutorsContainer}
-                redirectTo="/login"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/tasks"
-                exact
-                component={TasksContainer}
-                redirectTo="/login"
-              />
-
-              <PrivateRoute
-                allow={isAuth}
-                path="/records"
-                exact
-                component={RecordsContainer}
-                redirectTo="/login"
-              />
-
-              <PrivateRoute
-                allow={isAuth}
-                path="/production"
-                exact
-                component={WorkPlacePage}
-                redirectTo="/login"
-              />
-
-              <PrivateRoute
-                allow={isAuth}
-                path="/tex-proc-welding"
-                exact
-                component={TexProcWeldingPage}
-                redirectTo="/login"
-              />
-
-              <PrivateRoute
-                allow={isAuth}
-                path="/equipment"
-                exact
-                component={EquipmentContainer}
-                redirectTo="/login"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/instructions"
-                exact
-                component={InstructionsContainer}
-                redirectTo="/login"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/records"
-                exact
-                component={RecordsContainer}
-                redirectTo="/login"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/welding-modes"
-                exact
-                component={ModesContainer}
-                redirectTo="/login"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/records"
-                exact
-                component={RecordsContainer}
-                redirectTo="/login"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/production-calendar"
-                exact
-                component={ProductionCalendarPage}
-                redirectTo="/login"
-              />
-              <PrivateRoute
-                allow={isAuth}
-                path="/reports"
-                exact
-                component={ReportsContainer}
-                redirectTo="/login"
-              />
-            </Switch>
-          </ScrollToTop>
-          {/* </React.StrictMode> */}
+          <AppRouter />
         </MobileContext.Provider>
       </TabletContext.Provider>
 
@@ -192,4 +58,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
+export default connect(mapStateToProps, mapDispatchToProps)(App);

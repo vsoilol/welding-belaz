@@ -1,3 +1,5 @@
+@import 'styles/variables';
+
 .container {
   position: fixed;
   width: 100%;
@@ -56,6 +58,7 @@
   color: #000000;
   font-family: 'Muller Narrow Extra Bold';
   font-weight: 700;
+  border-bottom: 4px solid $primaryColor;
 }
 
 .headerIconsContainer {

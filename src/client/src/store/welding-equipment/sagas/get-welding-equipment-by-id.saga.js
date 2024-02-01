@@ -7,7 +7,7 @@ import {
   cancelled,
   takeLatest,
 } from 'redux-saga/effects';
-import { LOCATION_CHANGE } from 'connected-react-router';
+import { ROUTER_ON_LOCATION_CHANGED } from '@lagunovsky/redux-react-router';
 import api, { getCancelToken } from 'services/api';
 import { errorActionCreators } from 'store/error';
 import {
@@ -45,7 +45,7 @@ function* getWeldingEquipmentByIdSaga(id) {
 function* manageGetWeldingEquipmentByIdSaga({ id }) {
   const forkedSaga = yield fork(getWeldingEquipmentByIdSaga, id);
 
-  yield take(LOCATION_CHANGE);
+  yield take(ROUTER_ON_LOCATION_CHANGED);
 
   yield cancel(forkedSaga);
 }

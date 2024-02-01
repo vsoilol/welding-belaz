@@ -41,13 +41,10 @@ export const Header = ({ userRole }) => {
       return (
         <NavLink
           key={item.name}
-          exact
           to={item.route}
-          activeStyle={{
-            borderBottom: `4px solid ${GLOBALS.COLORS.PRIMARY_COLOR}`,
-          }}
-          activeClassName={styles.headerItemActive}
-          className={styles.headerItem}>
+          className={({ isActive }) =>
+            `${styles.headerItem} ${isActive ? styles.headerItemActive : ''}`
+          }>
           {item.name}
         </NavLink>
       );
