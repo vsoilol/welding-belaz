@@ -20,7 +20,7 @@ public class RecordDto : IMapFrom<WeldingRecord>
     /// <summary>
     /// Продолжительность сварки в секундах
     /// </summary>
-    public int WeldingDuration { get; set; }
+    public double WeldingDuration { get; set; }
 
     /// <summary>
     /// Значения сварочного тока
@@ -89,7 +89,7 @@ public class RecordDto : IMapFrom<WeldingRecord>
             )
             .ForMember(
                 dto => dto.WeldingDuration,
-                opt => opt.MapFrom(x => x.WeldingEndTime.Subtract(x.WeldingStartTime).Seconds)
+                opt => opt.MapFrom(x => x.WeldingEndTime.Subtract(x.WeldingStartTime).TotalSeconds)
             )
             .ForMember(dto => dto.WeldingTaskNumber,
                 opt =>
