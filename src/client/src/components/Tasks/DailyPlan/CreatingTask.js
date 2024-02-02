@@ -51,27 +51,6 @@ export const CreatingTask = ({
     } catch (error) {}
   };
 
-  /* Добавление сварочных материалов */
-  const setMaterial = variables => {
-    api
-      .put(`/WeldingTask/welding-material`, {
-        date: new Date(variables.date).toLocaleDateString('ru-RU', {
-          dateStyle: 'short',
-        }),
-        weldingMaterial: variables.weldingMaterial ?? null,
-        weldingMaterialBatchNumber:
-          variables.weldingMaterialBatchNumber != null
-            ? variables.weldingMaterialBatchNumber.toString()
-            : null,
-      })
-      .then(response => {
-        window.location.reload();
-      })
-      .catch(error => {
-        setmodalExistsDate(true);
-      });
-  };
-
   ////Селекты мастеров и контролеров
   const [valChioseMaster, setvalChioseMaster] = useState('');
   const [valChioseInstruct, setvalChioseInstruct] = useState('');
@@ -645,37 +624,6 @@ export const CreatingTask = ({
               options={mastersOptions}
             />
           </div>
-
-          <div className={styles.toolsHead}>
-            <p>Выберите контролера</p>
-            <Select
-              name="valChioseInstruct"
-              value={valChioseInstruct}
-              width="380px"
-              placeholder="Контролеры"
-              onChange={event => {
-                setvalChioseInstruct(event.value);
-              }}
-              options={techsOptions}
-            />
-          </div>
-        </div>
-      ) : null}
-      {userRole === 'Master' ? (
-        <div className={styles.RowTools}>
-          <div className={styles.toolsHead}>
-            <p>Выберите контролера</p>
-            <Select
-              name="valChioseInstruct"
-              value={valChioseInstruct}
-              width="380px"
-              placeholder="Контролеры"
-              onChange={event => {
-                setvalChioseInstruct(event.value);
-              }}
-              options={techsOptions}
-            />
-          </div>
         </div>
       ) : null}
       <div className={styles.RowTools}>
@@ -780,16 +728,7 @@ export const CreatingTask = ({
             </button>
           </div>
         )}
-        {(userRole === 'Admin' || userRole === 'Master') && (
-          <div className={styles.Upload}>
-            <label>Добавление сварочных материалов </label>
-            <button
-              className={styles.addMater}
-              onClick={() => setModalAddMaterial(true)}>
-              Добавить
-            </button>
-          </div>
-        )}
+
         {(userRole === 'Admin' || userRole === 'Master') && (
           <div className={styles.Upload}>
             <label>Загрузить данные</label>
@@ -851,77 +790,6 @@ export const CreatingTask = ({
           }
         />
       </TabPanel>
-
-      {/* Добавление сварочных материалов */}
-      <ModalWindow
-        isOpen={modalAddMaterial}
-        headerText="Добавление сварочных материалов "
-        setIsOpen={state => setModalAddMaterial(false)}
-        wrapperStyles={{ width: 420 }}>
-        <Formik
-          initialValues={valueAddMaterial}
-          enableReinitialize
-          onSubmit={variables => {
-            const { id, ...dataToSend } = variables;
-            setModalAddMaterial(false);
-            setMaterial(variables);
-          }}>
-          {({ handleSubmit, handleChange, values, handleBlur }) => (
-            <form onSubmit={handleSubmit}>
-              <div className={styles.row}>
-                <Input
-                  onChange={handleChange}
-                  width="200"
-                  style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
-                  value={values.date}
-                  name="date"
-                  placeholder="Дата"
-                  type="text"
-                  onFocus={e => {
-                    e.currentTarget.type = 'date';
-                  }}
-                  onBlur={handleBlur}
-                  autoComplete="off"
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={handleChange}
-                  style={{ width: 380, height: 40 }}
-                  value={values.weldingMaterial}
-                  name="weldingMaterial"
-                  placeholder="Наименование сварочного материала"
-                  autoComplete="off"
-                />
-              </div>
-              <div className={styles.row}>
-                <Input
-                  onChange={handleChange}
-                  style={{ width: 380, height: 40 }}
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={values.weldingMaterialBatchNumber}
-                  name="weldingMaterialBatchNumber"
-                  placeholder="Номер партии сварочного материала"
-                  autoComplete="off"
-                />
-              </div>
-              <div className={styles.row}>
-                <Button
-                  disabled={
-                    !values.date &&
-                    !values.weldingMaterial &&
-                    !values.weldingMaterialBatchNumber
-                  }
-                  type="submit">
-                  Закрепить
-                </Button>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </ModalWindow>
 
       {/*Модалка ошибки*/}
       <ModalWindow
