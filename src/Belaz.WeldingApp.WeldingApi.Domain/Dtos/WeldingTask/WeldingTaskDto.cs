@@ -61,7 +61,7 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
                 opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
             )
             .ForMember(
-                dto => dto.WeldingDate,
+                dto => dto.EndDateFromPlan,
                 opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.EndDateFromPlan.ToDayInfoString())
             )
             .ForMember(dto => dto.Status,
