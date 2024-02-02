@@ -12,6 +12,8 @@ public class WeldingTaskDto : IMapFrom<WeldingTask>
     public int Number { get; set; }
 
     public SeamDto Seam { get; set; } = null!;
+    
+    public string? SequenceNumber { get; set; }
 
     public TechnologicalProcessDto TechnologicalProcess { get; set; } = null!;
 

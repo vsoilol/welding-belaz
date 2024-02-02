@@ -13,11 +13,11 @@ public interface IProductAccountRepository
     Task<ProductAccountDto> ChangAmountFromPlanAsync(Guid id, int amountFromPlan);
 
     Task<ProductAccountDto> ChangAcceptedAmountAsync(Guid id, Guid inspectorId, int acceptedAmount);
-    
+
     Task<ProductAccountDto> AddProductAccountAsync(Guid productId, DateTime date, int? uniqueNumber);
-    
+
     Task<ProductAccountDto> SetUniqueNumberAsync(Guid productAccountId, int? uniqueNumber);
-    
+
     Task RemoveProductAccountAsync(Guid id);
 
     Task<ProductAccountDto> GetByIdAsync(Guid id);
@@ -42,5 +42,23 @@ public interface IProductAccountRepository
     Task<ProductAccountDto> SetProductAccountDefectiveReasonAsync(
         Guid productAccountId,
         string defectiveReason
+    );
+
+    Task<ProductAccountDto> EditProductAccountAsync(
+        Guid productAccountId,
+        List<string> sequenceNumbers,
+        int amountFromPlan
+    );
+    
+    Task<ProductAccountDto> ChangeEndWeldingDateAsync(
+        Guid productAccountId,
+        DateTime? weldingEndDate
+    );
+    
+    Task<ProductAccountDto> ChangeDefectiveAmountAsync(
+        Guid productAccountId,
+        Guid inspectorId,
+        int defectiveAmount,
+        string? defectiveReason
     );
 }

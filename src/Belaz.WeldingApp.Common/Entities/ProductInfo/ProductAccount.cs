@@ -10,6 +10,10 @@ public class ProductAccount : Entity
     public int AmountFromPlan { get; set; }
 
     public DateTime DateFromPlan { get; set; }
+    
+    public DateTime? EndDateFromPlan { get; set; }
+    
+    public List<string>? SequenceNumbers { get; set; }
 
     public int? UniqueNumber { get; set; }
 

@@ -1,11 +1,10 @@
-﻿using System.Text.Json.Serialization;
-using AutoMapper;
+﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Seam;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
+using System.Text.Json.Serialization;
 
 namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
 
@@ -15,7 +14,11 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
 
     public int Number { get; set; }
 
-    public string? WeldingDate { get; set; }
+    public string? SequenceNumber { get; set; }
+
+    public string WeldingDate { get; set; } = null!;
+
+    public string? EndDateFromPlan { get; set; }
 
     public int ManufacturedAmount { get; set; }
 
@@ -57,6 +60,10 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
                 dto => dto.WeldingDate,
                 opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
             )
+            .ForMember(
+                dto => dto.WeldingDate,
+                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.EndDateFromPlan.ToDayInfoString())
+            )
             .ForMember(dto => dto.Status,
                 opt =>
                     opt.MapFrom(x => x.TaskStatus))
@@ -86,7 +93,8 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
             )
             .ForMember(
                 dto => dto.ManufacturedAmount,
-                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.AmountFromPlan)
+                opt => 
+                    opt.MapFrom(x => x.SeamAccount.ProductAccount.AmountFromPlan)
             )
             // .ForMember(
             //     dto => dto.WeldingEquipment,

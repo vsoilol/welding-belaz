@@ -45,10 +45,18 @@ public interface IProductAccountService
     Task<Result<ProductAccountDto>> SetProductAccountDefectiveReasonAsync(
         SetProductAccountDefectiveReasonRequest request
     );
-    
+
     Task<Result<ProductAccountDto>> AddProductAccountAsync(AddProductAccountRequest request);
-    
+
     Task<Result<ProductAccountDto>> SetUniqueNumberAsync(SetUniqueNumberForProductRequest request);
-    
+
     Task<Result<Unit>> RemoveProductAccountAsync(RemoveProductAccountRequest request);
+
+    Task<Result<ProductAccountDto>> EditProductAccountAsync(EditProductAccountRequest request);
+
+    Task<Result<ProductAccountDto>> ChangeEndWeldingDateAsync(ChangeEndWeldingDateRequest request);
+
+    Task<Result<ProductAccountDto>> ChangeDefectiveAmountAsync(ChangeDefectiveAmountRequest request);
+
+    Task<Result<List<ProductTaskDto>>> GetAllProductAccountTasksAsync();
 }

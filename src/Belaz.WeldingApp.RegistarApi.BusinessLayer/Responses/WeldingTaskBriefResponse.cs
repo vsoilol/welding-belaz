@@ -60,6 +60,6 @@ public class WeldingTaskBriefResponse : IMapFrom<WeldingTaskDto>
             .ForMember(dto => dto.DetailNumber, opt => 
                 opt.MapFrom(x => x.Seam.Detail!.Number))
             .ForMember(dto => dto.SequenceNumber, opt => 
-                opt.MapFrom(x => ""));
+                opt.MapFrom(x => x.SequenceNumber ?? string.Empty));
     }
 }

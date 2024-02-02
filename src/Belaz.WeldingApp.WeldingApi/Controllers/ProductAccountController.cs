@@ -31,7 +31,7 @@ public class ProductAccountController : ControllerBase
     )
     {
         var result = await _productAccountService.GetAllDatesByProductionAreaAsync(
-            new ProductionAreaIdRequest { ProductionAreaId = productionAreaId }
+            new ProductionAreaIdRequest {ProductionAreaId = productionAreaId}
         );
 
         return result.ToOk();
@@ -166,13 +166,48 @@ public class ProductAccountController : ControllerBase
         var result = await _productAccountService.AddProductAccountAsync(request);
         return result.ToOk();
     }
-    
+
     [HttpPut("unique-number")]
     [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<ProductAccountDto>> SetUniqueNumberAsync(
         [FromBody] SetUniqueNumberForProductRequest request)
     {
         var result = await _productAccountService.SetUniqueNumberAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("edit")]
+    [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> EditProductAccountAsync(
+        [FromBody] EditProductAccountRequest request)
+    {
+        var result = await _productAccountService.EditProductAccountAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("update-defective-amount")]
+    [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> ChangeDefectiveAmountAsync(
+        [FromBody] ChangeDefectiveAmountRequest request)
+    {
+        var result = await _productAccountService.ChangeDefectiveAmountAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpPut("update-welding-end-date")]
+    [ProducesResponseType(typeof(ProductAccountDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ProductAccountDto>> ChangeEndWeldingDateAsync(
+        [FromBody] ChangeEndWeldingDateRequest request)
+    {
+        var result = await _productAccountService.ChangeEndWeldingDateAsync(request);
+        return result.ToOk();
+    }
+
+    [HttpGet("tasks")]
+    [ProducesResponseType(typeof(List<ProductTaskDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ProductTaskDto>>> GetAllProductAccountTasksAsync()
+    {
+        var result = await _productAccountService.GetAllProductAccountTasksAsync();
         return result.ToOk();
     }
 }

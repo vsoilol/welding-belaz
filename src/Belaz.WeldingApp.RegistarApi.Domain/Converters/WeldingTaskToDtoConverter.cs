@@ -25,6 +25,7 @@ public class WeldingTaskToDtoConverter : ITypeConverter<WeldingTask, WeldingTask
 
         destination.Id = source.Id;
         destination.Number = source.Number;
+        destination.SequenceNumber = source.SequenceNumber;
 
         MapRelatedEntities(source, destination);
 
