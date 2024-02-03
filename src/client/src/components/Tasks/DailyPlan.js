@@ -1,18 +1,7 @@
 import React from 'react';
+import { CreatingTask } from './DailyPlan/creating-task';
+
 import styles from './styles.module.scss';
-import errorActions from 'store/error/actions';
-
-import { CreatingTask } from './DailyPlan/CreatingTask';
-
-const {
-  Creators: { setError },
-} = errorActions;
-
-const dateOptions = {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-};
 
 export const DailyPlan = ({
   masters,

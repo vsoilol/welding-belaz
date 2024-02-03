@@ -11,6 +11,7 @@ import instructionsWatchers from 'store/instructions/sagas';
 import equipmentWatchers from 'store/equipment/sagas';
 import welderWatchers from 'store/welder/welder.watcher';
 import { weldingEquipmentWatchers } from 'store/welding-equipment';
+import { taskWatchers } from 'store/task';
 
 export default function* () {
   const sagas = [
@@ -19,12 +20,13 @@ export default function* () {
     ...authWatchers,
     ...workplaceWatchers,
     ...texprocweldingWatchers,
-    ...tasksWatchers,
+    //...tasksWatchers,
     ...recordsWatchers,
     ...instructionsWatchers,
     ...equipmentWatchers,
     ...welderWatchers,
     ...weldingEquipmentWatchers,
+    ...taskWatchers,
   ];
 
   yield all(sagas);

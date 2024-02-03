@@ -8,7 +8,7 @@ import WorkplaceActions from 'store/workplace/actions';
 
 const mapStateToProps = state => {
   return {
-    tasks: state.tasks.tasks,
+    //tasks: state.tasks.tasks,
     masters: state.executors.masters,
     executors: state.executors.executors,
     techs: state.executors.techs,
@@ -21,7 +21,7 @@ const mapStateToProps = state => {
     userRole: state.auth.user.role,
     user: state.auth.user,
 
-    info: state.tasks.info,
+    //info: state.tasks.info,
     ///Сварные швы
     seam: state.workplace.seam,
     ///Изделия
@@ -32,8 +32,8 @@ const mapStateToProps = state => {
     detail: state.workplace.detail,
 
     ///Ежедневный план
-    alldates: state.tasks.alldates,
-    plan: state.tasks.plan,
+    // alldates: state.tasks.alldates,
+    // plan: state.tasks.plan,
   };
 };
 const mapDispatchToProps = {

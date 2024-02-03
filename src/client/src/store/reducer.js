@@ -16,24 +16,27 @@ import texprocwelding from './texprocwelding/reducers';
 import calendar from './calendar/calendar.reducer';
 import welder from './welder/welder.reducer';
 import { weldingEquipmentReducer } from './welding-equipment';
+import { taskReducer } from './task';
 
 const reducers = {
   router: createRouterReducer(history),
   equipment,
   executors,
-  tasks,
+  // tasks,
   instructions,
   error,
   auth,
   records,
 
-  ///Производство
+  // Производство
   workplace,
-  ///Технологические процессы
+
+  // Технологические процессы
   texprocwelding,
   calendar,
   welder,
   weldingEquipment: weldingEquipmentReducer,
+  task: taskReducer,
 };
 
 export default combineReducers(reducers);

@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router": "^6.21.3",
-    "react-router-dom": "^6.21.3",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -17,9 +13,13 @@
     "formik": "^2.4.5",
     "history": "^5.3.0",
     "material-table": "^1.57.2",
+    "react": "^18.2.0",
     "react-big-calendar": "^1.8.7",
+    "react-dom": "^18.2.0",
     "react-loader-spinner": "^6.1.6",
     "react-redux": "^9.1.0",
+    "react-router": "^6.21.3",
+    "react-router-dom": "^6.21.3",
     "react-router-redux": "^4.0.8",
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
@@ -52,7 +52,7 @@
     ]
   },
   "devDependencies": {
-    "yarn-audit-fix": "^10.0.7",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "yarn-audit-fix": "^10.0.7"
   }
 }

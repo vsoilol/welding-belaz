@@ -1,28 +1,22 @@
+import React, { useEffect, useState } from 'react';
+import { Formik } from 'formik';
+
+import deleteIcon from 'assets/icons/delete.png';
+
+import { Upload } from 'components/Upload/index';
 import Button from 'components/shared/Button';
 import Input from 'components/shared/Input';
 import ModalWindow from 'components/shared/ModalWindow';
 import Select from 'components/shared/Select';
 import { Table } from 'components/shared/Table';
-import { Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
-import api from 'services/api';
-import styles from '../styles.module.scss';
-import errorActions from 'store/error/actions';
-import { Upload } from 'components/Upload/index';
-import deleteIcon from 'assets/icons/delete.png';
 
-const {
-  Creators: { setError },
-} = errorActions;
+import api from 'services/api';
+
+import styles from '../styles.module.scss';
 
 export const CreatingTask = ({
   masters,
 
-  product,
-  knot,
-  detail,
-  executors,
-  user,
   initialValues,
   equipment,
   userRole,
@@ -34,13 +28,6 @@ export const CreatingTask = ({
   const [errorText, seterrorText] = useState('');
   const [errorRecordsModal, seterrorRecordsModal] = useState(false);
 
-  /* Получение данных об изготовленных изделиях, узлах и деталях  */
-  const valueAddMaterial = {
-    date: '',
-    weldingMaterial: '',
-    weldingMaterialBatchNumber: '',
-  };
-  const [modalAddMaterial, setModalAddMaterial] = useState(false);
   const [modalExistsDate, setmodalExistsDate] = useState(false);
   const getDetProd = async () => {
     try {
@@ -55,12 +42,6 @@ export const CreatingTask = ({
   const [valChioseMaster, setvalChioseMaster] = useState('');
   const [valChioseInstruct, setvalChioseInstruct] = useState('');
   const mastersOptions = masters?.map(item => {
-    return {
-      value: item?.id,
-      label: `${item?.middleName} ${item?.firstName}`,
-    };
-  });
-  const techsOptions = techs?.map(item => {
     return {
       value: item?.id,
       label: `${item?.middleName} ${item?.firstName}`,
@@ -280,15 +261,6 @@ export const CreatingTask = ({
       title: 'Номер изделия',
       field: 'product.product.number',
     },
-    /* {
-            title: "Уникальный номер", 
-            field: "uniqueNumber",
-            render: rowData => rowData?.uniqueNumber ? rowData?.uniqueNumber: '-',
-            customFilterAndSearch: (term, rowData) => {
-                const value = rowData?.uniqueNumber ? rowData?.uniqueNumber: '-';
-                return value.toLowerCase().includes(term.toLowerCase());
-            },
-        }, */
     {
       title: 'Количество из плана ',
       field: 'amountFromPlan',
@@ -807,6 +779,7 @@ export const CreatingTask = ({
           </div>
         </div>
       </ModalWindow>
+
       {/*Удаление плана*/}
       <ModalWindow
         isOpen={deleteRecordsModal}
@@ -818,8 +791,7 @@ export const CreatingTask = ({
         <Formik
           initialValues={initialValues}
           enableReinitialize
-          onSubmit={variables => {
-            const { id, ...dataToSend } = variables;
+          onSubmit={() => {
             setdeleteRecordsModal(false);
             deleteRecords();
           }}>
@@ -861,25 +833,18 @@ export const CreatingTask = ({
         <Formik
           initialValues={initialValues}
           enableReinitialize
-          onSubmit={variables => {
-            const { id, ...dataToSend } = variables;
+          onSubmit={() => {
             FixoEquipment(valueWelder);
             setvalueChoiseWelder(false);
           }}>
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
+          {({ handleSubmit, values }) => (
             <form onSubmit={handleSubmit}>
               <div className={styles.equipments}>
                 {equipment[0]?.map(option => (
                   <div>
                     <input
                       type="checkbox"
-                      onChange={e => {
+                      onChange={() => {
                         handleSelectChange(option);
                       }}
                     />
@@ -902,53 +867,21 @@ export const CreatingTask = ({
       <ModalWindow
         isOpen={modalchangeInfoproductAccount}
         headerText="Редактировать"
-        setIsOpen={state => {
+        setIsOpen={() => {
           setmodalchangeInfoproductAccount(false);
         }}
         wrapperStyles={{ width: 420 }}>
         <Formik
           initialValues={initialValues}
           enableReinitialize
-          onSubmit={variables => {
-            const { id, ...dataToSend } = variables;
+          onSubmit={() => {
             setmodalchangeInfoproductAccount(false);
             ChangeData();
           }}>
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            setFieldValue,
-            handleBlur,
-          }) => (
+          {({ handleSubmit, handleChange, values, handleBlur }) => (
             <form onSubmit={handleSubmit}>
               {userRole === 'Master' || userRole === 'Admin' ? (
                 <div>
-                  {/* {CheckIsProd
-                                            ?<div>
-                                                <p>Изменение уникального номера  </p>
-                                                <div className={styles.row}>
-                                                    <Input 
-                                                        onChange={(e) => {
-                                                            const re = /^[0-9]+([,.][0-9]*)?$/;
-                                                            if (e.target.value === '' || re.test(e.target.value)) {
-                                                                handleChange(e);
-                                                                setprodUniqueNumber(e.target.value)
-                                                            }
-                                                        }} 
-                                                        type="number"
-                                                        min="0"
-                                                        style={{ height: 40, padding: "0 20px 0 30px", width: "100%" }}
-                                                        value={prodUniqueNumber}
-                                                        name="prodUniqueNumber"
-                                                        placeholder="Уникальный номер"
-                                                        onBlur={handleBlur}
-                                                        autoComplete="off"
-                                                    /> 
-                                                </div>
-                                            </div>
-                                            :null
-                                        } */}
                   <p>Изменение количества продукции из плана </p>
                   <div className={styles.row}>
                     <Input

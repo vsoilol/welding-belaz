@@ -4,7 +4,9 @@ import { GLOBALS } from 'config/GLOBALS';
 
 import styles from './loading-spinner.module.scss';
 
-const LoadingSpinner = ({ isFullScreenMode, paddingTop }) => {
+const LoadingSpinner = ({ isFullScreenMode, paddingTop, color }) => {
+  const colorFullScreen = '#007BFF';
+
   useEffect(() => {
     const toggleBodyScroll = disableScroll => {
       document.body.classList.toggle(styles.noScroll, disableScroll);
@@ -25,6 +27,11 @@ const LoadingSpinner = ({ isFullScreenMode, paddingTop }) => {
     ? styles.fullScreenSpinner
     : styles.inlineSpinner;
 
+  const getColor =
+    color ||
+    (isFullScreenMode && colorFullScreen) ||
+    GLOBALS.COLORS.PRIMARY_COLOR;
+
   return (
     <div className={spinnerClass} style={{ paddingTop }}>
       <RotatingLines
@@ -33,7 +40,7 @@ const LoadingSpinner = ({ isFullScreenMode, paddingTop }) => {
         width="90"
         strokeWidth="3"
         animationDuration="0.75"
-        strokeColor={GLOBALS.COLORS.PRIMARY_COLOR}
+        strokeColor={getColor}
         ariaLabel="loading"
       />
     </div>

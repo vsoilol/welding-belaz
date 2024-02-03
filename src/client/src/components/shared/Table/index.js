@@ -50,7 +50,7 @@ export const Table = ({
       isLoading={isLoading}
       title={!isMobile && title}
       columns={columns}
-      data={data}
+      data={data ?? []}
       detailPanel={
         renderRowChildren ? rowData => renderRowChildren(rowData) : null
       }

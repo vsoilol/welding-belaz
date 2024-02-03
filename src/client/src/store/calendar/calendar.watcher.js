@@ -1,6 +1,6 @@
 import * as sagas from './sagas';
 
-export default [
+const watchers = [
   ...sagas.loadMainCalendarByYearWatchers,
   ...sagas.createCalendarFromStoredWatchers,
   ...sagas.updateWorkingDayWithWorkingShiftWatchers,
@@ -13,3 +13,5 @@ export default [
   ...sagas.loadCalendarByEquipmentWatchers,
   ...sagas.createCalendarForEquipmentBasedOnMainWatchers,
 ];
+
+export default watchers;

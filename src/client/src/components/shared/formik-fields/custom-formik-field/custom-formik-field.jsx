@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import styles from './custom-formik-field.module.scss';
 
-const CustomFormikField = ({ name, children }) => {
+const CustomFormikField = ({ name, style, children }) => {
   const [field, meta] = useField(name);
 
   return (
-    <div className={styles.inputField}>
+    <div style={style} className={styles.inputField}>
       {React.cloneElement(children, { field, meta, name })}
       {meta.touched && meta.error && (
         <div className={styles.inputError}>{meta.error}</div>
