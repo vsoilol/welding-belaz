@@ -408,7 +408,7 @@ public class RegistarService : IRegistarService
 
         var masterId = await _masterRepository.GetMasterIdByWeldingTaskIdAsync(taskId);
         var seamId = await _seamRepository.GetSeamIdByWeldingTaskIdAsync(taskId);
-        
+
         if (masterId.HasValue && (weldPassage.IsEnsuringCurrentAllowance.HasValue
                                   || weldPassage.IsEnsuringVoltageAllowance.HasValue))
         {
@@ -511,13 +511,10 @@ public class RegistarService : IRegistarService
 
         if (existingConditionTime.Condition == Condition.On && existingConditionTime.Time > 5)
         {
-            await CreateWeldingEquipmentConditionTimeAsync(
+            await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
+                existingConditionTime.Id,
                 Condition.ForcedDowntime,
-                date,
-                startConditionTime,
-                weldingEquipmentId,
-                welderId
-            );
+                existingConditionTime.Time);
             return;
         }
 
