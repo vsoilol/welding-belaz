@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.RegistarApi.Domain.Dtos;
 using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.RegistarApi.DataLayer.Repositories.Implementations;
@@ -62,6 +63,18 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
         )!;
 
         updatedConditionTime.Time = time;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateEquipmentConditionTimeAsync(Guid id, Condition condition, double time)
+    {
+        var updatedConditionTime = (
+            await _context.WeldingEquipmentConditionTimes.FirstOrDefaultAsync(_ => _.Id == id)
+        )!;
+
+        updatedConditionTime.Time = time;
+        updatedConditionTime.Condition = condition;
 
         await _context.SaveChangesAsync();
     }
