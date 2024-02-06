@@ -19,7 +19,13 @@ public class _202402060001_CreateProductAccountTaskTable : Migration
             .WithColumn("DefectiveAmount").AsInt32().NotNullable()
             .WithColumn("ProductAccountId").AsGuid()
             .NotNullable()
-            .ForeignKey("ProductAccounts", "Id");
+            .ForeignKey("ProductAccounts", "Id")
+            .WithColumn("MasterId").AsGuid()
+            .Nullable()
+            .ForeignKey("Masters", "Id")
+            .WithColumn("InspectorId").AsGuid()
+            .Nullable()
+            .ForeignKey("Inspectors", "Id");
 
         Alter.Table("WeldingTasks")
             .AddColumn("ProductAccountTaskId")

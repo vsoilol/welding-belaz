@@ -20,4 +20,6 @@ public class Inspector : Entity
     public List<Seam> Seams { get; set; } = null!;
 
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
+    
+    public List<ProductAccountTask> ProductAccountTasks { get; set; } = null!;
 }

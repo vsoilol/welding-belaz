@@ -24,4 +24,6 @@ public class Master : Entity
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
 
     public List<WeldingRecord> WeldingRecords { get; set; } = null!;
+    
+    public List<ProductAccountTask> ProductAccountTasks { get; set; } = null!;
 }

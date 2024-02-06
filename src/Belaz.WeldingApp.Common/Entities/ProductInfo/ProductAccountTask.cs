@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Entities.Users;
 using Belaz.WeldingApp.Common.Entities.WeldingEquipmentInfo;
 
 namespace Belaz.WeldingApp.Common.Entities.ProductInfo;
@@ -30,4 +31,14 @@ public class ProductAccountTask : Entity
     public List<WeldingTask> WeldingTasks { get; set; } = null!;
     
     public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
+
+    public Guid? MasterId { get; set; }
+
+    [ForeignKey(nameof(MasterId))]
+    public Master? Master { get; set; }
+
+    public Guid? InspectorId { get; set; }
+
+    [ForeignKey(nameof(InspectorId))]
+    public Inspector? Inspector { get; set; }
 }
