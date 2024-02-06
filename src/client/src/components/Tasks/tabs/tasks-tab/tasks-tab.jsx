@@ -4,7 +4,7 @@ import { useTaskStore } from 'store/task';
 
 import { Button, ModalWindow, LoadingSpinner } from 'components/shared';
 import { EditTaskModal, GetSeamPassportModal } from 'components/Tasks/modals';
-import { TaskTable } from '../task-table';
+import { TaskTable } from 'components/Tasks/components';
 
 import styles from 'components/Tasks/styles.module.scss';
 

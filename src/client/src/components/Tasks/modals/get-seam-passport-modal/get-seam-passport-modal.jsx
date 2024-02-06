@@ -27,8 +27,6 @@ export const GetSeamPassportModal = ({
 
   const handleFormSubmit = values => {
     const { sequenceNumber } = values;
-    console.log('Sequence Number', sequenceNumber);
-    console.log('Task id', selectedTaskId);
 
     if (isFullPassport) {
       getFullTaskPassport(selectedTaskId, sequenceNumber);

@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { closeIcon } from 'assets/icons';
-// import { TabletContext } from 'context';
-// import { useSwipeable } from 'react-swipeable';
 import styles from './styles.module.scss';
 
 const ModalWindow = ({
@@ -15,8 +13,6 @@ const ModalWindow = ({
   headerTextColor,
   closeButtonStyles,
 }) => {
-  // const isTablet = useContext(TabletContext);
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflowY = 'hidden';
@@ -25,15 +21,12 @@ const ModalWindow = ({
       document.body.style.position = 'static';
       document.body.style.overflowY = 'auto';
     }
-  }, [isOpen]);
 
-  // const handlers = useSwipeable(
-  //   isTablet && {
-  //     onSwipedDown: () => setIsOpen(false),
-  //     preventDefaultTouchmoveEvent: true,
-  //     trackMouse: true,
-  //   }
-  // );
+    return () => {
+      document.body.style.position = 'static';
+      document.body.style.overflowY = 'auto';
+    };
+  }, [isOpen]);
 
   return (
     <div className={styles.container} /* {...handlers} */>

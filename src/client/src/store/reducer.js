@@ -17,6 +17,9 @@ import calendar from './calendar/calendar.reducer';
 import welder from './welder/welder.reducer';
 import { weldingEquipmentReducer } from './welding-equipment';
 import { taskReducer } from './task';
+import { masterReducer } from './master';
+import { productAccountReducer } from './product-account';
+import { modalReducer } from './modal';
 
 const reducers = {
   router: createRouterReducer(history),
@@ -37,6 +40,9 @@ const reducers = {
   welder,
   weldingEquipment: weldingEquipmentReducer,
   task: taskReducer,
+  master: masterReducer,
+  productAccount: productAccountReducer,
+  modal: modalReducer,
 };
 
 export default combineReducers(reducers);

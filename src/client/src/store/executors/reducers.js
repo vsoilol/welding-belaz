@@ -180,9 +180,9 @@ export const HANDLERS = {
   [Types.ADD_EXECUTOR_SUCCESS]: addExecutorSuccess,
   [Types.ADD_EXECUTOR_FAILURE]: failure,
 
-  [Types.LOAD_MASTERS_REQUEST]: request,
-  [Types.LOAD_MASTERS_SUCCESS]: loadMastersSuccess,
-  [Types.LOAD_MASTERS_FAILURE]: failure,
+  // [Types.LOAD_MASTERS_REQUEST]: request,
+  // [Types.LOAD_MASTERS_SUCCESS]: loadMastersSuccess,
+  // [Types.LOAD_MASTERS_FAILURE]: failure,
 
   [Types.EDIT_MASTER_REQUEST]: request,
   [Types.EDIT_MASTER_SUCCESS]: editMasterSuccess,

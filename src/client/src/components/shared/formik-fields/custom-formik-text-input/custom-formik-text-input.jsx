@@ -13,7 +13,7 @@ const CustomFormikTextInput = ({
 }) => {
   const inputStyle = { width, height };
   const inputClasses = `${styles.input} ${
-    meta.touched && meta.error ? styles.invalid : ''
+    meta?.touched && meta?.error ? styles.invalid : ''
   } ${className}`;
 
   return (
