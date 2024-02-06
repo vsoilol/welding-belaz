@@ -353,7 +353,8 @@ public class ProductAccountRepository : IProductAccountRepository
                 ProductId = productAccount.ProductId,
                 ProductResults = productResultStatus,
                 SeamAccounts = seamAccounts,
-                WeldingEquipments = productAccount.WeldingEquipments
+                WeldingEquipments = productAccount.WeldingEquipments,
+                SequenceNumbers = productAccount.SequenceNumbers
             };
             newProductAccounts.Add(newProductAccount);
         }
@@ -508,6 +509,93 @@ public class ProductAccountRepository : IProductAccountRepository
         }
 
         _context.WeldingTasks.AddRange(weldingTasks);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task GenerateProductAccountTasksAsync(DateTime date, Guid productionAreaId, Guid masterId)
+    {
+        var oldProductAccountTasks = _context.ProductAccountTasks
+            .Include(_ => _.WeldingTasks)
+            .Where(_ => _.DateFromPlan.Date.Equals(date.Date)
+                        && _.Master!.UserInfo.ProductionAreaId == productionAreaId);
+
+        _context.RemoveRange(oldProductAccountTasks);
+        await _context.SaveChangesAsync();
+
+        var master = (await _context.Masters.FirstOrDefaultAsync(_ => _.Id == masterId))!;
+
+        var productAccounts = await _context.ProductAccounts
+            .Where(_ => _.DateFromPlan.Date.Equals(date.Date))
+            .ToListAsync();
+
+        var productAccountTasks = new List<ProductAccountTask>();
+
+        foreach (var productAccount in productAccounts)
+        {
+            var sequenceNumbers = productAccount.SequenceNumbers;
+
+            if (sequenceNumbers == null || !sequenceNumbers.Any())
+            {
+                continue;
+            }
+
+            var seamAccounts = await _context.SeamAccounts
+                .Include(_ => _.SeamResults)
+                .Include(_ => _.ProductAccount)
+                .Include(_ => _.Seam.Inspector)
+                .Where(_ => _.ProductAccountId == productAccount.Id
+                            && _.ProductAccount.AmountFromPlan > 0
+                )
+                .OrderBy(_ => _.ProductAccount.Number)
+                .ToListAsync();
+
+            var plannedStartDate = productAccount.DateFromPlan;
+
+            var existingProductAccountTasks = await _context.ProductAccountTasks
+                .Where(productAccountTask => sequenceNumbers.Contains(productAccountTask.SequenceNumber)
+                                             && productAccountTask.ProductAccountId == productAccount.Id
+                                             && plannedStartDate > productAccountTask.DateFromPlan.Date
+                                             && plannedStartDate <= productAccountTask.EndDateFromPlan)
+                .Select(productAccountTask => productAccountTask.SequenceNumber)
+                .ToListAsync();
+
+            var sequenceNumbersWithoutWeldingTask = sequenceNumbers.Except(existingProductAccountTasks);
+
+            foreach (var sequenceNumber in sequenceNumbersWithoutWeldingTask)
+            {
+                var weldingTasks = new List<WeldingTask>();
+
+                foreach (var seamAccount in seamAccounts)
+                {
+                    var newWeldingTask = new WeldingTask
+                    {
+                        WeldingDate = date,
+                        Master = master,
+                        Inspector = seamAccount.Seam.Inspector,
+                        SeamAccount = seamAccount,
+                        SequenceNumber = sequenceNumber
+                    };
+                    weldingTasks.Add(newWeldingTask);
+                }
+
+                if (!weldingTasks.Any())
+                {
+                    continue;
+                }
+
+                var productAccountTask = new ProductAccountTask
+                {
+                    WeldingTasks = weldingTasks,
+                    SequenceNumber = sequenceNumber,
+                    DateFromPlan = productAccount.DateFromPlan,
+                    ProductAccountId = productAccount.Id,
+                    MasterId = master.Id
+                };
+                productAccountTasks.Add(productAccountTask);
+            }
+        }
+
+        _context.ProductAccountTasks.AddRange(productAccountTasks);
         await _context.SaveChangesAsync();
     }
 

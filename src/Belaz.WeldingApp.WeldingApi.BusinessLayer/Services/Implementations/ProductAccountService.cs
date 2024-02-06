@@ -163,7 +163,7 @@ public class ProductAccountService : IProductAccountService
 
         var date = request.Date.ToDateTime();
 
-        await _productAccountRepository.GenerateTasksAsync(
+        await _productAccountRepository.GenerateProductAccountTasksAsync(
             date,
             request.ProductionAreaId,
             request.MasterId

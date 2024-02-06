@@ -1,32 +1,30 @@
-﻿using AutoMapper;
+﻿using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
+using System.Text.Json.Serialization;
+using AutoMapper;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
-using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
-using System.Text.Json.Serialization;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingTask;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductAccount;
 
-public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask>
+public class ProductAccountTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccountTask>
 {
     public Guid Id { get; set; }
 
     public int Number { get; set; }
 
-    public string? SequenceNumber { get; set; }
+    public string SequenceNumber { get; set; } = null!;
+    
+    //public List<Common.Entities.TaskInfo.WeldingTask> WeldingTasks { get; set; } = null!;
 
-    public string WeldingDate { get; set; } = null!;
+    public string DateFromPlan { get; set; } = null!;
 
     public string? EndDateFromPlan { get; set; }
 
     public int ManufacturedAmount { get; set; }
 
-    public WeldingTaskStatus Status { get; set; }
-
-    public string SeamNumber { get; set; } = null!;
-
-    //public SeamDto Seam { get; set; } = null!;
+    public bool IsDone { get; set; }
 
     [JsonIgnore] public Guid MainProductId { get; set; }
 
@@ -36,71 +34,67 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
 
     public ProductBriefDto? Detail { get; set; }
 
-    public UserFullNameDto? Welder { get; set; }
-
     public UserFullNameDto? Master { get; set; }
 
     public UserFullNameDto? Inspector { get; set; }
 
     public List<WeldingEquipmentBriefDto>? WeldingEquipments { get; set; }
 
-    public int? UniqueNumber { get; set; }
+    public List<string> Seams { get; set; } = null!;
 
     /// <summary>
     /// Есть ли отклонения
     /// </summary>
-    public bool AreDeviations { get; set; } = false;
+    public bool AreDeviations { get; set; }
 
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Belaz.WeldingApp.Common.Entities.TaskInfo.WeldingTask, WeldingTaskDto>()
+            .CreateMap<Belaz.WeldingApp.Common.Entities.ProductInfo.ProductAccountTask, ProductAccountTaskDto>()
             .ForMember(
-                dto => dto.WeldingDate,
-                opt => opt.MapFrom(x => x.WeldingDate.ToDayInfoString())
+                dto => dto.DateFromPlan,
+                opt => opt.MapFrom(x => x.DateFromPlan.ToDayInfoString())
             )
             .ForMember(
                 dto => dto.EndDateFromPlan,
-                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.EndDateFromPlan.ToDayInfoString())
+                opt => opt
+                    .MapFrom(x => x.EndDateFromPlan.ToDayInfoString())
             )
-            .ForMember(dto => dto.Status,
+            .ForMember(
+                dto => dto.Seams,
+                opt => opt
+                    .MapFrom(x => x.WeldingTasks.Select(_ => _.SeamAccount.Seam.Number))
+            )
+            .ForMember(dto => dto.IsDone,
                 opt =>
-                    opt.MapFrom(x => x.TaskStatus))
-            .ForMember(dto => dto.SeamNumber,
-                opt =>
-                    opt.MapFrom(x => x.SeamAccount.Seam.Number))
+                    opt.MapFrom(x => x.WeldingTasks.All(_ =>
+                        _.TaskStatus == WeldingTaskStatus.Completed)))
             .ForMember(dto => dto.MainProductId,
                 opt =>
-                    opt.MapFrom(x => x.SeamAccount.Seam.ProductId))
+                    opt.MapFrom(x => x.ProductAccount.ProductId))
             .ForMember(dto => dto.Product,
+                opt => opt.Ignore())
+            .ForMember(dto => dto.Number,
                 opt => opt.Ignore())
             .ForMember(dto => dto.Detail,
                 opt => opt.Ignore())
             .ForMember(dto => dto.Knot,
                 opt => opt.Ignore())
-            .ForMember(dto => dto.Inspector, opt => opt.MapFrom(x => x.Inspector!.UserInfo))
-            /*.ForMember(dto => dto.Seam, opt => opt.MapFrom(x => x.SeamAccount.Seam))*/
-            .ForMember(dto => dto.Welder, opt => opt.MapFrom(x => x.Welder!.UserInfo))
-            .ForMember(dto => dto.Master, opt => opt.MapFrom(x => x.Master!.UserInfo))
+            .ForMember(dto => dto.Inspector, opt => opt
+                .MapFrom(x => x.Inspector!.UserInfo))
+            .ForMember(dto => dto.Master, opt =>
+                opt.MapFrom(x => x.Master!.UserInfo))
             .ForMember(
                 dto => dto.WeldingEquipments,
-                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.WeldingEquipments)
-            )
-            .ForMember(
-                dto => dto.UniqueNumber,
-                opt => opt.MapFrom(x => x.SeamAccount.ProductAccount.UniqueNumber)
-            )
-            .ForMember(
-                dto => dto.ManufacturedAmount,
-                opt =>
-                    opt.MapFrom(x => x.SeamAccount.ProductAccount.AmountFromPlan)
+                opt => opt
+                    .MapFrom(x => x.WeldingEquipments)
             )
             .ForMember(
                 dto => dto.AreDeviations,
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.WeldPassages.Any(
+                            x.WeldingTasks.Any(task => task.WeldPassages.Any(
                                 _ =>
                                     (
                                         _.IsEnsuringCurrentAllowance != null
@@ -114,7 +108,7 @@ public class WeldingTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.TaskInfo
                                         _.IsEnsuringVoltageAllowance != null
                                         && !(bool) _.IsEnsuringVoltageAllowance
                                     )
-                            )
+                            ))
                     )
             );
         ;

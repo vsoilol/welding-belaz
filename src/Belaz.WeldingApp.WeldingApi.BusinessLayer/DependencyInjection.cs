@@ -2,6 +2,8 @@
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Implementations;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
+using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +17,7 @@ public static class DependencyInjection
 
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped<IWorkingShiftService, WorkingShiftService>();
+        services.AddScoped<IProductAccountTaskService, ProductAccountTaskService>();
         services.AddScoped<IDayService, DayService>();
         services.AddScoped<ICalendarService, CalendarService>();
         services.AddScoped<IWorkshopService, WorkshopService>();
