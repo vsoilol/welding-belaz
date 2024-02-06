@@ -27,4 +27,6 @@ public class ProductAccount : Entity
     public List<WeldingEquipment> WeldingEquipments { get; set; } = null!;
 
     public List<SeamAccount> SeamAccounts { get; set; } = null!;
+
+    public List<ProductAccountTask> ProductAccountTasks { get; set; } = null!;
 }

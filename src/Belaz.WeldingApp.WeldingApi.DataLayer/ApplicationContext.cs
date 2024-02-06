@@ -16,6 +16,8 @@ public class ApplicationContext : DbContext
     public virtual DbSet<UserData> Users { get; set; } = null!;
 
     public virtual  DbSet<Post> Posts { get; set; } = null!;
+    
+    public virtual  DbSet<ProductAccountTask> ProductAccountTasks { get; set; } = null!;
 
     public virtual  DbSet<ProductionArea> ProductionAreas { get; set; } = null!;
 

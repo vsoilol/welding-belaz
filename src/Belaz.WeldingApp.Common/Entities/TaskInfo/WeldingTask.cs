@@ -75,7 +75,12 @@ public class WeldingTask : Entity
     public Guid? InspectorId { get; set; }
 
     [ForeignKey(nameof(InspectorId))]
-    public Inspector? Inspector { get; set; } = null!;
+    public Inspector? Inspector { get; set; }
 
     public List<WeldPassage> WeldPassages { get; set; } = null!;
+    
+    public Guid? ProductAccountTaskId { get; set; }
+
+    [ForeignKey(nameof(ProductAccountTaskId))]
+    public ProductAccountTask? ProductAccountTask { get; set; }
 }

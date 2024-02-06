@@ -115,4 +115,6 @@ public class WeldingEquipment : EntityWithRfidTag
     public List<WeldingRecord> WeldingRecords { get; set; } = null!;
 
     public List<ProductAccount> ProductAccounts { get; set; } = null!;
+
+    public List<ProductAccountTask> ProductAccountTasks { get; set; } = null!;
 }
