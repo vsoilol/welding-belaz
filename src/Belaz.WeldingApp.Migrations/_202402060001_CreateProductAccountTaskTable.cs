@@ -9,7 +9,8 @@ public class _202402060001_CreateProductAccountTaskTable : Migration
     {
         Create.Table("ProductAccountTasks")
             .WithColumn("Id").AsGuid().PrimaryKey()
-            .WithColumn("SequenceNumbers").AsString().NotNullable()
+            .WithColumn("IdFromSystem").AsString().Nullable()
+            .WithColumn("SequenceNumber").AsString().NotNullable()
             .WithColumn("DateFromPlan").AsDateTime().NotNullable()
             .WithColumn("EndDateFromPlan").AsDateTime().Nullable()
             .WithColumn("Reason").AsString().Nullable()
@@ -36,15 +37,15 @@ public class _202402060001_CreateProductAccountTaskTable : Migration
         // Many-to-Many: ProductAccountTask <-> WeldingEquipment
         // You need an association table for a many-to-many relationship
         Create.Table("ProductAccountTaskWeldingEquipment")
-            .WithColumn("ProductAccountTaskId").AsGuid()
+            .WithColumn("ProductAccountTasksId").AsGuid()
             .ForeignKey("ProductAccountTasks", "Id")
-            .WithColumn("WeldingEquipmentId").AsGuid()
+            .WithColumn("WeldingEquipmentsId").AsGuid()
             .ForeignKey("WeldingEquipments", "Id");
 
         // Ensure the combination is unique to prevent duplicate associations
         Create.UniqueConstraint()
             .OnTable("ProductAccountTaskWeldingEquipment")
-            .Columns("ProductAccountTaskId", "WeldingEquipmentId");
+            .Columns("ProductAccountTasksId", "WeldingEquipmentsId");
     }
 
     public override void Down()

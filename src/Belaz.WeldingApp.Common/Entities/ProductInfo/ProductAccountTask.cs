@@ -7,8 +7,8 @@ namespace Belaz.WeldingApp.Common.Entities.ProductInfo;
 
 public class ProductAccountTask : Entity
 {
-    public string SequenceNumbers { get; set; } = null!;
-    
+    public string SequenceNumber { get; set; } = null!;
+
     public DateTime DateFromPlan { get; set; }
     
     public DateTime? EndDateFromPlan { get; set; }
