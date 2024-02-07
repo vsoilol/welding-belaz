@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
 using Belaz.WeldingApp.WeldingApi.Domain.Extensions;
 
@@ -13,16 +14,32 @@ public class ProductAccountTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.P
     public Guid Id { get; set; }
 
     public int Number { get; set; }
+    
+    /// <summary>
+    /// Сварочные материалы
+    /// </summary>
+    public string? WeldingMaterial { get; set; }
+
+    /// <summary>
+    /// № сертификата (партии) св. материала
+    /// </summary>
+    public string? WeldingMaterialBatchNumber { get; set; }
 
     public string SequenceNumber { get; set; } = null!;
-    
-    //public List<Common.Entities.TaskInfo.WeldingTask> WeldingTasks { get; set; } = null!;
 
     public string DateFromPlan { get; set; } = null!;
 
     public string? EndDateFromPlan { get; set; }
 
+    public string? Reason { get; set; }
+
+    public string? DetectedDefects { get; set; }
+
     public int ManufacturedAmount { get; set; }
+    
+    public int AcceptedAmount { get; set; }
+    
+    public int DefectiveAmount { get; set; }
 
     public bool IsDone { get; set; }
 
@@ -42,6 +59,8 @@ public class ProductAccountTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.P
 
     public List<string> Seams { get; set; } = null!;
 
+    public List<WelderBriefDto> Welders { get; set; } = null!;
+
     /// <summary>
     /// Есть ли отклонения
     /// </summary>
@@ -59,6 +78,13 @@ public class ProductAccountTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.P
                 dto => dto.EndDateFromPlan,
                 opt => opt
                     .MapFrom(x => x.EndDateFromPlan.ToDayInfoString())
+            )
+            .ForMember(
+                dto => dto.Welders,
+                opt => opt
+                    .MapFrom(x => x.WeldingTasks
+                        .Where(wt => wt.Welder != null)
+                        .Select(_ => _.Welder))
             )
             .ForMember(
                 dto => dto.Seams,

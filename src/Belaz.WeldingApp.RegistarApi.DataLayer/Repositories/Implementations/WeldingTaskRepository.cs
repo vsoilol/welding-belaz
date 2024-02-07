@@ -37,9 +37,13 @@ public class WeldingTaskRepository : IWeldingTaskRepository
     {
         var tasksQuery = GetWeldingTasksWithIncludesByFilter(
             task =>
-                task.SeamAccount.ProductAccount.WeldingEquipments.Any(
-                    eq => eq.RfidTag == equipmentRfid
-                )
+                (task.ProductAccountTask != null
+                    ? task.ProductAccountTask.WeldingEquipments.Any(
+                        eq => eq.RfidTag == equipmentRfid
+                    )
+                    : task.SeamAccount.ProductAccount.WeldingEquipments.Any(
+                        eq => eq.RfidTag == equipmentRfid
+                    ))
                 && (
                     task.TaskStatus == WeldingTaskStatus.NotStarted
                     || (
@@ -47,7 +51,10 @@ public class WeldingTaskRepository : IWeldingTaskRepository
                         && task.TaskStatus != WeldingTaskStatus.Completed
                     )
                 )
-                && task.WeldingDate.Date.Equals(date.Date)
+                && (task.ProductAccountTask == null || task.ProductAccountTask.EndDateFromPlan == null
+                    ? task.WeldingDate.Date.Equals(date.Date)
+                    : (date.Date >= task.ProductAccountTask.DateFromPlan &&
+                       date.Date <= task.ProductAccountTask.EndDateFromPlan))
                 && task.SeamAccount.Seam.TechnologicalInstruction != null
                 && task.SeamAccount.Seam.Product.TechnologicalProcess != null
         );
@@ -58,7 +65,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
 
         return _mapper.Map<List<WeldingTaskDto>>(tasks);
     }
-
+    
     public async Task<WeldingTaskDto> GetTaskByIdAsync(Guid id)
     {
         var weldingTask = await GetWeldingTasksWithIncludesByFilter()

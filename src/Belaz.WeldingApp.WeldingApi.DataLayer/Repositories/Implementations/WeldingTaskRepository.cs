@@ -37,12 +37,18 @@ public class WeldingTaskRepository : IWeldingTaskRepository
 
     public async Task<List<WeldingTaskDto>> GetAllAsync()
     {
-        var weldingTasksQuery = _context.WeldingTasks;
+        //var weldingTasksQuery = _context.WeldingTasks;
 
-        var weldingTasks = await weldingTasksQuery
+        //var weldingTasks = await weldingTasksQuery
+        //    .OrderByDescending(_ => _.Number)
+        //    .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
+        //    .ToListAsync();
+
+        var weldingTasks = await GetWeldingTasksWithIncludesShortByFilter()
             .OrderByDescending(_ => _.Number)
-            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+
+        var mapWeldingTasks = _mapper.Map<List<WeldingTaskDto>>(weldingTasks);
 
         var productInsideIds = await _context.ProductInsides
             .ProjectTo<ProductInsideOnlyIdDto>(_mapper.ConfigurationProvider)
@@ -52,7 +58,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
-        foreach (var weldingTask in weldingTasks)
+        foreach (var weldingTask in mapWeldingTasks)
         {
             var productStructure = _extensionRepository
                 .GetProductStructureByMainProductId(weldingTask.MainProductId, productInsideIds, products);
@@ -62,16 +68,15 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             weldingTask.Knot = productStructure.Knot;
         }
 
-        return weldingTasks;
+        return mapWeldingTasks;
     }
 
     public async Task<WeldingTaskDto> GetByIdAsync(Guid id)
     {
-        var weldingTaskQuery = _context.WeldingTasks.Where(_ => _.Id == id);
-
-        var weldingTask = await weldingTaskQuery
-            .ProjectTo<WeldingTaskDto>(_mapper.ConfigurationProvider)
+        var weldingTask = await GetWeldingTasksWithIncludesShortByFilter(_ => _.Id == id)
             .FirstOrDefaultAsync();
+
+        var mapWeldingTask = _mapper.Map<WeldingTaskDto>(weldingTask);
 
         var productInsideIds = await _context.ProductInsides
             .ProjectTo<ProductInsideOnlyIdDto>(_mapper.ConfigurationProvider)
@@ -82,13 +87,13 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .ToListAsync();
 
         var productStructure = _extensionRepository
-            .GetProductStructureByMainProductId(weldingTask.MainProductId, productInsideIds, products);
+            .GetProductStructureByMainProductId(mapWeldingTask.MainProductId, productInsideIds, products);
 
-        weldingTask.Product = productStructure.Product;
-        weldingTask.Detail = productStructure.Detail;
-        weldingTask.Knot = productStructure.Knot;
+        mapWeldingTask.Product = productStructure.Product;
+        mapWeldingTask.Detail = productStructure.Detail;
+        mapWeldingTask.Knot = productStructure.Knot;
 
-        return weldingTask;
+        return mapWeldingTask;
     }
 
     public async Task<List<WeldingTaskDto>> GetAllUncompletedTaskAsync()
@@ -244,6 +249,7 @@ public class WeldingTaskRepository : IWeldingTaskRepository
                         .ProductMain!
                         .MainProduct
             )
+            .Include(_ => _.ProductAccountTask!.WeldingEquipments)
             .Include(_ => _.SeamAccount.Seam.ProductionArea!.Workshop)
             .Include(_ => _.SeamAccount.ProductAccount.WeldingEquipments)
             .Include(_ => _.SeamAccount.SeamResults)
@@ -260,6 +266,29 @@ public class WeldingTaskRepository : IWeldingTaskRepository
             .Include(_ => _.Inspector!.UserInfo)
             .Include(_ => _.Master!.UserInfo)
             .Include(_ => _.Welder!.UserInfo);
+
+        if (filter != null)
+        {
+            weldingTasks = weldingTasks.Where(filter);
+        }
+
+        return weldingTasks;
+    }
+
+    private IQueryable<WeldingTask> GetWeldingTasksWithIncludesShortByFilter(
+        Expression<Func<WeldingTask, bool>>? filter = null
+    )
+    {
+        IQueryable<WeldingTask> weldingTasks = _context.WeldingTasks
+            .Include(_ => _.ProductAccountTask!.WeldingEquipments)
+            .Include(_ => _.SeamAccount.Seam)
+            .Include(_ => _.ProductAccountTask!.Inspector!.UserInfo)
+            .Include(_ => _.ProductAccountTask!.Master!.UserInfo)
+            .Include(_ => _.Inspector!.UserInfo)
+            .Include(_ => _.Master!.UserInfo)
+            .Include(_ => _.Welder!.UserInfo)
+            .Include(_ => _.SeamAccount.ProductAccount.WeldingEquipments)
+             .Include(_ => _.WeldPassages);
 
         if (filter != null)
         {
