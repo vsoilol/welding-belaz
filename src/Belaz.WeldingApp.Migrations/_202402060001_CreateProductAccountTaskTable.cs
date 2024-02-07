@@ -18,6 +18,8 @@ public class _202402060001_CreateProductAccountTaskTable : Migration
             .WithColumn("ManufacturedAmount").AsInt32().NotNullable()
             .WithColumn("AcceptedAmount").AsInt32().NotNullable()
             .WithColumn("DefectiveAmount").AsInt32().NotNullable()
+            .WithColumn("WeldingMaterial").AsString().Nullable()
+            .WithColumn("WeldingMaterialBatchNumber").AsString().Nullable()
             .WithColumn("ProductAccountId").AsGuid()
             .NotNullable()
             .ForeignKey("ProductAccounts", "Id")

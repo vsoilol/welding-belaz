@@ -8,6 +8,16 @@ namespace Belaz.WeldingApp.Common.Entities.ProductInfo;
 public class ProductAccountTask : Entity
 {
     public string SequenceNumber { get; set; } = null!;
+    
+    /// <summary>
+    /// Сварочные материалы
+    /// </summary>
+    public string? WeldingMaterial { get; set; }
+
+    /// <summary>
+    /// № сертификата (партии) св. материала
+    /// </summary>
+    public string? WeldingMaterialBatchNumber { get; set; }
 
     public DateTime DateFromPlan { get; set; }
     
