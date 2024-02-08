@@ -13,15 +13,9 @@ public class ProductForProductAccountDto : IMapFrom<Belaz.WeldingApp.Common.Enti
 
     public string? IdFromSystem { get; set; }
 
-    public string? Name { get; set; }
-
-    public string Number { get; set; } = null!;
-
     public bool IsControlSubject { get; set; }
 
     public double ManufacturingTime { get; set; }
-
-    public List<ProductInsideDto> InsideProducts { get; set; } = null!;
 
     public ProductBriefDto? Product { get; set; }
 

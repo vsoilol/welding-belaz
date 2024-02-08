@@ -22,8 +22,6 @@ public class ProductForProductAccountDtoConverter : ITypeConverter<Product, Prod
 
         destination.Id = source.Id;
         destination.IdFromSystem = source.IdFromSystem;
-        destination.Number = source.Number;
-        destination.Name = source.Name;
         destination.IsControlSubject = source.IsControlSubject;
         destination.ManufacturingTime = source.ManufacturingTime;
 
@@ -34,28 +32,37 @@ public class ProductForProductAccountDtoConverter : ITypeConverter<Product, Prod
 
     private void MapRelatedEntities(Product source, ProductForProductAccountDto destination)
     {
-        destination.InsideProducts = _mapper.Map<List<ProductInsideDto>>(
-            source.ProductInsides.Select(_ => _.InsideProduct)
-        );
-
         MapMainProductsToProduct(source, destination);
     }
 
     private void MapMainProductsToProduct(Product source, ProductForProductAccountDto destination)
     {
+        switch (source.ProductType)
+        {
+            case ProductType.Product:
+                destination.Product = _mapper.Map<ProductBriefDto>(source);
+                break;
+            case ProductType.Knot:
+                destination.Knot = _mapper.Map<ProductBriefDto>(source);
+                break;
+            case ProductType.Detail:
+                destination.Detail = _mapper.Map<ProductBriefDto>(source);
+                break;
+        }
+
         var products = GetMainProducts(source);
 
-        if (products.Product != null)
+        if (products.Product is not null && source.ProductType != ProductType.Product)
         {
             destination.Product = _mapper.Map<ProductBriefDto>(products.Product);
         }
 
-        if (products.Knot != null)
+        if (products.Knot is not null && source.ProductType != ProductType.Knot)
         {
             destination.Knot = _mapper.Map<ProductBriefDto>(products.Knot);
         }
 
-        if (products.Detail != null)
+        if (products.Detail is not null && source.ProductType != ProductType.Detail)
         {
             destination.Detail = _mapper.Map<ProductBriefDto>(products.Detail);
         }
