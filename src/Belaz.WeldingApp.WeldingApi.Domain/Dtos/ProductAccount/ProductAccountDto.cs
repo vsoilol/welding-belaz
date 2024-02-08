@@ -16,9 +16,9 @@ public class ProductAccountDto
     public int AmountFromPlan { get; set; }
 
     public ProductForProductAccountDto Product { get; set; } = null!;
-    
+
     public int? UniqueNumber { get; set; }
-    
+
     public List<string>? SequenceNumbers { get; set; }
 
     public int AmountManufactured { get; set; }
@@ -48,9 +48,11 @@ public class ProductAccountDto
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.ProductResults
-                                .Where(_ => _.Status == ResultProductStatus.Manufactured)
-                                .Sum(_ => _.Amount)
+                            x.ProductAccountTasks.Any()
+                                ? x.ProductAccountTasks.Sum(_ => _.ManufacturedAmount)
+                                : x.ProductResults
+                                    .Where(_ => _.Status == ResultProductStatus.Manufactured)
+                                    .Sum(_ => _.Amount)
                     )
             )
             .ForMember(
@@ -68,9 +70,11 @@ public class ProductAccountDto
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.ProductResults
-                                .Where(_ => _.Status == ResultProductStatus.Accept)
-                                .Sum(_ => _.Amount)
+                            x.ProductAccountTasks.Any()
+                                ? x.ProductAccountTasks.Sum(_ => _.AcceptedAmount)
+                                : x.ProductResults
+                                    .Where(_ => _.Status == ResultProductStatus.Accept)
+                                    .Sum(_ => _.Amount)
                     )
             )
             .ForMember(
@@ -78,9 +82,11 @@ public class ProductAccountDto
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.ProductResults
-                                .Where(_ => _.Status == ResultProductStatus.Defective)
-                                .Sum(_ => _.Amount)
+                            x.ProductAccountTasks.Any()
+                                ? x.ProductAccountTasks.Sum(_ => _.DefectiveAmount)
+                                : x.ProductResults
+                                    .Where(_ => _.Status == ResultProductStatus.Defective)
+                                    .Sum(_ => _.Amount)
                     )
             )
             .ForMember(
@@ -88,24 +94,24 @@ public class ProductAccountDto
                 opt =>
                     opt.MapFrom(
                         x =>
-                            x.SeamAccounts
-                                .SelectMany(_ => _.WeldingTasks)
-                                .SelectMany(_ => _.WeldPassages)
-                                .Any(
-                                    _ =>
-                                        (
-                                            _.IsEnsuringCurrentAllowance != null
-                                            && !(bool)_.IsEnsuringCurrentAllowance
-                                        )
-                                        || (
-                                            _.IsEnsuringTemperatureAllowance != null
-                                            && !(bool)_.IsEnsuringTemperatureAllowance
-                                        )
-                                        || (
-                                            _.IsEnsuringVoltageAllowance != null
-                                            && !(bool)_.IsEnsuringVoltageAllowance
-                                        )
-                                )
+                            x.ProductAccountTasks.Any()
+                                ? x.ProductAccountTasks.SelectMany(_ => _.WeldingTasks)
+                                    .SelectMany(_ => _.WeldPassages)
+                                    .Any(_ => (_.IsEnsuringCurrentAllowance != null
+                                               && !(bool) _.IsEnsuringCurrentAllowance)
+                                              || (_.IsEnsuringTemperatureAllowance != null
+                                                  && !(bool) _.IsEnsuringTemperatureAllowance)
+                                              || (_.IsEnsuringVoltageAllowance != null
+                                                  && !(bool) _.IsEnsuringVoltageAllowance))
+                                : x.SeamAccounts
+                                    .SelectMany(_ => _.WeldingTasks)
+                                    .SelectMany(_ => _.WeldPassages)
+                                    .Any(_ => (_.IsEnsuringCurrentAllowance != null
+                                               && !(bool) _.IsEnsuringCurrentAllowance)
+                                              || (_.IsEnsuringTemperatureAllowance != null
+                                                  && !(bool) _.IsEnsuringTemperatureAllowance)
+                                              || (_.IsEnsuringVoltageAllowance != null
+                                                  && !(bool) _.IsEnsuringVoltageAllowance))
                     )
             );
     }

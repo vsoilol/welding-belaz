@@ -758,7 +758,8 @@ public class ProductAccountRepository : IProductAccountRepository
             .ThenInclude(pi => pi.InsideProduct)
             .Include(s => s.Product.Seams)
             .Include(s => s.Product.ProductionArea.Workshop)
-            .Include(s => s.Product.TechnologicalProcess);
+            .Include(s => s.Product.TechnologicalProcess)
+            .Include(s => s.ProductAccountTasks);
 
         if (filter != null)
         {
