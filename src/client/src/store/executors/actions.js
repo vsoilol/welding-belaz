@@ -17,9 +17,9 @@ const { Types, Creators } = createActions({
   deleteExecutorSuccess: ['id'],
   deleteExecutorFailure: ['error'],
 
-  // loadMastersRequest: ['payload'],
-  // loadMastersSuccess: ['masters'],
-  // loadMastersFailure: ['error'],
+  loadMastersRequest: ['payload'],
+  loadMastersSuccess: ['masters'],
+  loadMastersFailure: ['error'],
 
   editMasterRequest: ['payload', 'userId'],
   editMasterSuccess: ['master', 'userId'],

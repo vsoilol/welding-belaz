@@ -18,9 +18,9 @@ function* loadMastersSaga() {
   try {
     const response = yield call(api.getCancelled, `/master`, cancelToken);
 
-    yield put(masterActionCreators.loadMastersSuccess(response.data));
+    yield put(masterActionCreators.getAllMastersSuccess(response.data));
   } catch (error) {
-    yield put(masterActionCreators.loadMastersFailure(error));
+    yield put(masterActionCreators.getAllMastersFailure(error));
     yield put(errorActionCreators.setError(error.message));
   } finally {
     if (yield cancelled()) {
@@ -34,12 +34,12 @@ function* manageLoadMastersSaga() {
 
   yield take([
     ROUTER_ON_LOCATION_CHANGED,
-    masterActionTypes.LOAD_MASTERS_CANCEL,
+    masterActionTypes.GET_ALL_MASTERS_CANCEL,
   ]);
 
   yield cancel(forkedSaga);
 }
 
 export const loadMastersWatchers = [
-  takeLatest(masterActionTypes.LOAD_MASTERS_REQUEST, manageLoadMastersSaga),
+  takeLatest(masterActionTypes.GET_ALL_MASTERS_REQUEST, manageLoadMastersSaga),
 ];

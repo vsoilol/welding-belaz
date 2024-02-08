@@ -40,10 +40,10 @@ const handleSetSelectedMasterId = (state = initialState, { masterId }) => ({
 });
 
 const actionHandlers = {
-  [masterActionTypes.LOAD_MASTERS_REQUEST]: handleStartLoading,
-  [masterActionTypes.LOAD_MASTERS_SUCCESS]: handleLoadMastersSuccess,
-  [masterActionTypes.LOAD_MASTERS_FAILURE]: handleFailure,
-  [masterActionTypes.LOAD_MASTERS_CANCEL]: handleCancelLoading,
+  [masterActionTypes.GET_ALL_MASTERS_REQUEST]: handleStartLoading,
+  [masterActionTypes.GET_ALL_MASTERS_SUCCESS]: handleLoadMastersSuccess,
+  [masterActionTypes.GET_ALL_MASTERS_FAILURE]: handleFailure,
+  [masterActionTypes.GET_ALL_MASTERS_CANCEL]: handleCancelLoading,
 
   [masterActionTypes.SET_SELECTED_MASTER_ID]: handleSetSelectedMasterId,
 };

@@ -130,15 +130,15 @@ function* deleteExecutor({ payload }) {
   }
 }
 
-// function* loadMasters() {
-//   try {
-//     const { data } = yield call(api.get, `/Master`);
-//     yield put(loadMastersSuccess(data));
-//   } catch (error) {
-//     yield put(loadMastersFailure(error));
-//     yield put(setError(error.message));
-//   }
-// }
+function* loadMasters() {
+  try {
+    const { data } = yield call(api.get, `/Master`);
+    yield put(loadMastersSuccess(data));
+  } catch (error) {
+    yield put(loadMastersFailure(error));
+    yield put(setError(error.message));
+  }
+}
 
 function* addMaster({ payload }) {
   try {
@@ -277,7 +277,7 @@ export default [
   takeLatest(ADD_EXECUTOR_REQUEST, addExecutor),
   takeLatest(DELETE_EXECUTOR_REQUEST, deleteExecutor),
   takeLatest(EDIT_EXECUTOR_REQUEST, editExecutor),
-  // takeLatest(LOAD_MASTERS_REQUEST, loadMasters),
+  takeLatest(LOAD_MASTERS_REQUEST, loadMasters),
   takeLatest(ADD_MASTER_REQUEST, addMaster),
   // takeLatest(DELETE_MASTER_REQUEST, deleteMaster),
   takeLatest(EDIT_MASTER_REQUEST, editMaster),

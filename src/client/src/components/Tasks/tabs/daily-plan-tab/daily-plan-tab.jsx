@@ -21,8 +21,8 @@ import styles from 'components/Tasks/styles.module.scss';
 export const DailyPlanTab = () => {
   const { userRole } = useAuthStore();
   const {
-    loadMasters,
-    cancelLoadMaster,
+    getAllMasters,
+    cancelGetAllMasters,
     setSelectedMasterId,
     masters,
     selectedMasterId,
@@ -65,9 +65,9 @@ export const DailyPlanTab = () => {
   );
 
   useEffect(() => {
-    loadMasters();
-    return () => cancelLoadMaster();
-  }, [loadMasters, cancelLoadMaster, setSelectedMasterId]);
+    getAllMasters();
+    return () => cancelGetAllMasters();
+  }, [getAllMasters, cancelGetAllMasters, setSelectedMasterId]);
 
   useEffect(() => {
     if (selectedMaster && selectedMaster?.productionArea) {

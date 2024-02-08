@@ -34,13 +34,13 @@ export const useMasterStore = () => {
     [dispatch]
   );
 
-  const loadMasters = useCallback(
-    () => dispatch(masterActionCreators.loadMastersRequest()),
+  const getAllMasters = useCallback(
+    () => dispatch(masterActionCreators.getAllMastersRequest()),
     [dispatch]
   );
 
-  const cancelLoadMaster = useCallback(
-    () => dispatch(masterActionCreators.loadMastersCancel()),
+  const cancelGetAllMasters = useCallback(
+    () => dispatch(masterActionCreators.getAllMastersCancel()),
     [dispatch]
   );
 
@@ -50,7 +50,7 @@ export const useMasterStore = () => {
     selectedMasterId,
     selectedMaster,
     setSelectedMasterId,
-    loadMasters,
-    cancelLoadMaster,
+    getAllMasters,
+    cancelGetAllMasters,
   };
 };

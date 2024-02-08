@@ -2,10 +2,10 @@ import { createActions } from 'reduxsauce';
 
 const { Types, Creators } = createActions(
   {
-    loadMastersRequest: null,
-    loadMastersSuccess: ['masters'],
-    loadMastersFailure: ['error'],
-    loadMastersCancel: null,
+    getAllMastersRequest: null,
+    getAllMastersSuccess: ['masters'],
+    getAllMastersFailure: ['error'],
+    getAllMastersCancel: null,
 
     setSelectedMasterId: ['masterId'],
   },
