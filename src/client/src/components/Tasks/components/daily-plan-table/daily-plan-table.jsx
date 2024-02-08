@@ -57,12 +57,12 @@ export const DailyPlanTable = () => {
     {
       align: 'center',
       title: 'Наименование узла',
-      field: 'product.name',
+      field: 'product.knot.name',
     },
     {
       align: 'center',
       title: 'Номер узла',
-      field: 'product.number',
+      field: 'product.knot.number',
     },
     {
       align: 'center',
