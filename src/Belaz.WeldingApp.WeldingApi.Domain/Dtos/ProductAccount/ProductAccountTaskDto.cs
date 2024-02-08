@@ -2,6 +2,8 @@
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Belaz.WeldingApp.Common.Enums;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Inspector;
+using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Master;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Product;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Welder;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos.WeldingEquipment;
@@ -51,9 +53,9 @@ public class ProductAccountTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.P
 
     public ProductBriefDto? Detail { get; set; }
 
-    public UserFullNameDto? Master { get; set; }
+    public MasterBriefDto? Master { get; set; }
 
-    public UserFullNameDto? Inspector { get; set; }
+    public InspectorBriefDto? Inspector { get; set; }
 
     public List<WeldingEquipmentBriefDto>? WeldingEquipments { get; set; }
 
@@ -106,10 +108,6 @@ public class ProductAccountTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.P
                 opt => opt.Ignore())
             .ForMember(dto => dto.Knot,
                 opt => opt.Ignore())
-            .ForMember(dto => dto.Inspector, opt => opt
-                .MapFrom(x => x.Inspector!.UserInfo))
-            .ForMember(dto => dto.Master, opt =>
-                opt.MapFrom(x => x.Master!.UserInfo))
             .ForMember(
                 dto => dto.WeldingEquipments,
                 opt => opt

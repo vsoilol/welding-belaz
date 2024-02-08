@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using Belaz.WeldingApp.Common.Entities.Users;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.ProductionArea;
-using Belaz.WeldingApp.WeldingApi.Domain.Dtos.Workshop;
 using Belaz.WeldingApp.WeldingApi.Domain.Mappings;
 
-namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos;
+namespace Belaz.WeldingApp.WeldingApi.Domain.Dtos.Inspector;
 
-public class InspectorDto : IMapFrom<Common.Entities.Users.Inspector>
+public class InspectorBriefDto : IMapFrom<Common.Entities.Users.Inspector>
 {
     public Guid Id { get; set; }
 
@@ -27,28 +24,15 @@ public class InspectorDto : IMapFrom<Common.Entities.Users.Inspector>
     /// </summary>
     public string? ServiceNumber { get; set; }
     
-    public WorkshopBriefDto Workshop { get; set; } = null!;
-
-    public ProductionAreaBriefDto ProductionArea { get; set; } = null!;
-
     public void Mapping(Profile profile)
     {
         profile
-            .CreateMap<Common.Entities.Users.Inspector, InspectorDto>()
+            .CreateMap<Common.Entities.Users.Inspector, InspectorBriefDto>()
             .ForMember(dto => dto.RfidTag, opt => opt.MapFrom(x => x.UserInfo.RfidTag))
             .ForMember(dto => dto.FirstName, opt => opt.MapFrom(x => x.UserInfo.FirstName))
             .ForMember(dto => dto.MiddleName, opt => opt.MapFrom(x => x.UserInfo.MiddleName))
             .ForMember(dto => dto.LastName, opt => opt.MapFrom(x => x.UserInfo.LastName))
             .ForMember(dto => dto.Position, opt => opt.MapFrom(x => x.UserInfo.Position))
-            .ForMember(
-                dto => dto.ProductionArea,
-                opt => opt.MapFrom(x => x.UserInfo.ProductionArea)
-            )
-            .ForMember(
-                dto => dto.Workshop,
-                opt => opt
-                    .MapFrom(x => x.UserInfo.ProductionArea!.Workshop)
-            )
             .ForMember(dto => dto.ServiceNumber, opt => opt.MapFrom(x => x.UserInfo.ServiceNumber));
     }
 }
