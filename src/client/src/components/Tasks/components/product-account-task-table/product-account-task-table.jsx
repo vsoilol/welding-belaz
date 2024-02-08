@@ -18,6 +18,7 @@ import {
 import { isMaster, isMasterOrInspector, userRoles } from 'core/constants';
 
 import styles from 'components/Tasks/styles.module.scss';
+import { LoadingSpinner } from 'components/shared';
 
 export const ProductAccountTaskTable = () => {
   const { userRole } = useAuthStore();
@@ -26,6 +27,9 @@ export const ProductAccountTaskTable = () => {
     productAccountTasks,
     setSelectedProductAccountTaskId,
     selectedProductAccountTaskId,
+    getFullProductAccountTaskPassport,
+    getShortProductAccountTaskPassport,
+    isLoadingPassport,
   } = useProductAccountTaskStore();
 
   const [
@@ -223,7 +227,10 @@ export const ProductAccountTaskTable = () => {
       title: 'Скачать краткий паспорт',
       render: rowData => (
         <div>
-          <IconButton onClick={() => {}}>
+          <IconButton
+            onClick={() => {
+              getShortProductAccountTaskPassport(rowData.id);
+            }}>
             <SaveIcon style={{ color: '#000000' }} />
           </IconButton>
         </div>
@@ -236,7 +243,10 @@ export const ProductAccountTaskTable = () => {
       sorting: false,
       render: rowData => (
         <div>
-          <IconButton onClick={() => {}}>
+          <IconButton
+            onClick={() => {
+              getFullProductAccountTaskPassport(rowData.id);
+            }}>
             <SaveIcon style={{ color: '#000000' }} />
           </IconButton>
         </div>
@@ -261,6 +271,8 @@ export const ProductAccountTaskTable = () => {
 
   return (
     <>
+      {isLoadingPassport && <LoadingSpinner isFullScreenMode={true} />}
+
       {productAccountTasks && (
         <Table
           title="Сменные задания на сварку"

@@ -6,6 +6,7 @@ import {
   selectProductAccountTasks,
   selectSelectedProductAccountTaskId,
   selectSelectedProductAccountTask,
+  selectIsLoadingPassport,
 } from './product-account-task.selectors';
 
 export const useProductAccountTaskStore = () => {
@@ -14,6 +15,7 @@ export const useProductAccountTaskStore = () => {
   // Selectors
   const productAccountTasks = useSelector(selectProductAccountTasks);
   const isLoading = useSelector(selectIsLoading);
+  const isLoadingPassport = useSelector(selectIsLoadingPassport);
 
   const selectedProductAccountTask = useSelector(
     selectSelectedProductAccountTask
@@ -115,11 +117,38 @@ export const useProductAccountTaskStore = () => {
     [dispatch]
   );
 
+  const getShortProductAccountTaskPassport = useCallback(
+    (
+      productAccountTaskId,
+      averageIntervalSeconds = null,
+      secondsToIgnoreBetweenGraphs = null
+    ) =>
+      dispatch(
+        productAccountTaskActionCreators.getShortProductAccountTaskPassportRequest(
+          productAccountTaskId,
+          averageIntervalSeconds,
+          secondsToIgnoreBetweenGraphs
+        )
+      ),
+    [dispatch]
+  );
+
+  const getFullProductAccountTaskPassport = useCallback(
+    productAccountTaskId =>
+      dispatch(
+        productAccountTaskActionCreators.getFullProductAccountTaskPassportRequest(
+          productAccountTaskId
+        )
+      ),
+    [dispatch]
+  );
+
   return {
     productAccountTasks,
     isLoading,
     selectedProductAccountTaskId,
     selectedProductAccountTask,
+    isLoadingPassport,
 
     loadProductAccountTasks,
     loadProductAccountTasksCancel,
@@ -130,5 +159,7 @@ export const useProductAccountTaskStore = () => {
     changeManufacturedAmount,
     editProductAccountTask,
     updateWeldingMaterialInfo,
+    getShortProductAccountTaskPassport,
+    getFullProductAccountTaskPassport,
   };
 };

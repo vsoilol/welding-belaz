@@ -7,7 +7,20 @@ const initialState = {
   error: null,
   productAccountTasks: [],
   selectedProductAccountTaskId: null,
+  isLoadingPassport: false,
 };
+
+const handleStartLoadingPassport = (state = initialState) => ({
+  ...state,
+  isLoadingPassport: true,
+  error: null,
+});
+
+const handleFinishLoadingPassport = (state = initialState) => ({
+  ...state,
+  isLoadingPassport: false,
+  error: null,
+});
 
 // Handler function names now clearly describe the action they handle
 const handleStartLoading = (state = initialState) => ({
@@ -135,6 +148,20 @@ const actionHandlers = {
   [productAccountTaskActionTypes.UPDATE_WELDING_MATERIAL_INFO_SUCCESS]:
     handleEditProductAccountTaskSuccess,
   [productAccountTaskActionTypes.UPDATE_WELDING_MATERIAL_INFO_FAILURE]:
+    handleFailure,
+
+  [productAccountTaskActionTypes.GET_FULL_PRODUCT_ACCOUNT_TASK_PASSPORT_REQUEST]:
+    handleStartLoadingPassport,
+  [productAccountTaskActionTypes.GET_FULL_PRODUCT_ACCOUNT_TASK_PASSPORT_SUCCESS]:
+    handleFinishLoadingPassport,
+  [productAccountTaskActionTypes.GET_FULL_PRODUCT_ACCOUNT_TASK_PASSPORT_FAILURE]:
+    handleFailure,
+
+  [productAccountTaskActionTypes.GET_SHORT_PRODUCT_ACCOUNT_TASK_PASSPORT_REQUEST]:
+    handleStartLoadingPassport,
+  [productAccountTaskActionTypes.GET_SHORT_PRODUCT_ACCOUNT_TASK_PASSPORT_SUCCESS]:
+    handleFinishLoadingPassport,
+  [productAccountTaskActionTypes.GET_SHORT_PRODUCT_ACCOUNT_TASK_PASSPORT_FAILURE]:
     handleFailure,
 };
 

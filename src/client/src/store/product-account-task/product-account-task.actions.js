@@ -42,6 +42,18 @@ const { Types, Creators } = createActions(
     ],
     updateWeldingMaterialInfoSuccess: ['productAccountTask'],
     updateWeldingMaterialInfoFailure: ['error'],
+
+    getShortProductAccountTaskPassportRequest: [
+      'productAccountTaskId',
+      'averageIntervalSeconds',
+      'secondsToIgnoreBetweenGraphs',
+    ],
+    getShortProductAccountTaskPassportSuccess: null,
+    getShortProductAccountTaskPassportFailure: ['error'],
+
+    getFullProductAccountTaskPassportRequest: ['productAccountTaskId'],
+    getFullProductAccountTaskPassportSuccess: null,
+    getFullProductAccountTaskPassportFailure: ['error'],
   },
   {}
 );

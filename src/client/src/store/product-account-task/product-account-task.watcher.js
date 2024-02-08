@@ -8,6 +8,8 @@ const watchers = [
   ...sagas.changeManufacturedAmountWatchers,
   ...sagas.editProductAccountTaskWatchers,
   ...sagas.updateWeldingMaterialInfoWatchers,
+  ...sagas.getFullProductAccountTaskPassportWatchers,
+  ...sagas.getShortProductAccountTaskPassportWatchers,
 ];
 
 export default watchers;

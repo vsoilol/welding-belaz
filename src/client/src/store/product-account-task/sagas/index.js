@@ -5,3 +5,5 @@ export * from './change-end-welding-date.saga';
 export * from './change-manufactured-amount.saga';
 export * from './edit-product-account-task.saga';
 export * from './update-welding-material-info.saga';
+export * from './get-full-product-account-task-passport.saga';
+export * from './get-short-product-account-task-passport.saga';

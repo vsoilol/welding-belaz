@@ -1,5 +1,8 @@
 export const selectIsLoading = state => state.productAccountTask.isLoading;
 
+export const selectIsLoadingPassport = state =>
+  state.productAccountTask.isLoadingPassport;
+
 export const selectProductAccountTasks = state =>
   state.productAccountTask.productAccountTasks;
 

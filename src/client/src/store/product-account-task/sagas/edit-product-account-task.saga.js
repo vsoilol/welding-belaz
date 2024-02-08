@@ -1,5 +1,4 @@
-import { call, put, take, takeLatest, all } from 'redux-saga/effects';
-import api from 'services/api';
+import { put, take, takeLatest, all } from 'redux-saga/effects';
 import {
   productAccountTaskActionTypes,
   productAccountTaskActionCreators,
