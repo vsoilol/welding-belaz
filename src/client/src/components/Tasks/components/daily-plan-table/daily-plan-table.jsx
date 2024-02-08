@@ -71,6 +71,16 @@ export const DailyPlanTable = () => {
     },
     {
       align: 'center',
+      title: 'Количество изготовленной продукции',
+      field: 'amountManufactured',
+    },
+    {
+      align: 'center',
+      title: 'Количество забракованной продукции',
+      field: 'amountDefective',
+    },
+    {
+      align: 'center',
       title: ' Есть ли отклонения ',
       render: rowData => (rowData?.areDeviations ? 'есть' : 'нету'),
       customFilterAndSearch: (term, rowData) => {
