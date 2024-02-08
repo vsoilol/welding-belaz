@@ -14,8 +14,10 @@ import { weldingEquipmentWatchers } from 'store/welding-equipment';
 import { taskWatchers } from 'store/task';
 import { masterWatchers } from 'store/master';
 import { productAccountWatchers } from 'store/product-account';
+import { productAccountTaskWatchers } from 'store/product-account-task';
+import { inspectorWatchers } from 'store/inspector';
 
-export default function* () {
+function* rootSaga() {
   const sagas = [
     ...executorWatchers,
     ...calendarWatchers,
@@ -31,7 +33,11 @@ export default function* () {
     ...taskWatchers,
     ...masterWatchers,
     ...productAccountWatchers,
+    ...productAccountTaskWatchers,
+    ...inspectorWatchers,
   ];
 
   yield all(sagas);
 }
+
+export default rootSaga;

@@ -4,6 +4,7 @@ import { weldingEquipmentActionCreators } from './welding-equipment.actions';
 import {
   selectWeldingEquipment,
   selectWeldingEquipmentIsLoading,
+  selectWeldingEquipments,
 } from './welding-equipment.selectors';
 
 export const useWeldingEquipmentStore = () => {
@@ -11,6 +12,7 @@ export const useWeldingEquipmentStore = () => {
 
   // Selectors
   const weldingEquipment = useSelector(selectWeldingEquipment);
+  const weldingEquipments = useSelector(selectWeldingEquipments);
   const isLoading = useSelector(selectWeldingEquipmentIsLoading);
 
   // Actions
@@ -22,9 +24,17 @@ export const useWeldingEquipmentStore = () => {
     [dispatch]
   );
 
+  const getAllWeldingEquipments = useCallback(
+    () =>
+      dispatch(weldingEquipmentActionCreators.getAllWeldingEquipmentsRequest()),
+    [dispatch]
+  );
+
   return {
     weldingEquipment,
+    weldingEquipments,
     isLoading,
     getWeldingEquipmentById,
+    getAllWeldingEquipments,
   };
 };

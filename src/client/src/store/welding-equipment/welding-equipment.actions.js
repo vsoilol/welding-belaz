@@ -5,6 +5,10 @@ const { Types, Creators } = createActions(
     getWeldingEquipmentByIdRequest: ['id'],
     getWeldingEquipmentByIdSuccess: ['weldingEquipment'],
     getWeldingEquipmentByIdFailure: ['error'],
+
+    getAllWeldingEquipmentsRequest: null,
+    getAllWeldingEquipmentsSuccess: ['weldingEquipments'],
+    getAllWeldingEquipmentsFailure: ['error'],
   },
   {}
 );

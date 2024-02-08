@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import { tasksImage } from 'assets/pics';
 
 import ToolTip from 'components/shared/ToolTip';
-import { DailyPlanTab, TasksTab } from './tabs';
+import { DailyPlanTab, ProductAccountTasksTab, TasksTab } from './tabs';
 import { useQuery } from 'hooks';
 import { useSearchParams } from 'react-router-dom';
 import { convertStringToInt } from 'core/helpers';
@@ -17,7 +17,7 @@ export const Tasks = ({ userRole }) => {
   const searchParams = useQuery();
   const [, setSearchParams] = useSearchParams();
 
-  const tabs = [<TasksTab />, <DailyPlanTab />];
+  const tabs = [<DailyPlanTab />, <ProductAccountTasksTab />, <TasksTab />];
 
   const getRouteTabNumber = () => {
     const routeTabNumber = searchParams.get('tab');
@@ -63,8 +63,9 @@ export const Tasks = ({ userRole }) => {
           indicatorColor="primary"
           textColor="primary"
           aria-label="full width tabs example">
-          <Tab label="Сменные задания на сварку " />
           <Tab label="Ежедневный план" />
+          <Tab label="Задания на сварку изделия" />
+          <Tab label="Задания на сварку швов" />
         </Tabs>
       )}
 

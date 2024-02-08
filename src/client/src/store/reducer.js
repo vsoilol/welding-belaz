@@ -20,6 +20,8 @@ import { taskReducer } from './task';
 import { masterReducer } from './master';
 import { productAccountReducer } from './product-account';
 import { modalReducer } from './modal';
+import { productAccountTaskReducer } from './product-account-task';
+import { inspectorReducer } from './inspector';
 
 const reducers = {
   router: createRouterReducer(history),
@@ -43,6 +45,8 @@ const reducers = {
   master: masterReducer,
   productAccount: productAccountReducer,
   modal: modalReducer,
+  productAccountTask: productAccountTaskReducer,
+  inspector: inspectorReducer,
 };
 
 export default combineReducers(reducers);

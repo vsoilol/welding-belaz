@@ -1,3 +1,8 @@
 import * as sagas from './sagas';
 
-export default [...sagas.getWeldingEquipmentByIdWatchers];
+const watchers = [
+  ...sagas.getWeldingEquipmentByIdWatchers,
+  ...sagas.getAllWeldingEquipmentsWatchers,
+];
+
+export default watchers;

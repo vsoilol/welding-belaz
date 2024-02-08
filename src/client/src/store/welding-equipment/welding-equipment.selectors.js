@@ -3,3 +3,6 @@ export const selectWeldingEquipmentIsLoading = state =>
 
 export const selectWeldingEquipment = state =>
   state.weldingEquipment.weldingEquipment;
+
+export const selectWeldingEquipments = state =>
+  state.weldingEquipment.weldingEquipments;

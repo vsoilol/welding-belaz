@@ -6,6 +6,7 @@ const WELDING_EQUIPMENT_INITIAL_STATE = {
   isLoading: true,
   error: null,
   weldingEquipment: null,
+  weldingEquipments: null,
 };
 
 const startLoading = (state = WELDING_EQUIPMENT_INITIAL_STATE) => {
@@ -35,12 +36,28 @@ export const updateStateWithLoadedWeldingEquipment = (
   };
 };
 
+const handleLoadWeldingEquipmentsSuccess = (
+  state = WELDING_EQUIPMENT_INITIAL_STATE,
+  { weldingEquipments }
+) => ({
+  ...state,
+  weldingEquipments,
+  isLoading: false,
+});
+
 export const HANDLERS = {
   [weldingEquipmentActionTypes.GET_WELDING_EQUIPMENT_BY_ID_REQUEST]:
     startLoading,
   [weldingEquipmentActionTypes.GET_WELDING_EQUIPMENT_BY_ID_SUCCESS]:
     updateStateWithLoadedWeldingEquipment,
   [weldingEquipmentActionTypes.GET_WELDING_EQUIPMENT_BY_ID_FAILURE]:
+    loadingFailure,
+
+  [weldingEquipmentActionTypes.GET_ALL_WELDING_EQUIPMENTS_REQUEST]:
+    startLoading,
+  [weldingEquipmentActionTypes.GET_ALL_WELDING_EQUIPMENTS_SUCCESS]:
+    handleLoadWeldingEquipmentsSuccess,
+  [weldingEquipmentActionTypes.GET_ALL_WELDING_EQUIPMENTS_FAILURE]:
     loadingFailure,
 };
 
