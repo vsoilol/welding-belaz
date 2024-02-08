@@ -289,6 +289,26 @@
       "DownstreamPathTemplate": "/api/uploadFile/users",
       "ServiceName": "file",
       "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/file/product-account-seam-passport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/file/product-account-seam-passport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
+    },
+    {
+      "UpstreamPathTemplate": "/api/file/product-account-based-seam-passport",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
+      "DownstreamPathTemplate": "/api/file/product-account-based-seam-passport",
+      "ServiceName": "file",
+      "SwaggerKey": "file"
     }
   ]
 }

@@ -24,6 +24,24 @@ public class FileController : ControllerBase
         return result.ToFile();
     }
 
+    [HttpGet("product-account-seam-passport")]
+    public async Task<IActionResult> GenerateSeamPassportByProductAccountTaskIdAsync(
+        [FromQuery] GenerateSeamPassportByProductAccountTaskIdRequest request)
+    {
+        var result = await _fileService.GenerateSeamPassportByProductAccountTaskIdAsync(request);
+
+        return result.ToFile();
+    }
+
+    [HttpGet("product-account-based-seam-passport")]
+    public async Task<IActionResult> GenerateBasedSeamPassportByProductAccountTaskIdAsync(
+        [FromQuery] GenerateBasedSeamPassportByProductAccountTaskIdRequest request)
+    {
+        var result = await _fileService.GenerateBasedSeamPassportByProductAccountTaskIdAsync(request);
+
+        return result.ToFile();
+    }
+
     [HttpGet("based-seam-passport")]
     public async Task<IActionResult> GenerateBasedSeamPassportAsync(
         [FromQuery] GenerateBasedSeamPassportByTaskIdRequest request)

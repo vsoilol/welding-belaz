@@ -45,7 +45,8 @@ public class ProductAccountTaskDto : IMapFrom<Belaz.WeldingApp.Common.Entities.P
 
     public bool IsDone { get; set; }
 
-    [JsonIgnore] public Guid MainProductId { get; set; }
+    [JsonIgnore] 
+    public Guid MainProductId { get; set; }
 
     public ProductBriefDto Product { get; set; } = null!;
 

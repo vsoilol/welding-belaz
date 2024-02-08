@@ -16,6 +16,8 @@ public static class DependencyInjection
 
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<IMasterRepository, MasterRepository>();
+        services.AddScoped<IExtensionRepository, ExtensionRepository>();
+        services.AddScoped<IProductAccountTaskRepository, ProductAccountTaskRepository>();
         services.AddScoped<IInspectorRepository, InspectorRepository>();
         services.AddScoped<IWeldPassageRepository, WeldPassageRepository>();
         services.AddScoped<ISeamAccountRepository, SeamAccountRepository>();

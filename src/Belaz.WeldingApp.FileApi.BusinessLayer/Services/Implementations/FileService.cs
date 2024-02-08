@@ -2,7 +2,9 @@
 using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Requests;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Services.Interfaces;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.BasedProductAccountTaskPassport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.BasedSeamPassport;
+using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.ProductAccountTaskPassport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.SeamPassport;
 using Belaz.WeldingApp.FileApi.BusinessLayer.Validations.Services;
 using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
@@ -20,6 +22,7 @@ public class FileService : IFileService
     private readonly IWebHostEnvironment _environment;
     private readonly IValidationService _validationService;
     private readonly IProductAccountRepository _productAccountRepository;
+    private readonly IProductAccountTaskRepository _productAccountTaskRepository;
     private readonly IExcelFileService<List<ProductAccountInfoExcelModel>> _productAccountInfoExcelFileService;
 
     public FileService(
@@ -27,13 +30,15 @@ public class FileService : IFileService
         IWebHostEnvironment environment,
         IValidationService validationService,
         IProductAccountRepository productAccountRepository,
-        IExcelFileService<List<ProductAccountInfoExcelModel>> productAccountInfoExcelFileService)
+        IExcelFileService<List<ProductAccountInfoExcelModel>> productAccountInfoExcelFileService,
+        IProductAccountTaskRepository productAccountTaskRepository)
     {
         _taskRepository = taskRepository;
         _environment = environment;
         _validationService = validationService;
         _productAccountRepository = productAccountRepository;
         _productAccountInfoExcelFileService = productAccountInfoExcelFileService;
+        _productAccountTaskRepository = productAccountTaskRepository;
     }
 
     public async Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
@@ -106,15 +111,72 @@ public class FileService : IFileService
         return result;
     }
 
-    public Task<Result<DocumentDto>> GenerateSeamPassportByProductAccountTaskIdAsync(GenerateSeamPassportByProductAccountTaskIdRequest request)
+    public async Task<Result<DocumentDto>> GenerateSeamPassportByProductAccountTaskIdAsync(
+        GenerateSeamPassportByProductAccountTaskIdRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var task = await _productAccountTaskRepository.GetProductAccountTaskById(request.ProductAccountTaskId);
+
+        var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
+        var document = new ProductAccountTaskPassportDocument(task, fontsPath);
+        
+        byte[] bytes;
+        using (var stream = new MemoryStream())
+        {
+            document.GeneratePdf(stream);
+            bytes = stream.ToArray();
+        }
+
+        var result = new DocumentDto
+        {
+            FileName = $"Краткий Паспорт.pdf",
+            FileType = FileTypes.PdfType,
+            Bytes = bytes
+        };
+
+        return result;
     }
 
-    public Task<Result<DocumentDto>> GenerateBasedSeamPassportByProductAccountTaskIdAsync(
+    public async Task<Result<DocumentDto>> GenerateBasedSeamPassportByProductAccountTaskIdAsync(
         GenerateBasedSeamPassportByProductAccountTaskIdRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<DocumentDto>(validationResult.Exception);
+        }
+
+        var task = await _productAccountTaskRepository.GetProductAccountTaskById(request.ProductAccountTaskId);
+
+        var fontsPath = Path.Combine(_environment.WebRootPath, $"fonts");
+
+        var document =
+            new BasedProductAccountTaskPassportDocument(task, fontsPath,
+                request.AverageIntervalSeconds,
+                request.SecondsToIgnoreBetweenGraphs);
+
+        byte[] bytes;
+        using (var stream = new MemoryStream())
+        {
+            document.GeneratePdf(stream);
+            bytes = stream.ToArray();
+        }
+
+        var result = new DocumentDto
+        {
+            FileName = $"Краткий Паспорт.pdf",
+            FileType = FileTypes.PdfType,
+            Bytes = bytes
+        };
+
+        return result;
     }
 
     public async Task<Result<DocumentDto>> GenerateProductAccountInfoExcelFileAsync()
@@ -125,7 +187,7 @@ public class FileService : IFileService
 
         foreach (var productAccount in data)
         {
-            string[] parts = productAccount.Product.Number.Split(new[] { '-' }, 3);
+            string[] parts = productAccount.Product.Number.Split(new[] {'-'}, 3);
 
             excelDataModel.Add(new ProductAccountInfoExcelModel
             {
