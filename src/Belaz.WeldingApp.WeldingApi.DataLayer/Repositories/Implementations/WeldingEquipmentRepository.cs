@@ -54,6 +54,8 @@ public class WeldingEquipmentRepository : IWeldingEquipmentRepository
     {
         return _context.WeldingEquipmentConditionTimes
             .Where(_ => _.Condition == Condition.ForcedDowntime)
+            .OrderByDescending(_ => _.Date)
+            .ThenByDescending(_ => _.StartConditionTime)
             .ProjectTo<WeldingEquipmentDowntimeDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
