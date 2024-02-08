@@ -9,10 +9,18 @@ public interface IFileService
     Task<Result<DocumentDto>> GenerateSeamPassportByTaskIdAsync(
         GenerateSeamPassportByTaskIdRequest request
     );
-    
+
     Task<Result<DocumentDto>> GenerateBasedSeamPassportByTaskIdAsync(
         GenerateBasedSeamPassportByTaskIdRequest request
     );
-    
+
+    Task<Result<DocumentDto>> GenerateSeamPassportByProductAccountTaskIdAsync(
+        GenerateSeamPassportByProductAccountTaskIdRequest request
+    );
+
+    Task<Result<DocumentDto>> GenerateBasedSeamPassportByProductAccountTaskIdAsync(
+        GenerateBasedSeamPassportByProductAccountTaskIdRequest request
+    );
+
     Task<Result<DocumentDto>> GenerateProductAccountInfoExcelFileAsync();
 }

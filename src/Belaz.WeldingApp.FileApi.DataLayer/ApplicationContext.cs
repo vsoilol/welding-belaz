@@ -16,8 +16,10 @@ public sealed class ApplicationContext : DbContext
     public DbSet<UserData> Users { get; set; } = null!;
 
     public DbSet<Post> Posts { get; set; } = null!;
-    
+
     public DbSet<WeldingRecordLimit> WeldingRecordLimits { get; set; } = null!;
+
+    public DbSet<ProductAccountTask> ProductAccountTasks { get; set; } = null!;
 
     public DbSet<ProductionArea> ProductionAreas { get; set; } = null!;
 
@@ -99,6 +101,6 @@ public sealed class ApplicationContext : DbContext
 
         modelBuilder
             .Entity<ProductInside>()
-            .HasKey(t => new { t.InsideProductId, t.MainProductId });
+            .HasKey(t => new {t.InsideProductId, t.MainProductId});
     }
 }

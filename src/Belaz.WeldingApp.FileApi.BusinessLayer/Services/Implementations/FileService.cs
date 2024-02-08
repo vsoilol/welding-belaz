@@ -106,6 +106,17 @@ public class FileService : IFileService
         return result;
     }
 
+    public Task<Result<DocumentDto>> GenerateSeamPassportByProductAccountTaskIdAsync(GenerateSeamPassportByProductAccountTaskIdRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result<DocumentDto>> GenerateBasedSeamPassportByProductAccountTaskIdAsync(
+        GenerateBasedSeamPassportByProductAccountTaskIdRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result<DocumentDto>> GenerateProductAccountInfoExcelFileAsync()
     {
         var data = await _productAccountRepository.GetAllProductAccountsAsync();
