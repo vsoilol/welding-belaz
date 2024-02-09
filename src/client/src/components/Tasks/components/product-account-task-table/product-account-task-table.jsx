@@ -89,9 +89,7 @@ export const ProductAccountTaskTable = () => {
     const { weldingEquipments } = rowData;
 
     return weldingEquipments && weldingEquipments.length > 0
-      ? weldingEquipments.map(
-          equipment => `${equipment.name} ${equipment.factoryNumber}`
-        )
+      ? weldingEquipments.map(equipment => `${equipment.factoryNumber}`)
       : '-';
   };
 
@@ -173,20 +171,8 @@ export const ProductAccountTaskTable = () => {
 
         return value.toLowerCase().includes(term.toLowerCase());
       },
-      width: '20%',
+      width: '10%',
     },
-    // {
-    //   align: 'center',
-    //   width: '10%',
-    //   title: 'Оборудование',
-    //   sorting: false,
-    //   render: rowData => getTableEquipmentsColumnValueView(rowData),
-    //   customFilterAndSearch: (term, rowData) => {
-    //     const value = getTableEquipmentsColumnValue(rowData);
-
-    //     return value.toLowerCase().includes(term.toLowerCase());
-    //   },
-    // },
     {
       align: 'center',
       width: '10%',
@@ -201,6 +187,18 @@ export const ProductAccountTaskTable = () => {
         const valueA = getTableEquipmentsColumnValue(a);
         const valueB = getTableEquipmentsColumnValue(b);
         return valueA.localeCompare(valueB);
+      },
+    },
+    {
+      align: 'center',
+      width: '10%',
+      title: 'Оборудование',
+      sorting: false,
+      render: rowData => getTableEquipmentsColumnValueView(rowData),
+      customFilterAndSearch: (term, rowData) => {
+        const value = getTableEquipmentsColumnValue(rowData);
+
+        return value.toLowerCase().includes(term.toLowerCase());
       },
     },
     isMaster(userRole) && {
