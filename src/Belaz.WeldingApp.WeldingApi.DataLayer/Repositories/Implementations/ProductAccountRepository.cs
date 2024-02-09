@@ -516,6 +516,7 @@ public class ProductAccountRepository : IProductAccountRepository
     {
         var oldProductAccountTasks = _context.ProductAccountTasks
             .Include(_ => _.WeldingTasks)
+            .Include(_ => _.WeldingEquipments)
             .Where(_ => _.DateFromPlan.Date.Equals(date.Date)
                         && _.Master!.UserInfo.ProductionAreaId == productionAreaId);
 
