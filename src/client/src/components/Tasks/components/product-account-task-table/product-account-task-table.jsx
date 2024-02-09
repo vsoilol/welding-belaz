@@ -179,13 +179,13 @@ export const ProductAccountTaskTable = () => {
       title: 'Статус',
       render: rowData => getTableStatusColumnValueView(rowData),
       customFilterAndSearch: (term, rowData) => {
-        const value = getTableEquipmentsColumnValue(rowData);
+        const value = getTableStatusColumnValue(rowData);
 
         return value.toLowerCase().includes(term.toLowerCase());
       },
       customSort: (a, b) => {
-        const valueA = getTableEquipmentsColumnValue(a);
-        const valueB = getTableEquipmentsColumnValue(b);
+        const valueA = getTableStatusColumnValue(a);
+        const valueB = getTableStatusColumnValue(b);
         return valueA.localeCompare(valueB);
       },
     },
@@ -198,7 +198,10 @@ export const ProductAccountTaskTable = () => {
       customFilterAndSearch: (term, rowData) => {
         const value = getTableEquipmentsColumnValue(rowData);
 
-        return value.toLowerCase().includes(term.toLowerCase());
+        return (
+          Array.isArray(value) &&
+          value.join(' ').toLowerCase().includes(term.toLowerCase())
+        );
       },
     },
     isMaster(userRole) && {
