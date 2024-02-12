@@ -46,13 +46,15 @@ const handleGenerateTasksFinishLoading = (state = initialState) => ({
   error: null,
 });
 
-const handleLoadDatesSuccess = (state = initialState, action) => ({
-  ...state,
-  isLoading: false,
-  isAdditionalLoading: false,
-  dates: action.dates,
-  productionAreaId: action.productionAreaId,
-});
+const handleLoadDatesSuccess = (state = initialState, action) => {
+  return {
+    ...state,
+    isLoading: false,
+    isAdditionalLoading: false,
+    dates: action.dates.sort(compareDates),
+    productionAreaId: action.productionAreaId,
+  };
+};
 
 const handleLoadProductAccountsSuccess = (
   state = initialState,
@@ -72,18 +74,7 @@ const handleGenerateProductAccountsEmptySuccess = (
     ? state.dates
     : [...state.dates, date];
 
-  newDates.sort((a, b) => {
-    // Split the date strings into components
-    const [dayA, monthA, yearA] = a.split('.');
-    const [dayB, monthB, yearB] = b.split('.');
-
-    // Convert to ISO date format (YYYY-MM-DD) for comparison
-    const dateA = new Date(`${yearA}-${monthA}-${dayA}`).getTime();
-    const dateB = new Date(`${yearB}-${monthB}-${dayB}`).getTime();
-
-    // Compare the dates
-    return dateA - dateB;
-  });
+  newDates.sort(compareDates);
 
   return {
     ...state,
@@ -148,6 +139,19 @@ const handleFailure = (state = initialState, action) => ({
   isAdditionalLoading: false,
   error: action.error,
 });
+
+const compareDates = (a, b) => {
+  // Split the date strings into components
+  const [dayA, monthA, yearA] = a.split('.');
+  const [dayB, monthB, yearB] = b.split('.');
+
+  // Convert to ISO date format (YYYY-MM-DD) for comparison
+  const dateA = new Date(`${yearA}-${monthA}-${dayA}`).getTime();
+  const dateB = new Date(`${yearB}-${monthB}-${dayB}`).getTime();
+
+  // Compare the dates
+  return dateB - dateA;
+};
 
 const actionHandlers = {
   [productAccountActionTypes.LOAD_ALL_DATES_BY_PRODUCTION_AREA_ID_REQUEST]:
