@@ -5,7 +5,6 @@ import { userRoles, isMaster, isInspector } from 'core/constants';
 import {
   convertFromDDMMYYYYToDateObject,
   convertInputDateToDDMMYYYY,
-  convertFromDDMMYYYYToInputFormat,
 } from 'core/helpers';
 import { useAuthStore } from 'store/auth';
 import { useInspectorStore } from 'store/inspector';
@@ -17,6 +16,7 @@ import {
   Button,
   LoadingSpinner,
   CustomFormikSelect,
+  CustomFormikYesOrNoCheckboxes,
 } from 'components/shared';
 import { Formik, Form } from 'formik';
 
@@ -51,27 +51,23 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
 
   const validationSchema = createValidationSchema(
     convertFromDDMMYYYYToDateObject(selectedProductAccountTask.dateFromPlan),
-    selectedProductAccountTask.manufacturedAmount,
+    selectedProductAccountTask.manufacturedAmount > 0,
     userRole
   );
 
   const initialValues = {
     ...(isMaster(userRole) && {
-      weldingEndDate: selectedProductAccountTask.endDateFromPlan
-        ? convertFromDDMMYYYYToInputFormat(
-            selectedProductAccountTask.endDateFromPlan
-          )
-        : '',
-      manufacturedAmount: selectedProductAccountTask.manufacturedAmount ?? 0,
+      weldingEndDate: '',
       weldingMaterial: selectedProductAccountTask.weldingMaterial ?? '',
       weldingMaterialBatchNumber:
         selectedProductAccountTask.weldingMaterialBatchNumber ?? '',
+      isManufactured: [selectedProductAccountTask.manufacturedAmount > 0],
     }),
 
     ...(isInspector(userRole) && {
       inspectorId: selectedProductAccountTask.inspector?.id ?? '',
-      defectiveAmount: selectedProductAccountTask.defectiveAmount ?? 0,
       defectiveReason: selectedProductAccountTask.reason ?? '', // Причина брака
+      isDefective: [selectedProductAccountTask.defectiveAmount > 0],
     }),
   };
 
@@ -91,7 +87,13 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
         ? endWeldingDate
         : null;
 
-    console.log('Submit form: ', values);
+    if (isMaster(userRole)) {
+      values.manufacturedAmount = values.isManufactured[0] ? 1 : 0;
+    }
+
+    if (isInspector(userRole)) {
+      values.defectiveAmount = values.isDefective[0] ? 1 : 0;
+    }
 
     if (userRole === userRoles.admin) {
       handleEditByAdmin(values);
@@ -185,20 +187,9 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
                     </div>
 
                     <div className={styles.field}>
-                      <span>Количество изготовленной продукции</span>
+                      <span>Изготовлено ли изделие?</span>
 
-                      <CustomFormikField name="manufacturedAmount">
-                        <CustomFormikTextInput
-                          width="200"
-                          style={{
-                            height: 40,
-                            padding: '0 20px 0 30px',
-                            width: 380,
-                          }}
-                          placeholder="Количество изготовленной продукции"
-                          type="number"
-                        />
-                      </CustomFormikField>
+                      <CustomFormikYesOrNoCheckboxes name={'isManufactured'} />
                     </div>
 
                     <div className={styles.field}>
@@ -252,20 +243,9 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
                     </div>
 
                     <div className={styles.field}>
-                      <span>Количество забракованой продукции</span>
+                      <span>Забраковано ли изделие?</span>
 
-                      <CustomFormikField name="defectiveAmount">
-                        <CustomFormikTextInput
-                          width="200"
-                          style={{
-                            height: 40,
-                            padding: '0 20px 0 30px',
-                            width: 380,
-                          }}
-                          placeholder="Количество забракованой продукции"
-                          type="number"
-                        />
-                      </CustomFormikField>
+                      <CustomFormikYesOrNoCheckboxes name={'isDefective'} />
                     </div>
 
                     <div className={styles.field}>

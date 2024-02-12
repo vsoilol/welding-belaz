@@ -24,11 +24,11 @@ export const EditProductAccountModal = ({ isOpen, toggleModal }) => {
 
   const initialValues = {
     sequenceNumbers: selectedProductAccount?.sequenceNumbers ?? [],
-    amountFromPlan: selectedProductAccount?.amountFromPlan ?? 0,
   };
 
   const handleEditProductAccount = values => {
-    const { sequenceNumbers, amountFromPlan } = values;
+    const { sequenceNumbers } = values;
+    const amountFromPlan = sequenceNumbers.length;
 
     editProductAccount(
       selectedProductAccount.id,
@@ -52,19 +52,6 @@ export const EditProductAccountModal = ({ isOpen, toggleModal }) => {
         onSubmit={handleEditProductAccount}>
         {({ values, setFieldValue, isValid, dirty }) => (
           <Form className={styles.form}>
-            <div className={styles.field}>
-              <span>Количество из плана</span>
-
-              <CustomFormikField name="amountFromPlan">
-                <CustomFormikTextInput
-                  width="200"
-                  style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
-                  placeholder="Количество из плана"
-                  type="number"
-                />
-              </CustomFormikField>
-            </div>
-
             <div className={styles.field}>
               <span>Порядковый номер изделия</span>
 

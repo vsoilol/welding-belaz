@@ -42,13 +42,14 @@ export const ExpandProductAccountTaskRow = data => {
     },
     {
       // defectiveAmount
-      title: 'Количество забракованных',
-      render: rowData => rowData.defectiveAmount,
+      title: 'Забраковано',
+      render: ({ defectiveAmount }) => (defectiveAmount > 0 ? `Да` : 'Нет'),
     },
     {
       // defectiveAmount
-      title: 'Количество изготовленных',
-      render: rowData => rowData.manufacturedAmount,
+      title: 'Изготовлено',
+      render: ({ manufacturedAmount }) =>
+        manufacturedAmount > 0 ? `Да` : 'Нет',
     },
     {
       // detectedDefects

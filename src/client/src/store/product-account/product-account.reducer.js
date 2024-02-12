@@ -49,7 +49,6 @@ const handleGenerateTasksFinishLoading = (state = initialState) => ({
 const handleLoadDatesSuccess = (state = initialState, action) => {
   return {
     ...state,
-    isLoading: false,
     isAdditionalLoading: false,
     dates: action.dates.sort(compareDates),
     productionAreaId: action.productionAreaId,
@@ -78,7 +77,7 @@ const handleGenerateProductAccountsEmptySuccess = (
 
   return {
     ...state,
-    isLoading: false,
+    isAdditionalLoading: false,
     productAccounts: productAccounts,
     productAccountDate: date,
     selectedDate: date,
@@ -177,7 +176,7 @@ const actionHandlers = {
   [productAccountActionTypes.GENERATE_TASKS_FAILURE]: handleFailure,
 
   [productAccountActionTypes.GENERATE_PRODUCT_ACCOUNTS_EMPTY_REQUEST]:
-    handleStartLoading,
+    handleStartAdditionalLoading,
   [productAccountActionTypes.GENERATE_PRODUCT_ACCOUNTS_EMPTY_SUCCESS]:
     handleGenerateProductAccountsEmptySuccess,
   [productAccountActionTypes.GENERATE_PRODUCT_ACCOUNTS_EMPTY_FAILURE]:

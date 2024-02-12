@@ -6,10 +6,5 @@ export const createValidationSchema = currentDate => {
       .array()
       .of(yup.string().required('Это поле обязательно для заполнения'))
       .required('Это поле обязательно для заполнения'),
-
-    amountFromPlan: yup
-      .number()
-      .min(0, 'Количество должно быть больше 0')
-      .required('Это поле обязательно для заполнения'),
   });
 };

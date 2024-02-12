@@ -44,8 +44,6 @@ export const EditProductAccountTaskEquipmentModal = ({
 
     assignWeldingEquipments(selectedProductAccountTask.id, equipments);
     toggleModal(false);
-
-    // console.log('Form submit: ', equipments);
   };
 
   return (

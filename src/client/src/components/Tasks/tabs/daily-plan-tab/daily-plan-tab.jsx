@@ -67,13 +67,19 @@ export const DailyPlanTab = () => {
   useEffect(() => {
     getAllMasters();
     return () => cancelGetAllMasters();
-  }, [getAllMasters, cancelGetAllMasters, setSelectedMasterId]);
+  }, [getAllMasters, cancelGetAllMasters]);
 
   useEffect(() => {
     if (selectedMaster && selectedMaster?.productionArea) {
       loadAllDatesByProductionAreaId(selectedMaster.productionArea.id);
     }
   }, [selectedMaster, loadAllDatesByProductionAreaId]);
+
+  useEffect(() => {
+    if (selectedMaster && selectedDate) {
+      loadProductAccountByDate(selectedDate, selectedMaster.productionArea.id);
+    }
+  }, [loadProductAccountByDate]);
 
   const handleLoadProductAccounts = () => {
     loadProductAccountByDate(selectedDate, selectedMaster.productionArea.id);
@@ -103,54 +109,51 @@ export const DailyPlanTab = () => {
       <div className={styles.TablePlan}>
         <h3>Ежедневный план</h3>
 
-        {userRole === userRoles.admin && (
-          <div className={styles.RowTools}>
-            <div className={styles.toolsHead}>
-              <p>Выберите мастера</p>
+        <div className={styles.RowTools}>
+          <div className={styles.toolsHead}>
+            <p>Выберите мастера</p>
 
-              <CustomSelect
-                width="380px"
-                placeholder="Мастера"
-                value={
-                  mastersOptions.find(_ => _.value === selectedMasterId) ?? ''
-                }
-                onChange={event => {
-                  setSelectedDate(null);
-                  setSelectedMasterId(event.value);
+            <CustomSelect
+              width="380px"
+              placeholder="Мастера"
+              value={
+                mastersOptions.find(_ => _.value === selectedMasterId) ?? ''
+              }
+              onChange={event => {
+                setSelectedDate(null);
+                setSelectedMasterId(event.value);
+              }}
+              options={mastersOptions}
+            />
+          </div>
+
+          {(userRole === userRoles.master || userRole === userRoles.admin) && (
+            <div className={styles.toolsHead}>
+              <p>Выберите дату для создания плана</p>
+              <CustomFormikTextInput
+                width="200"
+                style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
+                type="date"
+                placeholder="Дата"
+                onChange={e => {
+                  setSelectedCreatedDate(
+                    convertInputDateToDDMMYYYY(e.target.value)
+                  );
                 }}
-                options={mastersOptions}
               />
             </div>
+          )}
 
-            {(userRole === userRoles.master ||
-              userRole === userRoles.admin) && (
-              <div className={styles.toolsHead}>
-                <p>Выберите дату для создания плана</p>
-                <CustomFormikTextInput
-                  width="200"
-                  style={{ height: 40, padding: '0 20px 0 30px', width: 380 }}
-                  type="date"
-                  placeholder="Дата"
-                  onChange={e => {
-                    setSelectedCreatedDate(
-                      convertInputDateToDDMMYYYY(e.target.value)
-                    );
-                  }}
-                />
-              </div>
+          {userRole === userRoles.admin &&
+            selectedMaster?.productionArea &&
+            selectedCreatedDate && (
+              <button
+                onClick={handleGenerateProductAccountsEmpty}
+                className={styles.create}>
+                Создать план на {selectedCreatedDate}
+              </button>
             )}
-
-            {userRole === userRoles.admin &&
-              selectedMaster?.productionArea &&
-              selectedCreatedDate && (
-                <button
-                  onClick={handleGenerateProductAccountsEmpty}
-                  className={styles.create}>
-                  Создать план на {selectedCreatedDate}
-                </button>
-              )}
-          </div>
-        )}
+        </div>
 
         {selectedMasterId && dates && dates.length > 0 && (
           <div className={styles.RowTools}>

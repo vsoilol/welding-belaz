@@ -1,0 +1,25 @@
+.inputField {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+}
+
+.inputError {
+  font-size: 14px;
+  color: red;
+  font-style: italic;
+  margin-left: 25px;
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+}
+
+.columnInputCheckbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
