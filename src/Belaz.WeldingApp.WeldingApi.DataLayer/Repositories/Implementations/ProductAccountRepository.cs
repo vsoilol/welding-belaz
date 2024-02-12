@@ -371,6 +371,12 @@ public class ProductAccountRepository : IProductAccountRepository
         Guid productionAreaId
     )
     {
+        var oldProductAccountTasks = _context.ProductAccountTasks
+            .Include(_ => _.WeldingTasks)
+            .Include(_ => _.WeldingEquipments)
+            .Where(_ => _.DateFromPlan.Date.Equals(newDate.Date)
+                        && _.Master!.UserInfo.ProductionAreaId == productionAreaId);
+
         var oldProductAccounts = _context.ProductAccounts.Where(
             _ =>
                 _.Product.ProductionAreaId == productionAreaId
@@ -383,6 +389,7 @@ public class ProductAccountRepository : IProductAccountRepository
                 && _.DateFromPlan.Date.Equals(newDate.Date)
         );
 
+        _context.RemoveRange(oldProductAccountTasks);
         _context.ProductAccounts.RemoveRange(oldProductAccounts);
         _context.SeamAccounts.RemoveRange(oldSeamAccounts);
 
