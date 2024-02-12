@@ -68,13 +68,30 @@ const handleGenerateProductAccountsEmptySuccess = (
   state = initialState,
   { productAccounts, date }
 ) => {
+  const newDates = state.dates.includes(date)
+    ? state.dates
+    : [...state.dates, date];
+
+  newDates.sort((a, b) => {
+    // Split the date strings into components
+    const [dayA, monthA, yearA] = a.split('.');
+    const [dayB, monthB, yearB] = b.split('.');
+
+    // Convert to ISO date format (YYYY-MM-DD) for comparison
+    const dateA = new Date(`${yearA}-${monthA}-${dayA}`).getTime();
+    const dateB = new Date(`${yearB}-${monthB}-${dayB}`).getTime();
+
+    // Compare the dates
+    return dateA - dateB;
+  });
+
   return {
     ...state,
     isLoading: false,
     productAccounts: productAccounts,
     productAccountDate: date,
     selectedDate: date,
-    dates: [...state.dates, date],
+    dates: newDates,
   };
 };
 
