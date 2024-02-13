@@ -1,4 +1,4 @@
-import { isMaster, isInspector } from 'core/constants';
+import { isMaster, isInspector, isMasterOrInspector } from 'core/constants';
 import * as yup from 'yup';
 
 export const createValidationSchema = (
@@ -24,7 +24,7 @@ export const createValidationSchema = (
     });
   }
 
-  if (isInspector(userRole)) {
+  if (isMasterOrInspector(userRole)) {
     validationSchema = validationSchema.shape({
       inspectorId: yup.string().required('Это поле обязательно для заполнения'),
 

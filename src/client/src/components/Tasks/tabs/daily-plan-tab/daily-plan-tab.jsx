@@ -144,7 +144,7 @@ export const DailyPlanTab = () => {
             </div>
           )}
 
-          {userRole === userRoles.admin &&
+          {(userRole === userRoles.admin || userRole === userRoles.master) &&
             selectedMaster?.productionArea &&
             selectedCreatedDate && (
               <button

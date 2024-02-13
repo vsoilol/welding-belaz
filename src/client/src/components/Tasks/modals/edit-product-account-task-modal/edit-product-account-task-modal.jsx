@@ -1,7 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import { useProductAccountTaskStore } from 'store/product-account-task';
 
-import { userRoles, isMaster, isInspector } from 'core/constants';
+import {
+  userRoles,
+  isMaster,
+  isInspector,
+  isMasterOrInspector,
+} from 'core/constants';
 import {
   convertFromDDMMYYYYToDateObject,
   convertInputDateToDDMMYYYY,
@@ -64,7 +69,7 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
       isManufactured: [selectedProductAccountTask.manufacturedAmount > 0],
     }),
 
-    ...(isInspector(userRole) && {
+    ...(isMasterOrInspector(userRole) && {
       inspectorId: selectedProductAccountTask.inspector?.id ?? '',
       defectiveReason: selectedProductAccountTask.reason ?? '', // Причина брака
       isDefective: [selectedProductAccountTask.defectiveAmount > 0],
@@ -72,7 +77,7 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
   };
 
   useEffect(() => {
-    if (isInspector(userRole)) {
+    if (isMasterOrInspector(userRole)) {
       getAllInspectors();
     }
   }, [getAllInspectors]);
@@ -91,16 +96,12 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
       values.manufacturedAmount = values.isManufactured[0] ? 1 : 0;
     }
 
-    if (isInspector(userRole)) {
+    if (isMasterOrInspector(userRole)) {
       values.defectiveAmount = values.isDefective[0] ? 1 : 0;
     }
 
-    if (userRole === userRoles.admin) {
+    if (userRole === userRoles.admin || userRole === userRoles.master) {
       handleEditByAdmin(values);
-    }
-
-    if (userRole === userRoles.master) {
-      handleEditByMaster(values);
     }
 
     if (userRole === userRoles.inspector) {
@@ -228,7 +229,7 @@ export const EditProductAccountTaskModal = ({ isOpen, toggleModal }) => {
                   </>
                 )}
 
-                {isInspector(userRole) && (
+                {isMasterOrInspector(userRole) && (
                   <>
                     <div className={styles.field}>
                       <span>Контролер</span>
