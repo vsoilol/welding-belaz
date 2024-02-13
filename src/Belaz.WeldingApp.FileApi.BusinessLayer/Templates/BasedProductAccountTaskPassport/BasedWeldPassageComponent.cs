@@ -115,130 +115,6 @@ public class BasedWeldPassageComponent : IComponent
         });
     }
 
-    private void ComposeDeviationValuesTable(IContainer container, WeldingDeviationValues deviationValue)
-    {
-        var columnsAmount = 19;
-
-        container.Table(table =>
-        {
-            table.ColumnsDefinition(columns =>
-            {
-                columns.RelativeColumn(2.5f);
-
-                for (var i = 0; i < columnsAmount - 1; i++)
-                {
-                    columns.RelativeColumn();
-                }
-            });
-
-            table
-                .Cell()
-                .ColumnSpan(5)
-                .Element(BlockCenter)
-                .Text("Время начала")
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .ColumnSpan(4)
-                .Element(BlockCenter)
-                .Text(deviationValue.DeviationStart.ToHoursMinutesSecondsString())
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .ColumnSpan(6)
-                .Element(BlockCenter)
-                .Text("Время окончания")
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .ColumnSpan(4)
-                .Element(BlockCenter)
-                .Text(deviationValue.DeviationEnd.ToHoursMinutesSecondsString())
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .ColumnSpan(5)
-                .Element(BlockCenter)
-                .Text("Минимальное значение")
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .ColumnSpan(4)
-                .Element(BlockCenter)
-                .Text(deviationValue.MinInstruction.ToString(CultureInfo.InvariantCulture))
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .ColumnSpan(6)
-                .Element(BlockCenter)
-                .Text("Максимальное значение")
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .ColumnSpan(4)
-                .Element(BlockCenter)
-                .Text(deviationValue.MaxInstruction.ToString(CultureInfo.InvariantCulture))
-                .Style(Typography.Normal);
-
-            var groupSize = columnsAmount - 1;
-
-            var deviationValueSet = GetDeviationValueSets(groupSize,
-                deviationValue.Values,
-                deviationValue.DeviationValues);
-
-            foreach (var groupedArray in deviationValueSet)
-            {
-                table
-                    .Cell()
-                    .Element(BlockLeft)
-                    .Text("Значение")
-                    .Style(Typography.Normal);
-
-                for (int i = 0; i < groupSize; i++)
-                {
-                    var valueString = i > groupedArray.Values.Length - 1
-                        ? "-"
-                        : groupedArray.Values[i].ToString(CultureInfo.InvariantCulture);
-
-                    table
-                        .Cell()
-                        .Element(BlockLeft)
-                        .Text(valueString)
-                        .Style(Typography.Normal);
-                }
-
-                table
-                    .Cell()
-                    .Element(BlockLeft)
-                    .Text("Отклонение")
-                    .Style(Typography.Normal);
-
-                for (int i = 0; i < groupSize; i++)
-                {
-                    var valueString = i > groupedArray.DeviationValues.Length - 1
-                        ? "-"
-                        : groupedArray.DeviationValues[i].ToString(CultureInfo.InvariantCulture);
-
-                    table
-                        .Cell()
-                        .Element(BlockLeft)
-                        .Text(valueString)
-                        .Style(Typography.Normal);
-                }
-            }
-
-            static IContainer BlockCenter(IContainer container) => Table.BlockCenter(container);
-            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
-        });
-    }
-
     private void ComposeCurrencyAndVoltageTable(IContainer container)
     {
         container.Table(table =>
@@ -453,8 +329,6 @@ public class BasedWeldPassageComponent : IComponent
         string mainPlotTitle,
         double[] values,
         IReadOnlyList<WeldPassageLineInfo> weldPassageLineInfos
-        // double? min,
-        //     double? max
     )
     {
         var model = new PlotModel
@@ -658,9 +532,9 @@ public class BasedWeldPassageComponent : IComponent
             resultVoltages.AddRange(zeroValues.Select(_ => new WeldingValue(_)));
         }
 
-        var secondPerValue = (_endWeldingTime - _startWeldingTime).TotalSeconds / resultAmperages.Length();
-        var endTimeResu = _startWeldingTime.Add(TimeSpan.FromSeconds(secondPerValue * resultAmperages.Length()));
-        var endTimeResusdfdsf = _startWeldingTime.Add(TimeSpan.FromSeconds(secondPerValue * 3375));
+        //var secondPerValue = (_endWeldingTime - _startWeldingTime).TotalSeconds / resultAmperages.Length();
+      //  var endTimeResu = _startWeldingTime.Add(TimeSpan.FromSeconds(secondPerValue * resultAmperages.Length()));
+      //  var endTimeResusdfdsf = _startWeldingTime.Add(TimeSpan.FromSeconds(secondPerValue * 3375));
 
         return new Values
         {
@@ -834,9 +708,6 @@ public class BasedWeldPassageComponent : IComponent
     {
         var amperagesResult = new List<WeldPassageLineInfo>();
         var voltagesResult = new List<WeldPassageLineInfo>();
-
-        var asasd = weldingValues.WeldingCurrentValues
-            .Select((_, i) => new { WeldPassageNumber = _.WeldPassageNumber, Value = _.Value, Index = i });
 
         var weldPassageWithIndex = weldingValues.WeldingCurrentValues
             .Select((_, index) => new { Index = index, WeldPassageNumber = _.WeldPassageNumber })

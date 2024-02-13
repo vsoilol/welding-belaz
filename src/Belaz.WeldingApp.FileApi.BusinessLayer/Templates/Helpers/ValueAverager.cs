@@ -7,6 +7,12 @@ public static class ValueAverager
         int samplesPerInterval = (int)(averageInterval / sampleRate);
         int numIntervals = values.Length / samplesPerInterval;
 
+        if (numIntervals <= 20)
+        {
+            samplesPerInterval = 1;
+            numIntervals = values.Length;
+        }
+
         double[] averagedValues = new double[numIntervals];
 
         for (int i = 0; i < numIntervals; i++)
