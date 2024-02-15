@@ -16,6 +16,7 @@ import { masterWatchers } from 'store/master';
 import { productAccountWatchers } from 'store/product-account';
 import { productAccountTaskWatchers } from 'store/product-account-task';
 import { inspectorWatchers } from 'store/inspector';
+import { weldingRecordWatchers } from 'store/welding-record';
 
 function* rootSaga() {
   const sagas = [
@@ -35,6 +36,7 @@ function* rootSaga() {
     ...productAccountWatchers,
     ...productAccountTaskWatchers,
     ...inspectorWatchers,
+    ...weldingRecordWatchers,
   ];
 
   yield all(sagas);

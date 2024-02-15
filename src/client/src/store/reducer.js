@@ -22,6 +22,7 @@ import { productAccountReducer } from './product-account';
 import { modalReducer } from './modal';
 import { productAccountTaskReducer } from './product-account-task';
 import { inspectorReducer } from './inspector';
+import { weldingRecordReducer } from './welding-record';
 
 const reducers = {
   router: createRouterReducer(history),
@@ -47,6 +48,7 @@ const reducers = {
   modal: modalReducer,
   productAccountTask: productAccountTaskReducer,
   inspector: inspectorReducer,
+  weldingRecord: weldingRecordReducer,
 };
 
 export default combineReducers(reducers);

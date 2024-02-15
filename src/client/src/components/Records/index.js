@@ -2,6 +2,7 @@ import { instructionsImage } from 'assets/pics';
 import { RecordsTable } from './components/Table';
 import ToolTip from 'components/shared/ToolTip';
 import React, { useEffect } from 'react';
+import { FilteredRecordsContainer } from './components';
 import styles from './styles.module.scss';
 
 export const Records = ({
@@ -11,9 +12,9 @@ export const Records = ({
   deleteRecords,
   userRole,
 }) => {
-  useEffect(() => {
-    loadRecords();
-  }, [loadRecords]);
+  // useEffect(() => {
+  //   loadRecords();
+  // }, [loadRecords]);
 
   return (
     <div className={styles.innerWrapper}>
@@ -22,14 +23,15 @@ export const Records = ({
         toolTipText="Здесь Вы можете просмотреть данные, полученные с регистратора сварочных процессов"
         src={instructionsImage}
       />
-      <RecordsTable
+      {/* <RecordsTable
         tableType="OTK"
         isRequesting={isRequesting}
         records={records}
         userRole={userRole}
         deleteRecords={deleteRecords}
         loadRecords={loadRecords}
-      />
+      /> */}
+      <FilteredRecordsContainer />
     </div>
   );
 };

@@ -33,15 +33,6 @@ import {
 import styles from '../styles.module.scss';
 
 import '../style.scss';
-const dateOptions = {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-};
-const StyleNewTable = {
-  width: 'calc(100% - 80px)',
-  margin: '0 auto',
-};
 
 export const RecordsTable = ({
   records,
