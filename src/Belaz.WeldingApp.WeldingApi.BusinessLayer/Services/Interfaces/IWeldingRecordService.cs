@@ -22,4 +22,6 @@ public interface IWeldingRecordService
     Task<Result<Unit>> SetSequenceNumberToWeldingRecordsAsync(SetSequenceNumberToWeldingRecordsRequest request);
 
     Task<Result<RecordBriefDto>> GetRecordValuesByDateAsync(GetRecordValuesByDateRequest request);
+
+    Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(GetFilteredWeldingRecordsRequest request);
 }

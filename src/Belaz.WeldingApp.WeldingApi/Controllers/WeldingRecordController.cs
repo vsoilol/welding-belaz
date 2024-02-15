@@ -30,6 +30,14 @@ public class WeldingRecordController : ControllerBase
         return await _weldingRecordService.GetAllAsync();
     }
 
+    [HttpGet("filtered")]
+    [ProducesResponseType(typeof(PaginatedList<RecordDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PaginatedList<RecordDto>>> GetFilteredRecordsAsync(
+        [FromQuery] GetFilteredWeldingRecordsRequest request)
+    {
+        return await _weldingRecordService.GetFilteredRecordsAsync(request);
+    }
+
     [HttpGet("with-deviations")]
     [ProducesResponseType(typeof(IEnumerable<RecordDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RecordDto>>> GetAllWithDeviationsAsync()
@@ -41,7 +49,7 @@ public class WeldingRecordController : ControllerBase
     public async Task<ActionResult<Unit>> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _weldingRecordService.DeleteAsync(
-            new DeleteWeldingRecordRequest { Id = id }
+            new DeleteWeldingRecordRequest {Id = id}
         );
         return result.ToOk();
     }
@@ -78,7 +86,7 @@ public class WeldingRecordController : ControllerBase
         var result = await _weldingRecordService.SetSequenceNumberToWeldingRecordsAsync(request);
         return result.ToOk();
     }
-    
+
     [HttpGet("full")]
     [ProducesResponseType(typeof(RecordBriefDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<RecordBriefDto>> GetRecordValuesByDateAsync(

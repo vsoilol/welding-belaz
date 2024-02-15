@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Requests.WeldingRecord;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Services.Interfaces;
 using Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.Services;
@@ -178,7 +179,7 @@ public class WeldingRecordService : IWeldingRecordService
 
             var totalSeconds = (nextStartTime - endTime).TotalSeconds;
 
-            var valuesAmount = (int)(totalSeconds * 10);
+            var valuesAmount = (int) (totalSeconds * 10);
 
             if (valuesAmount > 0)
             {
@@ -208,6 +209,63 @@ public class WeldingRecordService : IWeldingRecordService
             Min = valueMin,
             Max = valueMax,
         };
+    }
+
+    public async Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(GetFilteredWeldingRecordsRequest request)
+    {
+        var isAscending = string.Equals(request.SortOrder, "asc", StringComparison.OrdinalIgnoreCase);
+
+        var sortOrderValue = isAscending ? SortOrder.Ascending : SortOrder.Descending;
+
+        var paginationResult = await _weldingRecordRepository.GetFilteredRecordsAsync(request.SearchTerm,
+            request.SortColumn,
+            sortOrderValue, request.PageSize, request.PageNumber);
+
+        foreach (var item in paginationResult.Items)
+        {
+            ProcessWeldingRecord(item, request.DesiredArrayLength);
+        }
+
+        return paginationResult;
+    }
+
+    private void ProcessWeldingRecord(RecordDto record, int desiredArrayLength)
+    {
+        var weldingDuration = Math.Round(record.WeldingDuration, 2);
+        var originalArrayLength = record.WeldingCurrentValues.Length;
+
+        if (desiredArrayLength > 0 && originalArrayLength > desiredArrayLength)
+        {
+            record.WeldingCurrentValues = CalculateAverageArray(record.WeldingCurrentValues, desiredArrayLength);
+            record.ArcVoltageValues = CalculateAverageArray(record.ArcVoltageValues, desiredArrayLength);
+            record.SecondsPerPoint = CalculateSecondsPerPoint(weldingDuration, desiredArrayLength);
+        }
+        else
+        {
+            record.SecondsPerPoint = CalculateSecondsPerPoint(weldingDuration, originalArrayLength);
+        }
+    }
+
+    private double CalculateSecondsPerPoint(double weldingDuration, int arrayLength)
+    {
+        return Math.Round(weldingDuration / arrayLength, 2);
+    }
+
+    private double[] CalculateAverageArray(double[] inputArray, int desiredArrayLength)
+    {
+        int chunkSize = inputArray.Length / desiredArrayLength;
+
+        var averagedArray = new double[desiredArrayLength];
+
+        for (int i = 0; i < desiredArrayLength; i++)
+        {
+            int startIndex = i * chunkSize;
+
+            double average = inputArray.Skip(startIndex).Take(chunkSize).Average();
+            averagedArray[i] = Math.Round(average, 2);
+        }
+
+        return averagedArray;
     }
 }
 

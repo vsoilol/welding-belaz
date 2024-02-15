@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.WeldingApi.Domain.Dtos;
 using Belaz.WeldingApp.Common.Entities.TaskInfo;
+using Belaz.WeldingApp.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Belaz.WeldingApp.WeldingApi.DataLayer.Repositories.Implementations;
@@ -231,5 +233,98 @@ public class WeldingRecordRepository : IWeldingRecordRepository
         }
 
         return !(longCount > 0);
+    }
+
+    public async Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(string? searchTerm, string sortColumn,
+        SortOrder sortOrder,
+        int pageSize, int pageNumber)
+    {
+        IQueryable<WeldingRecord> recordsQuery = _context.WeldingRecords.AsQueryable();
+
+        recordsQuery = ApplySearchTermFilter(recordsQuery, searchTerm);
+        recordsQuery = ApplySorting(recordsQuery, sortColumn, sortOrder);
+
+        var count = await recordsQuery.CountAsync();
+        var records = await recordsQuery
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ProjectTo<RecordDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        return new PaginatedList<RecordDto>(records, count, pageNumber, pageSize);
+    }
+
+    private IQueryable<WeldingRecord> ApplySearchTermFilter(IQueryable<WeldingRecord> query, string? searchTerm)
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(record =>
+                ApplicationContext.ToChar(record.Date, "DD.MM.YYYY").Contains(searchTerm) ||
+                EF.Functions.Like(record.WeldPassage!.WeldingTask.ProductAccountTask!.SequenceNumber,
+                    $"%{searchTerm}%") ||
+                record.WeldPassage.WeldingTask.SeamAccount.Seam.Number.Contains(searchTerm) ||
+                EF.Functions.Like(record.WeldPassage.WeldingTask.Number.ToString(), $"%{searchTerm}%") ||
+                ApplicationContext.ToChar(record.WeldingStartTime, "HH24:MI:SS").Contains(searchTerm) ||
+                record.Welder.UserInfo.FirstName.Contains(searchTerm) ||
+                record.Welder.UserInfo.LastName.Contains(searchTerm) ||
+                record.Welder.UserInfo.MiddleName.Contains(searchTerm) ||
+                (record.WeldPassage != null &&
+                 (record.WeldPassage!.WeldingTask.Master!.UserInfo.MiddleName.Contains(searchTerm) ||
+                  record.WeldPassage!.WeldingTask.Master!.UserInfo.LastName.Contains(searchTerm) ||
+                  record.WeldPassage!.WeldingTask.Master!.UserInfo.FirstName.Contains(searchTerm))) ||
+                (record.WeldPassage == null && (record.Master!.UserInfo.MiddleName.Contains(searchTerm) ||
+                                                record.Master!.UserInfo.LastName.Contains(searchTerm) ||
+                                                record.Master!.UserInfo.FirstName.Contains(searchTerm))) ||
+                record.WeldingEquipment.FactoryNumber.Contains(searchTerm) ||
+                record.WeldingEquipment.Marking.Contains(searchTerm));
+        }
+
+        return query;
+    }
+
+    private IQueryable<WeldingRecord> ApplySorting(IQueryable<WeldingRecord> query, string sortColumn,
+        SortOrder sortOrder)
+    {
+        var isAscending = sortOrder == SortOrder.Ascending;
+
+        var sortOptions = new Dictionary<string, Func<IQueryable<WeldingRecord>, IQueryable<WeldingRecord>>>
+        {
+            ["date"] = q => ApplyDynamicOrder(q, r => r.Date.Date + r.WeldingStartTime, isAscending),
+            ["sequencenumber"] = q =>
+                ApplyOrderByNestedProperty(q, "WeldPassage.WeldingTask.ProductAccountTask.SequenceNumber", isAscending),
+            ["seamnumber"] = q =>
+                ApplyOrderByNestedProperty(q, "WeldPassage.WeldingTask.SeamAccount.Seam.Number", isAscending),
+            ["master"] = q =>
+                ApplyOrderByNestedProperty(q, "WeldPassage.WeldingTask.Master.UserInfo.MiddleName", isAscending),
+            ["welder"] = q => ApplyOrderByNestedProperty(q, "Welder.UserInfo.MiddleName", isAscending),
+            ["weldingequipment"] = q => ApplyOrderByNestedProperty(q, "WeldingEquipment.FactoryNumber", isAscending),
+            ["weldingtask"] = q => ApplyOrderByNestedProperty(q, "WeldPassage.WeldingTask.Number", isAscending),
+            ["weldingstarttime"] = q => ApplyDynamicOrder(q, r => r.WeldingStartTime.TotalSeconds, isAscending),
+            ["weldingduration"] = q =>
+                ApplyDynamicOrder(q, r => (r.WeldingStartTime - r.WeldingEndTime).TotalSeconds, isAscending),
+            ["weldingcurrentaverage"] = q => ApplyOrderByNestedProperty(q, "WeldingCurrentAverage", isAscending),
+            ["arcvoltageaverage"] = q => ApplyOrderByNestedProperty(q, "ArcVoltageAverage", isAscending),
+        };
+
+        Func<IQueryable<WeldingRecord>, IQueryable<WeldingRecord>> defaultSort = q =>
+            ApplyDynamicOrder(q, r => r.Date.Date + r.WeldingStartTime, isAscending);
+
+        query = sortOptions.TryGetValue(sortColumn.ToLower(), out var sortFunction)
+            ? sortFunction(query)
+            : defaultSort(query);
+
+        return query;
+    }
+
+    private IQueryable<WeldingRecord> ApplyOrderByNestedProperty(IQueryable<WeldingRecord> query, string propertyPath,
+        bool isAscending)
+    {
+        return query.OrderByNestedPropertyAndFilterNonNull(propertyPath, isAscending);
+    }
+
+    private IQueryable<WeldingRecord> ApplyDynamicOrder<T>(IQueryable<WeldingRecord> query,
+        Expression<Func<WeldingRecord, T>> keySelector, bool isAscending)
+    {
+        return query.OrderByDynamic(keySelector, isAscending);
     }
 }

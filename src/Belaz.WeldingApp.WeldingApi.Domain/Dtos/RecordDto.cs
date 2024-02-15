@@ -70,6 +70,8 @@ public class RecordDto : IMapFrom<WeldingRecord>
     public double WeldingCurrentAverage { get; set; }
 
     public double ArcVoltageAverage { get; set; }
+    
+    public double SecondsPerPoint { get; set; }
 
     public void Mapping(Profile profile)
     {
@@ -81,6 +83,11 @@ public class RecordDto : IMapFrom<WeldingRecord>
                 dto => dto.WeldingStart,
                 opt => opt.MapFrom(x => x.WeldingStartTime.ToHoursMinutesSecondsString())
             )
+            .ForMember(
+                dto => dto.SequenceNumber,
+                opt => opt.MapFrom(x => x.WeldPassage!.WeldingTask.ProductAccountTask!.SequenceNumber)
+            )
+            .ForMember(dto => dto.SecondsPerPoint, opt => opt.Ignore())
             .ForMember(
                 dto => dto.Master,
                 opt =>
