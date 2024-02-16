@@ -211,15 +211,27 @@ public class WeldingRecordService : IWeldingRecordService
         };
     }
 
-    public async Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(GetFilteredWeldingRecordsRequest request)
+    public async Task<Result<PaginatedList<RecordDto>>> GetFilteredRecordsAsync(GetFilteredWeldingRecordsRequest request)
     {
+        var validationResult = await _validationService.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            return new Result<PaginatedList<RecordDto>>(validationResult.Exception);
+        }
+        
         var isAscending = string.Equals(request.SortOrder, "asc", StringComparison.OrdinalIgnoreCase);
 
         var sortOrderValue = isAscending ? SortOrder.Ascending : SortOrder.Descending;
 
+        var dateStart = request.DateStart?.ToDateTime();
+        var dateEnd = request.DateEnd?.ToDateTime();
+
         var paginationResult = await _weldingRecordRepository.GetFilteredRecordsAsync(request.SearchTerm,
             request.SortColumn,
-            sortOrderValue, request.PageSize, request.PageNumber);
+            sortOrderValue, request.PageSize, request.PageNumber,
+            request.IncludeDeviations, request.SequenceNumber,
+            dateStart, dateEnd);
 
         foreach (var item in paginationResult.Items)
         {

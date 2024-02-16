@@ -3,6 +3,14 @@
 public class GetFilteredWeldingRecordsRequest
 {
     private const int MaxPageSize = 50;
+    
+    public string? DateStart { get; set; }
+
+    public string? DateEnd { get; set; }
+    
+    public bool? IncludeDeviations { get; set; }
+    
+    public string? SequenceNumber { get; set; }
 
     public string? SearchTerm { get; set; }
 

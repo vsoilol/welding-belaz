@@ -18,10 +18,6 @@ public class GetRecordsByDatePeriodRequestValidator : AbstractValidator<GetRecor
             .Cascade(CascadeMode.Stop)
             .SetValidator(new DateValidatorFor<GetRecordsByDatePeriodRequest>());
 
-        RuleFor(model => model)
-            .Cascade(CascadeMode.Stop)
-            .SetValidator(new IsDatePeriodCorrectValidator());
-
         RuleFor(model => model.WeldingTaskNumber)
             .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1)

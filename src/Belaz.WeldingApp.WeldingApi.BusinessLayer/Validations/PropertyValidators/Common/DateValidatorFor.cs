@@ -4,9 +4,9 @@ using FluentValidation.Validators;
 
 namespace Belaz.WeldingApp.WeldingApi.BusinessLayer.Validations.PropertyValidators.Common;
 
-public class DateValidatorFor<T> : PropertyValidator<T, string>
+public class DateValidatorFor<T> : PropertyValidator<T, string?>
 {
-    public override bool IsValid(ValidationContext<T> context, string value)
+    public override bool IsValid(ValidationContext<T> context, string? value)
     {
         if (string.IsNullOrEmpty(value))
         {

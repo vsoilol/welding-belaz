@@ -25,6 +25,7 @@ public interface IWeldingRecordRepository
 
     Task SetSequenceNumberToWeldingRecordsAsync(List<Guid> weldingRecordIds, string sequenceNumber);
 
-    Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(string? searchTerm, string sortColumn, SortOrder sortOrder, int pageSize,
-        int pageNumber);
+    Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(string? searchTerm, string sortColumn, SortOrder sortOrder,
+        int pageSize,
+        int pageNumber, bool? includeDeviations, string? sequenceNumber, DateTime? dateStart, DateTime? dateEnd);
 }

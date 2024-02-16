@@ -35,7 +35,8 @@ public class WeldingRecordController : ControllerBase
     public async Task<ActionResult<PaginatedList<RecordDto>>> GetFilteredRecordsAsync(
         [FromQuery] GetFilteredWeldingRecordsRequest request)
     {
-        return await _weldingRecordService.GetFilteredRecordsAsync(request);
+        var result = await _weldingRecordService.GetFilteredRecordsAsync(request);
+        return result.ToOk();
     }
 
     [HttpGet("with-deviations")]

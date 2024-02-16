@@ -23,5 +23,5 @@ public interface IWeldingRecordService
 
     Task<Result<RecordBriefDto>> GetRecordValuesByDateAsync(GetRecordValuesByDateRequest request);
 
-    Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(GetFilteredWeldingRecordsRequest request);
+    Task<Result<PaginatedList<RecordDto>>> GetFilteredRecordsAsync(GetFilteredWeldingRecordsRequest request);
 }

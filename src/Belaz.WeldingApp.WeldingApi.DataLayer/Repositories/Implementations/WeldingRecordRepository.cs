@@ -237,9 +237,25 @@ public class WeldingRecordRepository : IWeldingRecordRepository
 
     public async Task<PaginatedList<RecordDto>> GetFilteredRecordsAsync(string? searchTerm, string sortColumn,
         SortOrder sortOrder,
-        int pageSize, int pageNumber)
+        int pageSize, int pageNumber,
+        bool? includeDeviations,
+        string? sequenceNumber,
+        DateTime? dateStart, DateTime? dateEnd)
     {
         IQueryable<WeldingRecord> recordsQuery = _context.WeldingRecords.AsQueryable();
+
+        if (dateStart.HasValue && dateEnd.HasValue)
+        {
+            recordsQuery = recordsQuery.Where(record => record.Date >= dateStart && record.Date <= dateEnd);
+        }
+
+        recordsQuery = FilterRecordsBasedOnDeviations(recordsQuery, includeDeviations);
+
+        if (sequenceNumber is not null)
+        {
+            recordsQuery = recordsQuery.Where(x =>
+                x.WeldPassage!.WeldingTask.ProductAccountTask!.SequenceNumber == sequenceNumber);
+        }
 
         recordsQuery = ApplySearchTermFilter(recordsQuery, searchTerm);
         recordsQuery = ApplySorting(recordsQuery, sortColumn, sortOrder);
@@ -252,6 +268,48 @@ public class WeldingRecordRepository : IWeldingRecordRepository
             .ToListAsync();
 
         return new PaginatedList<RecordDto>(records, count, pageNumber, pageSize);
+    }
+
+    private IQueryable<WeldingRecord> FilterRecordsBasedOnDeviations(IQueryable<WeldingRecord> query,
+        bool? includeDeviations)
+    {
+        if (!includeDeviations.HasValue)
+        {
+            return query;
+        }
+
+        if (includeDeviations.Value)
+        {
+            return query.Where(record =>
+                (record.WeldPassage != null && (
+                    (record.WeldPassage.IsEnsuringCurrentAllowance.HasValue &&
+                     !record.WeldPassage.IsEnsuringCurrentAllowance.Value) ||
+                    (record.WeldPassage.IsEnsuringTemperatureAllowance.HasValue &&
+                     !record.WeldPassage.IsEnsuringTemperatureAllowance.Value) ||
+                    (record.WeldPassage.IsEnsuringVoltageAllowance.HasValue &&
+                     !record.WeldPassage.IsEnsuringVoltageAllowance.Value)
+                )) ||
+                (record.WeldPassage == null && (
+                    (record.IsEnsuringCurrentAllowance.HasValue && !record.IsEnsuringCurrentAllowance.Value) ||
+                    (record.IsEnsuringVoltageAllowance.HasValue && !record.IsEnsuringVoltageAllowance.Value)
+                ))
+            );
+        }
+
+        return query.Where(record =>
+            (record.WeldPassage != null && (
+                (!record.WeldPassage.IsEnsuringCurrentAllowance.HasValue ||
+                 record.WeldPassage.IsEnsuringCurrentAllowance.Value) &&
+                (!record.WeldPassage.IsEnsuringTemperatureAllowance.HasValue ||
+                 record.WeldPassage.IsEnsuringTemperatureAllowance.Value) &&
+                (!record.WeldPassage.IsEnsuringVoltageAllowance.HasValue ||
+                 record.WeldPassage.IsEnsuringVoltageAllowance.Value)
+            )) ||
+            (record.WeldPassage == null && (
+                (!record.IsEnsuringCurrentAllowance.HasValue || record.IsEnsuringCurrentAllowance.Value) &&
+                (!record.IsEnsuringVoltageAllowance.HasValue || record.IsEnsuringVoltageAllowance.Value)
+            ))
+        );
     }
 
     private IQueryable<WeldingRecord> ApplySearchTermFilter(IQueryable<WeldingRecord> query, string? searchTerm)
