@@ -6,6 +6,7 @@ import {
   take,
   cancelled,
   takeLatest,
+  select,
 } from 'redux-saga/effects';
 import { ROUTER_ON_LOCATION_CHANGED } from '@lagunovsky/redux-react-router';
 import api, { getCancelToken } from 'services/api';
@@ -27,6 +28,19 @@ function* getFilteredRecordsSaga(payload) {
   }
 
   params.append('desiredArrayLength', 500);
+
+  const additionalFilters = yield select(
+    state => state.weldingRecord?.additionalFilters
+  );
+
+  for (const key in additionalFilters) {
+    if (
+      additionalFilters[key] !== null &&
+      additionalFilters[key] !== undefined
+    ) {
+      params.append(key, additionalFilters[key]);
+    }
+  }
 
   try {
     const { data } = yield call(

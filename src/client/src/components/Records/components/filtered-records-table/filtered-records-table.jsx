@@ -1,4 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, {
+  useState,
+  useContext,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import store from 'store';
 import MaterialTable from 'material-table';
 import { LOCALIZATION_TABLE } from 'components/shared/Table/localization';
@@ -9,11 +14,22 @@ import { ExpandRecordRow } from './expand-record-row';
 
 import styles from './style.module.scss';
 
-export const FilteredRecordsTable = () => {
+export const FilteredRecordsTable = forwardRef((props, ref) => {
+  const tableRef = React.createRef();
   const isMobile = useContext(MobileContext);
   const { getFilteredRecords } = useWeldingRecordStore();
 
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
+
+  const reloadRecords = () => {
+    if (tableRef.current) {
+      tableRef.current.onQueryChange({ page: 0 });
+    }
+  };
+
+  useImperativeHandle(ref, () => ({
+    reloadRecords,
+  }));
 
   const columns = [
     {
@@ -88,13 +104,16 @@ export const FilteredRecordsTable = () => {
     },
     {
       title: 'Руководитель сварочных работ (мастер)',
-      render: rowData => (
-        <div>
-          <span>{rowData?.master?.middleName} </span>
-          <span>{rowData?.master?.firstName} </span>
-          <span>{rowData?.master?.lastName}</span>
-        </div>
-      ),
+      render: ({ master }) =>
+        master ? (
+          <div>
+            <span>{master?.middleName} </span>
+            <span>{master?.firstName} </span>
+            <span>{master?.lastName}</span>
+          </div>
+        ) : (
+          '-'
+        ),
       align: 'center',
       field: 'master',
     },
@@ -134,6 +153,7 @@ export const FilteredRecordsTable = () => {
   return (
     <div className={styles.recordTableContainer}>
       <MaterialTable
+        tableRef={tableRef}
         localization={LOCALIZATION_TABLE}
         title={!isMobile && 'Записи'}
         columns={columns}
@@ -153,4 +173,4 @@ export const FilteredRecordsTable = () => {
       />
     </div>
   );
-};
+});

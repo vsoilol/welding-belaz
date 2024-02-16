@@ -6,12 +6,27 @@ const initialState = {
   isLoading: true,
   error: null,
   records: null,
+  additionalFilters: null,
+  paginationInfo: null,
 };
 
-const handleStartLoading = (state = initialState) => ({
+const handleGetFilteredRecords = (state = initialState, { payload }) => ({
   ...state,
   isLoading: true,
   error: null,
+  paginationInfo: payload,
+});
+
+const handleSetAdditionalFilters = (
+  state = initialState,
+  { additionalFilters }
+) => ({
+  ...state,
+  additionalFilters,
+  paginationInfo: {
+    ...state.paginationInfo,
+    pageNumber: 1,
+  },
 });
 
 const handleFinishLoading = (state = initialState) => ({
@@ -24,6 +39,7 @@ const handleFailure = (state = initialState, action) => ({
   ...state,
   isLoading: false,
   error: action.error,
+  paginationInfo: null,
 });
 
 const handleLoadRecordsSuccess = (state = initialState, { records }) => ({
@@ -34,11 +50,13 @@ const handleLoadRecordsSuccess = (state = initialState, { records }) => ({
 });
 
 const actionHandlers = {
-  [weldingRecordActionTypes.GET_FILTERED_RECORDS]: handleStartLoading,
+  [weldingRecordActionTypes.GET_FILTERED_RECORDS]: handleGetFilteredRecords,
   [weldingRecordActionTypes.GET_FILTERED_RECORDS_SUCCESS]:
     handleLoadRecordsSuccess,
   [weldingRecordActionTypes.GET_FILTERED_RECORDS_FAILURE]: handleFailure,
   [weldingRecordActionTypes.GET_FILTERED_RECORDS_CANCEL]: handleFinishLoading,
+
+  [weldingRecordActionTypes.SET_ADDITIONAL_FILTERS]: handleSetAdditionalFilters,
 };
 
 export default createReducer(initialState, actionHandlers);

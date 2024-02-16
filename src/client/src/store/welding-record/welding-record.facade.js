@@ -22,10 +22,19 @@ export const useWeldingRecordStore = () => {
     [dispatch]
   );
 
+  const setAdditionalFilters = useCallback(
+    additionalFilters =>
+      dispatch(
+        weldingRecordActionCreators.setAdditionalFilters(additionalFilters)
+      ),
+    [dispatch]
+  );
+
   return {
     records,
     isLoading,
     getFilteredRecords,
     getFilteredRecordsCancel,
+    setAdditionalFilters,
   };
 };

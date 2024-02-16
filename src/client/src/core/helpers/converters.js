@@ -8,3 +8,15 @@ export function convertStringToInt(str) {
     return null; // or any indication that the conversion failed
   }
 }
+
+export function convertStringToValue(str) {
+  if (str === 'true') {
+    return true;
+  } else if (str === 'false') {
+    return false;
+  } else if (str === 'null') {
+    return null;
+  } else {
+    return str; // Return the original string if it does not match
+  }
+}

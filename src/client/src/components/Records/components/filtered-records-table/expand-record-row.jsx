@@ -7,8 +7,6 @@ import { WeldingChart } from '../welding-chart';
 import styles from './style.module.scss';
 
 export const ExpandRecordRow = data => {
-  console.log(data);
-
   return (
     <TableContainer className={styles.expandRowContainer} component={Paper}>
       <div className={styles.chartBlock}>

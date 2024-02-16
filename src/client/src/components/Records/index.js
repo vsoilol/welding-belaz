@@ -12,10 +12,6 @@ export const Records = ({
   deleteRecords,
   userRole,
 }) => {
-  // useEffect(() => {
-  //   loadRecords();
-  // }, [loadRecords]);
-
   return (
     <div className={styles.innerWrapper}>
       <ToolTip
@@ -23,14 +19,6 @@ export const Records = ({
         toolTipText="Здесь Вы можете просмотреть данные, полученные с регистратора сварочных процессов"
         src={instructionsImage}
       />
-      {/* <RecordsTable
-        tableType="OTK"
-        isRequesting={isRequesting}
-        records={records}
-        userRole={userRole}
-        deleteRecords={deleteRecords}
-        loadRecords={loadRecords}
-      /> */}
       <FilteredRecordsContainer />
     </div>
   );

@@ -6,6 +6,8 @@ const { Types, Creators } = createActions(
     getFilteredRecordsSuccess: ['records'],
     getFilteredRecordsFailure: ['error'],
     getFilteredRecordsCancel: null,
+
+    setAdditionalFilters: ['additionalFilters'],
   },
   {}
 );
