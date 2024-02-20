@@ -10,6 +10,7 @@ import { ExpandTaskRow } from './expand-task-row';
 import { useTaskStore } from 'store/task';
 import { useAuthStore } from 'store/auth';
 import { weldingTaskStatus, weldingTaskStatusText } from 'core/constants';
+import { userRoles } from 'core/constants';
 
 import styles from 'components/Tasks/styles.module.scss';
 
@@ -42,13 +43,91 @@ export const TaskTable = ({
     ];
 
     // Return actions based on the user role
-    return userRole === 'Admin' || userRole === 'Master'
+    return userRole === userRoles.admin || userRole === userRoles.master
       ? adminOrMasterActions
       : [];
   };
 
-  const columns = [
-    (userRole === 'Admin' || userRole === 'Master') && {
+  const getColumns = () => {
+    const columns = [
+      {
+        title: '№ задания',
+        field: 'number',
+        align: 'center',
+      },
+      {
+        title: 'Номер шва',
+        field: 'seamNumber',
+        align: 'center',
+      },
+      {
+        title: 'Количество швов',
+        field: 'manufacturedAmount',
+        align: 'center',
+      },
+      {
+        title: 'Дата ',
+        field: 'weldingDate',
+        align: 'center',
+      },
+      {
+        title: 'Статус',
+        field: 'status',
+        align: 'center',
+        render: rowData => {
+          const className = statusStyles[rowData?.status] || null;
+          const text = weldingTaskStatusText[rowData?.status] || '-';
+
+          return className ? (
+            <span className={className}>{text}</span>
+          ) : (
+            <p>{text}</p>
+          );
+        },
+        customFilterAndSearch: (term, rowData) => {
+          const statusString = weldingTaskStatusText[rowData?.status];
+          return statusString.toLowerCase().includes(term.toLowerCase());
+        },
+      },
+      {
+        field: 'url',
+        align: 'center',
+        sorting: false,
+        title: 'Скачать краткий паспорт',
+        render: rowData => (
+          <div>
+            <IconButton
+              onClick={() => {
+                handleToggleShortPassportModal(true);
+                setSelectedTaskId(rowData?.id);
+              }}>
+              <SaveIcon style={{ color: '#000000' }} />
+            </IconButton>
+          </div>
+        ),
+        width: 20,
+      },
+      {
+        field: 'url',
+        title: 'Скачать паспорт',
+        align: 'center',
+        sorting: false,
+        render: rowData => (
+          <div>
+            <IconButton
+              onClick={() => {
+                handleToggleFullPassportModal(true);
+                setSelectedTaskId(rowData?.id);
+              }}>
+              <SaveIcon style={{ color: '#000000' }} />
+            </IconButton>
+          </div>
+        ),
+        width: 20,
+      },
+    ];
+
+    const deleteTaskColumn = {
       title: 'Удаление',
       align: 'center',
       width: 20,
@@ -63,90 +142,19 @@ export const TaskTable = ({
           <DeleteIcon style={{ color: '#000000' }} />
         </IconButton>
       ),
-    },
-    {
-      title: '№ задания',
-      field: 'number',
-      align: 'center',
-    },
-    {
-      title: 'Номер шва',
-      field: 'seamNumber',
-      align: 'center',
-    },
-    {
-      title: 'Количество швов',
-      field: 'manufacturedAmount',
-      align: 'center',
-    },
-    {
-      title: 'Дата ',
-      field: 'weldingDate',
-      align: 'center',
-    },
-    {
-      title: 'Статус',
-      field: 'status',
-      align: 'center',
-      render: rowData => {
-        const className = statusStyles[rowData?.status] || null;
-        const text = weldingTaskStatusText[rowData?.status] || '-';
+    };
 
-        return className ? (
-          <span className={className}>{text}</span>
-        ) : (
-          <p>{text}</p>
-        );
-      },
-      customFilterAndSearch: (term, rowData) => {
-        const statusString = weldingTaskStatusText[rowData?.status];
-        return statusString.toLowerCase().includes(term.toLowerCase());
-      },
-    },
-    {
-      field: 'url',
-      align: 'center',
-      sorting: false,
-      title: 'Скачать краткий паспорт',
-      render: rowData => (
-        <div>
-          <IconButton
-            onClick={() => {
-              handleToggleShortPassportModal(true);
-              setSelectedTaskId(rowData?.id);
-            }}>
-            <SaveIcon style={{ color: '#000000' }} />
-          </IconButton>
-        </div>
-      ),
-      width: 20,
-    },
-    {
-      field: 'url',
-      title: 'Скачать паспорт',
-      align: 'center',
-      sorting: false,
-      render: rowData => (
-        <div>
-          <IconButton
-            onClick={() => {
-              handleToggleFullPassportModal(true);
-              setSelectedTaskId(rowData?.id);
-            }}>
-            <SaveIcon style={{ color: '#000000' }} />
-          </IconButton>
-        </div>
-      ),
-      width: 20,
-    },
-  ];
+    return userRole === userRoles.admin || userRole === userRoles.master
+      ? [deleteTaskColumn, ...columns]
+      : columns;
+  };
 
   return (
     <>
       {tasks && (
         <Table
           title="Сменные задания на сварку"
-          columns={columns}
+          columns={getColumns()}
           data={tasks}
           isLoading={isLoading}
           actions={getActions(userRole)}

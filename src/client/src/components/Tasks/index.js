@@ -10,6 +10,7 @@ import { DailyPlanTab, ProductAccountTasksTab, TasksTab } from './tabs';
 import { useQuery } from 'hooks';
 import { useSearchParams } from 'react-router-dom';
 import { convertStringToInt } from 'core/helpers';
+import { userRoles } from 'core/constants';
 
 import styles from './styles.module.scss';
 
@@ -51,12 +52,13 @@ export const Tasks = ({ userRole }) => {
         src={tasksImage}
       />
 
-      {(userRole === 'Admin' ||
-        userRole === 'Master' ||
-        userRole === 'Inspector' ||
-        userRole === 'Chief' ||
-        userRole === 'PlantManager' ||
-        userRole === 'Technologist') && (
+      {(userRole === userRoles.admin ||
+        userRole === userRoles.master ||
+        userRole === userRoles.inspector ||
+        userRole === userRoles.chief ||
+        userRole === userRoles.plantManager ||
+        userRole === userRoles.technologist ||
+        userRole === userRoles.ukkRepresentative) && (
         <Tabs
           value={tabNumber}
           onChange={onChangeTabNumber}

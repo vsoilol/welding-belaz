@@ -1,10 +1,11 @@
 export const userRoles = {
-  master: 'Master',
-  admin: 'Admin',
-  inspector: 'Inspector',
+  master: 'Master', // Мастер
+  admin: 'Admin', // Админ
+  inspector: 'Inspector', // Контролёр
   technologist: 'Technologist',
-  chief: 'Chief',
-  plantManager: 'PlantManager',
+  chief: 'Chief', // Начальник цеха
+  plantManager: 'PlantManager', // Руководитель завода
+  ukkRepresentative: 'UkkRepresentative', // Представитель УКК
 };
 
 export const isMaster = role =>
