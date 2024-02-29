@@ -99,6 +99,17 @@ export const useCalendarStore = () => {
     [dispatch]
   );
 
+  const createCalendarForWelderBasedOnMain = useCallback(
+    (welderId, year) =>
+      dispatch(
+        calendarActionCreators.createCalendarForWelderBasedOnMainRequest(
+          welderId,
+          year
+        )
+      ),
+    [dispatch]
+  );
+
   return {
     calendar,
     isLoading,
@@ -116,5 +127,6 @@ export const useCalendarStore = () => {
     loadCalendarByWelder,
     createCalendarForEquipmentBasedOnMain,
     cancelLoadMainCalendarByYear,
+    createCalendarForWelderBasedOnMain,
   };
 };

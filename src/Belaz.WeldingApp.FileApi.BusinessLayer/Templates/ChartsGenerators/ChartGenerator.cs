@@ -1,16 +1,9 @@
-﻿using System.Globalization;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Extensions;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Models;
-using Belaz.WeldingApp.FileApi.BusinessLayer.Templates.Helpers;
-using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
-using Belaz.WeldingApp.FileApi.Domain.Extensions;
+﻿using Belaz.WeldingApp.FileApi.Domain.Dtos.SeamPassportInfo;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Legends;
 using OxyPlot.Series;
 using OxyPlot.SkiaSharp;
-using QuestPDF.Fluent;
-using QuestPDF.Infrastructure;
 
 namespace Belaz.WeldingApp.FileApi.BusinessLayer.Templates.ChartsGenerators;
 

@@ -16,28 +16,31 @@ import { useCalendarStore } from 'store/calendar';
 import { useAuthStore } from 'store/auth';
 import { useWelderStore } from 'store/welder';
 import { useWeldingEquipmentStore } from 'store/welding-equipment';
+import { isNorNullAndUndefined } from 'core/helpers';
 import './styleCalendar.scss';
 
 const AdminTools = ({
   onAddWorkDay,
   onAddWeekend,
   onEditShift,
-  isEquipmentExists,
-  onCalendarForEquipmentBasedOnMain,
-}) => (
-  <div className={styles.RowToolsBtns}>
-    <button onClick={onAddWorkDay}>Добавить рабочий день</button>
-    <button onClick={onAddWeekend}>Добавить выходной день</button>
-    <button onClick={onEditShift}>Рабочие смены</button>
+  isCreateCalendarBasedOnMain,
+  onCreateCalendarBasedOnMain,
+}) => {
+  return (
+    <div className={styles.RowToolsBtns}>
+      <button onClick={onAddWorkDay}>Добавить рабочий день</button>
+      <button onClick={onAddWeekend}>Добавить выходной день</button>
+      <button onClick={onEditShift}>Рабочие смены</button>
 
-    {isEquipmentExists && (
-      <div className={styles.Create}>
-        <label>Создание календаря на основе общезаводского</label>
-        <button onClick={onCalendarForEquipmentBasedOnMain}>Создать</button>
-      </div>
-    )}
-  </div>
-);
+      {isCreateCalendarBasedOnMain && (
+        <div className={styles.Create}>
+          <label>Создание календаря на основе общезаводского</label>
+          <button onClick={onCreateCalendarBasedOnMain}>Создать</button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const ProductionCalendar = () => {
   const {
@@ -50,6 +53,7 @@ export const ProductionCalendar = () => {
     loadCalendarByEquipment,
     loadCalendarByWelder,
     createCalendarForEquipmentBasedOnMain,
+    createCalendarForWelderBasedOnMain,
   } = useCalendarStore();
 
   const { userRole } = useAuthStore();
@@ -80,6 +84,21 @@ export const ProductionCalendar = () => {
       (welderId && IsWelderLoading) ||
       (equipmentId && IsWeldingEquipmentLoading),
     [IsWeldingEquipmentLoading, IsWelderLoading, welderId, equipmentId]
+  );
+
+  const isWelderExists = useMemo(() => welderId && welder, [welder, welderId]);
+
+  const isEquipmentExists = useMemo(
+    () => equipmentId && weldingEquipment,
+    [weldingEquipment, equipmentId]
+  );
+
+  const isWelderOrEquipmentExists = useMemo(
+    () =>
+      (isNorNullAndUndefined(equipmentId) &&
+        isNorNullAndUndefined(weldingEquipment)) ||
+      (isNorNullAndUndefined(welderId) && isNorNullAndUndefined(welder)),
+    [welder, weldingEquipment, welderId, equipmentId]
   );
 
   useEffect(() => {
@@ -210,12 +229,21 @@ export const ProductionCalendar = () => {
                   onAddWorkDay={() => setIsAddWorkDayModalOpen(true)}
                   onAddWeekend={() => setIsAddWeekendModalOpen(true)}
                   onEditShift={() => setIsEditShiftModalOpen(true)}
-                  isEquipmentExists={equipmentId && weldingEquipment}
-                  onCalendarForEquipmentBasedOnMain={() => {
-                    createCalendarForEquipmentBasedOnMain(
-                      equipmentId,
-                      calendar?.year
-                    );
+                  isCreateCalendarBasedOnMain={isWelderOrEquipmentExists}
+                  onCreateCalendarBasedOnMain={() => {
+                    if (isEquipmentExists) {
+                      createCalendarForEquipmentBasedOnMain(
+                        equipmentId,
+                        calendar?.year
+                      );
+                    }
+
+                    if (isWelderExists) {
+                      createCalendarForWelderBasedOnMain(
+                        welderId,
+                        calendar?.year
+                      );
+                    }
                   }}
                 />
               )}

@@ -12,6 +12,7 @@ const watchers = [
   ...sagas.loadCalendarByWelderWatchers,
   ...sagas.loadCalendarByEquipmentWatchers,
   ...sagas.createCalendarForEquipmentBasedOnMainWatchers,
+  ...sagas.createCalendarForWelderBasedOnMainWatchers,
 ];
 
 export default watchers;

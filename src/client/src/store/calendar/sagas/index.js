@@ -9,3 +9,4 @@ export * from './update-working-shift.saga';
 export * from './load-calendar-by-welder.saga';
 export * from './load-calendar-by-equipment.saga';
 export * from './create-calendar-for-equipment-based-on-main.saga';
+export * from './create-calendar-for-welder-based-on-main.saga';

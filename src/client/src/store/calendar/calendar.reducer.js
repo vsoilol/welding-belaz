@@ -104,6 +104,13 @@ export const HANDLERS = {
     updateStateWithLoadedCalendar,
   [calendarActionTypes.CREATE_CALENDAR_FOR_EQUIPMENT_BASED_ON_MAIN_FAILURE]:
     loadingFailure,
+
+  [calendarActionTypes.CREATE_CALENDAR_FOR_WELDER_BASED_ON_MAIN_REQUEST]:
+    startLoading,
+  [calendarActionTypes.CREATE_CALENDAR_FOR_WELDER_BASED_ON_MAIN_SUCCESS]:
+    updateStateWithLoadedCalendar,
+  [calendarActionTypes.CREATE_CALENDAR_FOR_WELDER_BASED_ON_MAIN_FAILURE]:
+    loadingFailure,
 };
 
 export default createReducer(CALENDAR_INITIAL_STATE, HANDLERS);
