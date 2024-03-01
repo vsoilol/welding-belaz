@@ -357,6 +357,7 @@ src/.vscode
 
 .env*
 src/docker-compose/*.sql
-terminal-scripts/powershell/*.sql
+terminal-scripts/**/*.sql
 src/client/.vscode
 src/client/.env
+!.env.example
