@@ -16,15 +16,15 @@ namespace Belaz.WeldingApp.FileApi.BusinessLayer.Services.Implementations;
 
 public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyReportService
 {
-    private readonly IValidationService _validationService;
+    private readonly ICalendarRepository _calendarRepository;
 
     private readonly IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>
         _excelEquipmentEfficiencyReportService;
 
-    private readonly ICalendarRepository _calendarRepository;
-    private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
     private readonly IProductAccountRepository _productAccountRepository;
     private readonly IProductionAreaRepository _productionAreaRepository;
+    private readonly IValidationService _validationService;
+    private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
     private readonly IWorkplaceRepository _workplaceRepository;
     private readonly IWorkshopRepository _workshopRepository;
 
@@ -52,10 +52,7 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        if (!validationResult.IsValid)
-        {
-            return new Result<DocumentDto>(validationResult.Exception);
-        }
+        if (!validationResult.IsValid) return new Result<DocumentDto>(validationResult.Exception);
 
         var dateStart = request.StartDate.ToDateTime();
         var dateEnd = request.EndDate.ToDateTime();
@@ -112,10 +109,7 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        if (!validationResult.IsValid)
-        {
-            return new Result<DocumentDto>(validationResult.Exception);
-        }
+        if (!validationResult.IsValid) return new Result<DocumentDto>(validationResult.Exception);
 
         var dateStart = request.StartDate.ToDateTime();
         var dateEnd = request.EndDate.ToDateTime();
@@ -174,10 +168,7 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        if (!validationResult.IsValid)
-        {
-            return new Result<DocumentDto>(validationResult.Exception);
-        }
+        if (!validationResult.IsValid) return new Result<DocumentDto>(validationResult.Exception);
 
         var dateStart = request.StartDate.ToDateTime();
         var dateEnd = request.EndDate.ToDateTime();
@@ -236,10 +227,7 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
     {
         var validationResult = await _validationService.ValidateAsync(request);
 
-        if (!validationResult.IsValid)
-        {
-            return new Result<DocumentDto>(validationResult.Exception);
-        }
+        if (!validationResult.IsValid) return new Result<DocumentDto>(validationResult.Exception);
 
         var dateStart = request.StartDate.ToDateTime();
         var dateEnd = request.EndDate.ToDateTime();
@@ -305,7 +293,7 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
     {
         var result = new List<EquipmentEfficiencyReportDto>();
 
-        for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        for (var date = startDate; date <= endDate; date = date.AddDays(1))
         {
             var day = calendar.Days?.FirstOrDefault(
                 _ => _.MonthNumber == date.Month && _.Number == date.Day
@@ -327,19 +315,19 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
                 ? (double)accessibility
                 : PPT == 0
                     ? 0
-                    : (OT / PPT);
+                    : OT / PPT;
 
             var P = efficiency is not null
                 ? (double)efficiency
                 : IRR == 0
                     ? 0
-                    : (TP / IRR);
+                    : TP / IRR;
 
             var Q = quality is not null
                 ? (double)quality
                 : TP == 0
                     ? 0
-                    : (GP / TP);
+                    : GP / TP;
 
             var OEE = A * P * Q;
 
@@ -367,10 +355,7 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
             return CalculateTimeMinutesByWorkingShifts(dayWorkingShift!);
         }
 
-        if (IsWeekend(day))
-        {
-            return 0;
-        }
+        if (IsWeekend(day)) return 0;
 
         return CalculateTimeMinutesByWorkingShifts(mainWorkingShifts);
     }
