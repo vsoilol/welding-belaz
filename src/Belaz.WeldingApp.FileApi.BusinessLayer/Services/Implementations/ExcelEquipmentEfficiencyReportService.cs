@@ -7,7 +7,6 @@ using Belaz.WeldingApp.FileApi.DataLayer.Repositories.Interfaces;
 using Belaz.WeldingApp.FileApi.Domain.Dtos;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.CalendarInfo;
 using Belaz.WeldingApp.FileApi.Domain.Dtos.ConditionTimeInfo;
-using Belaz.WeldingApp.FileApi.Domain.Dtos.ProductInfo;
 using Belaz.WeldingApp.FileApi.Domain.Exceptions;
 using Belaz.WeldingApp.FileApi.Domain.Extensions;
 using LanguageExt.Common;
@@ -21,7 +20,7 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
     private readonly IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>>
         _excelEquipmentEfficiencyReportService;
 
-    private readonly IProductAccountRepository _productAccountRepository;
+    private readonly IProductAccountTaskRepository _productAccountTaskRepository;
     private readonly IProductionAreaRepository _productionAreaRepository;
     private readonly IValidationService _validationService;
     private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
@@ -32,18 +31,18 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         IValidationService validationService,
         IExcelFileService<DocumentInfo<List<EquipmentEfficiencyReportDto>>> excelEquipmentEfficiencyReportService,
         ICalendarRepository calendarRepository,
-        IWeldingEquipmentRepository weldingEquipmentRepository,
-        IProductAccountRepository productAccountRepository, IWorkshopRepository workshopRepository,
-        IWorkplaceRepository workplaceRepository, IProductionAreaRepository productionAreaRepository)
+        IWeldingEquipmentRepository weldingEquipmentRepository, IWorkshopRepository workshopRepository,
+        IWorkplaceRepository workplaceRepository, IProductionAreaRepository productionAreaRepository,
+        IProductAccountTaskRepository productAccountTaskRepository)
     {
         _validationService = validationService;
         _excelEquipmentEfficiencyReportService = excelEquipmentEfficiencyReportService;
         _calendarRepository = calendarRepository;
         _weldingEquipmentRepository = weldingEquipmentRepository;
-        _productAccountRepository = productAccountRepository;
         _workshopRepository = workshopRepository;
         _workplaceRepository = workplaceRepository;
         _productionAreaRepository = productionAreaRepository;
+        _productAccountTaskRepository = productAccountTaskRepository;
     }
 
     public async Task<Result<DocumentDto>> GenerateExcelEquipmentEfficiencyReportAsync(
@@ -65,13 +64,16 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
 
         var calendar = await _calendarRepository.GetMainCalendarByYearAsync(dateStart.Year);
 
-        var productAccounts =
-            await _productAccountRepository.GetProductAccountBriefsByDatePeriodAsync(
-                dateStart,
-                dateEnd
-            );
+        var productAccountTaskAmounts =
+            await _productAccountTaskRepository.GetProductAccountTaskAmountsAsync(dateStart, dateEnd);
 
-        if (!weldingEquipmentOnTimes.Any() || !productAccounts.Any() || calendar is null)
+        var weldingEquipmentIds =
+            await _weldingEquipmentRepository.GetWeldingEquipmentIdsAsync();
+
+        var weldingEquipmentsCalendars =
+            await _calendarRepository.GetCalendarsForWeldingEquipmentsByYearAsync(weldingEquipmentIds, dateStart.Year);
+
+        if (!weldingEquipmentOnTimes.Any() || !productAccountTaskAmounts.Any() || calendar is null)
         {
             var exception = new ListIsEmptyException();
             return new Result<DocumentDto>(exception);
@@ -80,12 +82,14 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         var data = GetEquipmentEfficiencyReportInfo(
             calendar,
             weldingEquipmentOnTimes,
-            productAccounts,
             dateStart,
             dateEnd,
             request.Accessibility,
             request.Efficiency,
-            request.Quality
+            request.Quality,
+            productAccountTaskAmounts,
+            weldingEquipmentIds,
+            weldingEquipmentsCalendars
         );
 
         var result = new DocumentInfo<List<EquipmentEfficiencyReportDto>>
@@ -121,16 +125,19 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
                 dateEnd
             );
 
+        var productAccountTaskAmounts =
+            await _productAccountTaskRepository.GetProductAccountTaskAmountsByProductionAreaAsync(dateStart, dateEnd,
+                request.ProductionAreaId);
+
+        var weldingEquipmentIds =
+            await _weldingEquipmentRepository.GetWeldingEquipmentIdsByProductionAreaAsync(request.ProductionAreaId);
+
+        var weldingEquipmentsCalendars =
+            await _calendarRepository.GetCalendarsForWeldingEquipmentsByYearAsync(weldingEquipmentIds, dateStart.Year);
+
         var calendar = await _calendarRepository.GetMainCalendarByYearAsync(dateStart.Year);
 
-        var productAccounts =
-            await _productAccountRepository.GetProductAccountBriefsByDatePeriodAndProductionAreaAsync(
-                request.ProductionAreaId,
-                dateStart,
-                dateEnd
-            );
-
-        if (!weldingEquipmentOnTimes.Any() || !productAccounts.Any() || calendar is null)
+        if (!weldingEquipmentOnTimes.Any() || !productAccountTaskAmounts.Any() || calendar is null)
         {
             var exception = new ListIsEmptyException();
             return new Result<DocumentDto>(exception);
@@ -139,12 +146,14 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         var data = GetEquipmentEfficiencyReportInfo(
             calendar,
             weldingEquipmentOnTimes,
-            productAccounts,
             dateStart,
             dateEnd,
             request.Accessibility,
             request.Efficiency,
-            request.Quality
+            request.Quality,
+            productAccountTaskAmounts,
+            weldingEquipmentIds,
+            weldingEquipmentsCalendars
         );
 
         var productionArea = await _productionAreaRepository.GetBriefInfoByIdAsync(request.ProductionAreaId);
@@ -180,16 +189,19 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
                 dateEnd
             );
 
+        var productAccountTaskAmounts =
+            await _productAccountTaskRepository.GetProductAccountTaskAmountsByWorkplaceAsync(dateStart, dateEnd,
+                request.WorkplaceId);
+
+        var weldingEquipmentIds =
+            await _weldingEquipmentRepository.GetWeldingEquipmentIdsByWorkplaceAsync(request.WorkplaceId);
+
+        var weldingEquipmentsCalendars =
+            await _calendarRepository.GetCalendarsForWeldingEquipmentsByYearAsync(weldingEquipmentIds, dateStart.Year);
+
         var calendar = await _calendarRepository.GetMainCalendarByYearAsync(dateStart.Year);
 
-        var productAccounts =
-            await _productAccountRepository.GetProductAccountBriefsByDatePeriodAndWorkplaceAsync(
-                request.WorkplaceId,
-                dateStart,
-                dateEnd
-            );
-
-        if (!weldingEquipmentOnTimes.Any() || !productAccounts.Any() || calendar is null)
+        if (!weldingEquipmentOnTimes.Any() || !productAccountTaskAmounts.Any() || calendar is null)
         {
             var exception = new ListIsEmptyException();
             return new Result<DocumentDto>(exception);
@@ -198,12 +210,14 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         var data = GetEquipmentEfficiencyReportInfo(
             calendar,
             weldingEquipmentOnTimes,
-            productAccounts,
             dateStart,
             dateEnd,
             request.Accessibility,
             request.Efficiency,
-            request.Quality
+            request.Quality,
+            productAccountTaskAmounts,
+            weldingEquipmentIds,
+            weldingEquipmentsCalendars
         );
 
         var workplace = await _workplaceRepository.GetBriefInfoByIdAsync(request.WorkplaceId);
@@ -239,16 +253,19 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
                 dateEnd
             );
 
+        var productAccountTaskAmounts =
+            await _productAccountTaskRepository.GetProductAccountTaskAmountsByWorkshopAsync(dateStart, dateEnd,
+                request.WorkshopId);
+
+        var weldingEquipmentIds =
+            await _weldingEquipmentRepository.GetWeldingEquipmentIdsByWorkshopAsync(request.WorkshopId);
+
+        var weldingEquipmentsCalendars =
+            await _calendarRepository.GetCalendarsForWeldingEquipmentsByYearAsync(weldingEquipmentIds, dateStart.Year);
+
         var calendar = await _calendarRepository.GetMainCalendarByYearAsync(dateStart.Year);
 
-        var productAccounts =
-            await _productAccountRepository.GetProductAccountBriefsByDatePeriodAndWorkshopAsync(
-                request.WorkshopId,
-                dateStart,
-                dateEnd
-            );
-
-        if (!weldingEquipmentOnTimes.Any() || !productAccounts.Any() || calendar is null)
+        if (!weldingEquipmentOnTimes.Any() || !productAccountTaskAmounts.Any() || calendar is null)
         {
             var exception = new ListIsEmptyException();
             return new Result<DocumentDto>(exception);
@@ -257,12 +274,14 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         var data = GetEquipmentEfficiencyReportInfo(
             calendar,
             weldingEquipmentOnTimes,
-            productAccounts,
             dateStart,
             dateEnd,
             request.Accessibility,
             request.Efficiency,
-            request.Quality
+            request.Quality,
+            productAccountTaskAmounts,
+            weldingEquipmentIds,
+            weldingEquipmentsCalendars
         );
 
         var workshop = await _workshopRepository.GetBriefInfoByIdAsync(request.WorkshopId);
@@ -281,53 +300,55 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
     }
 
     private List<EquipmentEfficiencyReportDto> GetEquipmentEfficiencyReportInfo(
-        CalendarDto calendar,
+        CalendarDto mainCalendar,
         List<ConditionTimeDto> onConditionTimes,
-        List<ProductAccountBriefDto> productAccounts,
         DateTime startDate,
         DateTime endDate,
         double? accessibility,
         double? efficiency,
-        double? quality
-    )
+        double? quality,
+        List<ProductAccountTaskAmountDto> productAccountTaskAmounts,
+        List<Guid> weldingEquipmentsIds,
+        List<CalendarDto> weldingEquipmentsCalendars)
     {
         var result = new List<EquipmentEfficiencyReportDto>();
 
         for (var date = startDate; date <= endDate; date = date.AddDays(1))
         {
-            var day = calendar.Days?.FirstOrDefault(
-                _ => _.MonthNumber == date.Month && _.Number == date.Day
-            );
+            var accessibilityExperimental = CalculateAccessibilityForDate(date, onConditionTimes, mainCalendar,
+                weldingEquipmentsIds,
+                weldingEquipmentsCalendars);
 
-            var PPT = GetWorkingShiftsWorkingTimeMinutes(calendar.MainWorkingShifts, day);
-            var OT = onConditionTimes.Where(_ => _.Date.Date == date.Date).Sum(_ => _.Time);
-
-            var productAccountsByDate = productAccounts
-                .Where(_ => _.DateFromPlan.Date == date.Date)
+            var productAccountTasksByDate = productAccountTaskAmounts
+                .Where(_ => _.Date.Date == date.Date)
                 .ToList();
 
-            var TP = (double)productAccountsByDate.Sum(_ => _.AmountManufactured);
-            var IRR = productAccountsByDate.Sum(_ => _.AmountFromPlan * _.ManufacturingTime);
+            // TP - фактическое количество единиц продукции, изготовленное за операционное время OT.
+            // Сюда входит вся продукция (изделия, узлы, детали), которая изготовлена за указанный период.
+            var TP = (double)productAccountTasksByDate.Sum(d => d.ManufacturedAmount);
 
-            var GP = (double)productAccountsByDate.Sum(_ => _.AmountAccept);
+            // IRR - идеальная норма производства – теоретически максимальное количество единиц продукции,
+            // которое можно изготовить за операционное время OT.
+            // Для расчета данного показателя на форме со структурой продукции для каждого изделия,
+            // узла и детали вводится норма времени на изготовление.
+            // Соответственно, берем из плана количество изделий, узлов и деталей,
+            // умножаем на соответствующую норму времени и суммируем.
+            var IRR = productAccountTasksByDate.Sum(_ => _.AmountFromPlan * _.ManufacturingTime);
 
-            var A = accessibility is not null
-                ? (double)accessibility
-                : PPT == 0
-                    ? 0
-                    : OT / PPT;
+            // GP - выпуск годной продукции – фактическое количество единиц годной
+            // продукции, выпущенное за время OT.
+            // Сюда входит продукция (изделия, узлы и детали), которая принята контролером
+            var GP = (double)productAccountTasksByDate.Sum(_ => _.AcceptedAmount);
 
-            var P = efficiency is not null
-                ? (double)efficiency
-                : IRR == 0
-                    ? 0
-                    : TP / IRR;
+            var A = accessibility ?? accessibilityExperimental;
 
-            var Q = quality is not null
-                ? (double)quality
-                : TP == 0
-                    ? 0
-                    : GP / TP;
+            var P = efficiency ?? (IRR == 0
+                ? 0
+                : TP / IRR);
+
+            var Q = quality ?? (TP == 0
+                ? 0
+                : GP / TP);
 
             var OEE = A * P * Q;
 
@@ -341,6 +362,57 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         }
 
         return result;
+    }
+
+    /// <summary>
+    ///     PPT - планируемое производственное время.
+    ///     Это время, которое запланировано для работы оборудования согласно производственному календарю.
+    /// </summary>
+    /// <param name="date">Дата для которой высчитывается PPT</param>
+    /// <param name="onConditionTimes">Время, когда аппарат включен или находился в работе</param>
+    /// <param name="mainCalendar">Общезаводской календарь</param>
+    /// <param name="weldingEquipmentsIds">Id сварочных оборудований</param>
+    /// <param name="weldingEquipmentsCalendars">Календари для конкретного сварочного оборудования</param>
+    /// <returns></returns>
+    private double CalculateAccessibilityForDate(DateTime date,
+        List<ConditionTimeDto> onConditionTimes,
+        CalendarDto mainCalendar,
+        List<Guid> weldingEquipmentsIds,
+        List<CalendarDto> weldingEquipmentsCalendars)
+    {
+        var totalPPT = 0d;
+
+        // OT – операционное время, т. е. время, оставшееся после учета простоев.
+        // Это время, когда сварочный аппарат включен минус простои, превышающие 5 минут.
+        // Если простой до 5 минут - он считается подготовкой к сварке. 
+        var totalOT = 0d;
+
+        foreach (var weldingEquipmentId in weldingEquipmentsIds)
+        {
+            var OT = onConditionTimes
+                .Where(conditionTime => conditionTime.Date.Date == date.Date &&
+                                        conditionTime.WeldingEquipmentId == weldingEquipmentId)
+                .Sum(conditionTime => conditionTime.Time);
+
+            if (OT == 0) continue;
+
+            var weldingEquipmentCalendar = weldingEquipmentsCalendars
+                .FirstOrDefault(_ => _.WeldingEquipmentId == weldingEquipmentId);
+
+            var calendar = weldingEquipmentCalendar is not null && weldingEquipmentCalendar.MainWorkingShifts.Any()
+                ? weldingEquipmentCalendar
+                : mainCalendar;
+
+            var day = calendar.Days?.FirstOrDefault(d => d.MonthNumber == date.Month && d.Number == date.Day);
+            var mainWorkingShifts = calendar.MainWorkingShifts;
+
+            totalPPT += GetWorkingShiftsWorkingTimeMinutes(mainWorkingShifts, day);
+            totalOT += OT;
+        }
+
+        var accessibility = totalPPT == 0 ? 0 : totalOT / totalPPT;
+
+        return accessibility;
     }
 
     private double GetWorkingShiftsWorkingTimeMinutes(

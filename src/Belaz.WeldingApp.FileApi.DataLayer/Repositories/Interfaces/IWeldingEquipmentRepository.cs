@@ -10,7 +10,7 @@ public interface IWeldingEquipmentRepository
         DateTime startDate,
         DateTime endDate
     );
-    
+
     Task<List<ConditionTimeDto>> GetEquipmentConditionTimeByIdAndDatePeriodAsync(
         Guid id,
         DateTime startDate,
@@ -62,6 +62,14 @@ public interface IWeldingEquipmentRepository
         DateTime startDate,
         DateTime endDate
     );
-    
+
     Task<WeldingEquipmentBriefDto> GetBriefInfoByIdAsync(Guid id);
+
+    Task<List<Guid>> GetWeldingEquipmentIdsAsync();
+
+    Task<List<Guid>> GetWeldingEquipmentIdsByProductionAreaAsync(Guid productionAreaId);
+
+    Task<List<Guid>> GetWeldingEquipmentIdsByWorkplaceAsync(Guid workplaceId);
+
+    Task<List<Guid>> GetWeldingEquipmentIdsByWorkshopAsync(Guid workshopId);
 }

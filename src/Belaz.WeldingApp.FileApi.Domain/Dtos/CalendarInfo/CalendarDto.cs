@@ -10,4 +10,6 @@ public class CalendarDto : IMapFrom<Calendar>
     public List<WorkingShiftDto> MainWorkingShifts { get; set; } = null!;
 
     public List<DayDto>? Days { get; set; }
+    
+    public Guid? WeldingEquipmentId { get; set; }
 }

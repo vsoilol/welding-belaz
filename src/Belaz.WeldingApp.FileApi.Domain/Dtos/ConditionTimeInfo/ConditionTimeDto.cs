@@ -6,6 +6,8 @@ namespace Belaz.WeldingApp.FileApi.Domain.Dtos.ConditionTimeInfo;
 
 public class ConditionTimeDto : IMapFrom<WeldingEquipmentConditionTime>
 {
+    public Guid WeldingEquipmentId { get; set; }
+    
     public Condition Condition { get; set; }
 
     public DateTime Date { get; set; }
