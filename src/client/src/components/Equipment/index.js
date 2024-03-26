@@ -232,6 +232,9 @@ export const Equipment = ({
     {
       title: 'Длительность',
       field: 'time',
+      render: rowData => {
+        return <p>{rowData?.time.toFixed(2)}</p>;
+      },
     },
     {
       title: 'Причина простоя',
@@ -745,7 +748,7 @@ export const Equipment = ({
                         setValuetPostsNumber(event.label)
                       }}
                       options={optPosts}
-                    /> 
+                    />
                   </div> */}
                 <div className={styles.row}>
                   <Select
