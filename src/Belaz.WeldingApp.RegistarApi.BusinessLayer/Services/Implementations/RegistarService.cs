@@ -17,6 +17,9 @@ namespace Belaz.WeldingApp.RegistarApi.BusinessLayer.Services.Implementations;
 
 public class RegistarService : IRegistarService
 {
+    private const int MaxIdleMinutes = 3;
+    private const int MaxForcedDowntimeMinutes = 5;
+
     private readonly IValidationService _validationService;
     private readonly IMapper _mapper;
     private readonly IWeldingEquipmentRepository _weldingEquipmentRepository;
@@ -495,9 +498,9 @@ public class RegistarService : IRegistarService
 
         var newConditionDateTime = date.Add(startConditionTime);
 
-        var idleMinutes = newConditionDateTime.Subtract(lastConditionDateTime).Minutes;
+        var idleMinutes = newConditionDateTime.Subtract(lastConditionDateTime).TotalMinutes;
 
-        if (idleMinutes >= 3)
+        if (idleMinutes >= MaxIdleMinutes)
         {
             await CreateWeldingEquipmentConditionTimeAsync(
                 Condition.On,
@@ -509,7 +512,7 @@ public class RegistarService : IRegistarService
             return;
         }
 
-        if (existingConditionTime.Condition == Condition.On && existingConditionTime.Time > 5)
+        if (existingConditionTime.Condition == Condition.On && existingConditionTime.Time > MaxForcedDowntimeMinutes)
         {
             await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
                 existingConditionTime.Id,
@@ -517,11 +520,19 @@ public class RegistarService : IRegistarService
                 existingConditionTime.Time);
             return;
         }
+        
+        var lastConditionStartDateTime = existingConditionTime.Date
+            .Add(existingConditionTime.StartConditionTime);
 
-        await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
-            existingConditionTime.Id,
-            existingConditionTime.Time + 1
-        );
+        var newMinutes = newConditionDateTime.Subtract(lastConditionStartDateTime).TotalMinutes;
+
+        if (newMinutes >= existingConditionTime.Time)
+        {
+            await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
+                existingConditionTime.Id,
+                newMinutes
+            );
+        }
     }
 
     private Task CreateWeldingEquipmentConditionTimeAsync(
@@ -536,7 +547,7 @@ public class RegistarService : IRegistarService
             new WeldingEquipmentConditionTime
             {
                 Condition = condition,
-                Time = 1,
+                Time = 0,
                 Date = date,
                 StartConditionTime = startConditionTime,
                 WeldingEquipmentId = weldingEquipmentId,

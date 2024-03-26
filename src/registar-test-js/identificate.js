@@ -2,22 +2,24 @@ const http = require("http");
 
 const REGISTAR_URL = "http://localhost:5006";
 
-Date.prototype.addDays = function(days) {
+Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
   return date;
-}
+};
 
 setInterval(() => {
   const now = new Date();
-  const isoString = now.addDays(6).toISOString();
+  const isoString = now.toISOString();
 
   const postData = JSON.stringify({
     RegID: "sdfsdf",
-    EplRF: "D7:F1:7D:5A",
-    EqpRF: "A6:F1:CF:48",
+    EplRF: "32:06:D3:E5",
+    EqpRF: "03:3D:93:0D",
     SDT: isoString,
   });
+
+  console.log(isoString);
 
   const options = {
     hostname: "localhost",
@@ -36,16 +38,14 @@ setInterval(() => {
       data += chunk;
     });
     res.on("end", () => {
-      console.log(data);
+      console.log("Send request");
     });
   });
 
   req.on("error", (error) => {
-    console.error(error);
+    console.error("Send request");
   });
 
   req.write(postData);
   req.end();
 }, 5000);
-
-
