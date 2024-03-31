@@ -511,21 +511,21 @@ public class RegistarService : IRegistarService
             );
             return;
         }
-
-        if (existingConditionTime.Condition == Condition.On && existingConditionTime.Time > MaxForcedDowntimeMinutes)
-        {
-            await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
-                existingConditionTime.Id,
-                Condition.ForcedDowntime,
-                existingConditionTime.Time);
-            return;
-        }
         
         var lastConditionStartDateTime = existingConditionTime.Date
             .Add(existingConditionTime.StartConditionTime);
 
         var newMinutes = newConditionDateTime.Subtract(lastConditionStartDateTime).TotalMinutes;
 
+        if (existingConditionTime.Condition == Condition.On && newMinutes > MaxForcedDowntimeMinutes)
+        {
+            await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
+                existingConditionTime.Id,
+                Condition.ForcedDowntime,
+                newMinutes);
+            return;
+        }
+        
         if (newMinutes >= existingConditionTime.Time)
         {
             await _weldingEquipmentRepository.UpdateEquipmentConditionTimeAsync(
