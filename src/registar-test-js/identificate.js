@@ -22,8 +22,8 @@ setInterval(() => {
   console.log(isoString);
 
   const options = {
-    hostname: "localhost",
-    port: 5006,
+    hostname: "weldingcontrol.bru.by",
+    port: 4001,
     path: "/api/registar/identificate",
     method: "POST",
     headers: {
@@ -31,6 +31,17 @@ setInterval(() => {
       "Content-Length": postData.length,
     },
   };
+
+  // const options = {
+  //   hostname: "localhost",
+  //   port: 5006,
+  //   path: "/api/registar/identificate",
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "Content-Length": postData.length,
+  //   },
+  // };
 
   const req = http.request(options, (res) => {
     let data = "";
@@ -43,7 +54,7 @@ setInterval(() => {
   });
 
   req.on("error", (error) => {
-    console.error("Send request");
+    console.error("Error");
   });
 
   req.write(postData);

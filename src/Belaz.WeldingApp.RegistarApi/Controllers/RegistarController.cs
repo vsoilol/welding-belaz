@@ -6,6 +6,7 @@ using Belaz.WeldingApp.RegistarApi.Extensions;
 using LanguageExt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Belaz.WeldingApp.RegistarApi.Controllers;
 
@@ -15,9 +16,12 @@ public class RegistarController : ControllerBase
 {
     private readonly IRegistarService _registarService;
 
-    public RegistarController(IRegistarService registarService)
+    private readonly ILogger<RegistarController> _logger;
+
+    public RegistarController(IRegistarService registarService, ILogger<RegistarController> logger)
     {
         _registarService = registarService;
+        _logger = logger;
     }
 
     [HttpPost("identificate")]
@@ -29,8 +33,14 @@ public class RegistarController : ControllerBase
         [FromBody] GetWelderWithEquipmentRequest request
     )
     {
+        _logger.LogInformation("Identificate request: {@Data}", request);
+
         var result = await _registarService.GetWelderWithEquipmentAsync(request);
-        return result.ToOk();
+        var data = result.ToOk();
+        
+        _logger.LogInformation("Identificate response: {@Data}", data.Result);
+        
+        return data;
     }
 
     [HttpPost("recordWithoutTask")]
@@ -38,8 +48,14 @@ public class RegistarController : ControllerBase
         [FromBody] RecordWithoutTaskRequest request
     )
     {
+        _logger.LogInformation("RecordWithoutTask request: {@Data}", request);
+        
         var result = await _registarService.CreateRecordWithoutTaskAsync(request);
-        return result.ToOk();
+        var data = result.ToOk();
+        
+        _logger.LogInformation("RecordWithoutTask response: {@Data}", data.Result);
+        
+        return data;
     }
 
     [HttpPost("tasks")]
@@ -65,8 +81,14 @@ public class RegistarController : ControllerBase
         [FromBody] RecordWithTaskRequest request
     )
     {
+        _logger.LogInformation("RecordWithTask request: {@Data}", request);
+        
         var result = await _registarService.CreateRecordWithTaskAsync(request);
-        return result.ToOk();
+        var data = result.ToOk();
+        
+        _logger.LogInformation("RecordWithTask response: {@Data}", data.Result);
+        
+        return data;
     }
 
     [HttpPost("completeTask")]

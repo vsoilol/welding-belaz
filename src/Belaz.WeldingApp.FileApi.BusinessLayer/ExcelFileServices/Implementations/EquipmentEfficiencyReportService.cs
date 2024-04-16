@@ -97,16 +97,6 @@ public class EquipmentEfficiencyReportService
             .Numberformat
             .Format = "dd.MMM";
 
-        // worksheet.Cells[
-        //     DataStartRow,
-        //     OverallEquipmentEfficiencyColumn,
-        //     data.Count + 1,
-        //     OverallEquipmentEfficiencyColumn
-        // ]
-        //     .Style
-        //     .Numberformat
-        //     .Format = "#,##0.00";
-
         using (
             var rangeData = worksheet.Cells[
                 _dataStartRow,
