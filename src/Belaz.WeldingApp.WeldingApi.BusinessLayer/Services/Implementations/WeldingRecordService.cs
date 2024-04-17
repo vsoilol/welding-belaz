@@ -134,10 +134,12 @@ public class WeldingRecordService : IWeldingRecordService
             .SelectMany(_ => _.WeldingCurrentValues)
             .ToArray());
 
+        var weldingEndTime = records.Last(_ => _.WeldingEndTime.Days == 0).WeldingEndTime;
+
         return new Result<RecordBriefDto>(new RecordBriefDto
         {
             WeldingStartTime = records.First().WeldingStartTime.ToHoursMinutesString(),
-            WeldingEndTime = records.Last().WeldingEndTime.ToHoursMinutesString(),
+            WeldingEndTime = weldingEndTime.ToHoursMinutesString(),
             ArcVoltageValues = recordValues.ArcVoltageValues,
             WeldingCurrentValues = recordValues.WeldingCurrentValues,
             WeldingCurrentMin = currencyParameterResult.Min,
