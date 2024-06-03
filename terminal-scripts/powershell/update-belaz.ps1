@@ -53,11 +53,13 @@ git pull origin $GitBranchName
 Write-Host "Executing Git commands on the remote server..."
 Invoke-SSHCommand -address "192.168.126.161" -user "svaradmin" -password $remoteServerPassword -command $sshCommand
 
+$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($remoteServerPassword))
+
 $sshDockerCommand = @"
 cd ~/welding-belaz/src/docker-compose &&
-docker compose build &&
-docker compose down &&
-docker compose up -d
+echo '$plainPassword' | sudo -S docker compose build &&
+echo '$plainPassword' | sudo -S docker compose down &&
+echo '$plainPassword' | sudo -S docker compose up -d
 "@
 
 Write-Host "Run docker..."
