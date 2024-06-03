@@ -19,26 +19,19 @@ catch {
     exit 1
 }
 
-try {
-    $pscpPath = (Get-Command pscp.exe -ErrorAction Stop).Source
-}
-catch {
-    Write-Error "PSCP.exe not found in system PATH. Please install PuTTY and ensure PSCP.exe is available in the PATH."
-    exit 1
-}
-
 # Function to execute an SSH command
 function Invoke-SSHCommand {
     param (
         [string]$address,
         [string]$user,
         [SecureString]$password,
-        [string]$command
+        [string]$command,
+        [string]$port = 22
     )
 
     $plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
 
-    Start-Process -NoNewWindow -Wait -FilePath $plinkPath -ArgumentList "-ssh -pw $plainPassword $user@$address `"$command`""
+    Start-Process -NoNewWindow -Wait -FilePath $plinkPath -ArgumentList "-ssh -pw $plainPassword -P $port $user@$address `"$command`""
 }
 
 # Define the SSH command
@@ -64,3 +57,5 @@ echo '$plainPassword' | sudo -S docker compose up -d
 
 Write-Host "Run docker..."
 Invoke-SSHCommand -address "192.168.126.161" -user "svaradmin" -password $remoteServerPassword -command $sshDockerCommand
+
+Write-Host "All complete"
