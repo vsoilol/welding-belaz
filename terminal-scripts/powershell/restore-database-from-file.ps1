@@ -1,6 +1,6 @@
 param (
     [string]$BackupFilePath = ".\backup.sql",
-    [string]$EnvFilePath = ".\.env.local"
+    [string]$EnvFilePath = ".\.env"
 )
 
 # Load secrets from .env file
