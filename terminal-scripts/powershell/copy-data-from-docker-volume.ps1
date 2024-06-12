@@ -1,52 +1,106 @@
-# PowerShell script to copy data from a Docker volume to the local PC
+# docker-compose_file-api-logs
+# docker-compose_gateway-api-logs
+# docker-compose_identity-api-logs
+# docker-compose_registar-api-logs
+# docker-compose_welding-api-logs
 
 param (
-    [string]$DockerVolumeName
+    [string]$DockerVolumeName,
+    [string]$EnvFilePath = ".\.env",
+    [string]$LocalPath = ".\"
 )
 
-# PowerShell script to copy data from a Docker volume to a uniquely named folder on the local PC
-
-
-# Define the base local path where the folder will be created
-$baseLocalPath = "./"
-
-# Create a folder name with volume name and date
-$date = Get-Date -Format "yyyy-MM-dd"
-$folderName = "$DockerVolumeName-$date"
-$localPath = Join-Path $baseLocalPath $folderName
-
-# Create the local directory
-New-Item -ItemType Directory -Path $localPath -Force
-
-# Name of the temporary container
-$tempContainerName = "temp-container"
-
-# Image to use (Alpine is a lightweight image)
-$imageName = "alpine"
-
-# Directory in container where volume will be mounted
-$containerVolumePath = "/volume_data"
-
-try {
-    # Run a temporary Docker container with the volume mounted
-    docker run -d --rm --name $tempContainerName -v ${DockerVolumeName}:${containerVolumePath} $imageName tail -f /dev/null
-
-    # Wait for the container to be fully up and running
-    Start-Sleep -Seconds 5
-
-    # Copy data from Docker volume (in container) to the newly created local folder
-    docker cp "${tempContainerName}:${containerVolumePath}/." $localPath
-
-    # Output message
-    Write-Host "Data copied successfully to $localPath"
-}
-catch {
-    # Error handling
-    Write-Error "An error occurred: $_"
-}
-finally {
-    # Stop and remove the temporary container
-    docker stop $tempContainerName
+if (-not $DockerVolumeName) {
+    Write-Error "DockerVolumeName parameter is required."
+    exit 1
 }
 
-# End of script
+$remoteServerPassword = Read-Host "Enter remote server password" -AsSecureString
+$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($remoteServerPassword))
+
+# Load secrets from .env file
+Get-Content $EnvFilePath | ForEach-Object {
+    $key, $value = $_.Split('=')
+    Set-Variable -Name $key -Value $value
+}
+
+# Function to check the availability of a command
+function Get-CommandPath {
+    param (
+        [string]$CommandName
+    )
+    try {
+        return (Get-Command $CommandName -ErrorAction Stop).Source
+    }
+    catch {
+        Write-Error "$CommandName not found in system PATH. Please install PuTTY and ensure $CommandName is available in the PATH."
+        exit 1
+    }
+}
+
+# Function to run a command
+function Invoke-CommandAndShowOutput {
+    param (
+        [string]$CommandPath,
+        [string]$Arguments
+    )
+
+    Write-Host
+
+    $process = Start-Process -FilePath $CommandPath -ArgumentList $Arguments -NoNewWindow -Wait -PassThru
+
+    Write-Host
+
+    # Return the exit code
+    return $process.ExitCode
+}
+
+# Get the full paths for plink and pscp
+$plinkPath = Get-CommandPath "plink.exe"
+$pscpPath = Get-CommandPath "pscp.exe"
+
+# Define the SSH command
+$sshCommand = @"
+mkdir -p "$REMOTE_HOME_PATH/$DockerVolumeName" &&
+docker run -d --rm --name temp-container -v ${DockerVolumeName}:/volume_data alpine tail -f /dev/null &&
+sleep 5 &&
+docker cp temp-container:/volume_data/. $REMOTE_HOME_PATH/$DockerVolumeName &&
+docker stop temp-container
+"@
+
+$plinkCommandArguments = "-ssh -pw $plainPassword -P $REMOTE_SSH_PORT $REMOTE_USER@$REMOTE_HOST `"$sshCommand`""
+
+Write-Host "Copy volume data from container on the remote server..."
+$sshExitCode = Invoke-CommandAndShowOutput -CommandPath $plinkPath -Arguments $plinkCommandArguments
+
+if ($sshExitCode -ne 0) {
+    Write-Error "Error coping volume data from container on remote server."
+    exit 1
+}
+Write-Host "Volume data copied successfully on remote server."
+
+# Copy volume data to the local machine
+$scpCommandArguments = "-P $REMOTE_SSH_PORT -pw $plainPassword -r $REMOTE_USER@${REMOTE_HOST}:${REMOTE_HOME_PATH}/$DockerVolumeName $LocalPath"
+
+Write-Host "`nCopying volume data to the local machine..."
+$scpExitCode = Invoke-CommandAndShowOutput -CommandPath $pscpPath -Arguments $scpCommandArguments
+
+if ($scpExitCode -ne 0) {
+    Write-Error "Error copying volume data to local machine."
+    exit 1
+}
+Write-Host "Volume data copied successfully to local machine."
+
+# Delete the volume data from the remote server
+$deleteCommandArguments = "-ssh -pw $plainPassword -P $REMOTE_SSH_PORT $REMOTE_USER@$REMOTE_HOST rm -rf ${REMOTE_HOME_PATH}/$DockerVolumeName"
+
+Write-Host "`nDeleting volume data from the remote server..."
+$deleteExitCode = Invoke-CommandAndShowOutput -CommandPath $plinkPath -Arguments $deleteCommandArguments
+
+if ($deleteExitCode -ne 0) {
+    Write-Error "Error deleting volume data from remote server."
+    exit 1
+}
+Write-Host "Volume data deleted from remote server."
+
+Write-Host "`nCopy volume data process completed successfully!"

@@ -1,6 +1,6 @@
 param (
     [string]$LocalBackupPath = ".\backup.sql",
-    [string]$EnvFilePath = ".\.env.belaz"
+    [string]$EnvFilePath = ".\.env"
 )
 
 $remoteServerPassword = Read-Host "Enter remote server password" -AsSecureString
