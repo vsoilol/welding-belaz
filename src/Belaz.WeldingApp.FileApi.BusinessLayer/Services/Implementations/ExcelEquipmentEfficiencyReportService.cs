@@ -73,10 +73,10 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         var weldingEquipmentsCalendars =
             await _calendarRepository.GetCalendarsForWeldingEquipmentsByYearAsync(weldingEquipmentIds, dateStart.Year);
 
-        if (!weldingEquipmentOnTimes.Any() || !productAccountTaskAmounts.Any() || calendar is null)
+        var validationException = ValidateEquipmentEfficiencyReportInputs(request, weldingEquipmentOnTimes, calendar, productAccountTaskAmounts);
+        if (validationException is not null)
         {
-            var exception = new ListIsEmptyException();
-            return new Result<DocumentDto>(exception);
+            return new Result<DocumentDto>(validationException);
         }
 
         var data = GetEquipmentEfficiencyReportInfo(
@@ -103,6 +103,25 @@ public class ExcelEquipmentEfficiencyReportService : IExcelEquipmentEfficiencyRe
         };
 
         return await _excelEquipmentEfficiencyReportService.GenerateReportAsync(result);
+    }
+    
+    private ListIsEmptyException? ValidateEquipmentEfficiencyReportInputs(
+        ExcelEquipmentEfficiencyReportRequest request,
+        IEnumerable<ConditionTimeDto> weldingEquipmentOnTimes,
+        CalendarDto? calendar,
+        IEnumerable<ProductAccountTaskAmountDto> productAccountTaskAmounts)
+    {
+        if (request.Accessibility is null && (!weldingEquipmentOnTimes.Any() || calendar is null))
+        {
+            return new ListIsEmptyException("Accessibility is null and either welding equipment on times is empty or calendar is null.");
+        }
+    
+        if (request.Efficiency is null && request.Quality is null && !productAccountTaskAmounts.Any())
+        {
+            return new ListIsEmptyException("Efficiency and Quality are both null and product account task amounts is empty.");
+        }
+
+        return null;
     }
 
     public async Task<

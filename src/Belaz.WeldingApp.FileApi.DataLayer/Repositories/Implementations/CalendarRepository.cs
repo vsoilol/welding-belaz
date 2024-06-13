@@ -31,7 +31,7 @@ internal class CalendarRepository : ICalendarRepository
     {
         var calendarQuery =
             _context.Calendars.Where(calendar =>
-                calendar.WeldingEquipmentId != null && weldingEquipmentIds.Contains(calendar.WeldingEquipmentId.Value));
+                calendar.WeldingEquipmentId != null && calendar.Year == year && weldingEquipmentIds.Contains(calendar.WeldingEquipmentId.Value));
 
         return calendarQuery
             .ProjectTo<CalendarDto>(_mapper.ConfigurationProvider)

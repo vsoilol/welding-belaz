@@ -4,4 +4,7 @@ public class ListIsEmptyException : Exception
 {
     public ListIsEmptyException()
         : base($"Data is empty") { }
+    
+    public ListIsEmptyException(string message)
+        : base(message) { }
 }
