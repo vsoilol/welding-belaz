@@ -65,10 +65,7 @@ public class ProductAccountTaskPassportDocument : IDocument
             column.Item().Element(ComposeProductionTable);
             column.Item().Element(ComposeDataWeldingTaskTable);
             column.Item().Element(ComposeProductsInfoTable);
-            column.Item().Element(ComposeMasterAndWelderTable);
-            column.Item().Element(ComposeWeldingEquipmentTable);
-            // column.Item().Element(ComposeTechnologicalInstructionTable);
-            // column.Item().Element(ComposeWeldPassageInstructionsTable);
+            column.Item().Element(ComposeMasterTable);
             column.Item().Element(ComposeAdditionalInfoTable);
             column.Item().Element(ComposeInspectorTable);
 
@@ -83,31 +80,6 @@ public class ProductAccountTaskPassportDocument : IDocument
                         row.Item().Component(new SeamTaskComponent(seamTask));
                     }
                 });
-
-            // IEnumerable<WeldPassageDto> weldPassages = Task.WeldPassages.OrderBy(_ => _.Number);
-            //
-            // if (_sequenceNumber is not null)
-            // {
-            //     weldPassages = weldPassages.Where(_ => _.SequenceNumber == _sequenceNumber);
-            // }
-            //
-            // column
-            //     .Item()
-            //     .Column(row =>
-            //     {
-            //         foreach (var weldPassage in weldPassages)
-            //         {
-            //             var weldPassageInstruction =
-            //                 Task.Seam.TechnologicalInstruction.WeldPassageInstructions.FirstOrDefault(
-            //                     _ => _.Number == weldPassage.Number
-            //                 )!;
-            //
-            //             row.Item()
-            //                 .Component(
-            //                     new WeldPassageComponent(weldPassageInstruction, weldPassage)
-            //                 );
-            //         }
-            //     });
         });
     }
 
@@ -292,7 +264,7 @@ public class ProductAccountTaskPassportDocument : IDocument
         });
     }
 
-    private void ComposeMasterAndWelderTable(IContainer container)
+    private void ComposeMasterTable(IContainer container)
     {
         container.Table(table =>
         {
@@ -304,294 +276,19 @@ public class ProductAccountTaskPassportDocument : IDocument
 
             table
                 .Cell()
-                .Column(1)
                 .Element(BlockLeft)
                 .Text("Руководитель сварочных работ (мастер)")
                 .Style(Typography.Normal);
             table
                 .Cell()
-                .Column(2)
                 .Element(BlockLeft)
                 .Text($"{Task.Master.MiddleName} {Task.Master.FirstName} {Task.Master.LastName}")
                 .Style(Typography.Italic);
 
-            table
-                .Cell()
-                .Row(3)
-                .Column(1)
-                .Element(BlockLeft)
-                .Text("Сварщик")
-                .Style(Typography.Normal);
-
-            table
-                .Cell()
-                .Row(3)
-                .Column(2)
-                .Element(BlockLeft)
-                .Text(
-                    Task.Welder is null
-                        ? "-"
-                        : $"{Task.Welder.MiddleName} {Task.Welder.FirstName} {Task.Welder.LastName}"
-                )
-                .Style(Typography.Italic);
-
             static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
     }
-
-    private void ComposeWeldingEquipmentTable(IContainer container)
-    {
-        container.Table(table =>
-        {
-            table.ColumnsDefinition(columns =>
-            {
-                columns.RelativeColumn();
-                columns.RelativeColumn();
-            });
-
-            table
-                .Cell()
-                .Column(1)
-                .Element(BlockLeft)
-                .Text("Наименование оборудования")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Column(2)
-                .Element(BlockLeft)
-                .Text(Task.WeldingEquipment is null ? "-" : $"{Task.WeldingEquipment.Name}")
-                .Style(Typography.Italic);
-
-            table
-                .Cell()
-                .Row(2)
-                .Column(1)
-                .Element(BlockLeft)
-                .Text("Инвентарный номер оборудования")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Row(2)
-                .Column(2)
-                .Element(BlockLeft)
-                .Text(
-                    Task.WeldingEquipment is null ? "-" : $"№{Task.WeldingEquipment.FactoryNumber}"
-                )
-                .Style(Typography.Italic);
-
-            table
-                .Cell()
-                .Row(3)
-                .Column(1)
-                .Element(BlockLeft)
-                .Text("Дата очередной аттестации (ППР)")
-                .Style(Typography.Normal);
-            table
-                .Cell()
-                .Row(3)
-                .Column(2)
-                .Element(BlockLeft)
-                .Text(
-                    Task.WeldingEquipment?.NextAttestationDate is null
-                        ? "-"
-                        : $"{Task.WeldingEquipment.NextAttestationDate}"
-                )
-                .Style(Typography.Italic);
-
-            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
-        });
-    }
-
-    // private void ComposeTechnologicalInstructionTable(IContainer container)
-    // {
-    //     container.Table(table =>
-    //     {
-    //         table.ColumnsDefinition(columns =>
-    //         {
-    //             columns.RelativeColumn();
-    //             columns.RelativeColumn();
-    //         });
-    //
-    //         table
-    //             .Cell()
-    //             .Column(1)
-    //             .Row(1)
-    //             .Element(BlockLeft)
-    //             .Text("Инструкция на технологический процесс сварки")
-    //             .Style(Typography.Normal);
-    //         table
-    //             .Cell()
-    //             .Column(2)
-    //             .Row(1)
-    //             .Element(BlockLeft)
-    //             .Text(
-    //                 $"{Task.Seam.TechnologicalInstruction.Name} №{Task.Seam.TechnologicalInstruction.Number}"
-    //             )
-    //             .Style(Typography.Italic);
-    //
-    //         table
-    //             .Cell()
-    //             .Column(1)
-    //             .Row(2)
-    //             .Element(BlockLeft)
-    //             .Text("Технологический процесс")
-    //             .Style(Typography.Normal);
-    //         table
-    //             .Cell()
-    //             .Column(2)
-    //             .Row(2)
-    //             .Element(BlockLeft)
-    //             .Text(
-    //                 $"{Task.Seam.TechnologicalProcess.Name} №{Task.Seam.TechnologicalProcess.Number}"
-    //             )
-    //             .Style(Typography.Italic);
-    //
-    //         static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
-    //     });
-    // }
-
-    // private void ComposeWeldPassageInstructionsTable(IContainer container)
-    // {
-    //     container.Column(column =>
-    //     {
-    //         column.Spacing(2);
-    //
-    //         column.Item().Text("Допуски на контролируемые параметры:").Style(Typography.Normal);
-    //         column
-    //             .Item()
-    //             .Table(table =>
-    //             {
-    //                 table.ColumnsDefinition(columns =>
-    //                 {
-    //                     columns.RelativeColumn(0.7F);
-    //                     columns.RelativeColumn(3);
-    //                     columns.RelativeColumn();
-    //                     columns.RelativeColumn();
-    //                     columns.RelativeColumn();
-    //                     columns.RelativeColumn();
-    //                     columns.RelativeColumn();
-    //                     columns.RelativeColumn();
-    //                 });
-    //
-    //                 table.Header(header =>
-    //                 {
-    //                     table
-    //                         .Cell()
-    //                         .RowSpan(2)
-    //                         .Element(BlockLeft)
-    //                         .Text("№ п/п")
-    //                         .Style(Typography.Normal);
-    //                     table
-    //                         .Cell()
-    //                         .RowSpan(2)
-    //                         .Element(BlockLeft)
-    //                         .Text("Наименование слоя")
-    //                         .Style(Typography.Normal);
-    //                     table
-    //                         .Cell()
-    //                         .ColumnSpan(2)
-    //                         .Element(BlockLeft)
-    //                         .Text($"Температура предварительного нагрева, °С")
-    //                         .Style(Typography.Normal);
-    //                     table
-    //                         .Cell()
-    //                         .ColumnSpan(2)
-    //                         .Element(BlockLeft)
-    //                         .Text($"Сварочный ток, А")
-    //                         .Style(Typography.Normal);
-    //                     table
-    //                         .Cell()
-    //                         .ColumnSpan(2)
-    //                         .Element(BlockLeft)
-    //                         .Text($"Напряжение на дуге, В")
-    //                         .Style(Typography.Normal);
-    //
-    //                     table.Cell().Element(BlockLeft).Text($"Min").Style(Typography.Normal);
-    //                     table.Cell().Element(BlockLeft).Text($"Max").Style(Typography.Normal);
-    //                     table.Cell().Element(BlockLeft).Text($"Min").Style(Typography.Normal);
-    //                     table.Cell().Element(BlockLeft).Text($"Max").Style(Typography.Normal);
-    //                     table.Cell().Element(BlockLeft).Text($"Min").Style(Typography.Normal);
-    //                     table.Cell().Element(BlockLeft).Text($"Max").Style(Typography.Normal);
-    //                 });
-    //
-    //                 foreach (
-    //                     var weldPassageInstructions in Task.Seam.TechnologicalInstruction.WeldPassageInstructions
-    //                         .OrderBy(
-    //                             _ => _.Number
-    //                         )
-    //                 )
-    //                 {
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(weldPassageInstructions.Number.ToString())
-    //                         .Style(Typography.Normal);
-    //
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(weldPassageInstructions.Name)
-    //                         .Style(Typography.Normal);
-    //
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(
-    //                             CheckValueForNull(weldPassageInstructions.PreheatingTemperatureMin)
-    //                         )
-    //                         .Style(Typography.Normal);
-    //
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(
-    //                             CheckValueForNull(weldPassageInstructions.PreheatingTemperatureMax)
-    //                         )
-    //                         .Style(Typography.Normal);
-    //
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(CheckValueForNull(weldPassageInstructions.WeldingCurrentMin))
-    //                         .Style(Typography.Normal);
-    //
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(CheckValueForNull(weldPassageInstructions.WeldingCurrentMax))
-    //                         .Style(Typography.Normal);
-    //
-    //                     var arcVoltageMinText = weldPassageInstructions.ArcVoltageMin is not null
-    //                         ? weldPassageInstructions.ArcVoltageMin.ToString()
-    //                         : "-";
-    //
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(arcVoltageMinText)
-    //                         .Style(Typography.Normal);
-    //
-    //                     var arcVoltageMaxText = weldPassageInstructions.ArcVoltageMax is not null
-    //                         ? weldPassageInstructions.ArcVoltageMax.ToString()
-    //                         : "-";
-    //
-    //                     table
-    //                         .Cell()
-    //                         .Element(BlockLeft)
-    //                         .Text(arcVoltageMaxText)
-    //                         .Style(Typography.Normal);
-    //                 }
-    //
-    //                 static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
-    //             });
-    //     });
-    // }
-
-    private string CheckValueForNull<T>(T value)
-    {
-        return (value is not null ? value.ToString() : "-")!;
-    }
-
+    
     private void ComposeAdditionalInfoTable(IContainer container)
     {
         container.Table(table =>

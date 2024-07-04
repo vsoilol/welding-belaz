@@ -25,19 +25,23 @@ public class SeamTaskComponent : IComponent
             column.Spacing(10);
 
             column.Item().Element(ComposeBaseInfo);
-            column.Item().Element(ComposeWeldPassageInstructionsTable);
             
+            column.Item().Element(ComposeWelderTable);
+            column.Item().Element(ComposeWeldingEquipmentTable);
+            
+            column.Item().Element(ComposeWeldPassageInstructionsTable);
+
             var weldPassages = SeamTask.WeldPassages;
 
             var weldPassagesInfoWithChart = new ConcurrentBag<WeldPassageInfoWithChart>();
-            
+
             Parallel.ForEach(weldPassages, weldPassage =>
             {
                 var weldPassageInstruction =
                     SeamTask.Seam.TechnologicalInstruction.WeldPassageInstructions.FirstOrDefault(
                         _ => _.Number == weldPassage.Number
                     )!;
-                
+
                 var weldingCurrentChartImageBytes = ChartGenerator.GetArcVoltageChartImageByte(
                     weldPassage,
                     "А",
@@ -57,15 +61,15 @@ public class SeamTaskComponent : IComponent
                     weldPassageInstruction.ArcVoltageMin,
                     weldPassageInstruction.ArcVoltageMax
                 );
-                
+
                 weldPassagesInfoWithChart.Add(
-                new WeldPassageInfoWithChart
-                {
-                    WeldPassageInfo = weldPassage,
-                    WeldPassageInstructionInfo = weldPassageInstruction,
-                    ArcVoltageChartImageBytes = arcVoltageChartImageBytes,
-                    WeldingCurrentChartImageBytes = weldingCurrentChartImageBytes
-                });
+                    new WeldPassageInfoWithChart
+                    {
+                        WeldPassageInfo = weldPassage,
+                        WeldPassageInstructionInfo = weldPassageInstruction,
+                        ArcVoltageChartImageBytes = arcVoltageChartImageBytes,
+                        WeldingCurrentChartImageBytes = weldingCurrentChartImageBytes
+                    });
             });
 
             var weldPassagesInfoWithChartOrdered = weldPassagesInfoWithChart.OrderBy(_ => _.WeldPassageInfo.Number);
@@ -137,6 +141,88 @@ public class SeamTaskComponent : IComponent
 
                     static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
                 });
+        });
+    }
+
+    private void ComposeWelderTable(IContainer container)
+    {
+        container.Table(table =>
+        {
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+            });
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Сварщик")
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(SeamTask.Welder is null
+                    ? "-"
+                    : $"{SeamTask.Welder.MiddleName} {SeamTask.Welder.FirstName} {SeamTask.Welder.LastName}"
+                )
+                .Style(Typography.Italic);
+
+            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
+        });
+    }
+
+    private void ComposeWeldingEquipmentTable(IContainer container)
+    {
+        container.Table(table =>
+        {
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+            });
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Наименование оборудования")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(SeamTask.WeldingEquipment is null ? "-" : $"{SeamTask.WeldingEquipment.Name}")
+                .Style(Typography.Italic);
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Инвентарный номер оборудования")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(
+                    SeamTask.WeldingEquipment is null ? "-" : $"№{SeamTask.WeldingEquipment.FactoryNumber}"
+                )
+                .Style(Typography.Italic);
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Дата очередной аттестации (ППР)")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(
+                    SeamTask.WeldingEquipment?.NextAttestationDate is null
+                        ? "-"
+                        : $"{SeamTask.WeldingEquipment.NextAttestationDate}"
+                )
+                .Style(Typography.Italic);
+
+            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
         });
     }
 
