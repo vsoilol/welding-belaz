@@ -33,6 +33,10 @@ public class BasedSeamTaskComponent : IComponent
             column.Spacing(10);
 
             column.Item().Element(ComposeBaseInfo);
+            
+            column.Item().Element(ComposeWelderTable);
+            column.Item().Element(ComposeWeldingEquipmentTable);
+            
             column.Item().Element(ComposeWeldPassageInstructionsTable);
 
             IEnumerable<WeldPassageDto> weldPassages = SeamTask.WeldPassages
@@ -102,6 +106,8 @@ public class BasedSeamTaskComponent : IComponent
                         )
                         .Style(Typography.Italic);
 
+                  
+
                     static IContainer BlockCenter(IContainer container) =>
                         Table.BlockCenter(container);
 
@@ -110,6 +116,88 @@ public class BasedSeamTaskComponent : IComponent
         });
     }
 
+    private void ComposeWelderTable(IContainer container)
+    {
+        container.Table(table =>
+        {
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+            });
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Сварщик")
+                .Style(Typography.Normal);
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(SeamTask.Welder is null
+                    ? "-"
+                    : $"{SeamTask.Welder.MiddleName} {SeamTask.Welder.FirstName} {SeamTask.Welder.LastName}"
+                )
+                .Style(Typography.Italic);
+
+            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
+        });
+    }
+    
+    private void ComposeWeldingEquipmentTable(IContainer container)
+    {
+        container.Table(table =>
+        {
+            table.ColumnsDefinition(columns =>
+            {
+                columns.RelativeColumn();
+                columns.RelativeColumn();
+            });
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Наименование оборудования")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(SeamTask.WeldingEquipment is null ? "-" : $"{SeamTask.WeldingEquipment.Name}")
+                .Style(Typography.Italic);
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Инвентарный номер оборудования")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(
+                    SeamTask.WeldingEquipment is null ? "-" : $"№{SeamTask.WeldingEquipment.FactoryNumber}"
+                )
+                .Style(Typography.Italic);
+
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text("Дата очередной аттестации (ППР)")
+                .Style(Typography.Normal);
+            table
+                .Cell()
+                .Element(BlockLeft)
+                .Text(
+                    SeamTask.WeldingEquipment?.NextAttestationDate is null
+                        ? "-"
+                        : $"{SeamTask.WeldingEquipment.NextAttestationDate}"
+                )
+                .Style(Typography.Italic);
+
+            static IContainer BlockLeft(IContainer container) => Table.BlockLeft(container);
+        });
+    }
+    
     private void ComposeWeldPassageInstructionsTable(IContainer container)
     {
         container.Column(column =>
@@ -246,8 +334,8 @@ public class BasedSeamTaskComponent : IComponent
                 });
         });
     }
-    
-     private void ComposeWeldPassageInfoTables(IContainer container, IReadOnlyList<WeldPassageDto> weldPassages)
+
+    private void ComposeWeldPassageInfoTables(IContainer container, IReadOnlyList<WeldPassageDto> weldPassages)
     {
         container.Table(table =>
         {

@@ -8,6 +8,10 @@ public class TaskBriefDto : IMapFrom<WeldingTask>
 {
     public SeamBriefDto Seam { get; set; } = null!;
 
+    public UserBriefDto? Welder { get; set; }
+
+    public WeldingEquipmentBriefDto? WeldingEquipment { get; set; }
+
     public List<WeldPassageDto> WeldPassages { get; set; } = null!;
 
     public void Mapping(Profile profile)
@@ -17,6 +21,15 @@ public class TaskBriefDto : IMapFrom<WeldingTask>
             .ForMember(dto => dto.Seam,
                 opt =>
                     opt.MapFrom(x => x.SeamAccount.Seam))
+            .ForMember(
+                dto => dto.WeldingEquipment,
+                opt =>
+                    opt.MapFrom(x =>
+                        x.WeldPassages.First().WeldingRecord.WeldingEquipment))
+            .ForMember(dto => dto.Welder,
+                opt =>
+                    opt.MapFrom(x => 
+                        x.Welder!.UserInfo))
             .ForMember(
                 dto => dto.WeldPassages,
                 opt =>
