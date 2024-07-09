@@ -361,3 +361,17 @@ terminal-scripts/**/*.sql
 src/client/.vscode
 src/client/.env
 !.env.example
+src/Belaz.WeldingApp.FileApi/appsettings.Development.json
+src/Belaz.WeldingApp.FileApi/appsettings.Development.json
+src/Belaz.WeldingApp.IdentityApi/appsettings.Development.json
+src/Belaz.WeldingApp.MigrationUtil/appsettings.json
+src/Belaz.WeldingApp.MigrationUtil/Properties/launchSettings.json
+src/Belaz.WeldingApp.RegistarApi/appsettings.Development.json
+src/Belaz.WeldingApp.WeldingApi/appsettings.Development.json
+src/client/.env.example
+src/client/yarn.lock
+terminal-scripts/powershell/.env.example
+src/client/yarn.lock
+src/Belaz.WeldingApp.FileApi/appsettings.Development.json
+src/Belaz.WeldingApp.FileApi/appsettings.Development.json
+src/Belaz.WeldingApp.MigrationUtil/appsettings.json
