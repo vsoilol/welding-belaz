@@ -1,0 +1,5 @@
+Start-Process -NoNewWindow -FilePath "dotnet" -ArgumentList "run --project ../../src/Belaz.WeldingApp.WeldingApi"
+Start-Process -NoNewWindow -FilePath "dotnet" -ArgumentList "run --project ../../src/Belaz.WeldingApp.RegistarApi"
+Start-Process -NoNewWindow -FilePath "dotnet" -ArgumentList "run --project ../../src/Belaz.WeldingApp.FileApi"
+Start-Process -NoNewWindow -FilePath "dotnet" -ArgumentList "run --project ../../src/Belaz.WeldingApp.IdentityApi"
+Start-Process -NoNewWindow -FilePath "dotnet" -ArgumentList "run --project ../../src/Belaz.WeldingApp.ApiGateway"
